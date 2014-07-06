@@ -33,5 +33,10 @@ so... you need to do some manual work
 
 Copy and header file [CryptoSwift-Bridging-Header.h](https://github.com/krzyzanowskim/CryptoSwift/blob/master/CryptoSwift-Bridging-Header.h) to you project and setup `Objective-C Bridging Header` in `Builds Settings` of you project with name of this header file.
 
+3. Link CryptoSwift with you target
+
+![Smaple fonfiguration](http://f.cl.ly/items/2c0N0e403I0O141a3A1Y/CryptoSwiftConfigurationLink.png)
+
+
 Done.
 

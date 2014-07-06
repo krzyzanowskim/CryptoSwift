@@ -6,17 +6,20 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
+//#import <openssl/rsa.h>
+
 #import <CommonCrypto/CommonCrypto.h>
 
-#include <openssl/ripemd.h>
-#include <openssl/cast.h>
-#include <openssl/idea.h>
-#include <openssl/aes.h>
-#include <openssl/sha.h>
-#include <openssl/des.h>
-#include <openssl/camellia.h>
-#include <openssl/blowfish.h>
+#import <openssl/ripemd.h>
+#import <openssl/cast.h>
+#import <openssl/idea.h>
+#import <openssl/aes.h>
+#import <openssl/sha.h>
+#import <openssl/des.h>
+#import <openssl/camellia.h>
+#import <openssl/blowfish.h>
 
-#include <openssl/bn.h>
-#include <openssl/ossl_typ.h>
+#import <openssl/bn.h>
+#import <openssl/ossl_typ.h>
+
 

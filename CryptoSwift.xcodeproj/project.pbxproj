@@ -10,6 +10,7 @@
 		53EF3745328C4EBAA8FD3C8A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 230BF7BDFE0F48EB92E8E651 /* libPods.a */; };
 		6CA7485BCB0B449C97D1EE33 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 230BF7BDFE0F48EB92E8E651 /* libPods.a */; };
 		752867B01969528B00E10455 /* Bignum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752867AF1969528B00E10455 /* Bignum.swift */; };
+		752867B21969675900E10455 /* RSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752867B11969675900E10455 /* RSA.swift */; };
 		752DEF7519693E7200E17557 /* CryptoSwift-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 752DEF7419693E7200E17557 /* CryptoSwift-Bridging-Header.h */; };
 		752DEF7719693EA000E17557 /* NSDataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752DEF7619693EA000E17557 /* NSDataExtension.swift */; };
 		754BE45B19693E190098E6F3 /* CryptoSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 754BE45A19693E190098E6F3 /* CryptoSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -38,6 +39,7 @@
 		230BF7BDFE0F48EB92E8E651 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B94B3F6DF034011B9EAC0B8 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		752867AF1969528B00E10455 /* Bignum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bignum.swift; sourceTree = "<group>"; };
+		752867B11969675900E10455 /* RSA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSA.swift; sourceTree = "<group>"; };
 		752DEF7419693E7200E17557 /* CryptoSwift-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CryptoSwift-Bridging-Header.h"; sourceTree = "<group>"; };
 		752DEF7619693EA000E17557 /* NSDataExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDataExtension.swift; sourceTree = "<group>"; };
 		754BE45519693E190098E6F3 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,6 +105,7 @@
 			children = (
 				754BE45A19693E190098E6F3 /* CryptoSwift.h */,
 				752867AF1969528B00E10455 /* Bignum.swift */,
+				752867B11969675900E10455 /* RSA.swift */,
 				752DEF7619693EA000E17557 /* NSDataExtension.swift */,
 				754BE45819693E190098E6F3 /* Supporting Files */,
 			);
@@ -313,6 +316,7 @@
 			files = (
 				752DEF7719693EA000E17557 /* NSDataExtension.swift in Sources */,
 				752867B01969528B00E10455 /* Bignum.swift in Sources */,
+				752867B21969675900E10455 /* RSA.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

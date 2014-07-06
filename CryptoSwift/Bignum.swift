@@ -22,9 +22,14 @@ class Bignum {
         BN_init(bignumPointer)
     }
     
-    convenience init(bignum: Bignum) {
+    convenience init(_ bignum: Bignum) {
         self.init();
         self.bignumPointer = BN_dup(bignum.bignumPointer);
+    }
+    
+    convenience init(_ pointer: UnsafePointer<BIGNUM>) {
+        self.init();
+        self.bignumPointer = BN_dup(pointer);
     }
     
     convenience init(data: NSData) {
@@ -42,7 +47,7 @@ class Bignum {
     }
     
     func copy() -> AnyObject! {
-        let copied:Bignum = Bignum(bignum: self)
+        let copied:Bignum = Bignum(self)
         return copied
     }
     
@@ -50,4 +55,38 @@ class Bignum {
         BN_clear_free(bignumPointer);
         bignumPointer.destroy()
     }
+}
+
+@infix func + (left: Bignum, right: Bignum) -> Bignum {
+    var resultPointer = UnsafePointer<BIGNUM>.alloc(sizeof(BIGNUM))
+    BN_add(resultPointer,left.bignumPointer, right.bignumPointer);
+    return Bignum(resultPointer)
+}
+
+@infix func - (left: Bignum, right: Bignum) -> Bignum {
+    var resultPointer = UnsafePointer<BIGNUM>.alloc(sizeof(BIGNUM))
+    BN_sub(resultPointer,left.bignumPointer, right.bignumPointer);
+    return Bignum(resultPointer)
+}
+
+@infix func * (left: Bignum, right: Bignum) -> Bignum {
+    var resultPointer = UnsafePointer<BIGNUM>.alloc(sizeof(BIGNUM))
+    var ctx:COpaquePointer = BN_CTX_new();
+    BN_CTX_init(ctx)
+    
+    BN_mul(resultPointer,left.bignumPointer, right.bignumPointer, ctx);
+    BN_CTX_free(ctx)
+    
+    return Bignum(resultPointer)
+}
+
+@infix func / (left: Bignum, right: Bignum) -> Bignum {
+    var resultPointer = UnsafePointer<BIGNUM>.alloc(sizeof(BIGNUM))
+    var ctx:COpaquePointer = BN_CTX_new();
+    BN_CTX_init(ctx)
+    
+    BN_div(resultPointer, nil, left.bignumPointer, right.bignumPointer, ctx);
+    BN_CTX_free(ctx)
+    
+    return Bignum(resultPointer)
 }

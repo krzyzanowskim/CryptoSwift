@@ -18,4 +18,5 @@
 #include <openssl/blowfish.h>
 
 #include <openssl/bn.h>
+#include <openssl/ossl_typ.h>
 

@@ -8,6 +8,35 @@
 
 import Foundation
 
+enum CryptoHash: Int {
+    case md5 = 1
+    case sha1 = 2
+    case sha224 = 3
+    case sha256 = 4
+    case sha384 = 5
+    case sha512 = 6
+    case ripemd160 = 7
+    
+    func hash(data: NSData) -> NSData! {
+        switch self {
+        case md5:
+            return data.md5()
+        case sha1:
+            return data.sha1()
+        case sha224:
+            return data.sha224()
+        case sha256:
+            return data.sha256()
+        case sha384:
+            return data.sha384()
+        case sha512:
+            return data.sha512()
+        case ripemd160:
+            return data.ripemd160()
+        }
+    }
+}
+
 extension NSData {
     
     func arrayOfBytes() -> Array<Byte> {
@@ -128,7 +157,7 @@ extension NSData {
         return outData;
     }
 
-    func ripemd150() -> NSData {
+    func ripemd160() -> NSData {
         var ctx = UnsafePointer<RIPEMD160_CTX>.alloc(sizeof(RIPEMD160_CTX))
         RIPEMD160_Init(ctx);
         

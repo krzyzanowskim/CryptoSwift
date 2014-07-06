@@ -172,7 +172,7 @@ extension NSData {
         
         return outData;
     }
-
+    
     func toHexString() -> String {
         let count = self.length / sizeof(Byte)
         var bytesArray = Byte[](count: count, repeatedValue: 0)

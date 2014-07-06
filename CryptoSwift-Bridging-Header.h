@@ -17,3 +17,5 @@
 #include <openssl/camellia.h>
 #include <openssl/blowfish.h>
 
+#include <openssl/bn.h>
+

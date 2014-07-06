@@ -1,0 +1,6 @@
+#include "Pods-OpenSSL-Universal.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/OpenSSL-Universal" "${PODS_ROOT}/BuildHeaders/OpenSSL-Universal/openssl" "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/OpenSSL-Universal" "${PODS_ROOT}/Headers/OpenSSL-Universal/openssl"
+LIBRARY_SEARCH_PATHS = ${PODS_OPENSSL_UNIVERSAL_LIBRARY_SEARCH_PATHS}
+OTHER_LDFLAGS = -ObjC ${PODS_OPENSSL_UNIVERSAL_OTHER_LDFLAGS}
+PODS_ROOT = ${SRCROOT}

@@ -1,0 +1,2 @@
+PODS_OPENSSL_UNIVERSAL_LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/OpenSSL-Universal/lib-ios" "$(PODS_ROOT)/OpenSSL-Universal/lib-ios"
+PODS_OPENSSL_UNIVERSAL_OTHER_LDFLAGS = -lcrypto -lssl

@@ -41,7 +41,7 @@ extension NSData {
     
     func arrayOfBytes() -> Array<Byte> {
         let count = self.length / sizeof(Byte)
-        var bytesArray = Byte[](count: count, repeatedValue: 0)
+        var bytesArray = [Byte](count: count, repeatedValue: 0)
         self.getBytes(&bytesArray, length:count * sizeof(Byte))
         return bytesArray
     }
@@ -175,7 +175,7 @@ extension NSData {
     
     func toHexString() -> String {
         let count = self.length / sizeof(Byte)
-        var bytesArray = Byte[](count: count, repeatedValue: 0)
+        var bytesArray = [Byte](count: count, repeatedValue: 0)
         self.getBytes(&bytesArray, length:count * sizeof(Byte))
         
         var s:String = "";

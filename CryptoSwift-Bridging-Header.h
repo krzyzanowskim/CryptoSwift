@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-//#import <openssl/rsa.h>
 
 #import <CommonCrypto/CommonCrypto.h>
 
@@ -19,7 +18,10 @@
 #import <openssl/camellia.h>
 #import <openssl/blowfish.h>
 
+
 #import <openssl/bn.h>
 #import <openssl/ossl_typ.h>
+
+//#import <openssl/rsa.h>
 
 

@@ -8,14 +8,22 @@
 
 import Foundation
 
-struct RSA {
+class SwiftRSA {
     var n: Bignum;
     var e: Bignum;
     var d: Bignum;
     var p: Bignum;
     var q: Bignum;
     
-//    func privateEncrypt(data: NSData) {
+    init(n: Bignum? = nil, e: Bignum? = nil, d: Bignum? = nil, p: Bignum? = nil, q: Bignum? = nil) {
+        self.n = n!;
+        self.e = e!;
+        self.d = d!;
+        self.p = p!;
+        self.q = q!;
+    }
+    
+    func privateEncrypt(data: NSData) {
 //        var rsa:UnsafePointer<RSA> = RSA_new();
-//    }
+    }
 }

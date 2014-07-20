@@ -9,7 +9,12 @@
 import Foundation
 
 class Bignum {
-    var bignumPointer:UnsafePointer<BIGNUM>;
+    var bignumPointer:UnsafePointer<BIGNUM> {
+        willSet {
+            BN_clear(self.bignumPointer);
+            self.bignumPointer.destroy()
+        }
+    }
     
     var numberOfBytes:Int {
         get {
@@ -22,28 +27,62 @@ class Bignum {
         BN_init(bignumPointer)
     }
     
-    convenience init(_ bignum: Bignum) {
+    convenience init(_ bignum: Bignum?) {
         self.init();
-        self.bignumPointer = BN_dup(bignum.bignumPointer);
+        if (bignum) {
+            self.bignumPointer = BN_dup(bignum!.bignumPointer);
+        }
     }
     
-    convenience init(_ pointer: UnsafePointer<BIGNUM>) {
-        self.init();
-        self.bignumPointer = BN_dup(pointer);
+    class func bignumWithBignum (bignum: Bignum?) -> Bignum? {
+        var newBignum = Bignum();
+        if let bb = bignum {
+            newBignum.bignumPointer = BN_dup(bb.bignumPointer);
+        }
+        return nil;
     }
     
-    convenience init(data: NSData) {
-        self.init();
-        var constPointerToBytes = CConstPointer<CUnsignedChar>(data, data.bytes.value)
-        var bn:UnsafePointer<BIGNUM> = BN_bin2bn(constPointerToBytes, CInt(data.length), nil);
+    class func bignumWithPointer (pointer: UnsafePointer<BIGNUM>) -> Bignum? {
+        var newBignum = Bignum();
+        newBignum.bignumPointer = BN_dup(pointer)
+        return newBignum
+    }
+    
+    class func bignumWithData(data: NSData?) -> Bignum? {
+        var newBignum = Bignum();
+        if let d = data {
+            newBignum.initWithData(d);
+            return newBignum
+        }
+        return nil
+    }
+    
+    func initWithData(data: NSData?) -> Bool {
+        if (!data) {
+            return false;
+        }
+        
+        let constPointerToBytes = ConstUnsafePointer<CUnsignedChar>(data!.bytes)
+        var bn:UnsafePointer<BIGNUM> = BN_bin2bn(constPointerToBytes, CInt(data!.length), nil);
+        if (bn == nil) {
+            return false;
+        }
         self.bignumPointer = bn;
+        return true;
     }
     
-    func data() -> NSData {
+    func data() -> NSData? {
         let len = self.numberOfBytes;
         var buf = UnsafePointer<Byte>.alloc(len);
-        let bytesCount = Int(BN_bn2bin(self.bignumPointer, buf))
-        return NSData(bytes: buf, length: bytesCount);
+        
+        let convertResult = BN_bn2bin(self.bignumPointer, buf);
+        if (convertResult == nil) {
+            return nil;
+        }
+        
+        var returnData:NSData = NSData(bytes: buf, length: Int(convertResult))
+        buf.destroy()
+        return returnData
     }
     
     func copy() -> AnyObject! {
@@ -52,21 +91,25 @@ class Bignum {
     }
     
     deinit {
-        BN_clear_free(bignumPointer);
-        bignumPointer.destroy()
+        BN_clear(self.bignumPointer);
+        self.bignumPointer.destroy()
     }
 }
 
 @infix func + (left: Bignum, right: Bignum) -> Bignum {
     var resultPointer = UnsafePointer<BIGNUM>.alloc(sizeof(BIGNUM))
     BN_add(resultPointer,left.bignumPointer, right.bignumPointer);
-    return Bignum(resultPointer)
+    var result = Bignum.bignumWithPointer(resultPointer)
+    resultPointer.destroy()
+    return result!
 }
 
 @infix func - (left: Bignum, right: Bignum) -> Bignum {
     var resultPointer = UnsafePointer<BIGNUM>.alloc(sizeof(BIGNUM))
     BN_sub(resultPointer,left.bignumPointer, right.bignumPointer);
-    return Bignum(resultPointer)
+    var result = Bignum.bignumWithPointer(resultPointer)
+    resultPointer.destroy()
+    return result!
 }
 
 @infix func * (left: Bignum, right: Bignum) -> Bignum {
@@ -76,8 +119,9 @@ class Bignum {
     
     BN_mul(resultPointer,left.bignumPointer, right.bignumPointer, ctx);
     BN_CTX_free(ctx)
-    
-    return Bignum(resultPointer)
+    var result:Bignum! = Bignum.bignumWithPointer(resultPointer)
+    resultPointer.destroy()
+    return result
 }
 
 @infix func / (left: Bignum, right: Bignum) -> Bignum {
@@ -88,5 +132,7 @@ class Bignum {
     BN_div(resultPointer, nil, left.bignumPointer, right.bignumPointer, ctx);
     BN_CTX_free(ctx)
     
-    return Bignum(resultPointer)
+    var result:Bignum! = Bignum.bignumWithPointer(resultPointer)
+    resultPointer.destroy()
+    return result
 }

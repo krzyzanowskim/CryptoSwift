@@ -24,6 +24,7 @@ class SwiftRSA {
     }
     
     func privateEncrypt(data: NSData) {
-//        var rsa:UnsafePointer<RSA> = RSA_new();
+        //TODO
+        //var rsa:UnsafePointer<RSA> = RSA_new();
     }
 }

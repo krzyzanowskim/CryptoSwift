@@ -20,14 +20,14 @@ class CryptoSwiftTests: XCTestCase {
     }
     
     func testMD5() {
-//        var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
-        var data:NSData = NSData(bytes: [49, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 49, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50] as [Byte], length: 40)
-        let zzz = data.md5()?.hexRepresentation
+        var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
+//        var data:NSData = NSData(bytes: [49, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 49, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50] as [Byte], length: 40)
+        let zzz = data.md5()?.hexString
         var md5data = data.md5()
         XCTAssertNotNil(md5data, "MD5 calculation failed")
         
         if let data = md5data {
-            XCTAssertEqual(data.hexRepresentation, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
+            XCTAssertEqual(data.hexString, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
         }
     }
     

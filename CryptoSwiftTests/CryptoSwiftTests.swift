@@ -19,10 +19,23 @@ class CryptoSwiftTests: XCTestCase {
         super.tearDown()
     }
     
+    func testIntExtension() {
+        let i1:Int = 1024
+        let i1Array = i1.toBytes(32 / 8) // 32 bit
+        let i1recovered = Int.withBytes(i1Array)
+        
+        XCTAssertEqual(i1, i1recovered, "Bytes conversion failed")
+        
+        let i2:Int = 1024
+        let i2Array = i2.toBytes(160 / 8) // 160 bit
+        let i2recovered = Int.withBytes(i1Array)
+        
+        XCTAssertEqual(i2, i2recovered, "Bytes conversion failed")
+    }
+    
     func testMD5() {
         var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
 //        var data:NSData = NSData(bytes: [49, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 49, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50] as [Byte], length: 40)
-        let zzz = data.md5()?.hexString
         var md5data = data.md5()
         XCTAssertNotNil(md5data, "MD5 calculation failed")
         

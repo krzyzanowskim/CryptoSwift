@@ -19,15 +19,20 @@ class CryptoSwiftTests: XCTestCase {
         super.tearDown()
     }
     
+    func testOverflow() {
+        var b:Byte = 128
+        var shifted = (Byte)(b << 24)
+    }
+    
     func testIntExtension() {
         let i1:Int = 1024
-        let i1Array = i1.toBytes(32 / 8) // 32 bit
+        let i1Array = i1.bytes(32 / 8) // 32 bit
         let i1recovered = Int.withBytes(i1Array)
         
         XCTAssertEqual(i1, i1recovered, "Bytes conversion failed")
         
         let i2:Int = 1024
-        let i2Array = i2.toBytes(160 / 8) // 160 bit
+        let i2Array = i2.bytes(160 / 8) // 160 bit
         let i2recovered = Int.withBytes(i1Array)
         
         XCTAssertEqual(i2, i2recovered, "Bytes conversion failed")

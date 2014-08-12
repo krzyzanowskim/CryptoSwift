@@ -11,7 +11,7 @@ import Foundation
 extension Byte {
     
     /** array of bits */
-    internal func bits() -> Array<Bool> {
+    internal func bits() -> [Bool] {
         let totalBitsCount = sizeof(Byte) * 8
         
         var bitsArray:[Bool] = [Bool](count: totalBitsCount, repeatedValue: false)
@@ -21,9 +21,19 @@ extension Byte {
             let check = self & bitVal
             
             if (check != 0) {
-                bitsArray[j] = 1;
+                bitsArray[j] = true;
             }
         }
         return bitsArray
+    }
+    
+    internal func bits() -> String {
+        var s = String()
+        let arr:[Bool] = self.bits()
+        for (idx,b) in enumerate(arr) {
+            s += (b ? "1" : "0")
+            if ((idx + 1) % 8 == 0) { s += " " }
+        }
+        return s
     }
 }

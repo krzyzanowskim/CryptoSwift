@@ -73,20 +73,18 @@ class MD5 {
         var buffer:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
         
         for i in 0..<numBlocks {
-            
+            NSLog("BLOCK")
             var index = i << 6
-            for j in 0..<64 {
-                index++
+            for var j = 0; j < 64; j++ {
                 var val:UInt32
                 if (index < message.length) {
                     val = UInt32(message.arrayOfBytes()[index])
                 } else {
-                    var tmp:UInt32 = UInt32(paddingBytes[index - message.length])
-                    var tmp2 = tmp << 24
-                    val = UInt32(tmp2)
-                    val = val | (buffer[j >> 2] >> 8)
+                    val = UInt32(paddingBytes[index - message.length])
                 }
+                val = (val << 24) | (buffer[j >> 2] >> 8)
                 buffer[j >> 2] = val
+                index++
             }
             
             var originalA:UInt32 = a
@@ -101,7 +99,7 @@ class MD5 {
                 
                 switch (div16) {
                 case 0:
-                    f = (b & c) | (~b & d);
+                    f = ((b) & (c)) | ((~b) & (d));
                     break
                 case 1:
                     f = (b & d) | (c & ~d);
@@ -121,22 +119,44 @@ class MD5 {
                     break
                 }
                 
-                var t1 = a + f // + buffer[bufferIndex]
-                var temp = b + rotateLeft(a + f + buffer[bufferIndex] + TABLE_T[j], SHIFT_AMTS[(div16 << 2) | (j & 3)]);
+                var temp = b &+ rotateLeft(a &+ f &+ buffer[bufferIndex] &+ TABLE_T[j], SHIFT_AMTS[(div16 << 2) | (j & 3)]);
                 a = d;
                 d = c;
                 c = b;
                 b = temp;
             }
-            a += originalA;
-            b += originalB;
-            c += originalC;
-            d += originalD;
+            a = a &+ originalA;
+            b = b &+ originalB;
+            c = c &+ originalC;
+            d = d &+ originalD;
         }
         
         println("dalej");
         
+        var md5:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
+        var count = 0;
+        for var i = 0; i < 4; i++
+        {
+            var n = (i == 0) ? a : ((i == 1) ? b : ((i == 2) ? c : d));
+            for var j = 0; j < 4; j++
+            {
+                md5.append(n)
+                n >>= 8;
+            }
+        }
+        
+        NSLog("\(toHexString(md5))")
+        
         return nil
+    }
+    
+    func toHexString(b:[UInt32]) -> String {
+        var s:String = String()
+        for var i = 0; i < b.count; i++
+        {
+            s = s + String(format: "%02X", arguments: [b[i] & 0xFF])
+        }
+        return s
     }
 
 //    func calculate() -> NSData? {
@@ -153,7 +173,7 @@ class MD5 {
 //        // Step 2. Append Length
 //        let lengthInBits: Int = (message.length * 8)
 //        // A 64-bit representation of lengthInBits
-//        tmpMessage.appendBytes(lengthInBits.toBytes(64 / 8));
+//        tmpMessage.appendBytes(lengthInBits.bytes(64 / 8));
 //        
 //        println("tmpMessage \(tmpMessage)")
 //        // Process the message in successive 512-bit chunks:

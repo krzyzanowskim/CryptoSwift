@@ -12,9 +12,10 @@
 		75445821196AA2A5002FF20E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75445820196AA2A5002FF20E /* Security.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		7547195119931802002FA5F1 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7547195019931802002FA5F1 /* IntExtension.swift */; };
 		754BE45B19693E190098E6F3 /* CryptoSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 754BE45A19693E190098E6F3 /* CryptoSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		754BE46819693E190098E6F3 /* CryptoSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* CryptoSwiftTests.swift */; };
+		754BE46819693E190098E6F3 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* HashTests.swift */; };
 		754C8FED19979F94005AD904 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C8FEC19979F94005AD904 /* ArrayExtension.swift */; };
 		7552614E1993051E000D2B20 /* CryptoHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552614D1993051E000D2B20 /* CryptoHash.swift */; };
+		755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755FB1D9199E347D00475437 /* ExtensionsTest.swift */; };
 		758F3F761992E57D0014BBDA /* Playground in Resources */ = {isa = PBXBuildFile; fileRef = 758F3F751992E57D0014BBDA /* Playground */; };
 		758F3F781992F6CE0014BBDA /* ByteExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758F3F771992F6CE0014BBDA /* ByteExtension.swift */; };
 		75B601EB197D6A6C0009B53D /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
@@ -94,9 +95,10 @@
 		754BE45A19693E190098E6F3 /* CryptoSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CryptoSwift.h; sourceTree = "<group>"; };
 		754BE46019693E190098E6F3 /* CryptoSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		754BE46619693E190098E6F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		754BE46719693E190098E6F3 /* CryptoSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoSwiftTests.swift; sourceTree = "<group>"; };
+		754BE46719693E190098E6F3 /* HashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTests.swift; sourceTree = "<group>"; };
 		754C8FEC19979F94005AD904 /* ArrayExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		7552614D1993051E000D2B20 /* CryptoHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoHash.swift; sourceTree = "<group>"; };
+		755FB1D9199E347D00475437 /* ExtensionsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionsTest.swift; sourceTree = "<group>"; };
 		758F3F751992E57D0014BBDA /* Playground */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Playground; path = CryptoSwift/Playground; sourceTree = "<group>"; };
 		758F3F771992F6CE0014BBDA /* ByteExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ByteExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -175,7 +177,8 @@
 		754BE46419693E190098E6F3 /* CryptoSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				754BE46719693E190098E6F3 /* CryptoSwiftTests.swift */,
+				754BE46719693E190098E6F3 /* HashTests.swift */,
+				755FB1D9199E347D00475437 /* ExtensionsTest.swift */,
 				754BE46519693E190098E6F3 /* Supporting Files */,
 			);
 			path = CryptoSwiftTests;
@@ -318,7 +321,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				754BE46819693E190098E6F3 /* CryptoSwiftTests.swift in Sources */,
+				754BE46819693E190098E6F3 /* HashTests.swift in Sources */,
+				755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

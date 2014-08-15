@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum CryptoHash: Int {
+public enum CryptoHash: Int {
     case md5 = 1
     case sha1 = 2
     case sha224 = 3
@@ -17,7 +17,7 @@ enum CryptoHash: Int {
     case sha512 = 6
     case ripemd160 = 7
     
-    func hash(data: NSData) -> NSData! {
+    public func hash(data: NSData) -> NSData! {
         switch self {
         case md5:
             return data.md5()

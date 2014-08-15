@@ -1,19 +1,23 @@
 #CryptoSwift
-
-Crypto related helpers for Swift.
-
-Since Xcode6-Beta5 frameworks can't bind to third-party libraries written in C/Objective-C so I decided drop OpenSSL dependency and now let's try build some stuff with Swift.
+Crypto related helpers for Swift implemented in Swift.
 
 ##Requirements
-~~For now CryptoSwift depends on OpenSSL~~
-
+Good mood
 
 ##Usage
 
-	import CryptoSwift
-
-    var data:NSData = NSData(bytes: [49, 50, 51] as Byte[], length: 3)
-    let md5data:NSData = CryptoHash.md5.hash(data)
+    import CryptoSwift
     
-	// Printout MD5 as String
-    NSLog(md5data.hexString())
+    /* Calculate hash for array of bytes */
+    var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
+    if let data = CryptoHash.md5.hash(data) {
+        println(data.hexString)
+    }
+    
+    /* Calculate hash for string with convenience extension */
+    var string:String = "123"
+    if let hash = string.md5() {
+        println(string.md5())
+    }
+    
+

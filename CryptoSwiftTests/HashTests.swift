@@ -19,34 +19,19 @@ class CryptoSwiftTests: XCTestCase {
         super.tearDown()
     }
     
-    func testOverflow() {
-        var b:Byte = 128
-        var shifted = (Byte)(b << 24)
-    }
-    
-    func testIntExtension() {
-        let i1:Int = 1024
-        let i1Array = i1.bytes(32 / 8) // 32 bit
-        let i1recovered = Int.withBytes(i1Array)
-        
-        XCTAssertEqual(i1, i1recovered, "Bytes conversion failed")
-        
-        let i2:Int = 1024
-        let i2Array = i2.bytes(160 / 8) // 160 bit
-        let i2recovered = Int.withBytes(i1Array)
-        
-        XCTAssertEqual(i2, i2recovered, "Bytes conversion failed")
-    }
-    
     func testMD5() {
-        var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
-//        var data:NSData = NSData(bytes: [49, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 49, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50, 51, 50] as [Byte], length: 40)
+        var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3) // "1", "2", "3"
         var md5data = data.md5()
         XCTAssertNotNil(md5data, "MD5 calculation failed")
         
         if let data = md5data {
             XCTAssertEqual(data.hexString, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
         }
+        
+        if let hash = "123".md5() {
+            XCTAssertEqual(hash, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
+        }
+
     }
     
 //    func testSHA1() {

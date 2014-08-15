@@ -48,7 +48,6 @@ extension NSData {
         var s:String = "";
         for(var i = 0; i < bytesArray.count; i++) {
             var st: String = NSString(format:"%02X", bytesArray[i])
-            NSLog("\(bytesArray[i]) -> \(st)")
             s = s + st
         }
         return s;

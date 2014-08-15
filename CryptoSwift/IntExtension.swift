@@ -15,16 +15,20 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 
 /*
-    Bit shifting with overflow protection using overflow operator "&".
-    Approach is consistent with standard overflow operators &+,&-,&*,&/
+Bit shifting with overflow protection using overflow operator "&".
+Approach is consistent with standard overflow operators &+, &-, &*, &/
+and introduce new overflow operators for shifting: &<<, &>>
 
-    Note: Works with unsigned integers values only
+Note: Works with unsigned integers values only
 
-    Usage
+Usage
 
-    var i = 1       // init
-    var j = i &<< 2 //shift left
-    j &<<= 2        //shift left and assign
+var i = 1       // init
+var j = i &<< 2 //shift left
+j &<<= 2        //shift left and assign
+
+
+@see: https://medium.com/@krzyzanowskim/swiftly-shift-bits-and-protect-yourself-be33016ce071
 */
 
 import Foundation
@@ -77,6 +81,11 @@ extension Int {
         data.getBytes(&i, length: sizeof(Int));
         return i.byteSwapped
     }
+}
+
+
+/** Bit operations */
+extension Int {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
     private mutating func shiftLeft(count: Int) -> Int {

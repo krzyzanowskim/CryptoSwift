@@ -11,7 +11,7 @@ import Foundation
 extension NSMutableData {
     
     /** Convenient way to append bytes */
-    internal func appendBytes(arrayOfBytes: Array<Byte>) {
+    internal func appendBytes(arrayOfBytes: [Byte]) {
         self.appendBytes(arrayOfBytes, length: arrayOfBytes.count)
     }
     
@@ -37,7 +37,7 @@ extension NSData {
     }
     
     public func md5() -> NSData? {
-        return MD5.calculate(self);
+        return MD5(self).calculate()
     }
     
     internal func toHexString() -> String {

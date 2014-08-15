@@ -33,13 +33,38 @@ j &<<= 2        //shift left and assign
 
 import Foundation
 
+/** array of bytes, little-endian representation */
+private func bytesArray<T>(value:T, totalBytes:Int) -> [Byte] {
+    var bytes = [Byte](count: totalBytes, repeatedValue: 0)
+    var data = NSData(bytes: [value] as [T], length: totalBytes)
+    
+    // then convert back to bytes, byte by byte
+    for i in 0..<data.length {
+        data.getBytes(&bytes[totalBytes - 1 - i], range:NSRange(location:i, length:sizeof(Byte)))
+    }
+    
+    return bytes
+}
+
+extension UInt32 {
+    public func bytes(_ totalBytes: Int = sizeof(UInt32)) -> [Byte] {
+        return bytesArray(self, totalBytes)
+    }
+}
+
+extension UInt64 {
+    public func bytes(_ totalBytes: Int = sizeof(UInt64)) -> [Byte] {
+        return bytesArray(self, totalBytes)
+    }
+}
+
 extension Int {
     
     private init(bits: [Bool]) {
         var bitPattern:UInt = 0
         for (idx,b) in enumerate(bits) {
             if (b == true) {
-                let bit:UInt = UInt(1) << UInt(idx)
+                var bit:UInt = UInt(1) << UInt(idx)
                 bitPattern = bitPattern | bit
             }
         }
@@ -49,27 +74,16 @@ extension Int {
     
     /** Array of bytes with optional padding (little-endian) */
     public func bytes(_ totalBytes: Int = sizeof(Int)) -> [Byte] {
-        var bytes:[Byte] = [Byte](count: totalBytes, repeatedValue: 0)
-        
-        // first convert to data
-        let data = NSData(bytes: [self] as [Int], length: totalBytes)
-        
-        // then convert back to bytes, byte by byte
-        for i in 0..<Swift.min(sizeof(Int),totalBytes) {
-            var b:Byte = 0
-            data.getBytes(&b, range: NSRange(location: i,length: 1))
-            bytes[totalBytes - 1 - i] = b
-        }
-        return bytes
+        return bytesArray(self, totalBytes)
     }
 
     /** Int with array bytes (little-endian) */
     public static func withBytes(bytes: [Byte]) -> Int {
         var i:Int = 0
-        let totalBytes = Swift.min(bytes.count, sizeof(Int))
+        var totalBytes = Swift.min(bytes.count, sizeof(Int))
         
         // get slice of Int
-        let start = Swift.max(bytes.count - sizeof(Int),0)
+        var start = Swift.max(bytes.count - sizeof(Int),0)
         var intarr = Array<Byte>(bytes[start..<(start + totalBytes)])
         
         // extend to Int size if necessary
@@ -77,25 +91,63 @@ extension Int {
             intarr.insert(0 as Byte, atIndex: 0)
         }
         
-        let data = NSData(bytes: intarr, length: intarr.count)
+        var data = NSData(bytes: intarr, length: intarr.count)
         data.getBytes(&i, length: sizeof(Int));
         return i.byteSwapped
     }
 }
 
+/** Bit operations */
+extension UInt32 {
+    
+    /** Shift bits to the left. All bits are shifted (including sign bit) */
+    private mutating func shiftLeft(count: UInt32) -> UInt32 {
+        var bitsCount = UInt32(sizeof(UInt32) * 8)
+        var shiftCount = Swift.min(count, bitsCount - 1)
+        var shiftedValue:UInt32 = 0;
+        
+        for bitIdx in 0..<bitsCount {
+            // if bit is set then copy to result and shift left 1
+            var bit = 1 << bitIdx
+            if ((self & bit) == bit) {
+                shiftedValue = shiftedValue | (bit << shiftCount)
+            }
+        }
+        self = shiftedValue
+        return self
+    }
+    
+    /** Shift bits to the right. All bits are shifted (including sign bit) */
+    private mutating func shiftRight(count: UInt32) -> UInt32 {
+        var bitsCount = UInt32(sizeof(UInt32) * 8)
+        var maxBitsForValue = UInt32(floor(log2(Double(self)) + 1))
+        var shiftCount = Swift.min(count, maxBitsForValue)
+        var shiftedValue:UInt32 = 0;
+        
+        for bitIdx in 0..<bitsCount {
+            // if bit is set then copy to result and shift left 1
+            var bit = 1 << bitIdx
+            if ((self & bit) == bit) {
+                shiftedValue = shiftedValue | (bit >> shiftCount)
+            }
+        }
+        self = shiftedValue
+        return self
+    }
+}
 
 /** Bit operations */
 extension Int {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
     private mutating func shiftLeft(count: Int) -> Int {
-        let bitsCount = sizeof(Int) * 8
-        let shiftCount = Swift.min(count, bitsCount - 1)
+        var bitsCount = sizeof(Int) * 8
+        var shiftCount = Swift.min(count, bitsCount - 1)
         var shiftedValue:Int = 0;
         
         for bitIdx in 0..<bitsCount {
             // if bit is set then copy to result and shift left 1
-            let bit = 1 << bitIdx
+            var bit = 1 << bitIdx
             if ((self & bit) == bit) {
                 shiftedValue = shiftedValue | (bit << shiftCount)
             }
@@ -106,14 +158,14 @@ extension Int {
     
     /** Shift bits to the right. All bits are shifted (including sign bit) */
     private mutating func shiftRight(count: Int) -> Int {
-        let bitsCount = sizeof(Int) * 8
-        let maxBitsForValue = Int(floor(log2(Double(self)) + 1))
-        let shiftCount = Swift.min(count, maxBitsForValue)
+        var bitsCount = sizeof(Int) * 8
+        var maxBitsForValue = Int(floor(log2(Double(self)) + 1))
+        var shiftCount = Swift.min(count, maxBitsForValue)
         var shiftedValue:Int = 0;
         
         for bitIdx in 0..<bitsCount {
             // if bit is set then copy to result and shift left 1
-            let bit = 1 << bitIdx
+            var bit = 1 << bitIdx
             if ((self & bit) == bit) {
                 shiftedValue = shiftedValue | (bit >> shiftCount)
             }
@@ -148,6 +200,13 @@ func &<< (lhs: Int, rhs: Int) -> Int {
     return l
 }
 
+/** shift left with bits truncation */
+func &<< (lhs: UInt32, rhs: UInt32) -> UInt32 {
+    var l = lhs;
+    l.shiftLeft(rhs)
+    return l
+}
+
 // Right operator
 
 infix operator &>>= {
@@ -167,6 +226,13 @@ precedence 160
 
 /** shift right and assign with bits truncation */
 func &>> (lhs: Int, rhs: Int) -> Int {
+    var l = lhs;
+    l.shiftRight(rhs)
+    return l
+}
+
+/** shift right and assign with bits truncation */
+func &>> (lhs: UInt32, rhs: UInt32) -> UInt32 {
     var l = lhs;
     l.shiftRight(rhs)
     return l

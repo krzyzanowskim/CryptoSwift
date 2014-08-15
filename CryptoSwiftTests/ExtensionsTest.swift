@@ -34,9 +34,9 @@ class ExtensionsTest: XCTestCase {
     }
     
     func testBytes() {
-        let size = sizeof(Int) // 32 or 64  bit
+        let size = sizeof(UInt32) // 32 or 64  bit
         
-        let i:Int = 1024
+        let i:UInt32 = 1024
         var bytes = i.bytes()
         XCTAssertTrue(bytes.count == size, "Invalid bytes length =  \(bytes.count)")
         

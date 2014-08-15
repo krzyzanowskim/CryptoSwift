@@ -14,10 +14,21 @@ Good mood
         println(data.hexString)
     }
     
+ direct or with helpers
+	
+	let hash = MD5(data).calculate()
+	let hash = data.md5()
+	
+srtaight from String
+
     /* Calculate hash for string with convenience extension */
     var string:String = "123"
     if let hash = string.md5() {
         println(string.md5())
     }
     
+##Contact
+Marcin Krzyżanowski [@krzyzanowskim](http://twitter.com/krzyzanowskim)
 
+##Licence
+see LICENSE file

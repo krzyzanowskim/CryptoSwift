@@ -20,16 +20,29 @@ class CryptoSwiftTests: XCTestCase {
     }
     
     func testMD5() {
-        var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3) // "1", "2", "3"
-        var md5data = data.md5()
-        XCTAssertNotNil(md5data, "MD5 calculation failed")
+        let data1:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [Byte], length: 3) // "1", "2", "3"
+        let data2:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [Byte], length: 3) // "1", "2", "3"
         
-        if let data = md5data {
-            XCTAssertEqual(data.hexString, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
+        if let d = MD5(data1).calculate() {
+            XCTAssertEqual(d.hexString, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
+        } else {
+            XCTFail("MD5 fail")
         }
         
-        if let hash = "123".md5() {
+        //FIXME: fail on 32-bit simulator for some unknown reason.
+        //       because it's working fine for the first time, and break for the second
+        //       time with the very same input data
+        if let d = MD5(data2).calculate() {
+            XCTAssertEqual(d.hexString, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
+        } else {
+            XCTFail("MD5 fail")
+        }
+
+        let string = "123"
+        if let hash = string.md5() {
             XCTAssertEqual(hash, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
+        } else {
+            XCTFail("MD5 fail")
         }
 
     }

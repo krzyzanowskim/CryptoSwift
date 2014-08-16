@@ -13,7 +13,7 @@ extension String {
     
     /** Calculate MD5 hash */
     public func md5() -> String? {
-        var stringData = self.dataUsingEncoding(NSASCIIStringEncoding, allowLossyConversion: false)
+        var stringData = self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
         if var data = stringData!.md5() {
             return data.hexString
         }

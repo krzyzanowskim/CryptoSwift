@@ -102,6 +102,10 @@ extension UInt32 {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
     private mutating func shiftLeft(count: UInt32) -> UInt32 {
+        if (self == 0) {
+            return self;
+        }
+        
         var bitsCount = UInt32(sizeof(UInt32) * 8)
         var shiftCount = Swift.min(count, bitsCount - 1)
         var shiftedValue:UInt32 = 0;
@@ -119,6 +123,10 @@ extension UInt32 {
     
     /** Shift bits to the right. All bits are shifted (including sign bit) */
     private mutating func shiftRight(count: UInt32) -> UInt32 {
+        if (self == 0) {
+            return self;
+        }
+        
         var bitsCount = UInt32(sizeof(UInt32) * 8)
         var maxBitsForValue = UInt32(floor(log2(Double(self)) + 1))
         var shiftCount = Swift.min(count, maxBitsForValue)
@@ -141,6 +149,10 @@ extension Int {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
     private mutating func shiftLeft(count: Int) -> Int {
+        if (self == 0) {
+            return self;
+        }
+        
         var bitsCount = sizeof(Int) * 8
         var shiftCount = Swift.min(count, bitsCount - 1)
         var shiftedValue:Int = 0;
@@ -158,6 +170,10 @@ extension Int {
     
     /** Shift bits to the right. All bits are shifted (including sign bit) */
     private mutating func shiftRight(count: Int) -> Int {
+        if (self == 0) {
+            return self;
+        }
+        
         var bitsCount = sizeof(Int) * 8
         var maxBitsForValue = Int(floor(log2(Double(self)) + 1))
         var shiftCount = Swift.min(count, maxBitsForValue)

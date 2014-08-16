@@ -22,18 +22,41 @@ class CryptoSwiftTests: XCTestCase {
     func testMD5() {
         let data1:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [Byte], length: 3) // "1", "2", "3"
         
-        if let d = MD5(data1).calculate() {
-            XCTAssertEqual(d.hexString, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
-        } else {
-            XCTFail("MD5 fail")
+        if let hash = MD5(data1).calculate() {
+            XCTAssertEqual(hash.hexString, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
         }
         
         if let hash = "123".md5() {
             XCTAssertEqual(hash, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
-        } else {
-            XCTFail("MD5 fail")
+        }
+        
+        if let hash = "".md5() {
+            XCTAssertEqual(hash, "D41D8CD98F00B204E9800998ECF8427E", "MD5 calculation failed")
+        }
+        
+        if let hash = "a".md5() {
+            XCTAssertEqual(hash, "0CC175B9C0F1B6A831C399E269772661", "MD5 calculation failed")
+        }
+        
+        if let hash = "abc".md5() {
+            XCTAssertEqual(hash, "900150983CD24FB0D6963F7D28E17F72", "MD5 calculation failed")
+        }
+        
+        if let hash = "message digest".md5() {
+            XCTAssertEqual(hash, "F96B697D7CB7938D525A2F31AAF161D0", "MD5 calculation failed")
         }
 
+        if let hash = "abcdefghijklmnopqrstuvwxyz".md5() {
+            XCTAssertEqual(hash, "C3FCD3D76192E4007DFB496CCA67E13B", "MD5 calculation failed")
+        }
+
+        if let hash = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".md5() {
+            XCTAssertEqual(hash, "D174AB98D277D9F5A5611C2C9F419D9F", "MD5 calculation failed")
+        }
+
+        if let hash = "12345678901234567890123456789012345678901234567890123456789012345678901234567890".md5() {
+            XCTAssertEqual(hash, "57EDF4A22BE3C955AC49DA2E2107B67A", "MD5 calculation failed")
+        }
     }
     
 //    func testSHA1() {

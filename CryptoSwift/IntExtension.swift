@@ -36,7 +36,7 @@ import Foundation
 /** array of bytes, little-endian representation */
 private func bytesArray<T>(value:T, totalBytes:Int) -> [Byte] {
     var bytes = [Byte](count: totalBytes, repeatedValue: 0)
-    var data = NSData(bytes: [value] as [T], length: totalBytes)
+    var data = NSData(bytes: [value] as [T], length: min(sizeof(T),totalBytes))
     
     // then convert back to bytes, byte by byte
     for i in 0..<data.length {

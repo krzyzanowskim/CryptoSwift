@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class MD5 {
+public class MD5 : CryptoHashBase {
 
     /** specifies the per-round shift amounts */
     private let s: [UInt32] = [7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
@@ -34,41 +34,25 @@ public class MD5 {
                        0x6fa87e4f,0xfe2ce6e0,0xa3014314,0x4e0811a1,
                        0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391]
     
-    let a0: UInt32 = 0x67452301
-    let b0: UInt32 = 0xefcdab89
-    let c0: UInt32 = 0x98badcfe
-    let d0: UInt32 = 0x10325476
-    
-    private var message: NSData
+    private let h:[UInt32] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
+//    private let a0: UInt32 = 0x67452301
+//    private let b0: UInt32 = 0xefcdab89
+//    private let c0: UInt32 = 0x98badcfe
+//    private let d0: UInt32 = 0x10325476
     
     //MARK: Public
-    
-    public init(_ message: NSData) {
-        self.message = message
-    }
-    
     public func calculate() -> NSData? {
-        var tmpMessage: NSMutableData = NSMutableData(data: message)
+        var tmpMessage = prepare()
         let wordSize = sizeof(UInt32)
-        
-        var aa = a0
-        var bb = b0
-        var cc = c0
-        var dd = d0
-        
-        // Step 1. Append Padding Bits
-        tmpMessage.appendBytes([0x80]) // append one bit (Byte with one bit) to message
-        
-        // append "0" bit until message length in bits ≡ 448 (mod 512)
-        while tmpMessage.length % 64 != 56 {
-            tmpMessage.appendBytes([0x00])
-        }
+
+        // hash values
+        var hh = h
         
         // Step 2. Append Length a 64-bit representation of lengthInBits
         var lengthInBits = (message.length * 8)
         var lengthBytes = lengthInBits.bytes(64 / 8)
         tmpMessage.appendBytes(reverse(lengthBytes));
-        
+
         // Process the message in successive 512-bit chunks:
         let chunkSizeBytes = 512 / 8 // 64
         var leftMessageBytes = tmpMessage.length
@@ -83,10 +67,10 @@ public class MD5 {
             }
             
             // Initialize hash value for this chunk:
-            var A:UInt32 = aa
-            var B:UInt32 = bb
-            var C:UInt32 = cc
-            var D:UInt32 = dd
+            var A:UInt32 = hh[0]
+            var B:UInt32 = hh[1]
+            var C:UInt32 = hh[2]
+            var D:UInt32 = hh[3]
             
             var dTemp:UInt32 = 0
             
@@ -122,17 +106,17 @@ public class MD5 {
                 A = dTemp    
             }
             
-            aa = aa &+ A
-            bb = bb &+ B
-            cc = cc &+ C
-            dd = dd &+ D
+            hh[0] = hh[0] &+ A
+            hh[1] = hh[1] &+ B
+            hh[2] = hh[2] &+ C
+            hh[3] = hh[3] &+ D
         }
 
         var buf: NSMutableData = NSMutableData();
-        buf.appendBytes(&aa, length: wordSize)
-        buf.appendBytes(&bb, length: wordSize)
-        buf.appendBytes(&cc, length: wordSize)
-        buf.appendBytes(&dd, length: wordSize)
+        hh.map({ (item) -> () in
+            var i:UInt32 = item.littleEndian
+            buf.appendBytes(&i, length: sizeof(UInt32))
+        })
         
         return buf.copy() as? NSData;
     }
@@ -142,12 +126,6 @@ public class MD5 {
     class func calculate(message: NSData) -> NSData?
     {
         return MD5(message).calculate();
-    }
-    
-    //MARK: Private
-    
-    private func rotateLeft(x:UInt32, _ n:UInt32) -> UInt32 {
-        return (x &<< n) | (x &>> (32 - n))
     }
 }
 

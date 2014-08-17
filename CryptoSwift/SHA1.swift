@@ -8,34 +8,16 @@
 
 import Foundation
 
-public class SHA1 {
+public class SHA1 : CryptoHashBase {
     
     private let h:[UInt32] = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
-    private var message: NSData;
-    
-    public init(_ message: NSData) {
-        self.message = message
-    }
-    
+        
     public func calculate() -> NSData? {
+        var tmpMessage = self.prepare()
         let wordSize = sizeof(UInt32)
         
-        var h0 = h[0]
-        var h1 = h[1]
-        var h2 = h[2]
-        var h3 = h[3]
-        var h4 = h[4]
-        
-        // make it big-endian
-        var tmpMessage: NSMutableData = NSMutableData(data: message)
-        
-        // append one bit (Byte with one bit) to message
-        tmpMessage.appendBytes([0x80])
-
-        // append "0" bit until message length in bits ≡ 448 (mod 512)
-        while tmpMessage.length % 64 != 56 {
-            tmpMessage.appendBytes([0x00])
-        }
+        // hash values
+        var hh = h
         
         // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
         tmpMessage.appendBytes((message.length * 8).bytes(64 / 8));
@@ -62,12 +44,11 @@ public class SHA1 {
                 }
             }
             
-            var A = h0
-            var B = h1
-            var C = h2
-            var D = h3
-            var E = h4
-            
+            var A = hh[0]
+            var B = hh[1]
+            var C = hh[2]
+            var D = hh[3]
+            var E = hh[4]
             
             // Main loop
             for j in 0...79 {
@@ -104,32 +85,20 @@ public class SHA1 {
                 
             }
             
-            h0 = (h0 &+ A) & 0xffffffff
-            h1 = (h1 &+ B) & 0xffffffff
-            h2 = (h2 &+ C) & 0xffffffff
-            h3 = (h3 &+ D) & 0xffffffff
-            h4 = (h4 &+ E) & 0xffffffff
+            hh[0] = (hh[0] &+ A) & 0xffffffff
+            hh[1] = (hh[1] &+ B) & 0xffffffff
+            hh[2] = (hh[2] &+ C) & 0xffffffff
+            hh[3] = (hh[3] &+ D) & 0xffffffff
+            hh[4] = (hh[4] &+ E) & 0xffffffff
         }
         
         // Produce the final hash value (big-endian) as a 160 bit number:
         var buf: NSMutableData = NSMutableData();
-        [h0, h1, h2, h3, h4].map({ (item) -> () in
+        hh.map({ (item) -> () in
             var i:UInt32 = item.bigEndian
             buf.appendBytes(&i, length: sizeof(UInt32))
         })
         
         return buf.copy() as? NSData;
-    }
-    
-    //MARK: Private
-    
-    private func reverseBytes(value: UInt32) -> UInt32
-    {
-        return (value & 0x000000FF) << 24 | (value & 0x0000FF00) << 8 |
-               (value & 0x00FF0000) >> 8  | (value & 0xFF000000) >> 24;
-    }
-    
-    private func rotateLeft(x:UInt32, _ n:UInt32) -> UInt32 {
-        return ((x &<< n) & 0xffffffff) | (x &>> (32 - n))
-    }
+    }    
 }

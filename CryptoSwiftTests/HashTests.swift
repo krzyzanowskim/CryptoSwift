@@ -59,14 +59,12 @@ class CryptoSwiftTests: XCTestCase {
         }
     }
     
-//    func testSHA1() {
-//        var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
-//        var sha1:NSData = data.sha1()
-//        XCTAssertNotNil(sha1, "SHA1 calculation failed")
-//        
-//        var sha1String:String = sha1.toHexString()
-//        XCTAssertEqualObjects(sha1String, "40BD001563085FC35165329EA1FF5C5ECBDBBEEF", "SHA1 calculation failed");
-//    }
+    func testSHA1() {
+        var data:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [Byte], length: 3)
+        if let hash = data.sha1() {
+            XCTAssertEqual(hash.hexString, "40BD001563085FC35165329EA1FF5C5ECBDBBEEF", "SHA1 calculation failed");
+        }
+    }
 //
 //    func testSHA512() {
 //        var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)

@@ -39,6 +39,10 @@ extension NSData {
     public func md5() -> NSData? {
         return MD5(self).calculate()
     }
+
+    public func sha1() -> NSData? {
+        return SHA1(self).calculate()
+    }
     
     internal func toHexString() -> String {
         let count = self.length / sizeof(Byte)

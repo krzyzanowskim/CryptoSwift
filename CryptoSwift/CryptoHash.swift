@@ -21,8 +21,8 @@ public enum CryptoHash: Int {
         switch self {
         case md5:
             return data.md5()
-            //        case sha1:
-            //            return data.sha1()
+        case sha1:
+            return data.sha1()
             //        case sha224:
             //            return data.sha224()
             //        case sha256:

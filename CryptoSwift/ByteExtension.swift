@@ -11,17 +11,17 @@ import Foundation
 extension Byte {
     
     /** array of bits */
-    internal func bits() -> [Bool] {
+    internal func bits() -> [Bit] {
         let totalBitsCount = sizeof(Byte) * 8
         
-        var bitsArray:[Bool] = [Bool](count: totalBitsCount, repeatedValue: false)
+        var bitsArray:[Bit] = [Bit](count: totalBitsCount, repeatedValue: Bit.zero)
         
         for j in 0..<totalBitsCount {
             let bitVal:Byte = 1 << UInt8(totalBitsCount - 1 - j)
             let check = self & bitVal
             
             if (check != 0) {
-                bitsArray[j] = true;
+                bitsArray[j] = Bit.one;
             }
         }
         return bitsArray
@@ -29,9 +29,9 @@ extension Byte {
     
     internal func bits() -> String {
         var s = String()
-        let arr:[Bool] = self.bits()
+        let arr:[Bit] = self.bits()
         for (idx,b) in enumerate(arr) {
-            s += (b ? "1" : "0")
+            s += (b == Bit.one ? "1" : "0")
             if ((idx + 1) % 8 == 0) { s += " " }
         }
         return s

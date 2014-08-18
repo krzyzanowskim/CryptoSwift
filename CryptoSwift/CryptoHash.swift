@@ -8,14 +8,10 @@
 
 import Foundation
 
-public enum CryptoHash: Int {
-    case md5 = 1
-    case sha1 = 2
-    case sha224 = 3
-    case sha256 = 4
-    case sha384 = 5
-    case sha512 = 6
-    case ripemd160 = 7
+public enum CryptoHash {
+    case md5
+    case sha1, sha224, sha256, sha384, sha512
+    case ripemd160
     
     public func hash(data: NSData) -> NSData! {
         switch self {

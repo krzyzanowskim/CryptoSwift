@@ -63,7 +63,7 @@ extension Int {
     private init(bits: [Bit]) {
         var bitPattern:UInt = 0
         for (idx,b) in enumerate(bits) {
-            if (b == Bit.one) {
+            if (b == Bit.Zero) {
                 var bit:UInt = UInt(1) << UInt(idx)
                 bitPattern = bitPattern | bit
             }

@@ -14,14 +14,14 @@ extension Byte {
     internal func bits() -> [Bit] {
         let totalBitsCount = sizeof(Byte) * 8
         
-        var bitsArray:[Bit] = [Bit](count: totalBitsCount, repeatedValue: Bit.zero)
+        var bitsArray:[Bit] = [Bit](count: totalBitsCount, repeatedValue: Bit.Zero)
         
         for j in 0..<totalBitsCount {
             let bitVal:Byte = 1 << UInt8(totalBitsCount - 1 - j)
             let check = self & bitVal
             
             if (check != 0) {
-                bitsArray[j] = Bit.one;
+                bitsArray[j] = Bit.One;
             }
         }
         return bitsArray
@@ -31,7 +31,7 @@ extension Byte {
         var s = String()
         let arr:[Bit] = self.bits()
         for (idx,b) in enumerate(arr) {
-            s += (b == Bit.one ? "1" : "0")
+            s += (b == Bit.One ? "1" : "0")
             if ((idx + 1) % 8 == 0) { s += " " }
         }
         return s

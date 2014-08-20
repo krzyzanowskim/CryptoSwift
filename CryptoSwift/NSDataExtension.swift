@@ -36,11 +36,11 @@ extension NSData {
         return UInt16(s);
     }
     
-    public func md5() -> NSData? {
+    public func md5() -> NSData {
         return MD5(self).calculate()
     }
 
-    public func sha1() -> NSData? {
+    public func sha1() -> NSData {
         return SHA1(self).calculate()
     }
     

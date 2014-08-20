@@ -12,7 +12,7 @@ public class SHA1 : CryptoHashBase {
     
     private let h:[UInt32] = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
         
-    public func calculate() -> NSData? {
+    public func calculate() -> NSData {
         var tmpMessage = self.prepare()
         let wordSize = sizeof(UInt32)
         
@@ -99,6 +99,6 @@ public class SHA1 : CryptoHashBase {
             buf.appendBytes(&i, length: sizeof(UInt32))
         })
         
-        return buf.copy() as? NSData;
+        return buf.copy() as NSData;
     }    
 }

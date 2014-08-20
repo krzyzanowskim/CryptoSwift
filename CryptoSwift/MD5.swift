@@ -35,13 +35,9 @@ public class MD5 : CryptoHashBase {
                        0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391]
     
     private let h:[UInt32] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
-//    private let a0: UInt32 = 0x67452301
-//    private let b0: UInt32 = 0xefcdab89
-//    private let c0: UInt32 = 0x98badcfe
-//    private let d0: UInt32 = 0x10325476
     
     //MARK: Public
-    public func calculate() -> NSData? {
+    public func calculate() -> NSData {
         var tmpMessage = prepare()
         let wordSize = sizeof(UInt32)
 
@@ -118,12 +114,12 @@ public class MD5 : CryptoHashBase {
             buf.appendBytes(&i, length: sizeof(UInt32))
         })
         
-        return buf.copy() as? NSData;
+        return buf.copy() as NSData;
     }
 
     //MARK: Class
     
-    class func calculate(message: NSData) -> NSData?
+    class func calculate(message: NSData) -> NSData
     {
         return MD5(message).calculate();
     }

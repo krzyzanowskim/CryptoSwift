@@ -9,9 +9,10 @@ Good mood
 - Easy to use
 - Convenience extensions
 
-######what implemented
+#####what implemented?
 - MD5
 - SHA1
+- SHA256
 
 ##Usage
 
@@ -30,12 +31,14 @@ Generally you should use `CryptoHash` enum or convenience extensions
 	let hash = MD5(data).calculate()
 	let hash = data.md5()
 	let hash = data.sha1()
+	let hash = data.sha256()
 	
-srtaight from String
+	println(hash.hexString)
+	
+straight from String
 
     /* Calculate hash for string with convenience extension */
-    var string:String = "123"
-    if let hash = string.md5() {
+    if let hash = "123".md5() {
         println(string.md5())
     }
     

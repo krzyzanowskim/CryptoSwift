@@ -69,7 +69,20 @@ class CryptoSwiftTests: XCTestCase {
         if let hash = "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha1() {
             XCTAssertEqual(hash, "84983E441C3BD26EBAAE4AA1F95129E5E54670F1", "SHA1 calculation failed")
         }
-
+    }
+    
+    func testSHA256() {
+        var data:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [Byte], length: 3)
+        var hash:NSData = data.sha256()
+        XCTAssertEqual(hash.hexString, "A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3", "SHA256 calculation failed");
+        
+        if let hash = "Rosetta code".sha256() {
+            XCTAssertEqual(hash, "764FAF5C61AC315F1497F9DFA542713965B785E5CC2F707D6468D7D1124CDFCF", "SHA1 calculation failed")
+        }
+//
+//        if let hash = "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha1() {
+//            XCTAssertEqual(hash, "84983E441C3BD26EBAAE4AA1F95129E5E54670F1", "SHA1 calculation failed")
+//        }
     }
 //
 //    func testSHA512() {

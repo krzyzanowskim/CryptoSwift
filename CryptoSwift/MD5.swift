@@ -116,12 +116,5 @@ public class MD5 : CryptoHashBase {
         
         return buf.copy() as NSData;
     }
-
-    //MARK: Class
-    
-    class func calculate(message: NSData) -> NSData
-    {
-        return MD5(message).calculate();
-    }
 }
 

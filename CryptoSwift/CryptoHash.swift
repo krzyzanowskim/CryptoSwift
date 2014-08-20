@@ -19,6 +19,8 @@ public enum CryptoHash {
             return data.md5()
         case sha1:
             return data.sha1()
+        case sha256:
+            return data.sha256()
             //        case sha224:
             //            return data.sha224()
             //        case sha256:

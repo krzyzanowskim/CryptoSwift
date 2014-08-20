@@ -33,9 +33,8 @@ public class SHA1 : CryptoHashBase {
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
-                    var range = NSRange(location:x * wordSize, length: wordSize)
                     var le:UInt32 = 0
-                    chunk.getBytes(&le, range:range);
+                    chunk.getBytes(&le, range:NSRange(location:x * wordSize, length: wordSize));
                     M[x] = le.bigEndian
                     break
                 default:

@@ -2,7 +2,14 @@
 
 import UIKit
 
-var i:Int = 24
+var i:UInt32 = 402653184
 i.bigEndian
 i.littleEndian
 
+
+var M:[UInt32] = [UInt32](count: 80, repeatedValue: 0)
+for x in 0..<M.count {
+    M[x] = 1
+}
+
+M

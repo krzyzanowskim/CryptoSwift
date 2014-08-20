@@ -46,4 +46,9 @@ public class CryptoHashBase {
     internal func rotateLeft(x:UInt32, _ n:UInt32) -> UInt32 {
         return ((x &<< n) & 0xffffffff) | (x &>> (32 - n))
     }
+    
+    internal func rotateRight(x:UInt32, _ n:UInt32) -> UInt32 {
+        return ((x &>> n) & 0xffffffff) | (x &<< (32 - n))
+    }
+
 }

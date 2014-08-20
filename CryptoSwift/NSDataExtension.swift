@@ -43,7 +43,11 @@ extension NSData {
     public func sha1() -> NSData {
         return SHA1(self).calculate()
     }
-    
+
+    public func sha256() -> NSData {
+        return SHA256(self).calculate()
+    }
+
     internal func toHexString() -> String {
         let count = self.length / sizeof(Byte)
         var bytesArray = [Byte](count: count, repeatedValue: 0)

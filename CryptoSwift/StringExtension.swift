@@ -13,17 +13,11 @@ extension String {
     
     /** Calculate MD5 hash */
     public func md5() -> String? {
-        if let stringData = self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-            return stringData.md5().toHexString()
-        }
-        return nil
+        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.md5().toHexString()
     }
     
     public func sha1() -> String? {
-        if let stringData = self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-            return stringData.sha1().toHexString()
-        }
-        return nil
+        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.sha1().toHexString()
     }
 
     public func sha256() -> String? {

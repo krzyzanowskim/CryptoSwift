@@ -21,10 +21,7 @@ extension String {
     }
 
     public func sha256() -> String? {
-        if let stringData = self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-            return stringData.sha256().toHexString()
-        }
-        return nil
+        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.sha256().toHexString()
     }
 
 }

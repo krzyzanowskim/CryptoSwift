@@ -1,5 +1,5 @@
 #CryptoSwift
-Crypto related helpers for [Swift](https://developer.apple.com/swift/) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
+Crypto related functions and helpers for [Swift](https://developer.apple.com/swift/) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
 ##Requirements
 Good mood
@@ -18,6 +18,8 @@ Good mood
 
 Generally you should use `CryptoHash` enum or convenience extensions
 
+CryptoHash enum usage
+
     import CryptoSwift
     
     /* CryptoHash enum usage */
@@ -26,7 +28,7 @@ Generally you should use `CryptoHash` enum or convenience extensions
         println(data.hexString)
     }
     
- direct or with helpers
+Direct methods
 	
 	let hash = MD5(data).calculate()
 	let hash = data.md5()
@@ -35,11 +37,10 @@ Generally you should use `CryptoHash` enum or convenience extensions
 	
 	println(hash.hexString)
 	
-straight from String
+Hashing A String And Printing Result
 
-    /* Calculate hash for string with convenience extension */
     if let hash = "123".md5() {
-        println(string.md5())
+        println(hash)
     }
     
 ##Contact

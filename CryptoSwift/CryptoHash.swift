@@ -23,6 +23,10 @@ public enum CryptoHash {
             return data.sha224()
         case sha256:
             return data.sha256()
+        case sha384:
+            return data.sha384()
+        case sha512:
+            return data.sha512()
         default:
             return nil
         }

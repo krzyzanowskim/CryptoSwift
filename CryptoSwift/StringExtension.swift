@@ -28,4 +28,12 @@ extension String {
         return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.sha256().toHexString()
     }
 
+    public func sha384() -> String? {
+        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.sha384().toHexString()
+    }
+
+    public func sha512() -> String? {
+        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.sha512().toHexString()
+    }
+
 }

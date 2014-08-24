@@ -17,14 +17,14 @@ class CryptoHashBase {
     }
     
     /** Common part for hash calculation. Prepare header data. */
-    func prepare() -> NSMutableData {
+    func prepare(_ len:Int = 64) -> NSMutableData {
         var tmpMessage: NSMutableData = NSMutableData(data: self.message)
         
         // Step 1. Append Padding Bits
         tmpMessage.appendBytes([0x80]) // append one bit (Byte with one bit) to message
         
         // append "0" bit until message length in bits ≡ 448 (mod 512)
-        while tmpMessage.length % 64 != 56 {
+        while tmpMessage.length % len != (len - 8) {
             tmpMessage.appendBytes([0x00])
         }
         
@@ -51,7 +51,7 @@ class CryptoHashBase {
     }
     
     func rotateRight(x:UInt32, _ n:UInt32) -> UInt32 {
-        return ((x &>> n) & 0xffffffff) | (x &<< (32 - n))
+        return (x >> n) | (x << (32 - n))
     }
 
     func rotateRight(x:UInt64, _ n:UInt64) -> UInt64 {

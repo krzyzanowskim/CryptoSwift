@@ -12,6 +12,7 @@ Good mood
 #####what implemented?
 - MD5
 - SHA1
+- SHA224
 - SHA256
 
 ##Usage
@@ -28,16 +29,16 @@ CryptoHash enum usage
         println(data.hexString)
     }
     
-Direct methods
+Hashing a data
 	
-	let hash = MD5(data).calculate()
 	let hash = data.md5()
 	let hash = data.sha1()
+    let hash = data.sha224()
 	let hash = data.sha256()
 	
 	println(hash.hexString)
 	
-Hashing A String And Printing Result
+Hashing a String and printing result
 
     if let hash = "123".md5() {
         println(hash)

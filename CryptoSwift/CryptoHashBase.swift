@@ -8,18 +8,16 @@
 
 import Foundation
 
-public class CryptoHashBase {
+class CryptoHashBase {
     
     internal var message: NSData
     
-    //MARK: Public
-    
-    public init(_ message: NSData) {
+    init(_ message: NSData) {
         self.message = message
     }
     
     /** Common part for hash calculation. Prepare header data. */
-    internal func prepare() -> NSMutableData {
+    func prepare() -> NSMutableData {
         var tmpMessage: NSMutableData = NSMutableData(data: self.message)
         
         // Step 1. Append Padding Bits

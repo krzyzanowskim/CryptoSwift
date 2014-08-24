@@ -21,7 +21,7 @@ class CryptoSwiftTests: XCTestCase {
     
     func testMD5() {
         let data1:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [Byte], length: 3) // "1", "2", "3"
-        var hash:NSData = MD5(data1).calculate()
+        var hash:NSData = data1.md5()
         XCTAssertEqual(hash.hexString, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
         
         if let hash = "123".md5() {
@@ -71,6 +71,12 @@ class CryptoSwiftTests: XCTestCase {
         }
     }
     
+    func testSHA224() {
+        var data:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [Byte], length: 3)
+        var hash:NSData = data.sha224();
+        XCTAssertEqual(hash.hexString, "78D8045D684ABD2EECE923758F3CD781489DF3A48E1278982466017F", "SHA256 calculation failed");
+    }
+
     func testSHA256() {
         var data:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [Byte], length: 3)
         var hash:NSData = data.sha256()
@@ -79,12 +85,8 @@ class CryptoSwiftTests: XCTestCase {
         if let hash = "Rosetta code".sha256() {
             XCTAssertEqual(hash, "764FAF5C61AC315F1497F9DFA542713965B785E5CC2F707D6468D7D1124CDFCF", "SHA1 calculation failed")
         }
-//
-//        if let hash = "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha1() {
-//            XCTAssertEqual(hash, "84983E441C3BD26EBAAE4AA1F95129E5E54670F1", "SHA1 calculation failed")
-//        }
     }
-//
+    
 //    func testSHA512() {
 //        var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
 //        var sha512:NSData = data.sha512()

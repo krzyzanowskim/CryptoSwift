@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class MD5 : CryptoHashBase {
+class MD5 : CryptoHashBase {
 
     /** specifies the per-round shift amounts */
     private let s: [UInt32] = [7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
@@ -36,8 +36,7 @@ public class MD5 : CryptoHashBase {
     
     private let h:[UInt32] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
     
-    //MARK: Public
-    public func calculate() -> NSData {
+    func calculate() -> NSData {
         var tmpMessage = prepare()
         let wordSize = sizeof(UInt32)
 

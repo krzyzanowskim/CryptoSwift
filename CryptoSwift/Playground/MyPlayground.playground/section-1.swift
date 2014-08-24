@@ -2,14 +2,19 @@
 
 import UIKit
 
-var i:UInt32 = 402653184
-i.bigEndian
-i.littleEndian
-
-
-var M:[UInt32] = [UInt32](count: 80, repeatedValue: 0)
-for x in 0..<M.count {
-    M[x] = 1
+// test inside class
+class Test {
+    func test(a:Int, b:Int) -> Int {
+        return a + b
+    }
 }
 
-M
+// test with no class
+func test(a:Int, b:Int) -> Int
+{
+    return a + b
+}
+
+Test().test(3, b: 3) // parameter name "b" WITH specified name is required
+// BUT
+test(3,4) // no parameter name "b"

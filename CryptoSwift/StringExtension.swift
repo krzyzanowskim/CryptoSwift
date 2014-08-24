@@ -20,6 +20,10 @@ extension String {
         return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.sha1().toHexString()
     }
 
+    public func sha224() -> String? {
+        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.sha224().toHexString()
+    }
+
     public func sha256() -> String? {
         return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.sha256().toHexString()
     }

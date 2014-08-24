@@ -44,8 +44,12 @@ extension NSData {
         return SHA1(self).calculate()
     }
 
+    public func sha224() -> NSData {
+        return SHA2(self).calculate(.sha224)
+    }
+
     public func sha256() -> NSData {
-        return SHA256(self).calculate()
+        return SHA2(self).calculate(.sha256)
     }
 
     internal func toHexString() -> String {

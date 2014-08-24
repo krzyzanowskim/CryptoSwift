@@ -17,7 +17,7 @@ class MD5 : CryptoHashBase {
                        6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21]
     
     /** binary integer part of the sines of integers (Radians) */
-    private let K: [UInt32] = [0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,
+    private let k: [UInt32] = [0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,
                        0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,
                        0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,
                        0x6b901122,0xfd987193,0xa679438e,0x49b40821,
@@ -38,7 +38,6 @@ class MD5 : CryptoHashBase {
     
     func calculate() -> NSData {
         var tmpMessage = prepare()
-        let wordSize = sizeof(UInt32)
 
         // hash values
         var hh = h
@@ -57,8 +56,7 @@ class MD5 : CryptoHashBase {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15
             var M:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
             for x in 0..<M.count {
-                var range = NSRange(location:x * wordSize, length: wordSize)
-                chunk.getBytes(&M[x], range:range);
+                chunk.getBytes(&M[x], range:NSRange(location:x * sizeofValue(M[x]), length: sizeofValue(M[x])));
             }
             
             // Initialize hash value for this chunk:
@@ -70,7 +68,7 @@ class MD5 : CryptoHashBase {
             var dTemp:UInt32 = 0
             
             // Main loop
-            for j in 0...63 {
+            for j in 0..<k.count {
                 var g = 0
                 var F:UInt32 = 0
                 
@@ -97,7 +95,7 @@ class MD5 : CryptoHashBase {
                 dTemp = D
                 D = C
                 C = B
-                B = B &+ rotateLeft((A &+ F &+ K[j] &+ M[g]), s[j])
+                B = B &+ rotateLeft((A &+ F &+ k[j] &+ M[g]), s[j])
                 A = dTemp    
             }
             
@@ -110,7 +108,7 @@ class MD5 : CryptoHashBase {
         var buf: NSMutableData = NSMutableData();
         hh.map({ (item) -> () in
             var i:UInt32 = item.littleEndian
-            buf.appendBytes(&i, length: sizeof(UInt32))
+            buf.appendBytes(&i, length: sizeofValue(i))
         })
         
         return buf.copy() as NSData;

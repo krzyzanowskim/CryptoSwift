@@ -14,7 +14,6 @@ class SHA1 : CryptoHashBase {
         
     func calculate() -> NSData {
         var tmpMessage = self.prepare()
-        let wordSize = sizeof(UInt32)
         
         // hash values
         var hh = h
@@ -34,7 +33,7 @@ class SHA1 : CryptoHashBase {
                 switch (x) {
                 case 0...15:
                     var le:UInt32 = 0
-                    chunk.getBytes(&le, range:NSRange(location:x * wordSize, length: wordSize));
+                    chunk.getBytes(&le, range:NSRange(location:x * sizeofValue(M[x]), length: sizeofValue(M[x])));
                     M[x] = le.bigEndian
                     break
                 default:
@@ -95,7 +94,7 @@ class SHA1 : CryptoHashBase {
         var buf: NSMutableData = NSMutableData();
         hh.map({ (item) -> () in
             var i:UInt32 = item.bigEndian
-            buf.appendBytes(&i, length: sizeof(UInt32))
+            buf.appendBytes(&i, length: sizeofValue(i))
         })
         
         return buf.copy() as NSData;

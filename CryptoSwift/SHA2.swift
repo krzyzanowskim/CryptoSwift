@@ -55,7 +55,6 @@ class SHA2 : CryptoHashBase {
     
     func calculate(variant: SHA2.variant) -> NSData {
         var tmpMessage = self.prepare()
-        let wordSize = sizeof(UInt32)
         
         // hash values
         var hh = variant.h()
@@ -75,7 +74,7 @@ class SHA2 : CryptoHashBase {
                 switch (x) {
                 case 0...15:
                     var le:UInt32 = 0
-                    chunk.getBytes(&le, range:NSRange(location:x * wordSize, length: wordSize));
+                    chunk.getBytes(&le, range:NSRange(location:x * sizeofValue(le), length: sizeofValue(le)));
                     M[x] = le.bigEndian
                     break
                 default:
@@ -96,7 +95,7 @@ class SHA2 : CryptoHashBase {
             var H = hh[7]
             
             // Main loop
-            for j in 0...63 {
+            for j in 0..<variant.k().count {
                 let s0 = rotateRight(A,2) ^ rotateRight(A,13) ^ rotateRight(A,22)
                 let maj = (A & B) ^ (A & C) ^ (B & C)
                 let t2 = s0 &+ maj
@@ -129,7 +128,7 @@ class SHA2 : CryptoHashBase {
         
         variant.resultingArray(hh).map({ (item) -> () in
             var i:UInt32 = item.bigEndian
-            buf.appendBytes(&i, length: sizeof(UInt32))
+            buf.appendBytes(&i, length: sizeofValue(i))
         })
         
         return buf.copy() as NSData;

@@ -60,6 +60,10 @@ extension NSData {
         return SHA2(self).calculate64(.sha512)
     }
 
+    public func crc32() -> NSData {
+        return CRC().crc32(self);
+    }
+
     internal func toHexString() -> String {
         let count = self.length / sizeof(Byte)
         var bytesArray = [Byte](count: count, repeatedValue: 0)

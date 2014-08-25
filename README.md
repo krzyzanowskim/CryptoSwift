@@ -16,6 +16,7 @@ Good mood
 - SHA256
 - SHA384
 - SHA512
+- CRC32
 
 ##Usage
 
@@ -37,6 +38,10 @@ Hashing a data
 	let hash = data.sha1()
     let hash = data.sha224()
 	let hash = data.sha256()
+	let hash = data.sha384()
+	let hash = data.sha512()
+	
+	let crc = data.crc32()
 	
 	println(hash.hexString)
 	

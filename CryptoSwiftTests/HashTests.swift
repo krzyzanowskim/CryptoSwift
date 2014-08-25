@@ -107,6 +107,12 @@ class CryptoSwiftTests: XCTestCase {
         }
 
     }
+    
+    func testCRC32() {
+        var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
+        var crc = data.crc32()
+        XCTAssertEqual(crc.hexString, "884863D2", "CRC32 calculation failed");
+    }
 
 //    func testHashEnum() {
 //        var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)

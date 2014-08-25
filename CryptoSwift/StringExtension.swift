@@ -36,4 +36,8 @@ extension String {
         return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.sha512().toHexString()
     }
 
+    public func crc32() -> String? {
+        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.crc32().toHexString()
+    }
+
 }

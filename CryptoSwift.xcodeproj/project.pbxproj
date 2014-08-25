@@ -19,7 +19,6 @@
 		754DD76E19A149AF00E52288 /* CryptoHashBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754DD76D19A149AF00E52288 /* CryptoHashBase.swift */; };
 		7552614E1993051E000D2B20 /* CryptoHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552614D1993051E000D2B20 /* CryptoHash.swift */; };
 		755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755FB1D9199E347D00475437 /* ExtensionsTest.swift */; };
-		757EF7F319AAA54500586276 /* SHA3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757EF7F219AAA54500586276 /* SHA3.swift */; };
 		757EF7F519AAA82400586276 /* CRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757EF7F419AAA82400586276 /* CRC.swift */; };
 		758F3F761992E57D0014BBDA /* Playground in Resources */ = {isa = PBXBuildFile; fileRef = 758F3F751992E57D0014BBDA /* Playground */; };
 		758F3F781992F6CE0014BBDA /* ByteExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758F3F771992F6CE0014BBDA /* ByteExtension.swift */; };
@@ -108,7 +107,6 @@
 		754DD76D19A149AF00E52288 /* CryptoHashBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoHashBase.swift; sourceTree = "<group>"; };
 		7552614D1993051E000D2B20 /* CryptoHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoHash.swift; sourceTree = "<group>"; };
 		755FB1D9199E347D00475437 /* ExtensionsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionsTest.swift; sourceTree = "<group>"; };
-		757EF7F219AAA54500586276 /* SHA3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHA3.swift; sourceTree = "<group>"; };
 		757EF7F419AAA82400586276 /* CRC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRC.swift; sourceTree = "<group>"; };
 		758F3F751992E57D0014BBDA /* Playground */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Playground; path = CryptoSwift/Playground; sourceTree = "<group>"; };
 		758F3F771992F6CE0014BBDA /* ByteExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ByteExtension.swift; sourceTree = "<group>"; };
@@ -173,7 +171,6 @@
 				750A545F1992D2680017DA75 /* MD5.swift */,
 				752E087A199FF27C005B0EA0 /* SHA1.swift */,
 				75153D4119AA3C7900750381 /* SHA2.swift */,
-				757EF7F219AAA54500586276 /* SHA3.swift */,
 				758F3F771992F6CE0014BBDA /* ByteExtension.swift */,
 				7547195019931802002FA5F1 /* IntExtension.swift */,
 				752DEF7619693EA000E17557 /* NSDataExtension.swift */,
@@ -326,7 +323,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				757EF7F319AAA54500586276 /* SHA3.swift in Sources */,
 				7552614E1993051E000D2B20 /* CryptoHash.swift in Sources */,
 				7599C9C6199EA28700A3988B /* StringExtension.swift in Sources */,
 				752E087B199FF27C005B0EA0 /* SHA1.swift in Sources */,

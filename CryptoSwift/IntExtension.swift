@@ -142,6 +142,7 @@ extension UInt32 {
         self = shiftedValue
         return self
     }
+
 }
 
 /** Bit operations */

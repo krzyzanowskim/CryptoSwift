@@ -31,7 +31,7 @@ class CryptoHashBase {
         return tmpMessage
     }
     
-    @availability(*,deprecated=0.1,message="Use bigInteger")
+    @availability(*,deprecated=0.1)
     func reverseByte(value: UInt32) -> UInt32 {
         // rdar://18060945 - not working since Xcode6-Beta6, need to split in two variables
         // return = ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24);

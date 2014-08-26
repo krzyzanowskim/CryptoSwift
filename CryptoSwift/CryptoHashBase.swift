@@ -30,32 +30,4 @@ class CryptoHashBase {
         
         return tmpMessage
     }
-    
-    @availability(*,deprecated=0.1)
-    func reverseByte(value: UInt32) -> UInt32 {
-        // rdar://18060945 - not working since Xcode6-Beta6, need to split in two variables
-        // return = ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24);
-        
-        // workaround
-        var tmp1 = ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8)
-        var tmp2 = ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24)
-        return tmp1 | tmp2
-    }
-    
-    func rotateLeft(x:UInt32, _ n:UInt32) -> UInt32 {
-        return ((x &<< n) & 0xffffffff) | (x &>> (32 - n))
-    }
-    
-    func rotateLeft(x:UInt64, _ n:UInt64) -> UInt64 {
-        return (x << n) | (x >> (64 - n))
-    }
-    
-    func rotateRight(x:UInt32, _ n:UInt32) -> UInt32 {
-        return (x >> n) | (x << (32 - n))
-    }
-
-    func rotateRight(x:UInt64, _ n:UInt64) -> UInt64 {
-        return ((x >> n) | (x << (64 - n)))
-    }
-
 }

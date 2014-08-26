@@ -3,7 +3,10 @@
    version = "3.0">
    <TimelineItems>
       <LoggerValueHistoryTimelineItem
-         documentLocation = "file:///Users/marcinkrzyzanowski/Devel/CryptoSwift/CryptoSwift/Playground/MyPlayground.playground#CharacterRangeLen=0&amp;CharacterRangeLoc=66&amp;EndingLineNumber=3&amp;StartingLineNumber=3&amp;Timestamp=429786824.478078">
+         documentLocation = "file:///Users/marcinkrzyzanowski/Devel/CryptoSwift/CryptoSwift/Playground/MyPlayground.playground#CharacterRangeLen=0&amp;CharacterRangeLoc=72&amp;EndingLineNumber=3&amp;StartingLineNumber=3&amp;Timestamp=430787997.74212">
+      </LoggerValueHistoryTimelineItem>
+      <LoggerValueHistoryTimelineItem
+         documentLocation = "#CharacterRangeLen=0&amp;CharacterRangeLoc=72&amp;EndingColumnNumber=7&amp;EndingLineNumber=3&amp;StartingColumnNumber=5&amp;StartingLineNumber=3&amp;Timestamp=430787997.742359">
       </LoggerValueHistoryTimelineItem>
    </TimelineItems>
 </Timeline>

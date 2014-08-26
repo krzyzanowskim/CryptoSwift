@@ -113,10 +113,4 @@ class CryptoSwiftTests: XCTestCase {
         var crc = data.crc32()
         XCTAssertEqual(crc.hexString, "884863D2", "CRC32 calculation failed");
     }
-
-    func testChaCha20() {
-        var ch = ChaCha20()
-        let bytes = ch.wordToByte([49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64])
-        println(bytes)
-    }
 }

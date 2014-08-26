@@ -1,21 +1,36 @@
 // Playground - noun: a place where people can play
 
-import UIKit
+import Foundation
 
-// test inside class
-class Test {
-    func test(a:Int, b:Int) -> Int {
-        return a + b
-    }
+struct CTX {
+    var q = 1
 }
 
-// test with no class
-func test(a:Int, b:Int) -> Int
-{
-    return a + b
+// WONT update q value of passed struct instance, but copy of it
+func foo1(var x:CTX) {
+    x.q = 3
 }
 
-Test().test(3, b: 3) // parameter name "b" WITH specified name is required
-// BUT
-test(3,4) // no parameter name "b"
+// WILL update passed struct instance
+func foo2(inout x:CTX) {
+    x.q = 2
+}
 
+var x = CTX()
+
+foo1(x)
+println(x.q)
+
+foo2(&x)
+println(x.q)
+
+
+
+struct FixedLengthRange {
+    var firstValue: Int
+    let length: Int
+}
+var rangeOfThreeItems = FixedLengthRange(firstValue: 0, length: 3)
+// the range represents integer values 0, 1, and 2
+rangeOfThreeItems.firstValue = 6
+// the range now represents integer values 6, 7, and 8

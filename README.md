@@ -18,6 +18,10 @@ Good mood
 - SHA512
 - CRC32
 
+####[Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5)
+
+[Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391)
+
 ##Usage
 
 Generally you should use `CryptoHash` enum or convenience extensions

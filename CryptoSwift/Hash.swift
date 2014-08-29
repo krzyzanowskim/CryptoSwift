@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum CryptoHash {
+public enum Hash {
     case md5
     case sha1, sha224, sha256, sha384, sha512
     case ripemd160

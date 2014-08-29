@@ -14,11 +14,9 @@ class CipherTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
 
@@ -62,17 +60,5 @@ class CipherTests: XCTestCase {
             
             XCTAssertEqual(encrypted.hexString, expected, "ChaCha20 failed");
         }
-        
-//        let key:NSData = NSData(bytes: [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] as [Byte], length: 32)
-//        let iv:NSData = NSData(bytes: [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] as [Byte], length: 32)
-
     }
-
-//    func testPerformanceExample() {
-//        // This is an example of a performance test case.
-//        self.measureBlock() {
-//            // Put the code you want to measure the time of here.
-//        }
-//    }
-
 }

@@ -9,8 +9,6 @@
 import Foundation
 
 public class ChaCha20 {
-    let keySize = 32
-    let nonceSize = 8
     let stateSize = 16
     let blockSize = 16 * 4
     
@@ -21,7 +19,6 @@ public class ChaCha20 {
     public init() {
     }
     
-    // checked
     private func wordToByte(input:[UInt32] /* 64 */) -> [Byte]? /* 16 */ {
         if (input.count != stateSize) {
             return nil;
@@ -41,20 +38,12 @@ public class ChaCha20 {
             quarterround(&x[3], &x[4], &x[9],  &x[14])
             i -= 2
         }
-        
+
+        var output = [Byte]()
+
         for i in 0..<16 {
             x[i] = x[i] &+ input[i]
-        }
-
-        var output:[Byte] = [Byte](count: 64, repeatedValue: 0)
-        
-        // build output
-        // TODO: improve
-        for i in 0..<16 {
-            let reversed = x[i].bytes().reverse()
-            for j in 0..<reversed.count {
-                output[(i*4)+j] = reversed[j]
-            }
+            output += x[i].bytes().reverse()
         }
 
         return output;
@@ -91,25 +80,18 @@ public class ChaCha20 {
         break;
         }
         
+        // 8 - 11
         for (var i = 0; i < 4; i++) {
             let start = addPos + (i*4)
             context.input[i + 8] = UInt32.withBytes(key[start..<(start + 4)]).bigEndian
         }
 
-        // iv - checked
+        // iv
         context.input[12] = 0
         context.input[13] = 0
         context.input[14] = UInt32.withBytes(iv[0..<4]).bigEndian
         context.input[15] = UInt32.withBytes(iv[4..<8]).bigEndian
         
-        println(iv)
-        
-        context.input.map({ (value) -> () in
-            var st: String = NSString(format:"%02X", value)
-            print(st)
-        })
-        println()
-
         return context
     }
     
@@ -132,18 +114,18 @@ public class ChaCha20 {
                     context.input[13] = context.input[13] &+ 1
                     /* stopping at 2^70 bytes per nonce is user's responsibility */
                 }
-                if (bytes <= 64) {
+                if (bytes <= blockSize) {
                     for (var i = 0; i < bytes; i++) {
                         c[i + cPos] = message[i + mPos] ^ output[i]
                     }
                     return c
                 }
-                for (var i = 0; i < 64; i++) {
+                for (var i = 0; i < blockSize; i++) {
                     c[i + cPos] = message[i + mPos] ^ output[i]
                 }
-                bytes -= 64
-                cPos += 64
-                mPos += 64
+                bytes -= blockSize
+                cPos += blockSize
+                mPos += blockSize
             }
         }
     }

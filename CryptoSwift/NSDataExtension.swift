@@ -70,10 +70,10 @@ extension NSData {
         self.getBytes(&bytesArray, length:count * sizeof(Byte))
         
         var s:String = "";
-        for(var i = 0; i < bytesArray.count; i++) {
-            var st: String = NSString(format:"%02X", bytesArray[i])
+        bytesArray.map({ (byte) -> () in
+            var st: String = NSString(format:"%02X", byte)
             s = s + st
-        }
+        })
         return s;
     }
     

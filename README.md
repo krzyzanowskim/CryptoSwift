@@ -24,7 +24,7 @@ Good mood
 
 ##Usage
 
-Generally you should use `CryptoHash` enum or convenience extensions
+Generally you should use `CryptoSwift.Hash`,`CryptoSwift.Cipher` enums or convenience extensions
 
 CryptoHash enum usage
 
@@ -32,7 +32,7 @@ CryptoHash enum usage
     
     /* CryptoHash enum usage */
     var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
-    if let data = CryptoHash.md5.hash(data) {
+    if let data = CryptoSwift.Hash.md5.hash(data) {
         println(data.hexString)
     }
     

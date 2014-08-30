@@ -56,17 +56,22 @@ class CipherTests: XCTestCase {
             let setup = (key: keyData, iv: ivData)
             var encrypted = Cipher.ChaCha20(setup).encrypt(messageData)
             XCTAssertNotNil(encrypted, "")
-            var decrypted = Cipher.ChaCha20(setup).decrypt(encrypted!)
-            XCTAssertNotNil(decrypted, "")
-            
-            XCTAssertEqual(messageData, decrypted!, "ChaCha20 decryption failed");
-            XCTAssertEqual(encrypted!.hexString, expectedHex, "ChaCha20 failed");
+            if let encrypted = encrypted {
+                var decrypted = Cipher.ChaCha20(setup).decrypt(encrypted)
+                XCTAssertNotNil(decrypted, "")
+                if let decrypted = decrypted {
+                    XCTAssertEqual(messageData, decrypted, "ChaCha20 decryption failed");
+                }
+                XCTAssertEqual(encrypted.hexString, expectedHex, "ChaCha20 failed");
 
-            // check extension
-            let encrypted2 = messageData.encrypt(Cipher.ChaCha20(setup))
-            XCTAssertNotNil(encrypted2, "")
-            XCTAssertEqual(encrypted!, encrypted2!, "ChaCha20 extension failed")
-            
+                // check extension
+                let encrypted2 = messageData.encrypt(Cipher.ChaCha20(setup))
+                XCTAssertNotNil(encrypted2, "")
+                if let encrypted2 = encrypted2 {
+                    XCTAssertEqual(encrypted, encrypted2, "ChaCha20 extension failed")
+                }
+
+            }
         }
     }
 }

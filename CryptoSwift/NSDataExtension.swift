@@ -64,6 +64,14 @@ extension NSData {
         return CRC().crc32(self);
     }
 
+    public func encrypt(cipher: Cipher) -> NSData {
+        return cipher.encrypt(self)
+    }
+
+    public func decrypt(cipher: Cipher) -> NSData {
+        return cipher.decrypt(self)
+    }
+
     internal func toHexString() -> String {
         let count = self.length / sizeof(Byte)
         var bytesArray = [Byte](count: count, repeatedValue: 0)

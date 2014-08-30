@@ -12,16 +12,16 @@ Good mood
 ####what implemented?
 
 #### Hash
-- MD5
-- SHA1
-- SHA224
-- SHA256
-- SHA384
-- SHA512
-- CRC32 (well, kind of hash)
+- [MD5](http://tools.ietf.org/html/rfc1321)
+- [SHA1](http://tools.ietf.org/html/rfc3174)
+- [SHA224](http://tools.ietf.org/html/rfc6234)
+- [SHA256](http://tools.ietf.org/html/rfc6234)
+- [SHA384](http://tools.ietf.org/html/rfc6234)
+- [SHA512](http://tools.ietf.org/html/rfc6234)
+- [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (well, kind of hash)
 
 #####Cipher
-- ChaCha20
+- [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
 
 ####[Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5)
 

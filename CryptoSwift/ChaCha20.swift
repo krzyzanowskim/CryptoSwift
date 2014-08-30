@@ -18,7 +18,7 @@ class ChaCha20 {
     }
     
     init(key:NSData, iv:NSData) {
-        context = keySetup(iv: iv, key: key)
+        context = contextSetup(iv: iv, key: key)
     }
 
     deinit
@@ -67,11 +67,11 @@ class ChaCha20 {
         return output;
     }
     
-    private func keySetup(# iv:NSData, key:NSData, kbits:UInt32 = 256) -> Context {
-        return keySetup(iv: iv.arrayOfBytes(), key: key.arrayOfBytes(), kbits: kbits)
+    private func contextSetup(# iv:NSData, key:NSData, kbits:UInt32 = 256) -> Context {
+        return contextSetup(iv: iv.arrayOfBytes(), key: key.arrayOfBytes(), kbits: kbits)
     }
     
-    private func keySetup(# iv:[Byte], key:[Byte], kbits:UInt32 = 256) -> Context {
+    private func contextSetup(# iv:[Byte], key:[Byte], kbits:UInt32 = 256) -> Context {
         var context = Context()
         
         // 4 - 8

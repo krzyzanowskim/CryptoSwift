@@ -65,15 +65,24 @@ Working with Cipher
 	let setup = (key: keyData, iv: ivData)
 	
 	// encrypt
-	let encrypted:NSData = Cipher.ChaCha20(setup).encrypt(dataToEncrypt)
+	let encrypted = Cipher.ChaCha20(setup).encrypt(dataToEncrypt)
 	
 	// decrypt
-	let decrypted:NSData = Cipher.ChaCha20(setup).decrypt(encrypted)
+	let decrypted = Cipher.ChaCha20(setup).decrypt(encrypted)
 	
-	// check
+	// validate result
 	if (encrypted.isEqual(decrypted)) {
 		print("Decryption failed!")
 	}
+
+with extensions
+	
+	// convenience setup tuplet
+	let setup = (key: keyData, iv: ivData)
+
+	let encrypted = dataToEncrypt.encrypt(Cipher.ChaCha20(setup))
+	let decrypted = encrypted.decrypt(Cipher.ChaCha20(setup))
+	
     
 ##Contact
 Marcin Krzyżanowski [@krzyzanowskim](http://twitter.com/krzyzanowskim)

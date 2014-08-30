@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal class ChaCha20 {
+class ChaCha20 {
     private let stateSize = 16
     private let blockSize = 16 * 4
     private var context:Context = Context()
@@ -17,7 +17,7 @@ internal class ChaCha20 {
         var input:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
     }
     
-    internal init(key:NSData, iv:NSData) {
+    init(key:NSData, iv:NSData) {
         context = keySetup(iv: iv, key: key)
     }
 
@@ -28,9 +28,13 @@ internal class ChaCha20 {
         }
     }
     
-    internal func encrypt(message:NSData) -> NSData {
+    func encrypt(message:NSData) -> NSData {
         let output = encryptBytes(message.arrayOfBytes())
         return NSData(bytes: output, length: output.count)
+    }
+    
+    func decrypt(message:NSData) -> NSData {
+        return encrypt(message)
     }
     
     private func wordToByte(input:[UInt32] /* 64 */) -> [Byte]? /* 16 */ {

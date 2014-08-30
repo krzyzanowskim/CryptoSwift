@@ -18,4 +18,13 @@ public enum Cipher {
                 return chacha.encrypt(message)
         }
     }
+    
+    public func decrypt(message: NSData) -> NSData {
+        switch (self) {
+        case .ChaCha20(let key, let iv):
+            var chacha = CryptoSwift.ChaCha20(key: key, iv: iv);
+            return chacha.decrypt(message)
+        }
+    }
+
 }

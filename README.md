@@ -60,6 +60,22 @@ Hashing a String and printing result
         println(hash)
     }
     
+Working with Cipher
+
+	// convenience setup tuplet
+	let setup = (key: keyData, iv: ivData)
+	
+	// encrypt
+	let encrypted:NSData = Cipher.ChaCha20(setup).encrypt(dataToEncrypt)
+	
+	// decrypt
+	let decrypted:NSData = Cipher.ChaCha20(setup).decrypt(encrypted)
+	
+	// check
+	if (encrypted.isEqual(decrypted)) {
+		print("Decryption failed!")
+	}
+    
 ##Contact
 Marcin Krzyżanowski [@krzyzanowskim](http://twitter.com/krzyzanowskim)
 

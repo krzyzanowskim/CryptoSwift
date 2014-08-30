@@ -53,8 +53,14 @@ class CipherTests: XCTestCase {
             let message = [Byte](count: (countElements(expectedHex) / 2), repeatedValue: 0)
             let messageData = NSData(bytes: message, length: message.count);
             
-            let ch = Cipher.ChaCha20(key: keyData, iv: ivData)
-            let encrypted = ch.encrypt(messageData)
+            let setup = (key: keyData, iv: ivData)
+            let encrypted = Cipher.ChaCha20(setup).encrypt(messageData)
+            let decrypted = Cipher.ChaCha20(setup).decrypt(encrypted)
+            XCTAssertEqual(messageData, decrypted, "ChaCha20 decryption failed");
+            
+            if (encrypted.isEqual(decrypted)) {
+                print("FAIL!")
+            }
             
             XCTAssertEqual(encrypted.hexString, expectedHex, "ChaCha20 failed");
         }

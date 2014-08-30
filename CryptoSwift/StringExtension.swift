@@ -41,11 +41,11 @@ extension String {
     }
 
     public func encrypt(cipher: Cipher) -> String? {
-        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.encrypt(cipher).toHexString()
+        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.encrypt(cipher)?.toHexString()
     }
 
     public func decrypt(cipher: Cipher) -> String? {
-        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.decrypt(cipher).toHexString()
+        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.decrypt(cipher)?.toHexString()
     }
 
 }

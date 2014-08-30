@@ -64,11 +64,11 @@ extension NSData {
         return CRC().crc32(self);
     }
 
-    public func encrypt(cipher: Cipher) -> NSData {
+    public func encrypt(cipher: Cipher) -> NSData? {
         return cipher.encrypt(self)
     }
 
-    public func decrypt(cipher: Cipher) -> NSData {
+    public func decrypt(cipher: Cipher) -> NSData? {
         return cipher.decrypt(self)
     }
 

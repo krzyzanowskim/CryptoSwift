@@ -10,30 +10,37 @@ import Foundation
 
 class ChaCha20 {
     private let stateSize = 16
-    private let blockSize = 16 * 4
-    private var context:Context = Context()
+    private var context:Context?
     
     private class Context {
         var input:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
-    }
-    
-    init(key:NSData, iv:NSData) {
-        context = contextSetup(iv: iv, key: key)
-    }
-
-    deinit
-    {
-        for (var i = 0; i < context.input.count; i++) {
-            context.input[i] = 0x00;
+        
+        deinit {
+            for (var i = 0; i < input.count; i++) {
+                input[i] = 0x00;
+            }
         }
     }
     
-    func encrypt(message:NSData) -> NSData {
-        let output = encryptBytes(message.arrayOfBytes())
-        return NSData(bytes: output, length: output.count)
+    init(key:NSData, iv:NSData) {
+        if let c = contextSetup(iv: iv, key: key) {
+            context = c
+        }
     }
     
-    func decrypt(message:NSData) -> NSData {
+    func encrypt(message:NSData) -> NSData? {
+        if (context == nil) {
+            return nil
+        }
+        
+        if let output = encryptBytes(message.arrayOfBytes()) {
+            return NSData(bytes: output, length: output.count)
+        }
+        
+        return nil
+    }
+    
+    func decrypt(message:NSData) -> NSData? {
         return encrypt(message)
     }
     
@@ -67,17 +74,22 @@ class ChaCha20 {
         return output;
     }
     
-    private func contextSetup(# iv:NSData, key:NSData, kbits:UInt32 = 256) -> Context {
-        return contextSetup(iv: iv.arrayOfBytes(), key: key.arrayOfBytes(), kbits: kbits)
+    private func contextSetup(# iv:NSData, key:NSData) -> Context? {
+        return contextSetup(iv: iv.arrayOfBytes(), key: key.arrayOfBytes())
     }
     
-    private func contextSetup(# iv:[Byte], key:[Byte], kbits:UInt32 = 256) -> Context {
-        var context = Context()
+    private func contextSetup(# iv:[Byte], key:[Byte]) -> Context? {
+        var ctx = Context()
+        let kbits = key.count * 8
+        
+        if (kbits != 128 && kbits != 256) {
+            return nil
+        }
         
         // 4 - 8
         for (var i = 0; i < 4; i++) {
             let start = i * 4
-            context.input[i + 4] = UInt32.withBytes(key[start..<(start + 4)]).bigEndian
+            ctx.input[i + 4] = UInt32.withBytes(key[start..<(start + 4)]).bigEndian
         }
         
         var addPos = 0;
@@ -85,62 +97,66 @@ class ChaCha20 {
         case 256:
             addPos += 16
             // sigma
-            context.input[0] = 0x61707865 //apxe
-            context.input[1] = 0x3320646e //3 dn
-            context.input[2] = 0x79622d32 //yb-2
-            context.input[3] = 0x6b206574 //k et
+            ctx.input[0] = 0x61707865 //apxe
+            ctx.input[1] = 0x3320646e //3 dn
+            ctx.input[2] = 0x79622d32 //yb-2
+            ctx.input[3] = 0x6b206574 //k et
         default:
             // tau
-            context.input[0] = 0x61707865 //apxe
-            context.input[1] = 0x3620646e //6 dn
-            context.input[2] = 0x79622d31 //yb-1
-            context.input[3] = 0x6b206574 //k et
+            ctx.input[0] = 0x61707865 //apxe
+            ctx.input[1] = 0x3620646e //6 dn
+            ctx.input[2] = 0x79622d31 //yb-1
+            ctx.input[3] = 0x6b206574 //k et
         break;
         }
         
         // 8 - 11
         for (var i = 0; i < 4; i++) {
             let start = addPos + (i*4)
-            context.input[i + 8] = UInt32.withBytes(key[start..<(start + 4)]).bigEndian
+            ctx.input[i + 8] = UInt32.withBytes(key[start..<(start + 4)]).bigEndian
         }
 
         // iv
-        context.input[12] = 0
-        context.input[13] = 0
-        context.input[14] = UInt32.withBytes(iv[0..<4]).bigEndian
-        context.input[15] = UInt32.withBytes(iv[4..<8]).bigEndian
+        ctx.input[12] = 0
+        ctx.input[13] = 0
+        ctx.input[14] = UInt32.withBytes(iv[0..<4]).bigEndian
+        ctx.input[15] = UInt32.withBytes(iv[4..<8]).bigEndian
         
-        return context
+        return ctx
     }
     
-    private func encryptBytes(message:[Byte]) -> [Byte] {
-        var cPos:Int = 0
-        var mPos:Int = 0
-        var bytes = message.count
-        
-        var c:[Byte] = [Byte](count: message.count, repeatedValue: 0)
-        
-        while (true) {
-            if let output = wordToByte(context.input) {
-                context.input[12] = context.input[12] &+ 1
-                if (context.input[12] == 0) {
-                    context.input[13] = context.input[13] &+ 1
-                    /* stopping at 2^70 bytes per nonce is user's responsibility */
-                }
-                if (bytes <= blockSize) {
-                    for (var i = 0; i < bytes; i++) {
+    private func encryptBytes(message:[Byte]) -> [Byte]? {
+        if let ctx = context {
+            var c:[Byte] = [Byte](count: message.count, repeatedValue: 0)
+            
+            let blockSize = 64
+            var cPos:Int = 0
+            var mPos:Int = 0
+            var bytes = message.count
+            
+            while (true) {
+                if let output = wordToByte(ctx.input) {
+                    ctx.input[12] = ctx.input[12] &+ 1
+                    if (ctx.input[12] == 0) {
+                        ctx.input[13] = ctx.input[13] &+ 1
+                        /* stopping at 2^70 bytes per nonce is user's responsibility */
+                    }
+                    if (bytes <= blockSize) {
+                        for (var i = 0; i < bytes; i++) {
+                            c[i + cPos] = message[i + mPos] ^ output[i]
+                        }
+                        return c
+                    }
+                    for (var i = 0; i < blockSize; i++) {
                         c[i + cPos] = message[i + mPos] ^ output[i]
                     }
-                    return c
+                    bytes -= blockSize
+                    cPos += blockSize
+                    mPos += blockSize
                 }
-                for (var i = 0; i < blockSize; i++) {
-                    c[i + cPos] = message[i + mPos] ^ output[i]
-                }
-                bytes -= blockSize
-                cPos += blockSize
-                mPos += blockSize
             }
         }
+        return nil;
     }
     
     private func quarterround(inout a:UInt32, inout _ b:UInt32, inout _ c:UInt32, inout _ d:UInt32) {

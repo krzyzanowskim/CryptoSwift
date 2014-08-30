@@ -61,27 +61,34 @@ Hashing a String and printing result
     
 Working with Cipher
 
-	// convenience setup tuplet
+	// convenience setup tuple
 	let setup = (key: keyData, iv: ivData)
 	
 	// encrypt
-	let encrypted = Cipher.ChaCha20(setup).encrypt(dataToEncrypt)
+	if let encrypted = Cipher.ChaCha20(setup).encrypt(dataToEncrypt) {
 	
-	// decrypt
-	let decrypted = Cipher.ChaCha20(setup).decrypt(encrypted)
-	
-	// validate result
-	if (encrypted.isEqual(decrypted)) {
-		print("Decryption failed!")
+	    // decrypt
+	    if let decrypted = Cipher.ChaCha20(setup).decrypt(encrypted) {
+	    
+	        // validate result
+	        if (encrypted.isEqual(decrypted)) {
+		        print("Decryption failed!")
+	        }
+	        
+	    }
 	}
+	
 
 with extensions
 	
-	// convenience setup tuplet
+	// convenience setup tuple
 	let setup = (key: keyData, iv: ivData)
 
-	let encrypted = dataToEncrypt.encrypt(Cipher.ChaCha20(setup))
-	let decrypted = encrypted.decrypt(Cipher.ChaCha20(setup))
+	if let encrypted = dataToEncrypt.encrypt(Cipher.ChaCha20(setup)) {
+		if let decrypted = encrypted.decrypt(Cipher.ChaCha20(setup)) {
+			println(decrypted)
+		}
+	}
 	
     
 ##Contact

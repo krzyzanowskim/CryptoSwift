@@ -57,12 +57,12 @@ class CipherTests: XCTestCase {
             let encrypted = Cipher.ChaCha20(setup).encrypt(messageData)
             let decrypted = Cipher.ChaCha20(setup).decrypt(encrypted)
             XCTAssertEqual(messageData, decrypted, "ChaCha20 decryption failed");
-            
-            if (encrypted.isEqual(decrypted)) {
-                print("FAIL!")
-            }
-            
             XCTAssertEqual(encrypted.hexString, expectedHex, "ChaCha20 failed");
+
+            // check extension
+            let encrypted2 = messageData.encrypt(Cipher.ChaCha20(setup))
+            XCTAssertEqual(encrypted, encrypted2, "ChaCha20 extension failed")
+            
         }
     }
 }

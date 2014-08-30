@@ -28,11 +28,11 @@ Good mood
 
 ##Usage
 
+    import CryptoSwift
+
 Generally you should use `CryptoSwift.Hash`,`CryptoSwift.Cipher` enums or convenience extensions
 
-CryptoHash enum usage
-
-    import CryptoSwift
+Hash enum usage
     
     /* Hash enum usage */
     var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)

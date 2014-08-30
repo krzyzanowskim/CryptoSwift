@@ -51,7 +51,7 @@ class ChaCha20 {
         
         var x = input
         
-        var i = 20
+        var i = 10
         while (i  > 0) {
             quarterround(&x[0], &x[4], &x[8], &x[12])
             quarterround(&x[1], &x[5], &x[9],  &x[13])
@@ -126,6 +126,7 @@ class ChaCha20 {
     }
     
     private func encryptBytes(message:[Byte]) -> [Byte]? {
+        
         if let ctx = context {
             var c:[Byte] = [Byte](count: message.count, repeatedValue: 0)
             

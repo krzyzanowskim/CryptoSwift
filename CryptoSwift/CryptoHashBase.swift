@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CryptoHashBase {
+class HashBase {
     
     var message: NSData
     

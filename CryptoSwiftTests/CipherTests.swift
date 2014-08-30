@@ -21,8 +21,6 @@ class CipherTests: XCTestCase {
     }
 
     func testChaCha20() {
-        let ch = ChaCha20()
-        
         let keys:[[Byte]] = [
             [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00],
             [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01],
@@ -39,7 +37,7 @@ class CipherTests: XCTestCase {
             [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07]
         ]
         
-        let expectedHex = [
+        let expectedHexes = [
             "76B8E0ADA0F13D90405D6AE55386BD28BDD219B8A08DED1AA836EFCC8B770DC7DA41597C5157488D7724E03FB8D84A376A43B8F41518A11CC387B669",
             "4540F05A9F1FB296D7736E7B208E3C96EB4FE1834688D2604F450952ED432D41BBE2A0B6EA7566D2A5D1E7E20D42AF2C53D792B1C43FEA817E9AD275",
             "DE9CBA7BF3D69EF5E786DC63973F653A0B49E015ADBFF7134FCB7DF137821031E85A050278A7084527214F73EFC7FA5B5277062EB7A0433E445F41E3",
@@ -51,14 +49,14 @@ class CipherTests: XCTestCase {
             let keyData = NSData(bytes: keys[idx], length: keys[idx].count)
             let ivData = NSData(bytes: ivs[idx], length: ivs[idx].count)
             
-            let context = ch.keySetup(iv: ivData, key: keyData)
-            
-            let expected = expectedHex[idx]
-            let message = [Byte](count: (countElements(expected) / 2), repeatedValue: 0)
+            let expectedHex = expectedHexes[idx]
+            let message = [Byte](count: (countElements(expectedHex) / 2), repeatedValue: 0)
             let messageData = NSData(bytes: message, length: message.count);
-            let encrypted = ch.encrypt(context, message: messageData)
             
-            XCTAssertEqual(encrypted.hexString, expected, "ChaCha20 failed");
+            let ch = Cipher.ChaCha20(key: keyData, iv: ivData)
+            let encrypted = ch.encrypt(messageData)
+            
+            XCTAssertEqual(encrypted.hexString, expectedHex, "ChaCha20 failed");
         }
     }
 }

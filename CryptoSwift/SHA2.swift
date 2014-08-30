@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SHA2 : CryptoHashBase {
+class SHA2 : CryptoSwift.HashBase {
     
     enum variant {
         case sha224, sha256, sha384, sha512

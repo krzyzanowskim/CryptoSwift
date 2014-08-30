@@ -8,15 +8,29 @@
 
 import Foundation
 
-public class ChaCha20 {
-    let stateSize = 16
-    let blockSize = 16 * 4
+internal class ChaCha20 {
+    private let stateSize = 16
+    private let blockSize = 16 * 4
+    private var context:Context = Context()
     
-    public class Context {
+    private class Context {
         var input:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
     }
     
-    public init() {
+    internal init(key:NSData, iv:NSData) {
+        context = keySetup(iv: iv, key: key)
+    }
+
+    deinit
+    {
+        for (var i = 0; i < context.input.count; i++) {
+            context.input[i] = 0x00;
+        }
+    }
+    
+    internal func encrypt(message:NSData) -> NSData {
+        let output = encryptBytes(message.arrayOfBytes())
+        return NSData(bytes: output, length: output.count)
     }
     
     private func wordToByte(input:[UInt32] /* 64 */) -> [Byte]? /* 16 */ {
@@ -49,7 +63,7 @@ public class ChaCha20 {
         return output;
     }
     
-    public func keySetup(# iv:NSData, key:NSData, kbits:UInt32 = 256) -> Context {
+    private func keySetup(# iv:NSData, key:NSData, kbits:UInt32 = 256) -> Context {
         return keySetup(iv: iv.arrayOfBytes(), key: key.arrayOfBytes(), kbits: kbits)
     }
     
@@ -95,12 +109,7 @@ public class ChaCha20 {
         return context
     }
     
-    public func encrypt(context:Context, message:NSData) -> NSData {
-        let output = encryptBytes(context, message: message.arrayOfBytes())
-        return NSData(bytes: output, length: output.count)
-    }
-    
-    private func encryptBytes(context:Context, message:[Byte]) -> [Byte] {
+    private func encryptBytes(message:[Byte]) -> [Byte] {
         var cPos:Int = 0
         var mPos:Int = 0
         var bytes = message.count

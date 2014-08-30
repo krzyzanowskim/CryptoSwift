@@ -37,15 +37,15 @@ extension NSData {
     }
     
     public func md5() -> NSData {
-        return MD5(self).calculate()
+        return Hash.md5.calculate(self)
     }
 
     public func sha1() -> NSData {
-        return SHA1(self).calculate()
+        return Hash.sha1.calculate(self)
     }
 
     public func sha224() -> NSData {
-        return SHA2(self).calculate32(.sha224)
+        return Hash.sha224.calculate(self)
     }
 
     public func sha256() -> NSData {

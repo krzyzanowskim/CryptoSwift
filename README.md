@@ -9,14 +9,19 @@ Good mood
 - Easy to use
 - Convenience extensions
 
-#####what implemented?
+####what implemented?
+
+#### Hash
 - MD5
 - SHA1
 - SHA224
 - SHA256
 - SHA384
 - SHA512
-- CRC32
+- CRC32 (well, kind of hash)
+
+#####Cipher
+- ChaCha20
 
 ####[Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5)
 
@@ -30,9 +35,9 @@ CryptoHash enum usage
 
     import CryptoSwift
     
-    /* CryptoHash enum usage */
+    /* Hash enum usage */
     var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
-    if let data = CryptoSwift.Hash.md5.hash(data) {
+    if let data = CryptoSwift.Hash.md5.calculate(data) {
         println(data.hexString)
     }
     

@@ -9,7 +9,7 @@ Good mood
 - Easy to use
 - Convenience extensions
 
-####what implemented?
+###What implemented?
 
 #### Hash
 - [MD5](http://tools.ietf.org/html/rfc1321)
@@ -23,9 +23,8 @@ Good mood
 #####Cipher
 - [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
 
-####[Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5)
-
-[Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391)
+###Why
+[Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
 
 ##Usage
 

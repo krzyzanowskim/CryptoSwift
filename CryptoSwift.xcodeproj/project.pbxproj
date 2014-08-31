@@ -11,6 +11,7 @@
 		75100F8F19B0BC890005C5F5 /* CipherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75100F8E19B0BC890005C5F5 /* CipherTests.swift */; };
 		75153D4219AA3C7900750381 /* SHA2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75153D4119AA3C7900750381 /* SHA2.swift */; };
 		75164E4919AD30AC00737F30 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75164E4819AD30AC00737F30 /* Utils.swift */; };
+		751C5C3D19B26B000094C75D /* Poly1305.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751C5C3C19B26B000094C75D /* Poly1305.swift */; };
 		752DEF7719693EA000E17557 /* NSDataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752DEF7619693EA000E17557 /* NSDataExtension.swift */; };
 		752E087B199FF27C005B0EA0 /* SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752E087A199FF27C005B0EA0 /* SHA1.swift */; };
 		75445821196AA2A5002FF20E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75445820196AA2A5002FF20E /* Security.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -99,6 +100,7 @@
 		75100F8E19B0BC890005C5F5 /* CipherTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CipherTests.swift; sourceTree = "<group>"; };
 		75153D4119AA3C7900750381 /* SHA2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHA2.swift; sourceTree = "<group>"; };
 		75164E4819AD30AC00737F30 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		751C5C3C19B26B000094C75D /* Poly1305.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Poly1305.swift; sourceTree = "<group>"; };
 		752DEF7619693EA000E17557 /* NSDataExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDataExtension.swift; sourceTree = "<group>"; };
 		752E087A199FF27C005B0EA0 /* SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHA1.swift; sourceTree = "<group>"; };
 		75445820196AA2A5002FF20E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -181,6 +183,7 @@
 				752E087A199FF27C005B0EA0 /* SHA1.swift */,
 				75153D4119AA3C7900750381 /* SHA2.swift */,
 				75EB380019ABDD710002375A /* ChaCha20.swift */,
+				751C5C3C19B26B000094C75D /* Poly1305.swift */,
 				758F3F771992F6CE0014BBDA /* ByteExtension.swift */,
 				7547195019931802002FA5F1 /* IntExtension.swift */,
 				752DEF7619693EA000E17557 /* NSDataExtension.swift */,
@@ -335,6 +338,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				751C5C3D19B26B000094C75D /* Poly1305.swift in Sources */,
 				7552614E1993051E000D2B20 /* Hash.swift in Sources */,
 				7599C9C6199EA28700A3988B /* StringExtension.swift in Sources */,
 				7563B2E819B14D4300B152CD /* Cipher.swift in Sources */,

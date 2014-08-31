@@ -36,7 +36,7 @@ Hash enum usage
     
     /* Hash enum usage */
     var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
-    if let data = CryptoSwift.Hash.md5.calculate(data) {
+    if let data = CryptoSwift.Hash.md5(data).calculate() {
         println(data.hexString)
     }
     

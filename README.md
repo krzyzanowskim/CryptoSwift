@@ -26,6 +26,10 @@ Good mood
 ###Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
 
+##Installation
+
+Drag the CryptoSwift.xcodeproj file into your Xcode project, and add CryptoSwift.framework as a dependency for your target.
+
 ##Usage
 
     import CryptoSwift

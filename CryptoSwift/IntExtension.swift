@@ -83,7 +83,7 @@ extension UInt64 {
 
 extension Int {
     
-    private init(bits: [Bit]) {
+    init(bits: [Bit]) {
         var bitPattern:UInt = 0
         for (idx,b) in enumerate(bits) {
             if (b == Bit.Zero) {

@@ -15,10 +15,12 @@ import Foundation
 class Poly1305 {
     let blockSize = 16
     
+    var buffer:[Byte] = [Byte](count: 16, repeatedValue: 0)
     var r:[Byte] = [Byte](count: 17, repeatedValue: 0)
     var h:[Byte] = [Byte](count: 17, repeatedValue: 0)
     var pad:[Byte] = [Byte](count: 17, repeatedValue: 0)
     var final:Byte = 0
+    var leftover:Int = 0
     
     init (key: [Byte]) {
         if (key.count != 32) {
@@ -38,6 +40,7 @@ class Poly1305 {
         r[16] = 0
         pad[16] = 0
         
+        leftover = 0
         final = 0
     }
     
@@ -146,6 +149,34 @@ class Poly1305 {
             mPos += blockSize //m = m + blockSize
             bytes -= blockSize
         }
+    }
+    
+    func finish(inout mac:[Byte]) -> Bool {
+        if (h.count != 16) {
+            return false
+        }
+        
+        /* process the remaining block */
+        if (leftover > 0) {
+            var i = leftover
+            buffer[i++] = 1
+            for (; i < blockSize; i++) {
+                buffer[i] = 0
+            }
+            final = 1
+            blocks(buffer)
+        }
+        
+        /* fully reduce h */
+        freeze(&h)
+        
+        /* h = (h + pad) % (1 << 128) */
+        add(&h, c: pad)
+        for i in 0..<16 {
+            mac[i] = h[i]
+        }
+        
+        return true
     }
     
     deinit {

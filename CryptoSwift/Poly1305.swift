@@ -44,6 +44,15 @@ class Poly1305 {
         final = 0
     }
     
+    deinit {
+        for i in 0...(r.count) {
+            r[i] = 0
+            h[i] = 0
+            pad[i] = 0
+            final = 0
+        }
+    }
+    
     func add(inout h:[Byte], c:[Byte]) -> Bool {
         if (h.count != 17 && c.count != 17) {
             return false
@@ -114,10 +123,10 @@ class Poly1305 {
         return true;
     }
     
-    func blocks(m:[Byte]) {
-        var mPos = 0
+    func blocks(m:[Byte], startPos:Int = 0) -> Int {
         var bytes = m.count
         let hibit = final ^ 1 // 1 <<128
+        var mPos = startPos
         
         while (bytes >= Int(blockSize)) {
             var hr:[UInt32] = [UInt32](count: 17, repeatedValue: 0)
@@ -149,6 +158,7 @@ class Poly1305 {
             mPos += blockSize //m = m + blockSize
             bytes -= blockSize
         }
+        return mPos
     }
     
     func finish(inout mac:[Byte]) -> Bool {
@@ -179,14 +189,54 @@ class Poly1305 {
         return true
     }
     
-    deinit {
-        for i in 0...(r.count) {
-            r[i] = 0
-            h[i] = 0
-            pad[i] = 0
-            final = 0
+    func update(m:[Byte]) {
+        var bytes = m.count
+        var mPos = 0
+        
+        /* handle leftover */
+        if (leftover > 0) {
+            var want = blockSize - leftover
+            if (want > bytes) {
+                want = bytes
+            }
+            
+            for i in 0..<want {
+                buffer[leftover + i] = m[mPos + i]
+            }
+            
+            bytes -= want
+            mPos += want
+            leftover += want
+            
+            if (leftover < blockSize) {
+                return
+            }
+            
+            blocks(buffer)
+            leftover = 0
+        }
+        
+        /* process full blocks */
+        if (bytes >= blockSize) {
+            var want = bytes & ~(blockSize - 1)
+            blocks(m, startPos: mPos)
+            mPos += want
+            bytes -= want;
+        }
+        
+        /* store leftover */
+        if (bytes > 0) {
+            for i in 0..<bytes {
+                buffer[leftover + 1] = m[i]
+            }
+            
+            leftover += bytes
         }
     }
     
-    
+    func auth(mac:[Byte], m:[Byte]) {
+        update(m)
+        var macLocal = mac
+        finish(&macLocal)
+    }
 }

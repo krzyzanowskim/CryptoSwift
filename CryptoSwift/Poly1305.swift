@@ -31,15 +31,43 @@ public class Poly1305 {
             h[i] = 0
         }
 
+        r[0] = key[0] & 0xff;
+        r[1] = key[1] & 0xff;
+        r[2] = key[2] & 0xff;
+        r[3] = key[3] & 0x0f;
+        r[4] = key[4] & 0xfc;
+        r[5] = key[5] & 0xff;
+        r[6] = key[6] & 0xff;
+        r[7] = key[7] & 0x0f;
+        r[8] = key[8] & 0xfc;
+        r[9] = key[9] & 0xff;
+        r[10] = key[10] & 0xff;
+        r[11] = key[11] & 0x0f;
+        r[12] = key[12] & 0xfc;
+        r[13] = key[13] & 0xff;
+        r[14] = key[14] & 0xff;
+        r[15] = key[15] & 0x0f;
+        r[16] = 0
+
         for i in 0..<16 {
-            r[i] = key[i] & 0x0f
             pad[i] = key[i + 16]
         }
-
-        h[16] = 0
-        r[16] = 0
         pad[16] = 0
         
+//        // debug
+//        print("\n init r: ")
+//        for i in 0..<r.count {
+//            print("\(r[i]), ")
+//        }
+//        print("\n")
+//
+//        // debug
+//        print("init pad: ")
+//        for i in 0..<pad.count {
+//            print("\(pad[i]), ")
+//        }
+//        print("\n")
+
         leftover = 0
         final = 0
     }
@@ -60,10 +88,10 @@ public class Poly1305 {
         }
         
         var u:UInt16 = 0
-        for i in 0..<h.count {
-            u = u &+ UInt16(h[i]) &+ UInt16(c[i])
-            h[0] = Byte.withValue(u)
-            u = u &>> 8 // u = u >> 8
+        for i in 0..<17 {
+            u += UInt16(h[i]) + UInt16(c[i])
+            h[i] = Byte.withValue(u)
+            u = u >> 8
         }
         return true
     }
@@ -76,21 +104,21 @@ public class Poly1305 {
         var u:UInt32 = 0
 
         for i in 0..<16 {
-            u = u &+ hr[i];
+            u += hr[i];
             h[i] = Byte.withValue(u) // crash! h[i] = UInt8(u) & 0xff
-            u = u >> 8;
+            u >>= 8;
         }
         
-        u = u &+ hr[16]
+        u += hr[16]
         h[16] = Byte.withValue(u) & 0x03
-        u = u >> 2
+        u >>= 2
         u += (u << 2); /* u *= 5; */
         for i in 0..<16 {
-            u = u &+ UInt32(h[i])
+            u += UInt32(h[i])
             h[i] = Byte.withValue(u) // crash! h[i] = UInt8(u) & 0xff
-            u = u >> 8
+            u >>= 8
         }
-        h[16] = h[16] &+ Byte.withValue(u);
+        h[16] += Byte.withValue(u);
         
         return true
     }
@@ -139,8 +167,9 @@ public class Poly1305 {
                 c[i] = m[mPos + i]
             }
             c[16] = hibit
+
             add(&h,c: c)
-            
+
             /* h *= r */
             for i in 0..<17 {
                 u = 0
@@ -154,8 +183,25 @@ public class Poly1305 {
                 }
                 hr[i] = u
             }
-            squeeze(&h, hr: hr)
             
+//            // debug
+//            print("blocks: hr:")
+//            for i in 0..<hr.count {
+//                let s:NSString = NSString(format: "%lu", hr[i])
+//                print("\(s), ")
+//            }
+//            print("\n")
+
+            squeeze(&h, hr: hr)
+
+            // debug
+            print("blocks: h:")
+            for i in 0..<h.count {
+                let s:NSString = NSString(format: "%d", h[i])
+                print("\(s), ")
+            }
+            print("\n")
+
             mPos += blockSize //m = m + blockSize
             bytes -= blockSize
         }
@@ -195,27 +241,27 @@ public class Poly1305 {
         var mPos = 0
         
         /* handle leftover */
-        if (leftover > 0) {
-            var want = blockSize - leftover
-            if (want > bytes) {
-                want = bytes
-            }
-            
-            for i in 0..<want {
-                buffer[leftover + i] = m[mPos + i]
-            }
-            
-            bytes -= want
-            mPos += want
-            leftover += want
-            
-            if (leftover < blockSize) {
-                return
-            }
-            
-            blocks(buffer)
-            leftover = 0
-        }
+//        if (leftover > 0) {
+//            var want = blockSize - leftover
+//            if (want > bytes) {
+//                want = bytes
+//            }
+//            
+//            for i in 0..<want {
+//                buffer[leftover + i] = m[mPos + i]
+//            }
+//            
+//            bytes -= want
+//            mPos += want
+//            leftover += want
+//            
+//            if (leftover < blockSize) {
+//                return
+//            }
+//            
+//            blocks(buffer)
+//            leftover = 0
+//        }
         
         /* process full blocks */
         if (bytes >= blockSize) {
@@ -225,6 +271,14 @@ public class Poly1305 {
             bytes -= want;
         }
         
+        // debug
+        print("update: h:")
+        for i in 0..<h.count {
+            let s:NSString = NSString(format: "%lu", h[i])
+            print("\(s), ")
+        }
+        print("\n")
+
         /* store leftover */
         if (bytes > 0) {
             for i in 0..<bytes {
@@ -233,6 +287,7 @@ public class Poly1305 {
             
             leftover += bytes
         }
+        
     }
     
     public func auth(mac:[Byte], m:[Byte]) -> [Byte] {

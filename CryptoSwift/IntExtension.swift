@@ -16,13 +16,12 @@
 
 import Foundation
 
-//FIXME: see integerFromBitsArray
-///* array of bits */
-//extension Int {
-//    init(bits: [Bit]) {
-//        self.init(bitPattern: integerFromBitsArray(bits) as UInt)
-//    }
-//}
+/* array of bits */
+extension Int {
+    init(bits: [Bit]) {
+        self.init(bitPattern: integerFromBitsArray(bits) as UInt)
+    }
+}
 
 /* array of bytes */
 extension Int {

@@ -8,6 +8,27 @@
 
 import Foundation
 
+/** casting */
+extension Byte {
+    
+    /** cast because UInt8(<UInt32>) because std initializer crash if value is > byte */
+    static func withValue(v:UInt64) -> Byte {
+        let tmp = v & 0xFF
+        return Byte(tmp)
+    }
+
+    static func withValue(v:UInt32) -> Byte {
+        let tmp = v & 0xFF
+        return Byte(tmp)
+    }
+    
+    static func withValue(v:UInt16) -> Byte {
+        let tmp = v & 0xFF
+        return Byte(tmp)
+    }
+
+}
+
 /** Bits */
 extension Byte {
 

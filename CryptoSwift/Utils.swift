@@ -24,8 +24,6 @@ func rotateRight(x:UInt64, n:UInt64) -> UInt64 {
     return ((x >> n) | (x << (64 - n)))
 }
 
-
-
 func reverseBytes(value: UInt32) -> UInt32 {
     // rdar://18060945 - not working since Xcode6-Beta6, need to split in two variables
     // return = ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24);
@@ -34,4 +32,18 @@ func reverseBytes(value: UInt32) -> UInt32 {
     var tmp1 = ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8)
     var tmp2 = ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24)
     return tmp1 | tmp2
+}
+
+
+/** array of bytes, little-endian representation */
+func bytesArray<T>(value:T, totalBytes:Int) -> [Byte] {
+    var bytes = [Byte](count: totalBytes, repeatedValue: 0)
+    var data = NSData(bytes: [value] as [T], length: min(sizeof(T),totalBytes))
+    
+    // then convert back to bytes, byte by byte
+    for i in 0..<data.length {
+        data.getBytes(&bytes[totalBytes - 1 - i], range:NSRange(location:i, length:sizeof(Byte)))
+    }
+    
+    return bytes
 }

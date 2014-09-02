@@ -12,7 +12,7 @@
 
 import Foundation
 
-class Poly1305 {
+public class Poly1305 {
     let blockSize = 16
     
     var buffer:[Byte] = [Byte](count: 16, repeatedValue: 0)
@@ -22,7 +22,7 @@ class Poly1305 {
     var final:Byte = 0
     var leftover:Int = 0
     
-    init (key: [Byte]) {
+    public init (key: [Byte]) {
         if (key.count != 32) {
             return;
         }
@@ -45,11 +45,12 @@ class Poly1305 {
     }
     
     deinit {
-        for i in 0...(r.count) {
+        for i in 0..<(r.count) {
             r[i] = 0
             h[i] = 0
             pad[i] = 0
             final = 0
+            leftover = 0
         }
     }
     
@@ -62,7 +63,8 @@ class Poly1305 {
         for i in 0..<h.count {
             u = u &+ h[i] &+ c[i]
             h[0] = u
-            u >>= 8
+            println(u)
+            u.shiftRight(8) // u = u >> 8
         }
         return true
     }
@@ -77,17 +79,17 @@ class Poly1305 {
         for i in 0..<16 {
             u = u &+ hr[i];
             h[i] = Byte(u) & 0xff;
-            u >>= 8;
+            u = u >> 8;
         }
         
         u = u &+ hr[16]
         h[16] = Byte(u) & 0x03
-        u >>= 2
+        u = u >> 2
         u += (u << 2); /* u *= 5; */
         for i in 0..<16 {
             u = u &+ UInt32(h[i])
             h[i] = Byte(u) & 0xff
-            u >>= 8
+            u = u >> 8
         }
         h[16] = h[16] &+ Byte(u);
         
@@ -161,7 +163,7 @@ class Poly1305 {
         return mPos
     }
     
-    func finish(inout mac:[Byte]) -> Bool {
+    public func finish(inout mac:[Byte]) -> Bool {
         if (h.count != 16) {
             return false
         }
@@ -189,7 +191,7 @@ class Poly1305 {
         return true
     }
     
-    func update(m:[Byte]) {
+    public func update(m:[Byte]) {
         var bytes = m.count
         var mPos = 0
         
@@ -234,7 +236,7 @@ class Poly1305 {
         }
     }
     
-    func auth(mac:[Byte], m:[Byte]) {
+    public func auth(mac:[Byte], m:[Byte]) {
         update(m)
         var macLocal = mac
         finish(&macLocal)

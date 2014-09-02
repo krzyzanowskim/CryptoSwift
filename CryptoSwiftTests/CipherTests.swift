@@ -48,9 +48,9 @@ class CipherTests: XCTestCase {
                                  0x2a,0x7d,0xfb,0x4b,0x3d,0x33,0x05,0xd9]
         
         
-        let poly = Poly1305(key: key);
-        let mac:[Byte] = [Byte](count: 16, repeatedValue: 0);
-        poly.auth(mac, m: msg)
+//        let poly = Poly1305(key: key);
+//        let mac:[Byte] = [Byte](count: 16, repeatedValue: 0);
+//        poly.auth(mac, m: msg)
     }
 
     func testChaCha20() {

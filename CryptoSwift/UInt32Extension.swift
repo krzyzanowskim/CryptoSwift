@@ -20,21 +20,7 @@ extension UInt32 {
 
     /** Int with array bytes (little-endian) */
     public static func withBytes(bytes: [Byte]) -> UInt32 {
-        var i:UInt32 = 0
-        var totalBytes = Swift.min(bytes.count, sizeofValue(i))
-        
-        // get slice of Int
-        var start = Swift.max(bytes.count - sizeofValue(i),0)
-        var intarr = [Byte](bytes[start..<(start + totalBytes)])
-        
-        // extend to Int size if necessary
-        while (intarr.count < sizeofValue(i)) {
-            intarr.insert(0 as Byte, atIndex: 0)
-        }
-        
-        var data = NSData(bytes: intarr, length: intarr.count)
-        data.getBytes(&i, length: sizeofValue(i));
-        return i.byteSwapped
+        return integerWithBytes(bytes)
     }
 }
 

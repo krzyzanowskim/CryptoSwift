@@ -62,7 +62,7 @@ public class Poly1305 {
         var u:UInt16 = 0
         for i in 0..<h.count {
             u = u &+ UInt16(h[i]) &+ UInt16(c[i])
-            h[0] = Byte(u)
+            h[0] = Byte.withValue(u)
             u = u &>> 8 // u = u >> 8
         }
         return true
@@ -77,20 +77,20 @@ public class Poly1305 {
 
         for i in 0..<16 {
             u = u &+ hr[i];
-            h[i] = Byte(u) & 0xff;
+            h[i] = Byte.withValue(u) // crash! h[i] = UInt8(u) & 0xff
             u = u >> 8;
         }
         
         u = u &+ hr[16]
-        h[16] = Byte(u) & 0x03
+        h[16] = Byte.withValue(u) & 0x03
         u = u >> 2
         u += (u << 2); /* u *= 5; */
         for i in 0..<16 {
             u = u &+ UInt32(h[i])
-            h[i] = Byte(u) & 0xff
+            h[i] = Byte.withValue(u) // crash! h[i] = UInt8(u) & 0xff
             u = u >> 8
         }
-        h[16] = h[16] &+ Byte(u);
+        h[16] = h[16] &+ Byte.withValue(u);
         
         return true
     }

@@ -235,8 +235,10 @@ public class Poly1305 {
         }
     }
     
-    public func auth(inout mac:[Byte], m:[Byte]) {
+    public func auth(mac:[Byte], m:[Byte]) -> [Byte] {
         update(m)
-        finish(&mac)
+        var macWork = mac
+        finish(&macWork)
+        return macWork
     }
 }

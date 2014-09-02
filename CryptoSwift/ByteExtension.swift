@@ -8,8 +8,8 @@
 
 import Foundation
 
+/** Bits */
 extension Byte {
-
     init(bits: [Bit]) {
         var bitPattern:Byte = 0
         for (idx,b) in enumerate(bits) {
@@ -48,7 +48,10 @@ extension Byte {
         }
         return s
     }
+}
 
+/** Shift bits */
+extension Byte {
     /** Shift bits to the right. All bits are shifted (including sign bit) */
     mutating func shiftRight(count: Byte) -> Byte {
         if (self == 0) {

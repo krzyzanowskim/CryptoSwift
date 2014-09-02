@@ -31,6 +31,7 @@
 		75B601EB197D6A6C0009B53D /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
 		75D94E2419B60C08007CB2A4 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2319B60C08007CB2A4 /* Operators.swift */; };
 		75D94E2619B60C4F007CB2A4 /* UInt32Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2519B60C4F007CB2A4 /* UInt32Extension.swift */; };
+		75D94E2819B60DDE007CB2A4 /* UInt64Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2719B60DDE007CB2A4 /* UInt64Extension.swift */; };
 		75EB380119ABDD710002375A /* ChaCha20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB380019ABDD710002375A /* ChaCha20.swift */; };
 /* End PBXBuildFile section */
 
@@ -126,6 +127,7 @@
 		759D481019B517BC005FF7FC /* BitExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitExtension.swift; sourceTree = "<group>"; };
 		75D94E2319B60C08007CB2A4 /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		75D94E2519B60C4F007CB2A4 /* UInt32Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UInt32Extension.swift; sourceTree = "<group>"; };
+		75D94E2719B60DDE007CB2A4 /* UInt64Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UInt64Extension.swift; sourceTree = "<group>"; };
 		75EB380019ABDD710002375A /* ChaCha20.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChaCha20.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -194,6 +196,7 @@
 				758F3F771992F6CE0014BBDA /* ByteExtension.swift */,
 				7547195019931802002FA5F1 /* IntExtension.swift */,
 				75D94E2519B60C4F007CB2A4 /* UInt32Extension.swift */,
+				75D94E2719B60DDE007CB2A4 /* UInt64Extension.swift */,
 				75D94E2319B60C08007CB2A4 /* Operators.swift */,
 				752DEF7619693EA000E17557 /* NSDataExtension.swift */,
 				754C8FEC19979F94005AD904 /* ArrayExtension.swift */,
@@ -347,6 +350,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75D94E2819B60DDE007CB2A4 /* UInt64Extension.swift in Sources */,
 				751C5C3D19B26B000094C75D /* Poly1305.swift in Sources */,
 				7552614E1993051E000D2B20 /* Hash.swift in Sources */,
 				7599C9C6199EA28700A3988B /* StringExtension.swift in Sources */,

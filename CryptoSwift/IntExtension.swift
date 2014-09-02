@@ -33,14 +33,8 @@ j &<<= 2        //shift left and assign
 
 import Foundation
 
-extension UInt64 {
-    public func bytes(_ totalBytes: Int = sizeof(UInt64)) -> [Byte] {
-        return bytesArray(self, totalBytes)
-    }
-}
-
+/* array of bits */
 extension Int {
-    
     init(bits: [Bit]) {
         var bitPattern:UInt = 0
         for (idx,b) in enumerate(bits) {
@@ -52,7 +46,10 @@ extension Int {
         
         self.init(bitPattern: bitPattern)
     }
-    
+}
+
+/* array of bytes */
+extension Int {
     /** Array of bytes with optional padding (little-endian) */
     public func bytes(_ totalBytes: Int = sizeof(Int)) -> [Byte] {
         return bytesArray(self, totalBytes)
@@ -80,7 +77,7 @@ extension Int {
 
 
 
-/** Bit operations */
+/** Shift bits */
 extension Int {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */

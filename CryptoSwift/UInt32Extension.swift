@@ -8,7 +8,7 @@
 
 import Foundation
 
-/* bytes of array */
+/* array of bytes */
 extension UInt32 {
     public func bytes(_ totalBytes: Int = sizeof(UInt32)) -> [Byte] {
         return bytesArray(self, totalBytes)
@@ -38,7 +38,7 @@ extension UInt32 {
     }
 }
 
-/** Bit operations */
+/** Shift bits */
 extension UInt32 {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */

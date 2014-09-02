@@ -10,16 +10,9 @@ import Foundation
 
 /** Bits */
 extension Byte {
+
     init(bits: [Bit]) {
-        var bitPattern:Byte = 0
-        for (idx,b) in enumerate(bits) {
-            if (b == Bit.Zero) {
-                var bit:Byte = Byte(1) << Byte(idx)
-                bitPattern = bitPattern | bit
-            }
-        }
-        
-        self.init(bitPattern)
+        self.init(integerFromBitsArray(bits) as Byte)
     }
     
     /** array of bits */

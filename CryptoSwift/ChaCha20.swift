@@ -33,7 +33,7 @@ class ChaCha20 {
             return nil
         }
         
-        if let output = encryptBytes(message.arrayOfBytes()) {
+        if let output = encryptBytes(message.bytes()) {
             return NSData(bytes: output, length: output.count)
         }
         
@@ -75,7 +75,7 @@ class ChaCha20 {
     }
     
     private func contextSetup(# iv:NSData, key:NSData) -> Context? {
-        return contextSetup(iv: iv.arrayOfBytes(), key: key.arrayOfBytes())
+        return contextSetup(iv: iv.bytes(), key: key.bytes())
     }
     
     private func contextSetup(# iv:[Byte], key:[Byte]) -> Context? {

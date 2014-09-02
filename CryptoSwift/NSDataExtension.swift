@@ -26,7 +26,7 @@ extension NSData {
     public func checksum() -> UInt16 {
         var s:UInt32 = 0;
         
-        var bytesArray = self.arrayOfBytes();
+        var bytesArray = self.bytes();
         
         for (var i = 0; i < bytesArray.count; i++) {
             var b = bytesArray[i]
@@ -85,7 +85,7 @@ extension NSData {
         return s;
     }
     
-    internal func arrayOfBytes() -> Array<Byte> {
+    internal func bytes() -> [Byte] {
         let count = self.length / sizeof(Byte)
         var bytesArray = [Byte](count: count, repeatedValue: 0)
         self.getBytes(&bytesArray, length:count * sizeof(Byte))

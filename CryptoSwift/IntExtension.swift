@@ -14,37 +14,23 @@
 //  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 //  - This notice may not be removed or altered from any source or binary distribution.
 
-/*
-Bit shifting with overflow protection using overflow operator "&".
-Approach is consistent with standard overflow operators &+, &-, &*, &/
-and introduce new overflow operators for shifting: &<<, &>>
-
-Note: Works with unsigned integers values only
-
-Usage
-
-var i = 1       // init
-var j = i &<< 2 //shift left
-j &<<= 2        //shift left and assign
-
-
-@see: https://medium.com/@krzyzanowskim/swiftly-shift-bits-and-protect-yourself-be33016ce071
-*/
-
 import Foundation
+
+func buildBitPattern<T : IntegerType, UnsignedIntegerType, BitwiseOperationsType, IntegerLiteralConvertible>(bits: [Bit]) -> T {
+        var bitPattern:T = 0
+        for (idx,b) in enumerate(bits) {
+            if (b == Bit.Zero) {
+                var bit = (1 << idx) as T
+                bitPattern = bitPattern | bit
+            }
+        }
+    return bitPattern
+}
 
 /* array of bits */
 extension Int {
     init(bits: [Bit]) {
-        var bitPattern:UInt = 0
-        for (idx,b) in enumerate(bits) {
-            if (b == Bit.Zero) {
-                var bit:UInt = UInt(1) << UInt(idx)
-                bitPattern = bitPattern | bit
-            }
-        }
-        
-        self.init(bitPattern: bitPattern)
+        self.init(bitPattern: integerFromBitsArray(bits) as UInt)
     }
 }
 
@@ -52,7 +38,11 @@ extension Int {
 extension Int {
     /** Array of bytes with optional padding (little-endian) */
     public func bytes(_ totalBytes: Int = sizeof(Int)) -> [Byte] {
-        return bytesArray(self, totalBytes)
+        return arrayOfBytes(self, totalBytes)
+    }
+
+    public static func withBytes(bytes: Slice<Byte>) -> Int {
+        return Int.withBytes(Array(bytes))
     }
 
     /** Int with array bytes (little-endian) */

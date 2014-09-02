@@ -16,23 +16,13 @@
 
 import Foundation
 
-func buildBitPattern<T : IntegerType, UnsignedIntegerType, BitwiseOperationsType, IntegerLiteralConvertible>(bits: [Bit]) -> T {
-        var bitPattern:T = 0
-        for (idx,b) in enumerate(bits) {
-            if (b == Bit.Zero) {
-                var bit = (1 << idx) as T
-                bitPattern = bitPattern | bit
-            }
-        }
-    return bitPattern
-}
-
-/* array of bits */
-extension Int {
-    init(bits: [Bit]) {
-        self.init(bitPattern: integerFromBitsArray(bits) as UInt)
-    }
-}
+//FIXME: see integerFromBitsArray
+///* array of bits */
+//extension Int {
+//    init(bits: [Bit]) {
+//        self.init(bitPattern: integerFromBitsArray(bits) as UInt)
+//    }
+//}
 
 /* array of bytes */
 extension Int {

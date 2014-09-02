@@ -33,7 +33,14 @@ extension Byte {
 extension Byte {
 
     init(bits: [Bit]) {
-        self.init(integerFromBitsArray(bits) as Byte)
+        var bitPattern = 0 as Byte
+        for (idx,b) in enumerate(bits) {
+            if (b == Bit.One) {
+                let bit = Byte(1 << idx)
+                bitPattern = bitPattern | bit
+            }
+        }
+        self.init(bitPattern)
     }
     
     /** array of bits */

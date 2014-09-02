@@ -8,17 +8,18 @@
 
 import Foundation
 
-/** build bit pattern from array of bits */
-func integerFromBitsArray<T : UnsignedIntegerType>(bits: [Bit]) -> T {
-    var bitPattern:T = 0
-    for (idx,b) in enumerate(bits) {
-        if (b == Bit.One) {
-            var bit = (UInt(1) << UInt(idx)) as T
-            bitPattern = bitPattern | bit
-        }
-    }
-    return bitPattern
-}
+//FIXME: I can't do this Generic since Beta7, fix it if you can
+///** build bit pattern from array of bits */
+//func integerFromBitsArray<T : UnsignedIntegerType>(bits: [Bit]) -> T {
+//    var bitPattern:T = 0
+//    for (idx,b) in enumerate(bits) {
+//        if (b == Bit.One) {
+//            let bit = (UInt(1) << UInt(idx)) as T
+//            bitPattern = bitPattern | bit
+//        }
+//    }
+//    return bitPattern
+//}
 
 /** initialize integer from array of bytes */
 func integerWithBytes<T: IntegerType>(bytes: [Byte]) -> T {

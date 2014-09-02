@@ -163,7 +163,7 @@ public class Poly1305 {
     }
     
     public func finish(inout mac:[Byte]) -> Bool {
-        if (h.count != 16) {
+        if (mac.count != 16) {
             return false
         }
         
@@ -235,9 +235,8 @@ public class Poly1305 {
         }
     }
     
-    public func auth(mac:[Byte], m:[Byte]) {
+    public func auth(inout mac:[Byte], m:[Byte]) {
         update(m)
-        var macLocal = mac
-        finish(&macLocal)
+        finish(&mac)
     }
 }

@@ -73,7 +73,7 @@ class SHA2 : CryptoSwift.HashBase {
         }
     }
     
-    //TODO: I can't do generict out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.
+    //FIXME: I can't do Generic fuct out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.
     func calculate32(variant: SHA2.variant) -> NSData {
         var tmpMessage = self.prepare()
         

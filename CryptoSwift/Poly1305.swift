@@ -59,12 +59,11 @@ public class Poly1305 {
             return false
         }
         
-        var u:Byte = 0
+        var u:UInt16 = 0
         for i in 0..<h.count {
-            u = u &+ h[i] &+ c[i]
-            h[0] = u
-            println(u)
-            u.shiftRight(8) // u = u >> 8
+            u = u &+ UInt16(h[i]) &+ UInt16(c[i])
+            h[0] = Byte(u)
+            u = u &>> 8 // u = u >> 8
         }
         return true
     }

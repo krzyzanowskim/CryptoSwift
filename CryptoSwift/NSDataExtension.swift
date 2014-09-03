@@ -69,7 +69,7 @@ extension NSData {
     }
     
     public func authenticate(authenticator: Authenticator) -> NSData? {
-        return authenticator.calculate(self)
+        return authenticator.authenticate(self)
     }
 }
 

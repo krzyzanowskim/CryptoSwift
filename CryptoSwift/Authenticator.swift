@@ -24,7 +24,7 @@ public enum Authenticator {
     
     :returns: 16-byte message authentication code
     */
-    public func calculate(message: NSData) -> NSData? {
+    public func authenticate(message: NSData) -> NSData? {
         switch (self) {
         case .Poly1305(let key):
             return CryptoSwift.Poly1305.authenticate(key: key, message: message)

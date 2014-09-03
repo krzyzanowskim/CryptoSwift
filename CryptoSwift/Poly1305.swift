@@ -215,14 +215,26 @@ public class Poly1305 {
         
         /* process the remaining block */
         if (leftover > 0) {
+            
             var i = leftover
             buffer[i++] = 1
             for (; i < blockSize; i++) {
                 buffer[i] = 0
             }
             final = 1
+            
             blocks(buffer)
+            
+            // debug
+            print("finish: buffer:")
+            for i in 0..<buffer.count {
+                let s:NSString = NSString(format: "%d", buffer[i])
+                print("\(s), ")
+            }
+            print("\n")
+
         }
+        
         
         /* fully reduce h */
         freeze(&h)
@@ -241,27 +253,27 @@ public class Poly1305 {
         var mPos = 0
         
         /* handle leftover */
-//        if (leftover > 0) {
-//            var want = blockSize - leftover
-//            if (want > bytes) {
-//                want = bytes
-//            }
-//            
-//            for i in 0..<want {
-//                buffer[leftover + i] = m[mPos + i]
-//            }
-//            
-//            bytes -= want
-//            mPos += want
-//            leftover += want
-//            
-//            if (leftover < blockSize) {
-//                return
-//            }
-//            
-//            blocks(buffer)
-//            leftover = 0
-//        }
+        if (leftover > 0) {
+            var want = blockSize - leftover
+            if (want > bytes) {
+                want = bytes
+            }
+            
+            for i in 0..<want {
+                buffer[leftover + i] = m[mPos + i]
+            }
+            
+            bytes -= want
+            mPos += want
+            leftover += want
+            
+            if (leftover < blockSize) {
+                return
+            }
+            
+            blocks(buffer)
+            leftover = 0
+        }
         
         /* process full blocks */
         if (bytes >= blockSize) {
@@ -282,7 +294,7 @@ public class Poly1305 {
         /* store leftover */
         if (bytes > 0) {
             for i in 0..<bytes {
-                buffer[leftover + 1] = m[i]
+                buffer[leftover + i] = m[mPos + i]
             }
             
             leftover += bytes

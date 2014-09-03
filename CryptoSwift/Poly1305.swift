@@ -77,7 +77,7 @@ public class Poly1305 {
         }
     }
     
-    // MARK: - Public
+    // MARK: - Internal
 
     /**
     Calculate Message Authentication Code (MAC) for message.
@@ -88,7 +88,7 @@ public class Poly1305 {
     
     :returns: Message Authentication Code
     */
-    class public func authenticate(key: [Byte], message: [Byte]) -> [Byte]? {
+    class internal func authenticate(# key: [Byte], message: [Byte]) -> [Byte]? {
         var poly = Poly1305(key)
         return poly.authenticate(message: message)
     }

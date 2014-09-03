@@ -23,6 +23,9 @@ Good mood
 #####Cipher
 - [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
 
+#####Message authenticators
+- [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
+
 ###Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
 
@@ -94,6 +97,9 @@ with extensions
 		}
 	}
 	
+Message authenticators
+
+	let mac = Authentication.Poly1305(key: key, message: msg).calculate()
     
 ##Contact
 Marcin Krzyżanowski [@krzyzanowskim](http://twitter.com/krzyzanowskim)

@@ -14,15 +14,37 @@ import Foundation
 
 public class Poly1305 {
     let blockSize = 16
+
+    lazy var buffer:[Byte] = {
+        [unowned self] in return [Byte](count: self.blockSize, repeatedValue: 0)
+    }()
     
-    var buffer:[Byte] = [Byte](count: 16, repeatedValue: 0)
-    var r:[Byte] = [Byte](count: 17, repeatedValue: 0)
-    var h:[Byte] = [Byte](count: 17, repeatedValue: 0)
-    var pad:[Byte] = [Byte](count: 17, repeatedValue: 0)
-    var final:Byte = 0
+    var r            = [Byte](count: 17, repeatedValue: 0)
+    var h            = [Byte](count: 17, repeatedValue: 0)
+    var pad          = [Byte](count: 17, repeatedValue: 0)
+    var final:Byte   = 0
     var leftover:Int = 0
     
     public init (key: [Byte]) {
+        setupKey(key)
+    }
+    
+    deinit {
+        for i in 0..<buffer.count {
+            buffer[i] = 0
+        }
+        
+        for i in 0..<(r.count) {
+            r[i] = 0
+            h[i] = 0
+            pad[i] = 0
+            final = 0
+            leftover = 0
+        }
+    }
+    
+    func setupKey(key:[Byte]) {
+        assert(key.count == 32,"Invalid key length");
         if (key.count != 32) {
             return;
         }
@@ -30,7 +52,7 @@ public class Poly1305 {
         for i in 0..<17 {
             h[i] = 0
         }
-
+        
         r[0] = key[0] & 0xff;
         r[1] = key[1] & 0xff;
         r[2] = key[2] & 0xff;
@@ -48,27 +70,17 @@ public class Poly1305 {
         r[14] = key[14] & 0xff;
         r[15] = key[15] & 0x0f;
         r[16] = 0
-
+        
         for i in 0..<16 {
             pad[i] = key[i + 16]
         }
         pad[16] = 0
-
+        
         leftover = 0
         final = 0
     }
     
-    deinit {
-        for i in 0..<(r.count) {
-            r[i] = 0
-            h[i] = 0
-            pad[i] = 0
-            final = 0
-            leftover = 0
-        }
-    }
-    
-    func add(inout h:[Byte], c:[Byte]) -> Bool {
+    private func add(inout h:[Byte], c:[Byte]) -> Bool {
         if (h.count != 17 && c.count != 17) {
             return false
         }
@@ -82,7 +94,7 @@ public class Poly1305 {
         return true
     }
     
-    func squeeze(inout h:[Byte], hr:[UInt32]) -> Bool {
+    private func squeeze(inout h:[Byte], hr:[UInt32]) -> Bool {
         if (h.count != 17 && hr.count != 17) {
             return false
         }
@@ -109,7 +121,8 @@ public class Poly1305 {
         return true
     }
     
-    func freeze(inout h:[Byte]) -> Bool {
+    private func freeze(inout h:[Byte]) -> Bool {
+        assert(h.count == 17,"Invalid length")
         if (h.count != 17) {
             return false
         }
@@ -138,7 +151,7 @@ public class Poly1305 {
         return true;
     }
     
-    func blocks(m:[Byte], startPos:Int = 0) -> Int {
+    private func blocks(m:[Byte], startPos:Int = 0) -> Int {
         var bytes = m.count
         let hibit = final ^ 1 // 1 <<128
         var mPos = startPos
@@ -178,7 +191,8 @@ public class Poly1305 {
         return mPos
     }
     
-    public func finish(inout mac:[Byte]) -> Bool {
+    private func finish(inout mac:[Byte]) -> Bool {
+        assert(mac.count == 16, "Invalid mac length")
         if (mac.count != 16) {
             return false
         }
@@ -209,7 +223,7 @@ public class Poly1305 {
         return true
     }
     
-    public func update(m:[Byte]) {
+    private func update(m:[Byte]) {
         var bytes = m.count
         var mPos = 0
         

@@ -14,8 +14,7 @@ import Foundation
 
 public class Poly1305 {
     let blockSize = 16
-
-    private var ctx = Context()
+    private var ctx:Context
     
     private class Context {
         var r            = [Byte](count: 17, repeatedValue: 0)
@@ -25,61 +24,70 @@ public class Poly1305 {
         
         var final:Byte   = 0
         var leftover:Int = 0
+        
+        init (_ key: [Byte]) {
+            assert(key.count == 32,"Invalid key length");
+            if (key.count != 32) {
+                return;
+            }
+            
+            for i in 0..<17 {
+                h[i] = 0
+            }
+            
+            r[0] = key[0] & 0xff;
+            r[1] = key[1] & 0xff;
+            r[2] = key[2] & 0xff;
+            r[3] = key[3] & 0x0f;
+            r[4] = key[4] & 0xfc;
+            r[5] = key[5] & 0xff;
+            r[6] = key[6] & 0xff;
+            r[7] = key[7] & 0x0f;
+            r[8] = key[8] & 0xfc;
+            r[9] = key[9] & 0xff;
+            r[10] = key[10] & 0xff;
+            r[11] = key[11] & 0x0f;
+            r[12] = key[12] & 0xfc;
+            r[13] = key[13] & 0xff;
+            r[14] = key[14] & 0xff;
+            r[15] = key[15] & 0x0f;
+            r[16] = 0
+            
+            for i in 0..<16 {
+                pad[i] = key[i + 16]
+            }
+            pad[16] = 0
+            
+            leftover = 0
+            final = 0
+        }
+        
+        deinit {
+            for i in 0..<buffer.count {
+                buffer[i] = 0
+            }
+            
+            for i in 0..<r.count {
+                r[i] = 0
+                h[i] = 0
+                pad[i] = 0
+                final = 0
+                leftover = 0
+            }
+        }
     }
     
-    public init (key: [Byte]) {
-        setupKey(ctx, key: key)
+    class public func withKey(key: [Byte]) -> Poly1305 {
+        return Poly1305(key)
     }
     
-    deinit {
-        for i in 0..<ctx.buffer.count {
-            ctx.buffer[i] = 0
-        }
-        
-        for i in 0..<ctx.r.count {
-            ctx.r[i] = 0
-            ctx.h[i] = 0
-            ctx.pad[i] = 0
-            ctx.final = 0
-            ctx.leftover = 0
-        }
+    private init (_ key: [Byte]) {
+        ctx = Context(key)
     }
     
-    private func setupKey(context:Context, key:[Byte]) {
-        assert(key.count == 32,"Invalid key length");
-        if (key.count != 32) {
-            return;
-        }
-        
-        for i in 0..<17 {
-            context.h[i] = 0
-        }
-        
-        context.r[0] = key[0] & 0xff;
-        context.r[1] = key[1] & 0xff;
-        context.r[2] = key[2] & 0xff;
-        context.r[3] = key[3] & 0x0f;
-        context.r[4] = key[4] & 0xfc;
-        context.r[5] = key[5] & 0xff;
-        context.r[6] = key[6] & 0xff;
-        context.r[7] = key[7] & 0x0f;
-        context.r[8] = key[8] & 0xfc;
-        context.r[9] = key[9] & 0xff;
-        context.r[10] = key[10] & 0xff;
-        context.r[11] = key[11] & 0x0f;
-        context.r[12] = key[12] & 0xfc;
-        context.r[13] = key[13] & 0xff;
-        context.r[14] = key[14] & 0xff;
-        context.r[15] = key[15] & 0x0f;
-        context.r[16] = 0
-        
-        for i in 0..<16 {
-            context.pad[i] = key[i + 16]
-        }
-        context.pad[16] = 0
-        
-        context.leftover = 0
-        context.final = 0
+    public func auth(mac:[Byte], message:[Byte]) -> [Byte]? {
+        update(ctx, m: message)
+        return finish(ctx, mac: mac)
     }
     
     private func add(context:Context, c:[Byte]) -> Bool {
@@ -270,11 +278,5 @@ public class Poly1305 {
             
             context.leftover += bytes
         }
-        
-    }
-    
-    public func auth(mac:[Byte], m:[Byte]) -> [Byte]? {
-        update(ctx, m: m)
-        return finish(ctx, mac: mac)
     }
 }

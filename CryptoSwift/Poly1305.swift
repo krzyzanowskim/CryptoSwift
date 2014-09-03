@@ -14,7 +14,7 @@ import Foundation
 
 public class Poly1305 {
     let blockSize = 16
-    private var ctx:Context
+    private var ctx:Context?
     
     private class Context {
         var r            = [Byte](count: 17, repeatedValue: 0)
@@ -77,18 +77,118 @@ public class Poly1305 {
         }
     }
     
-    class public func withKey(key: [Byte]) -> Poly1305 {
-        return Poly1305(key)
+    // MARK: - Public
+
+    /**
+    Calculate Message Authentication Code (MAC) for message.
+    Calculation context is discarder on instance deallocation.
+    
+    :param: key     256-bit key
+    :param: message Message
+    
+    :returns: Message Authentication Code
+    */
+    class public func authenticate(key: [Byte], message: [Byte]) -> [Byte]? {
+        var poly = Poly1305(key)
+        return poly.authenticate(message: message)
     }
+    
+    // MARK: - Private
     
     private init (_ key: [Byte]) {
         ctx = Context(key)
     }
     
-    public func auth(mac:[Byte], message:[Byte]) -> [Byte]? {
-        update(ctx, m: message)
-        return finish(ctx, mac: mac)
+    private func authenticate(# message:[Byte]) -> [Byte]? {
+        if let ctx = self.ctx {
+            update(ctx, message: message)
+            return finish(ctx)
+        }
+        return nil
     }
+    
+    /**
+    Add message to be processed
+    
+    :param: context Context
+    :param: message message
+    :param: bytes   length of the message fragment to be processed
+    */
+    private func update(context:Context, message:[Byte], bytes:Int? = nil) {
+        var bytes = bytes ?? message.count
+        var mPos = 0
+        
+        /* handle leftover */
+        if (context.leftover > 0) {
+            var want = blockSize - context.leftover
+            if (want > bytes) {
+                want = bytes
+            }
+            
+            for i in 0..<want {
+                context.buffer[context.leftover + i] = message[mPos + i]
+            }
+            
+            bytes -= want
+            mPos += want
+            context.leftover += want
+            
+            if (context.leftover < blockSize) {
+                return
+            }
+            
+            blocks(context, m: context.buffer)
+            context.leftover = 0
+        }
+        
+        /* process full blocks */
+        if (bytes >= blockSize) {
+            var want = bytes & ~(blockSize - 1)
+            blocks(context, m: message, startPos: mPos)
+            mPos += want
+            bytes -= want;
+        }
+        
+        /* store leftover */
+        if (bytes > 0) {
+            for i in 0..<bytes {
+                context.buffer[context.leftover + i] = message[mPos + i]
+            }
+            
+            context.leftover += bytes
+        }
+    }
+    
+    private func finish(context:Context) -> [Byte]? {
+        var mac = [Byte](count: 16, repeatedValue: 0);
+        
+        /* process the remaining block */
+        if (context.leftover > 0) {
+            
+            var i = context.leftover
+            context.buffer[i++] = 1
+            for (; i < blockSize; i++) {
+                context.buffer[i] = 0
+            }
+            context.final = 1
+            
+            blocks(context, m: context.buffer)
+        }
+        
+        
+        /* fully reduce h */
+        freeze(context)
+        
+        /* h = (h + pad) % (1 << 128) */
+        add(context, c: context.pad)
+        for i in 0..<mac.count {
+            mac[i] = context.h[i]
+        }
+        
+        return mac
+    }
+    
+    // MARK: - Utils
     
     private func add(context:Context, c:[Byte]) -> Bool {
         if (context.h.count != 17 && c.count != 17) {
@@ -108,9 +208,9 @@ public class Poly1305 {
         if (context.h.count != 17 && hr.count != 17) {
             return false
         }
-
+        
         var u:UInt32 = 0
-
+        
         for i in 0..<16 {
             u += hr[i];
             context.h[i] = Byte.withValue(u) // crash! h[i] = UInt8(u) & 0xff
@@ -176,9 +276,9 @@ public class Poly1305 {
                 c[i] = m[mPos + i]
             }
             c[16] = hibit
-
+            
             add(context, c: c)
-
+            
             /* h *= r */
             for i in 0..<17 {
                 u = 0
@@ -194,89 +294,10 @@ public class Poly1305 {
             }
             
             squeeze(context, hr: hr)
-
+            
             mPos += blockSize
             bytes -= blockSize
         }
         return mPos
-    }
-    
-    private func finish(context:Context, mac:[Byte]) -> [Byte]? {
-        assert(mac.count == 16, "Invalid mac length")
-        if (mac.count != 16) {
-            return nil
-        }
-        
-        var resultMAC = mac;
-        
-        /* process the remaining block */
-        if (context.leftover > 0) {
-            
-            var i = context.leftover
-            context.buffer[i++] = 1
-            for (; i < blockSize; i++) {
-                context.buffer[i] = 0
-            }
-            context.final = 1
-            
-            blocks(context, m: context.buffer)
-        }
-        
-        
-        /* fully reduce h */
-        freeze(context)
-        
-        /* h = (h + pad) % (1 << 128) */
-        add(context, c: context.pad)
-        for i in 0..<16 {
-            resultMAC[i] = context.h[i]
-        }
-        
-        return resultMAC
-    }
-    
-    private func update(context:Context, m:[Byte]) {
-        var bytes = m.count
-        var mPos = 0
-        
-        /* handle leftover */
-        if (context.leftover > 0) {
-            var want = blockSize - context.leftover
-            if (want > bytes) {
-                want = bytes
-            }
-            
-            for i in 0..<want {
-                context.buffer[context.leftover + i] = m[mPos + i]
-            }
-            
-            bytes -= want
-            mPos += want
-            context.leftover += want
-            
-            if (context.leftover < blockSize) {
-                return
-            }
-            
-            blocks(context, m: context.buffer)
-            context.leftover = 0
-        }
-        
-        /* process full blocks */
-        if (bytes >= blockSize) {
-            var want = bytes & ~(blockSize - 1)
-            blocks(context, m: m, startPos: mPos)
-            mPos += want
-            bytes -= want;
-        }
-        
-        /* store leftover */
-        if (bytes > 0) {
-            for i in 0..<bytes {
-                context.buffer[context.leftover + i] = m[mPos + i]
-            }
-            
-            context.leftover += bytes
-        }
     }
 }

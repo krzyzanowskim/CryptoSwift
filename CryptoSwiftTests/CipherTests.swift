@@ -28,8 +28,7 @@ class CipherTests: XCTestCase {
         
         let poly = Poly1305(key: key);
         var resultMac = poly.auth(mac, m: msg)
-        println(resultMac)
-        println("QQ")
+        XCTAssertEqual(resultMac, expectedMac, "Invalid auth mac")
     }
 
     func testChaCha20() {

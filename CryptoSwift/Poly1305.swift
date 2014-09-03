@@ -53,20 +53,6 @@ public class Poly1305 {
             pad[i] = key[i + 16]
         }
         pad[16] = 0
-        
-//        // debug
-//        print("\n init r: ")
-//        for i in 0..<r.count {
-//            print("\(r[i]), ")
-//        }
-//        print("\n")
-//
-//        // debug
-//        print("init pad: ")
-//        for i in 0..<pad.count {
-//            print("\(pad[i]), ")
-//        }
-//        print("\n")
 
         leftover = 0
         final = 0
@@ -184,25 +170,9 @@ public class Poly1305 {
                 hr[i] = u
             }
             
-//            // debug
-//            print("blocks: hr:")
-//            for i in 0..<hr.count {
-//                let s:NSString = NSString(format: "%lu", hr[i])
-//                print("\(s), ")
-//            }
-//            print("\n")
-
             squeeze(&h, hr: hr)
 
-            // debug
-            print("blocks: h:")
-            for i in 0..<h.count {
-                let s:NSString = NSString(format: "%d", h[i])
-                print("\(s), ")
-            }
-            print("\n")
-
-            mPos += blockSize //m = m + blockSize
+            mPos += blockSize
             bytes -= blockSize
         }
         return mPos
@@ -224,15 +194,6 @@ public class Poly1305 {
             final = 1
             
             blocks(buffer)
-            
-            // debug
-            print("finish: buffer:")
-            for i in 0..<buffer.count {
-                let s:NSString = NSString(format: "%d", buffer[i])
-                print("\(s), ")
-            }
-            print("\n")
-
         }
         
         
@@ -283,14 +244,6 @@ public class Poly1305 {
             bytes -= want;
         }
         
-        // debug
-        print("update: h:")
-        for i in 0..<h.count {
-            let s:NSString = NSString(format: "%lu", h[i])
-            print("\(s), ")
-        }
-        print("\n")
-
         /* store leftover */
         if (bytes > 0) {
             for i in 0..<bytes {

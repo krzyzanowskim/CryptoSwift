@@ -34,7 +34,7 @@ class ChaCha20 {
         }
         
         if let output = encryptBytes(message.bytes()) {
-            return NSData(bytes: output, length: output.count)
+            return NSData.withBytes(output)
         }
         
         return nil

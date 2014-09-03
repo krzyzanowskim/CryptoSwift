@@ -78,7 +78,7 @@ public class Poly1305 {
     }
     
     // MARK: - Internal
-
+    
     /**
     Calculate Message Authentication Code (MAC) for message.
     Calculation context is discarder on instance deallocation.
@@ -88,9 +88,16 @@ public class Poly1305 {
     
     :returns: Message Authentication Code
     */
+    
+    class internal func authenticate(# key: NSData, message: NSData) -> NSData? {
+        if let mac = Poly1305.authenticate(key: key.bytes(), message: message.bytes()) {
+            return NSData(bytes: mac, length: mac.count)
+        }
+        return nil
+    }
+
     class internal func authenticate(# key: [Byte], message: [Byte]) -> [Byte]? {
-        var poly = Poly1305(key)
-        return poly.authenticate(message: message)
+        return Poly1305(key).authenticate(message: message)
     }
     
     // MARK: - Private

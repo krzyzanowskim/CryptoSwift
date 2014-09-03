@@ -18,11 +18,7 @@ extension NSMutableData {
 }
 
 extension NSData {
-    
-    public var hexString: String {
-        return self.toHexString()
-    }
-    
+
     public func checksum() -> UInt16 {
         var s:UInt32 = 0;
         
@@ -71,8 +67,19 @@ extension NSData {
     public func decrypt(cipher: Cipher) -> NSData? {
         return cipher.decrypt(self)
     }
+    
+    public func authenticate(authenticator: Authenticator) -> NSData? {
+        return authenticator.calculate(self)
+    }
+}
 
-    internal func toHexString() -> String {
+extension NSData {
+    
+    public var hexString: String {
+        return self.toHexString()
+    }
+
+    func toHexString() -> String {
         let count = self.length / sizeof(Byte)
         var bytesArray = [Byte](count: count, repeatedValue: 0)
         self.getBytes(&bytesArray, length:count * sizeof(Byte))
@@ -85,11 +92,15 @@ extension NSData {
         return s;
     }
     
-    internal func bytes() -> [Byte] {
+    func bytes() -> [Byte] {
         let count = self.length / sizeof(Byte)
         var bytesArray = [Byte](count: count, repeatedValue: 0)
         self.getBytes(&bytesArray, length:count * sizeof(Byte))
         return bytesArray
+    }
+    
+    class public func withBytes(bytes: [Byte]) -> NSData {
+        return NSData(bytes: bytes, length: bytes.count)
     }
 }
 

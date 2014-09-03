@@ -99,7 +99,7 @@ with extensions
 	
 Message authenticators
 
-	let mac = Authentication.Poly1305(key: key, message: msg).calculate()
+	let mac = Authenticator.Poly1305(key: key, message: msg).calculate()
     
 ##Contact
 Marcin Krzyżanowski [@krzyzanowskim](http://twitter.com/krzyzanowskim)

@@ -47,5 +47,9 @@ extension String {
     public func decrypt(cipher: Cipher) -> String? {
         return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.decrypt(cipher)?.toHexString()
     }
+    
+    public func authenticate(authenticator: Authenticator) -> String? {
+        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.authenticate(authenticator)?.toHexString()
+    }
 
 }

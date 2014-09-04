@@ -293,7 +293,7 @@ public class Poly1305 {
                 }
                 for j in (i+1)..<17 {
                     var v:UInt32 = UInt32(UInt16(context.h[j])) * UInt32(context.r[i + 17 - j])  // unsigned long v = (unsigned short)st->h[j] * st->r[i + 17 - j];
-                    v = ((v &<< 8) &+ (v &<< 6))
+                    v = ((v << 8) &+ (v << 6))
                     u = u &+ v
                 }
                 hr[i] = u

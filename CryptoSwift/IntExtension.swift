@@ -47,22 +47,7 @@ extension Int {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
     private mutating func shiftLeft(count: Int) -> Int {
-        if (self == 0) {
-            return self;
-        }
-        
-        var bitsCount = sizeofValue(self) * 8
-        var shiftCount = Swift.min(count, bitsCount - 1)
-        var shiftedValue:Int = 0;
-        
-        for bitIdx in 0..<bitsCount {
-            // if bit is set then copy to result and shift left 1
-            var bit = 1 << bitIdx
-            if ((self & bit) == bit) {
-                shiftedValue = shiftedValue | (bit << shiftCount)
-            }
-        }
-        self = shiftedValue
+        self = CryptoSwift.shiftLeft(self, count)
         return self
     }
     
@@ -97,12 +82,12 @@ extension Int {
 // Left operator
 
 /** shift left and assign with bits truncation */
-func &<<= (inout lhs: Int, rhs: Int) {
+public func &<<= (inout lhs: Int, rhs: Int) {
     lhs.shiftLeft(rhs)
 }
 
 /** shift left with bits truncation */
-func &<< (lhs: Int, rhs: Int) -> Int {
+public func &<< (lhs: Int, rhs: Int) -> Int {
     var l = lhs;
     l.shiftLeft(rhs)
     return l

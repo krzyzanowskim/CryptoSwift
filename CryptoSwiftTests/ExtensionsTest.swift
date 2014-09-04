@@ -8,6 +8,7 @@
 
 import UIKit
 import XCTest
+import CryptoSwift
 
 class ExtensionsTest: XCTestCase {
 
@@ -44,5 +45,28 @@ class ExtensionsTest: XCTestCase {
         bytes = i.bytes(16)
         XCTAssertTrue(bytes.count == 16, "Invalid return type \(bytes.count)")
         XCTAssertTrue(bytes[14] == 4, "Invalid return type \(bytes.count)")
+    }
+    
+    func testShiftLeft() {
+        // Unsigned
+        var i:UInt32 = 1
+        XCTAssert(i &<< 1 == 2, "shift left failed")
+        XCTAssert(i &<< 8 == 256, "shift left failed")
+        XCTAssert(i &<< 32 == 2147483648, "shift left failed")
+        XCTAssert(i &<< 33 == 2147483648, "shift left failed")
+
+        // Signed
+        var ii:Int = 21
+        XCTAssert(ii &<< 1 == ii << 1, "shift left failed")
+        XCTAssert(ii &<< 8 == ii << 8, "shift left failed")
+        XCTAssert(ii &<< ((sizeofValue(ii) * 8) - 1) == ii << ((sizeofValue(ii) * 8) - 1), "shift left failed")
+        XCTAssert(ii &<< ((sizeofValue(ii) * 8)) == 0, "shift left failed")
+        
+        var iii:UInt32 = 21
+        XCTAssert(iii &<< 1 == iii << 1, "shift left failed")
+        XCTAssert(iii &<< 8 == iii << 8, "shift left failed")
+        XCTAssert(iii &<< ((sizeofValue(iii) * 8) - 1) == iii << ((sizeofValue(iii) * 8) - 1), "shift left failed")
+        XCTAssert((iii &<< 32) == 0, "shift left failed")
+
     }
 }

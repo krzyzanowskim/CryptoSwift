@@ -44,6 +44,12 @@ extension UInt32 {
                 shiftedValue = shiftedValue | (bit << shiftCount)
             }
         }
+        
+        if (shiftedValue != 0 && count >= bitsCount) {
+            // clear last bit that couldn't be shifted out of range
+            shiftedValue = shiftedValue & (~(1 << (bitsCount - 1)))
+        }
+
         self = shiftedValue
         return self
     }
@@ -78,12 +84,12 @@ extension UInt32 {
 }
 
 /** shift left and assign with bits truncation */
-func &<<= (inout lhs: UInt32, rhs: UInt32) {
+public func &<<= (inout lhs: UInt32, rhs: UInt32) {
     lhs.shiftLeft(rhs)
 }
 
 /** shift left with bits truncation */
-func &<< (lhs: UInt32, rhs: UInt32) -> UInt32 {
+public func &<< (lhs: UInt32, rhs: UInt32) -> UInt32 {
     var l = lhs;
     l.shiftLeft(rhs)
     return l

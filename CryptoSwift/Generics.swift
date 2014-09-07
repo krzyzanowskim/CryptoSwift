@@ -55,10 +55,10 @@ func integerWithBytes<T: IntegerType>(bytes: [Byte]) -> T {
 
 /** array of bytes, little-endian representation */
 func arrayOfBytes<T>(value:T, totalBytes:Int) -> [Byte] {
+    var v = value
+    
     var valuePointer = UnsafeMutablePointer<T>.alloc(1)
-
-    var val = value
-    valuePointer.initializeFrom(&val, count: 1)
+    valuePointer.memory = value
     
     var bytesPointer = UnsafeMutablePointer<Byte>(valuePointer)
     var bytes = [Byte](count: totalBytes, repeatedValue: 0)

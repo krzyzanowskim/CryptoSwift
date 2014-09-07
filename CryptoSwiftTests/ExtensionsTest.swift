@@ -52,8 +52,8 @@ class ExtensionsTest: XCTestCase {
         var i:UInt32 = 1
         XCTAssert(i &<< 1 == 2, "shift left failed")
         XCTAssert(i &<< 8 == 256, "shift left failed")
-        XCTAssert(i &<< 32 == 2147483648, "shift left failed")
-        XCTAssert(i &<< 33 == 2147483648, "shift left failed")
+        XCTAssert(i &<< 31 == i << 31, "shift left failed")
+        XCTAssert(i &<< 32 == 0, "shift left failed")
 
         // Signed
         var ii:Int = 21
@@ -65,7 +65,6 @@ class ExtensionsTest: XCTestCase {
         var iii:UInt32 = 21
         XCTAssert(iii &<< 1 == iii << 1, "shift left failed")
         XCTAssert(iii &<< 8 == iii << 8, "shift left failed")
-        XCTAssert(iii &<< ((sizeofValue(iii) * 8) - 1) == iii << ((sizeofValue(iii) * 8) - 1), "shift left failed")
         XCTAssert((iii &<< 32) == 0, "shift left failed")
 
     }

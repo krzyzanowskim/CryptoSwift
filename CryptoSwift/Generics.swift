@@ -55,13 +55,19 @@ func integerWithBytes<T: IntegerType>(bytes: [Byte]) -> T {
 
 /** array of bytes, little-endian representation */
 func arrayOfBytes<T>(value:T, totalBytes:Int) -> [Byte] {
-    var bytes = [Byte](count: totalBytes, repeatedValue: 0)
-    var data = NSData(bytes: [value] as [T], length: min(sizeof(T),totalBytes))
+    var valuePointer = UnsafeMutablePointer<T>.alloc(1)
+
+    var val = value
+    valuePointer.initializeFrom(&val, count: 1)
     
-    // then convert back to bytes, byte by byte
-    for i in 0..<data.length {
-        data.getBytes(&bytes[totalBytes - 1 - i], range:NSRange(location:i, length:sizeof(Byte)))
+    var bytesPointer = UnsafeMutablePointer<Byte>(valuePointer)
+    var bytes = [Byte](count: totalBytes, repeatedValue: 0)
+    for j in 0..<min(sizeof(T),totalBytes) {
+        bytes[totalBytes - 1 - j] = (bytesPointer + j).memory
     }
+    
+    valuePointer.destroy()
+    valuePointer.dealloc(1)
     
     return bytes
 }

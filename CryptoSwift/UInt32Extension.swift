@@ -11,7 +11,7 @@ import Foundation
 /** array of bytes */
 extension UInt32 {
     public func bytes(_ totalBytes: Int = sizeof(UInt32)) -> [Byte] {
-        return arrayOfBytes(self, totalBytes)
+        return arrayOfBytes(self, length: totalBytes)
     }
 
     public static func withBytes(bytes: Slice<Byte>) -> UInt32 {

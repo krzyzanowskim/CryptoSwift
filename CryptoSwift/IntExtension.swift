@@ -27,7 +27,7 @@ extension Int {
 extension Int {
     /** Array of bytes with optional padding (little-endian) */
     public func bytes(_ totalBytes: Int = sizeof(Int)) -> [Byte] {
-        return arrayOfBytes(self, totalBytes)
+        return arrayOfBytes(self, length: totalBytes)
     }
 
     public static func withBytes(bytes: Slice<Byte>) -> Int {

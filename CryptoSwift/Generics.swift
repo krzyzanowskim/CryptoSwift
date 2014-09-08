@@ -22,12 +22,12 @@ extension UInt32:Initiable {}
 extension UInt64:Initiable {}
 
 /** build bit pattern from array of bits */
-func integerFromBitsArray<T: UnsignedIntegerType where T: IntegerLiteralConvertible, T: Initiable>(bits: [Bit]) -> T
+func integerFromBitsArray<T: UnsignedIntegerType>(bits: [Bit]) -> T
 {
     var bitPattern:T = 0
     for (idx,b) in enumerate(bits) {
         if (b == Bit.One) {
-            let bit = T(1 << idx)
+            let bit = T.from(UIntMax(1) << UIntMax(idx))
             bitPattern = bitPattern | bit
         }
     }
@@ -54,7 +54,8 @@ func integerWithBytes<T: IntegerType>(bytes: [Byte]) -> T {
 }
 
 /** array of bytes, little-endian representation */
-func arrayOfBytes<T>(value:T, totalBytes:Int) -> [Byte] {
+func arrayOfBytes<T>(value:T, length:Int? = nil) -> [Byte] {
+    let totalBytes = length ?? (sizeofValue(value) * 8)
     var v = value
     
     var valuePointer = UnsafeMutablePointer<T>.alloc(1)

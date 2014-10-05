@@ -27,7 +27,7 @@ func integerFromBitsArray<T: UnsignedIntegerType>(bits: [Bit]) -> T
     var bitPattern:T = 0
     for (idx,b) in enumerate(bits) {
         if (b == Bit.One) {
-            let bit = T.from(UIntMax(1) << UIntMax(idx))
+            let bit = T(UIntMax(1) << UIntMax(idx))
             bitPattern = bitPattern | bit
         }
     }
@@ -100,7 +100,7 @@ func shiftLeft<T: SignedIntegerType where T: Initiable>(value: T, count: Int) ->
     
     var shiftedValue:T = 0;
     for bitIdx in 0..<bitsCount {
-        var bit = T.from(IntMax(1 << bitIdx))
+        var bit = T(IntMax(1 << bitIdx))
         if ((value & bit) == bit) {
             shiftedValue = shiftedValue | T(bit << shiftCount)
         }

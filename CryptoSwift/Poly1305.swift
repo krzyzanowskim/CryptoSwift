@@ -25,10 +25,10 @@ public class Poly1305 {
         var final:Byte   = 0
         var leftover:Int = 0
         
-        init (_ key: [Byte]) {
+        init?(_ key: [Byte]) {
             assert(key.count == 32,"Invalid key length");
             if (key.count != 32) {
-                return;
+                return nil;
             }
             
             for i in 0..<17 {
@@ -96,13 +96,16 @@ public class Poly1305 {
     }
 
     class internal func authenticate(# key: [Byte], message: [Byte]) -> [Byte]? {
-        return Poly1305(key).authenticate(message: message)
+        return Poly1305(key)?.authenticate(message: message)
     }
     
     // MARK: - Private
     
-    private init (_ key: [Byte]) {
+    private init? (_ key: [Byte]) {
         ctx = Context(key)
+        if (ctx == nil) {
+            return nil
+        }
     }
     
     private func authenticate(# message:[Byte]) -> [Byte]? {

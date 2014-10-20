@@ -17,17 +17,17 @@ public enum Hash {
     public func calculate() -> NSData! {
         switch self {
         case md5(let data):
-            return MD5(data).calculate()
+            return MD5(data)?.calculate()
         case sha1(let data):
-            return SHA1(data).calculate()
+            return SHA1(data)?.calculate()
         case sha224(let data):
-            return SHA2(data).calculate32(.sha224)
+            return SHA2(data)?.calculate32(.sha224)
         case sha256(let data):
-            return SHA2(data).calculate32(.sha256)
+            return SHA2(data)?.calculate32(.sha256)
         case sha384(let data):
-            return SHA2(data).calculate64(.sha384)
+            return SHA2(data)?.calculate64(.sha384)
         case sha512(let data):
-            return SHA2(data).calculate64(.sha512)
+            return SHA2(data)?.calculate64(.sha512)
         case crc32(let data):
             return CRC().crc32(data);
         default:

@@ -15,7 +15,7 @@ public enum Cipher {
         switch (self) {
             case .ChaCha20(let key, let iv):
                 var chacha = CryptoSwift.ChaCha20(key: key, iv: iv);
-                return chacha.encrypt(message)
+                return chacha?.encrypt(message)
         }
     }
     
@@ -23,7 +23,7 @@ public enum Cipher {
         switch (self) {
         case .ChaCha20(let key, let iv):
             var chacha = CryptoSwift.ChaCha20(key: key, iv: iv);
-            return chacha.decrypt(message)
+            return chacha?.decrypt(message)
         }
     }
 

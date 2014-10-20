@@ -12,8 +12,11 @@ class HashBase {
     
     var message: NSData
     
-    init(_ message: NSData) {
+    init?(_ message: NSData) {
         self.message = message
+        if (self.message.length == 0) {
+            return nil
+        }
     }
     
     /** Common part for hash calculation. Prepare header data. */

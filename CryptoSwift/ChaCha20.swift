@@ -22,9 +22,11 @@ class ChaCha20 {
         }
     }
     
-    init(key:NSData, iv:NSData) {
+    init?(key:NSData, iv:NSData) {
         if let c = contextSetup(iv: iv, key: key) {
             context = c
+        } else {
+            return nil
         }
     }
     

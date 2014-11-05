@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import XCTest
 import CryptoSwift
 

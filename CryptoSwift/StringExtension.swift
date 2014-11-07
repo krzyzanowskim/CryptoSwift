@@ -13,7 +13,12 @@ extension String {
     
     /** Calculate MD5 hash */
     public func md5() -> String? {
-        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.md5().toHexString()
+        if self == "" {
+            // - MARK: Workaround -> NSString "" yields NSData nil. dataUsingEncoding not working!
+            return "D41D8CD98F00B204E9800998ECF8427E"
+        } else {
+            return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.md5().toHexString()
+        }
     }
     
     public func sha1() -> String? {

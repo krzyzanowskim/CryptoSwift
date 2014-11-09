@@ -73,6 +73,13 @@ class CryptoSwiftTests: XCTestCase {
         if let hash = "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha1() {
             XCTAssertEqual(hash, "84983E441C3BD26EBAAE4AA1F95129E5E54670F1", "SHA1 calculation failed")
         }
+        
+        if let hash = "".sha1() {
+            XCTAssertEqual(hash, "DA39A3EE5E6B4B0D3255BFEF95601890AFD80709", "SHA1 calculation failed")
+        } else {
+            XCTAssert(false, "SHA1 calculation failed")
+        }
+        
     }
     
     func testSHA224() {
@@ -91,6 +98,13 @@ class CryptoSwiftTests: XCTestCase {
         if let hash = "Rosetta code".sha256() {
             XCTAssertEqual(hash, "764FAF5C61AC315F1497F9DFA542713965B785E5CC2F707D6468D7D1124CDFCF", "SHA256 calculation failed")
         }
+        
+        if let hash = "".sha256() {
+            XCTAssertEqual(hash, "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855", "SHA256 calculation failed")
+        } else {
+            XCTAssert(false, "SHA256 calculation failed")
+        }
+
     }
 
     func testSHA384() {
@@ -101,6 +115,12 @@ class CryptoSwiftTests: XCTestCase {
         
         if let hash = "The quick brown fox jumps over the lazy dog.".sha384() {
             XCTAssertEqual(hash, "ED892481D8272CA6DF370BF706E4D7BC1B5739FA2177AAE6C50E946678718FC67A7AF2819A021C2FC34E91BDB63409D7", "SHA384 calculation failed");
+        }
+        
+        if let hash = "".sha384() {
+            XCTAssertEqual(hash, "38B060A751AC96384CD9327EB1B1E36A21FDB71114BE07434C0CC7BF63F6E1DA274EDEBFE76F65FBD51AD2F14898B95B", "SHA384 calculation failed")
+        } else {
+            XCTAssert(false, "SHA384 calculation failed")
         }
     }
 
@@ -113,13 +133,24 @@ class CryptoSwiftTests: XCTestCase {
         if let hash = "The quick brown fox jumps over the lazy dog.".sha512() {
             XCTAssertEqual(hash, "91EA1245F20D46AE9A037A989F54F1F790F0A47607EEB8A14D12890CEA77A1BBC6C7ED9CF205E67B7F2B8FD4C7DFD3A7A8617E45F3C463D481C7E586C39AC1ED", "SHA512 calculation failed");
         }
-
+        
+        if let hash = "".sha512() {
+            XCTAssertEqual(hash, "CF83E1357EEFB8BDF1542850D66D8007D620E4050B5715DC83F4A921D36CE9CE47D0D13C5D85F2B0FF8318D2877EEC2F63B931BD47417A81A538327AF927DA3E", "SHA512 calculation failed")
+        } else {
+            XCTAssert(false, "SHA512 calculation failed")
+        }
     }
     
     func testCRC32() {
         var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
         if let crc = data.crc32() {
             XCTAssertEqual(crc.hexString, "884863D2", "CRC32 calculation failed");
+        }
+        
+        if let crc = "".crc32() {
+            XCTAssertEqual(crc, "00000000", "CRC32 calculation failed");
+        } else {
+            XCTAssert(false, "CRC32 calculation failed")
         }
     }
 }

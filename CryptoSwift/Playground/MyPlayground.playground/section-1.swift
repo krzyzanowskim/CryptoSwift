@@ -2,26 +2,6 @@
 
 import Foundation
 
-protocol Initiable  {
-    init(_ v: Int)
-}
+var str:String? = ""
+var data = str?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
 
-func integerFromBitsArray<T: IntegerLiteralConvertible where T: UnsignedIntegerType, T: Initiable>(bits: [Bit]) -> T
-{
-    var bitPattern:T = 0
-    for (idx,b) in enumerate(bits) {
-        if (b == Bit.One) {
-            let bit = T(1 << idx)
-            bitPattern = bitPattern | bit
-        }
-    }
-    return bitPattern
-}
-
-extension UInt:Initiable {}
-extension UInt8:Initiable {}
-extension UInt16:Initiable {}
-extension UInt32:Initiable {}
-extension UInt64:Initiable {}
-
-let i = integerFromBitsArray([Bit.One, Bit.Zero]) as UInt8

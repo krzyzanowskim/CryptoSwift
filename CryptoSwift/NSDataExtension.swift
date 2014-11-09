@@ -32,31 +32,31 @@ extension NSData {
         return UInt16(s);
     }
     
-    public func md5() -> NSData {
+    public func md5() -> NSData? {
         return Hash.md5(self).calculate()
     }
 
-    public func sha1() -> NSData {
+    public func sha1() -> NSData? {
         return Hash.sha1(self).calculate()
     }
 
-    public func sha224() -> NSData {
+    public func sha224() -> NSData? {
         return Hash.sha224(self).calculate()
     }
 
-    public func sha256() -> NSData {
+    public func sha256() -> NSData? {
         return Hash.sha256(self).calculate()
     }
 
-    public func sha384() -> NSData {
+    public func sha384() -> NSData? {
         return Hash.sha384(self).calculate()
     }
 
-    public func sha512() -> NSData {
+    public func sha512() -> NSData? {
         return Hash.sha512(self).calculate()
     }
 
-    public func crc32() -> NSData {
+    public func crc32() -> NSData? {
         return Hash.crc32(self).calculate()
     }
 

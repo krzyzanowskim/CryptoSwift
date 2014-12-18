@@ -31,7 +31,11 @@ Good mood
 
 ##Installation
 
-Drag the CryptoSwift.xcodeproj file into your Xcode project, and add CryptoSwift.framework as a dependency for your target.
+To install CryptoSwift, add it as a submodule to your project (on the top level project directory):
+
+	git submodule add git@github.com:krzyzanowskim/CryptoSwift.git
+
+Then, drag the CryptoSwift.xcodeproj file into your Xcode project, and add CryptoSwift.framework as a dependency for your target.
 
 #####iOS and OSX
 Bu default project is setup for iOS. You need to switch to OSX SDK manually [see #8](https://github.com/krzyzanowskim/CryptoSwift/issues/8)

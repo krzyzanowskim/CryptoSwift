@@ -21,6 +21,20 @@ class CryptoSwiftTests: XCTestCase {
     
     func testMD5() {
         let data1:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [Byte], length: 3) // "1", "2", "3"
+        if let hash = Hash.md5(data1).calculate() {
+            XCTAssertEqual(hash.hexString, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
+        } else {
+            XCTAssert(false, "Missing result")
+        }
+        
+        var string:NSString = ""
+        var data:NSData = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        if let hashData = Hash.md5(data).calculate() {
+            XCTAssertEqual(hashData.hexString, "D41D8CD98F00B204E9800998ECF8427E", "MD5 calculation failed")
+        } else {
+            XCTAssert(false, "Missing result")
+        }
+        
         if let hash = data1.md5() {
             XCTAssertEqual(hash.hexString, "202CB962AC59075B964B07152D234B70", "MD5 calculation failed");
         }

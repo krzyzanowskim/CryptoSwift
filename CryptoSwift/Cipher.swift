@@ -10,17 +10,16 @@ import Foundation
 
 public enum Cipher {
     case ChaCha20(key: NSData, iv: NSData)
-    case AES(key: NSData, iv: NSData)
+    case AES(key: NSData)
     
     public func encrypt(message: NSData) -> NSData? {
         switch (self) {
             case .ChaCha20(let key, let iv):
                 var chacha = CryptoSwift.ChaCha20(key: key, iv: iv)
                 return chacha?.encrypt(message)
-            case .AES(let key, let iv):
-                var aes = CryptoSwift.AES(key: key, iv: iv)
+            case .AES(let key):
+                var aes = CryptoSwift.AES(key: key)
                 return aes?.encrypt(message)
-            
         }
     }
     
@@ -29,8 +28,8 @@ public enum Cipher {
             case .ChaCha20(let key, let iv):
                 var chacha = CryptoSwift.ChaCha20(key: key, iv: iv);
                 return chacha?.decrypt(message)
-            case .AES(let key, let iv):
-                var aes = CryptoSwift.AES(key: key, iv: iv);
+            case .AES(let key):
+                var aes = CryptoSwift.AES(key: key);
                 return aes?.decrypt(message)
         }
     }

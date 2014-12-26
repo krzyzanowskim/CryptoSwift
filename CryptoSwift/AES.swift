@@ -107,8 +107,19 @@ public class AES {
             return nil;
         }
     }
+    
+    class public func blockSizeBytes() -> Int {
+        return 128 / 8
+    }
         
-    public func encrypt(message:NSData) -> NSData {
+    public func encrypt(message:NSData) -> NSData? {
+        
+        if (message.length > AES.blockSizeBytes()) {
+            // 128 bit block exceeded
+            println("AES 128-bit block exceeded!");
+            return nil;
+        }
+        
         let input = message.bytes()
         let expandedKey = expandKey()
         

@@ -48,7 +48,7 @@ class CipherTests: XCTestCase {
         
         if let aes = AES(key: NSData.withBytes(aesKey)) {
             let encrypted = aes.encrypt(NSData.withBytes(input))
-            XCTAssertEqual(encrypted, NSData.withBytes(expected), "encryption failed")
+            XCTAssertEqual(encrypted!, NSData.withBytes(expected), "encryption failed")
         } else {
             XCTAssert(false, "failed")
         }

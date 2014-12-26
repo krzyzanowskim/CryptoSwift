@@ -21,6 +21,7 @@ Good mood
 - [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (well, kind of hash)
 
 #####Cipher
+- [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pd8) with 128-bit block (caution: encryption only for now)
 - [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
 
 #####Message authenticators

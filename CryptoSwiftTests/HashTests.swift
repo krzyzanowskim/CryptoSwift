@@ -167,4 +167,16 @@ class CryptoSwiftTests: XCTestCase {
             XCTAssert(false, "CRC32 calculation failed")
         }
     }
+    
+    func testCRC32Async() {
+        let expect = expectationWithDescription("CRC32")
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            self.testCRC32()
+            expect.fulfill()
+        })
+
+        self.waitForExpectationsWithTimeout(10, handler: { (error) -> Void in
+            XCTAssertNil(error, "CRC32 async failed")
+        })
+    }
 }

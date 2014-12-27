@@ -108,26 +108,35 @@ public class AES {
         }
     }
     
-    class public func blockSizeBytes() -> Int {
+    public func blockSizeBytes() -> Int {
         return 128 / 8
     }
         
     public func encrypt(message:NSData) -> NSData? {
-        
-        if (message.length > AES.blockSizeBytes()) {
+        if (message.length % blockSizeBytes() != 0) {
             // 128 bit block exceeded
-            println("AES 128-bit block exceeded!");
-            return nil;
+            println("AES 128-bit block exceeded!")
+            return nil
         }
         
-        let input = message.bytes()
+        var out:[Byte] = [Byte]()
+        for block in message.bytes().chunks(blockSizeBytes()) {
+            for byte in encryptBlock(block) {
+                out.append(byte)
+            }
+        }
+
+        return NSData.withBytes(out)
+    }
+    
+    private func encryptBlock(block:[Byte]) -> [Byte] {
         let expandedKey = expandKey()
         
         var state:[[Byte]] = [[Byte]](count: 4, repeatedValue: [Byte](count: variant.Nb, repeatedValue: 0))
         var idx = 0
         for (i, row) in enumerate(state) {
             for (j, val) in enumerate(row) {
-                state[j][i] = input[idx++]
+                state[j][i] = block[idx++]
             }
         }
         
@@ -150,8 +159,8 @@ public class AES {
                 out.append(state[j][i])
             }
         }
-
-        return NSData.withBytes(out)
+        
+        return out
     }
     
     func decrypt(message:NSData) -> NSData? {

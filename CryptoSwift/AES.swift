@@ -28,6 +28,7 @@ public class AES {
     
     public let blockSizeBytes = 128 / 8
     public let blockMode:CipherBlockMode
+    public let paddingMode:PaddingMode
     
     private let variant:AESVariant
     private let key:NSData
@@ -94,10 +95,12 @@ public class AES {
                                0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd,
                                0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d]
     
-    public init?(key:NSData, iv:NSData? = nil, blockMode:CipherBlockMode = .CBC) {
+    public init?(key:NSData, iv:NSData? = nil, blockMode:CipherBlockMode = .CBC, paddingMode:PaddingMode = .None) {
         self.key = key
         self.iv = iv
         self.blockMode = blockMode
+        self.paddingMode = paddingMode
+        
         switch (key.length * 8) {
         case 128:
             self.variant = .aes128
@@ -116,13 +119,15 @@ public class AES {
 
     // if "iv" is given then CBC mode is used by default
     public func encrypt(message:NSData) -> NSData? {
-        if (message.length % blockSizeBytes != 0) {
+        let paddedMessage = self.paddingMode.addPadding(message, blockSizeBytes: UInt8(truncatingBitPattern: blockSizeBytes))
+        
+        if (paddedMessage.length % blockSizeBytes != 0) {
             // 128 bit block exceeded
             assertionFailure("AES 128-bit block exceeded!")
             return nil
         }
         
-        let blocks = message.bytes().chunks(blockSizeBytes)
+        let blocks = paddedMessage.bytes().chunks(blockSizeBytes)
         let out = blockMode.processBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
         return out == nil ? nil : NSData.withBytes(out!)
     }

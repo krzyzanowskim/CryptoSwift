@@ -21,11 +21,18 @@ Good mood
 - [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (well, kind of hash)
 
 #####Cipher
-- [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pd8) (encrypt only, need padding)
+- [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pd8) (encrypt only)
 - [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
 
 #####Message authenticators
 - [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
+
+#####Cipher block mode
+- Cipher-block chaining ([CBC](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher-block_chaining_.28CBC.29))
+- Cipher feedback ([CFB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_feedback_.28CFB.29))
+
+#####Data padding
+- [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
 
 ###Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).

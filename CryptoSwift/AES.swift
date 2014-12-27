@@ -98,10 +98,10 @@ public class AES {
         self.init(key:key, iv:nil)
     }
     
-    public init?(key:NSData, iv:NSData?) {
+    public init?(key:NSData, iv:NSData?, blockMode:CipherBlockMode = .CBC) {
         self.key = key
         self.iv = iv
-        self.blockMode = .CBC
+        self.blockMode = blockMode
         switch (key.length * 8) {
         case 128:
             self.variant = .aes128
@@ -122,7 +122,7 @@ public class AES {
     public func encrypt(message:NSData) -> NSData? {
         if (message.length % blockSizeBytes != 0) {
             // 128 bit block exceeded
-            println("AES 128-bit block exceeded!")
+            assertionFailure("AES 128-bit block exceeded!")
             return nil
         }
         

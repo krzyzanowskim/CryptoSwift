@@ -90,9 +90,10 @@ Working with Ciphers
 	let aesEncrypted = Cipher.AES(setup).encrypte(dataToEncrypt)
 	let chacha20Encrypted = Cipher.ChaCha20(setup).encrypt(dataToEncrypt)
 	
-	// AES setup with CBC block mode and data padding
-	let aes = AES(key: keyData, iv: ivData, blockMode: .CBC, paddingMode: .PKCS_7)
-	let aesEncrypted = aes.encrypt(dataToEncrypt)
+	// AES setup with CBC block mode and PKCS#7 data padding
+	let aes = AES(key: keyData, iv: ivData, blockMode: .CBC)
+	let paddedData = PKCS7(data: dataToEncrypt).addPadding(UInt8(AES.blockSizeBytes()))
+	let aesEncrypted = aes.encrypt(paddedData)
 	
 	// DECRYPT
 	let decryptedChaCha20 = Cipher.ChaCha20(setup).decrypt(encryptedData)

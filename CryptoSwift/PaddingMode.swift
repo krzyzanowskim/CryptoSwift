@@ -11,10 +11,10 @@ import Foundation
 public enum PaddingMode:Int {
     case None, PKCS_7
     
-    func addPadding(data:NSData, blockSizeBytes:UInt8) -> NSData {
+    public func addPadding(data:NSData, blockSizeBytes:Int) -> NSData {
         switch (self) {
         case PKCS_7:
-            return PKCS7(data: data).addPadding(blockSizeBytes)
+            return PKCS7(data: data).addPadding(UInt8(blockSizeBytes))
         case None:
             return data
         }

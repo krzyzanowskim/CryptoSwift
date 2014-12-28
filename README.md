@@ -98,7 +98,9 @@ Working with Ciphers
 	// DECRYPT
 	let decryptedChaCha20 = Cipher.ChaCha20(setup).decrypt(encryptedData)
 	let decryptedAES = Cipher.AES(setup).decrypt(encryptedData)
-	// remember to remove padding if applied
+
+	// remove padding IF applied on encryption
+	let decryptedRaw = PKCS7(data: decryptedAES).removePadding()
 	
 
 using extensions

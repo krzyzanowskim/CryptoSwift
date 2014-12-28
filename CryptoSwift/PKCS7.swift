@@ -31,4 +31,11 @@ public struct PKCS7 {
         }
         return withPadding
     }
+    
+    public func removePadding() -> NSData {
+        if let padding = data.bytes().last {
+            return data.subdataWithRange(NSRange(location: 0, length: data.length - Int(padding)))
+        }
+        return data
+    }
 }

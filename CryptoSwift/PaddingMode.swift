@@ -19,4 +19,14 @@ public enum PaddingMode:Int {
             return data
         }
     }
+    
+    public func removePadding(data:NSData) -> NSData {
+        switch (self) {
+        case PKCS_7:
+            return PKCS7(data: data).removePadding()
+        case None:
+            return data
+        }
+    }
+
 }

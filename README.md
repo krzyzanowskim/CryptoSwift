@@ -21,7 +21,7 @@ Good mood
 - [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (well, kind of hash)
 
 #####Cipher
-- [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pd8) (encrypt only)
+- [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pd8)
 - [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
 
 #####Message authenticators
@@ -46,7 +46,7 @@ To install CryptoSwift, add it as a submodule to your project (on the top level 
 Then, drag the CryptoSwift.xcodeproj file into your Xcode project, and add CryptoSwift.framework as a dependency for your target.
 
 #####iOS and OSX
-Bu default project is setup for iOS. You need to switch to OSX SDK manually [see #8](https://github.com/krzyzanowskim/CryptoSwift/issues/8)
+By default project is setup for iOS. You need to switch to OSX SDK manually [see #8](https://github.com/krzyzanowskim/CryptoSwift/issues/8)
 
 ##Usage
 
@@ -98,6 +98,7 @@ Working with Ciphers
 	// DECRYPT
 	let decryptedChaCha20 = Cipher.ChaCha20(setup).decrypt(encryptedData)
 	let decryptedAES = Cipher.AES(setup).decrypt(encryptedData)
+	// remember to remove padding if applied
 	
 
 using extensions

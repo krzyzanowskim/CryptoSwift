@@ -20,7 +20,7 @@ public enum CipherBlockMode {
     
     :returns: encrypted bytes
     */
-    func processBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+    func encryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
         
         // if IV is not available, fallback to plain
         var finalBlockMode:CipherBlockMode = self
@@ -30,11 +30,28 @@ public enum CipherBlockMode {
         
         switch (finalBlockMode) {
         case CBC:
-            return CBCMode.processBlocks(blocks, iv: iv, cipher: cipher)
+            return CBCMode.encryptBlocks(blocks, iv: iv, cipher: cipher)
         case CFB:
-            return CFBMode.processBlocks(blocks, iv: iv, cipher: cipher)
+            return CFBMode.encryptBlocks(blocks, iv: iv, cipher: cipher)
         case Plain:
-            return PlainMode.processBlocks(blocks, cipher: cipher)
+            return PlainMode.encryptBlocks(blocks, cipher: cipher)
+        }
+    }
+    
+    func decryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+        // if IV is not available, fallback to plain
+        var finalBlockMode:CipherBlockMode = self
+        if (iv == nil) {
+            finalBlockMode = .Plain
+        }
+        
+        switch (finalBlockMode) {
+        case CBC:
+            return CBCMode.decryptBlocks(blocks, iv: iv, cipher: cipher)
+        case CFB:
+            return CFBMode.decryptBlocks(blocks, iv: iv, cipher: cipher)
+        case Plain:
+            return PlainMode.decryptBlocks(blocks, cipher: cipher)
         }
     }
 }
@@ -43,7 +60,7 @@ public enum CipherBlockMode {
 *  Cipher-block chaining (CBC)
 */
 private struct CBCMode {
-    static func processBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+    static func encryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
         
         if (iv == nil) {
             assertionFailure("CBC require IV")
@@ -73,13 +90,40 @@ private struct CBCMode {
         }
         return out;
     }
+    
+    static func decryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+        if (iv == nil) {
+            assertionFailure("CBC require IV")
+            return nil
+        }
+
+        var out:[Byte]?
+        var lastCiphertext:[Byte] = iv!
+        for (idx,ciphertext) in enumerate(blocks) {
+            if let decrypted = cipher(block: ciphertext) { // decrypt
+                
+                var xored:[Byte] = [Byte](count: lastCiphertext.count, repeatedValue: 0)
+                for i in 0..<ciphertext.count {
+                    xored[i] = lastCiphertext[i] ^ decrypted[i]
+                }
+
+                if (out == nil) {
+                    out = [Byte]()
+                }
+                out = out! + xored
+            }
+            lastCiphertext = ciphertext
+        }
+        
+        return out
+    }
 }
 
 /**
 *  Cipher feedback (CFB)
 */
 private struct CFBMode {
-    static func processBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+    static func encryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
         
         if (iv == nil) {
             assertionFailure("CFB require IV")
@@ -106,6 +150,34 @@ private struct CFBMode {
         }
         return out;
     }
+    
+    static func decryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+        if (iv == nil) {
+            assertionFailure("CFB require IV")
+            return nil
+        }
+        
+        var out:[Byte]?
+        var lastCiphertext:[Byte] = iv!
+        for (idx,ciphertext) in enumerate(blocks) {
+            if let decrypted = cipher(block: lastCiphertext) {
+                var xored:[Byte] = [Byte](count: ciphertext.count, repeatedValue: 0)
+                for i in 0..<ciphertext.count {
+                    xored[i] = ciphertext[i] ^ decrypted[i]
+                }
+                lastCiphertext = xored
+                
+                
+                if (out == nil) {
+                    out = [Byte]()
+                }
+                
+                out = out! + xored
+            }
+        }
+        return out;
+    }
+
 }
 
 
@@ -113,7 +185,7 @@ private struct CFBMode {
 *  Plain mode, don't use it. For debuging purposes only
 */
 private struct PlainMode {
-    static func processBlocks(blocks:[[Byte]], cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+    static func encryptBlocks(blocks:[[Byte]], cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
         var out:[Byte]?
         for (idx,plaintext) in enumerate(blocks) {
             if let encrypted = cipher(block: plaintext) {
@@ -126,5 +198,9 @@ private struct PlainMode {
             }
         }
         return out
+    }
+    
+    static func decryptBlocks(blocks:[[Byte]], cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+        return encryptBlocks(blocks, cipher: cipher)
     }
 }

@@ -14,7 +14,7 @@ class AESTests: XCTestCase {
     // 128 bit key
     let aesKey:[Byte] = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
 
-    func testAES_encode() {
+    func testAES_encrypt() {
         let input:[Byte] = [0x00, 0x11, 0x22, 0x33,
             0x44, 0x55, 0x66, 0x77,
             0x88, 0x99, 0xaa, 0xbb,
@@ -28,12 +28,14 @@ class AESTests: XCTestCase {
         if let aes = AES(key: NSData.withBytes(aesKey), iv: nil, blockMode: .Plain) {
             let encrypted = aes.encrypt(NSData.withBytes(input))
             XCTAssertEqual(encrypted!, NSData.withBytes(expected), "encryption failed")
+            let decrypted = aes.decrypt(encrypted!)
+            XCTAssertEqual(decrypted!, NSData.withBytes(input), "decryption failed")
         } else {
             XCTAssert(false, "failed")
         }
     }
-    
-    func testAES_encode_cbc() {
+
+    func testAES_encrypt_cbc() {
         let key:[Byte] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
         let iv:[Byte] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
         let plaintext:[Byte] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
@@ -43,12 +45,14 @@ class AESTests: XCTestCase {
             XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
             let encrypted = aes.encrypt(NSData.withBytes(plaintext))
             XCTAssertEqual(encrypted!, NSData.withBytes(expected), "encryption failed")
+            let decrypted = aes.decrypt(encrypted!)
+            XCTAssertEqual(decrypted!, NSData.withBytes(plaintext), "decryption failed")
         } else {
             XCTAssert(false, "failed")
         }
     }
     
-    func testAES_encode_cfb() {
+    func testAES_encrypt_cfb() {
         let key:[Byte] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
         let iv:[Byte] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
         let plaintext:[Byte] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
@@ -58,6 +62,8 @@ class AESTests: XCTestCase {
             XCTAssertTrue(aes.blockMode == .CFB, "Invalid block mode")
             let encrypted = aes.encrypt(NSData.withBytes(plaintext))
             XCTAssertEqual(encrypted!, NSData.withBytes(expected), "encryption failed")
+            let decrypted = aes.decrypt(encrypted!)
+            XCTAssertEqual(decrypted!, NSData.withBytes(plaintext), "decryption failed")
         } else {
             XCTAssert(false, "failed")
         }

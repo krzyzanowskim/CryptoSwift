@@ -127,18 +127,17 @@ public class AES {
         }
         
         let blocks = message.bytes().chunks(AES.blockSizeBytes())
-        let out = blockMode.processBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
+        let out = blockMode.encryptBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
         return out == nil ? nil : NSData.withBytes(out!)
     }
     
     private func encryptBlock(block:[Byte]) -> [Byte] {
         let expandedKey = expandKey()
         
-        var state:[[Byte]] = [[Byte]](count: 4, repeatedValue: [Byte](count: variant.Nb, repeatedValue: 0))
-        var idx = 0
+        var state:[[Byte]] = [[Byte]](count: variant.Nb, repeatedValue: [Byte](count: variant.Nb, repeatedValue: 0))
         for (i, row) in enumerate(state) {
             for (j, val) in enumerate(row) {
-                state[j][i] = block[idx++]
+                state[j][i] = block[i * row.count + j]
             }
         }
         
@@ -165,10 +164,55 @@ public class AES {
         return out
     }
     
-    func decrypt(message:NSData) -> NSData? {
-        //TODO: to do
-        assertionFailure("Not implemented")
-        return nil
+    public func decrypt(message:NSData) -> NSData? {
+        if (message.length % AES.blockSizeBytes() != 0) {
+            // 128 bit block exceeded
+            assertionFailure("AES 128-bit block exceeded!")
+            return nil
+        }
+        
+        let blocks = message.bytes().chunks(AES.blockSizeBytes())
+        var out:[Byte]?
+        if (blockMode == .CFB) {
+            // CFB uses encryptBlock to decrypt
+            out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
+        } else {
+            out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipher: decryptBlock)
+        }
+        return out == nil ? nil : NSData.withBytes(out!)
+    }
+    
+    private func decryptBlock(block:[Byte]) -> [Byte] {
+        let expandedKey = expandKey()
+        
+        var state:[[Byte]] = [[Byte]](count: variant.Nb, repeatedValue: [Byte](count: variant.Nb, repeatedValue: 0))
+        for (i, row) in enumerate(state) {
+            for (j, val) in enumerate(row) {
+                state[j][i] = block[i * row.count + j]
+            }
+        }
+        
+        state = addRoundKey(state,expandedKey, variant.Nr)
+        
+        for roundCount in reverse(1..<variant.Nr) {
+            state = invShiftRows(state)
+            state = invSubBytes(state)
+            state = addRoundKey(state, expandedKey, roundCount)
+            state = invMixColumns(state)
+        }
+        
+        state = invShiftRows(state)
+        state = invSubBytes(state)
+        state = addRoundKey(state, expandedKey, 0)
+        
+        var out:[Byte] = [Byte]()
+        for i in 0..<state.count {
+            for j in 0..<state[0].count {
+                out.append(state[j][i])
+            }
+        }
+        
+        return out
     }
     
     public func expandKey() -> [Byte] {

@@ -74,7 +74,10 @@ class AESTests: XCTestCase {
             [0xcd, 0x60, 0xe0, 0xe7],
             [0xba, 0x70, 0xe1, 0x8c]]
         
-        XCTAssertTrue(compareMatrix(expected, AES(key: NSData.withBytes(aesKey))!.subBytes(input)), "subBytes failed")
+        let substituted = AES(key: NSData.withBytes(aesKey))!.subBytes(input)
+        XCTAssertTrue(compareMatrix(expected, substituted), "subBytes failed")
+        let inverted = AES(key: NSData.withBytes(aesKey))!.invSubBytes(substituted)
+        XCTAssertTrue(compareMatrix(input, inverted), "invSubBytes failed")
     }
     
     func testAES_shiftRows() {
@@ -88,7 +91,10 @@ class AESTests: XCTestCase {
             [0xe0, 0xe1, 0xb7, 0xd0],
             [0x8c, 0x4, 0x51, 0xe7]]
         
-        XCTAssertTrue(compareMatrix(expected, AES(key: NSData.withBytes(aesKey))!.shiftRows(input)), "shiftRows failed")
+        let shifted = AES(key: NSData.withBytes(aesKey))!.shiftRows(input)
+        XCTAssertTrue(compareMatrix(expected, shifted), "shiftRows failed")
+        let inverted = AES(key: NSData.withBytes(aesKey))!.invShiftRows(shifted)
+        XCTAssertTrue(compareMatrix(input, inverted), "invShiftRows failed")
     }
     
     func testAES_multiply() {
@@ -133,8 +139,10 @@ class AESTests: XCTestCase {
             [0x15, 0x92, 0x29, 0x1a]]
         
         if let aes = AES(key: NSData.withBytes(aesKey)) {
-            let result = aes.mixColumns(input)
-            XCTAssertTrue(compareMatrix(expected, result), "mixColumns failed")
+            let mixed = aes.mixColumns(input)
+            XCTAssertTrue(compareMatrix(expected, mixed), "mixColumns failed")
+            let inverted = aes.invMixColumns(mixed)
+            XCTAssertTrue(compareMatrix(input, inverted), "invMixColumns failed")
         }
     }
 

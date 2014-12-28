@@ -232,16 +232,32 @@ extension AES {
         return result
     }
     
+    public func invSubBytes(state:[[Byte]]) -> [[Byte]] {
+        var result = state
+        for (i,row) in enumerate(state) {
+            for (j,value) in enumerate(row) {
+                result[i][j] = invSBox[Int(value)]
+            }
+        }
+        return result
+    }
+    
     // Applies a cyclic shift to the last 3 rows of a state matrix.
     public func shiftRows(state:[[Byte]]) -> [[Byte]] {
         var result = state
-        var tmp:[Byte] = [Byte](count: 4, repeatedValue: 0)
         for r in 1..<4 {
             for c in 0..<variant.Nb {
-                tmp[c] = state[r][(c + r) % variant.Nb]
+                result[r][c] = state[r][(c + r) % variant.Nb]
             }
+        }
+        return result
+    }
+    
+    public func invShiftRows(state:[[Byte]]) -> [[Byte]] {
+        var result = state
+        for r in 1..<4 {
             for c in 0..<variant.Nb {
-                result[r][c] = tmp[c]
+                result[r][(c + r) % variant.Nb] = state[r][c]
             }
         }
         return result
@@ -308,6 +324,33 @@ extension AES {
         for i in 0..<state.count {
             for j in 0..<state[0].count {
                 state[i][j] = newRowMajorState[j][i]
+            }
+        }
+        
+        return state
+    }
+    
+    public func invMixColumns(state:[[Byte]]) -> [[Byte]] {
+        var state = state
+        var invColBox:[[Byte]] = [[14,11,13,9],[9,14,11,13],[13,9,14,11],[11,13,9,14]]
+        
+        var colOrderState = state.map({ val -> [Byte] in return val.map { _ in return 0 } }) // zeroing
+        
+        for i in 0..<state.count {
+            for j in 0..<state[0].count {
+                colOrderState[j][i] = state[i][j]
+            }
+        }
+        
+        var newState = state.map({ val -> [Byte] in return val.map { _ in return 0 } })
+        
+        for (i, row) in enumerate(colOrderState) {
+            newState[i] = matrixMultiplyPolys(invColBox, row)
+        }
+        
+        for i in 0..<state.count {
+            for j in 0..<state[0].count {
+                state[i][j] = newState[j][i]
             }
         }
         

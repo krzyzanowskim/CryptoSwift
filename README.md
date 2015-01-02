@@ -41,7 +41,7 @@ Good mood
 
 To install CryptoSwift, add it as a submodule to your project (on the top level project directory):
 
-	git submodule add git@github.com:krzyzanowskim/CryptoSwift.git
+	git submodule add https://github.com/krzyzanowskim/CryptoSwift.git
 
 Then, drag the CryptoSwift.xcodeproj file into your Xcode project, and add CryptoSwift.framework as a dependency for your target.
 

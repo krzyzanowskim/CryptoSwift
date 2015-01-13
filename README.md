@@ -26,6 +26,7 @@ Good mood
 
 #####Message authenticators
 - [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
+- [HMAC](https://www.ietf.org/rfc/rfc2104.txt) MD5, SHA1, SHA256
 
 #####Cipher block mode
 - Electronic codebook ([ECB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_.28ECB.29))

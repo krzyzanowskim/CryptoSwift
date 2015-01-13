@@ -98,6 +98,14 @@ public class AES {
         self.iv = iv
         self.blockMode = blockMode
         
+//        if (blockMode.supportIV() && iv == nil) {
+//            // auto generate IV
+//            var generatedIV:[Byte] = [Byte]();
+//            for (var i = 0; i < key.length; i++) {
+//                generatedIV.append(UInt8(truncatingBitPattern: arc4random_uniform(256)));
+//            }
+//        }
+        
         switch (key.length * 8) {
         case 128:
             self.variant = .aes128

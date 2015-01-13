@@ -9,7 +9,16 @@
 import Foundation
 
 public enum CipherBlockMode {
-    case Plain, CBC, CFB
+    case ECB, CBC, CFB
+    
+    func supportIV() -> Bool {
+        switch (self) {
+        case CBC, CFB:
+            return true
+        default:
+            return false
+        }
+    }
     
     /**
     Process input blocks with given block cipher mode. With fallback to plain mode.
@@ -25,7 +34,7 @@ public enum CipherBlockMode {
         // if IV is not available, fallback to plain
         var finalBlockMode:CipherBlockMode = self
         if (iv == nil) {
-            finalBlockMode = .Plain
+            finalBlockMode = .ECB
         }
         
         switch (finalBlockMode) {
@@ -33,8 +42,8 @@ public enum CipherBlockMode {
             return CBCMode.encryptBlocks(blocks, iv: iv, cipher: cipher)
         case CFB:
             return CFBMode.encryptBlocks(blocks, iv: iv, cipher: cipher)
-        case Plain:
-            return PlainMode.encryptBlocks(blocks, cipher: cipher)
+        case ECB:
+            return ECBMode.encryptBlocks(blocks, cipher: cipher)
         }
     }
     
@@ -42,7 +51,7 @@ public enum CipherBlockMode {
         // if IV is not available, fallback to plain
         var finalBlockMode:CipherBlockMode = self
         if (iv == nil) {
-            finalBlockMode = .Plain
+            finalBlockMode = .ECB
         }
         
         switch (finalBlockMode) {
@@ -50,8 +59,8 @@ public enum CipherBlockMode {
             return CBCMode.decryptBlocks(blocks, iv: iv, cipher: cipher)
         case CFB:
             return CFBMode.decryptBlocks(blocks, iv: iv, cipher: cipher)
-        case Plain:
-            return PlainMode.decryptBlocks(blocks, cipher: cipher)
+        case ECB:
+            return ECBMode.decryptBlocks(blocks, cipher: cipher)
         }
     }
 }
@@ -182,9 +191,9 @@ private struct CFBMode {
 
 
 /**
-*  Plain mode, don't use it. For debuging purposes only
+*  Electronic codebook (ECB)
 */
-private struct PlainMode {
+private struct ECBMode {
     static func encryptBlocks(blocks:[[Byte]], cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
         var out:[Byte]?
         for (idx,plaintext) in enumerate(blocks) {

@@ -95,17 +95,20 @@ public class AES {
     
     public init?(key:NSData, iv:NSData? = nil, blockMode:CipherBlockMode = .CBC) {
         self.key = key
-        self.iv = iv
         self.blockMode = blockMode
         
-//        if (blockMode.supportIV() && iv == nil) {
-//            // auto generate IV
-//            var generatedIV:[Byte] = [Byte]();
-//            for (var i = 0; i < key.length; i++) {
-//                generatedIV.append(UInt8(truncatingBitPattern: arc4random_uniform(256)));
-//            }
-//        }
-        
+        var finalIV = iv
+        if (blockMode.supportIV() && iv == nil) {
+            // auto generate IV
+            var generatedIV:[Byte] = [Byte]();
+            for (var i = 0; i < key.length; i++) {
+                generatedIV.append(UInt8(truncatingBitPattern: arc4random_uniform(256)));
+            }
+            finalIV = NSData.withBytes(generatedIV)
+        }
+
+        self.iv = finalIV
+
         switch (key.length * 8) {
         case 128:
             self.variant = .aes128
@@ -124,6 +127,10 @@ public class AES {
     
     public class func blockSizeBytes() -> Int {
         return 128 / 8 // 16 bytes
+    }
+    
+    public class func blockSizeBytes() -> UInt8 {
+        return UInt8(truncatingBitPattern: self.blockSizeBytes())
     }
 
     // if "iv" is given then CBC mode is used by default

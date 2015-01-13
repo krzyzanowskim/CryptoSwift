@@ -82,29 +82,36 @@ Hashing a String and printing result
         println(hash)
     }
     
+Some content-encryption algorithms assume the input length is a multiple of k octets, where k is greater than one.  For such algorithms, the input shall be padded
+
+	let paddedData = PKCS7(data: dataToEncrypt).addPadding(AES.blockSizeBytes())
+    
 Working with Ciphers
 
 	// convenience setup tuple
 	let setup = (key: keyData, iv: ivData)
-	
-	// ENCRYPT
-	let aesEncrypted = Cipher.AES(setup).encrypte(dataToEncrypt)
+
+ChaCha20
+
 	let chacha20Encrypted = Cipher.ChaCha20(setup).encrypt(dataToEncrypt)
+	let decryptedChaCha20 = Cipher.ChaCha20(setup).decrypt(encryptedData)
+
+AES
+	
+	// padding
+	let paddedData = PKCS7(data: dataToEncrypt).addPadding(AES.blockSizeBytes())
 	
 	// AES setup with CBC block mode and PKCS#7 data padding
-	let aes = AES(key: keyData, iv: ivData, blockMode: .CBC)
-	let paddedData = PKCS7(data: dataToEncrypt).addPadding(UInt8(AES.blockSizeBytes()))
+	let aesEncrypted = Cipher.AES(setup).encrypt(dataToEncrypt)
+	let aes = AES(key: keyData, iv: ivData, blockMode: .CBC) // CBC is default
+	
 	let aesEncrypted = aes.encrypt(paddedData)
 	
-	// DECRYPT
-	let decryptedChaCha20 = Cipher.ChaCha20(setup).decrypt(encryptedData)
 	let decryptedAES = Cipher.AES(setup).decrypt(encryptedData)
-
-	// remove padding IF applied on encryption
-	let decryptedRaw = PKCS7(data: decryptedAES).removePadding()
+	let decryptedRaw = PKCS7(data: decryptedAES).removePadding() // remove padding IF applied on encryption
 	
 
-using extensions
+Using extensions
 	
 	// convenience setup tuple
 	let setup = (key: keyData, iv: ivData)

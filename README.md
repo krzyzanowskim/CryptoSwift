@@ -103,11 +103,14 @@ AES
 	let paddedData = PKCS7(data: dataToEncrypt).addPadding(AES.blockSizeBytes())
 	
 	// AES setup with CBC block mode and PKCS#7 data padding
-	let aesEncrypted = Cipher.AES(setup).encrypt(dataToEncrypt)
-	let aes = AES(key: keyData, iv: ivData, blockMode: .CBC) // CBC is default
+	let aesEncrypted = Cipher.AES(setup).encrypt(paddedData)
 	
+	// or
+	let aes = AES(key: keyData, iv: ivData, blockMode: .CBC) // CBC is default
 	let aesEncrypted = aes.encrypt(paddedData)
 	
+
+	// decrypt
 	let decryptedAES = Cipher.AES(setup).decrypt(encryptedData)
 	let decryptedRaw = PKCS7(data: decryptedAES).removePadding() // remove padding IF applied on encryption
 	

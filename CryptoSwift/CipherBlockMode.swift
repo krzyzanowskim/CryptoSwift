@@ -11,7 +11,7 @@ import Foundation
 public enum CipherBlockMode {
     case ECB, CBC, CFB
     
-    func supportIV() -> Bool {
+    func requireIV() -> Bool {
         switch (self) {
         case CBC, CFB:
             return true

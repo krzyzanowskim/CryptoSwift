@@ -93,22 +93,11 @@ public class AES {
         0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd,
         0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d]
     
-    public init?(key:NSData, iv:NSData? = nil, blockMode:CipherBlockMode = .CBC) {
+    public init?(key:NSData, iv:NSData, blockMode:CipherBlockMode = .CBC) {
         self.key = key
         self.blockMode = blockMode
+        self.iv = iv
         
-        var finalIV = iv
-        if (blockMode.supportIV() && iv == nil) {
-            // auto generate IV
-            var generatedIV:[Byte] = [Byte]();
-            for (var i = 0; i < key.length; i++) {
-                generatedIV.append(UInt8(truncatingBitPattern: arc4random_uniform(256)));
-            }
-            finalIV = NSData.withBytes(generatedIV)
-        }
-
-        self.iv = finalIV
-
         switch (key.length * 8) {
         case 128:
             self.variant = .aes128
@@ -121,8 +110,19 @@ public class AES {
             break
         default:
             self.variant = .unknown
-            return nil;
+            return nil
         }
+        
+        if (blockMode.requireIV() && iv.length != key.length) {
+            assertionFailure("Key and Initialization Vector must be the same length!")
+            return nil
+        }
+    }
+    
+    convenience public init?(key:NSData, blockMode:CipherBlockMode = .CBC) {
+        // default IV is all 0x00...
+        let defaultIV = NSMutableData(length: key.length)!
+        self.init(key: key, iv: defaultIV, blockMode: blockMode)
     }
     
     public class func blockSizeBytes() -> Int {

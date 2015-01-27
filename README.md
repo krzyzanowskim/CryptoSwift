@@ -89,31 +89,29 @@ Some content-encryption algorithms assume the input length is a multiple of k oc
     
 Working with Ciphers
 
-	// convenience setup tuple
-	let setup = (key: keyData, iv: ivData)
-
 ChaCha20
 
-	let chacha20Encrypted = Cipher.ChaCha20(setup).encrypt(dataToEncrypt)
-	let decryptedChaCha20 = Cipher.ChaCha20(setup).decrypt(encryptedData)
+	let chacha20Encrypted = Cipher.ChaCha20(key: keyData, iv: ivData).encrypt(dataToEncrypt)
+	let decryptedChaCha20 = Cipher.ChaCha20(key: keyData, iv: ivData).decrypt(encryptedData)
 
 AES
 	
-	// padding
-	let paddedData = PKCS7(data: dataToEncrypt).addPadding(AES.blockSizeBytes())
+	// Adding padding for plaintext data is necessary for most of the cases
+	let paddedPlaintextData = PKCS7(data: dataToEncrypt).addPadding(AES.blockSizeBytes())
 	
-	// AES setup with CBC block mode and PKCS#7 data padding
-	let aesEncrypted = Cipher.AES(setup).encrypt(paddedData)
+	// Setup AES key and IV
+	let keyData = NSData.withBytes([0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00])
+	let ivData:NSData = Cipher.randomIV(keyData)
+	let encryptedData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).encrypt(paddedPlaintextData)
 	
 	// or
 	let aes = AES(key: keyData, iv: ivData, blockMode: .CBC) // CBC is default
-	let aesEncrypted = aes.encrypt(paddedData)
+	let encryptedData = aes?.encrypt(paddedData)
 	
-
 	// decrypt
-	let decryptedAES = Cipher.AES(setup).decrypt(encryptedData)
-	let decryptedRaw = PKCS7(data: decryptedAES).removePadding() // remove padding IF applied on encryption
-	
+	let decryptedPlaintextData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).decrypt(encryptedData)
+	// remove padding ONLY IF applied earlier
+	let decryptedRaw = PKCS7(data: decryptedPlaintextData).removePadding()	
 
 Using extensions
 	

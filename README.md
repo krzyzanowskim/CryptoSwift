@@ -98,24 +98,24 @@ AES
 
 Notice regarding padding: *Manual padding of data is optional and CryptoSwift by default always will add PKCS7 padding before encryption, and remove after decryption when __Cipher__ enum is used. If you need manually disable/enable padding, you can do this by setting parameter for encrypt()/decrypt() on class __AES__.*
 
-	// 1. Add padding
-	let paddedPlaintextData = PKCS7(data: plaintextData).addPadding(AES.blockSizeBytes())
+	// 1. Add padding (Optional)
+	let plaintextData = PKCS7(data: plaintextData).addPadding(AES.blockSizeBytes())
 	
 	// 2. Encrypt with key and random IV
 	let keyData = NSData.withBytes([0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00])
 	let ivData:NSData = Cipher.randomIV(keyData)
 	
-	let encryptedData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).encrypt(paddedPlaintextData)
+	let encryptedData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).encrypt(plaintextData)
 	
 	// or
 	let aes = AES(key: keyData, iv: ivData, blockMode: .CBC) // CBC is default
-	let encryptedData = aes?.encrypt(paddedData, addPadding: true) // With padding enabled
+	let encryptedData = aes?.encrypt(plaintextData, addPadding: true) // With padding enabled
 	
 	// 3. decrypt with key and IV
-	let decryptedPlaintextData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).decrypt(encryptedData)
+	let decryptedData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).decrypt(encryptedData)
 	
-	// 4. remove padding ONLY IF applied earlier
-	let plaintextData = PKCS7(data: decryptedPlaintextData).removePadding()	
+	// 4. remove padding ONLY IF applied earlier (Optional)
+	let plaintextData = PKCS7(data: decryptedData).removePadding()	
 
 Using extensions
 	

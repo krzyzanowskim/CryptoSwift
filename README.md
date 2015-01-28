@@ -96,8 +96,7 @@ ChaCha20
 
 AES
 
-Padding plaintext data is required for most of the cases (unless message can be split into chunks of block size). Nonetheless explicit padding is optional  and CryptoSwift will add padding when necessary. Removing padding is necessary after decryption if applied earlier (CryptoSwift can't decide if padding was applied earlier, this is up to you). For this reason the most convenient way is always add padding before encryption and remove after decryption, as described below:
-
+Notice regarding padding: *Manual padding of data is optional and CryptoSwift by default always will add PKCS7 padding before encryption, and remove after decryption when __Cipher__ enum is used. If you need manually disable/enable padding, you can do this by setting parameter for encrypt()/decrypt() on class __AES__.*
 
 	// 1. Add padding
 	let paddedPlaintextData = PKCS7(data: plaintextData).addPadding(AES.blockSizeBytes())
@@ -105,11 +104,12 @@ Padding plaintext data is required for most of the cases (unless message can be 
 	// 2. Encrypt with key and random IV
 	let keyData = NSData.withBytes([0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00])
 	let ivData:NSData = Cipher.randomIV(keyData)
+	
 	let encryptedData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).encrypt(paddedPlaintextData)
 	
 	// or
 	let aes = AES(key: keyData, iv: ivData, blockMode: .CBC) // CBC is default
-	let encryptedData = aes?.encrypt(paddedData)
+	let encryptedData = aes?.encrypt(paddedData, addPadding: true) // With padding enabled
 	
 	// 3. decrypt with key and IV
 	let decryptedPlaintextData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).decrypt(encryptedData)

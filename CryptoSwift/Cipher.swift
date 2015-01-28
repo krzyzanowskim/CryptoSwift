@@ -65,7 +65,7 @@ public enum Cipher {
         }
     }
 
-    public func randomIV(key: NSData) -> [Byte] {
+    static public func randomIV(key: NSData) -> [Byte] {
         var randomIV:[Byte] = [Byte]();
         for (var i = 0; i < key.length; i++) {
             randomIV.append(UInt8(truncatingBitPattern: arc4random_uniform(256)));
@@ -80,7 +80,7 @@ public enum Cipher {
     
     :returns: Random IV
     */
-    public func randomIV(key: NSData) -> NSData {
+    static public func randomIV(key: NSData) -> NSData {
         return NSData.withBytes(randomIV(key))
     }
 }

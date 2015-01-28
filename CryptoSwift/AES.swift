@@ -133,15 +133,22 @@ public class AES {
         return UInt8(truncatingBitPattern: self.blockSizeBytes())
     }
 
-    // if "iv" is given then CBC mode is used by default
+    /**
+    Encrypt message. If padding is necessary, then PKCS7 padding is addedd and need to be removed after decryption.
+    
+    :param: message Plaintext data
+    
+    :returns: Encrypted data
+    */
     public func encrypt(message:NSData) -> NSData? {
+        var finalMessage = message;
         if (message.length % AES.blockSizeBytes() != 0) {
-            // 128 bit block exceeded
-            assertionFailure("AES 128-bit block exceeded!")
-            return nil
+            // 128 bit block exceeded, need padding
+            // by default PKCS7 padding is addedd
+            finalMessage = PKCS7(data: message).addPadding(AES.blockSizeBytes())
         }
         
-        let blocks = message.bytes().chunks(AES.blockSizeBytes())
+        let blocks = finalMessage.bytes().chunks(AES.blockSizeBytes())
         let out = blockMode.encryptBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
         return out == nil ? nil : NSData.withBytes(out!)
     }

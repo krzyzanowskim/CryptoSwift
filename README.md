@@ -106,16 +106,18 @@ Notice regarding padding: *Manual padding of data is optional and CryptoSwift by
 	let ivData:NSData = Cipher.randomIV(keyData)
 	
 	let encryptedData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).encrypt(plaintextData)
-	
-	// or
-	let aes = AES(key: keyData, iv: ivData, blockMode: .CBC) // CBC is default
-	let encryptedData = aes?.encrypt(plaintextData, addPadding: true) // With padding enabled
-	
+		
 	// 3. decrypt with key and IV
 	let decryptedData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).decrypt(encryptedData)
 	
 	// 4. remove padding ONLY IF applied earlier (Optional)
 	let plaintextData = PKCS7(data: decryptedData).removePadding()	
+	
+AES without data padding
+
+	let aes = AES(key: keyData, iv: ivData, blockMode: .CBC) // CBC is default
+	let encryptedData = aes?.encrypt(plaintextData, addPadding: false)
+	let decryptedData = aes?.decrypt(encryptedData, removePadding: false)
 
 Using extensions
 	

@@ -24,9 +24,14 @@ class HashBase {
         tmpMessage.appendBytes([0x80]) // append one bit (Byte with one bit) to message
         
         // append "0" bit until message length in bits ≡ 448 (mod 512)
-        while tmpMessage.length % len != (len - 8) {
-            tmpMessage.appendBytes([0x00])
+        var msgLength = tmpMessage.length;
+        var counter = 0;
+        while msgLength % len != (len - 8) {
+            counter++
+            msgLength++
         }
+        var bufZeros = UnsafeMutablePointer<Byte>(calloc(UInt(counter), UInt(sizeof(Byte))))
+        tmpMessage.appendBytes(bufZeros, length: counter)
         
         return tmpMessage
     }

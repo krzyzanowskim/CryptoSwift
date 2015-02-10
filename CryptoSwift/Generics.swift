@@ -35,15 +35,15 @@ func integerFromBitsArray<T: UnsignedIntegerType>(bits: [Bit]) -> T
 }
 
 /** initialize integer from array of bytes */
-func integerWithBytes<T: IntegerType>(bytes: [Byte]) -> T {
+func integerWithBytes<T: IntegerType>(bytes: [UInt8]) -> T {
     var totalBytes = Swift.min(bytes.count, sizeof(T))
     // get slice of Int
     var start = Swift.max(bytes.count - sizeof(T),0)
-    var intarr = [Byte](bytes[start..<(start + totalBytes)])
+    var intarr = [UInt8](bytes[start..<(start + totalBytes)])
     
     // pad size if necessary
     while (intarr.count < sizeof(T)) {
-        intarr.insert(0 as Byte, atIndex: 0)
+        intarr.insert(0 as UInt8, atIndex: 0)
     }
     intarr = intarr.reverse()
     
@@ -54,15 +54,15 @@ func integerWithBytes<T: IntegerType>(bytes: [Byte]) -> T {
 }
 
 /** array of bytes, little-endian representation */
-func arrayOfBytes<T>(value:T, length:Int? = nil) -> [Byte] {
+func arrayOfBytes<T>(value:T, length:Int? = nil) -> [UInt8] {
     let totalBytes = length ?? (sizeofValue(value) * 8)
     var v = value
     
     var valuePointer = UnsafeMutablePointer<T>.alloc(1)
     valuePointer.memory = value
     
-    var bytesPointer = UnsafeMutablePointer<Byte>(valuePointer)
-    var bytes = [Byte](count: totalBytes, repeatedValue: 0)
+    var bytesPointer = UnsafeMutablePointer<UInt8>(valuePointer)
+    var bytes = [UInt8](count: totalBytes, repeatedValue: 0)
     for j in 0..<min(sizeof(T),totalBytes) {
         bytes[totalBytes - 1 - j] = (bytesPointer + j).memory
     }
@@ -77,13 +77,13 @@ func arrayOfBytes<T>(value:T, length:Int? = nil) -> [Byte] {
 
 // helper to be able tomake shift operation on T
 func <<<T:SignedIntegerType>(lhs: T, rhs: Int) -> Int {
-    let a = lhs as Int
+    let a = lhs as! Int
     let b = rhs
     return a << b
 }
 
 func <<<T:UnsignedIntegerType>(lhs: T, rhs: Int) -> UInt {
-    let a = lhs as UInt
+    let a = lhs as! UInt
     let b = rhs
     return a << b
 }

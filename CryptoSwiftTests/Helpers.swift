@@ -8,7 +8,7 @@
 
 import Foundation
 
-func compareMatrix(a:[[Byte]], b:[[Byte]]) -> Bool {
+func compareMatrix(a:[[UInt8]], b:[[UInt8]]) -> Bool {
     for (i,arr) in enumerate(a) {
         for (j,val) in enumerate(arr) {
             if (val != b[i][j]) {

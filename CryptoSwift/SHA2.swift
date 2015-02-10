@@ -155,7 +155,7 @@ class SHA2 : CryptoSwift.HashBase {
             buf.appendBytes(&i, length: sizeofValue(i))
         })
         
-        return buf.copy() as NSData;
+        return buf.copy() as! NSData;
     }
     
     func calculate64(variant: SHA2.variant) -> NSData {
@@ -239,6 +239,6 @@ class SHA2 : CryptoSwift.HashBase {
             buf.appendBytes(&i, length: sizeofValue(i))
         })
         
-        return buf.copy() as NSData;
+        return buf.copy() as! NSData;
     }
 }

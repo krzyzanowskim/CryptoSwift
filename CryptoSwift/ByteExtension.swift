@@ -9,31 +9,31 @@
 import Foundation
 
 /** casting */
-extension Byte {
+extension UInt8 {
     
     /** cast because UInt8(<UInt32>) because std initializer crash if value is > byte */
-    static func withValue(v:UInt64) -> Byte {
+    static func withValue(v:UInt64) -> UInt8 {
         let tmp = v & 0xFF
-        return Byte(tmp)
+        return UInt8(tmp)
     }
 
-    static func withValue(v:UInt32) -> Byte {
+    static func withValue(v:UInt32) -> UInt8 {
         let tmp = v & 0xFF
-        return Byte(tmp)
+        return UInt8(tmp)
     }
     
-    static func withValue(v:UInt16) -> Byte {
+    static func withValue(v:UInt16) -> UInt8 {
         let tmp = v & 0xFF
-        return Byte(tmp)
+        return UInt8(tmp)
     }
 
 }
 
 /** Bits */
-extension Byte {
+extension UInt8 {
 
     init(bits: [Bit]) {
-        self.init(integerFromBitsArray(bits) as Byte)
+        self.init(integerFromBitsArray(bits) as UInt8)
     }
     
     /** array of bits */
@@ -43,7 +43,7 @@ extension Byte {
         var bitsArray = [Bit](count: totalBitsCount, repeatedValue: Bit.Zero)
         
         for j in 0..<totalBitsCount {
-            let bitVal:Byte = 1 << Byte(totalBitsCount - 1 - j)
+            let bitVal:UInt8 = 1 << UInt8(totalBitsCount - 1 - j)
             let check = self & bitVal
             
             if (check != 0) {
@@ -65,22 +65,22 @@ extension Byte {
 }
 
 /** Shift bits */
-extension Byte {
+extension UInt8 {
     /** Shift bits to the right. All bits are shifted (including sign bit) */
-    mutating func shiftRight(count: Byte) -> Byte {
+    mutating func shiftRight(count: UInt8) -> UInt8 {
         if (self == 0) {
             return self;
         }
 
-        var bitsCount = Byte(sizeof(Byte) * 8)
+        var bitsCount = UInt8(sizeof(UInt8) * 8)
 
         if (count >= bitsCount) {
             return 0
         }
 
-        var maxBitsForValue = Byte(floor(log2(Double(self) + 1)))
+        var maxBitsForValue = UInt8(floor(log2(Double(self) + 1)))
         var shiftCount = Swift.min(count, maxBitsForValue - 1)
-        var shiftedValue:Byte = 0;
+        var shiftedValue:UInt8 = 0;
         
         for bitIdx in 0..<bitsCount {
             var byte = 1 << bitIdx
@@ -94,7 +94,7 @@ extension Byte {
 }
 
 /** shift right and assign with bits truncation */
-func &>> (lhs: Byte, rhs: Byte) -> Byte {
+func &>> (lhs: UInt8, rhs: UInt8) -> UInt8 {
     var l = lhs;
     l.shiftRight(rhs)
     return l

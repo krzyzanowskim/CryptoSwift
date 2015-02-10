@@ -65,8 +65,8 @@ public enum Cipher {
         }
     }
 
-    static public func randomIV(key: NSData) -> [Byte] {
-        var randomIV:[Byte] = [Byte]();
+    static public func randomIV(key: NSData) -> [UInt8] {
+        var randomIV:[UInt8] = [UInt8]();
         for (var i = 0; i < key.length; i++) {
             randomIV.append(UInt8(truncatingBitPattern: arc4random_uniform(256)));
         }

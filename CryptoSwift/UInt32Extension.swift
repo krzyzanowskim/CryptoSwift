@@ -10,16 +10,16 @@ import Foundation
 
 /** array of bytes */
 extension UInt32 {
-    public func bytes(_ totalBytes: Int = sizeof(UInt32)) -> [Byte] {
+    public func bytes(_ totalBytes: Int = sizeof(UInt32)) -> [UInt8] {
         return arrayOfBytes(self, length: totalBytes)
     }
 
-    public static func withBytes(bytes: Slice<Byte>) -> UInt32 {
+    public static func withBytes(bytes: Slice<UInt8>) -> UInt32 {
         return UInt32.withBytes(Array(bytes))
     }
 
     /** Int with array bytes (little-endian) */
-    public static func withBytes(bytes: [Byte]) -> UInt32 {
+    public static func withBytes(bytes: [UInt8]) -> UInt32 {
         return integerWithBytes(bytes)
     }
 }

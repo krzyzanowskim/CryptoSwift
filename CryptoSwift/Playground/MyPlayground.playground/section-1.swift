@@ -10,15 +10,14 @@ for a in repeat {
     arr = arr + [Byte(a)]
 }
 
-arr + [Byte](count: 5, repeatedValue: 0)
+arr + [UInt8](count: 5, repeatedValue: 0)
 
 
 arr[0..<3]
 
 
-var key:[Byte] = [1,2,3,4,5,6,7,8,9,0]
-var opad = [Byte](count: 64, repeatedValue: 0x5c)
+var key:[UInt8] = [1,2,3,4,5,6,7,8,9,0]
+var opad = [UInt8](count: 64, repeatedValue: 0x5c)
 
 opad.map({ (val:Byte) -> (Byte) in
     return val ^ 56
-})

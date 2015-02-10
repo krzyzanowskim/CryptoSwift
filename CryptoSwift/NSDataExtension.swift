@@ -11,7 +11,7 @@ import Foundation
 extension NSMutableData {
     
     /** Convenient way to append bytes */
-    internal func appendBytes(arrayOfBytes: [Byte]) {
+    internal func appendBytes(arrayOfBytes: [UInt8]) {
         self.appendBytes(arrayOfBytes, length: arrayOfBytes.count)
     }
     
@@ -22,11 +22,10 @@ extension NSData {
     public func checksum() -> UInt16 {
         var s:UInt32 = 0;
         
-        var bytesArray = self.bytes();
+        var bytesArray = self.bytes;
         
-        for (var i = 0; i < bytesArray.count; i++) {
-            var b = bytesArray[i]
-            s = s + UInt32(bytesArray[i])
+        for (var i = 0; i < self.length; i++) {
+            s = s + UInt32(self.bytes[i])
         }
         s = s % 65536;
         return UInt16(s);
@@ -80,25 +79,25 @@ extension NSData {
     }
 
     func toHexString() -> String {
-        let count = self.length / sizeof(Byte)
-        var bytesArray = [Byte](count: count, repeatedValue: 0)
-        self.getBytes(&bytesArray, length:count * sizeof(Byte))
+        let count = self.length / sizeof(UInt8)
+        var bytesArray = [UInt8](count: count, repeatedValue: 0)
+        self.getBytes(&bytesArray, length:count * sizeof(UInt8))
         
         var s:String = "";
         for byte in bytesArray {
-            s = s + NSString(format:"%02X", byte)
+            s = s + (NSString(format:"%02X", byte) as! String)
         }
         return s;
     }
     
-    func bytes() -> [Byte] {
-        let count = self.length / sizeof(Byte)
-        var bytesArray = [Byte](count: count, repeatedValue: 0)
-        self.getBytes(&bytesArray, length:count * sizeof(Byte))
+    func bytes() -> [UInt8] {
+        let count = self.length / sizeof(UInt8)
+        var bytesArray = [UInt8](count: count, repeatedValue: 0)
+        self.getBytes(&bytesArray, length:count * sizeof(UInt8))
         return bytesArray
     }
     
-    class public func withBytes(bytes: [Byte]) -> NSData {
+    class public func withBytes(bytes: [UInt8]) -> NSData {
         return NSData(bytes: bytes, length: bytes.count)
     }
 }

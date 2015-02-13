@@ -30,7 +30,7 @@ public class AES {
     private let key:NSData
     private let iv:NSData?
     
-    private let sBox:[Byte] = [
+    private let sBox:[UInt8] = [
         0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76, 
         0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0, 
         0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15, 
@@ -48,7 +48,7 @@ public class AES {
         0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf, 
         0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16]
     
-    private let invSBox:[Byte] = [
+    private let invSBox:[UInt8] = [
         0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3,
         0x9e, 0x81, 0xf3, 0xd7, 0xfb, 0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f,
         0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb, 0x54,
@@ -75,7 +75,7 @@ public class AES {
         0x21, 0x0c, 0x7d]
     
     // Parameters for Linear Congruence Generators
-    private let Rcon:[Byte] = [
+    private let Rcon:[UInt8] = [
         0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a,
         0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39,
         0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a,
@@ -156,10 +156,10 @@ public class AES {
         return out == nil ? nil : NSData.withBytes(out!)
     }
     
-    private func encryptBlock(block:[Byte]) -> [Byte] {
+    private func encryptBlock(block:[UInt8]) -> [UInt8] {
         let expandedKey = expandKey()
         
-        var state:[[Byte]] = [[Byte]](count: variant.Nb, repeatedValue: [Byte](count: variant.Nb, repeatedValue: 0))
+        var state:[[UInt8]] = [[UInt8]](count: variant.Nb, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))
         for (i, row) in enumerate(state) {
             for (j, val) in enumerate(row) {
                 state[j][i] = block[i * row.count + j]
@@ -179,7 +179,7 @@ public class AES {
         state = shiftRows(state)
         state = addRoundKey(state, expandedKey, variant.Nr)
         
-        var out:[Byte] = [Byte]()
+        var out:[UInt8] = [UInt8]()
         for i in 0..<state.count {
             for j in 0..<state[0].count {
                 out.append(state[j][i])
@@ -197,7 +197,7 @@ public class AES {
         }
         
         let blocks = message.bytes().chunks(AES.blockSizeBytes())
-        var out:[Byte]?
+        var out:[UInt8]?
         if (blockMode == .CFB) {
             // CFB uses encryptBlock to decrypt
             out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
@@ -212,10 +212,10 @@ public class AES {
         return out == nil ? nil : NSData.withBytes(out!)
     }
     
-    private func decryptBlock(block:[Byte]) -> [Byte] {
+    private func decryptBlock(block:[UInt8]) -> [UInt8] {
         let expandedKey = expandKey()
         
-        var state:[[Byte]] = [[Byte]](count: variant.Nb, repeatedValue: [Byte](count: variant.Nb, repeatedValue: 0))
+        var state:[[UInt8]] = [[UInt8]](count: variant.Nb, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))
         for (i, row) in enumerate(state) {
             for (j, val) in enumerate(row) {
                 state[j][i] = block[i * row.count + j]
@@ -235,7 +235,7 @@ public class AES {
         state = invSubBytes(state)
         state = addRoundKey(state, expandedKey, 0)
         
-        var out:[Byte] = [Byte]()
+        var out:[UInt8] = [UInt8]()
         for i in 0..<state.count {
             for j in 0..<state[0].count {
                 out.append(state[j][i])
@@ -245,14 +245,14 @@ public class AES {
         return out
     }
     
-    public func expandKey() -> [Byte] {
+    public func expandKey() -> [UInt8] {
         
         /*
         * Function used in the Key Expansion routine that takes a four-byte
         * input word and applies an S-box to each of the four bytes to
         * produce an output word.
         */
-        func subWord(word:[Byte]) -> [Byte] {
+        func subWord(word:[UInt8]) -> [UInt8] {
             var result = word
             for i in 0..<4 {
                 result[i] = sBox[Int(word[i])]
@@ -260,8 +260,8 @@ public class AES {
             return result
         }
 
-        var w:[Byte] = [Byte](count: variant.Nb * (variant.Nr + 1) * 4, repeatedValue: 0)
-        let keyBytes:[Byte] = key.bytes()
+        var w:[UInt8] = [UInt8](count: variant.Nb * (variant.Nr + 1) * 4, repeatedValue: 0)
+        let keyBytes:[UInt8] = key.bytes()
         for i in 0..<variant.Nk {
             for wordIdx in 0..<4 {
                 w[(4*i)+wordIdx] = keyBytes[(4*i)+wordIdx]
@@ -270,7 +270,7 @@ public class AES {
         
         var i = variant.Nk
         while (i < variant.Nb * (variant.Nr + 1)) {
-            var tmp:[Byte] = [Byte](count: 4, repeatedValue: 0)
+            var tmp:[UInt8] = [UInt8](count: 4, repeatedValue: 0)
             for wordIdx in 0..<4 {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
             }
@@ -296,7 +296,7 @@ public class AES {
 extension AES {
     
     // byte substitution with table (S-box)
-    public func subBytes(state:[[Byte]]) -> [[Byte]] {
+    public func subBytes(state:[[UInt8]]) -> [[UInt8]] {
         var result = state
         for (i,row) in enumerate(state) {
             for (j,value) in enumerate(row) {
@@ -306,7 +306,7 @@ extension AES {
         return result
     }
     
-    public func invSubBytes(state:[[Byte]]) -> [[Byte]] {
+    public func invSubBytes(state:[[UInt8]]) -> [[UInt8]] {
         var result = state
         for (i,row) in enumerate(state) {
             for (j,value) in enumerate(row) {
@@ -317,7 +317,7 @@ extension AES {
     }
     
     // Applies a cyclic shift to the last 3 rows of a state matrix.
-    public func shiftRows(state:[[Byte]]) -> [[Byte]] {
+    public func shiftRows(state:[[UInt8]]) -> [[UInt8]] {
         var result = state
         for r in 1..<4 {
             for c in 0..<variant.Nb {
@@ -327,7 +327,7 @@ extension AES {
         return result
     }
     
-    public func invShiftRows(state:[[Byte]]) -> [[Byte]] {
+    public func invShiftRows(state:[[UInt8]]) -> [[UInt8]] {
         var result = state
         for r in 1..<4 {
             for c in 0..<variant.Nb {
@@ -356,8 +356,8 @@ extension AES {
         return p
     }
     
-    public func matrixMultiplyPolys(matrix:[[Byte]], _ array:[Byte]) -> [Byte] {
-        var returnArray:[Byte] = array.map({ _ in return 0 })
+    public func matrixMultiplyPolys(matrix:[[UInt8]], _ array:[UInt8]) -> [UInt8] {
+        var returnArray:[UInt8] = array.map({ _ in return 0 })
         for (i, row) in enumerate(matrix) {
             for (j, boxVal) in enumerate(row) {
                 returnArray[i] = multiplyPolys(boxVal, array[j]) ^ returnArray[i]
@@ -366,8 +366,8 @@ extension AES {
         return returnArray
     }
 
-    public func addRoundKey(state:[[Byte]], _ expandedKeyW:[Byte], _ round:Int) -> [[Byte]] {
-        var newState = state.map({ val -> [Byte] in return val.map { _ in return 0 } })
+    public func addRoundKey(state:[[UInt8]], _ expandedKeyW:[UInt8], _ round:Int) -> [[UInt8]] {
+        var newState = state.map({ val -> [UInt8] in return val.map { _ in return 0 } })
         for c in 0..<variant.Nb {
             for i in 0..<4 {
                 newState[i][c] = state[i][c] ^ expandedKeyW[(4*variant.Nb*round)+(variant.Nb*c)+i]
@@ -377,11 +377,11 @@ extension AES {
     }
     
     // mixes data (independently of one another)
-    public func mixColumns(state:[[Byte]]) -> [[Byte]] {
+    public func mixColumns(state:[[UInt8]]) -> [[UInt8]] {
         var state = state
-        var colBox:[[Byte]] = [[2,3,1,1],[1,2,3,1],[1,1,2,3],[3,1,1,2]]
+        var colBox:[[UInt8]] = [[2,3,1,1],[1,2,3,1],[1,1,2,3],[3,1,1,2]]
         
-        var rowMajorState = state.map({ val -> [Byte] in return val.map { _ in return 0 } }) // zeroing
+        var rowMajorState = state.map({ val -> [UInt8] in return val.map { _ in return 0 } }) // zeroing
         
         for i in 0..<state.count {
             for j in 0..<state[0].count {
@@ -389,7 +389,7 @@ extension AES {
             }
         }
         
-        var newRowMajorState = state.map({ val -> [Byte] in return val.map { _ in return 0 } })
+        var newRowMajorState = state.map({ val -> [UInt8] in return val.map { _ in return 0 } })
         
         for (i, row) in enumerate(rowMajorState) {
             newRowMajorState[i] = matrixMultiplyPolys(colBox, row)
@@ -404,11 +404,11 @@ extension AES {
         return state
     }
     
-    public func invMixColumns(state:[[Byte]]) -> [[Byte]] {
+    public func invMixColumns(state:[[UInt8]]) -> [[UInt8]] {
         var state = state
-        var invColBox:[[Byte]] = [[14,11,13,9],[9,14,11,13],[13,9,14,11],[11,13,9,14]]
+        var invColBox:[[UInt8]] = [[14,11,13,9],[9,14,11,13],[13,9,14,11],[11,13,9,14]]
         
-        var colOrderState = state.map({ val -> [Byte] in return val.map { _ in return 0 } }) // zeroing
+        var colOrderState = state.map({ val -> [UInt8] in return val.map { _ in return 0 } }) // zeroing
         
         for i in 0..<state.count {
             for j in 0..<state[0].count {
@@ -416,7 +416,7 @@ extension AES {
             }
         }
         
-        var newState = state.map({ val -> [Byte] in return val.map { _ in return 0 } })
+        var newState = state.map({ val -> [UInt8] in return val.map { _ in return 0 } })
         
         for (i, row) in enumerate(colOrderState) {
             newState[i] = matrixMultiplyPolys(invColBox, row)

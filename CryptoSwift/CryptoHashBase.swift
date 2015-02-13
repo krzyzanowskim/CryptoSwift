@@ -21,7 +21,7 @@ class HashBase {
         var tmpMessage: NSMutableData = NSMutableData(data: self.message)
         
         // Step 1. Append Padding Bits
-        tmpMessage.appendBytes([0x80]) // append one bit (Byte with one bit) to message
+        tmpMessage.appendBytes([0x80]) // append one bit (UInt8 with one bit) to message
         
         // append "0" bit until message length in bits ≡ 448 (mod 512)
         var msgLength = tmpMessage.length;
@@ -30,7 +30,7 @@ class HashBase {
             counter++
             msgLength++
         }
-        var bufZeros = UnsafeMutablePointer<Byte>(calloc(UInt(counter), UInt(sizeof(Byte))))
+        var bufZeros = UnsafeMutablePointer<UInt8>(calloc(UInt(counter), UInt(sizeof(UInt8))))
         tmpMessage.appendBytes(bufZeros, length: counter)
         
         return tmpMessage

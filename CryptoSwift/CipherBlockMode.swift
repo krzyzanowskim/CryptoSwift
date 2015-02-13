@@ -29,7 +29,7 @@ public enum CipherBlockMode {
     
     :returns: encrypted bytes
     */
-    func encryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
         
         // if IV is not available, fallback to plain
         var finalBlockMode:CipherBlockMode = self
@@ -47,7 +47,7 @@ public enum CipherBlockMode {
         }
     }
     
-    func decryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
         // if IV is not available, fallback to plain
         var finalBlockMode:CipherBlockMode = self
         if (iv == nil) {
@@ -69,19 +69,19 @@ public enum CipherBlockMode {
 *  Cipher-block chaining (CBC)
 */
 private struct CBCMode {
-    static func encryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+    static func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
         
         if (iv == nil) {
             assertionFailure("CBC require IV")
             return nil
         }
         
-        var out:[Byte]?
-        var lastCiphertext:[Byte] = iv!
+        var out:[UInt8]?
+        var lastCiphertext:[UInt8] = iv!
         for (idx,plaintext) in enumerate(blocks) {
             // for the first time ciphertext = iv
             // ciphertext = plaintext (+) ciphertext
-            var xoredPlaintext:[Byte] = plaintext
+            var xoredPlaintext:[UInt8] = plaintext
             for i in 0..<plaintext.count {
                 xoredPlaintext[i] = lastCiphertext[i] ^ plaintext[i]
             }
@@ -91,7 +91,7 @@ private struct CBCMode {
                 lastCiphertext = encrypted
                 
                 if (out == nil) {
-                    out = [Byte]()
+                    out = [UInt8]()
                 }
                 
                 out = out! + encrypted
@@ -100,24 +100,24 @@ private struct CBCMode {
         return out;
     }
     
-    static func decryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+    static func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
         if (iv == nil) {
             assertionFailure("CBC require IV")
             return nil
         }
 
-        var out:[Byte]?
-        var lastCiphertext:[Byte] = iv!
+        var out:[UInt8]?
+        var lastCiphertext:[UInt8] = iv!
         for (idx,ciphertext) in enumerate(blocks) {
             if let decrypted = cipher(block: ciphertext) { // decrypt
                 
-                var xored:[Byte] = [Byte](count: lastCiphertext.count, repeatedValue: 0)
+                var xored:[UInt8] = [UInt8](count: lastCiphertext.count, repeatedValue: 0)
                 for i in 0..<ciphertext.count {
                     xored[i] = lastCiphertext[i] ^ decrypted[i]
                 }
 
                 if (out == nil) {
-                    out = [Byte]()
+                    out = [UInt8]()
                 }
                 out = out! + xored
             }
@@ -132,18 +132,18 @@ private struct CBCMode {
 *  Cipher feedback (CFB)
 */
 private struct CFBMode {
-    static func encryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+    static func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
         
         if (iv == nil) {
             assertionFailure("CFB require IV")
             return nil
         }
         
-        var out:[Byte]?
-        var lastCiphertext:[Byte] = iv!
+        var out:[UInt8]?
+        var lastCiphertext:[UInt8] = iv!
         for (idx,plaintext) in enumerate(blocks) {
             if let encrypted = cipher(block: lastCiphertext) {
-                var xoredPlaintext:[Byte] = [Byte](count: plaintext.count, repeatedValue: 0)
+                var xoredPlaintext:[UInt8] = [UInt8](count: plaintext.count, repeatedValue: 0)
                 for i in 0..<plaintext.count {
                     xoredPlaintext[i] = plaintext[i] ^ encrypted[i]
                 }
@@ -151,7 +151,7 @@ private struct CFBMode {
 
                 
                 if (out == nil) {
-                    out = [Byte]()
+                    out = [UInt8]()
                 }
                 
                 out = out! + xoredPlaintext
@@ -160,17 +160,17 @@ private struct CFBMode {
         return out;
     }
     
-    static func decryptBlocks(blocks:[[Byte]], iv:[Byte]?, cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+    static func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
         if (iv == nil) {
             assertionFailure("CFB require IV")
             return nil
         }
         
-        var out:[Byte]?
-        var lastCiphertext:[Byte] = iv!
+        var out:[UInt8]?
+        var lastCiphertext:[UInt8] = iv!
         for (idx,ciphertext) in enumerate(blocks) {
             if let decrypted = cipher(block: lastCiphertext) {
-                var xored:[Byte] = [Byte](count: ciphertext.count, repeatedValue: 0)
+                var xored:[UInt8] = [UInt8](count: ciphertext.count, repeatedValue: 0)
                 for i in 0..<ciphertext.count {
                     xored[i] = ciphertext[i] ^ decrypted[i]
                 }
@@ -178,7 +178,7 @@ private struct CFBMode {
                 
                 
                 if (out == nil) {
-                    out = [Byte]()
+                    out = [UInt8]()
                 }
                 
                 out = out! + xored
@@ -194,13 +194,13 @@ private struct CFBMode {
 *  Electronic codebook (ECB)
 */
 private struct ECBMode {
-    static func encryptBlocks(blocks:[[Byte]], cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
-        var out:[Byte]?
+    static func encryptBlocks(blocks:[[UInt8]], cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
+        var out:[UInt8]?
         for (idx,plaintext) in enumerate(blocks) {
             if let encrypted = cipher(block: plaintext) {
                 
                 if (out == nil) {
-                    out = [Byte]()
+                    out = [UInt8]()
                 }
 
                 out = out! + encrypted
@@ -209,7 +209,7 @@ private struct ECBMode {
         return out
     }
     
-    static func decryptBlocks(blocks:[[Byte]], cipher:(block:[Byte]) -> [Byte]?) -> [Byte]? {
+    static func decryptBlocks(blocks:[[UInt8]], cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
         return encryptBlocks(blocks, cipher: cipher)
     }
 }

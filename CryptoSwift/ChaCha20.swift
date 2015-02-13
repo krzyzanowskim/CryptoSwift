@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ChaCha20 {
+public class ChaCha20 {
     
     private let blockSizeBytes = 512 / 8
     private let stateSize = 16
@@ -48,7 +48,7 @@ class ChaCha20 {
         return encrypt(message)
     }
     
-    private func wordToByte(input:[UInt32] /* 64 */) -> [Byte]? /* 16 */ {
+    private func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
         if (input.count != stateSize) {
             return nil;
         }
@@ -68,7 +68,7 @@ class ChaCha20 {
             i -= 2
         }
 
-        var output = [Byte]()
+        var output = [UInt8]()
 
         for i in 0..<16 {
             x[i] = x[i] &+ input[i]
@@ -82,7 +82,7 @@ class ChaCha20 {
         return contextSetup(iv: iv.bytes(), key: key.bytes())
     }
     
-    private func contextSetup(# iv:[Byte], key:[Byte]) -> Context? {
+    private func contextSetup(# iv:[UInt8], key:[UInt8]) -> Context? {
         var ctx = Context()
         let kbits = key.count * 8
         
@@ -129,10 +129,10 @@ class ChaCha20 {
         return ctx
     }
     
-    private func encryptBytes(message:[Byte]) -> [Byte]? {
+    private func encryptBytes(message:[UInt8]) -> [UInt8]? {
         
         if let ctx = context {
-            var c:[Byte] = [Byte](count: message.count, repeatedValue: 0)
+            var c:[UInt8] = [UInt8](count: message.count, repeatedValue: 0)
             
             var cPos:Int = 0
             var mPos:Int = 0

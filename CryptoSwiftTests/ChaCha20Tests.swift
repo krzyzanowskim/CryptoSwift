@@ -51,7 +51,7 @@ class ChaCha20Tests: XCTestCase {
             
             let expectedHex = expectedHexes[idx]
             //println(countElements(expectedHex) / 2);
-            let message = [UInt8](count: (countElements(expectedHex) / 2), repeatedValue: 0)
+            let message = [UInt8](count: (count(expectedHex) / 2), repeatedValue: 0)
             let messageData = NSData(bytes: message, length: message.count);
             
             let setup = (key: keyData, iv: ivData)

@@ -76,7 +76,7 @@ class CryptoSwiftTests: XCTestCase {
     
     func testMD5PerformanceSwift() {
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
-            let buf = UnsafeMutablePointer<Byte>(calloc(2048, UInt(sizeof(UInt8))))
+            let buf = UnsafeMutablePointer<UInt8>(calloc(2048, UInt(sizeof(UInt8))))
             let data = NSData(bytes: buf, length: 2048)
             self.startMeasuring()
             for _ in [0...1000] {
@@ -90,7 +90,7 @@ class CryptoSwiftTests: XCTestCase {
     
     func testMD5PerformanceCommonCrypto() {
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
-            let buf = UnsafeMutablePointer<Byte>(calloc(2048, UInt(sizeof(UInt8))))
+            let buf = UnsafeMutablePointer<UInt8>(calloc(2048, UInt(sizeof(UInt8))))
             let data = NSData(bytes: buf, length: 2048)
             self.startMeasuring()
             for _ in [0...1000] {

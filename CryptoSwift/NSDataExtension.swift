@@ -86,7 +86,7 @@ extension NSData {
         
         var s:String = "";
         for byte in bytesArray {
-            s = s + NSString(format:"%02X", byte)
+            s = s + String(format:"%02X", byte)
         }
         return s;
     }

@@ -16,7 +16,7 @@ public struct PKCS7 {
     }
     
     public func addPadding(blockSizeBytes:UInt8) -> NSData {
-        var padding = blockSizeBytes - (data.length % Int(blockSizeBytes))
+        var padding = UInt8(blockSizeBytes) - (UInt8(data.length) % UInt8(blockSizeBytes))
         var withPadding = NSMutableData(data: data)
         if (padding == 0) {
             // If the original data is a multiple of N bytes, then an extra block of bytes with value N is added.
@@ -33,7 +33,7 @@ public struct PKCS7 {
     }
     
     public func removePadding() -> NSData {
-        var padding:Byte = 0
+        var padding:UInt8 = 0
         data.subdataWithRange(NSRange(location: data.length - 1, length: 1)).getBytes(&padding, length: 1)
         
         if padding >= 1 {

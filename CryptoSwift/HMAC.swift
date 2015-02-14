@@ -29,7 +29,7 @@ public class HMAC {
         }
     }
     
-    let key:[UInt8]
+    var key:[UInt8]
     let variant:Variant
     
     class internal func authenticate(# key: NSData, message: NSData, variant:HMAC.Variant = .md5) -> NSData? {

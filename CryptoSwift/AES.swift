@@ -255,7 +255,7 @@ public class AES {
         func subWord(word:[UInt8]) -> [UInt8] {
             var result = word
             for i in 0..<4 {
-                result[i] = sBox[Int(word[i])]
+                result[i] = self.sBox[Int(word[i])]
             }
             return result
         }

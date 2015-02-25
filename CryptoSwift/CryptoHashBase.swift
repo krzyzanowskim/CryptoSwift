@@ -30,7 +30,7 @@ class HashBase {
             counter++
             msgLength++
         }
-        var bufZeros = UnsafeMutablePointer<UInt8>(calloc(UInt(counter), UInt(sizeof(UInt8))))
+        var bufZeros = UnsafeMutablePointer<UInt8>(calloc(counter, sizeof(UInt8)))
         tmpMessage.appendBytes(bufZeros, length: counter)
         
         return tmpMessage

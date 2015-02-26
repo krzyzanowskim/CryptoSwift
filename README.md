@@ -41,6 +41,8 @@ Good mood
 
 ##Installation
 
+For Swift 1.2 check **swift12** branch.
+
 To install CryptoSwift, add it as a submodule to your project (on the top level project directory):
 
 	git submodule add https://github.com/krzyzanowskim/CryptoSwift.git
@@ -49,6 +51,12 @@ Then, drag the CryptoSwift.xcodeproj file into your Xcode project, and add Crypt
 
 #####iOS and OSX
 By default project is setup for iOS. You need to switch to OSX SDK manually [see #8](https://github.com/krzyzanowskim/CryptoSwift/issues/8)
+
+####CococaPods
+
+You can use [CocoaPods](http://cocoapods.org/?q=cryptoSwift). You need version 0.36 or newer to use Swift framework.
+
+    pod 'CryptoSwift'
 
 ##Usage
 

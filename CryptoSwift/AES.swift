@@ -140,14 +140,15 @@ public class AES {
     
     :returns: Encrypted data
     */
-    public func encrypt(message:NSData, addPadding: Bool = true) -> NSData? {
+
+    public func encrypt(message:NSData, padding: Padding? = PKCS7()) -> NSData? {
         var finalMessage = message;
 
-        if (addPadding) {
-            finalMessage = PKCS7.add(message, blockSize: AES.blockSizeBytes())
+        if let padding = padding {
+            finalMessage = padding.add(message, blockSize: AES.blockSizeBytes())
         } else if (message.length % AES.blockSizeBytes() != 0) {
             // 128 bit block exceeded, need padding
-            assertionFailure("AES 128-bit block exceeded!")
+            assert(false, "AES 128-bit block exceeded!");
             return nil
         }
         
@@ -206,7 +207,7 @@ public class AES {
         }
         
         if (out != nil && removePadding) {
-            return PKCS7.remove(NSData.withBytes(out!))
+            return PKCS7().remove(NSData.withBytes(out!))
         }
         
         return out == nil ? nil : NSData.withBytes(out!)

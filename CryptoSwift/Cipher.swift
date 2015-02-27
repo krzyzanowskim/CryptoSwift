@@ -43,7 +43,7 @@ public enum Cipher {
                 return chacha?.encrypt(message)
             case .AES(let key, let iv, let blockMode):
                 var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode)
-                return aes?.encrypt(message)
+                return aes?.encrypt(message, padding: PKCS7())
         }
     }
     

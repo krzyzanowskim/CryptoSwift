@@ -22,7 +22,7 @@ class AESTests: XCTestCase {
         let expected:[UInt8] = [0xae,0x8c,0x59,0x95,0xb2,0x6f,0x8e,0x3d,0xb0,0x6f,0x0a,0xa5,0xfe,0xc4,0xf0,0xc2];
         
         if let aes = AES(key: NSData.withBytes(key), iv: NSData.withBytes(iv), blockMode: .CBC) {
-            let encrypted = aes.encrypt(NSData.withBytes(input), addPadding: false)
+            let encrypted = aes.encrypt(NSData.withBytes(input), padding: nil)
             XCTAssertEqual(encrypted!, NSData.withBytes(expected), "encryption failed")
             let decrypted = aes.decrypt(encrypted!)
             XCTAssertEqual(decrypted!, NSData.withBytes(input), "decryption failed")
@@ -43,7 +43,7 @@ class AESTests: XCTestCase {
             0x70, 0xb4, 0xc5, 0x5a];
         
         if let aes = AES(key: NSData.withBytes(aesKey), blockMode: .ECB) {
-            let encrypted = aes.encrypt(NSData.withBytes(input), addPadding: false)
+            let encrypted = aes.encrypt(NSData.withBytes(input), padding: nil)
             XCTAssertEqual(encrypted!, NSData.withBytes(expected), "encryption failed")
             let decrypted = aes.decrypt(encrypted!, removePadding: false)
             XCTAssertEqual(decrypted!, NSData.withBytes(input), "decryption failed")
@@ -60,7 +60,7 @@ class AESTests: XCTestCase {
         
         if let aes = AES(key: NSData.withBytes(key), iv:NSData.withBytes(iv), blockMode: .CBC) {
             XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
-            let encrypted = aes.encrypt(NSData.withBytes(plaintext), addPadding: false)
+            let encrypted = aes.encrypt(NSData.withBytes(plaintext), padding: nil)
             XCTAssertEqual(encrypted!, NSData.withBytes(expected), "encryption failed")
             let decrypted = aes.decrypt(encrypted!, removePadding: false)
             XCTAssertEqual(decrypted!, NSData.withBytes(plaintext), "decryption failed")
@@ -77,7 +77,7 @@ class AESTests: XCTestCase {
         
         if let aes = AES(key: NSData.withBytes(key), iv:NSData.withBytes(iv), blockMode: .CFB) {
             XCTAssertTrue(aes.blockMode == .CFB, "Invalid block mode")
-            let encrypted = aes.encrypt(NSData.withBytes(plaintext), addPadding: false)
+            let encrypted = aes.encrypt(NSData.withBytes(plaintext), padding: nil)
             XCTAssertEqual(encrypted!, NSData.withBytes(expected), "encryption failed")
             let decrypted = aes.decrypt(encrypted!, removePadding: false)
             XCTAssertEqual(decrypted!, NSData.withBytes(plaintext), "decryption failed")

@@ -144,7 +144,7 @@ public class AES {
         var finalMessage = message;
 
         if (addPadding) {
-            finalMessage = PKCS7(data: message).addPadding(AES.blockSizeBytes())
+            finalMessage = PKCS7.add(message, blockSize: AES.blockSizeBytes())
         } else if (message.length % AES.blockSizeBytes() != 0) {
             // 128 bit block exceeded, need padding
             assertionFailure("AES 128-bit block exceeded!")
@@ -206,7 +206,7 @@ public class AES {
         }
         
         if (out != nil && removePadding) {
-            return PKCS7(data: NSData.withBytes(out!)).removePadding()
+            return PKCS7.remove(NSData.withBytes(out!))
         }
         
         return out == nil ? nil : NSData.withBytes(out!)

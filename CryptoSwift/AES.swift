@@ -115,7 +115,6 @@ public class AES {
         
         if (blockMode.requireIV() && iv.length != key.length) {
             assertionFailure("Key and Initialization Vector must be the same length!")
-            return nil
         }
     }
     
@@ -148,7 +147,6 @@ public class AES {
         } else if (message.length % AES.blockSizeBytes() != 0) {
             // 128 bit block exceeded, need padding
             assertionFailure("AES 128-bit block exceeded!")
-            return nil
         }
         
         let blocks = finalMessage.bytes().chunks(AES.blockSizeBytes())
@@ -193,7 +191,6 @@ public class AES {
         if (message.length % AES.blockSizeBytes() != 0) {
             // 128 bit block exceeded
             assertionFailure("AES 128-bit block exceeded!")
-            return nil
         }
         
         let blocks = message.bytes().chunks(AES.blockSizeBytes())

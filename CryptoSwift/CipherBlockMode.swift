@@ -73,10 +73,9 @@ public enum CipherBlockMode {
 */
 private struct CBCMode {
     static func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:CipherWorker) -> [UInt8]? {
-        
+        assert(iv != nil, "CFB require IV")
         if (iv == nil) {
-            assertionFailure("CBC require IV")
-            return nil
+            return nil;
         }
         
         var out:[UInt8]?
@@ -104,8 +103,8 @@ private struct CBCMode {
     }
     
     static func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:CipherWorker) -> [UInt8]? {
+        assert(iv != nil, "CFB require IV")
         if (iv == nil) {
-            assertionFailure("CBC require IV")
             return nil
         }
 
@@ -114,7 +113,7 @@ private struct CBCMode {
         for (idx,ciphertext) in enumerate(blocks) {
             if let decrypted = cipher(block: ciphertext) { // decrypt
                 
-                var xored:[UInt8] = [UInt8](count: lastCiphertext.count, repeatedValue: 0)
+                var xored:[UInt8] = [UInt8](count: ciphertext.count, repeatedValue: 0)
                 for i in 0..<ciphertext.count {
                     xored[i] = lastCiphertext[i] ^ decrypted[i]
                 }
@@ -136,9 +135,8 @@ private struct CBCMode {
 */
 private struct CFBMode {
     static func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:CipherWorker) -> [UInt8]? {
-        
+        assert(iv != nil, "CFB require IV")
         if (iv == nil) {
-            assertionFailure("CFB require IV")
             return nil
         }
         
@@ -164,8 +162,8 @@ private struct CFBMode {
     }
     
     static func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:CipherWorker) -> [UInt8]? {
+        assert(iv != nil, "CFB require IV")
         if (iv == nil) {
-            assertionFailure("CFB require IV")
             return nil
         }
         

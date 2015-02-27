@@ -76,7 +76,6 @@ private struct CBCMode {
         
         if (iv == nil) {
             assertionFailure("CBC require IV")
-            return nil
         }
         
         var out:[UInt8]?
@@ -106,7 +105,6 @@ private struct CBCMode {
     static func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:CipherWorker) -> [UInt8]? {
         if (iv == nil) {
             assertionFailure("CBC require IV")
-            return nil
         }
 
         var out:[UInt8]?
@@ -139,7 +137,6 @@ private struct CFBMode {
         
         if (iv == nil) {
             assertionFailure("CFB require IV")
-            return nil
         }
         
         var out:[UInt8]?
@@ -166,7 +163,6 @@ private struct CFBMode {
     static func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:CipherWorker) -> [UInt8]? {
         if (iv == nil) {
             assertionFailure("CFB require IV")
-            return nil
         }
         
         var out:[UInt8]?

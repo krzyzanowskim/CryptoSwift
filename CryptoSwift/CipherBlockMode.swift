@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias CipherWorker = (block: [UInt8]) -> [UInt8]?
+
 public enum CipherBlockMode {
     case ECB, CBC, CFB
     
@@ -20,6 +22,7 @@ public enum CipherBlockMode {
         }
     }
     
+    
     /**
     Process input blocks with given block cipher mode. With fallback to plain mode.
     
@@ -29,7 +32,7 @@ public enum CipherBlockMode {
     
     :returns: encrypted bytes
     */
-    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
+    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:CipherWorker) -> [UInt8]? {
         
         // if IV is not available, fallback to plain
         var finalBlockMode:CipherBlockMode = self
@@ -69,7 +72,7 @@ public enum CipherBlockMode {
 *  Cipher-block chaining (CBC)
 */
 private struct CBCMode {
-    static func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
+    static func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:CipherWorker) -> [UInt8]? {
         
         if (iv == nil) {
             assertionFailure("CBC require IV")
@@ -100,7 +103,7 @@ private struct CBCMode {
         return out;
     }
     
-    static func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
+    static func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:CipherWorker) -> [UInt8]? {
         if (iv == nil) {
             assertionFailure("CBC require IV")
             return nil
@@ -132,7 +135,7 @@ private struct CBCMode {
 *  Cipher feedback (CFB)
 */
 private struct CFBMode {
-    static func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
+    static func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:CipherWorker) -> [UInt8]? {
         
         if (iv == nil) {
             assertionFailure("CFB require IV")
@@ -160,7 +163,7 @@ private struct CFBMode {
         return out;
     }
     
-    static func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
+    static func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipher:CipherWorker) -> [UInt8]? {
         if (iv == nil) {
             assertionFailure("CFB require IV")
             return nil
@@ -194,7 +197,7 @@ private struct CFBMode {
 *  Electronic codebook (ECB)
 */
 private struct ECBMode {
-    static func encryptBlocks(blocks:[[UInt8]], cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
+    static func encryptBlocks(blocks:[[UInt8]], cipher:CipherWorker) -> [UInt8]? {
         var out:[UInt8]?
         for (idx,plaintext) in enumerate(blocks) {
             if let encrypted = cipher(block: plaintext) {
@@ -209,7 +212,7 @@ private struct ECBMode {
         return out
     }
     
-    static func decryptBlocks(blocks:[[UInt8]], cipher:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
+    static func decryptBlocks(blocks:[[UInt8]], cipher:CipherWorker) -> [UInt8]? {
         return encryptBlocks(blocks, cipher: cipher)
     }
 }

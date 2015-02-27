@@ -156,7 +156,7 @@ public class AES {
         return out == nil ? nil : NSData.withBytes(out!)
     }
     
-    private func encryptBlock(block:[UInt8]) -> [UInt8] {
+    private func encryptBlock(block:[UInt8]) -> [UInt8]? {
         let expandedKey = expandKey()
         
         var state:[[UInt8]] = [[UInt8]](count: variant.Nb, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))
@@ -212,7 +212,7 @@ public class AES {
         return out == nil ? nil : NSData.withBytes(out!)
     }
     
-    private func decryptBlock(block:[UInt8]) -> [UInt8] {
+    private func decryptBlock(block:[UInt8]) -> [UInt8]? {
         let expandedKey = expandKey()
         
         var state:[[UInt8]] = [[UInt8]](count: variant.Nb, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))

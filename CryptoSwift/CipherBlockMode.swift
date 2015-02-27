@@ -111,7 +111,7 @@ private struct CBCMode {
         for (idx,ciphertext) in enumerate(blocks) {
             if let decrypted = cipher(block: ciphertext) { // decrypt
                 
-                var xored:[UInt8] = [UInt8](count: lastCiphertext.count, repeatedValue: 0)
+                var xored:[UInt8] = [UInt8](count: ciphertext.count, repeatedValue: 0)
                 for i in 0..<ciphertext.count {
                     xored[i] = lastCiphertext[i] ^ decrypted[i]
                 }

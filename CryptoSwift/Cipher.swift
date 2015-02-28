@@ -27,7 +27,7 @@ public enum Cipher {
     
     :returns: Value of Cipher
     */
-    case AES(key: NSData, iv: NSData, blockMode: CipherBlockMode)
+    case AES(key: [UInt8], iv: [UInt8], blockMode: CipherBlockMode)
     
     /**
     Encrypt message

@@ -27,8 +27,8 @@ private enum AESVariant:Int {
 public class AES {
     public let blockMode:CipherBlockMode
     private let variant:AESVariant
-    private let key:NSData
-    private let iv:NSData?
+    private let key:[UInt8]
+    private let iv:[UInt8]?
     
     private let sBox:[UInt8] = [
         0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76, 
@@ -93,12 +93,12 @@ public class AES {
         0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd,
         0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d]
     
-    public init?(key:NSData, iv:NSData, blockMode:CipherBlockMode = .CBC) {
+    public init?(key:[UInt8], iv:[UInt8], blockMode:CipherBlockMode = .CBC) {
         self.key = key
-        self.blockMode = blockMode
         self.iv = iv
+        self.blockMode = blockMode
         
-        switch (key.length * 8) {
+        switch (key.count * 8) {
         case 128:
             self.variant = .aes128
             break
@@ -113,15 +113,15 @@ public class AES {
             return nil
         }
         
-        if (blockMode.needIV && iv.length != AES.blockSizeBytes()) {
+        if (blockMode.needIV && iv.count != AES.blockSizeBytes()) {
             assert(false, "Block size and Initialization Vector must be the same length!")
             return nil
         }
     }
     
-    convenience public init?(key:NSData, blockMode:CipherBlockMode = .CBC) {
+    convenience public init?(key:[UInt8], blockMode:CipherBlockMode = .CBC) {
         // default IV is all 0x00...
-        let defaultIV = NSMutableData(length: AES.blockSizeBytes())!
+        let defaultIV = [UInt8](count: AES.blockSizeBytes(), repeatedValue: 0)
         self.init(key: key, iv: defaultIV, blockMode: blockMode)
     }
     
@@ -149,7 +149,7 @@ public class AES {
         }
         
         let blocks = finalBytes.chunks(AES.blockSizeBytes())
-        return blockMode.encryptBlocks(blocks, iv: self.iv?.bytes(), cipherOperation: encryptBlock)
+        return blockMode.encryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
     }
     
     private func encryptBlock(block:[UInt8]) -> [UInt8]? {
@@ -196,9 +196,9 @@ public class AES {
         var out:[UInt8]?
         if (blockMode == .CFB) {
             // CFB uses encryptBlock to decrypt
-            out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipherOperation: encryptBlock)
+            out = blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
         } else {
-            out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipherOperation: decryptBlock)
+            out = blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: decryptBlock)
         }
         
         if let out = out, let padding = padding {
@@ -257,10 +257,9 @@ public class AES {
         }
 
         var w:[UInt8] = [UInt8](count: variant.Nb * (variant.Nr + 1) * 4, repeatedValue: 0)
-        let keyBytes:[UInt8] = key.bytes()
         for i in 0..<variant.Nk {
             for wordIdx in 0..<4 {
-                w[(4*i)+wordIdx] = keyBytes[(4*i)+wordIdx]
+                w[(4*i)+wordIdx] = key[(4*i)+wordIdx]
             }
         }
         

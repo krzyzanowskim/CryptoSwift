@@ -46,14 +46,11 @@ class ChaCha20Tests: XCTestCase {
         ]
         
         for (var idx = 0; idx < keys.count; idx++) {
-            let keyData = NSData(bytes: keys[idx], length: keys[idx].count)
-            let ivData = NSData(bytes: ivs[idx], length: ivs[idx].count)
             
             let expectedHex = expectedHexes[idx]
-            //println(countElements(expectedHex) / 2);
             let message = [UInt8](count: (count(expectedHex) / 2), repeatedValue: 0)
             
-            let setup = (key: keyData, iv: ivData)
+            let setup = (key: keys[idx], iv: ivs[idx])
             var encrypted = Cipher.ChaCha20(setup).encrypt(message)
             XCTAssert(encrypted != nil, "missing")
             if let encrypted = encrypted {

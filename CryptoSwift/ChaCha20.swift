@@ -24,7 +24,7 @@ public class ChaCha20 {
         }
     }
     
-    init?(key:NSData, iv:NSData) {
+    init?(key:[UInt8], iv:[UInt8]) {
         if let c = contextSetup(iv: iv, key: key) {
             context = c
         } else {
@@ -73,11 +73,7 @@ public class ChaCha20 {
 
         return output;
     }
-    
-    private func contextSetup(# iv:NSData, key:NSData) -> Context? {
-        return contextSetup(iv: iv.bytes(), key: key.bytes())
-    }
-    
+        
     private func contextSetup(# iv:[UInt8], key:[UInt8]) -> Context? {
         var ctx = Context()
         let kbits = key.count * 8

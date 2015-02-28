@@ -17,7 +17,7 @@ public enum Cipher {
     
     :returns: Value of Cipher
     */
-    case ChaCha20(key: NSData, iv: NSData)
+    case ChaCha20(key: [UInt8], iv: [UInt8])
     /**
     AES
     
@@ -65,22 +65,11 @@ public enum Cipher {
         }
     }
 
-    static public func randomIV(key: NSData) -> [UInt8] {
+    static public func randomIV(blockSize:Int) -> [UInt8] {
         var randomIV:[UInt8] = [UInt8]();
-        for (var i = 0; i < key.length; i++) {
+        for (var i = 0; i < blockSize; i++) {
             randomIV.append(UInt8(truncatingBitPattern: arc4random_uniform(256)));
         }
         return randomIV
-    }
-    
-    /**
-    Convenience function to generate Initialization Vector (IV) for given key. Use this function to generate IV for you key.
-    
-    :param: key Given key
-    
-    :returns: Random IV
-    */
-    static public func randomIV(key: NSData) -> NSData {
-        return NSData.withBytes(randomIV(key))
     }
 }

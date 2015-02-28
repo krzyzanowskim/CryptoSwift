@@ -32,20 +32,16 @@ public class ChaCha20 {
         }
     }
     
-    func encrypt(message:NSData) -> NSData? {
+    func encrypt(bytes:[UInt8]) -> [UInt8]? {
         if (context == nil) {
             return nil
         }
         
-        if let output = encryptBytes(message.bytes()) {
-            return NSData.withBytes(output)
-        }
-        
-        return nil
+        return encryptBytes(bytes)
     }
     
-    func decrypt(message:NSData) -> NSData? {
-        return encrypt(message)
+    func decrypt(bytes:[UInt8]) -> [UInt8]? {
+        return encrypt(bytes)
     }
     
     private func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {

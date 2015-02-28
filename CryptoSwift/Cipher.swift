@@ -40,7 +40,7 @@ public enum Cipher {
         switch (self) {
             case .ChaCha20(let key, let iv):
                 var chacha = CryptoSwift.ChaCha20(key: key, iv: iv)
-                return chacha?.encrypt(NSData.withBytes(bytes))?.bytes() //TODO: [UInt8]
+                return chacha?.encrypt(bytes)
             case .AES(let key, let iv, let blockMode):
                 var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode)
                 return aes?.encrypt(bytes)
@@ -58,7 +58,7 @@ public enum Cipher {
         switch (self) {
             case .ChaCha20(let key, let iv):
                 var chacha = CryptoSwift.ChaCha20(key: key, iv: iv);
-                return chacha?.decrypt(NSData.withBytes(bytes))?.bytes() //TODO: [UInt8]
+                return chacha?.decrypt(bytes)
             case .AES(let key, let iv, let blockMode):
                 var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode);
                 return aes?.decrypt(bytes)

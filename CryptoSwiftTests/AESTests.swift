@@ -174,4 +174,54 @@ class AESTests: XCTestCase {
         }
     }
 
+    func testAESPerformance() {
+        let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let message = [UInt8](count: 1024 * 1024, repeatedValue: 7)
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
+            self.startMeasuring()
+            let encrypted = AES(key: key, iv: iv, blockMode: .CBC)?.encrypt(message, padding: PKCS7())
+            self.stopMeasuring()
+        })
+    }
+    
+    func testAESPerformanceCommonCrypto() {
+        let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let message = [UInt8](count: 1024 * 1024, repeatedValue: 7)
+        
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
+            self.startMeasuring()
+            
+            let keyData     = NSData.withBytes(key)
+            let keyBytes    = UnsafePointer<Void>(keyData.bytes)
+            let ivData      = NSData.withBytes(iv)
+            let ivBytes     = UnsafePointer<Void>(ivData.bytes)
+            
+            let data = NSData.withBytes(message)
+            let dataLength    = data.length
+            let dataBytes     = UnsafePointer<Void>(data.bytes)
+            
+            let cryptData    = NSMutableData(length: Int(dataLength) + kCCBlockSizeAES128)
+            var cryptPointer = UnsafeMutablePointer<Void>(cryptData!.mutableBytes)
+            let cryptLength  = cryptData!.length
+            
+            var numBytesEncrypted:Int = 0
+            
+            var cryptStatus = CCCrypt(
+                UInt32(kCCEncrypt),
+                UInt32(kCCAlgorithmAES128),
+                UInt32(kCCOptionPKCS7Padding),
+                keyBytes,
+                key.count,
+                ivBytes,
+                dataBytes,
+                dataLength,
+                cryptPointer, cryptLength,
+                &numBytesEncrypted)
+
+            self.stopMeasuring()
+        })
+    }
+
 }

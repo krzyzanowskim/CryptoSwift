@@ -1,7 +1,17 @@
 // Playground - noun: a place where people can play
 
 import Foundation
-import CryptoSwift
 
-let plaintext = "Lorem ipsum"
-let MD5 = plaintext.md5()
+protocol Proto {
+    
+}
+
+struct S1: Proto {
+    
+}
+
+func create<M: Proto>(p:M) -> M {
+    return p()
+}
+
+let qq = create(S1())

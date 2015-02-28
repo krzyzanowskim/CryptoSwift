@@ -113,7 +113,7 @@ public class AES {
             return nil
         }
         
-        if (blockMode.requireIV() && iv.length != AES.blockSizeBytes()) {
+        if (blockMode.needIV && iv.length != AES.blockSizeBytes()) {
             assert(false, "Block size and Initialization Vector must be the same length!")
             return nil
         }
@@ -149,7 +149,7 @@ public class AES {
         }
         
         let blocks = finalBytes.chunks(AES.blockSizeBytes())
-        return blockMode.encryptBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
+        return blockMode.encryptBlocks(blocks, iv: self.iv?.bytes(), cipherOperation: encryptBlock)
     }
     
     private func encryptBlock(block:[UInt8]) -> [UInt8]? {
@@ -196,9 +196,9 @@ public class AES {
         var out:[UInt8]?
         if (blockMode == .CFB) {
             // CFB uses encryptBlock to decrypt
-            out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
+            out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipherOperation: encryptBlock)
         } else {
-            out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipher: decryptBlock)
+            out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipherOperation: decryptBlock)
         }
         
         if let out = out, let padding = padding {

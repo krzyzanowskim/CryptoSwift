@@ -15,7 +15,7 @@ public struct PKCS7: Padding {
     }
     
     public func add(bytes: [UInt8] , blockSize:Int) -> [UInt8] {
-        var padding = UInt8(blockSize) - (UInt8(bytes.count) % UInt8(blockSize))
+        var padding = UInt8(blockSize - (bytes.count % blockSize))
         var withPadding = bytes
         if (padding == 0) {
             // If the original data is a multiple of N bytes, then an extra block of bytes with value N is added.

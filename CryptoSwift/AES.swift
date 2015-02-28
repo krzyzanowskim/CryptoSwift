@@ -113,15 +113,15 @@ public class AES {
             return nil
         }
         
-        if (blockMode.requireIV() && iv.length != key.length) {
-            assertionFailure("Key and Initialization Vector must be the same length!")
+        if (blockMode.requireIV() && iv.length != AES.blockSizeBytes()) {
+            assertionFailure("Block and Initialization Vector must be the same length!")
             return nil
         }
     }
     
     convenience public init?(key:NSData, blockMode:CipherBlockMode = .CBC) {
         // default IV is all 0x00...
-        let defaultIV = NSMutableData(length: key.length)!
+        let defaultIV = NSMutableData(length: AES.blockSizeBytes())!
         self.init(key: key, iv: defaultIV, blockMode: blockMode)
     }
     

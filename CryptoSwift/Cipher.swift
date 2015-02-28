@@ -36,14 +36,14 @@ public enum Cipher {
     
     :returns: encrypted message
     */
-    public func encrypt(message: NSData) -> NSData? {
+    public func encrypt(bytes: [UInt8]) -> [UInt8]? {
         switch (self) {
             case .ChaCha20(let key, let iv):
                 var chacha = CryptoSwift.ChaCha20(key: key, iv: iv)
-                return chacha?.encrypt(message)
+                return chacha?.encrypt(NSData.withBytes(bytes))?.bytes() //TODO: [UInt8]
             case .AES(let key, let iv, let blockMode):
                 var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode)
-                return aes?.encrypt(message, padding: PKCS7())
+                return aes?.encrypt(bytes, padding: PKCS7())
         }
     }
     
@@ -54,14 +54,14 @@ public enum Cipher {
     
     :returns: Plaintext message
     */
-    public func decrypt(message: NSData) -> NSData? {
+    public func decrypt(bytes: [UInt8]) -> [UInt8]? {
         switch (self) {
             case .ChaCha20(let key, let iv):
                 var chacha = CryptoSwift.ChaCha20(key: key, iv: iv);
-                return chacha?.decrypt(message)
+                return chacha?.decrypt(NSData.withBytes(bytes))?.bytes() //TODO: [UInt8]
             case .AES(let key, let iv, let blockMode):
                 var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode);
-                return aes?.decrypt(message)
+                return aes?.decrypt(bytes, removePadding: true)
         }
     }
 

@@ -14,31 +14,29 @@ public struct PKCS7: Padding {
         
     }
     
-    public func add(data: NSData , blockSize:Int) -> NSData {
-        var padding = UInt8(blockSize) - (UInt8(data.length) % UInt8(blockSize))
-        var withPadding = NSMutableData(data: data)
+    public func add(bytes: [UInt8] , blockSize:Int) -> [UInt8] {
+        var padding = UInt8(blockSize) - (UInt8(bytes.count) % UInt8(blockSize))
+        var withPadding = bytes
         if (padding == 0) {
             // If the original data is a multiple of N bytes, then an extra block of bytes with value N is added.
             for i in 0..<blockSize {
-                withPadding.appendBytes([UInt8(blockSize)])
+                withPadding += [UInt8(blockSize)]
             }
         } else {
             // The value of each added byte is the number of bytes that are added
             for i in 0..<padding {
-                withPadding.appendBytes([padding])
+                withPadding += [UInt8(padding)]
             }
         }
         return withPadding
     }
     
-    public func remove(data: NSData, blockSize:Int? = nil) -> NSData
-    {
-        var padding:UInt8 = 0
-        data.subdataWithRange(NSRange(location: data.length - 1, length: 1)).getBytes(&padding, length: 1)
+    public func remove(bytes: [UInt8], blockSize:Int? = nil) -> [UInt8] {
+        var padding = Int(bytes.last!) // last byte
         
-        if padding >= 1 {
-            return data.subdataWithRange(NSRange(location: 0, length: data.length - Int(padding)))
+        if padding >= 1 { //TODO: need test for that, what about empty padding
+            return Array(bytes[0..<(bytes.count - padding)])
         }
-        return data
+        return bytes
     }
 }

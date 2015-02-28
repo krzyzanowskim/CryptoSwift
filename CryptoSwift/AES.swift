@@ -114,7 +114,7 @@ public class AES {
         }
         
         if (blockMode.requireIV() && iv.length != AES.blockSizeBytes()) {
-            assertionFailure("Block size and Initialization Vector must be the same length!")
+            assert(false, "Block size and Initialization Vector must be the same length!")
             return nil
         }
     }
@@ -128,10 +128,6 @@ public class AES {
     public class func blockSizeBytes() -> Int {
         return 128 / 8 // 16 bytes
     }
-    
-    public class func blockSizeBytes() -> UInt8 {
-        return UInt8(truncatingBitPattern: self.blockSizeBytes())
-    }
 
     /**
     Encrypt message. If padding is necessary, then PKCS7 padding is addedd and need to be removed after decryption.
@@ -141,20 +137,19 @@ public class AES {
     :returns: Encrypted data
     */
 
-    public func encrypt(message:NSData, padding: Padding? = PKCS7()) -> NSData? {
-        var finalMessage = message;
+    public func encrypt(bytes:[UInt8], padding: Padding? = PKCS7()) -> [UInt8]? {
+        var finalBytes = bytes;
 
         if let padding = padding {
-            finalMessage = padding.add(message, blockSize: AES.blockSizeBytes())
-        } else if (message.length % AES.blockSizeBytes() != 0) {
+            finalBytes = padding.add(bytes, blockSize: AES.blockSizeBytes())
+        } else if (bytes.count % AES.blockSizeBytes() != 0) {
             // 128 bit block exceeded, need padding
             assert(false, "AES 128-bit block exceeded!");
             return nil
         }
         
-        let blocks = finalMessage.bytes().chunks(AES.blockSizeBytes())
-        let out = blockMode.encryptBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
-        return out == nil ? nil : NSData.withBytes(out!)
+        let blocks = finalBytes.chunks(AES.blockSizeBytes())
+        return blockMode.encryptBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
     }
     
     private func encryptBlock(block:[UInt8]) -> [UInt8]? {
@@ -190,14 +185,15 @@ public class AES {
         return out
     }
     
-    public func decrypt(message:NSData, removePadding:Bool = true) -> NSData? {
-        if (message.length % AES.blockSizeBytes() != 0) {
+    //TODO: Padding
+    public func decrypt(bytes:[UInt8], removePadding:Bool) -> [UInt8]? {
+        if (bytes.count % AES.blockSizeBytes() != 0) {
             // 128 bit block exceeded
-            assertionFailure("AES 128-bit block exceeded!")
+            assert(false,"AES 128-bit block exceeded!")
             return nil
         }
         
-        let blocks = message.bytes().chunks(AES.blockSizeBytes())
+        let blocks = bytes.chunks(AES.blockSizeBytes())
         var out:[UInt8]?
         if (blockMode == .CFB) {
             // CFB uses encryptBlock to decrypt
@@ -207,10 +203,10 @@ public class AES {
         }
         
         if (out != nil && removePadding) {
-            return PKCS7().remove(NSData.withBytes(out!))
+            return PKCS7().remove(out!)
         }
         
-        return out == nil ? nil : NSData.withBytes(out!)
+        return out;
     }
     
     private func decryptBlock(block:[UInt8]) -> [UInt8]? {

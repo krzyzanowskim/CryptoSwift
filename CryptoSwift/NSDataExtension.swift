@@ -61,11 +61,17 @@ extension NSData {
     }
 
     public func encrypt(cipher: Cipher) -> NSData? {
-        return cipher.encrypt(self)
+        if let encrypted = cipher.encrypt(self.bytes()) {
+            return NSData.withBytes(encrypted)
+        }
+        return nil
     }
 
     public func decrypt(cipher: Cipher) -> NSData? {
-        return cipher.decrypt(self)
+        if let decrypted = cipher.decrypt(self.bytes()) {
+            return NSData.withBytes(decrypted)
+        }
+        return nil;
     }
     
     public func authenticate(authenticator: Authenticator) -> NSData? {

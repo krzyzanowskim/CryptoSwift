@@ -52,23 +52,23 @@ class ChaCha20Tests: XCTestCase {
             let expectedHex = expectedHexes[idx]
             //println(countElements(expectedHex) / 2);
             let message = [UInt8](count: (count(expectedHex) / 2), repeatedValue: 0)
-            let messageData = NSData(bytes: message, length: message.count);
             
             let setup = (key: keyData, iv: ivData)
-            var encrypted = Cipher.ChaCha20(setup).encrypt(messageData)
-            XCTAssertNotNil(encrypted, "")
+            var encrypted = Cipher.ChaCha20(setup).encrypt(message)
+            XCTAssert(encrypted != nil, "missing")
             if let encrypted = encrypted {
                 var decrypted = Cipher.ChaCha20(setup).decrypt(encrypted)
-                XCTAssertNotNil(decrypted, "")
+                XCTAssert(decrypted != nil, "missing")
                 if let decrypted = decrypted {
-                    XCTAssertEqual(messageData, decrypted, "ChaCha20 decryption failed");
+                    XCTAssertEqual(message, decrypted, "ChaCha20 decryption failed");
                 }
                 
                 // check extension
+                let messageData = NSData(bytes: message, length: message.count);
                 let encrypted2 = messageData.encrypt(Cipher.ChaCha20(setup))
                 XCTAssertNotNil(encrypted2, "")
                 if let encrypted2 = encrypted2 {
-                    XCTAssertEqual(encrypted, encrypted2, "ChaCha20 extension failed")
+                    XCTAssertEqual(NSData.withBytes(encrypted), encrypted2, "ChaCha20 extension failed")
                 }
             }
         }

@@ -88,13 +88,6 @@ public class Poly1305 {
     
     :returns: Message Authentication Code
     */
-    class internal func authenticate(# key: NSData, message: NSData) -> NSData? {
-        if let mac = Poly1305.authenticate(key: key.bytes(), message: message.bytes()) {
-            return NSData(bytes: mac, length: mac.count)
-        }
-        return nil
-    }
-
     class internal func authenticate(# key: [UInt8], message: [UInt8]) -> [UInt8]? {
         return Poly1305(key)?.authenticate(message: message)
     }

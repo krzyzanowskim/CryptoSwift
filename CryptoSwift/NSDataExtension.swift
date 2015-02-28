@@ -75,7 +75,10 @@ extension NSData {
     }
     
     public func authenticate(authenticator: Authenticator) -> NSData? {
-        return authenticator.authenticate(self)
+        if let result = authenticator.authenticate(self.bytes()) {
+            NSData.withBytes(result)
+        }
+        return nil
     }
 }
 

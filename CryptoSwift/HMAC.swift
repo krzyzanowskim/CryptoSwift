@@ -31,14 +31,7 @@ public class HMAC {
     
     var key:[UInt8]
     let variant:Variant
-    
-    class internal func authenticate(# key: NSData, message: NSData, variant:HMAC.Variant = .md5) -> NSData? {
-        if let mac = HMAC.authenticate(key: key.bytes(), message: message.bytes(), variant: variant) {
-            return NSData(bytes: mac, length: mac.count)
-        }
-        return nil
-    }
-    
+        
     class internal func authenticate(# key: [UInt8], message: [UInt8], variant:HMAC.Variant = .md5) -> [UInt8]? {
         return HMAC(key, variant: variant)?.authenticate(message: message)
     }

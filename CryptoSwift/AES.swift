@@ -137,7 +137,7 @@ public class AES {
     :returns: Encrypted data
     */
 
-    public func encrypt(bytes:[UInt8], padding: Padding? = PKCS7()) -> [UInt8]? {
+    public func encrypt(bytes:[UInt8], padding:Padding? = PKCS7()) -> [UInt8]? {
         var finalBytes = bytes;
 
         if let padding = padding {
@@ -185,8 +185,7 @@ public class AES {
         return out
     }
     
-    //TODO: Padding
-    public func decrypt(bytes:[UInt8], removePadding:Bool) -> [UInt8]? {
+    public func decrypt(bytes:[UInt8], padding:Padding? = PKCS7()) -> [UInt8]? {
         if (bytes.count % AES.blockSizeBytes() != 0) {
             // 128 bit block exceeded
             assert(false,"AES 128-bit block exceeded!")
@@ -202,8 +201,8 @@ public class AES {
             out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipher: decryptBlock)
         }
         
-        if (out != nil && removePadding) {
-            return PKCS7().remove(out!)
+        if let out = out, let padding = padding {
+            return padding.remove(out, blockSize: nil)
         }
         
         return out;

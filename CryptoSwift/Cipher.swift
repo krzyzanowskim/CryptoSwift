@@ -43,7 +43,7 @@ public enum Cipher {
                 return chacha?.encrypt(NSData.withBytes(bytes))?.bytes() //TODO: [UInt8]
             case .AES(let key, let iv, let blockMode):
                 var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode)
-                return aes?.encrypt(bytes, padding: PKCS7())
+                return aes?.encrypt(bytes)
         }
     }
     
@@ -61,7 +61,7 @@ public enum Cipher {
                 return chacha?.decrypt(NSData.withBytes(bytes))?.bytes() //TODO: [UInt8]
             case .AES(let key, let iv, let blockMode):
                 var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode);
-                return aes?.decrypt(bytes, removePadding: true)
+                return aes?.decrypt(bytes)
         }
     }
 

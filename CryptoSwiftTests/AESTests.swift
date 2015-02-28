@@ -24,7 +24,7 @@ class AESTests: XCTestCase {
         if let aes = AES(key: NSData.withBytes(key), iv: NSData.withBytes(iv), blockMode: .CBC) {
             let encrypted = aes.encrypt(input, padding: nil)
             XCTAssertEqual(encrypted!, expected, "encryption failed")
-            let decrypted = aes.decrypt(encrypted!, removePadding: true)
+            let decrypted = aes.decrypt(encrypted!, padding: nil)
             XCTAssertEqual(decrypted!, input, "decryption failed")
         } else {
             XCTAssert(false, "failed")
@@ -45,7 +45,7 @@ class AESTests: XCTestCase {
         if let aes = AES(key: NSData.withBytes(aesKey), blockMode: .ECB) {
             let encrypted = aes.encrypt(input, padding: nil)
             XCTAssertEqual(encrypted!, expected, "encryption failed")
-            let decrypted = aes.decrypt(encrypted!, removePadding: false)
+            let decrypted = aes.decrypt(encrypted!, padding: nil)
             XCTAssertEqual(decrypted!, input, "decryption failed")
         } else {
             XCTAssert(false, "failed")
@@ -62,7 +62,7 @@ class AESTests: XCTestCase {
             XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
             let encrypted = aes.encrypt(plaintext, padding: nil)
             XCTAssertEqual(encrypted!, expected, "encryption failed")
-            let decrypted = aes.decrypt(encrypted!, removePadding: false)
+            let decrypted = aes.decrypt(encrypted!, padding: nil)
             XCTAssertEqual(decrypted!, plaintext, "decryption failed")
         } else {
             XCTAssert(false, "failed")
@@ -79,7 +79,7 @@ class AESTests: XCTestCase {
             XCTAssertTrue(aes.blockMode == .CFB, "Invalid block mode")
             let encrypted = aes.encrypt(plaintext, padding: nil)
             XCTAssertEqual(encrypted!, expected, "encryption failed")
-            let decrypted = aes.decrypt(encrypted!, removePadding: false)
+            let decrypted = aes.decrypt(encrypted!, padding: nil)
             XCTAssertEqual(decrypted!, plaintext, "decryption failed")
         } else {
             XCTAssert(false, "failed")

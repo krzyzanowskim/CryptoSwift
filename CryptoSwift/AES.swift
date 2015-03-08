@@ -26,6 +26,8 @@ private enum AESVariant:Int {
 
 public class AES {
     public let blockMode:CipherBlockMode
+    static let blockSize:Int = 16 // 128 /8
+    
     private let variant:AESVariant
     private let key:[UInt8]
     private let iv:[UInt8]?
@@ -113,7 +115,7 @@ public class AES {
             return nil
         }
         
-        if (blockMode.needIV && iv.count != AES.blockSizeBytes()) {
+        if (blockMode.needIV && iv.count != AES.blockSize) {
             assert(false, "Block size and Initialization Vector must be the same length!")
             return nil
         }
@@ -121,14 +123,10 @@ public class AES {
     
     convenience public init?(key:[UInt8], blockMode:CipherBlockMode = .CBC) {
         // default IV is all 0x00...
-        let defaultIV = [UInt8](count: AES.blockSizeBytes(), repeatedValue: 0)
+        let defaultIV = [UInt8](count: AES.blockSize, repeatedValue: 0)
         self.init(key: key, iv: defaultIV, blockMode: blockMode)
     }
     
-    public class func blockSizeBytes() -> Int {
-        return 128 / 8 // 16 bytes
-    }
-
     /**
     Encrypt message. If padding is necessary, then PKCS7 padding is addedd and need to be removed after decryption.
     
@@ -141,14 +139,14 @@ public class AES {
         var finalBytes = bytes;
 
         if let padding = padding {
-            finalBytes = padding.add(bytes, blockSize: AES.blockSizeBytes())
-        } else if (bytes.count % AES.blockSizeBytes() != 0) {
+            finalBytes = padding.add(bytes, blockSize: AES.blockSize)
+        } else if (bytes.count % AES.blockSize != 0) {
             // 128 bit block exceeded, need padding
             assert(false, "AES 128-bit block exceeded!");
             return nil
         }
         
-        let blocks = finalBytes.chunks(AES.blockSizeBytes())
+        let blocks = finalBytes.chunks(AES.blockSize)
         return blockMode.encryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
     }
     
@@ -187,13 +185,13 @@ public class AES {
     }
     
     public func decrypt(bytes:[UInt8], padding:Padding? = PKCS7()) -> [UInt8]? {
-        if (bytes.count % AES.blockSizeBytes() != 0) {
+        if (bytes.count % AES.blockSize != 0) {
             // 128 bit block exceeded
             assert(false,"AES 128-bit block exceeded!")
             return nil
         }
         
-        let blocks = bytes.chunks(AES.blockSizeBytes())
+        let blocks = bytes.chunks(AES.blockSize)
         let out:[UInt8]?
         if (blockMode == .CFB) {
             // CFB uses encryptBlock to decrypt

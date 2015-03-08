@@ -10,7 +10,7 @@ import Foundation
 
 public class ChaCha20 {
     
-    private let blockSizeBytes = 512 / 8
+    static let blockSize = 64 // 512 / 8
     private let stateSize = 16
     private var context:Context?
     
@@ -137,18 +137,18 @@ public class ChaCha20 {
                         ctx.input[13] = ctx.input[13] &+ 1
                         /* stopping at 2^70 bytes per nonce is user's responsibility */
                     }
-                    if (bytes <= blockSizeBytes) {
+                    if (bytes <= ChaCha20.blockSize) {
                         for (var i = 0; i < bytes; i++) {
                             c[i + cPos] = message[i + mPos] ^ output[i]
                         }
                         return c
                     }
-                    for (var i = 0; i < blockSizeBytes; i++) {
+                    for (var i = 0; i < ChaCha20.blockSize; i++) {
                         c[i + cPos] = message[i + mPos] ^ output[i]
                     }
-                    bytes -= blockSizeBytes
-                    cPos += blockSizeBytes
-                    mPos += blockSizeBytes
+                    bytes -= ChaCha20.blockSize
+                    cPos += ChaCha20.blockSize
+                    mPos += ChaCha20.blockSize
                 }
             }
         }

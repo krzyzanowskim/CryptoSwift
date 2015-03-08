@@ -77,57 +77,38 @@ private struct CBCMode: BlockMode {
     }
     
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
+        precondition(blocks.count > 0)
         assert(iv != nil, "CFB require IV")
         if (iv == nil) {
             return nil;
         }
         
+        
         var out:[UInt8]?
-        var lastCiphertext:[UInt8] = iv!
-        for (idx,plaintext) in enumerate(blocks) {
-            // for the first time ciphertext = iv
-            // ciphertext = plaintext (+) ciphertext
-            var xoredPlaintext:[UInt8] = plaintext
-            for i in 0..<plaintext.count {
-                xoredPlaintext[i] = lastCiphertext[i] ^ plaintext[i]
-            }
-            
-            // encrypt with cipher
-            if let encrypted = cipherOperation(block: xoredPlaintext) {
-                lastCiphertext = encrypted
-                
-                if (out == nil) {
-                    out = [UInt8]()
-                }
-                
-                out = out! + encrypted
+        var prevCiphertext:[UInt8]? // for the first time prevCiphertext = iv
+        for plaintext in blocks {
+            if let encrypted = cipherOperation(block: xor(prevCiphertext ?? iv!, plaintext)) {
+                out = (out ?? [UInt8]()) + encrypted
+                prevCiphertext = encrypted
             }
         }
         return out;
     }
     
     func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
+        precondition(blocks.count > 0)
         assert(iv != nil, "CFB require IV")
         if (iv == nil) {
             return nil
         }
 
         var out:[UInt8]?
-        var lastCiphertext:[UInt8] = iv!
-        for (idx,ciphertext) in enumerate(blocks) {
+        var prevCiphertext:[UInt8]? // for the first time prevCiphertext = iv
+        for ciphertext in blocks {
             if let decrypted = cipherOperation(block: ciphertext) { // decrypt
-                
-                var xored:[UInt8] = [UInt8](count: ciphertext.count, repeatedValue: 0)
-                for i in 0..<ciphertext.count {
-                    xored[i] = lastCiphertext[i] ^ decrypted[i]
-                }
-
-                if (out == nil) {
-                    out = [UInt8]()
-                }
-                out = out! + xored
+                out = (out ?? [UInt8]()) + xor(prevCiphertext ?? iv!, decrypted)
             }
-            lastCiphertext = ciphertext
+            prevCiphertext = ciphertext
         }
         
         return out
@@ -219,4 +200,13 @@ private struct ECBMode: BlockMode {
     func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
         return encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
     }
+}
+
+//MARK: helpers
+private func xor(a: [UInt8], b:[UInt8]) -> [UInt8] {
+    var xored = [UInt8](count: a.count, repeatedValue: 0)
+    for i in 0..<xored.count {
+        xored[i] = a[i] ^ b[i]
+    }
+    return xored
 }

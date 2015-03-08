@@ -72,10 +72,6 @@ public enum CipherBlockMode {
 private struct CBCMode: BlockMode {
     var needIV:Bool = true
     
-    init() {
-        
-    }
-    
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
         precondition(blocks.count > 0)
         assert(iv != nil, "CFB require IV")
@@ -85,9 +81,9 @@ private struct CBCMode: BlockMode {
         
         
         var out:[UInt8]?
-        var prevCiphertext:[UInt8]? // for the first time prevCiphertext = iv
+        var prevCiphertext = iv! // for the first time prevCiphertext = iv
         for plaintext in blocks {
-            if let encrypted = cipherOperation(block: xor(prevCiphertext ?? iv!, plaintext)) {
+            if let encrypted = cipherOperation(block: xor(prevCiphertext, plaintext)) {
                 out = (out ?? [UInt8]()) + encrypted
                 prevCiphertext = encrypted
             }
@@ -103,10 +99,10 @@ private struct CBCMode: BlockMode {
         }
 
         var out:[UInt8]?
-        var prevCiphertext:[UInt8]? // for the first time prevCiphertext = iv
+        var prevCiphertext = iv! // for the first time prevCiphertext = iv
         for ciphertext in blocks {
             if let decrypted = cipherOperation(block: ciphertext) { // decrypt
-                out = (out ?? [UInt8]()) + xor(prevCiphertext ?? iv!, decrypted)
+                out = (out ?? [UInt8]()) + xor(prevCiphertext, decrypted)
             }
             prevCiphertext = ciphertext
         }
@@ -120,6 +116,7 @@ private struct CBCMode: BlockMode {
 */
 private struct CFBMode: BlockMode {
     var needIV:Bool = true
+    
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
         assert(iv != nil, "CFB require IV")
         if (iv == nil) {
@@ -127,21 +124,11 @@ private struct CFBMode: BlockMode {
         }
         
         var out:[UInt8]?
-        var lastCiphertext:[UInt8] = iv!
-        for (idx,plaintext) in enumerate(blocks) {
+        var lastCiphertext = iv!
+        for plaintext in blocks {
             if let encrypted = cipherOperation(block: lastCiphertext) {
-                var xoredPlaintext:[UInt8] = [UInt8](count: plaintext.count, repeatedValue: 0)
-                for i in 0..<plaintext.count {
-                    xoredPlaintext[i] = plaintext[i] ^ encrypted[i]
-                }
-                lastCiphertext = xoredPlaintext
-
-                
-                if (out == nil) {
-                    out = [UInt8]()
-                }
-                
-                out = out! + xoredPlaintext
+                lastCiphertext = xor(plaintext,encrypted)
+                out = (out ?? [UInt8]()) + lastCiphertext
             }
         }
         return out;
@@ -155,20 +142,10 @@ private struct CFBMode: BlockMode {
         
         var out:[UInt8]?
         var lastCiphertext:[UInt8] = iv!
-        for (idx,ciphertext) in enumerate(blocks) {
+        for ciphertext in blocks {
             if let decrypted = cipherOperation(block: lastCiphertext) {
-                var xored:[UInt8] = [UInt8](count: ciphertext.count, repeatedValue: 0)
-                for i in 0..<ciphertext.count {
-                    xored[i] = ciphertext[i] ^ decrypted[i]
-                }
-                lastCiphertext = xored
-                
-                
-                if (out == nil) {
-                    out = [UInt8]()
-                }
-                
-                out = out! + xored
+                lastCiphertext = xor(ciphertext, decrypted)
+                out = (out ?? [UInt8]()) + lastCiphertext
             }
         }
         return out;
@@ -184,14 +161,9 @@ private struct ECBMode: BlockMode {
     var needIV:Bool = false
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
         var out:[UInt8]?
-        for (idx,plaintext) in enumerate(blocks) {
+        for plaintext in blocks {
             if let encrypted = cipherOperation(block: plaintext) {
-                
-                if (out == nil) {
-                    out = [UInt8]()
-                }
-
-                out = out! + encrypted
+                out = (out ?? [UInt8]()) + encrypted
             }
         }
         return out

@@ -135,22 +135,8 @@ private struct CFBMode: BlockMode {
     }
     
     func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
-        assert(iv != nil, "CFB require IV")
-        if (iv == nil) {
-            return nil
-        }
-        
-        var out:[UInt8]?
-        var lastCiphertext:[UInt8] = iv!
-        for ciphertext in blocks {
-            if let decrypted = cipherOperation(block: lastCiphertext) {
-                lastCiphertext = xor(ciphertext, decrypted)
-                out = (out ?? [UInt8]()) + lastCiphertext
-            }
-        }
-        return out;
+        return encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
     }
-
 }
 
 

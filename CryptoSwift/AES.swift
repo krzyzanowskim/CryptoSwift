@@ -176,8 +176,9 @@ public class AES {
         state = addRoundKey(state, expandedKey, variant.Nr)
         
         var out:[UInt8] = [UInt8]()
+        out.reserveCapacity(state.count * state[0].count)
         for i in 0..<state.count {
-            for j in 0..<state[0].count {
+            for j in 0..<state[i].count {
                 out.append(state[j][i])
             }
         }
@@ -193,7 +194,7 @@ public class AES {
         }
         
         let blocks = bytes.chunks(AES.blockSizeBytes())
-        var out:[UInt8]?
+        let out:[UInt8]?
         if (blockMode == .CFB) {
             // CFB uses encryptBlock to decrypt
             out = blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)

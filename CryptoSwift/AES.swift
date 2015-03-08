@@ -255,16 +255,17 @@ public class AES {
             return result
         }
 
-        var w:[UInt8] = [UInt8](count: variant.Nb * (variant.Nr + 1) * 4, repeatedValue: 0)
+        var w = [UInt8](count: variant.Nb * (variant.Nr + 1) * 4, repeatedValue: 0)
         for i in 0..<variant.Nk {
             for wordIdx in 0..<4 {
                 w[(4*i)+wordIdx] = key[(4*i)+wordIdx]
             }
         }
         
-        var i = variant.Nk
-        while (i < variant.Nb * (variant.Nr + 1)) {
-            var tmp:[UInt8] = [UInt8](count: 4, repeatedValue: 0)
+        var tmp = [UInt8](count: 4, repeatedValue: 0)
+        for (var i = variant.Nk; i < variant.Nb * (variant.Nr + 1); i++) {
+            tmp = tmp.map({ val in 0});
+            
             for wordIdx in 0..<4 {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
             }
@@ -280,8 +281,6 @@ public class AES {
             for wordIdx in 0..<4 {
                 w[4*i+wordIdx] = w[4*(i-variant.Nk)+wordIdx]^tmp[wordIdx];
             }
-            
-            i++
         }
         return w;
     }

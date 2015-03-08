@@ -41,3 +41,11 @@ func reverseBytes(value: UInt32) -> UInt32 {
     var tmp2 = ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24)
     return tmp1 | tmp2
 }
+
+func xor(a: [UInt8], b:[UInt8]) -> [UInt8] {
+    var xored = [UInt8](count: a.count, repeatedValue: 0)
+    for i in 0..<xored.count {
+        xored[i] = a[i] ^ b[i]
+    }
+    return xored
+}

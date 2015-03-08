@@ -159,12 +159,3 @@ private struct ECBMode: BlockMode {
         return encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
     }
 }
-
-//MARK: helpers
-private func xor(a: [UInt8], b:[UInt8]) -> [UInt8] {
-    var xored = [UInt8](count: a.count, repeatedValue: 0)
-    for i in 0..<xored.count {
-        xored[i] = a[i] ^ b[i]
-    }
-    return xored
-}

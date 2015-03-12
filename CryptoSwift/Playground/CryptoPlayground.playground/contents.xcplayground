@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='3.0' sdk='iphonesimulator'>
-    <sections>
-        <code source-file-name='section-1.swift'/>
-    </sections>
+<playground version='5.0' target-platform='ios'>
     <timeline fileName='timeline.xctimeline'/>
 </playground>

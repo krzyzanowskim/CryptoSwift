@@ -14,7 +14,7 @@ extension UInt64 {
         return arrayOfBytes(self, length: totalBytes)
     }
 
-    public static func withBytes(bytes: Slice<UInt8>) -> UInt64 {
+    public static func withBytes(bytes: ArraySlice<UInt8>) -> UInt64 {
         return UInt64.withBytes(Array(bytes))
     }
 

@@ -5,6 +5,9 @@
 //  Created by Marcin Krzyzanowski on 28/02/15.
 //  Copyright (c) 2015 Marcin Krzyzanowski. All rights reserved.
 //
+//  PKCS is a group of public-key cryptography standards devised
+//  and published by RSA Security Inc, starting in the early 1990s.
+//
 
 import Foundation
 

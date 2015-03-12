@@ -13,6 +13,17 @@ public class HMAC {
     public enum Variant {
         case sha1, sha256, md5
         
+        var size:Int {
+            switch (self) {
+            case .sha1:
+                return SHA1(NSData()).size
+            case .sha256:
+                return SHA2.Variant.sha256.size
+            case .md5:
+                return MD5(NSData()).size
+            }
+        }
+        
         func calculateHash(# bytes:[UInt8]) -> [UInt8]? {
             switch (self) {
             case .sha1:
@@ -31,14 +42,14 @@ public class HMAC {
     
     var key:[UInt8]
     let variant:Variant
-        
+    
     class internal func authenticate(# key: [UInt8], message: [UInt8], variant:HMAC.Variant = .md5) -> [UInt8]? {
         return HMAC(key, variant: variant)?.authenticate(message: message)
     }
 
     // MARK: - Private
     
-    private init? (_ key: [UInt8], variant:HMAC.Variant = .md5) {
+    internal init? (_ key: [UInt8], variant:HMAC.Variant = .md5) {
         self.variant = variant
         self.key = key
 
@@ -53,7 +64,7 @@ public class HMAC {
         }
     }
     
-    private func authenticate(# message:[UInt8]) -> [UInt8]? {
+    internal func authenticate(# message:[UInt8]) -> [UInt8]? {
         var opad = [UInt8](count: variant.blockSize(), repeatedValue: 0x5c)
         for (idx, val) in enumerate(key) {
             opad[idx] = key[idx] ^ opad[idx]

@@ -24,7 +24,7 @@ public class ChaCha20 {
         }
     }
     
-    init?(key:[UInt8], iv:[UInt8]) {
+    public init?(key:[UInt8], iv:[UInt8]) {
         if let c = contextSetup(iv: iv, key: key) {
             context = c
         } else {
@@ -32,7 +32,7 @@ public class ChaCha20 {
         }
     }
     
-    func encrypt(bytes:[UInt8]) -> [UInt8]? {
+    public func encrypt(bytes:[UInt8]) -> [UInt8]? {
         if (context == nil) {
             return nil
         }
@@ -40,7 +40,7 @@ public class ChaCha20 {
         return encryptBytes(bytes)
     }
     
-    func decrypt(bytes:[UInt8]) -> [UInt8]? {
+    public func decrypt(bytes:[UInt8]) -> [UInt8]? {
         return encrypt(bytes)
     }
     

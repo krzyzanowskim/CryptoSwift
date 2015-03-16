@@ -40,7 +40,7 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Release">
+      buildConfiguration = "Debug">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -57,6 +57,9 @@
                </Test>
                <Test
                   Identifier = "AESTests/testAESPerformanceCommonCrypto()">
+               </Test>
+               <Test
+                  Identifier = "ChaCha20Tests/testChaCha20Performance()">
                </Test>
                <Test
                   Identifier = "RaufelderTests">

@@ -146,7 +146,8 @@ private struct CFBMode: BlockMode {
 private struct ECBMode: BlockMode {
     var needIV:Bool = false
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
-        var out:[UInt8]?
+        var out:[UInt8] = [UInt8]()
+        out.reserveCapacity(blocks.count * blocks[0].count)
         for plaintext in blocks {
             if let encrypted = cipherOperation(block: plaintext) {
                 out = (out ?? [UInt8]()) + encrypted

@@ -143,8 +143,8 @@ public class AES {
             assert(false, "AES 128-bit block exceeded!");
             return nil
         }
-        
-        let blocks = finalBytes.chunks(AES.blockSize)
+
+        let blocks = finalBytes.chunks(AES.blockSize) // 0.34
         return blockMode.encryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
     }
     
@@ -256,9 +256,9 @@ public class AES {
             }
         }
         
-        var tmp = [UInt8](count: 4, repeatedValue: 0)
+        var tmp:[UInt8]
         for (var i = variant.Nk; i < variant.Nb * (variant.Nr + 1); i++) {
-            tmp = tmp.map({ val in 0});
+            tmp = [UInt8](count: 4, repeatedValue: 0)
             
             for wordIdx in 0..<4 {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
@@ -342,7 +342,7 @@ extension AES {
     }
     
     public func matrixMultiplyPolys(matrix:[[UInt8]], _ array:[UInt8]) -> [UInt8] {
-        var returnArray:[UInt8] = array.map({ _ in return 0 })
+        var returnArray:[UInt8] = [UInt8](count: array.count, repeatedValue: 0)
         for (i, row) in enumerate(matrix) {
             for (j, boxVal) in enumerate(row) {
                 returnArray[i] = multiplyPolys(boxVal, array[j]) ^ returnArray[i]
@@ -352,11 +352,14 @@ extension AES {
     }
 
     public func addRoundKey(state:[[UInt8]], _ expandedKeyW:[UInt8], _ round:Int) -> [[UInt8]] {
-        var newState = state.map({ val -> [UInt8] in return val.map { _ in return 0 } })
+        var newState = [[UInt8]](count: state.count, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))
+        let idxRow = 4*variant.Nb*round
         for c in 0..<variant.Nb {
-            for i in 0..<4 {
-                newState[i][c] = state[i][c] ^ expandedKeyW[(4*variant.Nb*round)+(variant.Nb*c)+i]
-            }
+            let idxCol = variant.Nb*c
+            newState[0][c] = state[0][c] ^ expandedKeyW[idxRow+idxCol+0]
+            newState[1][c] = state[1][c] ^ expandedKeyW[idxRow+idxCol+1]
+            newState[2][c] = state[2][c] ^ expandedKeyW[idxRow+idxCol+2]
+            newState[3][c] = state[3][c] ^ expandedKeyW[idxRow+idxCol+3]
         }
         return newState
     }
@@ -366,15 +369,14 @@ extension AES {
         var state = state
         var colBox:[[UInt8]] = [[2,3,1,1],[1,2,3,1],[1,1,2,3],[3,1,1,2]]
         
-        var rowMajorState = state.map({ val -> [UInt8] in return val.map { _ in return 0 } }) // zeroing
+        var rowMajorState = [[UInt8]](count: state.count, repeatedValue: [UInt8](count: state.first!.count, repeatedValue: 0)) //state.map({ val -> [UInt8] in return val.map { _ in return 0 } }) // zeroing
+        var newRowMajorState = rowMajorState
         
         for i in 0..<state.count {
             for j in 0..<state[0].count {
                 rowMajorState[j][i] = state[i][j]
             }
         }
-        
-        var newRowMajorState = state.map({ val -> [UInt8] in return val.map { _ in return 0 } })
         
         for (i, row) in enumerate(rowMajorState) {
             newRowMajorState[i] = matrixMultiplyPolys(colBox, row)

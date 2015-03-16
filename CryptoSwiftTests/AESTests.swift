@@ -181,7 +181,7 @@ class AESTests: XCTestCase {
         let message = [UInt8](count: 1024 * 1024, repeatedValue: 7)
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
             self.startMeasuring()
-            let encrypted = AES(key: key, iv: iv, blockMode: .ECB)?.encrypt(message, padding: PKCS7())
+            let encrypted = AES(key: key, iv: iv, blockMode: .CBC)?.encrypt(message, padding: PKCS7())
             self.stopMeasuring()
         })
     }

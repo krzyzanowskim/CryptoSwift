@@ -23,12 +23,12 @@ public struct PKCS7: Padding {
         if (padding == 0) {
             // If the original data is a multiple of N bytes, then an extra block of bytes with value N is added.
             for i in 0..<blockSize {
-                withPadding += [UInt8(blockSize)]
+                withPadding.extend([UInt8(blockSize)])
             }
         } else {
             // The value of each added byte is the number of bytes that are added
             for i in 0..<padding {
-                withPadding += [UInt8(padding)]
+                withPadding.extend([UInt8(padding)])
             }
         }
         return withPadding

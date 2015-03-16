@@ -49,3 +49,14 @@ func xor(a: [UInt8], b:[UInt8]) -> [UInt8] {
     }
     return xored
 }
+
+func perf(text: String, closure: () -> ()) {
+    let measurementStart = NSDate();
+    
+    closure()
+    
+    let measurementStop = NSDate();
+    let executionTime = measurementStop.timeIntervalSinceDate(measurementStart)
+    
+    println("\(text) \(executionTime)");
+}

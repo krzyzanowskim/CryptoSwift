@@ -80,11 +80,12 @@ private struct CBCMode: BlockMode {
         }
         
         
-        var out:[UInt8]?
+        var out:[UInt8] = [UInt8]()
+        out.reserveCapacity(blocks.count * blocks[0].count)
         var prevCiphertext = iv! // for the first time prevCiphertext = iv
         for plaintext in blocks {
             if let encrypted = cipherOperation(block: xor(prevCiphertext, plaintext)) {
-                out = (out ?? [UInt8]()) + encrypted
+                out.extend(encrypted)
                 prevCiphertext = encrypted
             }
         }
@@ -98,11 +99,12 @@ private struct CBCMode: BlockMode {
             return nil
         }
 
-        var out:[UInt8]?
+        var out:[UInt8] = [UInt8]()
+        out.reserveCapacity(blocks.count * blocks[0].count)
         var prevCiphertext = iv! // for the first time prevCiphertext = iv
         for ciphertext in blocks {
             if let decrypted = cipherOperation(block: ciphertext) { // decrypt
-                out = (out ?? [UInt8]()) + xor(prevCiphertext, decrypted)
+                out.extend(xor(prevCiphertext, decrypted))
             }
             prevCiphertext = ciphertext
         }
@@ -123,12 +125,14 @@ private struct CFBMode: BlockMode {
             return nil
         }
         
-        var out:[UInt8]?
+        var out:[UInt8] = [UInt8]()
+        out.reserveCapacity(blocks.count * blocks[0].count)
+
         var lastCiphertext = iv!
         for plaintext in blocks {
             if let encrypted = cipherOperation(block: lastCiphertext) {
                 lastCiphertext = xor(plaintext,encrypted)
-                out = (out ?? [UInt8]()) + lastCiphertext
+                out.extend(lastCiphertext)
             }
         }
         return out;
@@ -150,7 +154,7 @@ private struct ECBMode: BlockMode {
         out.reserveCapacity(blocks.count * blocks[0].count)
         for plaintext in blocks {
             if let encrypted = cipherOperation(block: plaintext) {
-                out = (out ?? [UInt8]()) + encrypted
+                out.extend(encrypted)
             }
         }
         return out

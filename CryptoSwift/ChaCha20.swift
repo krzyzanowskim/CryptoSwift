@@ -32,6 +32,16 @@ public class ChaCha20 {
         }
     }
     
+    convenience public init?(key:String, iv:String) {
+        if let kkey = key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.bytes(), let iiv = iv.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.bytes() {
+            self.init(key: kkey, iv: iiv)
+        } else {
+            self.init(key: [UInt8](), iv: [UInt8]()) //FIXME: this is due Swift bug, remove this line later, when fixed
+            return nil
+        }
+    }
+
+    
     public func encrypt(bytes:[UInt8]) -> [UInt8]? {
         if (context == nil) {
             return nil

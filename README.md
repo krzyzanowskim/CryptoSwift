@@ -39,9 +39,11 @@ Good mood
 ###Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
 
-##Installation
+###Contribution
 
-For Swift 1.2 check **swift12** branch.
+For latest version, please check **develop** branch. This is latest development version that will be marged to **master** branch at some point.
+
+##Installation
 
 To install CryptoSwift, add it as a submodule to your project (on the top level project directory):
 

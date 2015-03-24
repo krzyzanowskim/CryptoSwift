@@ -166,7 +166,7 @@ let mac = Authenticator.Poly1305(key: key).authenticate(message)
 ##Contact
 Marcin Krzyżanowski [@krzyzanowskim](http://twitter.com/krzyzanowskim)
 
-##License
+##Licence
 
 Copyright (C) 2014 Marcin Krzyżanowski <marcin.krzyzanowski@gmail.com>
 This software is provided 'as-is', without any express or implied warranty. 

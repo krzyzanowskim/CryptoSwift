@@ -54,7 +54,7 @@ Then, drag the CryptoSwift.xcodeproj file into your Xcode project, and add Crypt
 #####iOS and OSX
 By default project is setup for iOS. You need to switch to OSX SDK manually [see #8](https://github.com/krzyzanowskim/CryptoSwift/issues/8)
 
-####CococaPods
+####CocoaPods
 
 You can use [CocoaPods](http://cocoapods.org/?q=cryptoSwift). You need version 0.36 or newer to use Swift framework.
 

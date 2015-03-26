@@ -54,7 +54,7 @@ public class ChaCha20 {
         return encrypt(bytes)
     }
     
-    private func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
+    private final func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
         if (input.count != stateSize) {
             return nil;
         }
@@ -75,10 +75,11 @@ public class ChaCha20 {
         }
 
         var output = [UInt8]()
+        output.reserveCapacity(16)
 
         for i in 0..<16 {
             x[i] = x[i] &+ input[i]
-            output += x[i].bytes().reverse()
+            output.extend(x[i].bigEndian.bytes())
         }
 
         return output;
@@ -131,7 +132,7 @@ public class ChaCha20 {
         return ctx
     }
     
-    private func encryptBytes(message:[UInt8]) -> [UInt8]? {
+    private final func encryptBytes(message:[UInt8]) -> [UInt8]? {
         
         if let ctx = context {
             var c:[UInt8] = [UInt8](count: message.count, repeatedValue: 0)
@@ -165,7 +166,7 @@ public class ChaCha20 {
         return nil;
     }
     
-    private func quarterround(inout a:UInt32, inout _ b:UInt32, inout _ c:UInt32, inout _ d:UInt32) {
+    private final func quarterround(inout a:UInt32, inout _ b:UInt32, inout _ c:UInt32, inout _ d:UInt32) {
         a = a &+ b
         d = rotateLeft((d ^ a), 16)
         

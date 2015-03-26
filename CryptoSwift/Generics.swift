@@ -55,7 +55,7 @@ func integerWithBytes<T: IntegerType>(bytes: [UInt8]) -> T {
 
 /** array of bytes, little-endian representation */
 func arrayOfBytes<T>(value:T, length:Int? = nil) -> [UInt8] {
-    let totalBytes = length ?? (sizeofValue(value) * 8)
+    let totalBytes = length ?? sizeof(T)
     var v = value
     
     var valuePointer = UnsafeMutablePointer<T>.alloc(1)

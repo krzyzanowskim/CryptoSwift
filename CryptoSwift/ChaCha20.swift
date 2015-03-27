@@ -79,7 +79,10 @@ public class ChaCha20 {
 
         for i in 0..<16 {
             x[i] = x[i] &+ input[i]
-            output.extend(x[i].bigEndian.bytes())
+            output += [UInt8((x[i] & 0xFFFFFFFF) >> 24),
+                       UInt8((x[i] & 0xFFFFFF) >> 16),
+                       UInt8((x[i] & 0xFFFF) >> 8),
+                       UInt8((x[i] & 0xFF) >> 0)]
         }
 
         return output;
@@ -96,7 +99,7 @@ public class ChaCha20 {
         // 4 - 8
         for (var i = 0; i < 4; i++) {
             let start = i * 4
-            ctx.input[i + 4] = UInt32.withBytes(key[start..<(start + 4)]).bigEndian
+            ctx.input[i + 4] = wordNumber(key[start..<(start + 4)])
         }
         
         var addPos = 0;
@@ -120,14 +123,16 @@ public class ChaCha20 {
         // 8 - 11
         for (var i = 0; i < 4; i++) {
             let start = addPos + (i*4)
-            ctx.input[i + 8] = UInt32.withBytes(key[start..<(start + 4)]).bigEndian
+            
+            let bytes = key[start..<(start + 4)]
+            ctx.input[i + 8] = wordNumber(bytes)
         }
 
         // iv
         ctx.input[12] = 0
         ctx.input[13] = 0
-        ctx.input[14] = UInt32.withBytes(iv[0..<4]).bigEndian
-        ctx.input[15] = UInt32.withBytes(iv[4..<8]).bigEndian
+        ctx.input[14] = wordNumber(iv[0..<4])
+        ctx.input[15] = wordNumber(iv[4..<8])
         
         return ctx
     }
@@ -180,3 +185,15 @@ public class ChaCha20 {
         b = rotateLeft((b ^ c), 7);
     }
 }
+
+// MARK: Helpers
+
+/// Change array to number. It's here because arrayOfBytes is too slow
+private func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
+    var value:UInt32 = 0
+    for (var i:UInt32 = 0, j = 0; i < 4; i++, j++) {
+        value = value | UInt32(bytes[j]) << (8 * i)
+    }
+    return value
+}
+

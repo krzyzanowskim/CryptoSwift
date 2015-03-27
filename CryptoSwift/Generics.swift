@@ -34,7 +34,9 @@ func integerFromBitsArray<T: UnsignedIntegerType>(bits: [Bit]) -> T
     return bitPattern
 }
 
-/** initialize integer from array of bytes */
+/// Initialize integer from array of bytes.
+/// I found this method slow
+@availability(*, deprecated=0.8)
 func integerWithBytes<T: IntegerType>(bytes: [UInt8]) -> T {
     var totalBytes = Swift.min(bytes.count, sizeof(T))
     // get slice of Int
@@ -53,7 +55,8 @@ func integerWithBytes<T: IntegerType>(bytes: [UInt8]) -> T {
     return i
 }
 
-/** array of bytes, little-endian representation */
+/// Array of bytes, little-endian representation. Don't use if not necessary.
+/// I found this method slow
 func arrayOfBytes<T>(value:T, length:Int? = nil) -> [UInt8] {
     let totalBytes = length ?? sizeof(T)
     var v = value

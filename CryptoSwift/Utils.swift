@@ -8,6 +8,10 @@
 
 import Foundation
 
+func rotateLeft(v:UInt8, n:UInt8) -> UInt8 {
+    return ((v << n) & 0xFF) | (v >> (8 - n))
+}
+
 func rotateLeft(v:UInt16, n:UInt16) -> UInt16 {
     return ((v << n) & 0xFFFF) | (v >> (16 - n))
 }

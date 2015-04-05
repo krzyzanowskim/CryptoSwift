@@ -11,7 +11,7 @@ import Foundation
 public class HMAC {
     
     public enum Variant {
-        case sha1, sha256, md5
+        case sha1, sha256, sha384, sha512, md5
         
         var size:Int {
             switch (self) {
@@ -30,13 +30,22 @@ public class HMAC {
                 return NSData.withBytes(bytes).sha1()?.bytes()
             case .sha256:
                 return NSData.withBytes(bytes).sha256()?.bytes()
+            case .sha384:
+                return NSData.withBytes(bytes).sha384()?.bytes()
+            case .sha512:
+                return NSData.withBytes(bytes).sha512()?.bytes()
             case .md5:
                 return NSData.withBytes(bytes).md5()?.bytes();
             }
         }
         
         func blockSize() -> Int {
-            return 64
+            switch self {
+            case .md5, .sha1, .sha256:
+                return 64
+            case .sha384, .sha512:
+                return 128
+            }
         }
     }
     

@@ -135,7 +135,7 @@ public class AES {
     }
     
     /**
-    Encrypt message. If padding is necessary, then PKCS7 padding is addedd and need to be removed after decryption.
+    Encrypt message. If padding is necessary, then PKCS7 padding is added and needs to be removed after decryption.
     
     :param: message Plaintext data
     

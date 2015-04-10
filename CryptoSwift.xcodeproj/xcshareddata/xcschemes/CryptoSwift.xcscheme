@@ -3,7 +3,7 @@
    LastUpgradeVersion = "0610"
    version = "1.3">
    <BuildAction
-      parallelizeBuildables = "YES"
+      parallelizeBuildables = "NO"
       buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
@@ -51,6 +51,20 @@
                BlueprintName = "CryptoSwiftTests"
                ReferencedContainer = "container:CryptoSwift.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "AESTests/testAESPerformance()">
+               </Test>
+               <Test
+                  Identifier = "AESTests/testAESPerformanceCommonCrypto()">
+               </Test>
+               <Test
+                  Identifier = "ChaCha20Tests/testChaCha20Performance()">
+               </Test>
+               <Test
+                  Identifier = "RaufelderTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

@@ -76,12 +76,10 @@ class CryptoSwiftTests: XCTestCase {
     
     func testMD5PerformanceSwift() {
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
-            let buf = UnsafeMutablePointer<Byte>(calloc(2048, UInt(sizeof(UInt8))))
+            let buf = UnsafeMutablePointer<UInt8>(calloc(2048, sizeof(UInt8)))
             let data = NSData(bytes: buf, length: 2048)
             self.startMeasuring()
-            for _ in [0...1000] {
-                Hash.md5(data).calculate()
-            }
+            Hash.md5(data).calculate()
             self.stopMeasuring()
             buf.dealloc(1024)
             buf.destroy()
@@ -90,16 +88,14 @@ class CryptoSwiftTests: XCTestCase {
     
     func testMD5PerformanceCommonCrypto() {
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
-            let buf = UnsafeMutablePointer<Byte>(calloc(2048, UInt(sizeof(UInt8))))
+            let buf = UnsafeMutablePointer<UInt8>(calloc(2048, sizeof(UInt8)))
             let data = NSData(bytes: buf, length: 2048)
             self.startMeasuring()
-            for _ in [0...1000] {
-                var outbuf = UnsafeMutablePointer<UInt8>.alloc(Int(CC_MD5_DIGEST_LENGTH))
-                CC_MD5(data.bytes, CC_LONG(data.length), outbuf)
-                let output = NSData(bytes: outbuf, length: Int(CC_MD5_DIGEST_LENGTH));
-                outbuf.dealloc(Int(CC_MD5_DIGEST_LENGTH))
-                outbuf.destroy()
-            }
+            var outbuf = UnsafeMutablePointer<UInt8>.alloc(Int(CC_MD5_DIGEST_LENGTH))
+            CC_MD5(data.bytes, CC_LONG(data.length), outbuf)
+            let output = NSData(bytes: outbuf, length: Int(CC_MD5_DIGEST_LENGTH));
+            outbuf.dealloc(Int(CC_MD5_DIGEST_LENGTH))
+            outbuf.destroy()
             self.stopMeasuring()
             buf.dealloc(1024)
             buf.destroy()

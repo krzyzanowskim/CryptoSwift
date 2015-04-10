@@ -8,8 +8,9 @@
 
 import Foundation
 
-class MD5 : CryptoSwift.HashBase {
-
+class MD5 : CryptoSwift.HashBase, _Hash {
+    var size:Int = 16 // 128 / 8
+    
     /** specifies the per-round shift amounts */
     private let s: [UInt32] = [7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
                        5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,
@@ -56,9 +57,8 @@ class MD5 : CryptoSwift.HashBase {
             
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15
             var M:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
-            for x in 0..<M.count {
-                chunk.getBytes(&M[x], range:NSRange(location:x * sizeofValue(M[x]), length: sizeofValue(M[x])));
-            }
+            let range = NSRange(location:0, length: M.count * sizeof(UInt32))
+            chunk.getBytes(UnsafeMutablePointer<Void>(M), range: range)
             
             // Initialize hash value for this chunk:
             var A:UInt32 = hh[0]
@@ -112,7 +112,7 @@ class MD5 : CryptoSwift.HashBase {
             buf.appendBytes(&i, length: sizeofValue(i))
         })
         
-        return buf.copy() as NSData;
+        return buf.copy() as! NSData;
     }
 }
 

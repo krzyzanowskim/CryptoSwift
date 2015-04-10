@@ -20,6 +20,16 @@ class ExtensionsTest: XCTestCase {
         super.tearDown()
     }
 
+    func testArrayChunksPerformance() {
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
+            let message = [UInt8](count: 1024 * 1024, repeatedValue: 7)
+            self.startMeasuring()
+            let blocks = message.chunks(AES.blockSize)
+            self.stopMeasuring()
+        })
+    }
+
+    
     func testIntExtension() {
         let i1:Int = 1024
         let i1Array = i1.bytes(32 / 8) // 32 bit

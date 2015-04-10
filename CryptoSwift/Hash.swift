@@ -21,13 +21,13 @@ public enum Hash {
         case sha1(let data):
             return SHA1(data).calculate()
         case sha224(let data):
-            return SHA2(data).calculate32(.sha224)
+            return SHA2(data, variant: .sha224).calculate32()
         case sha256(let data):
-            return SHA2(data).calculate32(.sha256)
+            return SHA2(data, variant: .sha256).calculate32()
         case sha384(let data):
-            return SHA2(data).calculate64(.sha384)
+            return SHA2(data, variant: .sha384).calculate64()
         case sha512(let data):
-            return SHA2(data).calculate64(.sha512)
+            return SHA2(data, variant: .sha512).calculate64()
         case crc32(let data):
             return CRC().crc32(data);
         default:

@@ -17,7 +17,7 @@ public enum Cipher {
     
     :returns: Value of Cipher
     */
-    case ChaCha20(key: NSData, iv: NSData)
+    case ChaCha20(key: [UInt8], iv: [UInt8])
     /**
     AES
     
@@ -27,7 +27,7 @@ public enum Cipher {
     
     :returns: Value of Cipher
     */
-    case AES(key: NSData, iv: NSData, blockMode: CipherBlockMode)
+    case AES(key: [UInt8], iv: [UInt8], blockMode: CipherBlockMode)
     
     /**
     Encrypt message
@@ -36,14 +36,14 @@ public enum Cipher {
     
     :returns: encrypted message
     */
-    public func encrypt(message: NSData) -> NSData? {
+    public func encrypt(bytes: [UInt8]) -> [UInt8]? {
         switch (self) {
             case .ChaCha20(let key, let iv):
                 var chacha = CryptoSwift.ChaCha20(key: key, iv: iv)
-                return chacha?.encrypt(message)
+                return chacha?.encrypt(bytes)
             case .AES(let key, let iv, let blockMode):
                 var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode)
-                return aes?.encrypt(message)
+                return aes?.encrypt(bytes)
         }
     }
     
@@ -54,33 +54,22 @@ public enum Cipher {
     
     :returns: Plaintext message
     */
-    public func decrypt(message: NSData) -> NSData? {
+    public func decrypt(bytes: [UInt8]) -> [UInt8]? {
         switch (self) {
             case .ChaCha20(let key, let iv):
                 var chacha = CryptoSwift.ChaCha20(key: key, iv: iv);
-                return chacha?.decrypt(message)
+                return chacha?.decrypt(bytes)
             case .AES(let key, let iv, let blockMode):
                 var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode);
-                return aes?.decrypt(message)
+                return aes?.decrypt(bytes)
         }
     }
 
-    static public func randomIV(key: NSData) -> [UInt8] {
+    static public func randomIV(blockSize:Int) -> [UInt8] {
         var randomIV:[UInt8] = [UInt8]();
-        for (var i = 0; i < key.length; i++) {
+        for (var i = 0; i < blockSize; i++) {
             randomIV.append(UInt8(truncatingBitPattern: arc4random_uniform(256)));
         }
         return randomIV
-    }
-    
-    /**
-    Convenience function to generate Initialization Vector (IV) for given key. Use this function to generate IV for you key.
-    
-    :param: key Given key
-    
-    :returns: Random IV
-    */
-    static public func randomIV(key: NSData) -> NSData {
-        return NSData.withBytes(randomIV(key))
     }
 }

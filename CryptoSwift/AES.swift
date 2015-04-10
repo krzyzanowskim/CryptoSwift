@@ -8,29 +8,44 @@
 
 import Foundation
 
-private enum AESVariant:Int {
-    case unknown, aes128, aes192, aes256
-    
-    var Nk:Int { // Nk words
-        return [4,6,8][self.rawValue - 1]
-    }
-    
-    var Nb:Int { // Nb words
-        return 4
-    }
-    
-    var Nr:Int { // Nr
-        return Nk + 6
-    }
-}
-
 public class AES {
-    public let blockMode:CipherBlockMode
-    private let variant:AESVariant
-    private let key:NSData
-    private let iv:NSData?
     
-    private let sBox:[UInt8] = [
+    public enum AESVariant:Int {
+        case unknown, aes128, aes192, aes256
+        
+        var Nk:Int { // Nk words
+            return [4,6,8][self.rawValue - 1]
+        }
+        
+        var Nb:Int { // Nb words
+            return 4
+        }
+        
+        var Nr:Int { // Nr
+            return Nk + 6
+        }
+    }
+    
+    public let blockMode:CipherBlockMode
+    public static let blockSize:Int = 16 // 128 /8
+    
+    public var variant:AESVariant {
+        switch (self.key.count * 8) {
+        case 128:
+            return .aes128
+        case 192:
+            return .aes192
+        case 256:
+            return .aes256
+        default:
+            return .unknown
+        }
+    }
+    private let key:[UInt8]
+    private let iv:[UInt8]?
+    public lazy var expandedKey:[UInt8] = { AES.expandKey(self.key, variant: self.variant) }()
+    
+    static private let sBox:[UInt8] = [
         0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76, 
         0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0, 
         0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15, 
@@ -48,7 +63,7 @@ public class AES {
         0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf, 
         0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16]
     
-    private let invSBox:[UInt8] = [
+    static private let invSBox:[UInt8] = [
         0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3,
         0x9e, 0x81, 0xf3, 0xd7, 0xfb, 0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f,
         0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb, 0x54,
@@ -75,7 +90,7 @@ public class AES {
         0x21, 0x0c, 0x7d]
     
     // Parameters for Linear Congruence Generators
-    private let Rcon:[UInt8] = [
+    static private let Rcon:[UInt8] = [
         0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a,
         0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39,
         0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a,
@@ -93,46 +108,32 @@ public class AES {
         0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39, 0x72, 0xe4, 0xd3, 0xbd,
         0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d]
     
-    public init?(key:NSData, iv:NSData, blockMode:CipherBlockMode = .CBC) {
+    public init?(key:[UInt8], iv:[UInt8], blockMode:CipherBlockMode = .CBC) {
         self.key = key
-        self.blockMode = blockMode
         self.iv = iv
+        self.blockMode = blockMode
         
-        switch (key.length * 8) {
-        case 128:
-            self.variant = .aes128
-            break
-        case 192:
-            self.variant = .aes192
-            break
-        case 256:
-            self.variant = .aes256
-            break
-        default:
-            self.variant = .unknown
-            return nil
-        }
-        
-        if (blockMode.requireIV() && iv.length != AES.blockSizeBytes()) {
-            assertionFailure("Block and Initialization Vector must be the same length!")
+        if (blockMode.needIV && iv.count != AES.blockSize) {
+            assert(false, "Block size and Initialization Vector must be the same length!")
             return nil
         }
     }
     
-    convenience public init?(key:NSData, blockMode:CipherBlockMode = .CBC) {
+    convenience public init?(key:[UInt8], blockMode:CipherBlockMode = .CBC) {
         // default IV is all 0x00...
-        let defaultIV = NSMutableData(length: AES.blockSizeBytes())!
+        let defaultIV = [UInt8](count: AES.blockSize, repeatedValue: 0)
         self.init(key: key, iv: defaultIV, blockMode: blockMode)
     }
     
-    public class func blockSizeBytes() -> Int {
-        return 128 / 8 // 16 bytes
+    convenience public init?(key:String, iv:String, blockMode:CipherBlockMode = .CBC) {
+        if let kkey = key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.bytes(), let iiv = iv.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.bytes() {
+            self.init(key: kkey, iv: iiv, blockMode: blockMode)
+        } else {
+            self.init(key: [UInt8](), iv: [UInt8](), blockMode: blockMode) //FIXME: this is due Swift bug, remove this line later, when fixed
+            return nil
+        }
     }
     
-    public class func blockSizeBytes() -> UInt8 {
-        return UInt8(truncatingBitPattern: self.blockSizeBytes())
-    }
-
     /**
     Encrypt message. If padding is necessary, then PKCS7 padding is added and needs to be removed after decryption.
     
@@ -140,81 +141,81 @@ public class AES {
     
     :returns: Encrypted data
     */
-    public func encrypt(message:NSData, addPadding: Bool = true) -> NSData? {
-        var finalMessage = message;
 
-        if (addPadding) {
-            finalMessage = PKCS7(data: message).addPadding(AES.blockSizeBytes())
-        } else if (message.length % AES.blockSizeBytes() != 0) {
+    public func encrypt(bytes:[UInt8], padding:Padding? = PKCS7()) -> [UInt8]? {
+        var finalBytes = bytes;
+
+        if let padding = padding {
+            finalBytes = padding.add(bytes, blockSize: AES.blockSize)
+        } else if (bytes.count % AES.blockSize != 0) {
             // 128 bit block exceeded, need padding
-            assertionFailure("AES 128-bit block exceeded!")
+            assert(false, "AES 128-bit block exceeded!");
             return nil
         }
-        
-        let blocks = finalMessage.bytes().chunks(AES.blockSizeBytes())
-        let out = blockMode.encryptBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
-        return out == nil ? nil : NSData.withBytes(out!)
+
+        let blocks = finalBytes.chunks(AES.blockSize) // 0.34
+        return blockMode.encryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
     }
     
-    private func encryptBlock(block:[UInt8]) -> [UInt8] {
-        let expandedKey = expandKey()
-        
-        var state:[[UInt8]] = [[UInt8]](count: variant.Nb, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))
-        for (i, row) in enumerate(state) {
-            for (j, val) in enumerate(row) {
-                state[j][i] = block[i * row.count + j]
-            }
-        }
-        
-        state = addRoundKey(state,expandedKey, 0)
-        
-        for roundCount in 1..<variant.Nr {
-            state = subBytes(state)
-            state = shiftRows(state)
-            state = mixColumns(state)
-            state = addRoundKey(state, expandedKey, roundCount)
-        }
-        
-        state = subBytes(state)
-        state = shiftRows(state)
-        state = addRoundKey(state, expandedKey, variant.Nr)
-        
+    private func encryptBlock(block:[UInt8]) -> [UInt8]? {
         var out:[UInt8] = [UInt8]()
-        for i in 0..<state.count {
-            for j in 0..<state[0].count {
-                out.append(state[j][i])
+        
+        autoreleasepool { () -> () in
+            var state:[[UInt8]] = [[UInt8]](count: variant.Nb, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))
+            for (i, row) in enumerate(state) {
+                for (j, val) in enumerate(row) {
+                    state[j][i] = block[i * row.count + j]
+                }
+            }
+            
+            state = addRoundKey(state,expandedKey, 0)
+            
+            for roundCount in 1..<variant.Nr {
+                subBytes(&state)
+                state = shiftRows(state)
+                state = mixColumns(state)
+                state = addRoundKey(state, expandedKey, roundCount)
+            }
+            
+            subBytes(&state)
+            state = shiftRows(state)
+            state = addRoundKey(state, expandedKey, variant.Nr)
+
+
+            out = [UInt8](count: state.count * state.first!.count, repeatedValue: 0)
+            for i in 0..<state.count {
+                for j in 0..<state[i].count {
+                    out[(i * 4) + j] = state[j][i]
+                }
             }
         }
-        
         return out
     }
     
-    public func decrypt(message:NSData, removePadding:Bool = true) -> NSData? {
-        if (message.length % AES.blockSizeBytes() != 0) {
+    public func decrypt(bytes:[UInt8], padding:Padding? = PKCS7()) -> [UInt8]? {
+        if (bytes.count % AES.blockSize != 0) {
             // 128 bit block exceeded
-            assertionFailure("AES 128-bit block exceeded!")
+            assert(false,"AES 128-bit block exceeded!")
             return nil
         }
         
-        let blocks = message.bytes().chunks(AES.blockSizeBytes())
-        var out:[UInt8]?
+        let blocks = bytes.chunks(AES.blockSize)
+        let out:[UInt8]?
         if (blockMode == .CFB) {
             // CFB uses encryptBlock to decrypt
-            out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipher: encryptBlock)
+            out = blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
         } else {
-            out = blockMode.decryptBlocks(blocks, iv: self.iv?.bytes(), cipher: decryptBlock)
+            out = blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: decryptBlock)
         }
         
-        if (out != nil && removePadding) {
-            return PKCS7(data: NSData.withBytes(out!)).removePadding()
+        if let out = out, let padding = padding {
+            return padding.remove(out, blockSize: nil)
         }
         
-        return out == nil ? nil : NSData.withBytes(out!)
+        return out;
     }
     
-    private func decryptBlock(block:[UInt8]) -> [UInt8] {
-        let expandedKey = expandKey()
-        
+    private func decryptBlock(block:[UInt8]) -> [UInt8]? {
         var state:[[UInt8]] = [[UInt8]](count: variant.Nb, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))
         for (i, row) in enumerate(state) {
             for (j, val) in enumerate(row) {
@@ -245,7 +246,7 @@ public class AES {
         return out
     }
     
-    public func expandKey() -> [UInt8] {
+    static private func expandKey(key:[UInt8], variant:AESVariant) -> [UInt8] {
         
         /*
         * Function used in the Key Expansion routine that takes a four-byte
@@ -255,22 +256,22 @@ public class AES {
         func subWord(word:[UInt8]) -> [UInt8] {
             var result = word
             for i in 0..<4 {
-                result[i] = sBox[Int(word[i])]
+                result[i] = self.sBox[Int(word[i])]
             }
             return result
         }
 
-        var w:[UInt8] = [UInt8](count: variant.Nb * (variant.Nr + 1) * 4, repeatedValue: 0)
-        let keyBytes:[UInt8] = key.bytes()
+        var w = [UInt8](count: variant.Nb * (variant.Nr + 1) * 4, repeatedValue: 0)
         for i in 0..<variant.Nk {
             for wordIdx in 0..<4 {
-                w[(4*i)+wordIdx] = keyBytes[(4*i)+wordIdx]
+                w[(4*i)+wordIdx] = key[(4*i)+wordIdx]
             }
         }
         
-        var i = variant.Nk
-        while (i < variant.Nb * (variant.Nr + 1)) {
-            var tmp:[UInt8] = [UInt8](count: 4, repeatedValue: 0)
+        var tmp:[UInt8]
+        for (var i = variant.Nk; i < variant.Nb * (variant.Nr + 1); i++) {
+            tmp = [UInt8](count: 4, repeatedValue: 0)
+            
             for wordIdx in 0..<4 {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
             }
@@ -286,8 +287,6 @@ public class AES {
             for wordIdx in 0..<4 {
                 w[4*i+wordIdx] = w[4*(i-variant.Nk)+wordIdx]^tmp[wordIdx];
             }
-            
-            i++
         }
         return w;
     }
@@ -296,21 +295,19 @@ public class AES {
 extension AES {
     
     // byte substitution with table (S-box)
-    public func subBytes(state:[[UInt8]]) -> [[UInt8]] {
-        var result = state
+    public func subBytes(inout state:[[UInt8]]) {
         for (i,row) in enumerate(state) {
             for (j,value) in enumerate(row) {
-                result[i][j] = sBox[Int(value)]
+                state[i][j] = AES.sBox[Int(value)]
             }
         }
-        return result
     }
     
     public func invSubBytes(state:[[UInt8]]) -> [[UInt8]] {
         var result = state
         for (i,row) in enumerate(state) {
             for (j,value) in enumerate(row) {
-                result[i][j] = invSBox[Int(value)]
+                result[i][j] = AES.invSBox[Int(value)]
             }
         }
         return result
@@ -357,7 +354,7 @@ extension AES {
     }
     
     public func matrixMultiplyPolys(matrix:[[UInt8]], _ array:[UInt8]) -> [UInt8] {
-        var returnArray:[UInt8] = array.map({ _ in return 0 })
+        var returnArray:[UInt8] = [UInt8](count: array.count, repeatedValue: 0)
         for (i, row) in enumerate(matrix) {
             for (j, boxVal) in enumerate(row) {
                 returnArray[i] = multiplyPolys(boxVal, array[j]) ^ returnArray[i]
@@ -367,11 +364,14 @@ extension AES {
     }
 
     public func addRoundKey(state:[[UInt8]], _ expandedKeyW:[UInt8], _ round:Int) -> [[UInt8]] {
-        var newState = state.map({ val -> [UInt8] in return val.map { _ in return 0 } })
+        var newState = [[UInt8]](count: state.count, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))
+        let idxRow = 4*variant.Nb*round
         for c in 0..<variant.Nb {
-            for i in 0..<4 {
-                newState[i][c] = state[i][c] ^ expandedKeyW[(4*variant.Nb*round)+(variant.Nb*c)+i]
-            }
+            let idxCol = variant.Nb*c
+            newState[0][c] = state[0][c] ^ expandedKeyW[idxRow+idxCol+0]
+            newState[1][c] = state[1][c] ^ expandedKeyW[idxRow+idxCol+1]
+            newState[2][c] = state[2][c] ^ expandedKeyW[idxRow+idxCol+2]
+            newState[3][c] = state[3][c] ^ expandedKeyW[idxRow+idxCol+3]
         }
         return newState
     }
@@ -381,15 +381,14 @@ extension AES {
         var state = state
         var colBox:[[UInt8]] = [[2,3,1,1],[1,2,3,1],[1,1,2,3],[3,1,1,2]]
         
-        var rowMajorState = state.map({ val -> [UInt8] in return val.map { _ in return 0 } }) // zeroing
+        var rowMajorState = [[UInt8]](count: state.count, repeatedValue: [UInt8](count: state.first!.count, repeatedValue: 0)) //state.map({ val -> [UInt8] in return val.map { _ in return 0 } }) // zeroing
+        var newRowMajorState = rowMajorState
         
         for i in 0..<state.count {
             for j in 0..<state[0].count {
                 rowMajorState[j][i] = state[i][j]
             }
         }
-        
-        var newRowMajorState = state.map({ val -> [UInt8] in return val.map { _ in return 0 } })
         
         for (i, row) in enumerate(rowMajorState) {
             newRowMajorState[i] = matrixMultiplyPolys(colBox, row)

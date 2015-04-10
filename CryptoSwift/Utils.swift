@@ -8,6 +8,10 @@
 
 import Foundation
 
+func rotateLeft(v:UInt8, n:UInt8) -> UInt8 {
+    return ((v << n) & 0xFF) | (v >> (8 - n))
+}
+
 func rotateLeft(v:UInt16, n:UInt16) -> UInt16 {
     return ((v << n) & 0xFFFF) | (v >> (16 - n))
 }
@@ -40,4 +44,23 @@ func reverseBytes(value: UInt32) -> UInt32 {
     var tmp1 = ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8)
     var tmp2 = ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24)
     return tmp1 | tmp2
+}
+
+func xor(a: [UInt8], b:[UInt8]) -> [UInt8] {
+    var xored = [UInt8](count: a.count, repeatedValue: 0)
+    for i in 0..<xored.count {
+        xored[i] = a[i] ^ b[i]
+    }
+    return xored
+}
+
+func perf(text: String, closure: () -> ()) {
+    let measurementStart = NSDate();
+    
+    closure()
+    
+    let measurementStop = NSDate();
+    let executionTime = measurementStop.timeIntervalSinceDate(measurementStart)
+    
+    println("\(text) \(executionTime)");
 }

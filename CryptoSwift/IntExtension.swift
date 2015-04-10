@@ -30,7 +30,7 @@ extension Int {
         return arrayOfBytes(self, length: totalBytes)
     }
 
-    public static func withBytes(bytes: Slice<Byte>) -> Int {
+    public static func withBytes(bytes: ArraySlice<UInt8>) -> Int {
         return Int.withBytes(Array(bytes))
     }
 

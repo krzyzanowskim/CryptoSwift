@@ -11,10 +11,11 @@ import Foundation
 extension Array {
     
     /** split in chunks with given chunk size */
-    internal func chunks(chunksize:Int) -> [Array<T>] {
-        var words:[[T]] = [[T]]()
+    func chunks(chunksize:Int) -> [Array<T>] {
+        var words = [[T]]()
+        words.reserveCapacity(self.count / chunksize)        
         for var idx = chunksize; idx <= self.count; idx = idx + chunksize {
-            let word = Array(self[idx - chunksize..<idx])
+            let word = Array(self[idx - chunksize..<idx]) // this is slow for large table
             words.append(word)
         }
         let reminder = Array(suffix(self, self.count % chunksize))

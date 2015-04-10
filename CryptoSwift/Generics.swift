@@ -34,7 +34,9 @@ func integerFromBitsArray<T: UnsignedIntegerType>(bits: [Bit]) -> T
     return bitPattern
 }
 
-/** initialize integer from array of bytes */
+/// Initialize integer from array of bytes.
+/// I found this method slow
+@availability(*, deprecated=0.8)
 func integerWithBytes<T: IntegerType>(bytes: [UInt8]) -> T {
     var totalBytes = Swift.min(bytes.count, sizeof(T))
     // get slice of Int
@@ -53,15 +55,16 @@ func integerWithBytes<T: IntegerType>(bytes: [UInt8]) -> T {
     return i
 }
 
-/** array of bytes, little-endian representation */
+/// Array of bytes, little-endian representation. Don't use if not necessary.
+/// I found this method slow
 func arrayOfBytes<T>(value:T, length:Int? = nil) -> [UInt8] {
-    let totalBytes = length ?? (sizeofValue(value) * 8)
+    let totalBytes = length ?? sizeof(T)
     var v = value
     
     var valuePointer = UnsafeMutablePointer<T>.alloc(1)
     valuePointer.memory = value
     
-    var bytesPointer = UnsafeMutablePointer<Byte>(valuePointer)
+    var bytesPointer = UnsafeMutablePointer<UInt8>(valuePointer)
     var bytes = [UInt8](count: totalBytes, repeatedValue: 0)
     for j in 0..<min(sizeof(T),totalBytes) {
         bytes[totalBytes - 1 - j] = (bytesPointer + j).memory
@@ -77,13 +80,13 @@ func arrayOfBytes<T>(value:T, length:Int? = nil) -> [UInt8] {
 
 // helper to be able tomake shift operation on T
 func <<<T:SignedIntegerType>(lhs: T, rhs: Int) -> Int {
-    let a = lhs as Int
+    let a = lhs as! Int
     let b = rhs
     return a << b
 }
 
 func <<<T:UnsignedIntegerType>(lhs: T, rhs: Int) -> UInt {
-    let a = lhs as UInt
+    let a = lhs as! UInt
     let b = rhs
     return a << b
 }

@@ -8,12 +8,50 @@
 
 import Foundation
 
-class SHA2 : CryptoSwift.HashBase {
+
+class SHA2 : HashBase, _Hash {
+    var size:Int { return variant.rawValue }
+    let variant:SHA2.Variant
     
-    enum variant {
+    enum Variant: RawRepresentable {
         case sha224, sha256, sha384, sha512
         
-        func h() -> [UInt64] {
+        typealias RawValue = Int
+        var rawValue: RawValue {
+            switch (self) {
+            case .sha224:
+                return 224
+            case .sha256:
+                return 256
+            case .sha384:
+                return 384
+            case .sha512:
+                return 512
+            }
+        }
+        
+        init?(rawValue: RawValue) {
+            switch (rawValue) {
+            case 224:
+                self = .sha224
+                break;
+            case 256:
+                self = .sha256
+                break;
+            case 384:
+                self = .sha384
+                break;
+            case 512:
+                self = .sha512
+                break;
+            default:
+                return nil
+            }
+        }
+        
+        var size:Int { return self.rawValue }
+        
+        private var h:[UInt64] {
             switch (self) {
             case .sha224:
                 return [0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939, 0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4]
@@ -26,7 +64,7 @@ class SHA2 : CryptoSwift.HashBase {
             }
         }
         
-        func k() -> [UInt64] {
+        private var k:[UInt64] {
             switch (self) {
             case .sha224, .sha256:
                 return [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -57,7 +95,7 @@ class SHA2 : CryptoSwift.HashBase {
             }
         }
         
-        func resultingArray<T>(hh:[T]) -> [T] {
+        private func resultingArray<T>(hh:[T]) -> [T] {
             var finalHH:[T] = hh;
             switch (self) {
             case .sha224:
@@ -73,13 +111,18 @@ class SHA2 : CryptoSwift.HashBase {
         }
     }
     
-    //FIXME: I can't do Generic fuct out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.
-    func calculate32(variant: SHA2.variant) -> NSData {
+    init(_ message:NSData, variant: SHA2.Variant) {
+        self.variant = variant
+        super.init(message)
+    }
+    
+    //FIXME: I can't do Generic func out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.
+    func calculate32() -> NSData {
         var tmpMessage = self.prepare()
         
         // hash values
         var hh = [UInt32]()
-        variant.h().map({(h) -> () in
+        variant.h.map({(h) -> () in
             hh.append(UInt32(h))
         })
         
@@ -93,7 +136,7 @@ class SHA2 : CryptoSwift.HashBase {
             let chunk = tmpMessage.subdataWithRange(NSRange(location: i, length: min(chunkSizeBytes,leftMessageBytes)))
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 32-bit words into sixty-four 32-bit words:
-            var M:[UInt32] = [UInt32](count: variant.k().count, repeatedValue: 0)
+            var M:[UInt32] = [UInt32](count: variant.k.count, repeatedValue: 0)
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
@@ -119,13 +162,13 @@ class SHA2 : CryptoSwift.HashBase {
             var H = hh[7]
             
             // Main loop
-            for j in 0..<variant.k().count {
+            for j in 0..<variant.k.count {
                 let s0 = rotateRight(A,2) ^ rotateRight(A,13) ^ rotateRight(A,22)
                 let maj = (A & B) ^ (A & C) ^ (B & C)
                 let t2 = s0 &+ maj
                 let s1 = rotateRight(E,6) ^ rotateRight(E,11) ^ rotateRight(E,25)
                 let ch = (E & F) ^ ((~E) & G)
-                let t1 = H &+ s1 &+ ch &+ UInt32(variant.k()[j]) &+ M[j]
+                let t1 = H &+ s1 &+ ch &+ UInt32(variant.k[j]) &+ M[j]
                 
                 H = G
                 G = F
@@ -155,15 +198,15 @@ class SHA2 : CryptoSwift.HashBase {
             buf.appendBytes(&i, length: sizeofValue(i))
         })
         
-        return buf.copy() as NSData;
+        return buf.copy() as! NSData;
     }
     
-    func calculate64(variant: SHA2.variant) -> NSData {
+    func calculate64() -> NSData {
         var tmpMessage = self.prepare(128)
         
         // hash values
         var hh = [UInt64]()
-        variant.h().map({(h) -> () in
+        variant.h.map({(h) -> () in
             hh.append(h)
         })
         
@@ -177,7 +220,7 @@ class SHA2 : CryptoSwift.HashBase {
             var chunk = tmpMessage.subdataWithRange(NSRange(location: i, length: min(chunkSizeBytes,leftMessageBytes)))
             // break chunk into sixteen 64-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 64-bit words into eighty 64-bit words:
-            var M = [UInt64](count: variant.k().count, repeatedValue: 0)
+            var M = [UInt64](count: variant.k.count, repeatedValue: 0)
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
@@ -203,13 +246,13 @@ class SHA2 : CryptoSwift.HashBase {
             var H = hh[7]
             
             // Main loop
-            for j in 0..<variant.k().count {
+            for j in 0..<variant.k.count {
                 let s0 = rotateRight(A,28) ^ rotateRight(A,34) ^ rotateRight(A,39)
                 let maj = (A & B) ^ (A & C) ^ (B & C)
                 let t2 = s0 &+ maj
                 let s1 = rotateRight(E,14) ^ rotateRight(E,18) ^ rotateRight(E,41)
                 let ch = (E & F) ^ ((~E) & G)
-                let t1 = H &+ s1 &+ ch &+ variant.k()[j] &+ UInt64(M[j])
+                let t1 = H &+ s1 &+ ch &+ variant.k[j] &+ UInt64(M[j])
                 
                 H = G
                 G = F
@@ -239,6 +282,6 @@ class SHA2 : CryptoSwift.HashBase {
             buf.appendBytes(&i, length: sizeofValue(i))
         })
         
-        return buf.copy() as NSData;
+        return buf.copy() as! NSData;
     }
 }

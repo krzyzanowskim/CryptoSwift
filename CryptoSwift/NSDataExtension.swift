@@ -61,15 +61,24 @@ extension NSData {
     }
 
     public func encrypt(cipher: Cipher) -> NSData? {
-        return cipher.encrypt(self)
+        if let encrypted = cipher.encrypt(self.bytes()) {
+            return NSData.withBytes(encrypted)
+        }
+        return nil
     }
 
     public func decrypt(cipher: Cipher) -> NSData? {
-        return cipher.decrypt(self)
+        if let decrypted = cipher.decrypt(self.bytes()) {
+            return NSData.withBytes(decrypted)
+        }
+        return nil;
     }
     
     public func authenticate(authenticator: Authenticator) -> NSData? {
-        return authenticator.authenticate(self)
+        if let result = authenticator.authenticate(self.bytes()) {
+            return NSData.withBytes(result)
+        }
+        return nil
     }
 }
 
@@ -86,7 +95,7 @@ extension NSData {
         
         var s:String = "";
         for byte in bytesArray {
-            s = s + NSString(format:"%02X", byte)
+            s = s + String(format:"%02X", byte)
         }
         return s;
     }

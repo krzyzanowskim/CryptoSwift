@@ -8,7 +8,12 @@
 
 import Foundation
 
-class SHA1 : CryptoSwift.HashBase {
+class SHA1 : CryptoSwift.HashBase, _Hash {
+    var size:Int = 20 // 160 / 8
+    
+    override init(_ message: NSData) {
+        super.init(message)
+    }
     
     private let h:[UInt32] = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
         
@@ -80,7 +85,6 @@ class SHA1 : CryptoSwift.HashBase {
                 C = rotateLeft(B, 30)
                 B = A
                 A = temp
-                
             }
             
             hh[0] = (hh[0] &+ A) & 0xffffffff
@@ -92,11 +96,11 @@ class SHA1 : CryptoSwift.HashBase {
         
         // Produce the final hash value (big-endian) as a 160 bit number:
         var buf: NSMutableData = NSMutableData();
-        hh.map({ (item) -> () in
+        for item in hh {
             var i:UInt32 = item.bigEndian
             buf.appendBytes(&i, length: sizeofValue(i))
-        })
+        }
         
-        return buf.copy() as NSData;
+        return buf.copy() as! NSData;
     }    
 }

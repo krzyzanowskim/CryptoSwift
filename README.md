@@ -56,12 +56,20 @@ By default project is setup for iOS. You need to switch to OSX SDK manually [see
 
 ####CocoaPods
 
-You can use [CocoaPods](http://cocoapods.org/?q=cryptoSwift). You need version 0.36 or newer to use Swift framework.
+You can use [CocoaPods](http://cocoapods.org/?q=cryptoSwift).
 
 ```ruby
 pod 'CryptoSwift'
 ```
 
+or for newest version from specified branch of code:
+
+```ruby
+pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"
+```
+
+You need version 0.36 or newer to use Swift framework.
+ 
 ##Usage
 
 ```swift

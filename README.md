@@ -113,7 +113,7 @@ if let hash = "123".md5() {
 Some content-encryption algorithms assume the input length is a multiple of k octets, where k is greater than one. For such algorithms, the input shall be padded.
 
 ```swift
-let paddedData = PKCS7(data: dataToEncrypt).addPadding(AES.blockSizeBytes())
+let paddedData = PKCS7().add(bytes, AES.blockSize)
 ```
 
 Working with Ciphers
@@ -121,8 +121,8 @@ Working with Ciphers
 ChaCha20
 
 ```swift
-let chacha20Encrypted = Cipher.ChaCha20(key: keyData, iv: ivData).encrypt(dataToEncrypt)
-let decryptedChaCha20 = Cipher.ChaCha20(key: keyData, iv: ivData).decrypt(encryptedData)
+let encrypted = Cipher.ChaCha20(key: key, iv: iv).encrypt(message)
+let decrypted = Cipher.ChaCha20(key: key, iv: iv).decrypt(encrypted)
 ```
 
 AES
@@ -130,20 +130,17 @@ AES
 Notice regarding padding: *Manual padding of data is optional and CryptoSwift by default always will add PKCS7 padding before encryption, and remove after decryption when __Cipher__ enum is used. If you need manually disable/enable padding, you can do this by setting parameter for encrypt()/decrypt() on class __AES__.*
 
 ```swift
-// 1. Add padding (Optional)
-let plaintextData = PKCS7(data: plaintextData).addPadding(AES.blockSizeBytes())
 
-// 2. Encrypt with key and random IV
-let keyData = NSData.withBytes([0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00])
-let ivData:NSData = Cipher.randomIV(keyData)
+// 1. set key and random IV
+let key = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] as [UInt8]
+let iv = Cipher.randomIV(AES.blockSize)
 
-let encryptedData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).encrypt(plaintextData)
+// 2. encrypt
+let encrypted = AES(key: key, iv: iv, blockMode: .CBC)?.encrypt(message, padding: PKCS7())
 	
-// 3. decrypt with key and IV
-let decryptedData = Cipher.AES(key: keyData, iv: ivData, blockMode: .CBC).decrypt(encryptedData)
+// 3. decrypt with the same key and IV
+let decrypted = AES(key: key, iv: iv, blockMode: .CBC)?.decrypt(encryptedData, padding: PKCS7())
 	
-// 4. remove padding ONLY IF applied earlier (Optional)
-let plaintextData = PKCS7(data: decryptedData).removePadding()	
 ```
 	
 AES without data padding

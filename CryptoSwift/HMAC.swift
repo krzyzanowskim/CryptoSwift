@@ -19,6 +19,10 @@ public class HMAC {
                 return SHA1(NSData()).size
             case .sha256:
                 return SHA2.Variant.sha256.size
+            case .sha384:
+                return SHA2.Variant.sha384.size
+            case .sha512:
+                return SHA2.Variant.sha512.size
             case .md5:
                 return MD5(NSData()).size
             }

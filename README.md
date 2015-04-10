@@ -67,8 +67,6 @@ or for newest version from specified branch of code:
 ```ruby
 pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"
 ```
-
-You need version 0.36 or newer to use Swift framework.
  
 ##Usage
 
@@ -146,19 +144,14 @@ let decrypted = AES(key: key, iv: iv, blockMode: .CBC)?.decrypt(encryptedData, p
 AES without data padding
 
 ```swift
-let aes = AES(key: keyData, iv: ivData, blockMode: .CBC) // CBC is default
-let encryptedData = aes?.encrypt(plaintextData, addPadding: false)
-let decryptedData = aes?.decrypt(encryptedData, removePadding: false)
+let encrypted = Cipher.AES(key: key, iv: iv, blockMode: .CBC).encrypt(plaintext)
 ```
 
 Using extensions
 	
 ```swift
-// convenience setup tuple
-let setup = (key: keyData, iv: ivData)
-
-let encrypted = dataToEncrypt.encrypt(Cipher.ChaCha20(setup))
-let decrypted = encrypted.decrypt(Cipher.ChaCha20(setup))
+let encrypted = dataToEncrypt.encrypt(Cipher.ChaCha20(key: key, iv: iv))
+let decrypted = encrypted.decrypt(Cipher.ChaCha20(key: key, iv: iv))
 ```
 	
 Message authenticators
@@ -166,6 +159,15 @@ Message authenticators
 ```swift
 // Calculate Message Authentication Code (MAC) for message
 let mac = Authenticator.Poly1305(key: key).authenticate(message)
+```
+
+#####Conversion between NSData and [UInt8]
+
+For you convenience CryptoSwift provide two function to easily convert array of bytes to NSData and other way around:
+
+```swift
+let data  = NSData.withBytes([0x01,0x02,0x03])
+let bytes = data.bytes()
 ```
 
 ##Contact

@@ -22,7 +22,7 @@ extension NSData {
     public func checksum() -> UInt16 {
         var s:UInt32 = 0;
         
-        var bytesArray = self.bytes();
+        var bytesArray = self.arrayOfBytes()
         
         for (var i = 0; i < bytesArray.count; i++) {
             var b = bytesArray[i]
@@ -61,21 +61,21 @@ extension NSData {
     }
 
     public func encrypt(cipher: Cipher) -> NSData? {
-        if let encrypted = cipher.encrypt(self.bytes()) {
+        if let encrypted = cipher.encrypt(self.arrayOfBytes()) {
             return NSData.withBytes(encrypted)
         }
         return nil
     }
 
     public func decrypt(cipher: Cipher) -> NSData? {
-        if let decrypted = cipher.decrypt(self.bytes()) {
+        if let decrypted = cipher.decrypt(self.arrayOfBytes()) {
             return NSData.withBytes(decrypted)
         }
         return nil;
     }
     
     public func authenticate(authenticator: Authenticator) -> NSData? {
-        if let result = authenticator.authenticate(self.bytes()) {
+        if let result = authenticator.authenticate(self.arrayOfBytes()) {
             return NSData.withBytes(result)
         }
         return nil
@@ -100,7 +100,7 @@ extension NSData {
         return s;
     }
     
-    func bytes() -> [UInt8] {
+    public func arrayOfBytes() -> [UInt8] {
         let count = self.length / sizeof(UInt8)
         var bytesArray = [UInt8](count: count, repeatedValue: 0)
         self.getBytes(&bytesArray, length:count * sizeof(UInt8))

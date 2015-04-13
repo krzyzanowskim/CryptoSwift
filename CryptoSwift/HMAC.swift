@@ -31,15 +31,15 @@ public class HMAC {
         func calculateHash(# bytes:[UInt8]) -> [UInt8]? {
             switch (self) {
             case .sha1:
-                return NSData.withBytes(bytes).sha1()?.bytes()
+                return NSData.withBytes(bytes).sha1()?.arrayOfBytes()
             case .sha256:
-                return NSData.withBytes(bytes).sha256()?.bytes()
+                return NSData.withBytes(bytes).sha256()?.arrayOfBytes()
             case .sha384:
-                return NSData.withBytes(bytes).sha384()?.bytes()
+                return NSData.withBytes(bytes).sha384()?.arrayOfBytes()
             case .sha512:
-                return NSData.withBytes(bytes).sha512()?.bytes()
+                return NSData.withBytes(bytes).sha512()?.arrayOfBytes()
             case .md5:
-                return NSData.withBytes(bytes).md5()?.bytes();
+                return NSData.withBytes(bytes).md5()?.arrayOfBytes();
             }
         }
         

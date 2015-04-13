@@ -167,7 +167,7 @@ For you convenience CryptoSwift provide two function to easily convert array of 
 
 ```swift
 let data  = NSData.withBytes([0x01,0x02,0x03])
-let bytes = data.bytes()
+let bytes:[UInt8] = data.arrayOfBytes()
 ```
 
 ##Contact

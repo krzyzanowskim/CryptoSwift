@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class AES {
+public final class AES {
     
     public enum AESVariant:Int {
         case unknown, aes128, aes192, aes256
@@ -160,7 +160,7 @@ public class AES {
     private func encryptBlock(block:[UInt8]) -> [UInt8]? {
         var out:[UInt8] = [UInt8]()
         
-        autoreleasepool { () -> () in
+        autoreleasepool() {
             var state:[[UInt8]] = [[UInt8]](count: variant.Nb, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))
             for (i, row) in enumerate(state) {
                 for (j, val) in enumerate(row) {
@@ -168,7 +168,7 @@ public class AES {
                 }
             }
             
-            state = addRoundKey(state,expandedKey, 0)
+            state = addRoundKey(state, expandedKey, 0)
             
             for roundCount in 1..<variant.Nr {
                 subBytes(&state)

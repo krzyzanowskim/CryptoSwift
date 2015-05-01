@@ -36,7 +36,7 @@ func integerFromBitsArray<T: UnsignedIntegerType>(bits: [Bit]) -> T
 
 /// Initialize integer from array of bytes.
 /// I found this method slow
-@availability(*, deprecated=0.8)
+@availability(*, deprecated=0.8, message="Deprecated but replacement is not yet available.")
 func integerWithBytes<T: IntegerType>(bytes: [UInt8]) -> T {
     var totalBytes = Swift.min(bytes.count, sizeof(T))
     // get slice of Int

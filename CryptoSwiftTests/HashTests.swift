@@ -203,7 +203,7 @@ class CryptoSwiftTests: XCTestCase {
             expect.fulfill()
         })
 
-        self.waitForExpectationsWithTimeout(10, handler: { (error) -> Void in
+        waitForExpectationsWithTimeout(10, handler: { (error) -> Void in
             XCTAssertNil(error, "CRC32 async failed")
         })
     }

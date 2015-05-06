@@ -9,7 +9,7 @@
 import Foundation
 
 
-class SHA2 : HashBase, _Hash {
+final class SHA2 : HashBase, _Hash {
     var size:Int { return variant.rawValue }
     let variant:SHA2.Variant
     

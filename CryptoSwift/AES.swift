@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class AES {
+final public class AES {
     
     public enum AESVariant:Int {
         case unknown, aes128, aes192, aes256

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class ChaCha20 {
+final public class ChaCha20 {
     
     static let blockSize = 64 // 512 / 8
     private let stateSize = 16

@@ -9,7 +9,7 @@
 import XCTest
 import CryptoSwift
 
-class CryptoSwiftTests: XCTestCase {
+final class CryptoSwiftTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

@@ -12,7 +12,7 @@
 
 import Foundation
 
-public class Poly1305 {
+final public class Poly1305 {
     let blockSize = 16
     private var ctx:Context?
     

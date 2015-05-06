@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 import CryptoSwift
 
-class HMACTests: XCTestCase {
+final class HMACTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

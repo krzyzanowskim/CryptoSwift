@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 import CryptoSwift
 
-class Poly1305Tests: XCTestCase {
+final class Poly1305Tests: XCTestCase {
     
     override func setUp() {
         super.setUp()

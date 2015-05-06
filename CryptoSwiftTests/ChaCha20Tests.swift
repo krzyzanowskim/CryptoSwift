@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 import CryptoSwift
 
-class ChaCha20Tests: XCTestCase {
+final class ChaCha20Tests: XCTestCase {
 
     override func setUp() {
         super.setUp()

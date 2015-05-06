@@ -14,7 +14,7 @@ final public class ChaCha20 {
     private let stateSize = 16
     private var context:Context?
     
-    private class Context {
+    final private class Context {
         var input:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
         
         deinit {

@@ -14,3 +14,5 @@ xcuserdata
 DerivedData
 *.xcuserstate
 timeline.xctimeline
+
+/Framework

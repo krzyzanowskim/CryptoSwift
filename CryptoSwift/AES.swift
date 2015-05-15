@@ -148,8 +148,7 @@ final public class AES {
         if let padding = padding {
             finalBytes = padding.add(bytes, blockSize: AES.blockSize)
         } else if (bytes.count % AES.blockSize != 0) {
-            // 128 bit block exceeded, need padding
-            assert(false, "AES 128-bit block exceeded!");
+            assert(false, "AES block size exceeded!");
             return nil
         }
 
@@ -194,8 +193,7 @@ final public class AES {
     
     public func decrypt(bytes:[UInt8], padding:Padding? = PKCS7()) -> [UInt8]? {
         if (bytes.count % AES.blockSize != 0) {
-            // 128 bit block exceeded
-            assert(false,"AES 128-bit block exceeded!")
+            assert(false,"AES block size exceeded!")
             return nil
         }
         

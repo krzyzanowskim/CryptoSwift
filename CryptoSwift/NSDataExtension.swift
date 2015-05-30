@@ -97,7 +97,7 @@ extension NSData {
         for byte in bytesArray {
             s = s + String(format:"%02X", byte)
         }
-        return s;
+        return s.lowercaseString;
     }
     
     public func arrayOfBytes() -> [UInt8] {

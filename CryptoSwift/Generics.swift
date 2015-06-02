@@ -35,24 +35,25 @@ func integerFromBitsArray<T: UnsignedIntegerType>(bits: [Bit]) -> T
 }
 
 /// Initialize integer from array of bytes.
-/// I found this method slow
-@availability(*, deprecated=0.8, message="Deprecated but replacement is not yet available.")
-func integerWithBytes<T: IntegerType>(bytes: [UInt8]) -> T {
-    var totalBytes = Swift.min(bytes.count, sizeof(T))
-    // get slice of Int
-    var start = Swift.max(bytes.count - sizeof(T),0)
-    var intarr = [UInt8](bytes[start..<(start + totalBytes)])
-    
-    // pad size if necessary
-    while (intarr.count < sizeof(T)) {
-        intarr.insert(0 as UInt8, atIndex: 0)
+/// This method may be slow
+func integerWithBytes<T: IntegerType where T:ByteConvertible, T: BitshiftOperationsType>(bytes: [UInt8]) -> T {
+    var bytes = bytes.reverse()
+    if bytes.count < sizeof(T) {
+        let paddingCount = sizeof(T) - bytes.count
+        if (paddingCount > 0) {
+            bytes += [UInt8](count: paddingCount, repeatedValue: 0)
+        }
     }
-    intarr = intarr.reverse()
     
-    var i:T = 0
-    var data = NSData(bytes: intarr, length: intarr.count)
-    data.getBytes(&i, length: sizeofValue(i));
-    return i
+    if sizeof(T) == 1 {
+        return T(truncatingBitPattern: UInt64(bytes[0]))
+    }
+    
+    var result: T = 0
+    for byte in bytes.reverse() {
+        result = result << 8 | T(byte)
+    }
+    return result
 }
 
 /// Array of bytes, little-endian representation. Don't use if not necessary.

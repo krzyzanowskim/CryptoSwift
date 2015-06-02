@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>7266B6DF-1CD3-4383-821A-42E5BE4580E8</string>
 	<key>IDESourceControlProjectName</key>
-	<string>CryptoSwift</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>C3D8ED1CB28D809ADCE2C0DE74935E8A502ACD53</key>
 		<string>github.com:krzyzanowskim/CryptoSwift.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>CryptoSwift.xcodeproj</string>
+	<string>CryptoSwift.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>C3D8ED1CB28D809ADCE2C0DE74935E8A502ACD53</key>

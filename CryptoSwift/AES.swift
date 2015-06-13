@@ -11,7 +11,7 @@ import Foundation
 final public class AES {
     
     public enum AESVariant:Int {
-        case unknown, aes128, aes192, aes256
+        case aes128, aes192, aes256
         
         var Nk:Int { // Nk words
             return [4,6,8][self.rawValue - 1]
@@ -38,7 +38,7 @@ final public class AES {
         case 256:
             return .aes256
         default:
-            return .unknown
+            preconditionFailure("Unknown AES variant for given key.")
         }
     }
     private let key:[UInt8]

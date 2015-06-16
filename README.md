@@ -52,7 +52,7 @@ To install CryptoSwift, add it as a submodule to your project (on the top level 
 Then, drag the CryptoSwift.xcodeproj file into your Xcode project, and add CryptoSwift.framework as a dependency to your target.
 
 Alternatively, you can build the Universal Framework and link it in your Xcode project. 
-Aggregate target `CryptoSwift-Universal` runs a script to build a universal framework. The script currently copies the framework to the `Framework` directory.
+Aggregate target `CryptoSwift-Universal` runs a script to build a universal framework. The script currently copies the framework to the `Framework` directory. (The path to CryptoSwift directory cannot contain any space)
 
 #####iOS and OSX
 By default project is setup for iOS. You need to switch to OS X SDK manually [see #8](https://github.com/krzyzanowskim/CryptoSwift/issues/8)

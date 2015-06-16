@@ -11,7 +11,7 @@ import Foundation
 final public class AES {
     
     public enum AESVariant:Int {
-        case aes128, aes192, aes256
+        case aes128 = 1, aes192, aes256
         
         var Nk:Int { // Nk words
             return [4,6,8][self.rawValue - 1]

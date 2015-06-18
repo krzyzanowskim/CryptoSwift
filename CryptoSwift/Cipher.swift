@@ -8,6 +8,9 @@
 
 import Foundation
 
+private typealias CryptoSwift_ChaCha20  = ChaCha20
+private typealias CryptoSwift_AES       = AES
+
 public enum Cipher {
     /**
     ChaCha20
@@ -39,10 +42,10 @@ public enum Cipher {
     public func encrypt(bytes: [UInt8]) -> [UInt8]? {
         switch (self) {
             case .ChaCha20(let key, let iv):
-                var chacha = CryptoSwift.ChaCha20(key: key, iv: iv)
+                var chacha = CryptoSwift_ChaCha20(key: key, iv: iv)
                 return chacha?.encrypt(bytes)
             case .AES(let key, let iv, let blockMode):
-                var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode)
+                var aes = CryptoSwift_AES(key: key, iv: iv, blockMode: blockMode)
                 return aes?.encrypt(bytes)
         }
     }
@@ -57,10 +60,10 @@ public enum Cipher {
     public func decrypt(bytes: [UInt8]) -> [UInt8]? {
         switch (self) {
             case .ChaCha20(let key, let iv):
-                var chacha = CryptoSwift.ChaCha20(key: key, iv: iv);
+                var chacha = CryptoSwift_ChaCha20(key: key, iv: iv);
                 return chacha?.decrypt(bytes)
             case .AES(let key, let iv, let blockMode):
-                var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode);
+                var aes = CryptoSwift_AES(key: key, iv: iv, blockMode: blockMode);
                 return aes?.decrypt(bytes)
         }
     }

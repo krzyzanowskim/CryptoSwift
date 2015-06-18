@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class MD5 : CryptoSwift.HashBase, _Hash {
+final class MD5 : HashBase, _Hash {
     var size:Int = 16 // 128 / 8
     
     /** specifies the per-round shift amounts */

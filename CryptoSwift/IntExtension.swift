@@ -40,14 +40,12 @@ extension Int {
     }
 }
 
-
-
 /** Shift bits */
 extension Int {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
     private mutating func shiftLeft(count: Int) -> Int {
-        self = CryptoSwift.shiftLeft(self, count)
+        self = CryptoSwift_shiftLeft(self, count)
         return self
     }
     
@@ -105,4 +103,8 @@ func &>> (lhs: Int, rhs: Int) -> Int {
     var l = lhs;
     l.shiftRight(rhs)
     return l
+}
+
+func CryptoSwift_shiftLeft(value: Int, count: Int) -> Int {
+    return shiftLeft(value, count)
 }

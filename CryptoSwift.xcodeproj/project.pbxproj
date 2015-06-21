@@ -68,6 +68,8 @@
 		E06B2D3C1B3731BD0009773E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E06B2D3A1B3731BD0009773E /* Main.storyboard */; };
 		E06B2D3E1B3731BD0009773E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E06B2D3D1B3731BD0009773E /* Images.xcassets */; };
 		E06B2D411B3731BD0009773E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E06B2D3F1B3731BD0009773E /* LaunchScreen.xib */; };
+		E06B2D5C1B3734690009773E /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
+		E06B2D5D1B3734690009773E /* CryptoSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +129,13 @@
 			remoteGlobalIDString = E06B2D311B3731BD0009773E;
 			remoteInfo = CryptoSwiftDemo;
 		};
+		E06B2D5E1B3734690009773E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 754BE44C19693E190098E6F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 754BE45419693E190098E6F3;
+			remoteInfo = CryptoSwift;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -137,6 +146,17 @@
 			dstSubfolderSpec = 10;
 			files = (
 			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E06B2D601B37346A0009773E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E06B2D5D1B3734690009773E /* CryptoSwift.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -216,6 +236,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E06B2D5C1B3734690009773E /* CryptoSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,10 +421,12 @@
 				E06B2D2E1B3731BD0009773E /* Sources */,
 				E06B2D2F1B3731BD0009773E /* Frameworks */,
 				E06B2D301B3731BD0009773E /* Resources */,
+				E06B2D601B37346A0009773E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E06B2D5F1B3734690009773E /* PBXTargetDependency */,
 			);
 			name = CryptoSwiftDemo;
 			productName = CryptoSwiftDemo;
@@ -603,6 +626,11 @@
 			isa = PBXTargetDependency;
 			target = E06B2D311B3731BD0009773E /* CryptoSwiftDemo */;
 			targetProxy = E06B2D541B3732EF0009773E /* PBXContainerItemProxy */;
+		};
+		E06B2D5F1B3734690009773E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 754BE45419693E190098E6F3 /* CryptoSwift */;
+			targetProxy = E06B2D5E1B3734690009773E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

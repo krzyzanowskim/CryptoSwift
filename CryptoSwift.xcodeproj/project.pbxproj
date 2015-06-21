@@ -120,6 +120,13 @@
 			remoteGlobalIDString = 754BE45419693E190098E6F3;
 			remoteInfo = CryptoSwift;
 		};
+		E06B2D541B3732EF0009773E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 754BE44C19693E190098E6F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E06B2D311B3731BD0009773E;
+			remoteInfo = CryptoSwiftDemo;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -379,6 +386,7 @@
 				75B601ED197D6B3D0009B53D /* PBXTargetDependency */,
 				75B6021D197D6CF10009B53D /* PBXTargetDependency */,
 				75B6021F197D6D070009B53D /* PBXTargetDependency */,
+				E06B2D551B3732EF0009773E /* PBXTargetDependency */,
 			);
 			name = CryptoSwiftTests;
 			productName = CryptoSwiftTests;
@@ -419,7 +427,7 @@
 					};
 					754BE45F19693E190098E6F3 = {
 						CreatedOnToolsVersion = 6.0;
-						TestTargetID = 754BE45419693E190098E6F3;
+						TestTargetID = E06B2D311B3731BD0009773E;
 					};
 					E06B2D311B3731BD0009773E = {
 						CreatedOnToolsVersion = 6.3.2;
@@ -590,6 +598,11 @@
 			isa = PBXTargetDependency;
 			target = 754BE45419693E190098E6F3 /* CryptoSwift */;
 			targetProxy = 75B6021E197D6D070009B53D /* PBXContainerItemProxy */;
+		};
+		E06B2D551B3732EF0009773E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E06B2D311B3731BD0009773E /* CryptoSwiftDemo */;
+			targetProxy = E06B2D541B3732EF0009773E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -783,6 +796,7 @@
 				METAL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = CryptoSwiftTests/Bridging.h;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CryptoSwiftDemo.app/CryptoSwiftDemo";
 			};
 			name = Debug;
 		};
@@ -807,6 +821,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = CryptoSwiftTests/Bridging.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CryptoSwiftDemo.app/CryptoSwiftDemo";
 			};
 			name = Release;
 		};

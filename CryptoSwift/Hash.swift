@@ -30,8 +30,6 @@ public enum Hash {
             return SHA2(data, variant: .sha512).calculate64()
         case crc32(let data):
             return CRC().crc32(data);
-        default:
-            return nil
         }
     }
 }

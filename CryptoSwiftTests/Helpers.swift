@@ -9,10 +9,10 @@
 import Foundation
 
 func compareMatrix(a:[[UInt8]], b:[[UInt8]]) -> Bool {
-    for (i,arr) in enumerate(a) {
-        for (j,val) in enumerate(arr) {
+    for (i,arr) in a.enumerate() {
+        for (j,val) in arr.enumerate() {
             if (val != b[i][j]) {
-                println("Not equal: \(val) vs \(b[i][j])")
+                print("Not equal: \(val) vs \(b[i][j])") //FIXME: remove verbose
                 return false
             }
         }

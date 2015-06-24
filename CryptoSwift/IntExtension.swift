@@ -26,7 +26,7 @@ extension Int {
 /* array of bytes */
 extension Int {
     /** Array of bytes with optional padding (little-endian) */
-    public func bytes(_ totalBytes: Int = sizeof(Int)) -> [UInt8] {
+    public func bytes(totalBytes: Int = sizeof(Int)) -> [UInt8] {
         return arrayOfBytes(self, length: totalBytes)
     }
 
@@ -47,7 +47,7 @@ extension Int {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
     private mutating func shiftLeft(count: Int) -> Int {
-        self = CryptoSwift.shiftLeft(self, count)
+        self = CryptoSwift.shiftLeft(self, count: count) //FIXME: count:
         return self
     }
     
@@ -57,19 +57,19 @@ extension Int {
             return self;
         }
         
-        var bitsCount = sizeofValue(self) * 8
+        let bitsCount = sizeofValue(self) * 8
 
         if (count >= bitsCount) {
             return 0
         }
 
-        var maxBitsForValue = Int(floor(log2(Double(self)) + 1))
-        var shiftCount = Swift.min(count, maxBitsForValue - 1)
+        let maxBitsForValue = Int(floor(log2(Double(self)) + 1))
+        let shiftCount = Swift.min(count, maxBitsForValue - 1)
         var shiftedValue:Int = 0;
         
         for bitIdx in 0..<bitsCount {
             // if bit is set then copy to result and shift left 1
-            var bit = 1 << bitIdx
+            let bit = 1 << bitIdx
             if ((self & bit) == bit) {
                 shiftedValue = shiftedValue | (bit >> shiftCount)
             }

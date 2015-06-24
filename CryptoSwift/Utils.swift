@@ -41,8 +41,8 @@ func reverseBytes(value: UInt32) -> UInt32 {
     // return = ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24);
     
     // workaround
-    var tmp1 = ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8)
-    var tmp2 = ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24)
+    let tmp1 = ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8)
+    let tmp2 = ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24)
     return tmp1 | tmp2
 }
 
@@ -62,5 +62,5 @@ func perf(text: String, closure: () -> ()) {
     let measurementStop = NSDate();
     let executionTime = measurementStop.timeIntervalSinceDate(measurementStart)
     
-    println("\(text) \(executionTime)");
+    print("\(text) \(executionTime)");
 }

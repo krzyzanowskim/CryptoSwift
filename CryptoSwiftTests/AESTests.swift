@@ -99,9 +99,9 @@ final class AESTests: XCTestCase {
         
         var substituted = input
         AES(key: aesKey, blockMode: .CBC)!.subBytes(&substituted)
-        XCTAssertTrue(compareMatrix(expected, substituted), "subBytes failed")
+        XCTAssertTrue(compareMatrix(expected, b: substituted), "subBytes failed")
         let inverted = AES(key: aesKey, blockMode: .CBC)!.invSubBytes(substituted)
-        XCTAssertTrue(compareMatrix(input, inverted), "invSubBytes failed")
+        XCTAssertTrue(compareMatrix(input, b: inverted), "invSubBytes failed")
     }
     
     func testAES_shiftRows() {
@@ -116,9 +116,9 @@ final class AESTests: XCTestCase {
             [0x8c, 0x4, 0x51, 0xe7]]
         
         let shifted = AES(key: aesKey, blockMode: .CBC)!.shiftRows(input)
-        XCTAssertTrue(compareMatrix(expected, shifted), "shiftRows failed")
+        XCTAssertTrue(compareMatrix(expected, b: shifted), "shiftRows failed")
         let inverted = AES(key: aesKey, blockMode: .CBC)!.invShiftRows(shifted)
-        XCTAssertTrue(compareMatrix(input, inverted), "invShiftRows failed")
+        XCTAssertTrue(compareMatrix(input, b: inverted), "invShiftRows failed")
     }
     
     func testAES_multiply() {
@@ -148,7 +148,7 @@ final class AESTests: XCTestCase {
         
         if let aes = AES(key: aesKey, blockMode: .CBC) {
             let result = aes.addRoundKey(input, aes.expandedKey, 0)
-            XCTAssertTrue(compareMatrix(expected, result), "addRoundKey failed")
+            XCTAssertTrue(compareMatrix(expected, b: result), "addRoundKey failed")
         } else {
             XCTAssert(false, "")
         }
@@ -167,9 +167,9 @@ final class AESTests: XCTestCase {
         
         if let aes = AES(key: aesKey, blockMode: .CBC) {
             let mixed = aes.mixColumns(input)
-            XCTAssertTrue(compareMatrix(expected, mixed), "mixColumns failed")
+            XCTAssertTrue(compareMatrix(expected, b: mixed), "mixColumns failed")
             let inverted = aes.invMixColumns(mixed)
-            XCTAssertTrue(compareMatrix(input, inverted), "invMixColumns failed")
+            XCTAssertTrue(compareMatrix(input, b: inverted), "invMixColumns failed")
         } else {
             XCTAssert(false, "")
         }
@@ -180,7 +180,7 @@ final class AESTests: XCTestCase {
         let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
         let message = [UInt8](count: 1024 * 1024, repeatedValue: 7)
         measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, forBlock: { () -> Void in
-            let encrypted = AES(key: key, iv: iv, blockMode: .CBC)?.encrypt(message, padding: PKCS7())
+            AES(key: key, iv: iv, blockMode: .CBC)?.encrypt(message, padding: PKCS7())
         })
     }
     
@@ -200,14 +200,14 @@ final class AESTests: XCTestCase {
             let dataBytes     = UnsafePointer<Void>(data.bytes)
             
             let cryptData    = NSMutableData(length: Int(dataLength) + kCCBlockSizeAES128)
-            var cryptPointer = UnsafeMutablePointer<Void>(cryptData!.mutableBytes)
+            let cryptPointer = UnsafeMutablePointer<Void>(cryptData!.mutableBytes)
             let cryptLength  = cryptData!.length
             
             var numBytesEncrypted:Int = 0
             
             self.startMeasuring()
             
-            var cryptStatus = CCCrypt(
+            CCCrypt(
                 UInt32(kCCEncrypt),
                 UInt32(kCCAlgorithmAES128),
                 UInt32(kCCOptionPKCS7Padding),

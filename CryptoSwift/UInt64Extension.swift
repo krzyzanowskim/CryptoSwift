@@ -10,7 +10,7 @@ import Foundation
 
 /** array of bytes */
 extension UInt64 {
-    public func bytes(_ totalBytes: Int = sizeof(UInt64)) -> [UInt8] {
+    public func bytes(totalBytes: Int = sizeof(UInt64)) -> [UInt8] {
         return arrayOfBytes(self, length: totalBytes)
     }
 

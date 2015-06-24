@@ -10,7 +10,7 @@ import Foundation
 
 /** array of bytes */
 extension UInt32 {
-    public func bytes(_ totalBytes: Int = sizeof(UInt32)) -> [UInt8] {
+    public func bytes(totalBytes: Int = sizeof(UInt32)) -> [UInt8] {
         return arrayOfBytes(self, length: totalBytes)
     }
 
@@ -33,13 +33,13 @@ extension UInt32 {
             return self;
         }
         
-        var bitsCount = UInt32(sizeof(UInt32) * 8)
-        var shiftCount = Swift.min(count, bitsCount - 1)
+        let bitsCount = UInt32(sizeof(UInt32) * 8)
+        let shiftCount = Swift.min(count, bitsCount - 1)
         var shiftedValue:UInt32 = 0;
         
         for bitIdx in 0..<bitsCount {
             // if bit is set then copy to result and shift left 1
-            var bit = 1 << bitIdx
+            let bit = 1 << bitIdx
             if ((self & bit) == bit) {
                 shiftedValue = shiftedValue | (bit << shiftCount)
             }
@@ -60,19 +60,19 @@ extension UInt32 {
             return self;
         }
         
-        var bitsCount = UInt32(sizeofValue(self) * 8)
+        let bitsCount = UInt32(sizeofValue(self) * 8)
 
         if (count >= bitsCount) {
             return 0
         }
 
-        var maxBitsForValue = UInt32(floor(log2(Double(self)) + 1))
-        var shiftCount = Swift.min(count, maxBitsForValue - 1)
+        let maxBitsForValue = UInt32(floor(log2(Double(self)) + 1))
+        let shiftCount = Swift.min(count, maxBitsForValue - 1)
         var shiftedValue:UInt32 = 0;
         
         for bitIdx in 0..<bitsCount {
             // if bit is set then copy to result and shift left 1
-            var bit = 1 << bitIdx
+            let bit = 1 << bitIdx
             if ((self & bit) == bit) {
                 shiftedValue = shiftedValue | (bit >> shiftCount)
             }

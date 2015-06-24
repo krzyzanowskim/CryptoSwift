@@ -83,12 +83,12 @@ final public class Poly1305 {
     Calculate Message Authentication Code (MAC) for message.
     Calculation context is discarder on instance deallocation.
     
-    :param: key     256-bit key
-    :param: message Message
+    - parameter key:     256-bit key
+    - parameter message: Message
     
-    :returns: Message Authentication Code
+    - returns: Message Authentication Code
     */
-    class internal func authenticate(# key: [UInt8], message: [UInt8]) -> [UInt8]? {
+    class internal func authenticate(key  key: [UInt8], message: [UInt8]) -> [UInt8]? {
         return Poly1305(key)?.authenticate(message: message)
     }
     
@@ -101,7 +101,7 @@ final public class Poly1305 {
         }
     }
     
-    private func authenticate(# message:[UInt8]) -> [UInt8]? {
+    private func authenticate(message  message:[UInt8]) -> [UInt8]? {
         if let ctx = self.ctx {
             update(ctx, message: message)
             return finish(ctx)
@@ -112,9 +112,9 @@ final public class Poly1305 {
     /**
     Add message to be processed
     
-    :param: context Context
-    :param: message message
-    :param: bytes   length of the message fragment to be processed
+    - parameter context: Context
+    - parameter message: message
+    - parameter bytes:   length of the message fragment to be processed
     */
     private func update(context:Context, message:[UInt8], bytes:Int? = nil) {
         var bytes = bytes ?? message.count
@@ -145,7 +145,7 @@ final public class Poly1305 {
         
         /* process full blocks */
         if (bytes >= blockSize) {
-            var want = bytes & ~(blockSize - 1)
+            let want = bytes & ~(blockSize - 1)
             blocks(context, m: message, startPos: mPos)
             mPos += want
             bytes -= want;

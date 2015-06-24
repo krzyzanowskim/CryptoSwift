@@ -25,7 +25,7 @@ extension NSData {
         var bytesArray = self.arrayOfBytes()
         
         for (var i = 0; i < bytesArray.count; i++) {
-            var b = bytesArray[i]
+            _ = bytesArray[i]
             s = s + UInt32(bytesArray[i])
         }
         s = s % 65536;

@@ -18,7 +18,7 @@ final class SHA1 : CryptoSwift.HashBase, _Hash {
     private let h:[UInt32] = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
         
     func calculate() -> NSData {
-        var tmpMessage = self.prepare()
+        let tmpMessage = self.prepare(64)
         
         // hash values
         var hh = h
@@ -42,7 +42,7 @@ final class SHA1 : CryptoSwift.HashBase, _Hash {
                     M[x] = le.bigEndian
                     break
                 default:
-                    M[x] = rotateLeft(M[x-3] ^ M[x-8] ^ M[x-14] ^ M[x-16], 1)
+                    M[x] = rotateLeft(M[x-3] ^ M[x-8] ^ M[x-14] ^ M[x-16], n: 1) //FIXME: n:
                     break
                 }
             }
@@ -79,10 +79,10 @@ final class SHA1 : CryptoSwift.HashBase, _Hash {
                     break
                 }
                 
-                var temp = (rotateLeft(A,5) &+ f &+ E &+ M[j] &+ k) & 0xffffffff
+                let temp = (rotateLeft(A,n: 5) &+ f &+ E &+ M[j] &+ k) & 0xffffffff
                 E = D
                 D = C
-                C = rotateLeft(B, 30)
+                C = rotateLeft(B, n: 30)
                 B = A
                 A = temp
             }
@@ -95,7 +95,7 @@ final class SHA1 : CryptoSwift.HashBase, _Hash {
         }
         
         // Produce the final hash value (big-endian) as a 160 bit number:
-        var buf: NSMutableData = NSMutableData();
+        let buf: NSMutableData = NSMutableData();
         for item in hh {
             var i:UInt32 = item.bigEndian
             buf.appendBytes(&i, length: sizeofValue(i))

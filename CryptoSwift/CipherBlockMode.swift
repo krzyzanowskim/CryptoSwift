@@ -38,11 +38,11 @@ public enum CipherBlockMode {
     /**
     Process input blocks with given block cipher mode. With fallback to plain mode.
     
-    :param: blocks cipher block size blocks
-    :param: iv     IV
-    :param: cipher single block encryption closure
+    - parameter blocks: cipher block size blocks
+    - parameter iv:     IV
+    - parameter cipher: single block encryption closure
     
-    :returns: encrypted bytes
+    - returns: encrypted bytes
     */
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
         
@@ -84,7 +84,7 @@ private struct CBCMode: BlockMode {
         out.reserveCapacity(blocks.count * blocks[0].count)
         var prevCiphertext = iv! // for the first time prevCiphertext = iv
         for plaintext in blocks {
-            if let encrypted = cipherOperation(block: xor(prevCiphertext, plaintext)) {
+            if let encrypted = cipherOperation(block: xor(prevCiphertext, b: plaintext)) {
                 out.extend(encrypted)
                 prevCiphertext = encrypted
             }
@@ -104,7 +104,7 @@ private struct CBCMode: BlockMode {
         var prevCiphertext = iv! // for the first time prevCiphertext = iv
         for ciphertext in blocks {
             if let decrypted = cipherOperation(block: ciphertext) { // decrypt
-                out.extend(xor(prevCiphertext, decrypted))
+                out.extend(xor(prevCiphertext, b: decrypted)) //FIXME: b:
             }
             prevCiphertext = ciphertext
         }
@@ -131,7 +131,7 @@ private struct CFBMode: BlockMode {
         var lastCiphertext = iv!
         for plaintext in blocks {
             if let encrypted = cipherOperation(block: lastCiphertext) {
-                lastCiphertext = xor(plaintext,encrypted)
+                lastCiphertext = xor(plaintext,b: encrypted)
                 out.extend(lastCiphertext)
             }
         }

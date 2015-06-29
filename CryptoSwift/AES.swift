@@ -128,10 +128,8 @@ final public class AES {
     convenience public init?(key:String, iv:String, blockMode:CipherBlockMode = .CBC) {
         if let kkey = key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(), let iiv = iv.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() {
             self.init(key: kkey, iv: iiv, blockMode: blockMode)
-        } else {
-            self.init(key: [UInt8](), iv: [UInt8](), blockMode: blockMode) //FIXME: this is due Swift bug, remove this line later, when fixed
-            return nil
         }
+        return nil
     }
     
     /**
@@ -223,7 +221,7 @@ final public class AES {
         
         state = addRoundKey(state,expandedKey, variant.Nr)
         
-        for roundCount in Array((1..<variant.Nr).reverse()) { //FIXME: WAT?
+        for roundCount in (1..<variant.Nr).reverse() {
             state = invShiftRows(state)
             state = invSubBytes(state)
             state = addRoundKey(state, expandedKey, roundCount)

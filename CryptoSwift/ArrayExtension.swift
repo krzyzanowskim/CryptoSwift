@@ -11,8 +11,8 @@ import Foundation
 extension Array {
     
     /** split in chunks with given chunk size */
-    func chunks(chunksize:Int) -> [Array<T>] {
-        var words = [[T]]()
+    func chunks(chunksize:Int) -> [Array<Element>] {
+        var words = [[Element]]()
         words.reserveCapacity(self.count / chunksize)        
         for var idx = chunksize; idx <= self.count; idx = idx + chunksize {
             let word = Array(self[idx - chunksize..<idx]) // this is slow for large table

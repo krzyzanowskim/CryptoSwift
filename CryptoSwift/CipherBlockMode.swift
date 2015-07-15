@@ -18,7 +18,7 @@ private protocol BlockMode {
 }
 
 public enum CipherBlockMode {
-    case ECB, CBC, CFB
+    case ECB, CBC, CFB, CTR
     
     private var mode:BlockMode {
         switch (self) {
@@ -28,6 +28,8 @@ public enum CipherBlockMode {
             return CFBMode()
         case ECB:
             return ECBMode()
+        case CTR:
+            return CTRMode()
         }
     }
     
@@ -55,7 +57,7 @@ public enum CipherBlockMode {
         return finalBlockMode.mode.encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
     }
     
-    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
+    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
         // if IV is not available, fallback to plain
         var finalBlockMode:CipherBlockMode = self
         if (iv == nil) {
@@ -67,18 +69,17 @@ public enum CipherBlockMode {
 }
 
 /**
-*  Cipher-block chaining (CBC)
+Cipher-block chaining (CBC)
 */
 private struct CBCMode: BlockMode {
-    var needIV:Bool = true
+    let needIV = true
     
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
         precondition(blocks.count > 0)
         assert(iv != nil, "CFB require IV")
         if (iv == nil) {
-            return nil;
+            return nil
         }
-        
         
         var out:[UInt8] = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[0].count)
@@ -114,10 +115,10 @@ private struct CBCMode: BlockMode {
 }
 
 /**
-*  Cipher feedback (CFB)
+Cipher feedback (CFB)
 */
 private struct CFBMode: BlockMode {
-    var needIV:Bool = true
+    let needIV = true
     
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
         assert(iv != nil, "CFB require IV")
@@ -145,10 +146,10 @@ private struct CFBMode: BlockMode {
 
 
 /**
-*  Electronic codebook (ECB)
+Electronic codebook (ECB)
 */
 private struct ECBMode: BlockMode {
-    var needIV:Bool = false
+    let needIV = false
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
         var out:[UInt8] = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[0].count)
@@ -163,4 +164,49 @@ private struct ECBMode: BlockMode {
     func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
         return encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
     }
+}
+
+/**
+Counter (CTR)
+*/
+private struct CTRMode: BlockMode {
+    let needIV = true
+    
+    private func buildNonce(iv: [UInt8], counter: UInt) -> [UInt8] {
+        let noncePartLen = AES.blockSize / 2
+        let noncePrefix = Array(iv[0..<noncePartLen])
+        let nonceSuffix = arrayOfBytes(counter)
+        
+        var nonce = noncePrefix
+        nonce += nonceSuffix
+        return nonce
+    }
+    
+    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
+        //var counter:UInt = 17940646550795321087
+        var counter:UInt = 0
+        var out:[UInt8] = [UInt8]()
+        out.reserveCapacity(blocks.count * blocks[0].count)
+        for plaintext in blocks {
+            let nonce = buildNonce(iv!, counter: counter++)
+            if let encrypted = cipherOperation(block: nonce) {
+                out.extend(xor(plaintext, b: encrypted))
+            }
+        }
+        return out
+    }
+    
+    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
+        var counter:UInt = 0
+        var out:[UInt8] = [UInt8]()
+        out.reserveCapacity(blocks.count * blocks[0].count)
+        for plaintext in blocks {
+            let nonce = buildNonce(iv!, counter: counter++)
+            if let encrypted = cipherOperation(block: nonce) {
+                out.extend(xor(encrypted, b: plaintext))
+            }
+        }
+        return out
+    }
+
 }

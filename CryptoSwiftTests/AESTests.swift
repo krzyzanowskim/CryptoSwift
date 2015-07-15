@@ -86,6 +86,23 @@ final class AESTests: XCTestCase {
         }
     }
     
+    func testAES_encrypt_ctr() {
+        let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:[UInt8] = [0xf0,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa,0xfb,0xfc,0xfd,0xfe,0xff]
+        let plaintext:[UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
+        let expected:[UInt8] = [103, 238, 5, 84, 116, 153, 248, 188, 240, 195, 131, 36, 232, 96, 92, 40]
+        
+        if let aes = AES(key: key, iv:iv, blockMode: .CTR) {
+            XCTAssertTrue(aes.blockMode == .CTR, "Invalid block mode")
+            let encrypted = aes.encrypt(plaintext, padding: nil)
+            XCTAssertEqual(encrypted!, expected, "encryption failed")
+            let decrypted = aes.decrypt(encrypted!, padding: nil)
+            XCTAssertEqual(decrypted!, plaintext, "decryption failed")
+        } else {
+            XCTAssert(false, "failed")
+        }
+    }
+    
     func testAES_SubBytes() {
         let input:[[UInt8]] = [[0x00, 0x10, 0x20, 0x30],
             [0x40, 0x50, 0x60, 0x70],

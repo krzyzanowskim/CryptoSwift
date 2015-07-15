@@ -204,7 +204,7 @@ private struct CTRMode: BlockMode {
     }
     
     func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
-        guard iv != nil else {
+        guard let iv = iv else {
             throw BlockError.MissingInitializationVector
         }
         
@@ -212,7 +212,7 @@ private struct CTRMode: BlockMode {
         var out:[UInt8] = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[0].count)
         for plaintext in blocks {
-            let nonce = buildNonce(iv!, counter: counter++)
+            let nonce = buildNonce(iv, counter: counter++)
             if let encrypted = cipherOperation(block: nonce) {
                 out.extend(xor(encrypted, b: plaintext))
             }

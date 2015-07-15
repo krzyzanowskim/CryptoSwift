@@ -10,6 +10,10 @@ import Foundation
 
 final public class ChaCha20 {
     
+    enum Error: ErrorType {
+        case MissingContext
+    }
+    
     static let blockSize = 64 // 512 / 8
     private let stateSize = 16
     private var context:Context?
@@ -40,16 +44,16 @@ final public class ChaCha20 {
     }
 
     
-    public func encrypt(bytes:[UInt8]) -> [UInt8]? {
-        if (context == nil) {
-            return nil
+    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
+        guard context != nil else {
+            throw Error.MissingContext
         }
         
-        return encryptBytes(bytes)
+        return try encryptBytes(bytes)
     }
     
-    public func decrypt(bytes:[UInt8]) -> [UInt8]? {
-        return encrypt(bytes)
+    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
+        return try encrypt(bytes)
     }
     
     private final func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
@@ -135,38 +139,39 @@ final public class ChaCha20 {
         return ctx
     }
     
-    private final func encryptBytes(message:[UInt8]) -> [UInt8]? {
+    private final func encryptBytes(message:[UInt8]) throws -> [UInt8] {
         
-        if let ctx = context {
-            var c:[UInt8] = [UInt8](count: message.count, repeatedValue: 0)
-            
-            var cPos:Int = 0
-            var mPos:Int = 0
-            var bytes = message.count
-            
-            while (true) {
-                if let output = wordToByte(ctx.input) {
-                    ctx.input[12] = ctx.input[12] &+ 1
-                    if (ctx.input[12] == 0) {
-                        ctx.input[13] = ctx.input[13] &+ 1
-                        /* stopping at 2^70 bytes per nonce is user's responsibility */
-                    }
-                    if (bytes <= ChaCha20.blockSize) {
-                        for (var i = 0; i < bytes; i++) {
-                            c[i + cPos] = message[i + mPos] ^ output[i]
-                        }
-                        return c
-                    }
-                    for (var i = 0; i < ChaCha20.blockSize; i++) {
+        guard let ctx = context else {
+            throw Error.MissingContext
+        }
+        
+        var c:[UInt8] = [UInt8](count: message.count, repeatedValue: 0)
+        
+        var cPos:Int = 0
+        var mPos:Int = 0
+        var bytes = message.count
+        
+        while (true) {
+            if let output = wordToByte(ctx.input) {
+                ctx.input[12] = ctx.input[12] &+ 1
+                if (ctx.input[12] == 0) {
+                    ctx.input[13] = ctx.input[13] &+ 1
+                    /* stopping at 2^70 bytes per nonce is user's responsibility */
+                }
+                if (bytes <= ChaCha20.blockSize) {
+                    for (var i = 0; i < bytes; i++) {
                         c[i + cPos] = message[i + mPos] ^ output[i]
                     }
-                    bytes -= ChaCha20.blockSize
-                    cPos += ChaCha20.blockSize
-                    mPos += ChaCha20.blockSize
+                    return c
                 }
+                for (var i = 0; i < ChaCha20.blockSize; i++) {
+                    c[i + cPos] = message[i + mPos] ^ output[i]
+                }
+                bytes -= ChaCha20.blockSize
+                cPos += ChaCha20.blockSize
+                mPos += ChaCha20.blockSize
             }
         }
-        return nil;
     }
     
     private final func quarterround(inout a:UInt32, inout _ b:UInt32, inout _ c:UInt32, inout _ d:UInt32) {

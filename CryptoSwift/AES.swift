@@ -10,6 +10,10 @@ import Foundation
 
 final public class AES {
     
+    enum Error: ErrorType {
+        case BlockSizeExceeded
+    }
+    
     public enum AESVariant:Int {
         case aes128 = 1, aes192, aes256
         
@@ -140,18 +144,17 @@ final public class AES {
     - returns: Encrypted data
     */
 
-    public func encrypt(bytes:[UInt8], padding:Padding? = PKCS7()) -> [UInt8]? {
+    public func encrypt(bytes:[UInt8], padding:Padding? = PKCS7()) throws -> [UInt8] {
         var finalBytes = bytes;
 
         if let padding = padding {
             finalBytes = padding.add(bytes, blockSize: AES.blockSize)
-        } else if (bytes.count % AES.blockSize != 0) {
-            assert(false, "AES block size exceeded!");
-            return nil
+        } else if bytes.count % AES.blockSize != 0 {
+            throw Error.BlockSizeExceeded
         }
 
         let blocks = finalBytes.chunks(AES.blockSize) // 0.34
-        return blockMode.encryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
+        return try blockMode.encryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
     }
     
     private func encryptBlock(block:[UInt8]) -> [UInt8]? {
@@ -189,27 +192,26 @@ final public class AES {
         return out
     }
     
-    public func decrypt(bytes:[UInt8], padding:Padding? = PKCS7()) -> [UInt8]? {
-        if (bytes.count % AES.blockSize != 0) {
-            assert(false,"AES block size exceeded!")
-            return nil
+    public func decrypt(bytes:[UInt8], padding:Padding? = PKCS7()) throws -> [UInt8] {
+        if bytes.count % AES.blockSize != 0 {
+            throw Error.BlockSizeExceeded
         }
         
         let blocks = bytes.chunks(AES.blockSize)
-        let out:[UInt8]?
+        let out:[UInt8]
         switch (blockMode) {
         case .CFB, .CTR:
             // CFB, CTR uses encryptBlock to decrypt
-            out = blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
+            out = try blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
         default:
-            out = blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: decryptBlock)
+            out = try blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: decryptBlock)
         }
         
-        if let out = out, let padding = padding {
+        if let padding = padding {
             return padding.remove(out, blockSize: nil)
         }
         
-        return out;
+        return out
     }
     
     private func decryptBlock(block:[UInt8]) -> [UInt8]? {

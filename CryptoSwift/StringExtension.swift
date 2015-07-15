@@ -40,12 +40,12 @@ extension String {
         return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.crc32()?.toHexString()
     }
 
-    public func encrypt(cipher: Cipher) -> String? {
-        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.encrypt(cipher)?.toHexString()
+    public func encrypt(cipher: Cipher) throws -> String? {
+        return try self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.encrypt(cipher)?.toHexString()
     }
 
-    public func decrypt(cipher: Cipher) -> String? {
-        return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.decrypt(cipher)?.toHexString()
+    public func decrypt(cipher: Cipher) throws -> String? {
+        return try self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.decrypt(cipher)?.toHexString()
     }
     
     public func authenticate(authenticator: Authenticator) -> String? {

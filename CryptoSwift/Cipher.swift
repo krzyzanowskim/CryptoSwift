@@ -9,6 +9,12 @@
 import Foundation
 
 public enum Cipher {
+    
+    public enum Error: ErrorType {
+        case EncryptError
+        case DecryptError
+    }
+    
     /**
     ChaCha20
     
@@ -36,14 +42,18 @@ public enum Cipher {
     
     - returns: encrypted message
     */
-    public func encrypt(bytes: [UInt8]) -> [UInt8]? {
+    public func encrypt(bytes: [UInt8]) throws -> [UInt8] {
         switch (self) {
             case .ChaCha20(let key, let iv):
-                let chacha = CryptoSwift.ChaCha20(key: key, iv: iv)
-                return chacha?.encrypt(bytes)
+                guard let chacha = CryptoSwift.ChaCha20(key: key, iv: iv) else {
+                    throw Error.EncryptError
+                }
+                return try chacha.encrypt(bytes)
             case .AES(let key, let iv, let blockMode):
-                let aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode)
-                return aes?.encrypt(bytes)
+                guard let aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode) else {
+                    throw Error.EncryptError
+                }
+                return try aes.encrypt(bytes)
         }
     }
     
@@ -54,14 +64,18 @@ public enum Cipher {
     
     - returns: Plaintext message
     */
-    public func decrypt(bytes: [UInt8]) -> [UInt8]? {
+    public func decrypt(bytes: [UInt8]) throws -> [UInt8] {
         switch (self) {
             case .ChaCha20(let key, let iv):
-                let chacha = CryptoSwift.ChaCha20(key: key, iv: iv);
-                return chacha?.decrypt(bytes)
+                guard let chacha = CryptoSwift.ChaCha20(key: key, iv: iv) else {
+                    throw Error.DecryptError
+                }
+                return try chacha.decrypt(bytes)
             case .AES(let key, let iv, let blockMode):
-                let aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode);
-                return aes?.decrypt(bytes)
+                guard let aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode) else {
+                    throw Error.DecryptError
+                }
+                return try aes.decrypt(bytes)
         }
     }
 

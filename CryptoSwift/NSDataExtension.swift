@@ -60,18 +60,14 @@ extension NSData {
         return Hash.crc32(self).calculate()
     }
 
-    public func encrypt(cipher: Cipher) -> NSData? {
-        if let encrypted = cipher.encrypt(self.arrayOfBytes()) {
-            return NSData.withBytes(encrypted)
-        }
-        return nil
+    public func encrypt(cipher: Cipher) throws -> NSData? {
+        let encrypted = try cipher.encrypt(self.arrayOfBytes())
+        return NSData.withBytes(encrypted)
     }
 
-    public func decrypt(cipher: Cipher) -> NSData? {
-        if let decrypted = cipher.decrypt(self.arrayOfBytes()) {
-            return NSData.withBytes(decrypted)
-        }
-        return nil;
+    public func decrypt(cipher: Cipher) throws -> NSData? {
+        let decrypted = try cipher.decrypt(self.arrayOfBytes())
+        return NSData.withBytes(decrypted)
     }
     
     public func authenticate(authenticator: Authenticator) -> NSData? {

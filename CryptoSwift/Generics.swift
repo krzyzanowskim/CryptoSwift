@@ -79,13 +79,13 @@ func arrayOfBytes<T>(value:T, length:Int? = nil) -> [UInt8] {
 // MARK: - shiftLeft
 
 // helper to be able tomake shift operation on T
-func <<<T:SignedIntegerType>(lhs: T, rhs: Int) -> Int {
+func << <T:SignedIntegerType>(lhs: T, rhs: Int) -> Int {
     let a = lhs as! Int
     let b = rhs
     return a << b
 }
 
-func <<<T:UnsignedIntegerType>(lhs: T, rhs: Int) -> UInt {
+func << <T:UnsignedIntegerType>(lhs: T, rhs: Int) -> UInt {
     let a = lhs as! UInt
     let b = rhs
     return a << b

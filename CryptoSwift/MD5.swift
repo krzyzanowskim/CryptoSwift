@@ -60,7 +60,7 @@ final class MD5 : HashProtocol  {
             let chunk = tmpMessage.subdataWithRange(NSRange(location: i, length: min(chunkSizeBytes,leftMessageBytes)))
             
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15
-            var M:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
+            var M = [UInt32](count: 16, repeatedValue: 0)
             let range = NSRange(location:0, length: M.count * sizeof(UInt32))
             chunk.getBytes(UnsafeMutablePointer<Void>(M), range: range)
             

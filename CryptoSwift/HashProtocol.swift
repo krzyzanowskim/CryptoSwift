@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol HashProtocol {
+internal protocol HashProtocol {
     var message: NSData { get }
 
     /** Common part for hash calculation. Prepare header data. */

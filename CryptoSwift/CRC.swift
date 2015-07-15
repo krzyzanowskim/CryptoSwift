@@ -45,10 +45,14 @@ final class CRC {
     
     func crc32(message:NSData) -> NSData {
         var crc:UInt32 = 0xffffffff
-        for b in message.arrayOfBytes() {
-            let idx = Int((crc ^ UInt32(b)) & 0xff)
-            crc = (crc >> 8) ^ table[idx]
+        
+        for chunk in NSDataSequence(chunkSize: 256, data: message) {
+            for b in chunk.arrayOfBytes() {
+                let idx = Int((crc ^ UInt32(b)) & 0xff)
+                crc = (crc >> 8) ^ table[idx]
+            }
         }
+        
         crc = crc ^ 0xffffffff
         
         // reverse bytes

@@ -55,10 +55,7 @@ final class MD5 : HashProtocol  {
 
         // Process the message in successive 512-bit chunks:
         let chunkSizeBytes = 512 / 8 // 64
-        var leftMessageBytes = tmpMessage.length
-        for (var i = 0; i < tmpMessage.length; i = i + chunkSizeBytes, leftMessageBytes -= chunkSizeBytes) {
-            let chunk = tmpMessage.subdataWithRange(NSRange(location: i, length: min(chunkSizeBytes,leftMessageBytes)))
-            
+        for chunk in NSDataSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15
             var M = [UInt32](count: 16, repeatedValue: 0)
             let range = NSRange(location:0, length: M.count * sizeof(UInt32))

@@ -1,5 +1,5 @@
 //
-//  Hash.swift
+//  HashProtocol.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 17/08/14.
@@ -8,21 +8,16 @@
 
 import Foundation
 
-protocol _Hash {
-    var size:Int { get }
+protocol HashProtocol {
+    var message: NSData { get }
+
+    /** Common part for hash calculation. Prepare header data. */
     func prepare(len:Int) -> NSMutableData
 }
 
-internal class HashBase {
-    
-    var message: NSData
-    
-    internal init(_ message: NSData) {
-        self.message = message
-    }
-    
-    /** Common part for hash calculation. Prepare header data. */
-    internal func prepare(len:Int) -> NSMutableData {
+extension HashProtocol {
+
+    func prepare(len:Int) -> NSMutableData {
         let tmpMessage: NSMutableData = NSMutableData(data: self.message)
         
         // Step 1. Append Padding Bits
@@ -31,19 +26,19 @@ internal class HashBase {
         // append "0" bit until message length in bits ≡ 448 (mod 512)
         var msgLength = tmpMessage.length
         var counter = 0
-      
+        
         while msgLength % len != (len - 8) {
             counter++
             msgLength++
         }
-      
+        
         let bufZeros = UnsafeMutablePointer<UInt8>(calloc(counter, sizeof(UInt8)))
-      
+        
         tmpMessage.appendBytes(bufZeros, length: counter)
-      
+        
         bufZeros.destroy()
         bufZeros.dealloc(1)
-      
+        
         return tmpMessage
     }
 }

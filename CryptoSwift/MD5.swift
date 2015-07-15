@@ -8,9 +8,14 @@
 
 import Foundation
 
-final class MD5 : CryptoSwift.HashBase, _Hash  {
+final class MD5 : HashProtocol  {
     var size:Int = 16 // 128 / 8
+    let message: NSData
     
+    init (_ message: NSData) {
+        self.message = message
+    }
+
     /** specifies the per-round shift amounts */
     private let s: [UInt32] = [7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
                        5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,

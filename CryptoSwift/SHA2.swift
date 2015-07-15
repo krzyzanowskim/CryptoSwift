@@ -9,9 +9,16 @@
 import Foundation
 
 
-final class SHA2 : HashBase, _Hash {
+final class SHA2 : HashProtocol {
     var size:Int { return variant.rawValue }
     let variant:SHA2.Variant
+    
+    let message: NSData
+    
+    init(_ message:NSData, variant: SHA2.Variant) {
+        self.variant = variant
+        self.message = message
+    }
     
     enum Variant: RawRepresentable {
         case sha224, sha256, sha384, sha512
@@ -109,11 +116,6 @@ final class SHA2 : HashBase, _Hash {
             }
             return finalHH
         }
-    }
-    
-    init(_ message:NSData, variant: SHA2.Variant) {
-        self.variant = variant
-        super.init(message)
     }
     
     //FIXME: I can't do Generic func out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.

@@ -37,7 +37,7 @@
 		754BE46819693E190098E6F3 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* HashTests.swift */; };
 		754C30B71AA13BC000E6FFA4 /* PKCS7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C30B61AA13BC000E6FFA4 /* PKCS7.swift */; };
 		754C8FED19979F94005AD904 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C8FEC19979F94005AD904 /* ArrayExtension.swift */; };
-		754DD76E19A149AF00E52288 /* HashBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754DD76D19A149AF00E52288 /* HashBase.swift */; };
+		754DD76E19A149AF00E52288 /* HashProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754DD76D19A149AF00E52288 /* HashProtocol.swift */; };
 		755111E819B7B7DF00C2AD86 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755111E719B7B7DF00C2AD86 /* Authenticator.swift */; };
 		7552614E1993051E000D2B20 /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552614D1993051E000D2B20 /* Hash.swift */; };
 		755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755FB1D9199E347D00475437 /* ExtensionsTest.swift */; };
@@ -147,7 +147,7 @@
 		754BE46719693E190098E6F3 /* HashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTests.swift; sourceTree = "<group>"; };
 		754C30B61AA13BC000E6FFA4 /* PKCS7.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKCS7.swift; sourceTree = "<group>"; };
 		754C8FEC19979F94005AD904 /* ArrayExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
-		754DD76D19A149AF00E52288 /* HashBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashBase.swift; sourceTree = "<group>"; };
+		754DD76D19A149AF00E52288 /* HashProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashProtocol.swift; sourceTree = "<group>"; };
 		755111E719B7B7DF00C2AD86 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		7552614D1993051E000D2B20 /* Hash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hash.swift; sourceTree = "<group>"; };
 		755FB1D9199E347D00475437 /* ExtensionsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionsTest.swift; sourceTree = "<group>"; };
@@ -234,7 +234,7 @@
 				75B0A56F1AB1A1BB000BD8D2 /* PKCS5.swift */,
 				754C30B61AA13BC000E6FFA4 /* PKCS7.swift */,
 				755111E719B7B7DF00C2AD86 /* Authenticator.swift */,
-				754DD76D19A149AF00E52288 /* HashBase.swift */,
+				754DD76D19A149AF00E52288 /* HashProtocol.swift */,
 				750A545F1992D2680017DA75 /* MD5.swift */,
 				752E087A199FF27C005B0EA0 /* SHA1.swift */,
 				75153D4119AA3C7900750381 /* SHA2.swift */,
@@ -457,7 +457,7 @@
 				75A74B271A1FF6B2004419F1 /* AES.swift in Sources */,
 				754C30B71AA13BC000E6FFA4 /* PKCS7.swift in Sources */,
 				755111E819B7B7DF00C2AD86 /* Authenticator.swift in Sources */,
-				754DD76E19A149AF00E52288 /* HashBase.swift in Sources */,
+				754DD76E19A149AF00E52288 /* HashProtocol.swift in Sources */,
 				758C764119B61AE500653BC6 /* Generics.swift in Sources */,
 				758F3F781992F6CE0014BBDA /* UInt8Extension.swift in Sources */,
 			);

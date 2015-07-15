@@ -8,11 +8,12 @@
 
 import Foundation
 
-final class SHA1 : CryptoSwift.HashBase, _Hash {
+final class SHA1 : HashProtocol {
     var size:Int = 20 // 160 / 8
+    let message: NSData
     
-    override init(_ message: NSData) {
-        super.init(message)
+    init(_ message: NSData) {
+        self.message = message
     }
     
     private let h:[UInt32] = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
@@ -24,7 +25,7 @@ final class SHA1 : CryptoSwift.HashBase, _Hash {
         var hh = h
         
         // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
-        tmpMessage.appendBytes((message.length * 8).bytes(64 / 8));
+        tmpMessage.appendBytes((self.message.length * 8).bytes(64 / 8));
         
         // Process the message in successive 512-bit chunks:
         let chunkSizeBytes = 512 / 8 // 64

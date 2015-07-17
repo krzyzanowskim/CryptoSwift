@@ -35,11 +35,12 @@ public struct PKCS7: Padding {
     }
     
     public func remove(bytes: [UInt8], blockSize:Int? = nil) -> [UInt8] {
-        let lastByte = bytes.last!
-        var padding = Int(lastByte) // last byte
-        
-        if padding >= 1 { //TODO: need test for that, what about empty padding
-            return Array(bytes[0..<(bytes.count - padding)])
+        if let last = bytes.last {
+            
+            var padding = Int(last) // last byte
+            if padding >= 1 { //TODO: need test for that, what about empty padding
+                return Array(bytes[0..<(bytes.count - padding)])
+            }
         }
         return bytes
     }

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "CryptoSwift"
-  s.version      = "0.0.11"
+  s.version      = "0.0.12"
   s.summary      = "Cryptography in Swift. SHA, MD5, CRC, Poly1305, HMAC, ChaCha20, AES."
   s.description  = "Cryptography functions and helpers for Swift implemented in Swift. SHA, MD5, CRC, Poly1305, HMAC, ChaCha20, AES."
   s.homepage     = "https://github.com/krzyzanowskim/CryptoSwift"
@@ -12,6 +12,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.0"
   s.osx.platform  = :osx, '10.9'
   s.osx.deployment_target = "10.9"
-  s.source_files  = "CryptoSwift/*"
+  s.source_files  = "CryptoSwift/*.swift"
   s.requires_arc = true
 end

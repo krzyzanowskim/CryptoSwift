@@ -71,6 +71,16 @@ or for newest version from specified branch of code:
 ```ruby
 pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"
 ```
+
+####Carthage 
+You can use [Carthage](https://github.com/Carthage/Carthage). 
+Specify in Cartfile:
+
+```ruby
+github "krzyzanowskim/CryptoSwift"
+```
+
+Then follow [build instructions](https://github.com/Carthage/Carthage#getting-started)
  
 ##Usage
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class SHA1 : CryptoSwift.HashBase, _Hash {
+final class SHA1 : HashBase, _Hash {
     var size:Int = 20 // 160 / 8
     
     override init(_ message: NSData) {

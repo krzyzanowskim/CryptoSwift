@@ -18,7 +18,7 @@ extension Array {
             let word = Array(self[idx - chunksize..<idx]) // this is slow for large table
             words.append(word)
         }
-        let reminder = Array(suffix(self, self.count % chunksize))
+        let reminder = Array(self.suffix(self.count % chunksize))
         if (reminder.count > 0) {
             words.append(reminder)
         }

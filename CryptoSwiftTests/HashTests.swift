@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import CryptoSwift
+@testable import CryptoSwift
 
 final class CryptoSwiftTests: XCTestCase {
     

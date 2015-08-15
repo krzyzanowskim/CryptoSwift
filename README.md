@@ -84,7 +84,7 @@ Hash enum usage
 /* Hash enum usage */
 var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
 if let data = CryptoSwift.Hash.md5(data).calculate() {
-    println(data.hexString)
+    println(data.toHexString())
 }
 ```
     
@@ -100,7 +100,7 @@ let hash = data.sha512()
 	
 let crc = data.crc32()
 
-println(hash.hexString)
+println(hash.toHexString())
 ```
 	
 Hashing a String and printing result

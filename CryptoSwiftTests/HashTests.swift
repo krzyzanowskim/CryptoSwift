@@ -22,7 +22,7 @@ final class CryptoSwiftTests: XCTestCase {
     func testMD5() {
         let data1:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [UInt8], length: 3) // "1", "2", "3"
         if let hash = Hash.md5(data1).calculate() {
-            XCTAssertEqual(hash.hexString, "202cb962ac59075b964b07152d234b70", "MD5 calculation failed");
+            XCTAssertEqual(hash.toHexString(), "202cb962ac59075b964b07152d234b70", "MD5 calculation failed");
         } else {
             XCTAssert(false, "Missing result")
         }
@@ -30,13 +30,13 @@ final class CryptoSwiftTests: XCTestCase {
         var string:NSString = ""
         var data:NSData = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
         if let hashData = Hash.md5(data).calculate() {
-            XCTAssertEqual(hashData.hexString, "d41d8cd98f00b204e9800998ecf8427e", "MD5 calculation failed")
+            XCTAssertEqual(hashData.toHexString(), "d41d8cd98f00b204e9800998ecf8427e", "MD5 calculation failed")
         } else {
             XCTAssert(false, "Missing result")
         }
         
         if let hash = data1.md5() {
-            XCTAssertEqual(hash.hexString, "202cb962ac59075b964b07152d234b70", "MD5 calculation failed");
+            XCTAssertEqual(hash.toHexString(), "202cb962ac59075b964b07152d234b70", "MD5 calculation failed");
         }
         
         if let hash = "123".md5() {
@@ -105,7 +105,7 @@ final class CryptoSwiftTests: XCTestCase {
     func testSHA1() {
         var data:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [UInt8], length: 3)
         if let hash = data.sha1() {
-            XCTAssertEqual(hash.hexString, "40bd001563085fc35165329ea1ff5c5ecbdbbeef", "SHA1 calculation failed");
+            XCTAssertEqual(hash.toHexString(), "40bd001563085fc35165329ea1ff5c5ecbdbbeef", "SHA1 calculation failed");
         }
         
         if let hash = "abc".sha1() {
@@ -127,14 +127,14 @@ final class CryptoSwiftTests: XCTestCase {
     func testSHA224() {
         var data:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [UInt8], length: 3)
         if let hash = data.sha224() {
-            XCTAssertEqual(hash.hexString, "78d8045d684abd2eece923758f3cd781489df3a48e1278982466017f", "SHA224 calculation failed");
+            XCTAssertEqual(hash.toHexString(), "78d8045d684abd2eece923758f3cd781489df3a48e1278982466017f", "SHA224 calculation failed");
         }
     }
 
     func testSHA256() {
         var data:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [UInt8], length: 3)
         if let hash = data.sha256() {
-            XCTAssertEqual(hash.hexString, "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", "SHA256 calculation failed");
+            XCTAssertEqual(hash.toHexString(), "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", "SHA256 calculation failed");
         }
         
         if let hash = "Rosetta code".sha256() {
@@ -152,7 +152,7 @@ final class CryptoSwiftTests: XCTestCase {
     func testSHA384() {
         var data:NSData = NSData(bytes: [49, 50, 51] as [UInt8], length: 3)
         if let hash = data.sha384() {
-            XCTAssertEqual(hash.hexString, "9a0a82f0c0cf31470d7affede3406cc9aa8410671520b727044eda15b4c25532a9b5cd8aaf9cec4919d76255b6bfb00f", "SHA384 calculation failed");
+            XCTAssertEqual(hash.toHexString(), "9a0a82f0c0cf31470d7affede3406cc9aa8410671520b727044eda15b4c25532a9b5cd8aaf9cec4919d76255b6bfb00f", "SHA384 calculation failed");
         }
         
         if let hash = "The quick brown fox jumps over the lazy dog.".sha384() {
@@ -169,7 +169,7 @@ final class CryptoSwiftTests: XCTestCase {
     func testSHA512() {
         var data:NSData = NSData(bytes: [49, 50, 51] as [UInt8], length: 3)
         if let hash = data.sha512() {
-            XCTAssertEqual(hash.hexString, "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2", "SHA512 calculation failed");
+            XCTAssertEqual(hash.toHexString(), "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2", "SHA512 calculation failed");
         }
         
         if let hash = "The quick brown fox jumps over the lazy dog.".sha512() {
@@ -186,7 +186,7 @@ final class CryptoSwiftTests: XCTestCase {
     func testCRC32() {
         var data:NSData = NSData(bytes: [49, 50, 51] as [UInt8], length: 3)
         if let crc = data.crc32() {
-            XCTAssertEqual(crc.hexString, "884863d2", "CRC32 calculation failed");
+            XCTAssertEqual(crc.toHexString(), "884863d2", "CRC32 calculation failed");
         }
         
         if let crc = "".crc32() {

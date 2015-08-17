@@ -96,6 +96,11 @@ extension NSData {
         return s
     }
     
+    func toUtf8String()->String?
+    {
+        return NSString(data: self, encoding: NSUTF8StringEncoding) as? String
+    }
+    
     public func arrayOfBytes() -> [UInt8] {
         let count = self.length / sizeof(UInt8)
         var bytesArray = [UInt8](count: count, repeatedValue: 0)

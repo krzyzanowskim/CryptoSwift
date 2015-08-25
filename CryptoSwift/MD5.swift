@@ -107,11 +107,11 @@ final class MD5 : HashProtocol  {
             hh[3] = hh[3] &+ D
         }
 
-        let buf: NSMutableData = NSMutableData();
-        hh.map({ (item) -> () in
+        let buf: NSMutableData = NSMutableData()
+        hh.forEach { item in
             var i:UInt32 = item.littleEndian
             buf.appendBytes(&i, length: sizeofValue(i))
-        })
+        }
         
         return buf.copy() as! NSData
     }

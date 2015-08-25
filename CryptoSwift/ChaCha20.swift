@@ -81,7 +81,7 @@ final public class ChaCha20 {
 
         for i in 0..<16 {
             x[i] = x[i] &+ input[i]            
-            output.extend([UInt8((x[i] & 0xFFFFFFFF) >> 24),
+            output.appendContentsOf([UInt8((x[i] & 0xFFFFFFFF) >> 24),
                        UInt8((x[i] & 0xFFFFFF) >> 16),
                        UInt8((x[i] & 0xFFFF) >> 8),
                        UInt8((x[i] & 0xFF) >> 0)])
@@ -194,7 +194,7 @@ final public class ChaCha20 {
 /// Change array to number. It's here because arrayOfBytes is too slow
 private func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
     var value:UInt32 = 0
-    for (var i:UInt32 = 0, j = 0; i < 4; i++, j++) {
+    for (var i:UInt32 = 0, j = bytes.startIndex; i < 4; i++, j++) {
         value = value | UInt32(bytes[j]) << (8 * i)
     }
     return value

@@ -81,7 +81,7 @@ final public class ChaCha20 {
 
         for i in 0..<16 {
             x[i] = x[i] &+ input[i]            
-            output.extend([UInt8((x[i] & 0xFFFFFFFF) >> 24),
+            output.appendContentsOf([UInt8((x[i] & 0xFFFFFFFF) >> 24),
                        UInt8((x[i] & 0xFFFFFF) >> 16),
                        UInt8((x[i] & 0xFFFF) >> 8),
                        UInt8((x[i] & 0xFF) >> 0)])

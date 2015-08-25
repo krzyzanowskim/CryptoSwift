@@ -89,7 +89,7 @@ private struct CBCMode: BlockMode {
         var prevCiphertext = iv // for the first time prevCiphertext = iv
         for plaintext in blocks {
             if let encrypted = cipherOperation(block: xor(prevCiphertext, b: plaintext)) {
-                out.extend(encrypted)
+                out.appendContentsOf(encrypted)
                 prevCiphertext = encrypted
             }
         }
@@ -107,7 +107,7 @@ private struct CBCMode: BlockMode {
         var prevCiphertext = iv // for the first time prevCiphertext = iv
         for ciphertext in blocks {
             if let decrypted = cipherOperation(block: ciphertext) { // decrypt
-                out.extend(xor(prevCiphertext, b: decrypted)) //FIXME: b:
+                out.appendContentsOf(xor(prevCiphertext, b: decrypted)) //FIXME: b:
             }
             prevCiphertext = ciphertext
         }
@@ -134,7 +134,7 @@ private struct CFBMode: BlockMode {
         for plaintext in blocks {
             if let encrypted = cipherOperation(block: lastCiphertext) {
                 lastCiphertext = xor(plaintext,b: encrypted)
-                out.extend(lastCiphertext)
+                out.appendContentsOf(lastCiphertext)
             }
         }
         return out
@@ -157,7 +157,7 @@ private struct ECBMode: BlockMode {
         out.reserveCapacity(blocks.count * blocks[0].count)
         for plaintext in blocks {
             if let encrypted = cipherOperation(block: plaintext) {
-                out.extend(encrypted)
+                out.appendContentsOf(encrypted)
             }
         }
         return out
@@ -197,7 +197,7 @@ private struct CTRMode: BlockMode {
         for plaintext in blocks {
             let nonce = buildNonce(iv, counter: counter++)
             if let encrypted = cipherOperation(block: nonce) {
-                out.extend(xor(plaintext, b: encrypted))
+                out.appendContentsOf(xor(plaintext, b: encrypted))
             }
         }
         return out
@@ -214,7 +214,7 @@ private struct CTRMode: BlockMode {
         for plaintext in blocks {
             let nonce = buildNonce(iv, counter: counter++)
             if let encrypted = cipherOperation(block: nonce) {
-                out.extend(xor(encrypted, b: plaintext))
+                out.appendContentsOf(xor(encrypted, b: plaintext))
             }
         }
         return out

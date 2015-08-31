@@ -108,7 +108,7 @@ final class MD5 : HashProtocol  {
         }
 
         let buf: NSMutableData = NSMutableData();
-        hh.map({ (item) -> () in
+		_ = hh.map({ (item) -> () in
             var i:UInt32 = item.littleEndian
             buf.appendBytes(&i, length: sizeofValue(i))
         })

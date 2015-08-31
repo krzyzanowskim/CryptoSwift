@@ -124,9 +124,9 @@ final class SHA2 : HashProtocol {
         
         // hash values
         var hh = [UInt32]()
-		variant.h.forEach {(h) -> () in
-			hh.append(UInt32(h))
-		}
+        variant.h.forEach {(h) -> () in
+            hh.append(UInt32(h))
+        }
 		
         // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
         tmpMessage.appendBytes((message.length * 8).bytes(64 / 8));

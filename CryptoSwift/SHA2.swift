@@ -124,10 +124,10 @@ final class SHA2 : HashProtocol {
         
         // hash values
         var hh = [UInt32]()
-        variant.h.map({(h) -> () in
+        variant.h.forEach {(h) -> () in
             hh.append(UInt32(h))
-        })
-        
+        }
+		
         // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
         tmpMessage.appendBytes((message.length * 8).bytes(64 / 8));
         
@@ -192,12 +192,11 @@ final class SHA2 : HashProtocol {
         
         // Produce the final hash value (big-endian) as a 160 bit number:
         let buf: NSMutableData = NSMutableData();
-        
-        variant.resultingArray(hh).map({ (item) -> () in
+        variant.resultingArray(hh).forEach{ (item) -> () in
             var i:UInt32 = UInt32(item.bigEndian)
             buf.appendBytes(&i, length: sizeofValue(i))
-        })
-        
+        }
+		
         return buf.copy() as! NSData;
     }
     
@@ -206,10 +205,11 @@ final class SHA2 : HashProtocol {
         
         // hash values
         var hh = [UInt64]()
-        variant.h.map({(h) -> () in
+        variant.h.forEach {(h) -> () in
             hh.append(h)
-        })
-        
+        }
+		
+  
         // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
         tmpMessage.appendBytes((message.length * 8).bytes(64 / 8));
         
@@ -277,7 +277,7 @@ final class SHA2 : HashProtocol {
         // Produce the final hash value (big-endian)
         let buf: NSMutableData = NSMutableData();
         
-        variant.resultingArray(hh).map({ (item) -> () in
+        variant.resultingArray(hh).forEach({ (item) -> () in
             var i = item.bigEndian
             buf.appendBytes(&i, length: sizeofValue(i))
         })

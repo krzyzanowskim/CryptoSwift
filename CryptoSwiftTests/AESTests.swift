@@ -31,6 +31,23 @@ final class AESTests: XCTestCase {
         }
     }
 
+    func testAES_encrypt3() {
+        let key = "679fb1ddf7d81bee"
+        let iv = "kdf67398DF7383fd"
+        let input:[UInt8] = [0x62, 0x72, 0x61, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+        
+        let expected:[UInt8] = [0xae,0x8c,0x59,0x95,0xb2,0x6f,0x8e,0x3d,0xb0,0x6f,0x0a,0xa5,0xfe,0xc4,0xf0,0xc2];
+        
+        if let aes = AES(key: key, iv: iv, blockMode: .CBC) {
+            let encrypted = try! aes.encrypt(input, padding: nil)
+            XCTAssertEqual(encrypted, expected, "encryption failed")
+            let decrypted = try! aes.decrypt(encrypted, padding: nil)
+            XCTAssertEqual(decrypted, input, "decryption failed")
+        } else {
+            XCTAssert(false, "failed")
+        }
+    }
+    
     func testAES_encrypt() {
         let input:[UInt8] = [0x00, 0x11, 0x22, 0x33,
             0x44, 0x55, 0x66, 0x77,

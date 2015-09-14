@@ -55,6 +55,8 @@ Then, drag the CryptoSwift.xcodeproj file into your Xcode project, and add Crypt
 Alternatively, you can build the Universal Framework and link it in your Xcode project. 
 Aggregate target `CryptoSwift-Universal` runs a script to build a universal framework. The script currently copies the framework to the `Framework` directory. (The path to CryptoSwift directory cannot contain any space)
 
+Looking for version for Swift 1.2? check branch **swift12**, it's there.
+
 #####iOS and OSX
 By default project is setup for iOS. You need to switch to OS X SDK manually [see #8](https://github.com/krzyzanowskim/CryptoSwift/issues/8)
 
@@ -199,3 +201,15 @@ Permission is granted to anyone to use this software for any purpose, including 
 - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
 - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 - This notice may not be removed or altered from any source or binary distribution.
+
+##Changelog
+
+This is not full changelog
+
+0.0.14
+- hexString -> toHextString() #105
+- CTR (Counter mode)
+- Hex string is lowercase now
+- Carthage support
+- Tests update
+- Swift 2.0 support - overall update

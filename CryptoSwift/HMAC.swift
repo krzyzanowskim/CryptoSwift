@@ -28,7 +28,7 @@ final public class HMAC {
             }
         }
         
-        func calculateHash(# bytes:[UInt8]) -> [UInt8]? {
+        func calculateHash(bytes  bytes:[UInt8]) -> [UInt8]? {
             switch (self) {
             case .sha1:
                 return NSData.withBytes(bytes).sha1()?.arrayOfBytes()
@@ -56,7 +56,7 @@ final public class HMAC {
     var key:[UInt8]
     let variant:Variant
     
-    class internal func authenticate(# key: [UInt8], message: [UInt8], variant:HMAC.Variant = .md5) -> [UInt8]? {
+    class internal func authenticate(key  key: [UInt8], message: [UInt8], variant:HMAC.Variant = .md5) -> [UInt8]? {
         return HMAC(key, variant: variant)?.authenticate(message: message)
     }
 
@@ -77,13 +77,13 @@ final public class HMAC {
         }
     }
     
-    internal func authenticate(# message:[UInt8]) -> [UInt8]? {
+    internal func authenticate(message  message:[UInt8]) -> [UInt8]? {
         var opad = [UInt8](count: variant.blockSize(), repeatedValue: 0x5c)
-        for (idx, val) in enumerate(key) {
+        for (idx, _) in key.enumerate() {
             opad[idx] = key[idx] ^ opad[idx]
         }
         var ipad = [UInt8](count: variant.blockSize(), repeatedValue: 0x36)
-        for (idx, val) in enumerate(key) {
+        for (idx, _) in key.enumerate() {
             ipad[idx] = key[idx] ^ ipad[idx]
         }
 

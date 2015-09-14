@@ -8,9 +8,14 @@
 
 import Foundation
 
-final class MD5 : CryptoSwift.HashBase, _Hash {
+final class MD5 : HashProtocol  {
     var size:Int = 16 // 128 / 8
+    let message: NSData
     
+    init (_ message: NSData) {
+        self.message = message
+    }
+
     /** specifies the per-round shift amounts */
     private let s: [UInt32] = [7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
                        5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,
@@ -38,25 +43,21 @@ final class MD5 : CryptoSwift.HashBase, _Hash {
     private let h:[UInt32] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
     
     func calculate() -> NSData {
-        var tmpMessage = prepare()
+        let tmpMessage = prepare(64)
 
         // hash values
         var hh = h
         
         // Step 2. Append Length a 64-bit representation of lengthInBits
-        var lengthInBits = (message.length * 8)
-        var lengthBytes = lengthInBits.bytes(64 / 8)
-        tmpMessage.appendBytes(reverse(lengthBytes));
+        let lengthInBits = (message.length * 8)
+        let lengthBytes = lengthInBits.bytes(64 / 8)
+        tmpMessage.appendBytes(Array(lengthBytes.reverse())); //FIXME: Array?
 
         // Process the message in successive 512-bit chunks:
         let chunkSizeBytes = 512 / 8 // 64
-        var leftMessageBytes = tmpMessage.length
-        for (var i = 0; i < tmpMessage.length; i = i + chunkSizeBytes, leftMessageBytes -= chunkSizeBytes) {
-            let chunk = tmpMessage.subdataWithRange(NSRange(location: i, length: min(chunkSizeBytes,leftMessageBytes)))
-            let bytes = tmpMessage.bytes;
-            
+        for chunk in NSDataSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15
-            var M:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
+            var M = [UInt32](count: 16, repeatedValue: 0)
             let range = NSRange(location:0, length: M.count * sizeof(UInt32))
             chunk.getBytes(UnsafeMutablePointer<Void>(M), range: range)
             
@@ -96,7 +97,7 @@ final class MD5 : CryptoSwift.HashBase, _Hash {
                 dTemp = D
                 D = C
                 C = B
-                B = B &+ rotateLeft((A &+ F &+ k[j] &+ M[g]), s[j])
+                B = B &+ rotateLeft((A &+ F &+ k[j] &+ M[g]), n: s[j])
                 A = dTemp    
             }
             
@@ -106,13 +107,13 @@ final class MD5 : CryptoSwift.HashBase, _Hash {
             hh[3] = hh[3] &+ D
         }
 
-        var buf: NSMutableData = NSMutableData();
-        hh.map({ (item) -> () in
+        let buf: NSMutableData = NSMutableData();
+        hh.forEach({ (item) -> () in
             var i:UInt32 = item.littleEndian
             buf.appendBytes(&i, length: sizeofValue(i))
         })
         
-        return buf.copy() as! NSData;
+        return buf.copy() as! NSData
     }
 }
 

@@ -16,18 +16,18 @@ extension UInt16 {
             return self;
         }
 
-        var bitsCount = UInt16(sizeofValue(self) * 8)
+        let bitsCount = UInt16(sizeofValue(self) * 8)
 
         if (count >= bitsCount) {
             return 0
         }
 
-        var maxBitsForValue = UInt16(floor(log2(Double(self) + 1)))
-        var shiftCount = Swift.min(count, maxBitsForValue - 1)
+        let maxBitsForValue = UInt16(floor(log2(Double(self) + 1)))
+        let shiftCount = Swift.min(count, maxBitsForValue - 1)
         var shiftedValue:UInt16 = 0;
         
         for bitIdx in 0..<bitsCount {
-            var byte = 1 << bitIdx
+            let byte = 1 << bitIdx
             if ((self & byte) == byte) {
                 shiftedValue = shiftedValue | (byte >> shiftCount)
             }

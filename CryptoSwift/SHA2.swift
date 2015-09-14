@@ -9,9 +9,16 @@
 import Foundation
 
 
-final class SHA2 : HashBase, _Hash {
+final class SHA2 : HashProtocol {
     var size:Int { return variant.rawValue }
     let variant:SHA2.Variant
+    
+    let message: NSData
+    
+    init(_ message:NSData, variant: SHA2.Variant) {
+        self.variant = variant
+        self.message = message
+    }
     
     enum Variant: RawRepresentable {
         case sha224, sha256, sha384, sha512
@@ -111,29 +118,22 @@ final class SHA2 : HashBase, _Hash {
         }
     }
     
-    init(_ message:NSData, variant: SHA2.Variant) {
-        self.variant = variant
-        super.init(message)
-    }
-    
     //FIXME: I can't do Generic func out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.
     func calculate32() -> NSData {
-        var tmpMessage = self.prepare()
+        let tmpMessage = self.prepare(64)
         
         // hash values
         var hh = [UInt32]()
-        variant.h.map({(h) -> () in
+        variant.h.forEach {(h) -> () in
             hh.append(UInt32(h))
-        })
-        
+        }
+		
         // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
         tmpMessage.appendBytes((message.length * 8).bytes(64 / 8));
         
         // Process the message in successive 512-bit chunks:
         let chunkSizeBytes = 512 / 8 // 64
-        var leftMessageBytes = tmpMessage.length
-        for var i = 0; i < tmpMessage.length; i = i + chunkSizeBytes, leftMessageBytes -= chunkSizeBytes {
-            let chunk = tmpMessage.subdataWithRange(NSRange(location: i, length: min(chunkSizeBytes,leftMessageBytes)))
+        for chunk in NSDataSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 32-bit words into sixty-four 32-bit words:
             var M:[UInt32] = [UInt32](count: variant.k.count, repeatedValue: 0)
@@ -145,8 +145,8 @@ final class SHA2 : HashBase, _Hash {
                     M[x] = le.bigEndian
                     break
                 default:
-                    let s0 = rotateRight(M[x-15], 7) ^ rotateRight(M[x-15], 18) ^ (M[x-15] >> 3)
-                    let s1 = rotateRight(M[x-2], 17) ^ rotateRight(M[x-2], 19) ^ (M[x-2] >> 10)
+                    let s0 = rotateRight(M[x-15], n: 7) ^ rotateRight(M[x-15], n: 18) ^ (M[x-15] >> 3) //FIXME: n
+                    let s1 = rotateRight(M[x-2], n: 17) ^ rotateRight(M[x-2], n: 19) ^ (M[x-2] >> 10)
                     M[x] = M[x-16] &+ s0 &+ M[x-7] &+ s1
                     break
                 }
@@ -163,10 +163,10 @@ final class SHA2 : HashBase, _Hash {
             
             // Main loop
             for j in 0..<variant.k.count {
-                let s0 = rotateRight(A,2) ^ rotateRight(A,13) ^ rotateRight(A,22)
+                let s0 = rotateRight(A,n: 2) ^ rotateRight(A,n: 13) ^ rotateRight(A,n: 22)
                 let maj = (A & B) ^ (A & C) ^ (B & C)
                 let t2 = s0 &+ maj
-                let s1 = rotateRight(E,6) ^ rotateRight(E,11) ^ rotateRight(E,25)
+                let s1 = rotateRight(E,n: 6) ^ rotateRight(E,n: 11) ^ rotateRight(E,n: 25)
                 let ch = (E & F) ^ ((~E) & G)
                 let t1 = H &+ s1 &+ ch &+ UInt32(variant.k[j]) &+ M[j]
                 
@@ -191,25 +191,25 @@ final class SHA2 : HashBase, _Hash {
         }
         
         // Produce the final hash value (big-endian) as a 160 bit number:
-        var buf: NSMutableData = NSMutableData();
-        
-        variant.resultingArray(hh).map({ (item) -> () in
+        let buf: NSMutableData = NSMutableData();
+        variant.resultingArray(hh).forEach{ (item) -> () in
             var i:UInt32 = UInt32(item.bigEndian)
             buf.appendBytes(&i, length: sizeofValue(i))
-        })
-        
+        }
+		
         return buf.copy() as! NSData;
     }
     
     func calculate64() -> NSData {
-        var tmpMessage = self.prepare(128)
+        let tmpMessage = self.prepare(128)
         
         // hash values
         var hh = [UInt64]()
-        variant.h.map({(h) -> () in
+        variant.h.forEach {(h) -> () in
             hh.append(h)
-        })
-        
+        }
+		
+  
         // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
         tmpMessage.appendBytes((message.length * 8).bytes(64 / 8));
         
@@ -217,7 +217,7 @@ final class SHA2 : HashBase, _Hash {
         let chunkSizeBytes = 1024 / 8 // 128
         var leftMessageBytes = tmpMessage.length
         for var i = 0; i < tmpMessage.length; i = i + chunkSizeBytes, leftMessageBytes -= chunkSizeBytes {
-            var chunk = tmpMessage.subdataWithRange(NSRange(location: i, length: min(chunkSizeBytes,leftMessageBytes)))
+            let chunk = tmpMessage.subdataWithRange(NSRange(location: i, length: min(chunkSizeBytes,leftMessageBytes)))
             // break chunk into sixteen 64-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 64-bit words into eighty 64-bit words:
             var M = [UInt64](count: variant.k.count, repeatedValue: 0)
@@ -229,8 +229,8 @@ final class SHA2 : HashBase, _Hash {
                     M[x] = le.bigEndian
                     break
                 default:
-                    let s0 = rotateRight(M[x-15], 1) ^ rotateRight(M[x-15], 8) ^ (M[x-15] >> 7)
-                    let s1 = rotateRight(M[x-2], 19) ^ rotateRight(M[x-2], 61) ^ (M[x-2] >> 6)
+                    let s0 = rotateRight(M[x-15], n: 1) ^ rotateRight(M[x-15], n: 8) ^ (M[x-15] >> 7)
+                    let s1 = rotateRight(M[x-2], n: 19) ^ rotateRight(M[x-2], n: 61) ^ (M[x-2] >> 6)
                     M[x] = M[x-16] &+ s0 &+ M[x-7] &+ s1
                     break
                 }
@@ -247,10 +247,10 @@ final class SHA2 : HashBase, _Hash {
             
             // Main loop
             for j in 0..<variant.k.count {
-                let s0 = rotateRight(A,28) ^ rotateRight(A,34) ^ rotateRight(A,39)
+                let s0 = rotateRight(A,n: 28) ^ rotateRight(A,n: 34) ^ rotateRight(A,n: 39) //FIXME: n:
                 let maj = (A & B) ^ (A & C) ^ (B & C)
                 let t2 = s0 &+ maj
-                let s1 = rotateRight(E,14) ^ rotateRight(E,18) ^ rotateRight(E,41)
+                let s1 = rotateRight(E,n: 14) ^ rotateRight(E,n: 18) ^ rotateRight(E,n: 41)
                 let ch = (E & F) ^ ((~E) & G)
                 let t1 = H &+ s1 &+ ch &+ variant.k[j] &+ UInt64(M[j])
                 
@@ -275,9 +275,9 @@ final class SHA2 : HashBase, _Hash {
         }
         
         // Produce the final hash value (big-endian)
-        var buf: NSMutableData = NSMutableData();
+        let buf: NSMutableData = NSMutableData();
         
-        variant.resultingArray(hh).map({ (item) -> () in
+        variant.resultingArray(hh).forEach({ (item) -> () in
             var i = item.bigEndian
             buf.appendBytes(&i, length: sizeofValue(i))
         })

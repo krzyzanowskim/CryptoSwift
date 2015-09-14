@@ -9,59 +9,73 @@
 import Foundation
 
 public enum Cipher {
+    
+    public enum Error: ErrorType {
+        case EncryptError
+        case DecryptError
+    }
+    
     /**
     ChaCha20
     
-    :param: key Encryption key
-    :param: iv  Initialization Vector
+    - parameter key: Encryption key
+    - parameter iv:  Initialization Vector
     
-    :returns: Value of Cipher
+    - returns: Value of Cipher
     */
     case ChaCha20(key: [UInt8], iv: [UInt8])
     /**
     AES
     
-    :param: key       Encryption key
-    :param: iv        Initialization Vector
-    :param: blockMode Block mode (CBC by default)
+    - parameter key:       Encryption key
+    - parameter iv:        Initialization Vector
+    - parameter blockMode: Block mode (CBC by default)
     
-    :returns: Value of Cipher
+    - returns: Value of Cipher
     */
     case AES(key: [UInt8], iv: [UInt8], blockMode: CipherBlockMode)
     
     /**
     Encrypt message
     
-    :param: message Plaintext message
+    - parameter message: Plaintext message
     
-    :returns: encrypted message
+    - returns: encrypted message
     */
-    public func encrypt(bytes: [UInt8]) -> [UInt8]? {
+    public func encrypt(bytes: [UInt8]) throws -> [UInt8] {
         switch (self) {
             case .ChaCha20(let key, let iv):
-                var chacha = CryptoSwift.ChaCha20(key: key, iv: iv)
-                return chacha?.encrypt(bytes)
+                guard let chacha = CryptoSwift.ChaCha20(key: key, iv: iv) else {
+                    throw Error.EncryptError
+                }
+                return try chacha.encrypt(bytes)
             case .AES(let key, let iv, let blockMode):
-                var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode)
-                return aes?.encrypt(bytes)
+                guard let aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode) else {
+                    throw Error.EncryptError
+                }
+                return try aes.encrypt(bytes)
         }
     }
     
     /**
     Decrypt message
     
-    :param: message Message data
+    - parameter message: Message data
     
-    :returns: Plaintext message
+    - returns: Plaintext message
     */
-    public func decrypt(bytes: [UInt8]) -> [UInt8]? {
+    public func decrypt(bytes: [UInt8]) throws -> [UInt8] {
         switch (self) {
             case .ChaCha20(let key, let iv):
-                var chacha = CryptoSwift.ChaCha20(key: key, iv: iv);
-                return chacha?.decrypt(bytes)
+                guard let chacha = CryptoSwift.ChaCha20(key: key, iv: iv) else {
+                    throw Error.DecryptError
+                }
+                return try chacha.decrypt(bytes)
             case .AES(let key, let iv, let blockMode):
-                var aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode);
-                return aes?.decrypt(bytes)
+                guard let aes = CryptoSwift.AES(key: key, iv: iv, blockMode: blockMode) else {
+                    throw Error.DecryptError
+                }
+                return try aes.decrypt(bytes)
         }
     }
 

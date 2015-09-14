@@ -10,6 +10,10 @@ import Foundation
 
 final public class ChaCha20 {
     
+    enum Error: ErrorType {
+        case MissingContext
+    }
+    
     static let blockSize = 64 // 512 / 8
     private let stateSize = 16
     private var context:Context?
@@ -35,23 +39,21 @@ final public class ChaCha20 {
     convenience public init?(key:String, iv:String) {
         if let kkey = key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(), let iiv = iv.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() {
             self.init(key: kkey, iv: iiv)
-        } else {
-            self.init(key: [UInt8](), iv: [UInt8]()) //FIXME: this is due Swift bug, remove this line later, when fixed
-            return nil
         }
+        return nil
     }
 
     
-    public func encrypt(bytes:[UInt8]) -> [UInt8]? {
-        if (context == nil) {
-            return nil
+    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
+        guard context != nil else {
+            throw Error.MissingContext
         }
         
-        return encryptBytes(bytes)
+        return try encryptBytes(bytes)
     }
     
-    public func decrypt(bytes:[UInt8]) -> [UInt8]? {
-        return encrypt(bytes)
+    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
+        return try encrypt(bytes)
     }
     
     private final func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
@@ -78,18 +80,18 @@ final public class ChaCha20 {
         output.reserveCapacity(16)
 
         for i in 0..<16 {
-            x[i] = x[i] &+ input[i]
-            output += [UInt8((x[i] & 0xFFFFFFFF) >> 24),
+            x[i] = x[i] &+ input[i]            
+            output.appendContentsOf([UInt8((x[i] & 0xFFFFFFFF) >> 24),
                        UInt8((x[i] & 0xFFFFFF) >> 16),
                        UInt8((x[i] & 0xFFFF) >> 8),
-                       UInt8((x[i] & 0xFF) >> 0)]
+                       UInt8((x[i] & 0xFF) >> 0)])
         }
 
         return output;
     }
         
-    private func contextSetup(# iv:[UInt8], key:[UInt8]) -> Context? {
-        var ctx = Context()
+    private func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
+        let ctx = Context()
         let kbits = key.count * 8
         
         if (kbits != 128 && kbits != 256) {
@@ -137,52 +139,53 @@ final public class ChaCha20 {
         return ctx
     }
     
-    private final func encryptBytes(message:[UInt8]) -> [UInt8]? {
+    private final func encryptBytes(message:[UInt8]) throws -> [UInt8] {
         
-        if let ctx = context {
-            var c:[UInt8] = [UInt8](count: message.count, repeatedValue: 0)
-            
-            var cPos:Int = 0
-            var mPos:Int = 0
-            var bytes = message.count
-            
-            while (true) {
-                if let output = wordToByte(ctx.input) {
-                    ctx.input[12] = ctx.input[12] &+ 1
-                    if (ctx.input[12] == 0) {
-                        ctx.input[13] = ctx.input[13] &+ 1
-                        /* stopping at 2^70 bytes per nonce is user's responsibility */
-                    }
-                    if (bytes <= ChaCha20.blockSize) {
-                        for (var i = 0; i < bytes; i++) {
-                            c[i + cPos] = message[i + mPos] ^ output[i]
-                        }
-                        return c
-                    }
-                    for (var i = 0; i < ChaCha20.blockSize; i++) {
+        guard let ctx = context else {
+            throw Error.MissingContext
+        }
+        
+        var c:[UInt8] = [UInt8](count: message.count, repeatedValue: 0)
+        
+        var cPos:Int = 0
+        var mPos:Int = 0
+        var bytes = message.count
+        
+        while (true) {
+            if let output = wordToByte(ctx.input) {
+                ctx.input[12] = ctx.input[12] &+ 1
+                if (ctx.input[12] == 0) {
+                    ctx.input[13] = ctx.input[13] &+ 1
+                    /* stopping at 2^70 bytes per nonce is user's responsibility */
+                }
+                if (bytes <= ChaCha20.blockSize) {
+                    for (var i = 0; i < bytes; i++) {
                         c[i + cPos] = message[i + mPos] ^ output[i]
                     }
-                    bytes -= ChaCha20.blockSize
-                    cPos += ChaCha20.blockSize
-                    mPos += ChaCha20.blockSize
+                    return c
                 }
+                for (var i = 0; i < ChaCha20.blockSize; i++) {
+                    c[i + cPos] = message[i + mPos] ^ output[i]
+                }
+                bytes -= ChaCha20.blockSize
+                cPos += ChaCha20.blockSize
+                mPos += ChaCha20.blockSize
             }
         }
-        return nil;
     }
     
     private final func quarterround(inout a:UInt32, inout _ b:UInt32, inout _ c:UInt32, inout _ d:UInt32) {
         a = a &+ b
-        d = rotateLeft((d ^ a), 16)
+        d = rotateLeft((d ^ a), n: 16) //FIXME: WAT? n:
         
         c = c &+ d
-        b = rotateLeft((b ^ c), 12);
+        b = rotateLeft((b ^ c), n: 12);
         
         a = a &+ b
-        d = rotateLeft((d ^ a), 8);
+        d = rotateLeft((d ^ a), n: 8);
 
         c = c &+ d
-        b = rotateLeft((b ^ c), 7);
+        b = rotateLeft((b ^ c), n: 7);
     }
 }
 
@@ -191,7 +194,7 @@ final public class ChaCha20 {
 /// Change array to number. It's here because arrayOfBytes is too slow
 private func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
     var value:UInt32 = 0
-    for (var i:UInt32 = 0, j = 0; i < 4; i++, j++) {
+    for (var i:UInt32 = 0, j = bytes.startIndex; i < 4; i++, j++) {
         value = value | UInt32(bytes[j]) << (8 * i)
     }
     return value

@@ -56,7 +56,7 @@ extension UInt8 {
     func bits() -> String {
         var s = String()
         let arr:[Bit] = self.bits()
-        for (idx,b) in enumerate(arr) {
+        for (idx,b) in arr.enumerate() {
             s += (b == Bit.One ? "1" : "0")
             if ((idx + 1) % 8 == 0) { s += " " }
         }
@@ -72,18 +72,18 @@ extension UInt8 {
             return self;
         }
 
-        var bitsCount = UInt8(sizeof(UInt8) * 8)
+        let bitsCount = UInt8(sizeof(UInt8) * 8)
 
         if (count >= bitsCount) {
             return 0
         }
 
-        var maxBitsForValue = UInt8(floor(log2(Double(self) + 1)))
-        var shiftCount = Swift.min(count, maxBitsForValue - 1)
+        let maxBitsForValue = UInt8(floor(log2(Double(self) + 1)))
+        let shiftCount = Swift.min(count, maxBitsForValue - 1)
         var shiftedValue:UInt8 = 0;
         
         for bitIdx in 0..<bitsCount {
-            var byte = 1 << bitIdx
+            let byte = 1 << bitIdx
             if ((self & byte) == byte) {
                 shiftedValue = shiftedValue | (byte >> shiftCount)
             }

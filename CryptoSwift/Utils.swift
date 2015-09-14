@@ -37,13 +37,7 @@ func rotateRight(x:UInt64, n:UInt64) -> UInt64 {
 }
 
 func reverseBytes(value: UInt32) -> UInt32 {
-    // rdar://18060945 - not working since Xcode6-Beta6, need to split in two variables
-    // return = ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24);
-    
-    // workaround
-    var tmp1 = ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8)
-    var tmp2 = ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24)
-    return tmp1 | tmp2
+    return ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24);
 }
 
 func xor(a: [UInt8], b:[UInt8]) -> [UInt8] {
@@ -62,5 +56,5 @@ func perf(text: String, closure: () -> ()) {
     let measurementStop = NSDate();
     let executionTime = measurementStop.timeIntervalSinceDate(measurementStart)
     
-    println("\(text) \(executionTime)");
+    print("\(text) \(executionTime)");
 }

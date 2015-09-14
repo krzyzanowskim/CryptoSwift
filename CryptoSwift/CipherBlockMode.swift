@@ -11,14 +11,18 @@ import Foundation
 // I have no better name for that
 typealias CipherOperationOnBlock = (block: [UInt8]) -> [UInt8]?
 
+enum BlockError: ErrorType {
+    case MissingInitializationVector
+}
+
 private protocol BlockMode {
     var needIV:Bool { get }
-    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]?
-    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]?
+    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8]
+    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8]
 }
 
 public enum CipherBlockMode {
-    case ECB, CBC, CFB
+    case ECB, CBC, CFB, CTR
     
     private var mode:BlockMode {
         switch (self) {
@@ -28,6 +32,8 @@ public enum CipherBlockMode {
             return CFBMode()
         case ECB:
             return ECBMode()
+        case CTR:
+            return CTRMode()
         }
     }
     
@@ -38,13 +44,13 @@ public enum CipherBlockMode {
     /**
     Process input blocks with given block cipher mode. With fallback to plain mode.
     
-    :param: blocks cipher block size blocks
-    :param: iv     IV
-    :param: cipher single block encryption closure
+    - parameter blocks: cipher block size blocks
+    - parameter iv:     IV
+    - parameter cipher: single block encryption closure
     
-    :returns: encrypted bytes
+    - returns: encrypted bytes
     */
-    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
+    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
         
         // if IV is not available, fallback to plain
         var finalBlockMode:CipherBlockMode = self
@@ -52,59 +58,56 @@ public enum CipherBlockMode {
             finalBlockMode = .ECB
         }
         
-        return finalBlockMode.mode.encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
+        return try finalBlockMode.mode.encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
     }
     
-    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:(block:[UInt8]) -> [UInt8]?) -> [UInt8]? {
+    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
         // if IV is not available, fallback to plain
         var finalBlockMode:CipherBlockMode = self
         if (iv == nil) {
             finalBlockMode = .ECB
         }
 
-        return finalBlockMode.mode.decryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
+        return try finalBlockMode.mode.decryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
     }
 }
 
 /**
-*  Cipher-block chaining (CBC)
+Cipher-block chaining (CBC)
 */
 private struct CBCMode: BlockMode {
-    var needIV:Bool = true
+    let needIV = true
     
-    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
+    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
         precondition(blocks.count > 0)
-        assert(iv != nil, "CFB require IV")
-        if (iv == nil) {
-            return nil;
+        guard let iv = iv else {
+            throw BlockError.MissingInitializationVector
         }
-        
         
         var out:[UInt8] = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[0].count)
-        var prevCiphertext = iv! // for the first time prevCiphertext = iv
+        var prevCiphertext = iv // for the first time prevCiphertext = iv
         for plaintext in blocks {
-            if let encrypted = cipherOperation(block: xor(prevCiphertext, plaintext)) {
-                out.extend(encrypted)
+            if let encrypted = cipherOperation(block: xor(prevCiphertext, b: plaintext)) {
+                out.appendContentsOf(encrypted)
                 prevCiphertext = encrypted
             }
         }
-        return out;
+        return out
     }
     
-    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
+    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
         precondition(blocks.count > 0)
-        assert(iv != nil, "CFB require IV")
-        if (iv == nil) {
-            return nil
+        guard let iv = iv else {
+            throw BlockError.MissingInitializationVector
         }
 
         var out:[UInt8] = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[0].count)
-        var prevCiphertext = iv! // for the first time prevCiphertext = iv
+        var prevCiphertext = iv // for the first time prevCiphertext = iv
         for ciphertext in blocks {
             if let decrypted = cipherOperation(block: ciphertext) { // decrypt
-                out.extend(xor(prevCiphertext, decrypted))
+                out.appendContentsOf(xor(prevCiphertext, b: decrypted)) //FIXME: b:
             }
             prevCiphertext = ciphertext
         }
@@ -114,53 +117,107 @@ private struct CBCMode: BlockMode {
 }
 
 /**
-*  Cipher feedback (CFB)
+Cipher feedback (CFB)
 */
 private struct CFBMode: BlockMode {
-    var needIV:Bool = true
+    let needIV = true
     
-    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
-        assert(iv != nil, "CFB require IV")
-        if (iv == nil) {
-            return nil
+    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
+        guard let iv = iv else {
+            throw BlockError.MissingInitializationVector
         }
         
         var out:[UInt8] = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[0].count)
 
-        var lastCiphertext = iv!
+        var lastCiphertext = iv
         for plaintext in blocks {
             if let encrypted = cipherOperation(block: lastCiphertext) {
-                lastCiphertext = xor(plaintext,encrypted)
-                out.extend(lastCiphertext)
-            }
-        }
-        return out;
-    }
-    
-    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
-        return encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
-    }
-}
-
-
-/**
-*  Electronic codebook (ECB)
-*/
-private struct ECBMode: BlockMode {
-    var needIV:Bool = false
-    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
-        var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[0].count)
-        for plaintext in blocks {
-            if let encrypted = cipherOperation(block: plaintext) {
-                out.extend(encrypted)
+                lastCiphertext = xor(plaintext,b: encrypted)
+                out.appendContentsOf(lastCiphertext)
             }
         }
         return out
     }
     
-    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8]? {
+    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
+        return try encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
+    }
+}
+
+
+/**
+Electronic codebook (ECB)
+*/
+private struct ECBMode: BlockMode {
+    let needIV = false
+    
+    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8] {
+        var out:[UInt8] = [UInt8]()
+        out.reserveCapacity(blocks.count * blocks[0].count)
+        for plaintext in blocks {
+            if let encrypted = cipherOperation(block: plaintext) {
+                out.appendContentsOf(encrypted)
+            }
+        }
+        return out
+    }
+    
+    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8] {
         return encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
     }
+}
+
+/**
+Counter (CTR)
+*/
+private struct CTRMode: BlockMode {
+    let needIV = true
+    
+    private func buildNonce(iv: [UInt8], counter: UInt) -> [UInt8] {
+        let noncePartLen = AES.blockSize / 2
+        let noncePrefix = Array(iv[0..<noncePartLen])
+        let nonceSuffix = arrayOfBytes(counter)
+        
+        var nonce = noncePrefix
+        nonce += nonceSuffix
+        return nonce
+    }
+    
+    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
+        //var counter:UInt = 17940646550795321087
+        
+        guard let iv = iv else {
+            throw BlockError.MissingInitializationVector
+        }
+
+        var counter:UInt = 0
+        var out:[UInt8] = [UInt8]()
+        out.reserveCapacity(blocks.count * blocks[0].count)
+        for plaintext in blocks {
+            let nonce = buildNonce(iv, counter: counter++)
+            if let encrypted = cipherOperation(block: nonce) {
+                out.appendContentsOf(xor(plaintext, b: encrypted))
+            }
+        }
+        return out
+    }
+    
+    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
+        guard let iv = iv else {
+            throw BlockError.MissingInitializationVector
+        }
+        
+        var counter:UInt = 0
+        var out:[UInt8] = [UInt8]()
+        out.reserveCapacity(blocks.count * blocks[0].count)
+        for plaintext in blocks {
+            let nonce = buildNonce(iv, counter: counter++)
+            if let encrypted = cipherOperation(block: nonce) {
+                out.appendContentsOf(xor(encrypted, b: plaintext))
+            }
+        }
+        return out
+    }
+
 }

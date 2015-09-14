@@ -32,6 +32,7 @@ Good mood
 - Electronic codebook ([ECB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_.28ECB.29))
 - Cipher-block chaining ([CBC](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher-block_chaining_.28CBC.29))
 - Cipher feedback ([CFB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_feedback_.28CFB.29))
+- Counter ([CTR](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Counter_.28CTR.29))
 
 #####Data padding
 - [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
@@ -70,6 +71,16 @@ or for newest version from specified branch of code:
 ```ruby
 pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"
 ```
+
+####Carthage 
+You can use [Carthage](https://github.com/Carthage/Carthage). 
+Specify in Cartfile:
+
+```ruby
+github "krzyzanowskim/CryptoSwift"
+```
+
+Then follow [build instructions](https://github.com/Carthage/Carthage#getting-started)
  
 ##Usage
 
@@ -82,7 +93,7 @@ Generally you should use `CryptoSwift.Hash`, `CryptoSwift.Cipher` enums or conve
 Hash enum usage
 ```swift
 /* Hash enum usage */
-var data:NSData = NSData(bytes: [49, 50, 51] as [Byte], length: 3)
+var data:NSData = NSData(bytes: [49, 50, 51] as [UInt8], length: 3)
 if let data = CryptoSwift.Hash.md5(data).calculate() {
     println(data.toHexString())
 }

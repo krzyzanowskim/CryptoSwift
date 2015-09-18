@@ -8,19 +8,19 @@
 
 import Foundation
 
-func rotateLeft(v:UInt8, n:UInt8) -> UInt8 {
+func rotateLeft(v:UInt8, _ n:UInt8) -> UInt8 {
     return ((v << n) & 0xFF) | (v >> (8 - n))
 }
 
-func rotateLeft(v:UInt16, n:UInt16) -> UInt16 {
+func rotateLeft(v:UInt16, _ n:UInt16) -> UInt16 {
     return ((v << n) & 0xFFFF) | (v >> (16 - n))
 }
 
-func rotateLeft(v:UInt32, n:UInt32) -> UInt32 {
+func rotateLeft(v:UInt32, _ n:UInt32) -> UInt32 {
     return ((v << n) & 0xFFFFFFFF) | (v >> (32 - n))
 }
 
-func rotateLeft(x:UInt64, n:UInt64) -> UInt64 {
+func rotateLeft(x:UInt64, _ n:UInt64) -> UInt64 {
     return (x << n) | (x >> (64 - n))
 }
 

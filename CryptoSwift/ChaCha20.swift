@@ -176,16 +176,16 @@ final public class ChaCha20 {
     
     private final func quarterround(inout a:UInt32, inout _ b:UInt32, inout _ c:UInt32, inout _ d:UInt32) {
         a = a &+ b
-        d = rotateLeft((d ^ a), n: 16) //FIXME: WAT? n:
+        d = rotateLeft((d ^ a), 16) //FIXME: WAT? n:
         
         c = c &+ d
-        b = rotateLeft((b ^ c), n: 12);
+        b = rotateLeft((b ^ c), 12);
         
         a = a &+ b
-        d = rotateLeft((d ^ a), n: 8);
+        d = rotateLeft((d ^ a), 8);
 
         c = c &+ d
-        b = rotateLeft((b ^ c), n: 7);
+        b = rotateLeft((b ^ c), 7);
     }
 }
 

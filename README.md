@@ -1,5 +1,17 @@
 #CryptoSwift
+
 Crypto related functions and helpers for [Swift](https://developer.apple.com/swift/) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
+
+-------
+<p align="center">
+    <a href="#features">Features</a> &bull;
+    <a href="#contribution">Contribution</a> &bull;
+    <a href="#installation">Installation</a> &bull;
+    <a href="#usage">Usage</a> &bull; 
+    <a href="#author">Author</a> &bull;
+    <a href="#changelog">Changelog</a>
+</p>
+-------
 
 ##Requirements
 Good mood
@@ -9,7 +21,7 @@ Good mood
 - Easy to use
 - Convenience extensions
 
-###What implemented?
+##What implemented?
 
 #### Hash
 - [MD5](http://tools.ietf.org/html/rfc1321)
@@ -37,10 +49,10 @@ Good mood
 #####Data padding
 - [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
 
-###Why
+##Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
 
-###Contribution
+##Contribution
 
 For latest version, please check **develop** branch. This is latest development version that will be merged into **master** branch at some point.
 
@@ -186,8 +198,10 @@ let data  = NSData.withBytes([0x01,0x02,0x03])
 let bytes:[UInt8] = data.arrayOfBytes()
 ```
 
-##Contact
-Marcin Krzyżanowski [@krzyzanowskim](http://twitter.com/krzyzanowskim)
+##Author
+[Marcin Krzyżanowski](http://www.krzyzanowskim.com)
+
+T: [@krzyzanowskim](http://twitter.com/krzyzanowskim)
 
 ##License
 
@@ -204,7 +218,10 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 ##Changelog
 
-This is not full changelog
+0.0.15
+- Fix 32-bit CTR block mode
+- Carthage support update
+- Mark as App-Extension-Safe API
 
 0.0.14
 - hexString -> toHextString() #105

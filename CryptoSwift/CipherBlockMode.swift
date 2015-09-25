@@ -177,7 +177,7 @@ private struct CTRMode: BlockMode {
     private func buildNonce(iv: [UInt8], counter: UInt) -> [UInt8] {
         let noncePartLen = AES.blockSize / 2
         let noncePrefix = Array(iv[0..<noncePartLen])
-        let nonceSuffix = arrayOfBytes(counter)
+        let nonceSuffix = arrayOfBytes(counter, length: noncePartLen)
         
         var nonce = noncePrefix
         nonce += nonceSuffix

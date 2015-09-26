@@ -22,7 +22,7 @@ final class CryptoSwiftTests: XCTestCase {
     func testMD5() {
         let data1:NSData = NSData(bytes: [0x31, 0x32, 0x33] as [UInt8], length: 3) // "1", "2", "3"
         if let hash = Hash.md5(data1).calculate() {
-            XCTAssertEqual(hash.toHexString(), "202cb962ac59075b964b07152d234b70", "MD5 calculation failed");
+            XCTAssertEqual(hash, [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70], "MD5 calculation failed");
         } else {
             XCTAssert(false, "Missing result")
         }
@@ -30,7 +30,7 @@ final class CryptoSwiftTests: XCTestCase {
         let string:NSString = ""
         let data:NSData = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
         if let hashData = Hash.md5(data).calculate() {
-            XCTAssertEqual(hashData.toHexString(), "d41d8cd98f00b204e9800998ecf8427e", "MD5 calculation failed")
+            XCTAssertEqual(hashData, [0xd4,0x1d,0x8c,0xd9,0x8f,0x00,0xb2,0x04,0xe9,0x80,0x09,0x98,0xec,0xf8,0x42,0x7e], "MD5 calculation failed")
         } else {
             XCTAssert(false, "Missing result")
         }
@@ -196,15 +196,9 @@ final class CryptoSwiftTests: XCTestCase {
         }
     }
     
-    func testCRC32Async() {
-        let expect = expectationWithDescription("CRC32")
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            self.testCRC32()
-            expect.fulfill()
-        })
-
-        waitForExpectationsWithTimeout(10, handler: { (error) -> Void in
-            XCTAssertNil(error, "CRC32 async failed")
-        })
+    func testChecksum() {
+        let data:NSData = NSData(bytes: [49, 50, 51] as [UInt8], length: 3)
+        XCTAssert(data.checksum() == 0x96, "Invalid checksum")
     }
+
 }

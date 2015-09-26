@@ -19,45 +19,50 @@ extension NSMutableData {
 
 extension NSData {
 
+    /// Two octet checksum as defined in RFC-4880. Sum of all octets, mod 65536
     public func checksum() -> UInt16 {
-        var s:UInt32 = 0;
-        
+        var s:UInt32 = 0
         var bytesArray = self.arrayOfBytes()
-        
         for (var i = 0; i < bytesArray.count; i++) {
-            _ = bytesArray[i]
             s = s + UInt32(bytesArray[i])
         }
-        s = s % 65536;
-        return UInt16(s);
+        s = s % 65536
+        return UInt16(s)
     }
     
     public func md5() -> NSData? {
-        return Hash.md5(self).calculate()
+        guard let result = Hash.md5(self).calculate() else { return nil }
+        return NSData.withBytes(result)
     }
 
     public func sha1() -> NSData? {
-        return Hash.sha1(self).calculate()
+        guard let result = Hash.sha1(self).calculate() else { return nil }
+        return NSData.withBytes(result)
     }
 
     public func sha224() -> NSData? {
-        return Hash.sha224(self).calculate()
+        guard let result = Hash.sha224(self).calculate() else { return nil }
+        return NSData.withBytes(result)
     }
 
     public func sha256() -> NSData? {
-        return Hash.sha256(self).calculate()
+        guard let result = Hash.sha256(self).calculate() else { return nil }
+        return NSData.withBytes(result)
     }
 
     public func sha384() -> NSData? {
-        return Hash.sha384(self).calculate()
+        guard let result = Hash.sha384(self).calculate() else { return nil }
+        return NSData.withBytes(result)
     }
 
     public func sha512() -> NSData? {
-        return Hash.sha512(self).calculate()
+        guard let result = Hash.sha512(self).calculate() else { return nil }
+        return NSData.withBytes(result)
     }
 
     public func crc32() -> NSData? {
-        return Hash.crc32(self).calculate()
+        guard let result = Hash.crc32(self).calculate() else { return nil }
+        return NSData.withBytes(result)
     }
 
     public func encrypt(cipher: Cipher) throws -> NSData? {

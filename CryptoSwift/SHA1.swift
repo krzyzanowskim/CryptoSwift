@@ -18,7 +18,7 @@ final class SHA1 : HashProtocol {
     
     private let h:[UInt32] = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
         
-    func calculate() -> NSData {
+    func calculate() -> [UInt8] {
         let tmpMessage = self.prepare(64)
         
         // hash values
@@ -94,12 +94,12 @@ final class SHA1 : HashProtocol {
         }
         
         // Produce the final hash value (big-endian) as a 160 bit number:
-        let buf: NSMutableData = NSMutableData();
-        for item in hh {
-            var i:UInt32 = item.bigEndian
-            buf.appendBytes(&i, length: sizeofValue(i))
+        var result = [UInt8]()
+        result.reserveCapacity(hh.count / 4)
+        hh.forEach {
+            let item = $0.bigEndian
+            result += [UInt8(item & 0xff), UInt8((item >> 8) & 0xff), UInt8((item >> 16) & 0xff), UInt8((item >> 24) & 0xff)]
         }
-        
-        return buf.copy() as! NSData;
-    }    
+        return result
+    }
 }

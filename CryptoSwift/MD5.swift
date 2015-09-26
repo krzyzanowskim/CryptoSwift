@@ -42,7 +42,7 @@ final class MD5 : HashProtocol  {
     
     private let h:[UInt32] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
     
-    func calculate() -> NSData {
+    func calculate() -> [UInt8] {
         let tmpMessage = prepare(64)
 
         // hash values
@@ -107,13 +107,14 @@ final class MD5 : HashProtocol  {
             hh[3] = hh[3] &+ D
         }
 
-        let buf: NSMutableData = NSMutableData();
-        hh.forEach({ (item) -> () in
-            var i:UInt32 = item.littleEndian
-            buf.appendBytes(&i, length: sizeofValue(i))
-        })
+        var result = [UInt8]()
+        result.reserveCapacity(hh.count / 4)
         
-        return buf.copy() as! NSData
+        hh.forEach {
+            let itemLE = $0.littleEndian
+            result += [UInt8(itemLE & 0xff), UInt8((itemLE >> 8) & 0xff), UInt8((itemLE >> 16) & 0xff), UInt8((itemLE >> 24) & 0xff)]
+        }
+        return result
     }
 }
 

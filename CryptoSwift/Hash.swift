@@ -14,7 +14,7 @@ public enum Hash {
     case sha224(NSData), sha256(NSData), sha384(NSData), sha512(NSData)
     case crc32(NSData)
     
-    public func calculate() -> NSData? {
+    public func calculate() -> [UInt8]? {
         switch self {
         case md5(let data):
             return MD5(data).calculate()
@@ -29,7 +29,7 @@ public enum Hash {
         case sha512(let data):
             return SHA2(data, variant: .sha512).calculate64()
         case crc32(let data):
-            return CRC().crc32(data);
+            return CRC().crc32(data).bytes()
         }
     }
 }

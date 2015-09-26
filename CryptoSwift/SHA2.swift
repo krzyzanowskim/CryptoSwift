@@ -102,24 +102,21 @@ final class SHA2 : HashProtocol {
             }
         }
         
-        private func resultingArray<T>(hh:[T]) -> [T] {
-            var finalHH:[T] = hh;
+        private func resultingArray<T>(hh:[T]) -> ArraySlice<T> {
             switch (self) {
             case .sha224:
-                finalHH = Array(hh[0..<7])
-                break;
+                return hh[0..<7]
             case .sha384:
-                finalHH = Array(hh[0..<6])
-                break;
+                return hh[0..<6]
             default:
                 break;
             }
-            return finalHH
+            return ArraySlice(hh)
         }
     }
     
     //FIXME: I can't do Generic func out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.
-    func calculate32() -> NSData {
+    func calculate32() -> [UInt8] {
         let tmpMessage = self.prepare(64)
         
         // hash values
@@ -191,16 +188,16 @@ final class SHA2 : HashProtocol {
         }
         
         // Produce the final hash value (big-endian) as a 160 bit number:
-        let buf: NSMutableData = NSMutableData();
-        variant.resultingArray(hh).forEach{ (item) -> () in
-            var i:UInt32 = UInt32(item.bigEndian)
-            buf.appendBytes(&i, length: sizeofValue(i))
+        var result = [UInt8]()
+        result.reserveCapacity(hh.count / 4)
+        variant.resultingArray(hh).forEach {
+            let item = $0.bigEndian
+            result += [UInt8(item & 0xff), UInt8((item >> 8) & 0xff), UInt8((item >> 16) & 0xff), UInt8((item >> 24) & 0xff)]
         }
-		
-        return buf.copy() as! NSData;
+        return result
     }
     
-    func calculate64() -> NSData {
+    func calculate64() -> [UInt8] {
         let tmpMessage = self.prepare(128)
         
         // hash values
@@ -275,13 +272,13 @@ final class SHA2 : HashProtocol {
         }
         
         // Produce the final hash value (big-endian)
-        let buf: NSMutableData = NSMutableData();
-        
-        variant.resultingArray(hh).forEach({ (item) -> () in
-            var i = item.bigEndian
-            buf.appendBytes(&i, length: sizeofValue(i))
-        })
-        
-        return buf.copy() as! NSData;
+        var result = [UInt8]()
+        result.reserveCapacity(hh.count / 4)
+        variant.resultingArray(hh).forEach {
+            let item = $0.bigEndian
+            result += [UInt8(item & 0xff), UInt8((item >> 8) & 0xff), UInt8((item >> 16) & 0xff), UInt8((item >> 24) & 0xff),
+                       UInt8((item >> 32) & 0xff),UInt8((item >> 40) & 0xff), UInt8((item >> 48) & 0xff), UInt8((item >> 56) & 0xff)]
+        }
+        return result
     }
 }

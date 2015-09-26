@@ -86,15 +86,7 @@ extension NSData {
 extension NSData {
     
     public func toHexString() -> String {
-        let count = self.length / sizeof(UInt8)
-        var bytesArray = [UInt8](count: count, repeatedValue: 0)
-        self.getBytes(&bytesArray, length:count * sizeof(UInt8))
-        
-        var s:String = "";
-        for byte in bytesArray {
-            s = s + String(format:"%02x", byte)
-        }
-        return s
+        return self.arrayOfBytes().toHexString()
     }
     
     public func arrayOfBytes() -> [UInt8] {

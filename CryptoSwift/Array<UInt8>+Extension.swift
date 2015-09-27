@@ -39,5 +39,17 @@ extension Array where Element: _UInt8Type {
     public func crc32() -> [UInt8]? {
         return Hash.crc32(Element.arrayValue(self)).calculate()
     }
+    
+    public func encrypt(cipher: Cipher) throws -> [UInt8]? {
+        return try cipher.encrypt(Element.arrayValue(self))
+    }
+    
+    public func decrypt(cipher: Cipher) throws -> [UInt8]? {
+        return try cipher.decrypt(Element.arrayValue(self))
+    }
+
+    public func authenticate(authenticator: Authenticator) -> [UInt8]? {
+        return authenticator.authenticate(Element.arrayValue(self))
+    }
 
 }

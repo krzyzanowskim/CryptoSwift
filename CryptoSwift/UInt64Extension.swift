@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 /** array of bytes */
 extension UInt64 {
     public func bytes(totalBytes: Int = sizeof(UInt64)) -> [UInt8] {

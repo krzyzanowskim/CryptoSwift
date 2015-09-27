@@ -6,30 +6,28 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 public enum Hash {
-    case md5(NSData)
-    case sha1(NSData)
-    case sha224(NSData), sha256(NSData), sha384(NSData), sha512(NSData)
-    case crc32(NSData)
+    case md5(Array<UInt8>)
+    case sha1(Array<UInt8>)
+    case sha224(Array<UInt8>), sha256(Array<UInt8>), sha384(Array<UInt8>), sha512(Array<UInt8>)
+    case crc32(Array<UInt8>)
     
     public func calculate() -> [UInt8]? {
         switch self {
-        case md5(let data):
-            return MD5(data).calculate()
-        case sha1(let data):
-            return SHA1(data).calculate()
-        case sha224(let data):
-            return SHA2(data, variant: .sha224).calculate32()
-        case sha256(let data):
-            return SHA2(data, variant: .sha256).calculate32()
-        case sha384(let data):
-            return SHA2(data, variant: .sha384).calculate64()
-        case sha512(let data):
-            return SHA2(data, variant: .sha512).calculate64()
-        case crc32(let data):
-            return CRC().crc32(data).bytes()
+        case md5(let bytes):
+            return MD5(bytes).calculate()
+        case sha1(let bytes):
+            return SHA1(bytes).calculate()
+        case sha224(let bytes):
+            return SHA2(bytes, variant: .sha224).calculate32()
+        case sha256(let bytes):
+            return SHA2(bytes, variant: .sha256).calculate32()
+        case sha384(let bytes):
+            return SHA2(bytes, variant: .sha384).calculate64()
+        case sha512(let bytes):
+            return SHA2(bytes, variant: .sha512).calculate64()
+        case crc32(let bytes):
+            return CRC().crc32(bytes).bytes()
         }
     }
 }

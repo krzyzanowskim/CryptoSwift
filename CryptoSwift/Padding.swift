@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 public protocol Padding {
     func add(data: [UInt8], blockSize:Int) -> [UInt8]
     func remove(data: [UInt8], blockSize:Int?) -> [UInt8]

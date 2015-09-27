@@ -5,8 +5,6 @@
 //  Created by Marcin Krzyzanowski on 27/12/14.
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
-
-import Foundation
 import XCTest
 @testable import CryptoSwift
 

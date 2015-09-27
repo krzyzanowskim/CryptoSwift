@@ -22,8 +22,6 @@ j &<<= 2        //shift left and assign
 @see: https://medium.com/@krzyzanowskim/swiftly-shift-bits-and-protect-yourself-be33016ce071
 */
 
-import Foundation
-
 infix operator &<<= {
 associativity none
 precedence 160

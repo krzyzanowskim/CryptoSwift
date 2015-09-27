@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 final public class ChaCha20 {
     
     enum Error: ErrorType {
@@ -35,14 +33,6 @@ final public class ChaCha20 {
             return nil
         }
     }
-    
-    convenience public init?(key:String, iv:String) {
-        if let kkey = key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(), let iiv = iv.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() {
-            self.init(key: kkey, iv: iiv)
-        }
-        return nil
-    }
-
     
     public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
         guard context != nil else {

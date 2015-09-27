@@ -6,6 +6,8 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
+import Foundation
+
 struct NSDataSequence: SequenceType {
     
     let chunkSize: Int

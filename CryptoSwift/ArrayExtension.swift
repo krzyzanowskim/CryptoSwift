@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 extension Array {
     
     /** split in chunks with given chunk size */
@@ -28,9 +26,6 @@ extension Array {
 
 // MARK: - Array<UInt8>
 
-public protocol _UInt8Type {}
-extension UInt8: _UInt8Type {}
-
 extension Array where Element: _UInt8Type {
     public func toHexString() -> String {
         var s:String = "";
@@ -40,4 +35,5 @@ extension Array where Element: _UInt8Type {
         return s
     }
 }
+
 

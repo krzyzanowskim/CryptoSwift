@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 final class CRC {
     
     private let table:[UInt32] = [0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
@@ -43,11 +41,11 @@ final class CRC {
         0xbdbdf21c, 0xcabac28a, 0x53b39330, 0x24b4a3a6, 0xbad03605, 0xcdd70693, 0x54de5729, 0x23d967bf,
         0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94, 0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d]
     
-    func crc32(message:NSData) -> UInt32 {
+    func crc32(message:[UInt8]) -> UInt32 {
         var crc:UInt32 = 0xffffffff
         
-        for chunk in NSDataSequence(chunkSize: 256, data: message) {
-            for b in chunk.arrayOfBytes() {
+        for chunk in BytesSequence(chunkSize: 256, data: message) {
+            for b in chunk {
                 let idx = Int((crc ^ UInt32(b)) & 0xff)
                 crc = (crc >> 8) ^ table[idx]
             }

@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 func compareMatrix(a:[[UInt8]], b:[[UInt8]]) -> Bool {
     for (i,arr) in a.enumerate() {
         for (j,val) in arr.enumerate() {

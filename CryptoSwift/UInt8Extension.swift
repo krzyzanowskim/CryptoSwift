@@ -6,7 +6,10 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
+import Darwin.libc
+
+public protocol _UInt8Type { }
+extension UInt8: _UInt8Type {}
 
 /** casting */
 extension UInt8 {

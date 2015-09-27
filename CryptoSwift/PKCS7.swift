@@ -9,8 +9,6 @@
 //  and published by RSA Security Inc, starting in the early 1990s.
 //
 
-import Foundation
-
 public struct PKCS7: Padding {
     
     public init() {

@@ -6,7 +6,10 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
+import Darwin.libc
+
+protocol _UInt32Type { }
+extension UInt32: _UInt32Type {}
 
 /** array of bytes */
 extension UInt32 {

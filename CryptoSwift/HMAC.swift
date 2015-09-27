@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 final public class HMAC {
     
     public enum Variant {
@@ -16,7 +14,7 @@ final public class HMAC {
         var size:Int {
             switch (self) {
             case .sha1:
-                return SHA1(NSData()).size
+                return SHA1.size
             case .sha256:
                 return SHA2.Variant.sha256.size
             case .sha384:
@@ -24,22 +22,22 @@ final public class HMAC {
             case .sha512:
                 return SHA2.Variant.sha512.size
             case .md5:
-                return MD5(NSData()).size
+                return MD5.size
             }
         }
         
-        func calculateHash(bytes  bytes:[UInt8]) -> [UInt8]? {
+        func calculateHash(bytes bytes:[UInt8]) -> [UInt8]? {
             switch (self) {
             case .sha1:
-                return NSData.withBytes(bytes).sha1()?.arrayOfBytes()
+                return Hash.sha1(bytes).calculate()
             case .sha256:
-                return NSData.withBytes(bytes).sha256()?.arrayOfBytes()
+                return Hash.sha256(bytes).calculate()
             case .sha384:
-                return NSData.withBytes(bytes).sha384()?.arrayOfBytes()
+                return Hash.sha384(bytes).calculate()
             case .sha512:
-                return NSData.withBytes(bytes).sha512()?.arrayOfBytes()
+                return Hash.sha512(bytes).calculate()
             case .md5:
-                return NSData.withBytes(bytes).md5()?.arrayOfBytes();
+                return Hash.md5(bytes).calculate()
             }
         }
         

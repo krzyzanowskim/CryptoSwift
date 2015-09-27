@@ -10,8 +10,6 @@
 //
 //  PKCS#5 http://tools.ietf.org/html/rfc2898
 
-import Foundation
-
 //public struct PKCS5 {
 //}
 //

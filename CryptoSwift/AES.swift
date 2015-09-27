@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 final public class AES {
     
     enum Error: ErrorType {
@@ -88,16 +86,7 @@ final public class AES {
         let defaultIV = [UInt8](count: AES.blockSize, repeatedValue: 0)
         self.init(key: key, iv: defaultIV, blockMode: blockMode)
     }
-    
-    convenience public init?(key:String, iv:String, blockMode:CipherBlockMode = .CBC) {
-        if let kkey = key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(), let iiv = iv.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() {
-            self.init(key: kkey, iv: iiv, blockMode: blockMode)
-        }
-        else {
-            return nil
-        }
-    }
-    
+        
     /**
     Encrypt message. If padding is necessary, then PKCS7 padding is added and needs to be removed after decryption.
     
@@ -122,33 +111,31 @@ final public class AES {
     private func encryptBlock(block:[UInt8]) -> [UInt8]? {
         var out:[UInt8] = [UInt8]()
         
-        autoreleasepool { () -> () in
-            var state:[[UInt8]] = [[UInt8]](count: variant.Nb, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))
-            for (i, row) in state.enumerate() {
-                for (j, _) in row.enumerate() {
-                    state[j][i] = block[i * row.count + j]
-                }
+        var state:[[UInt8]] = [[UInt8]](count: variant.Nb, repeatedValue: [UInt8](count: variant.Nb, repeatedValue: 0))
+        for (i, row) in state.enumerate() {
+            for (j, _) in row.enumerate() {
+                state[j][i] = block[i * row.count + j]
             }
-            
-            state = addRoundKey(state,expandedKey, 0)
-            
-            for roundCount in 1..<variant.Nr {
-                subBytes(&state)
-                state = shiftRows(state)
-                state = mixColumns(state)
-                state = addRoundKey(state, expandedKey, roundCount)
-            }
-            
+        }
+        
+        state = addRoundKey(state,expandedKey, 0)
+        
+        for roundCount in 1..<variant.Nr {
             subBytes(&state)
             state = shiftRows(state)
-            state = addRoundKey(state, expandedKey, variant.Nr)
-            
-            
-            out = [UInt8](count: state.count * state.first!.count, repeatedValue: 0)
-            for i in 0..<state.count {
-                for j in 0..<state[i].count {
-                    out[(i * 4) + j] = state[j][i]
-                }
+            state = mixColumns(state)
+            state = addRoundKey(state, expandedKey, roundCount)
+        }
+        
+        subBytes(&state)
+        state = shiftRows(state)
+        state = addRoundKey(state, expandedKey, variant.Nr)
+        
+        
+        out = [UInt8](count: state.count * state.first!.count, repeatedValue: 0)
+        for i in 0..<state.count {
+            for j in 0..<state[i].count {
+                out[(i * 4) + j] = state[j][i]
             }
         }
         return out

@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 protocol BitshiftOperationsType {
     func <<(lhs: Self, rhs: Self) -> Self
     func >>(lhs: Self, rhs: Self) -> Self

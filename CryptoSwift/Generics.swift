@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 /** Protocol and extensions for integerFromBitsArray. Bit hakish for me, but I can't do it in any other way */
 protocol Initiable  {
     init(_ v: Int)

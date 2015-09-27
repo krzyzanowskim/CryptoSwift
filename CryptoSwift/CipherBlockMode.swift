@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 // I have no better name for that
 typealias CipherOperationOnBlock = (block: [UInt8]) -> [UInt8]?
 

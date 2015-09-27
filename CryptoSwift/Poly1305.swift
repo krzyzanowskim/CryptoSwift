@@ -10,8 +10,6 @@
 //  Poly1305 takes a 32-byte, one-time key and a message and produces a 16-byte tag that authenticates the
 //  message such that an attacker has a negligible chance of producing a valid tag for an inauthentic message.
 
-import Foundation
-
 final public class Poly1305 {
     let blockSize = 16
     private var ctx:Context?

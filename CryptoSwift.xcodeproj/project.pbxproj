@@ -60,7 +60,7 @@
 		75BC3AE31A4E412000ADF343 /* CipherBlockMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BC3AE21A4E412000ADF343 /* CipherBlockMode.swift */; };
 		75BE4EB11B1E4A9F007A2B57 /* IntegerConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BE4EB01B1E4A9F007A2B57 /* IntegerConvertible.swift */; };
 		75D63F751BB711270041579B /* BytesSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F741BB711270041579B /* BytesSequence.swift */; settings = {ASSET_TAGS = (); }; };
-		75D63F771BB840050041579B /* ArraySlice+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F761BB840050041579B /* ArraySlice+Bytes.swift */; settings = {ASSET_TAGS = (); }; };
+		75D63F771BB840050041579B /* ArraySlice<UInt8>+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F761BB840050041579B /* ArraySlice<UInt8>+Bytes.swift */; settings = {ASSET_TAGS = (); }; };
 		75D63F791BB86F6E0041579B /* ChaCha20+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F781BB86F6E0041579B /* ChaCha20+Foundation.swift */; settings = {ASSET_TAGS = (); }; };
 		75D63F7B1BB86F9C0041579B /* AES+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F7A1BB86F9C0041579B /* AES+Foundation.swift */; settings = {ASSET_TAGS = (); }; };
 		75D94E2419B60C08007CB2A4 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2319B60C08007CB2A4 /* Operators.swift */; };
@@ -177,7 +177,7 @@
 		75BC3AE21A4E412000ADF343 /* CipherBlockMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CipherBlockMode.swift; sourceTree = "<group>"; };
 		75BE4EB01B1E4A9F007A2B57 /* IntegerConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntegerConvertible.swift; sourceTree = "<group>"; };
 		75D63F741BB711270041579B /* BytesSequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BytesSequence.swift; sourceTree = "<group>"; };
-		75D63F761BB840050041579B /* ArraySlice+Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ArraySlice+Bytes.swift"; sourceTree = "<group>"; };
+		75D63F761BB840050041579B /* ArraySlice<UInt8>+Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ArraySlice<UInt8>+Bytes.swift"; sourceTree = "<group>"; };
 		75D63F781BB86F6E0041579B /* ChaCha20+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChaCha20+Foundation.swift"; sourceTree = "<group>"; };
 		75D63F7A1BB86F9C0041579B /* AES+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AES+Foundation.swift"; sourceTree = "<group>"; };
 		75D94E2319B60C08007CB2A4 /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
@@ -263,7 +263,7 @@
 				754C8FEC19979F94005AD904 /* Array+Extension.swift */,
 				753403F61BB898470039099C /* Array<UInt8>+Extension.swift */,
 				753403F41BB892ED0039099C /* Array<UInt8>+Foundation.swift */,
-				75D63F761BB840050041579B /* ArraySlice+Bytes.swift */,
+				75D63F761BB840050041579B /* ArraySlice<UInt8>+Bytes.swift */,
 				7599C9C5199EA28700A3988B /* StringExtension.swift */,
 				75D94E2319B60C08007CB2A4 /* Operators.swift */,
 				75164E4819AD30AC00737F30 /* Utils.swift */,
@@ -473,7 +473,7 @@
 				757EF7F519AAA82400586276 /* CRC.swift in Sources */,
 				75D94E2619B60C4F007CB2A4 /* UInt32Extension.swift in Sources */,
 				75A74B271A1FF6B2004419F1 /* AES.swift in Sources */,
-				75D63F771BB840050041579B /* ArraySlice+Bytes.swift in Sources */,
+				75D63F771BB840050041579B /* ArraySlice<UInt8>+Bytes.swift in Sources */,
 				754C30B71AA13BC000E6FFA4 /* PKCS7.swift in Sources */,
 				755111E819B7B7DF00C2AD86 /* Authenticator.swift in Sources */,
 				753403F71BB898470039099C /* Array<UInt8>+Extension.swift in Sources */,

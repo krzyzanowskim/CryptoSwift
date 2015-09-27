@@ -9,11 +9,7 @@
 extension Array where Element: _UInt8Type {
     
     public func toHexString() -> String {
-        var s:String = ""
-        for byte in self {
-            s = s + String(format:"%02x", byte as! UInt8)
-        }
-        return s
+        return self.lazy.reduce("") { $0 + String(format:"%02x", $1 as! UInt8) }
     }
     
     public func md5() -> [UInt8]? {

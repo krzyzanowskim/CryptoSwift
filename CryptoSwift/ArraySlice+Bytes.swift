@@ -7,7 +7,6 @@
 //
 
 extension ArraySlice where Element: _UInt8Type {
-    typealias Element = UInt8
     
     func toUInt32Array() -> Array<UInt32> {
         var result = Array<UInt32>()

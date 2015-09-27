@@ -24,16 +24,3 @@ extension Array {
     }
 }
 
-// MARK: - Array<UInt8>
-
-extension Array where Element: _UInt8Type {
-    public func toHexString() -> String {
-        var s:String = "";
-        for byte in self {
-            s = s + String(format:"%02x", byte as! UInt8)
-        }
-        return s
-    }
-}
-
-

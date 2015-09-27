@@ -9,7 +9,6 @@
 /** String extension */
 extension String {
     
-    /** Calculate MD5 hash */
     public func md5() -> String? {
         return self.utf8.lazy.map({ $0 as UInt8 }).md5()?.toHexString()
     }

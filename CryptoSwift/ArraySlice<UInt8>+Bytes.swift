@@ -10,6 +10,7 @@ extension ArraySlice where Element: _UInt8Type {
     
     func toUInt32Array() -> Array<UInt32> {
         var result = Array<UInt32>()
+        result.reserveCapacity(self.count / sizeof(UInt32))
         for idx in self.startIndex.stride(to: self.endIndex, by: sizeof(UInt32)) {
             var val:UInt32 = 0
             val |= UInt32(self[idx.advancedBy(3)] as! UInt8) << 24
@@ -37,5 +38,4 @@ extension ArraySlice where Element: _UInt8Type {
         }
         return result
     }
-
 }

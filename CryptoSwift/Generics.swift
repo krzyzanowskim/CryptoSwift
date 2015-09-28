@@ -48,7 +48,7 @@ func integerWithBytes<T: IntegerType where T:ByteConvertible, T: BitshiftOperati
     }
     
     var result: T = 0
-    for byte in Array(bytes.reverse()) { //FIXME: Array??
+    for byte in bytes.reverse() {
         result = result << 8 | T(byte)
     }
     return result

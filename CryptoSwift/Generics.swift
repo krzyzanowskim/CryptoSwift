@@ -44,7 +44,7 @@ func integerWithBytes<T: IntegerType where T:ByteConvertible, T: BitshiftOperati
     }
     
     if sizeof(T) == 1 {
-        return T(truncatingBitPattern: UInt64(bytes[0]))
+        return T(truncatingBitPattern: UInt64(bytes.first!))
     }
     
     var result: T = 0

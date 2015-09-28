@@ -7,16 +7,11 @@
 //
 
 extension Bit {
-
     func inverted() -> Bit {
         if (self == Bit.Zero) {
             return Bit.One
         }
 
         return Bit.Zero
-    }
-
-    mutating func invert()  {
-        self = self.inverted()
     }
 }

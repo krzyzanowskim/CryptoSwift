@@ -83,7 +83,7 @@ private struct CBCMode: BlockMode {
         }
         
         var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[0].count)
+        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
         var prevCiphertext = iv // for the first time prevCiphertext = iv
         for plaintext in blocks {
             if let encrypted = cipherOperation(block: xor(prevCiphertext, b: plaintext)) {
@@ -101,7 +101,7 @@ private struct CBCMode: BlockMode {
         }
 
         var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[0].count)
+        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
         var prevCiphertext = iv // for the first time prevCiphertext = iv
         for ciphertext in blocks {
             if let decrypted = cipherOperation(block: ciphertext) { // decrypt
@@ -126,7 +126,7 @@ private struct CFBMode: BlockMode {
         }
         
         var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[0].count)
+        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
 
         var lastCiphertext = iv
         for plaintext in blocks {
@@ -152,7 +152,7 @@ private struct ECBMode: BlockMode {
     
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8] {
         var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[0].count)
+        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
         for plaintext in blocks {
             if let encrypted = cipherOperation(block: plaintext) {
                 out.appendContentsOf(encrypted)
@@ -191,7 +191,7 @@ private struct CTRMode: BlockMode {
 
         var counter:UInt = 0
         var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[0].count)
+        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
         for plaintext in blocks {
             let nonce = buildNonce(iv, counter: counter++)
             if let encrypted = cipherOperation(block: nonce) {
@@ -208,7 +208,7 @@ private struct CTRMode: BlockMode {
         
         var counter:UInt = 0
         var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[0].count)
+        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
         for plaintext in blocks {
             let nonce = buildNonce(iv, counter: counter++)
             if let encrypted = cipherOperation(block: nonce) {

@@ -218,6 +218,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 ##Changelog
 
+0.0.16
+- Critical fix for private "md5" selector issue (#135)
+
 0.0.15
 - Fix 32-bit CTR block mode
 - Carthage support update

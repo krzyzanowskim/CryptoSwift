@@ -30,7 +30,7 @@ extension NSData {
         return UInt16(s)
     }
     
-    public func md5() -> NSData? {
+    @nonobjc public func md5() -> NSData? {
         guard let result = Hash.md5(self.arrayOfBytes()).calculate() else { return nil }
         return NSData.withBytes(result)
     }

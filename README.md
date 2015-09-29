@@ -62,7 +62,7 @@ To install CryptoSwift, add it as a submodule to your project (on the top level 
 
 	git submodule add https://github.com/krzyzanowskim/CryptoSwift.git
 
-Then, drag the CryptoSwift.xcodeproj file into your Xcode project, and add CryptoSwift.framework as a dependency to your target.
+Then, drag the CryptoSwift.xcodeproj file into your Xcode project, and add CryptoSwift.framework as a dependency to your target. Now select your App and choose the General tab for the app target. Drag CryptoSwift.framework to "Embedded Binaries"
 
 Alternatively, you can build the Universal Framework and link it in your Xcode project. 
 Aggregate target `CryptoSwift-Universal` runs a script to build a universal framework. The script currently copies the framework to the `Framework` directory. (The path to CryptoSwift directory cannot contain any space)
@@ -217,6 +217,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 - This notice may not be removed or altered from any source or binary distribution.
 
 ##Changelog
+
+0.0.16
+- Critical fix for private "md5" selector issue (#135)
 
 0.0.15
 - Fix 32-bit CTR block mode

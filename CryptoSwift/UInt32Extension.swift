@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Darwin.libc
+import Darwin
 
 protocol _UInt32Type { }
 extension UInt32: _UInt32Type {}

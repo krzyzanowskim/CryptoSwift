@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Darwin.libc
+import Darwin
 
 public protocol _UInt8Type {
     /// [Hack](https://twitter.com/jckarter/status/648235521127256064) for array `value`

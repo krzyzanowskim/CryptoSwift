@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Darwin.libc
+import Darwin
 
 /** Shift bits */
 extension UInt16 {

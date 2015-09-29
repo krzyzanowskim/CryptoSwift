@@ -32,7 +32,7 @@ extension NSData {
         return UInt16(s);
     }
     
-    public func md5() -> NSData? {
+    @nonobjc public func md5() -> NSData? {
         return Hash.md5(self).calculate()
     }
 

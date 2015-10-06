@@ -22,5 +22,14 @@ extension Array {
         }
         return words
     }
+    
+    subscript(index: UInt32) -> Element {
+        get {
+            return self[Int(index)]
+        }
+        set {
+            self[Int(index)] = newValue
+        }
+    }
 }
 

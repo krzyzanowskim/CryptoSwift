@@ -23,6 +23,9 @@ extension Array {
         return words
     }
     
+    /*
+    This helper call is slow, therefore don't use it. It is due to extension, or due to optimization that can be done
+    
     subscript(index: UInt32) -> Element {
         get {
             return self[Int(index)]
@@ -31,5 +34,6 @@ extension Array {
             self[Int(index)] = newValue
         }
     }
+    */
 }
 

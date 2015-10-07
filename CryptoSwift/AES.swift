@@ -46,6 +46,7 @@ final public class AES {
     private let key:[UInt8]
     private let iv:[UInt8]?
     public lazy var expandedKey:[[UInt32]] = { self.expandKey(self.key, variant: self.variant) }()
+    public lazy var expandedKeyInv:[[UInt32]] = { self.expandKeyInv(self.key, variant: self.variant) }()
     
 //    private lazy var sBoxes:(sBox:[UInt8], invSBox:[UInt8]) = self.calculateSBox()
 //    private lazy var sBox:[UInt8] = self.sBoxes.sBox
@@ -899,10 +900,10 @@ final public class AES {
     
     private func F1(x0: UInt32, _ x1: UInt32, _ x2: UInt32, _ x3: UInt32) -> UInt32 {
         var result:UInt32 = 0
-        result |= UInt32(B1(T0[x0 & 255]))
-        result |= UInt32(B1(T0[(x1 >> 8) & 255])) << 8
-        result |= UInt32(B1(T0[(x2 >> 16) & 255])) << 16
-        result |= UInt32(B1(T0[x3 >> 24])) << 24
+        result |= UInt32(B1(T0[Int(x0 & 255)]))
+        result |= UInt32(B1(T0[Int((x1 >> 8) & 255)])) << 8
+        result |= UInt32(B1(T0[Int((x2 >> 16) & 255)])) << 16
+        result |= UInt32(B1(T0[Int(x3 >> 24)])) << 24
         return result
     }
 
@@ -920,10 +921,10 @@ final public class AES {
             t[2] = b[2] ^ rk[r][2]
             t[3] = b[3] ^ rk[r][3]
             
-            b[0] = T0[t[0] & 0xFF] ^ T1[(t[1] >> 8) & 0xFF] ^ T2[(t[2] >> 16) & 0xFF] ^ T3[t[3] >> 24]
-            b[1] = T0[t[1] & 0xFF] ^ T1[(t[2] >> 8) & 0xFF] ^ T2[(t[3] >> 16) & 0xFF] ^ T3[t[0] >> 24]
-            b[2] = T0[t[2] & 0xFF] ^ T1[(t[3] >> 8) & 0xFF] ^ T2[(t[0] >> 16) & 0xFF] ^ T3[t[1] >> 24]
-            b[3] = T0[t[3] & 0xFF] ^ T1[(t[0] >> 8) & 0xFF] ^ T2[(t[1] >> 16) & 0xFF] ^ T3[t[2] >> 24]
+            b[0] = T0[Int(t[0] & 0xFF)] ^ T1[Int((t[1] >> 8) & 0xFF)] ^ T2[Int((t[2] >> 16) & 0xFF)] ^ T3[Int(t[3] >> 24)]
+            b[1] = T0[Int(t[1] & 0xFF)] ^ T1[Int((t[2] >> 8) & 0xFF)] ^ T2[Int((t[3] >> 16) & 0xFF)] ^ T3[Int(t[0] >> 24)]
+            b[2] = T0[Int(t[2] & 0xFF)] ^ T1[Int((t[3] >> 8) & 0xFF)] ^ T2[Int((t[0] >> 16) & 0xFF)] ^ T3[Int(t[1] >> 24)]
+            b[3] = T0[Int(t[3] & 0xFF)] ^ T1[Int((t[0] >> 8) & 0xFF)] ^ T2[Int((t[1] >> 16) & 0xFF)] ^ T3[Int(t[2] >> 24)]
         }
         
         // last round
@@ -976,44 +977,9 @@ final public class AES {
     }
     
     private func decryptBlock(block:[UInt8]) -> [UInt8]? {
-        
-        func prepareRK() -> [[UInt32]] {
-            let rounds = self.variant.Nr
-            let rk = self.expandedKey
-            var rk2 = rk
-            
-            //TODO: isn't it just COPY ?
-//            for(var r = 0; r < rk2.count; r++) {
-//                rk2[r] = [UInt32](count: 4, repeatedValue: 0)
-//                
-//                rk2[r][0] = rk[r][0];
-//                rk2[r][1] = rk[r][1];
-//                rk2[r][2] = rk[r][2];
-//                rk2[r][3] = rk[r][3];
-//            }
-            
-            for r in 1..<rounds {
-                var w:UInt32
-                
-                w = rk2[r][0];
-                rk2[r][0] = U1[B0(w)] ^ U2[B1(w)] ^ U3[B2(w)] ^ U4[B3(w)]
-                
-                w = rk2[r][1];
-                rk2[r][1] = U1[B0(w)] ^ U2[B1(w)] ^ U3[B2(w)] ^ U4[B3(w)]
-                
-                w = rk2[r][2];
-                rk2[r][2] = U1[B0(w)] ^ U2[B1(w)] ^ U3[B2(w)] ^ U4[B3(w)]
-                
-                w = rk2[r][3];
-                rk2[r][3] = U1[B0(w)] ^ U2[B1(w)] ^ U3[B2(w)] ^ U4[B3(w)]
-            }
-            
-            return rk2
-        }
-        
         let rounds = self.variant.Nr // TODO: remove later
         var b = block[block.startIndex..<block.endIndex].toUInt32Array()
-        let rk = prepareRK()
+        let rk = expandedKeyInv
 
         var t = [UInt32](count: 4, repeatedValue: 0) // UInt32 effectively
         
@@ -1023,10 +989,10 @@ final public class AES {
             t[2] = b[2] ^ rk[r][2]
             t[3] = b[3] ^ rk[r][3]
             
-            b[0] = T0_INV[t[0] & 0xFF] ^ T1_INV[(t[3] >> 8) & 0xFF] ^ T2_INV[(t[2] >> 16) & 0xFF] ^ T3_INV[t[1] >> 24]
-            b[1] = T0_INV[t[1] & 0xFF] ^ T1_INV[(t[0] >> 8) & 0xFF] ^ T2_INV[(t[3] >> 16) & 0xFF] ^ T3_INV[t[2] >> 24]
-            b[2] = T0_INV[t[2] & 0xFF] ^ T1_INV[(t[1] >> 8) & 0xFF] ^ T2_INV[(t[0] >> 16) & 0xFF] ^ T3_INV[t[3] >> 24]
-            b[3] = T0_INV[t[3] & 0xFF] ^ T1_INV[(t[2] >> 8) & 0xFF] ^ T2_INV[(t[1] >> 16) & 0xFF] ^ T3_INV[t[0] >> 24]
+            b[0] = T0_INV[Int(t[0] & 0xFF)] ^ T1_INV[Int((t[3] >> 8) & 0xFF)] ^ T2_INV[Int((t[2] >> 16) & 0xFF)] ^ T3_INV[Int(t[1] >> 24)]
+            b[1] = T0_INV[Int(t[1] & 0xFF)] ^ T1_INV[Int((t[0] >> 8) & 0xFF)] ^ T2_INV[Int((t[3] >> 16) & 0xFF)] ^ T3_INV[Int(t[2] >> 24)]
+            b[2] = T0_INV[Int(t[2] & 0xFF)] ^ T1_INV[Int((t[1] >> 8) & 0xFF)] ^ T2_INV[Int((t[0] >> 16) & 0xFF)] ^ T3_INV[Int(t[3] >> 24)]
+            b[3] = T0_INV[Int(t[3] & 0xFF)] ^ T1_INV[Int((t[2] >> 8) & 0xFF)] ^ T2_INV[Int((t[1] >> 16) & 0xFF)] ^ T3_INV[Int(t[0] >> 24)]
         }
         
         // last round
@@ -1036,10 +1002,10 @@ final public class AES {
         t[3] = b[3] ^ rk[1][3]
         
         // rounds
-        b[0] = sBoxInv[B0(t[0])] | (sBoxInv[B1(t[3])] << 8) | (sBoxInv[B2(t[2])] << 16) | (sBoxInv[B3(t[1])] << 24) ^ rk[0][0]
-        b[1] = sBoxInv[B0(t[1])] | (sBoxInv[B1(t[0])] << 8) | (sBoxInv[B2(t[3])] << 16) | (sBoxInv[B3(t[2])] << 24) ^ rk[0][1]
-        b[2] = sBoxInv[B0(t[2])] | (sBoxInv[B1(t[1])] << 8) | (sBoxInv[B2(t[0])] << 16) | (sBoxInv[B3(t[3])] << 24) ^ rk[0][2]
-        b[3] = sBoxInv[B0(t[3])] | (sBoxInv[B1(t[2])] << 8) | (sBoxInv[B2(t[1])] << 16) | (sBoxInv[B3(t[0])] << 24) ^ rk[0][3]
+        b[0] = sBoxInv[Int(B0(t[0]))] | (sBoxInv[Int(B1(t[3]))] << 8) | (sBoxInv[Int(B2(t[2]))] << 16) | (sBoxInv[Int(B3(t[1]))] << 24) ^ rk[0][0]
+        b[1] = sBoxInv[Int(B0(t[1]))] | (sBoxInv[Int(B1(t[0]))] << 8) | (sBoxInv[Int(B2(t[3]))] << 16) | (sBoxInv[Int(B3(t[2]))] << 24) ^ rk[0][1]
+        b[2] = sBoxInv[Int(B0(t[2]))] | (sBoxInv[Int(B1(t[1]))] << 8) | (sBoxInv[Int(B2(t[0]))] << 16) | (sBoxInv[Int(B3(t[3]))] << 24) ^ rk[0][2]
+        b[3] = sBoxInv[Int(B0(t[3]))] | (sBoxInv[Int(B1(t[2]))] << 8) | (sBoxInv[Int(B2(t[1]))] << 16) | (sBoxInv[Int(B3(t[0]))] << 24) ^ rk[0][3]
         
         var out = [UInt8]()
         out.reserveCapacity(b.count * 4)
@@ -1052,6 +1018,28 @@ final public class AES {
         }
         
         return out
+    }
+    
+    private func expandKeyInv(key:[UInt8], variant:AESVariant) -> [[UInt32]] {
+        let rounds = variant.Nr
+        var rk2:[[UInt32]] = expandKey(key, variant: variant)
+        for r in 1..<rounds {
+            var w:UInt32
+            
+            w = rk2[r][0];
+            rk2[r][0] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            
+            w = rk2[r][1];
+            rk2[r][1] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            
+            w = rk2[r][2];
+            rk2[r][2] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            
+            w = rk2[r][3];
+            rk2[r][3] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+        }
+        
+        return rk2
     }
     
     private func expandKey(key:[UInt8], variant:AESVariant) -> [[UInt32]] {

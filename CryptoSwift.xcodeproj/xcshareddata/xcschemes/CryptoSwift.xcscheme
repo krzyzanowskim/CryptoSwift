@@ -37,7 +37,7 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
@@ -53,9 +53,6 @@
                ReferencedContainer = "container:CryptoSwift.xcodeproj">
             </BuildableReference>
             <SkippedTests>
-               <Test
-                  Identifier = "AESTests/testAESPerformance()">
-               </Test>
                <Test
                   Identifier = "AESTests/testAESPerformanceCommonCrypto()">
                </Test>

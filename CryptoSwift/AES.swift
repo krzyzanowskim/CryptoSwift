@@ -125,7 +125,7 @@ final public class AES {
     private func encryptBlock(block:[UInt8]) -> [UInt8]? {
         let rounds = self.variant.Nr
         let rk = self.expandedKey
-        var b = block[block.startIndex..<block.endIndex].toUInt32Array()
+        var b = toUInt32Array(block[block.startIndex..<block.endIndex])
 
         var t = [UInt32](count: 4, repeatedValue: 0)
         
@@ -192,7 +192,7 @@ final public class AES {
     private func decryptBlock(block:[UInt8]) -> [UInt8]? {
         let rounds = self.variant.Nr
         let rk = expandedKeyInv
-        var b = block[block.startIndex..<block.endIndex].toUInt32Array()
+        var b = toUInt32Array(block[block.startIndex..<block.endIndex])
 
         var t = [UInt32](count: 4, repeatedValue: 0)
         

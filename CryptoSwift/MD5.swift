@@ -42,6 +42,7 @@ final class MD5 : HashProtocol  {
     
     func calculate() -> [UInt8] {
         var tmpMessage = prepare(64)
+        tmpMessage.reserveCapacity(tmpMessage.count + 4)
 
         // initialize hh with hash values
         var hh = h
@@ -55,7 +56,7 @@ final class MD5 : HashProtocol  {
         let chunkSizeBytes = 512 / 8 // 64
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15
-            var M = chunk.toUInt32Array()
+            var M = toUInt32Array(chunk)
             assert(M.count == 16, "Invalid array")
             
             // Initialize hash value for this chunk:

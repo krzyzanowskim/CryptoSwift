@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
+import simd
+
 final class SHA2 : HashProtocol {
     var size:Int { return variant.rawValue }
     let variant:SHA2.Variant
@@ -136,7 +138,7 @@ final class SHA2 : HashProtocol {
                 case 0...15:
                     let start = chunk.startIndex + (x * sizeofValue(M[x]))
                     let end = start + sizeofValue(M[x])
-                    let le = chunk[start..<end].toUInt32Array()[0]
+                    let le = toUInt32Array(chunk[start..<end])[0]
                     M[x] = le.bigEndian
                     break
                 default:
@@ -219,7 +221,7 @@ final class SHA2 : HashProtocol {
                 case 0...15:
                     let start = chunk.startIndex + (x * sizeofValue(M[x]))
                     let end = start + sizeofValue(M[x])
-                    let le = chunk[start..<end].toUInt64Array()[0]
+                    let le = toUInt64Array(chunk[start..<end])[0]
                     M[x] = le.bigEndian
                     break
                 default:

@@ -78,7 +78,7 @@ final class ExtensionsTest: XCTestCase {
     
     func testtoUInt32Array() {
         let chunk:ArraySlice<UInt8> = [1,1,1,7,2,3,4,5]
-        let result = chunk.toUInt32Array()
+        let result = toUInt32Array(chunk)
         
         XCTAssert(result.count == 2, "Invalid conversion")
         XCTAssert(result[0] == 117506305, "Invalid conversion")

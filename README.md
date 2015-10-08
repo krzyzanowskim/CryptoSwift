@@ -236,6 +236,13 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 ##Changelog
 
+0.1.0
+- Major performance improvements.
+- Transition from Optionals to throw error.
+- Replace enum Cipher with protocol for ciphers.
+- Added CRC16
+- Drop internal "Foundation" dependency, nonetheless it is supported as usual.
+
 0.0.16
 - Critical fix for private "md5" selector issue (#135)
 

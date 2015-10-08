@@ -108,15 +108,17 @@ Generally you should use `CryptoSwift.Hash`, `CryptoSwift.Cipher` enums or conve
 Hash enum usage
 ```swift
 /* Hash enum usage */
-var data:NSData = NSData(bytes: [49, 50, 51] as [UInt8], length: 3)
-if let data = CryptoSwift.Hash.md5(data).calculate() {
-    println(data.toHexString())
-}
+let input:[UInt8] = [49, 50, 51]
+let output = CryptoSwift.Hash.md5(input).calculate()
+let output = input.md5()
+println(output.toHexString())
 ```
     
 Hashing a data
 
 ```swift
+let data = NSData()
+
 let hash = data.md5()
 let hash = data.sha1()
 let hash = data.sha224()
@@ -124,7 +126,8 @@ let hash = data.sha256()
 let hash = data.sha384()
 let hash = data.sha512()
 	
-let crc = data.crc32()
+let crc32 = data.crc32()
+let crc16 = data.crc16()
 
 println(hash.toHexString())
 ```
@@ -132,9 +135,7 @@ println(hash.toHexString())
 Hashing a String and printing result
 
 ```swift
-if let hash = "123".md5() {
-    println(hash)
-}
+let hash = "123".md5()
 ```    
     
 Some content-encryption algorithms assume the input length is a multiple of k octets, where k is greater than one. For such algorithms, the input shall be padded.
@@ -157,37 +158,41 @@ AES
 Notice regarding padding: *Manual padding of data is optional and CryptoSwift by default always will add PKCS7 padding before encryption, and remove after decryption when __Cipher__ enum is used. If you need manually disable/enable padding, you can do this by setting parameter for encrypt()/decrypt() on class __AES__.*
 
 ```swift
+let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
 
-// 1. set key and random IV
 let key = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] as [UInt8]
 let iv = Cipher.randomIV(AES.blockSize)
 
-// 2. encrypt
-let encrypted = AES(key: key, iv: iv, blockMode: .CBC)?.encrypt(message, padding: PKCS7())
-	
-// 3. decrypt with the same key and IV
-let decrypted = AES(key: key, iv: iv, blockMode: .CBC)?.decrypt(encryptedData, padding: PKCS7())
+do {
+    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC)?.encrypt(input, padding: PKCS7())
+    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC)?.decrypt(input, padding: PKCS7())
+} catch AES.Error.BlockSizeExceeded {
+    // block size exceeded
+} catch {
+    // some error
+}
 	
 ```
 	
 AES without data padding
 
 ```swift
-let encrypted = Cipher.AES(key: key, iv: iv, blockMode: .CBC).encrypt(plaintext)
+let encrypted = Cipher.AES(key: key, iv: iv, blockMode: .CBC).encrypt(input)
 ```
 
 Using extensions
 	
 ```swift
-let encrypted = dataToEncrypt.encrypt(Cipher.ChaCha20(key: key, iv: iv))
-let decrypted = encrypted.decrypt(Cipher.ChaCha20(key: key, iv: iv))
+let plain = NSData()
+let encrypted = try! plain.encrypt(Cipher.ChaCha20(key: key, iv: iv))
+let decrypted = try! encrypted.decrypt(Cipher.ChaCha20(key: key, iv: iv))
 ```
 	
 Message authenticators
 
 ```swift
 // Calculate Message Authentication Code (MAC) for message
-let mac = Authenticator.Poly1305(key: key).authenticate(message)
+let mac = try! Authenticator.Poly1305(key: key).authenticate(input)
 ```
 
 #####Conversion between NSData and [UInt8]
@@ -202,7 +207,7 @@ let bytes:[UInt8] = data.arrayOfBytes()
 ##Author
 [Marcin Krzyżanowski](http://www.krzyzanowskim.com)
 
-T: [@krzyzanowskim](http://twitter.com/krzyzanowskim)
+twitter: [@krzyzanowskim](http://twitter.com/krzyzanowskim)
 
 ##License
 

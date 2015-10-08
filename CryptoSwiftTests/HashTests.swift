@@ -193,6 +193,11 @@ final class CryptoSwiftTests: XCTestCase {
         }
     }
     
+    func testCRC16() {
+        let result = CRC().crc16([49,50,51,52,53,54,55,56,57] as [UInt8])
+        XCTAssert(result == 0xBB3D, "CRC16 failed")
+    }
+    
     func testChecksum() {
         let data:NSData = NSData(bytes: [49, 50, 51] as [UInt8], length: 3)
         XCTAssert(data.checksum() == 0x96, "Invalid checksum")

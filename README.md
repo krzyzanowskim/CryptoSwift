@@ -31,6 +31,7 @@ Good mood
 - [SHA384](http://tools.ietf.org/html/rfc6234)
 - [SHA512](http://tools.ietf.org/html/rfc6234)
 - [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (well, kind of hash)
+- [CRC16](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (well, kind of hash)
 
 #####Cipher
 - [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)

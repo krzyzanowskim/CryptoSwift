@@ -11,6 +11,7 @@ public enum Hash {
     case sha1(Array<UInt8>)
     case sha224(Array<UInt8>), sha256(Array<UInt8>), sha384(Array<UInt8>), sha512(Array<UInt8>)
     case crc32(Array<UInt8>)
+    case crc16(Array<UInt8>)
     
     public func calculate() -> [UInt8]? {
         switch self {
@@ -28,6 +29,8 @@ public enum Hash {
             return SHA2(bytes, variant: .sha512).calculate64()
         case crc32(let bytes):
             return CRC().crc32(bytes).bytes()
+        case crc16(let bytes):
+            return UInt32(CRC().crc16(bytes)).bytes(2)
         }
     }
 }

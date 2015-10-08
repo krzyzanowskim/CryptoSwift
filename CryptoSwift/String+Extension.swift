@@ -37,6 +37,10 @@ extension String {
         return self.utf8.lazy.map({ $0 as UInt8 }).crc32()?.toHexString()
     }
 
+    public func crc16() -> String? {
+        return self.utf8.lazy.map({ $0 as UInt8 }).crc16()?.toHexString()
+    }
+
     public func encrypt(cipher: Cipher) throws -> String? {
         return try self.utf8.lazy.map({ $0 as UInt8 }).encrypt(cipher)?.toHexString()
     }

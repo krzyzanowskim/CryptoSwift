@@ -65,6 +65,11 @@ extension NSData {
         return NSData.withBytes(result)
     }
 
+    public func crc16() -> NSData? {
+        guard let result = Hash.crc16(self.arrayOfBytes()).calculate() else { return nil }
+        return NSData.withBytes(result)
+    }
+
     public func encrypt(cipher: Cipher) throws -> NSData? {
         let encrypted = try cipher.encrypt(self.arrayOfBytes())
         return NSData.withBytes(encrypted)

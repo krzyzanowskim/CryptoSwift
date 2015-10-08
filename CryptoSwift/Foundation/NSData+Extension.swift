@@ -71,12 +71,12 @@ extension NSData {
     }
 
     public func encrypt(cipher: Cipher) throws -> NSData {
-        let encrypted = try cipher.encrypt(self.arrayOfBytes())
+        let encrypted = try cipher.cipherEncrypt(self.arrayOfBytes())
         return NSData.withBytes(encrypted)
     }
 
     public func decrypt(cipher: Cipher) throws -> NSData {
-        let decrypted = try cipher.decrypt(self.arrayOfBytes())
+        let decrypted = try cipher.cipherDecrypt(self.arrayOfBytes())
         return NSData.withBytes(decrypted)
     }
     

@@ -9,11 +9,11 @@
 import Foundation
 
 extension AES {
-    convenience public init?(key:String, iv:String, blockMode:CipherBlockMode = .CBC) {
+    convenience public init(key:String, iv:String, blockMode:CipherBlockMode = .CBC) throws {
         guard let kkey = key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(), let iiv = iv.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() else {
-            return nil
+            throw Error.InvalidKeyOrInitializationVector
         }
         
-        self.init(key: kkey, iv: iiv, blockMode: blockMode)
+        try self.init(key: kkey, iv: iiv, blockMode: blockMode)
     }
 }

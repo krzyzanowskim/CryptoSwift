@@ -179,6 +179,18 @@ final public class ChaCha20 {
     }
 }
 
+// MARK: - Cipher
+
+extension ChaCha20: Cipher {
+    public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
+        return try self.encrypt(bytes)
+    }
+    
+    public func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8] {
+        return try self.decrypt(bytes)
+    }
+}
+
 // MARK: Helpers
 
 /// Change array to number. It's here because arrayOfBytes is too slow

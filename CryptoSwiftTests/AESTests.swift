@@ -19,14 +19,38 @@ final class AESTests: XCTestCase {
         
         let expected:[UInt8] = [0xae,0x8c,0x59,0x95,0xb2,0x6f,0x8e,0x3d,0xb0,0x6f,0x0a,0xa5,0xfe,0xc4,0xf0,0xc2];
         
-        if let aes = AES(key: key, iv: iv, blockMode: .CBC) {
-            let encrypted = try! aes.encrypt(input, padding: nil)
-            XCTAssertEqual(encrypted, expected, "encryption failed")
-            let decrypted = try! aes.decrypt(encrypted, padding: nil)
-            XCTAssertEqual(decrypted, input, "decryption failed")
-        } else {
-            XCTAssert(false, "failed")
-        }
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC)
+        let encrypted = try! aes.encrypt(input, padding: nil)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted, padding: nil)
+        XCTAssertEqual(decrypted, input, "decryption failed")
+    }
+    
+    func testFoo() {
+        let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
+        input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC))
+        AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC)
+        let encrypted = Cipher.AES(key: key, iv: iv, blockMode: .CBC).encrypt(input)
+//        let input = NSData()
+//        let encrypted = try! AES(key: "secret0key000000", iv:"0123456789012345").encrypt(input.arrayOfBytes())
+//        let input = NSData()
+//        let encrypted = try! input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345"))
+//        let encrypted = try! AES(key: "secret0key000000", iv:"0123456789012345").encrypt(input.arrayOfBytes())
+        
+//let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
+//
+//let key = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] as [UInt8]
+//let iv = AES.randomIV(AES.blockSize)
+//
+//do {
+//    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC).encrypt(input, padding: PKCS7())
+//    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC).decrypt(input, padding: PKCS7())
+//} catch AES.Error.BlockSizeExceeded {
+//    // block size exceeded
+//} catch {
+//    // some error
+//}
+
     }
 
     func testAES_encrypt3() {
@@ -36,14 +60,11 @@ final class AESTests: XCTestCase {
         
         let expected:[UInt8] = [0xae,0x8c,0x59,0x95,0xb2,0x6f,0x8e,0x3d,0xb0,0x6f,0x0a,0xa5,0xfe,0xc4,0xf0,0xc2];
         
-        if let aes = AES(key: key, iv: iv, blockMode: .CBC) {
-            let encrypted = try! aes.encrypt(input, padding: nil)
-            XCTAssertEqual(encrypted, expected, "encryption failed")
-            let decrypted = try! aes.decrypt(encrypted, padding: nil)
-            XCTAssertEqual(decrypted, input, "decryption failed")
-        } else {
-            XCTAssert(false, "failed")
-        }
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC)
+        let encrypted = try! aes.encrypt(input, padding: nil)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted, padding: nil)
+        XCTAssertEqual(decrypted, input, "decryption failed")
     }
     
     func testAES_encrypt() {
@@ -57,14 +78,11 @@ final class AESTests: XCTestCase {
             0xd8, 0xcd, 0xb7, 0x80,
             0x70, 0xb4, 0xc5, 0x5a];
         
-        if let aes = AES(key: aesKey, blockMode: .ECB) {
-            let encrypted = try! aes.encrypt(input, padding: nil)
-            XCTAssertEqual(encrypted, expected, "encryption failed")
-            let decrypted = try! aes.decrypt(encrypted, padding: nil)
-            XCTAssertEqual(decrypted, input, "decryption failed")
-        } else {
-            XCTAssert(false, "failed")
-        }
+        let aes = try! AES(key: aesKey, blockMode: .ECB)
+        let encrypted = try! aes.encrypt(input, padding: nil)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted, padding: nil)
+        XCTAssertEqual(decrypted, input, "decryption failed")
     }
 
     func testAES_encrypt_cbc() {
@@ -73,15 +91,12 @@ final class AESTests: XCTestCase {
         let plaintext:[UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
         let expected:[UInt8] = [0x76,0x49,0xab,0xac,0x81,0x19,0xb2,0x46,0xce,0xe9,0x8e,0x9b,0x12,0xe9,0x19,0x7d];
         
-        if let aes = AES(key: key, iv:iv, blockMode: .CBC) {
-            XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
-            let encrypted = try! aes.encrypt(plaintext, padding: nil)
-            XCTAssertEqual(encrypted, expected, "encryption failed")
-            let decrypted = try! aes.decrypt(encrypted, padding: nil)
-            XCTAssertEqual(decrypted, plaintext, "decryption failed")
-        } else {
-            XCTAssert(false, "failed")
-        }
+        let aes = try! AES(key: key, iv:iv, blockMode: .CBC)
+        XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext, padding: nil)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted, padding: nil)
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
     
     func testAES_encrypt_cfb() {
@@ -90,15 +105,12 @@ final class AESTests: XCTestCase {
         let plaintext:[UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
         let expected:[UInt8] = [0x3b,0x3f,0xd9,0x2e,0xb7,0x2d,0xad,0x20,0x33,0x34,0x49,0xf8,0xe8,0x3c,0xfb,0x4a];
         
-        if let aes = AES(key: key, iv:iv, blockMode: .CFB) {
-            XCTAssertTrue(aes.blockMode == .CFB, "Invalid block mode")
-            let encrypted = try! aes.encrypt(plaintext, padding: nil)
-            XCTAssertEqual(encrypted, expected, "encryption failed")
-            let decrypted = try! aes.decrypt(encrypted, padding: nil)
-            XCTAssertEqual(decrypted, plaintext, "decryption failed")
-        } else {
-            XCTAssert(false, "failed")
-        }
+        let aes = try! AES(key: key, iv:iv, blockMode: .CFB)
+        XCTAssertTrue(aes.blockMode == .CFB, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext, padding: nil)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted, padding: nil)
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
     
     func testAES_encrypt_ctr() {
@@ -107,24 +119,21 @@ final class AESTests: XCTestCase {
         let plaintext:[UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
         let expected:[UInt8] = [103, 238, 5, 84, 116, 153, 248, 188, 240, 195, 131, 36, 232, 96, 92, 40]
         
-        if let aes = AES(key: key, iv:iv, blockMode: .CTR) {
-            XCTAssertTrue(aes.blockMode == .CTR, "Invalid block mode")
-            let encrypted = try! aes.encrypt(plaintext, padding: nil)
-            XCTAssertEqual(encrypted, expected, "encryption failed")
-            let decrypted = try! aes.decrypt(encrypted, padding: nil)
-            XCTAssertEqual(decrypted, plaintext, "decryption failed")
-        } else {
-            XCTAssert(false, "failed")
-        }
+        let aes = try! AES(key: key, iv:iv, blockMode: .CTR)
+        XCTAssertTrue(aes.blockMode == .CTR, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext, padding: nil)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted, padding: nil)
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
     
     func testAES_encrypt_performance() {
         let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
         let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
         let message = [UInt8](count: 1024 * 1024, repeatedValue: 7)
-        let aes = AES(key: key, iv: iv, blockMode: .CBC)
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC)
         measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, forBlock: { () -> Void in
-            try! aes?.encrypt(message, padding: PKCS7())
+            try! aes.encrypt(message, padding: PKCS7())
         })
     }
 
@@ -132,9 +141,9 @@ final class AESTests: XCTestCase {
         let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
         let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
         let message = [UInt8](count: 1024 * 1024, repeatedValue: 7)
-        let aes = AES(key: key, iv: iv, blockMode: .CBC)
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC)
         measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, forBlock: { () -> Void in
-            try! aes?.decrypt(message, padding: PKCS7())
+            try! aes.decrypt(message, padding: PKCS7())
         })
     }
 

@@ -25,33 +25,6 @@ final class AESTests: XCTestCase {
         let decrypted = try! aes.decrypt(encrypted, padding: nil)
         XCTAssertEqual(decrypted, input, "decryption failed")
     }
-    
-    func testFoo() {
-        let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
-        input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC))
-        AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC)
-        let encrypted = Cipher.AES(key: key, iv: iv, blockMode: .CBC).encrypt(input)
-//        let input = NSData()
-//        let encrypted = try! AES(key: "secret0key000000", iv:"0123456789012345").encrypt(input.arrayOfBytes())
-//        let input = NSData()
-//        let encrypted = try! input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345"))
-//        let encrypted = try! AES(key: "secret0key000000", iv:"0123456789012345").encrypt(input.arrayOfBytes())
-        
-//let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
-//
-//let key = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] as [UInt8]
-//let iv = AES.randomIV(AES.blockSize)
-//
-//do {
-//    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC).encrypt(input, padding: PKCS7())
-//    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC).decrypt(input, padding: PKCS7())
-//} catch AES.Error.BlockSizeExceeded {
-//    // block size exceeded
-//} catch {
-//    // some error
-//}
-
-    }
 
     func testAES_encrypt3() {
         let key = "679fb1ddf7d81bee"

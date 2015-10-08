@@ -8,18 +8,15 @@
 
 import Darwin
 
-public protocol _UInt8Type {
-    /// [Hack](https://twitter.com/jckarter/status/648235521127256064) for array `value`
-    static func arrayValue(array: [Self]) -> [UInt8]
-}
+public protocol _UInt8Type { }
+extension UInt8: _UInt8Type {}
 
 extension _UInt8Type {
-    static public func arrayValue(array: [Self]) -> [Self] {
-        return array
+    static func Zero() -> Self {
+        return 0 as! Self
     }
 }
 
-extension UInt8: _UInt8Type {}
 
 /** casting */
 extension UInt8 {

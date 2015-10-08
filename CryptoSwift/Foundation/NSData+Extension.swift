@@ -30,61 +30,59 @@ extension NSData {
         return UInt16(s)
     }
     
-    @nonobjc public func md5() -> NSData? {
-        guard let result = Hash.md5(self.arrayOfBytes()).calculate() else { return nil }
+    @nonobjc public func md5() -> NSData {
+        let result = Hash.md5(self.arrayOfBytes()).calculate()
         return NSData.withBytes(result)
     }
 
     public func sha1() -> NSData? {
-        guard let result = Hash.sha1(self.arrayOfBytes()).calculate() else { return nil }
+        let result = Hash.sha1(self.arrayOfBytes()).calculate()
         return NSData.withBytes(result)
     }
 
     public func sha224() -> NSData? {
-        guard let result = Hash.sha224(self.arrayOfBytes()).calculate() else { return nil }
+        let result = Hash.sha224(self.arrayOfBytes()).calculate()
         return NSData.withBytes(result)
     }
 
     public func sha256() -> NSData? {
-        guard let result = Hash.sha256(self.arrayOfBytes()).calculate() else { return nil }
+        let result = Hash.sha256(self.arrayOfBytes()).calculate()
         return NSData.withBytes(result)
     }
 
     public func sha384() -> NSData? {
-        guard let result = Hash.sha384(self.arrayOfBytes()).calculate() else { return nil }
+        let result = Hash.sha384(self.arrayOfBytes()).calculate()
         return NSData.withBytes(result)
     }
 
     public func sha512() -> NSData? {
-        guard let result = Hash.sha512(self.arrayOfBytes()).calculate() else { return nil }
+        let result = Hash.sha512(self.arrayOfBytes()).calculate()
         return NSData.withBytes(result)
     }
 
     public func crc32() -> NSData? {
-        guard let result = Hash.crc32(self.arrayOfBytes()).calculate() else { return nil }
+        let result = Hash.crc32(self.arrayOfBytes()).calculate()
         return NSData.withBytes(result)
     }
 
     public func crc16() -> NSData? {
-        guard let result = Hash.crc16(self.arrayOfBytes()).calculate() else { return nil }
+        let result = Hash.crc16(self.arrayOfBytes()).calculate()
         return NSData.withBytes(result)
     }
 
-    public func encrypt(cipher: Cipher) throws -> NSData? {
+    public func encrypt(cipher: Cipher) throws -> NSData {
         let encrypted = try cipher.encrypt(self.arrayOfBytes())
         return NSData.withBytes(encrypted)
     }
 
-    public func decrypt(cipher: Cipher) throws -> NSData? {
+    public func decrypt(cipher: Cipher) throws -> NSData {
         let decrypted = try cipher.decrypt(self.arrayOfBytes())
         return NSData.withBytes(decrypted)
     }
     
-    public func authenticate(authenticator: Authenticator) -> NSData? {
-        if let result = authenticator.authenticate(self.arrayOfBytes()) {
-            return NSData.withBytes(result)
-        }
-        return nil
+    public func authenticate(authenticator: Authenticator) throws -> NSData {
+        let result = try authenticator.authenticate(self.arrayOfBytes())
+        return NSData.withBytes(result)
     }
 }
 

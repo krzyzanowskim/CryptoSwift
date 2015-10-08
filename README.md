@@ -103,18 +103,19 @@ Then follow [build instructions](https://github.com/Carthage/Carthage#getting-st
 import CryptoSwift
 ```
 
-Generally you should use `CryptoSwift.Hash`, `CryptoSwift.Cipher` enums or convenience extensions
+For your convenience you should use extensions methods like encrypt(), decrypt(), md5(), sha1() and so on.
 
-Hash enum usage
+Hashing a data or array of bytes (aka `Array<UInt8>`)
 ```swift
 /* Hash enum usage */
 let input:[UInt8] = [49, 50, 51]
-let output = CryptoSwift.Hash.md5(input).calculate()
+
 let output = input.md5()
+// alternatively: let output = CryptoSwift.Hash.md5(input).calculate()
+
 println(output.toHexString())
 ```
-    
-Hashing a data
+
 
 ```swift
 let data = NSData()
@@ -149,43 +150,54 @@ Working with Ciphers
 ChaCha20
 
 ```swift
-let encrypted = Cipher.ChaCha20(key: key, iv: iv).encrypt(message)
-let decrypted = Cipher.ChaCha20(key: key, iv: iv).decrypt(encrypted)
+let encrypted = ChaCha20(key: key, iv: iv).encrypt(message)
+let decrypted = ChaCha20(key: key, iv: iv).decrypt(encrypted)
 ```
 
 AES
 
 Notice regarding padding: *Manual padding of data is optional and CryptoSwift by default always will add PKCS7 padding before encryption, and remove after decryption when __Cipher__ enum is used. If you need manually disable/enable padding, you can do this by setting parameter for encrypt()/decrypt() on class __AES__.*
 
+Basic:
+```swift
+let input = NSData()
+let encrypted = try! input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345"))
+
+let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
+input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC))
+```
+
+Advanced:
 ```swift
 let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
 
 let key = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] as [UInt8]
-let iv = Cipher.randomIV(AES.blockSize)
+let iv = AES.randomIV(AES.blockSize)
 
 do {
-    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC)?.encrypt(input, padding: PKCS7())
-    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC)?.decrypt(input, padding: PKCS7())
+    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC).encrypt(input, padding: PKCS7())
+    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC).decrypt(input, padding: PKCS7())
 } catch AES.Error.BlockSizeExceeded {
     // block size exceeded
 } catch {
     // some error
-}
-	
+}	
 ```
 	
 AES without data padding
 
 ```swift
-let encrypted = Cipher.AES(key: key, iv: iv, blockMode: .CBC).encrypt(input)
+let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
+let encrypted = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC).encrypt(input)
 ```
 
 Using extensions
 	
 ```swift
 let plain = NSData()
-let encrypted = try! plain.encrypt(Cipher.ChaCha20(key: key, iv: iv))
-let decrypted = try! encrypted.decrypt(Cipher.ChaCha20(key: key, iv: iv))
+let encrypted = try! plain.encrypt(ChaCha20(key: key, iv: iv))
+let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
+// plain == decrypted
 ```
 	
 Message authenticators

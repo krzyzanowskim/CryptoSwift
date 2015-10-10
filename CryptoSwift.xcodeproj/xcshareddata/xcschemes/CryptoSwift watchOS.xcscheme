@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "75DF77461BC8EB59006E9520"
-               BuildableName = "CryptoSwift.framework"
-               BlueprintName = "CryptoSwift OSX"
+               BlueprintIdentifier = "5596BDBA1BC8F220007E38D5"
+               BuildableName = "CryptoSwift watchOS.framework"
+               BlueprintName = "CryptoSwift watchOS"
                ReferencedContainer = "container:CryptoSwift.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "75DF77461BC8EB59006E9520"
-            BuildableName = "CryptoSwift.framework"
-            BlueprintName = "CryptoSwift OSX"
+            BlueprintIdentifier = "5596BDBA1BC8F220007E38D5"
+            BuildableName = "CryptoSwift watchOS.framework"
+            BlueprintName = "CryptoSwift watchOS"
             ReferencedContainer = "container:CryptoSwift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "75DF77461BC8EB59006E9520"
-            BuildableName = "CryptoSwift.framework"
-            BlueprintName = "CryptoSwift OSX"
+            BlueprintIdentifier = "5596BDBA1BC8F220007E38D5"
+            BuildableName = "CryptoSwift watchOS.framework"
+            BlueprintName = "CryptoSwift watchOS"
             ReferencedContainer = "container:CryptoSwift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

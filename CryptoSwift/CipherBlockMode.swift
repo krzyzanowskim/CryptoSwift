@@ -130,8 +130,8 @@ private struct CFBMode: BlockMode {
 
         var lastCiphertext = iv
         for plaintext in blocks {
-            if let encrypted = cipherOperation(block: lastCiphertext) {
-                lastCiphertext = xor(plaintext,b: encrypted)
+            if let ciphertext = cipherOperation(block: lastCiphertext) {
+                lastCiphertext = xor(plaintext,b: ciphertext)
                 out.appendContentsOf(lastCiphertext)
             }
         }
@@ -139,7 +139,23 @@ private struct CFBMode: BlockMode {
     }
     
     func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
-        return try encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
+        // return try encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
+        guard let iv = iv else {
+            throw BlockError.MissingInitializationVector
+        }
+        
+        var out:[UInt8] = [UInt8]()
+        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
+
+        var lastCiphertext = iv
+        for ciphertext in blocks {
+            if let decrypted = cipherOperation(block: lastCiphertext) {
+                out.appendContentsOf(xor(decrypted, b: ciphertext))
+            }
+            lastCiphertext = ciphertext
+        }
+        
+        return out
     }
 }
 

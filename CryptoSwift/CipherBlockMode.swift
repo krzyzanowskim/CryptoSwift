@@ -139,7 +139,6 @@ private struct CFBMode: BlockMode {
     }
     
     func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
-        // return try encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
         guard let iv = iv else {
             throw BlockError.MissingInitializationVector
         }

@@ -65,8 +65,9 @@ To install CryptoSwift, add it as a submodule to your project (on the top level 
 
 Then, drag the CryptoSwift.xcodeproj file into your Xcode project, and add CryptoSwift.framework as a dependency to your target. Now select your App and choose the General tab for the app target. Drag CryptoSwift.framework to "Embedded Binaries"
 
-Alternatively, you can build the Universal Framework and link it in your Xcode project. 
-Aggregate target `CryptoSwift-Universal` runs a script to build a universal framework. The script currently copies the framework to the `Framework` directory. (The path to CryptoSwift directory cannot contain any space)
+#####Binary distribution
+
+Alternatively, you can build the Universal Framework and link it in your Xcode project. To do that please run `build.sh` script and find resulting frameworks in `Framework` directory.
 
 Looking for version for Swift 1.2? check branch **swift12**, it's there.
 

@@ -6,20 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		3F8849E11B0647D6006AB604 /* CryptoSwift-Universal */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 3F8849E21B0647D6006AB604 /* Build configuration list for PBXAggregateTarget "CryptoSwift-Universal" */;
-			buildPhases = (
-				3F8849E51B0647DD006AB604 /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = "CryptoSwift-Universal";
-			productName = "CryptoSwift-Universal";
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		5596BDC31BC8F384007E38D5 /* AES+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C951BB8A4BD009CAFC5 /* AES+Foundation.swift */; settings = {ASSET_TAGS = (); }; };
 		5596BDC41BC8F384007E38D5 /* Array<UInt8>+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C961BB8A4BD009CAFC5 /* Array<UInt8>+Foundation.swift */; settings = {ASSET_TAGS = (); }; };
@@ -528,9 +514,6 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Marcin Krzyzanowski";
 				TargetAttributes = {
-					3F8849E11B0647D6006AB604 = {
-						CreatedOnToolsVersion = 6.3.1;
-					};
 					5596BDBA1BC8F220007E38D5 = {
 						CreatedOnToolsVersion = 7.0.1;
 					};
@@ -559,7 +542,6 @@
 				5596BDBA1BC8F220007E38D5 /* CryptoSwift watchOS */,
 				75DF77461BC8EB59006E9520 /* CryptoSwift OSX */,
 				754BE45F19693E190098E6F3 /* CryptoSwiftTests */,
-				3F8849E11B0647D6006AB604 /* CryptoSwift-Universal */,
 			);
 		};
 /* End PBXProject section */
@@ -595,22 +577,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		3F8849E51B0647DD006AB604 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "TARGET_NAME=\"CryptoSwift\"\nFRAMEWORK_NAME=\"CryptoSwift\"\nINSTALL_DIR=\"Framework\"\nFRAMEWORK=\"${INSTALL_DIR}/${FRAMEWORK_NAME}.framework\"\n\nif [ -d \"${INSTALL_DIR}\" ]\nthen\nrm -rf \"${INSTALL_DIR}\"\nfi\n\nmkdir \"${INSTALL_DIR}\"\n\nWRK_DIR=\"build\"\nDEVICE_DIR=\"${WRK_DIR}/Release-iphoneos/${FRAMEWORK_NAME}.framework\"\nSIMULATOR_DIR=\"${WRK_DIR}/Release-iphonesimulator/${FRAMEWORK_NAME}.framework\"\n\nxcodebuild -configuration \"Release\" -target \"${TARGET_NAME}\" -sdk iphoneos SYMROOT=$(PWD)/${WRK_DIR}\nxcodebuild -configuration \"Release\" -target \"${TARGET_NAME}\" -sdk iphonesimulator SYMROOT=$(PWD)/${WRK_DIR}\n\nlipo -create \"${DEVICE_DIR}/${FRAMEWORK_NAME}\" \"${SIMULATOR_DIR}/${FRAMEWORK_NAME}\" -output \"${DEVICE_DIR}/${FRAMEWORK_NAME}\"\n\ncp -R \"${DEVICE_DIR}\" \"${INSTALL_DIR}/\"\n\nif [ -d \"${SIMULATOR_DIR}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" ]; then\ncp -f -R \"${SIMULATOR_DIR}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" \"${FRAMEWORK}/Modules/${FRAMEWORK_NAME}.swiftmodule/\" | echo\nfi\n\nrm -r \"${WRK_DIR}\"";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5596BDB61BC8F220007E38D5 /* Sources */ = {
@@ -795,20 +761,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		3F8849E31B0647D6006AB604 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		3F8849E41B0647D6006AB604 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		5596BDC11BC8F220007E38D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1089,15 +1041,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3F8849E21B0647D6006AB604 /* Build configuration list for PBXAggregateTarget "CryptoSwift-Universal" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3F8849E31B0647D6006AB604 /* Debug */,
-				3F8849E41B0647D6006AB604 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		5596BDC01BC8F220007E38D5 /* Build configuration list for PBXNativeTarget "CryptoSwift watchOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1105,6 +1048,7 @@
 				5596BDC21BC8F220007E38D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		754BE44F19693E190098E6F3 /* Build configuration list for PBXProject "CryptoSwift" */ = {
 			isa = XCConfigurationList;

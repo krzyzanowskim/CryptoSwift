@@ -130,7 +130,7 @@ let input:[UInt8] = [49, 50, 51]
 let output = input.md5()
 // alternatively: let output = CryptoSwift.Hash.md5(input).calculate()
 
-println(output.toHexString())
+print(output.toHexString())
 ```
 
 
@@ -147,7 +147,7 @@ let hash = data.sha512()
 let crc32 = data.crc32()
 let crc16 = data.crc16()
 
-println(hash.toHexString())
+print(hash.toHexString())
 ```
 	
 Hashing a String and printing result

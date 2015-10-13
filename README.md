@@ -19,7 +19,7 @@ Good mood
 ##Features
 
 - Easy to use
-- Convenience extensions
+- Convenient extensions for String and NSData
 
 ##What implemented?
 

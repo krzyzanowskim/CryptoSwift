@@ -57,28 +57,44 @@ Good mood
 
 For latest version, please check **develop** branch. This is latest development version that will be merged into **master** branch at some point.
 
+- If you want to contribute, submit a [pull request](https://github.com/krzyzanowskim/CryptoSwift/pulls).
+- If you found a bug, [open an issue](https://github.com/krzyzanowskim/CryptoSwift/issues).
+- If you have a feature request, [open an issue](https://github.com/krzyzanowskim/CryptoSwift/issues).
+
 ##Installation
 
 To install CryptoSwift, add it as a submodule to your project (on the top level project directory):
 
 	git submodule add https://github.com/krzyzanowskim/CryptoSwift.git
 
-Then, drag the CryptoSwift.xcodeproj file into your Xcode project, and add CryptoSwift.framework as a dependency to your target. Now select your App and choose the General tab for the app target. Drag CryptoSwift.framework to "Embedded Binaries"
+####Embedded Framework
 
-#####Binary distribution
+Embedded frameworks require a minimum deployment target of iOS 8 or OS X Mavericks (10.9). Drag the `CryptoSwift.xcodeproj` file into your Xcode project, and add appropriate framework as a dependency to your target. Now select your App and choose the General tab for the app target. Drag framework to *Embedded Binaries*
+
+#####iOS, OSX, watchOS
+
+In the project, you'll find three targets, configured for each supported SDK:
+- CryptoSwift iOS
+- CryptoSwift OSX
+- CryptoSwift watchOS
+
+You may need to choose the one you need to build `CryptoSwift.framework` for your application.
+
+####CryptoSwift.framework
 
 Alternatively, you can build the Universal Framework and link it in your Xcode project. To do that please run `build.sh` script and find resulting frameworks in `Framework` directory.
 
 Looking for version for Swift 1.2? check branch **swift12**, it's there.
-
-#####iOS and OSX
-By default project is setup for iOS. You need to switch to OS X SDK manually [see #8](https://github.com/krzyzanowskim/CryptoSwift/issues/8)
 
 ####CocoaPods
 
 You can use [CocoaPods](http://cocoapods.org/?q=cryptoSwift).
 
 ```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
+use_frameworks!
+
 pod 'CryptoSwift'
 ```
 
@@ -96,7 +112,7 @@ Specify in Cartfile:
 github "krzyzanowskim/CryptoSwift"
 ```
 
-Then follow [build instructions](https://github.com/Carthage/Carthage#getting-started)
+Run carthage to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started)
  
 ##Usage
 
@@ -218,9 +234,10 @@ let bytes:[UInt8] = data.arrayOfBytes()
 ```
 
 ##Author
-[Marcin Krzyżanowski](http://www.krzyzanowskim.com)
 
-twitter: [@krzyzanowskim](http://twitter.com/krzyzanowskim)
+Cryptoswift is owned and maintained by Marcin Krzyżanowski. You can follow me on Twitter at [@krzyzanowskim](http://twitter.com/krzyzanowskim) for project updates and releases.
+
+[Marcin Krzyżanowski](http://www.krzyzanowskim.com)
 
 ##License
 

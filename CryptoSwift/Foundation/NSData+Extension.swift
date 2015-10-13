@@ -98,6 +98,10 @@ extension NSData {
         self.getBytes(&bytesArray, length:count * sizeof(UInt8))
         return bytesArray
     }
+
+    public convenience init(bytes: [UInt8]) {
+        self.init(data: NSData.withBytes(bytes))
+    }
     
     class public func withBytes(bytes: [UInt8]) -> NSData {
         return NSData(bytes: bytes, length: bytes.count)

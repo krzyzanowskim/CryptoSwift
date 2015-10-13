@@ -84,4 +84,9 @@ final class ExtensionsTest: XCTestCase {
         XCTAssert(result[0] == 117506305, "Invalid conversion")
         XCTAssert(result[1] == 84148994, "Invalid conversion")
     }
+
+    func test_NSData_init() {
+        let data = NSData(bytes: [0x01, 0x02, 0x03])
+        XCTAssert(data.length == 3, "Invalid data")
+    }
 }

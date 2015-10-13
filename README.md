@@ -229,7 +229,7 @@ let mac = try! Authenticator.Poly1305(key: key).authenticate(input)
 For you convenience CryptoSwift provide two function to easily convert array of bytes to NSData and other way around:
 
 ```swift
-let data  = NSData.withBytes([0x01,0x02,0x03])
+let data = NSData(bytes: [0x01, 0x02, 0x03])
 let bytes:[UInt8] = data.arrayOfBytes()
 ```
 

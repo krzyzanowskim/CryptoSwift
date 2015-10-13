@@ -89,4 +89,9 @@ final class ExtensionsTest: XCTestCase {
         let data = NSData(bytes: [0x01, 0x02, 0x03])
         XCTAssert(data.length == 3, "Invalid data")
     }
+
+    func test_String_encrypt_base64() {
+        let encrypted: String = try! "my secret string".encrypt(AES(key: "secret0key000000", iv: "0123456789012345"))
+        XCTAssertEqual(encrypted, "aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs=")
+    }
 }

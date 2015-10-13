@@ -69,6 +69,7 @@
 		758A94291A65C67400E46135 /* HMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758A94271A65C59200E46135 /* HMACTests.swift */; };
 		758C764119B61AE500653BC6 /* Generics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758C764019B61AE500653BC6 /* Generics.swift */; };
 		758F3F781992F6CE0014BBDA /* UInt8Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758F3F771992F6CE0014BBDA /* UInt8Extension.swift */; };
+		759B0A9C1BCDAB1200AF902E /* String+FoundationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759B0A9B1BCDAB1200AF902E /* String+FoundationExtension.swift */; settings = {ASSET_TAGS = (); }; };
 		759D481119B517BC005FF7FC /* BitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759D481019B517BC005FF7FC /* BitExtension.swift */; };
 		75A663A61AA0CAD00052110B /* Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A663A51AA0CAD00052110B /* Padding.swift */; };
 		75A74B271A1FF6B2004419F1 /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A74B261A1FF6B2004419F1 /* AES.swift */; };
@@ -231,6 +232,7 @@
 		758C764019B61AE500653BC6 /* Generics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generics.swift; sourceTree = "<group>"; };
 		758F3F771992F6CE0014BBDA /* UInt8Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UInt8Extension.swift; sourceTree = "<group>"; };
 		7599C9C5199EA28700A3988B /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		759B0A9B1BCDAB1200AF902E /* String+FoundationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+FoundationExtension.swift"; sourceTree = "<group>"; };
 		759D481019B517BC005FF7FC /* BitExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitExtension.swift; sourceTree = "<group>"; };
 		75A663A51AA0CAD00052110B /* Padding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Padding.swift; sourceTree = "<group>"; };
 		75A74B261A1FF6B2004419F1 /* AES.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AES.swift; sourceTree = "<group>"; };
@@ -393,6 +395,7 @@
 				75FB9C971BB8A4BD009CAFC5 /* ChaCha20+Foundation.swift */,
 				75FB9C981BB8A4BD009CAFC5 /* NSData+Extension.swift */,
 				75FB9C991BB8A4BD009CAFC5 /* Utils+Foundation.swift */,
+				759B0A9B1BCDAB1200AF902E /* String+FoundationExtension.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -653,6 +656,7 @@
 				75B0A5701AB1A1BB000BD8D2 /* PKCS5.swift in Sources */,
 				757EF7F519AAA82400586276 /* CRC.swift in Sources */,
 				75D94E2619B60C4F007CB2A4 /* UInt32Extension.swift in Sources */,
+				759B0A9C1BCDAB1200AF902E /* String+FoundationExtension.swift in Sources */,
 				75A74B271A1FF6B2004419F1 /* AES.swift in Sources */,
 				75D63F771BB840050041579B /* ArraySlice<UInt8>+Bytes.swift in Sources */,
 				754C30B71AA13BC000E6FFA4 /* PKCS7.swift in Sources */,

@@ -41,14 +41,15 @@ extension String {
         return self.utf8.lazy.map({ $0 as UInt8 }).crc16().toHexString()
     }
 
-    public func encrypt(cipher: Cipher) throws -> String {
-        return try self.utf8.lazy.map({ $0 as UInt8 }).encrypt(cipher).toHexString()
+    public func encrypt(cipher: Cipher) throws -> [UInt8] {
+        return try self.utf8.lazy.map({ $0 as UInt8 }).encrypt(cipher)
     }
 
-    public func decrypt(cipher: Cipher) throws -> String {
-        return try self.utf8.lazy.map({ $0 as UInt8 }).decrypt(cipher).toHexString()
+    public func decrypt(cipher: Cipher) throws -> [UInt8] {
+        return try self.utf8.lazy.map({ $0 as UInt8 }).decrypt(cipher)
     }
     
+    /// Returns hex string of bytes.
     public func authenticate(authenticator: Authenticator) throws -> String {
         return  try self.utf8.lazy.map({ $0 as UInt8 }).authenticate(authenticator).toHexString()
     }

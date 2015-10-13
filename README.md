@@ -184,11 +184,19 @@ let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
 input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC))
 ```
 
-Encrypt String to Base64 String output
+Encrypt String to Base64 string result:
 
 ```swift
 // Encrypt string and get Base64 representation of result
 let base64: String = try! "my secret string".encrypt(AES(key: "secret0key000000", iv: "0123456789012345"))
+```
+
+...under the hood, this is [UInt8] converted to NSData converted to Base64 string representation:
+
+```swift
+let encryptedBytes: [UInt8] = try "my secret string".encrypt(AES(key: "secret0key000000", iv: "0123456789012345")
+
+let base64 = NSData(bytes: encryptedBytes).base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength)
 ```
 
 Advanced:

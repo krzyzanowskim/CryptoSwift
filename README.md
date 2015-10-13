@@ -167,8 +167,8 @@ Working with Ciphers
 ChaCha20
 
 ```swift
-let encrypted = ChaCha20(key: key, iv: iv).encrypt(message)
-let decrypted = ChaCha20(key: key, iv: iv).decrypt(encrypted)
+let encrypted: [UInt8] = ChaCha20(key: key, iv: iv).encrypt(message)
+let decrypted: [UInt8] = ChaCha20(key: key, iv: iv).decrypt(encrypted)
 ```
 
 AES
@@ -180,7 +180,7 @@ Basic:
 let input = NSData()
 let encrypted = try! input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345"))
 
-let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
+let input: [UInt8] = [0,1,2,3,4,5,6,7,8,9]
 input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC))
 ```
 
@@ -201,14 +201,14 @@ let base64 = NSData(bytes: encryptedBytes).base64EncodedStringWithOptions(NSData
 
 Advanced:
 ```swift
-let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
+let input: [UInt8] = [0,1,2,3,4,5,6,7,8,9]
 
-let key = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] as [UInt8]
-let iv = AES.randomIV(AES.blockSize)
+let key: [UInt8] = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00]
+let iv: [UInt8] = AES.randomIV(AES.blockSize)
 
 do {
-    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC).encrypt(input, padding: PKCS7())
-    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC).decrypt(input, padding: PKCS7())
+    let encrypted: [UInt8] = try AES(key: key, iv: iv, blockMode: .CBC).encrypt(input, padding: PKCS7())
+    let decrypted: [UInt8] = try AES(key: key, iv: iv, blockMode: .CBC).decrypt(input, padding: PKCS7())
 } catch AES.Error.BlockSizeExceeded {
     // block size exceeded
 } catch {
@@ -219,16 +219,16 @@ do {
 AES without data padding
 
 ```swift
-let input = [0,1,2,3,4,5,6,7,8,9] as [UInt8]
-let encrypted = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC).encrypt(input)
+let input: [UInt8] = [0,1,2,3,4,5,6,7,8,9]
+let encrypted: [UInt8] = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC).encrypt(input)
 ```
 
 Using extensions
 	
 ```swift
 let plain = NSData()
-let encrypted = try! plain.encrypt(ChaCha20(key: key, iv: iv))
-let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
+let encrypted: NSData = try! plain.encrypt(ChaCha20(key: key, iv: iv))
+let decrypted: NSData = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
 // plain == decrypted
 ```
 	
@@ -236,7 +236,7 @@ Message authenticators
 
 ```swift
 // Calculate Message Authentication Code (MAC) for message
-let mac = try! Authenticator.Poly1305(key: key).authenticate(input)
+let mac: [UInt8] = try! Authenticator.Poly1305(key: key).authenticate(input)
 ```
 
 #####Conversion between NSData and [UInt8]
@@ -244,7 +244,7 @@ let mac = try! Authenticator.Poly1305(key: key).authenticate(input)
 For you convenience CryptoSwift provide two function to easily convert array of bytes to NSData and other way around:
 
 ```swift
-let data = NSData(bytes: [0x01, 0x02, 0x03])
+let data: NSData = NSData(bytes: [0x01, 0x02, 0x03])
 let bytes:[UInt8] = data.arrayOfBytes()
 ```
 

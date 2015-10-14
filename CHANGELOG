@@ -1,3 +1,6 @@
+0.1.1
+- Fix Cococapods package (missing Foundation integration)
+
 0.1.0
 - Major performance improvements.
 - Transition from Optionals to throw error.

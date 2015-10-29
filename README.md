@@ -73,12 +73,13 @@ Embedded frameworks require a minimum deployment target of iOS 8 or OS X Maveric
 
 
 
-#####iOS, OSX, watchOS
+#####iOS, OSX, watchOS, tvOS
 
 In the project, you'll find three targets, configured for each supported SDK:
 - CryptoSwift iOS
 - CryptoSwift OSX
 - CryptoSwift watchOS
+- CryptoSwift tvOS
 
 You may need to choose the one you need to build `CryptoSwift.framework` for your application.
 

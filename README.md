@@ -36,6 +36,7 @@ Good mood
 #####Cipher
 - [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)
 - [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
+- [Rabbit](https://tools.ietf.org/html/rfc4503)
 
 #####Message authenticators
 - [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
@@ -169,6 +170,13 @@ ChaCha20
 ```swift
 let encrypted: [UInt8] = ChaCha20(key: key, iv: iv).encrypt(message)
 let decrypted: [UInt8] = ChaCha20(key: key, iv: iv).decrypt(encrypted)
+```
+
+Rabbit
+
+```swift
+let encrypted = Rabbit(key: key, iv: iv)?.encrypt(plaintext)
+let decrypted = Rabbit(key: key, iv: iv)?.decrypt(encrypted!)
 ```
 
 AES

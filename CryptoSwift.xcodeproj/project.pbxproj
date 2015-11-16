@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5596BDC31BC8F384007E38D5 /* AES+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C951BB8A4BD009CAFC5 /* AES+Foundation.swift */; };
-		5596BDC41BC8F384007E38D5 /* Array<UInt8>+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C961BB8A4BD009CAFC5 /* Array<UInt8>+Foundation.swift */; };
+		5596BDC41BC8F384007E38D5 /* ArrayUInt8+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C961BB8A4BD009CAFC5 /* ArrayUInt8+Foundation.swift */; };
 		5596BDC51BC8F384007E38D5 /* ChaCha20+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C971BB8A4BD009CAFC5 /* ChaCha20+Foundation.swift */; };
 		5596BDC61BC8F384007E38D5 /* NSData+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C981BB8A4BD009CAFC5 /* NSData+Extension.swift */; };
 		5596BDC71BC8F384007E38D5 /* Utils+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C991BB8A4BD009CAFC5 /* Utils+Foundation.swift */; };
@@ -34,7 +34,7 @@
 		5596BDDB1BC8F384007E38D5 /* UInt32Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2519B60C4F007CB2A4 /* UInt32Extension.swift */; };
 		5596BDDC1BC8F384007E38D5 /* UInt64Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2719B60DDE007CB2A4 /* UInt64Extension.swift */; };
 		5596BDDD1BC8F384007E38D5 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C8FEC19979F94005AD904 /* Array+Extension.swift */; };
-		5596BDDE1BC8F384007E38D5 /* ArraySlice<UInt8>+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F761BB840050041579B /* ArraySlice<UInt8>+Bytes.swift */; };
+		5596BDDE1BC8F384007E38D5 /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F761BB840050041579B /* ArraySliceUInt8+Bytes.swift */; };
 		5596BDDF1BC8F384007E38D5 /* CSArrayType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75232CCD1BC6E6AC007F68B1 /* CSArrayType+Extensions.swift */; };
 		5596BDE01BC8F384007E38D5 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7599C9C5199EA28700A3988B /* String+Extension.swift */; };
 		5596BDE11BC8F384007E38D5 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2319B60C08007CB2A4 /* Operators.swift */; };
@@ -105,7 +105,7 @@
 		75D614A41BD844F2001358B2 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C8FEC19979F94005AD904 /* Array+Extension.swift */; };
 		75D614A51BD844F2001358B2 /* CSArrayType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75232CCD1BC6E6AC007F68B1 /* CSArrayType+Extensions.swift */; };
 		75D614A61BD844F2001358B2 /* MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750A545F1992D2680017DA75 /* MD5.swift */; };
-		75D614A71BD844F2001358B2 /* Array<UInt8>+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C961BB8A4BD009CAFC5 /* Array<UInt8>+Foundation.swift */; };
+		75D614A71BD844F2001358B2 /* ArrayUInt8+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C961BB8A4BD009CAFC5 /* ArrayUInt8+Foundation.swift */; };
 		75D614A81BD844F2001358B2 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7547195019931802002FA5F1 /* IntExtension.swift */; };
 		75D614A91BD844F2001358B2 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2319B60C08007CB2A4 /* Operators.swift */; };
 		75D614AA1BD844F2001358B2 /* NSData+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C981BB8A4BD009CAFC5 /* NSData+Extension.swift */; };
@@ -116,14 +116,14 @@
 		75D614AF1BD844F2001358B2 /* UInt32Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2519B60C4F007CB2A4 /* UInt32Extension.swift */; };
 		75D614B01BD844F2001358B2 /* String+FoundationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759B0A9B1BCDAB1200AF902E /* String+FoundationExtension.swift */; };
 		75D614B11BD844F2001358B2 /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A74B261A1FF6B2004419F1 /* AES.swift */; };
-		75D614B21BD844F2001358B2 /* ArraySlice<UInt8>+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F761BB840050041579B /* ArraySlice<UInt8>+Bytes.swift */; };
+		75D614B21BD844F2001358B2 /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F761BB840050041579B /* ArraySliceUInt8+Bytes.swift */; };
 		75D614B31BD844F2001358B2 /* PKCS7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C30B61AA13BC000E6FFA4 /* PKCS7.swift */; };
 		75D614B41BD844F2001358B2 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755111E719B7B7DF00C2AD86 /* Authenticator.swift */; };
 		75D614B51BD844F2001358B2 /* HashProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754DD76D19A149AF00E52288 /* HashProtocol.swift */; };
 		75D614B61BD844F2001358B2 /* Generics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758C764019B61AE500653BC6 /* Generics.swift */; };
 		75D614B71BD844F2001358B2 /* UInt8Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758F3F771992F6CE0014BBDA /* UInt8Extension.swift */; };
 		75D63F751BB711270041579B /* BytesSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F741BB711270041579B /* BytesSequence.swift */; };
-		75D63F771BB840050041579B /* ArraySlice<UInt8>+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F761BB840050041579B /* ArraySlice<UInt8>+Bytes.swift */; };
+		75D63F771BB840050041579B /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F761BB840050041579B /* ArraySliceUInt8+Bytes.swift */; };
 		75D94E2419B60C08007CB2A4 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2319B60C08007CB2A4 /* Operators.swift */; };
 		75D94E2619B60C4F007CB2A4 /* UInt32Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2519B60C4F007CB2A4 /* UInt32Extension.swift */; };
 		75D94E2819B60DDE007CB2A4 /* UInt64Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2719B60DDE007CB2A4 /* UInt64Extension.swift */; };
@@ -146,7 +146,7 @@
 		75DF77581BC8EB59006E9520 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C8FEC19979F94005AD904 /* Array+Extension.swift */; };
 		75DF77591BC8EB59006E9520 /* CSArrayType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75232CCD1BC6E6AC007F68B1 /* CSArrayType+Extensions.swift */; };
 		75DF775A1BC8EB59006E9520 /* MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750A545F1992D2680017DA75 /* MD5.swift */; };
-		75DF775B1BC8EB59006E9520 /* Array<UInt8>+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C961BB8A4BD009CAFC5 /* Array<UInt8>+Foundation.swift */; };
+		75DF775B1BC8EB59006E9520 /* ArrayUInt8+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C961BB8A4BD009CAFC5 /* ArrayUInt8+Foundation.swift */; };
 		75DF775C1BC8EB59006E9520 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7547195019931802002FA5F1 /* IntExtension.swift */; };
 		75DF775D1BC8EB59006E9520 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2319B60C08007CB2A4 /* Operators.swift */; };
 		75DF775E1BC8EB59006E9520 /* NSData+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C981BB8A4BD009CAFC5 /* NSData+Extension.swift */; };
@@ -156,7 +156,7 @@
 		75DF77621BC8EB59006E9520 /* CRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757EF7F419AAA82400586276 /* CRC.swift */; };
 		75DF77631BC8EB59006E9520 /* UInt32Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D94E2519B60C4F007CB2A4 /* UInt32Extension.swift */; };
 		75DF77641BC8EB59006E9520 /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A74B261A1FF6B2004419F1 /* AES.swift */; };
-		75DF77651BC8EB59006E9520 /* ArraySlice<UInt8>+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F761BB840050041579B /* ArraySlice<UInt8>+Bytes.swift */; };
+		75DF77651BC8EB59006E9520 /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D63F761BB840050041579B /* ArraySliceUInt8+Bytes.swift */; };
 		75DF77661BC8EB59006E9520 /* PKCS7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C30B61AA13BC000E6FFA4 /* PKCS7.swift */; };
 		75DF77671BC8EB59006E9520 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755111E719B7B7DF00C2AD86 /* Authenticator.swift */; };
 		75DF77681BC8EB59006E9520 /* HashProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754DD76D19A149AF00E52288 /* HashProtocol.swift */; };
@@ -164,7 +164,7 @@
 		75DF776A1BC8EB59006E9520 /* UInt8Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758F3F771992F6CE0014BBDA /* UInt8Extension.swift */; };
 		75EB380119ABDD710002375A /* ChaCha20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB380019ABDD710002375A /* ChaCha20.swift */; };
 		75FB9C9A1BB8A4BD009CAFC5 /* AES+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C951BB8A4BD009CAFC5 /* AES+Foundation.swift */; };
-		75FB9C9B1BB8A4BD009CAFC5 /* Array<UInt8>+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C961BB8A4BD009CAFC5 /* Array<UInt8>+Foundation.swift */; };
+		75FB9C9B1BB8A4BD009CAFC5 /* ArrayUInt8+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C961BB8A4BD009CAFC5 /* ArrayUInt8+Foundation.swift */; };
 		75FB9C9C1BB8A4BD009CAFC5 /* ChaCha20+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C971BB8A4BD009CAFC5 /* ChaCha20+Foundation.swift */; };
 		75FB9C9D1BB8A4BD009CAFC5 /* NSData+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C981BB8A4BD009CAFC5 /* NSData+Extension.swift */; };
 		75FB9C9E1BB8A4BD009CAFC5 /* Utils+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C991BB8A4BD009CAFC5 /* Utils+Foundation.swift */; };
@@ -298,14 +298,14 @@
 		75BE4EB01B1E4A9F007A2B57 /* IntegerConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntegerConvertible.swift; sourceTree = "<group>"; };
 		75D614BF1BD844F2001358B2 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75D63F741BB711270041579B /* BytesSequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BytesSequence.swift; sourceTree = "<group>"; };
-		75D63F761BB840050041579B /* ArraySlice<UInt8>+Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ArraySlice<UInt8>+Bytes.swift"; sourceTree = "<group>"; };
+		75D63F761BB840050041579B /* ArraySliceUInt8+Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ArraySliceUInt8+Bytes.swift"; sourceTree = "<group>"; };
 		75D94E2319B60C08007CB2A4 /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		75D94E2519B60C4F007CB2A4 /* UInt32Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UInt32Extension.swift; sourceTree = "<group>"; };
 		75D94E2719B60DDE007CB2A4 /* UInt64Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UInt64Extension.swift; sourceTree = "<group>"; };
 		75DF77721BC8EB59006E9520 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75EB380019ABDD710002375A /* ChaCha20.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChaCha20.swift; sourceTree = "<group>"; };
 		75FB9C951BB8A4BD009CAFC5 /* AES+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AES+Foundation.swift"; sourceTree = "<group>"; };
-		75FB9C961BB8A4BD009CAFC5 /* Array<UInt8>+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array<UInt8>+Foundation.swift"; sourceTree = "<group>"; };
+		75FB9C961BB8A4BD009CAFC5 /* ArrayUInt8+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ArrayUInt8+Foundation.swift"; sourceTree = "<group>"; };
 		75FB9C971BB8A4BD009CAFC5 /* ChaCha20+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChaCha20+Foundation.swift"; sourceTree = "<group>"; };
 		75FB9C981BB8A4BD009CAFC5 /* NSData+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+Extension.swift"; sourceTree = "<group>"; };
 		75FB9C991BB8A4BD009CAFC5 /* Utils+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Utils+Foundation.swift"; sourceTree = "<group>"; };
@@ -408,7 +408,7 @@
 				75D94E2519B60C4F007CB2A4 /* UInt32Extension.swift */,
 				75D94E2719B60DDE007CB2A4 /* UInt64Extension.swift */,
 				754C8FEC19979F94005AD904 /* Array+Extension.swift */,
-				75D63F761BB840050041579B /* ArraySlice<UInt8>+Bytes.swift */,
+				75D63F761BB840050041579B /* ArraySliceUInt8+Bytes.swift */,
 				75232CCD1BC6E6AC007F68B1 /* CSArrayType+Extensions.swift */,
 				7599C9C5199EA28700A3988B /* String+Extension.swift */,
 				75D94E2319B60C08007CB2A4 /* Operators.swift */,
@@ -459,7 +459,7 @@
 			isa = PBXGroup;
 			children = (
 				75FB9C951BB8A4BD009CAFC5 /* AES+Foundation.swift */,
-				75FB9C961BB8A4BD009CAFC5 /* Array<UInt8>+Foundation.swift */,
+				75FB9C961BB8A4BD009CAFC5 /* ArrayUInt8+Foundation.swift */,
 				75FB9C971BB8A4BD009CAFC5 /* ChaCha20+Foundation.swift */,
 				6764D7D21BF62E16000FE52E /* Rabbit+Foundation.swift */,
 				75FB9C981BB8A4BD009CAFC5 /* NSData+Extension.swift */,
@@ -698,7 +698,7 @@
 				5596BDDC1BC8F384007E38D5 /* UInt64Extension.swift in Sources */,
 				5596BDE11BC8F384007E38D5 /* Operators.swift in Sources */,
 				5596BDDB1BC8F384007E38D5 /* UInt32Extension.swift in Sources */,
-				5596BDDE1BC8F384007E38D5 /* ArraySlice<UInt8>+Bytes.swift in Sources */,
+				5596BDDE1BC8F384007E38D5 /* ArraySliceUInt8+Bytes.swift in Sources */,
 				5596BDCB1BC8F384007E38D5 /* Padding.swift in Sources */,
 				5596BDC91BC8F384007E38D5 /* Cipher.swift in Sources */,
 				5596BDD61BC8F384007E38D5 /* HMAC.swift in Sources */,
@@ -712,7 +712,7 @@
 				5596BDC31BC8F384007E38D5 /* AES+Foundation.swift in Sources */,
 				5596BDD81BC8F384007E38D5 /* BitExtension.swift in Sources */,
 				5596BDCD1BC8F384007E38D5 /* PKCS7.swift in Sources */,
-				5596BDC41BC8F384007E38D5 /* Array<UInt8>+Foundation.swift in Sources */,
+				5596BDC41BC8F384007E38D5 /* ArrayUInt8+Foundation.swift in Sources */,
 				5596BDC51BC8F384007E38D5 /* ChaCha20+Foundation.swift in Sources */,
 				5596BDE51BC8F384007E38D5 /* BytesSequence.swift in Sources */,
 				5596BDE21BC8F384007E38D5 /* Utils.swift in Sources */,
@@ -753,7 +753,7 @@
 				754C8FED19979F94005AD904 /* Array+Extension.swift in Sources */,
 				75232CCE1BC6E6AC007F68B1 /* CSArrayType+Extensions.swift in Sources */,
 				7539E3291B3B4A530037F4E1 /* MD5.swift in Sources */,
-				75FB9C9B1BB8A4BD009CAFC5 /* Array<UInt8>+Foundation.swift in Sources */,
+				75FB9C9B1BB8A4BD009CAFC5 /* ArrayUInt8+Foundation.swift in Sources */,
 				7547195119931802002FA5F1 /* IntExtension.swift in Sources */,
 				75D94E2419B60C08007CB2A4 /* Operators.swift in Sources */,
 				75FB9C9D1BB8A4BD009CAFC5 /* NSData+Extension.swift in Sources */,
@@ -765,7 +765,7 @@
 				759B0A9C1BCDAB1200AF902E /* String+FoundationExtension.swift in Sources */,
 				6764D7D31BF62E16000FE52E /* Rabbit+Foundation.swift in Sources */,
 				75A74B271A1FF6B2004419F1 /* AES.swift in Sources */,
-				75D63F771BB840050041579B /* ArraySlice<UInt8>+Bytes.swift in Sources */,
+				75D63F771BB840050041579B /* ArraySliceUInt8+Bytes.swift in Sources */,
 				754C30B71AA13BC000E6FFA4 /* PKCS7.swift in Sources */,
 				755111E819B7B7DF00C2AD86 /* Authenticator.swift in Sources */,
 				754DD76E19A149AF00E52288 /* HashProtocol.swift in Sources */,
@@ -814,7 +814,7 @@
 				75D614A41BD844F2001358B2 /* Array+Extension.swift in Sources */,
 				75D614A51BD844F2001358B2 /* CSArrayType+Extensions.swift in Sources */,
 				75D614A61BD844F2001358B2 /* MD5.swift in Sources */,
-				75D614A71BD844F2001358B2 /* Array<UInt8>+Foundation.swift in Sources */,
+				75D614A71BD844F2001358B2 /* ArrayUInt8+Foundation.swift in Sources */,
 				75D614A81BD844F2001358B2 /* IntExtension.swift in Sources */,
 				75D614A91BD844F2001358B2 /* Operators.swift in Sources */,
 				75D614AA1BD844F2001358B2 /* NSData+Extension.swift in Sources */,
@@ -826,7 +826,7 @@
 				75D614B01BD844F2001358B2 /* String+FoundationExtension.swift in Sources */,
 				6764D7D51BF62E16000FE52E /* Rabbit+Foundation.swift in Sources */,
 				75D614B11BD844F2001358B2 /* AES.swift in Sources */,
-				75D614B21BD844F2001358B2 /* ArraySlice<UInt8>+Bytes.swift in Sources */,
+				75D614B21BD844F2001358B2 /* ArraySliceUInt8+Bytes.swift in Sources */,
 				75D614B31BD844F2001358B2 /* PKCS7.swift in Sources */,
 				75D614B41BD844F2001358B2 /* Authenticator.swift in Sources */,
 				75D614B51BD844F2001358B2 /* HashProtocol.swift in Sources */,
@@ -859,7 +859,7 @@
 				75DF77581BC8EB59006E9520 /* Array+Extension.swift in Sources */,
 				75DF77591BC8EB59006E9520 /* CSArrayType+Extensions.swift in Sources */,
 				75DF775A1BC8EB59006E9520 /* MD5.swift in Sources */,
-				75DF775B1BC8EB59006E9520 /* Array<UInt8>+Foundation.swift in Sources */,
+				75DF775B1BC8EB59006E9520 /* ArrayUInt8+Foundation.swift in Sources */,
 				75DF775C1BC8EB59006E9520 /* IntExtension.swift in Sources */,
 				75DF775D1BC8EB59006E9520 /* Operators.swift in Sources */,
 				75DF775E1BC8EB59006E9520 /* NSData+Extension.swift in Sources */,
@@ -869,7 +869,7 @@
 				75DF77621BC8EB59006E9520 /* CRC.swift in Sources */,
 				75DF77631BC8EB59006E9520 /* UInt32Extension.swift in Sources */,
 				75DF77641BC8EB59006E9520 /* AES.swift in Sources */,
-				75DF77651BC8EB59006E9520 /* ArraySlice<UInt8>+Bytes.swift in Sources */,
+				75DF77651BC8EB59006E9520 /* ArraySliceUInt8+Bytes.swift in Sources */,
 				75DF77661BC8EB59006E9520 /* PKCS7.swift in Sources */,
 				674A736A1BF4E08C00866C5B /* Rabbit.swift in Sources */,
 				75DF77671BC8EB59006E9520 /* Authenticator.swift in Sources */,

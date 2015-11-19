@@ -67,8 +67,8 @@ func toUInt64Array(slice: ArraySlice<UInt8>) -> Array<UInt64> {
     return result
 }
 
-func xor(a: [UInt8], b:[UInt8]) -> [UInt8] {
-    var xored = [UInt8](count: a.count, repeatedValue: 0)
+func xor(a: [UInt8], _ b:[UInt8]) -> [UInt8] {
+    var xored = [UInt8](count: min(a.count, b.count), repeatedValue: 0)
     for i in 0..<xored.count {
         xored[i] = a[i] ^ b[i]
     }

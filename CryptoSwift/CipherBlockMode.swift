@@ -13,8 +13,16 @@ enum BlockError: ErrorType {
     case MissingInitializationVector
 }
 
+struct BlockModeOptions: OptionSetType {
+    let rawValue: Int
+
+    static let None = BlockModeOptions(rawValue: 0)
+    static let InitializationVectorRequired = BlockModeOptions(rawValue: 1)
+    static let PaddingRequired = BlockModeOptions(rawValue: 2)
+}
+
 private protocol BlockMode {
-    var needIV:Bool { get }
+    var options: BlockModeOptions { get }
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8]
     func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8]
 }
@@ -34,10 +42,8 @@ public enum CipherBlockMode {
             return CTRMode()
         }
     }
-    
-    var needIV: Bool {
-        return mode.needIV
-    }
+
+    var options: BlockModeOptions { return mode.options }
     
     /**
     Process input blocks with given block cipher mode. With fallback to plain mode.
@@ -74,7 +80,7 @@ public enum CipherBlockMode {
 Cipher-block chaining (CBC)
 */
 private struct CBCMode: BlockMode {
-    let needIV = true
+    let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
     
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
         precondition(blocks.count > 0)
@@ -86,7 +92,7 @@ private struct CBCMode: BlockMode {
         out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
         var prevCiphertext = iv // for the first time prevCiphertext = iv
         for plaintext in blocks {
-            if let encrypted = cipherOperation(block: xor(prevCiphertext, b: plaintext)) {
+            if let encrypted = cipherOperation(block: xor(prevCiphertext, plaintext)) {
                 out.appendContentsOf(encrypted)
                 prevCiphertext = encrypted
             }
@@ -105,7 +111,7 @@ private struct CBCMode: BlockMode {
         var prevCiphertext = iv // for the first time prevCiphertext = iv
         for ciphertext in blocks {
             if let decrypted = cipherOperation(block: ciphertext) { // decrypt
-                out.appendContentsOf(xor(prevCiphertext, b: decrypted)) //FIXME: b:
+                out.appendContentsOf(xor(prevCiphertext, decrypted)) //FIXME: b:
             }
             prevCiphertext = ciphertext
         }
@@ -118,8 +124,8 @@ private struct CBCMode: BlockMode {
 Cipher feedback (CFB)
 */
 private struct CFBMode: BlockMode {
-    let needIV = true
-    
+    let options: BlockModeOptions = [.InitializationVectorRequired]
+
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
         guard let iv = iv else {
             throw BlockError.MissingInitializationVector
@@ -131,7 +137,7 @@ private struct CFBMode: BlockMode {
         var lastCiphertext = iv
         for plaintext in blocks {
             if let ciphertext = cipherOperation(block: lastCiphertext) {
-                lastCiphertext = xor(plaintext,b: ciphertext)
+                lastCiphertext = xor(plaintext, ciphertext)
                 out.appendContentsOf(lastCiphertext)
             }
         }
@@ -149,7 +155,7 @@ private struct CFBMode: BlockMode {
         var lastCiphertext = iv
         for ciphertext in blocks {
             if let decrypted = cipherOperation(block: lastCiphertext) {
-                out.appendContentsOf(xor(decrypted, b: ciphertext))
+                out.appendContentsOf(xor(decrypted, ciphertext))
             }
             lastCiphertext = ciphertext
         }
@@ -163,8 +169,8 @@ private struct CFBMode: BlockMode {
 Electronic codebook (ECB)
 */
 private struct ECBMode: BlockMode {
-    let needIV = false
-    
+    let options: BlockModeOptions = [.PaddingRequired]
+
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8] {
         var out:[UInt8] = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
@@ -185,8 +191,8 @@ private struct ECBMode: BlockMode {
 Counter (CTR)
 */
 private struct CTRMode: BlockMode {
-    let needIV = true
-    
+    let options = BlockModeOptions.InitializationVectorRequired
+
     private func buildNonce(iv: [UInt8], counter: UInt) -> [UInt8] {
         let noncePartLen = AES.blockSize / 2
         let noncePrefix = Array(iv[0..<noncePartLen])
@@ -210,7 +216,7 @@ private struct CTRMode: BlockMode {
         for plaintext in blocks {
             let nonce = buildNonce(iv, counter: counter++)
             if let encrypted = cipherOperation(block: nonce) {
-                out.appendContentsOf(xor(plaintext, b: encrypted))
+                out.appendContentsOf(xor(plaintext, encrypted))
             }
         }
         return out
@@ -227,7 +233,7 @@ private struct CTRMode: BlockMode {
         for plaintext in blocks {
             let nonce = buildNonce(iv, counter: counter++)
             if let encrypted = cipherOperation(block: nonce) {
-                out.appendContentsOf(xor(encrypted, b: plaintext))
+                out.appendContentsOf(xor(encrypted, plaintext))
             }
         }
         return out

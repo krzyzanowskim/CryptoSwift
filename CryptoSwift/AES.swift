@@ -91,7 +91,7 @@ final public class AES {
         self.iv = iv
         self.blockMode = blockMode
         
-        if (blockMode.needIV && iv.count != AES.blockSize) {
+        if (blockMode.options.contains(.InitializationVectorRequired) && iv.count != AES.blockSize) {
             assert(false, "Block size and Initialization Vector must be the same length!")
             throw Error.InvalidInitializationVector
         }
@@ -107,6 +107,7 @@ final public class AES {
     Encrypt message. If padding is necessary, then PKCS7 padding is added and needs to be removed after decryption.
     
     - parameter message: Plaintext data
+    - parameter padding: Optional padding
     
     - returns: Encrypted data
     */
@@ -116,10 +117,11 @@ final public class AES {
         
         if let padding = padding {
             finalBytes = padding.add(bytes, blockSize: AES.blockSize)
-        } else if bytes.count % AES.blockSize != 0 {
+        } else if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
             throw Error.BlockSizeExceeded
         }
-        
+
+
         let blocks = finalBytes.chunks(AES.blockSize)
         return try blockMode.encryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
     }
@@ -170,7 +172,7 @@ final public class AES {
     }
     
     public func decrypt(bytes:[UInt8], padding:Padding? = PKCS7()) throws -> [UInt8] {
-        if bytes.count % AES.blockSize != 0 {
+        if padding == nil && blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
             throw Error.BlockSizeExceeded
         }
         

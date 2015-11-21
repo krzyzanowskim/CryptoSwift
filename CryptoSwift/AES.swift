@@ -8,7 +8,7 @@
 
 final public class AES {
     
-    enum Error: ErrorType {
+    public enum Error: ErrorType {
         case BlockSizeExceeded
         case InvalidKeyOrInitializationVector
         case InvalidInitializationVector

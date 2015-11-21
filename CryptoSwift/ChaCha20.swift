@@ -8,7 +8,7 @@
 
 final public class ChaCha20 {
     
-    enum Error: ErrorType {
+    public enum Error: ErrorType {
         case MissingContext
     }
     

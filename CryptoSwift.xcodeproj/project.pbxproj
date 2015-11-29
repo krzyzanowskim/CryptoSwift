@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21C68D4F1C0BA77500D2B00A /* CryptoSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 21C68D4E1C0BA77500D2B00A /* CryptoSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		21C68D501C0BA77500D2B00A /* CryptoSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 21C68D4E1C0BA77500D2B00A /* CryptoSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		21C68D511C0BA77500D2B00A /* CryptoSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 21C68D4E1C0BA77500D2B00A /* CryptoSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		21C68D521C0BA77500D2B00A /* CryptoSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 21C68D4E1C0BA77500D2B00A /* CryptoSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5596BDC31BC8F384007E38D5 /* AES+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C951BB8A4BD009CAFC5 /* AES+Foundation.swift */; };
 		5596BDC41BC8F384007E38D5 /* Array<UInt8>+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C961BB8A4BD009CAFC5 /* Array<UInt8>+Foundation.swift */; };
 		5596BDC51BC8F384007E38D5 /* ChaCha20+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FB9C971BB8A4BD009CAFC5 /* ChaCha20+Foundation.swift */; };
@@ -244,6 +248,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		21C68D4E1C0BA77500D2B00A /* CryptoSwift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoSwift.h; sourceTree = "<group>"; };
 		5596BDBB1BC8F220007E38D5 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		750A545F1992D2680017DA75 /* MD5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MD5.swift; sourceTree = "<group>"; };
 		75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Poly1305Tests.swift; sourceTree = "<group>"; };
@@ -372,6 +377,7 @@
 		754BE45719693E190098E6F3 /* CryptoSwift */ = {
 			isa = PBXGroup;
 			children = (
+				21C68D4E1C0BA77500D2B00A /* CryptoSwift.h */,
 				75FB9C941BB8A4BD009CAFC5 /* Foundation */,
 				7552614D1993051E000D2B20 /* Hash.swift */,
 				7563B2E719B14D4300B152CD /* Cipher.swift */,
@@ -461,6 +467,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21C68D501C0BA77500D2B00A /* CryptoSwift.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,6 +475,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21C68D4F1C0BA77500D2B00A /* CryptoSwift.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +483,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21C68D511C0BA77500D2B00A /* CryptoSwift.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,6 +491,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21C68D521C0BA77500D2B00A /* CryptoSwift.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,7 +604,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Marcin Krzyzanowski";
 				TargetAttributes = {
 					5596BDBA1BC8F220007E38D5 = {
@@ -960,6 +970,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1009,6 +1020,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1189,6 +1201,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1212,6 +1225,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

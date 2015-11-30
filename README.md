@@ -70,14 +70,19 @@ To install CryptoSwift, add it as a submodule to your project (on the top level 
 
 ####Embedded Framework
 
-Embedded frameworks require a minimum deployment target of iOS 8 or OS X Mavericks (10.9). Drag the `CryptoSwift.xcodeproj` file into your Xcode project, and add appropriate framework as a dependency to your target. Now select your App and choose the General tab for the app target. Drag framework to *Embedded Binaries*
+Embedded frameworks require a minimum deployment target of iOS 8 or OS X Mavericks (10.9). Drag the `CryptoSwift.xcodeproj` file into your Xcode project, and add appropriate framework as a dependency to your target. Now select your App and choose the General tab for the app target. Find *Embedded Binaries* and press "+", then select `CryptoSwift.framework` (iOS, OS X, watchOS or tvOS)
 
-#####iOS, OSX, watchOS
+![](https://cloud.githubusercontent.com/assets/758033/10834511/25a26852-7e9a-11e5-8c01-6cc8f1838459.png)
+
+
+
+#####iOS, OSX, watchOS, tvOS
 
 In the project, you'll find three targets, configured for each supported SDK:
 - CryptoSwift iOS
 - CryptoSwift OSX
 - CryptoSwift watchOS
+- CryptoSwift tvOS
 
 You may need to choose the one you need to build `CryptoSwift.framework` for your application.
 
@@ -277,4 +282,4 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 ##Changelog
 
-see CHANGELOG file
+See [CHANGELOG](./CHANGELOG) file.

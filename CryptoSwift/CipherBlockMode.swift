@@ -193,7 +193,7 @@ Counter (CTR)
 private struct CTRMode: BlockMode {
     let options = BlockModeOptions.InitializationVectorRequired
 
-    private func buildNonce(iv: [UInt8], counter: UInt) -> [UInt8] {
+    private func buildNonce(iv: [UInt8], counter: UInt64) -> [UInt8] {
         let noncePartLen = AES.blockSize / 2
         let noncePrefix = Array(iv[0..<noncePartLen])
         let nonceSuffix = arrayOfBytes(counter, length: noncePartLen)
@@ -214,7 +214,7 @@ private struct CTRMode: BlockMode {
         var out:[UInt8] = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
         for plaintext in blocks {
-            let nonce = buildNonce(iv, counter: counter++)
+            let nonce = buildNonce(iv, counter: UInt64(counter++))
             if let encrypted = cipherOperation(block: nonce) {
                 out.appendContentsOf(xor(plaintext, encrypted))
             }
@@ -228,10 +228,10 @@ private struct CTRMode: BlockMode {
         }
         
         var counter:UInt = 0
-        var out:[UInt8] = [UInt8]()
+        var out = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
         for plaintext in blocks {
-            let nonce = buildNonce(iv, counter: counter++)
+            let nonce = buildNonce(iv, counter: UInt64(counter++))
             if let encrypted = cipherOperation(block: nonce) {
                 out.appendContentsOf(xor(encrypted, plaintext))
             }

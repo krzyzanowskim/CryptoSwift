@@ -196,11 +196,9 @@ private struct CTRMode: BlockMode {
     private func buildNonce(iv: [UInt8], counter: UInt64) -> [UInt8] {
         let noncePartLen = AES.blockSize / 2
         let noncePrefix = Array(iv[0..<noncePartLen])
-        let nonceSuffix = arrayOfBytes(counter, length: noncePartLen)
-        
-        var nonce = noncePrefix
-        nonce += nonceSuffix
-        return nonce
+        let nonceSuffix = Array(iv[noncePartLen..<iv.count])
+        let c = UInt64.withBytes(nonceSuffix) + counter
+        return noncePrefix + arrayOfBytes(c)
     }
     
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
@@ -230,10 +228,10 @@ private struct CTRMode: BlockMode {
         var counter:UInt = 0
         var out = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
-        for plaintext in blocks {
+        for ciphertext in blocks {
             let nonce = buildNonce(iv, counter: UInt64(counter++))
-            if let encrypted = cipherOperation(block: nonce) {
-                out.appendContentsOf(xor(encrypted, plaintext))
+            if let decrypted = cipherOperation(block: nonce) {
+                out.appendContentsOf(xor(decrypted, ciphertext))
             }
         }
         return out

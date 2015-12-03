@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import simd
-
 final class SHA2 : HashProtocol {
     var size:Int { return variant.rawValue }
     let variant:SHA2.Variant

@@ -6,7 +6,12 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Darwin
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 
 protocol _UInt32Type { }
 extension UInt32: _UInt32Type {}

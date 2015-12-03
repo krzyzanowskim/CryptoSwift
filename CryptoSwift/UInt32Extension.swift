@@ -9,7 +9,7 @@
 #if os(Linux)
     import Glibc
 #else
-    import Darwin.C
+    import Darwin
 #endif
 
 

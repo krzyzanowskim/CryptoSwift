@@ -6,12 +6,6 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Darwin.C
-#endif
-
 public enum CipherError: ErrorType {
     case Encrypt
     case Decrypt
@@ -28,7 +22,7 @@ extension Cipher {
     static public func randomIV(blockSize:Int) -> [UInt8] {
         var randomIV:[UInt8] = [UInt8]();
         for (var i = 0; i < blockSize; i++) {
-            randomIV.append(UInt8(truncatingBitPattern: arc4random_uniform(256)));
+            randomIV.append(UInt8(truncatingBitPattern: cs_arc4random_uniform(256)));
         }
         return randomIV
     }

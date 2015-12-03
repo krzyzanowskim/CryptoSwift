@@ -6,6 +6,12 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin
+#endif
+
 public enum CipherError: ErrorType {
     case Encrypt
     case Decrypt

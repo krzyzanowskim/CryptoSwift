@@ -33,12 +33,12 @@ extension String {
         return self.utf8.lazy.map({ $0 as UInt8 }).sha512().toHexString()
     }
 
-    public func crc32() -> String {
-        return self.utf8.lazy.map({ $0 as UInt8 }).crc32().toHexString()
+    public func crc32(seed: UInt32? = nil) -> String {
+        return self.utf8.lazy.map({ $0 as UInt8 }).crc32(seed).toHexString()
     }
 
-    public func crc16() -> String {
-        return self.utf8.lazy.map({ $0 as UInt8 }).crc16().toHexString()
+    public func crc16(seed: UInt16? = nil) -> String {
+        return self.utf8.lazy.map({ $0 as UInt8 }).crc16(seed).toHexString()
     }
 
     public func encrypt(cipher: Cipher) throws -> [UInt8] {

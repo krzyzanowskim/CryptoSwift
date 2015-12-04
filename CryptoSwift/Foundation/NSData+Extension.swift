@@ -60,12 +60,12 @@ extension NSData {
         return NSData.withBytes(result)
     }
 
-    public func crc32(seed: UInt32?) -> NSData? {
+    public func crc32(seed: UInt32? = nil) -> NSData? {
         let result = Hash.crc32(self.arrayOfBytes(), seed: seed).calculate()
         return NSData.withBytes(result)
     }
 
-    public func crc16(seed: UInt16?) -> NSData? {
+    public func crc16(seed: UInt16? = nil) -> NSData? {
         let result = Hash.crc16(self.arrayOfBytes(), seed: seed).calculate()
         return NSData.withBytes(result)
     }

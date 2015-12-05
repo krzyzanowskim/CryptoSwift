@@ -119,11 +119,11 @@ final class CryptoSwiftTests: XCTestCase {
     
     func testCRC32() {
         let data:NSData = NSData(bytes: [49, 50, 51] as [UInt8], length: 3)
-        if let crc = data.crc32() {
+        if let crc = data.crc32(nil) {
             XCTAssertEqual(crc.toHexString(), "884863d2", "CRC32 calculation failed");
         }
         
-        XCTAssertEqual("".crc32(), "00000000", "CRC32 calculation failed");
+        XCTAssertEqual("".crc32(nil), "00000000", "CRC32 calculation failed");
     }
     
     func testCRC16() {

@@ -8,11 +8,11 @@
 
 //TODO: func anyGenerator is renamed to AnyGenerator in Swift 2.2, until then it's just dirty hack for linux (because swift >= 2.2 is available for Linux)
 private func CS_AnyGenerator<Element>(body: () -> Element?) -> AnyGenerator<Element> {
-#if os(Linux)
+ #if os(Linux)
     return AnyGenerator(body: body)
-#else
-    return anyGenerator(body)
-#endif
+ #else
+     return anyGenerator(body)
+ #endif
 }
 
 struct BytesSequence: SequenceType {

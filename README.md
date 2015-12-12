@@ -20,6 +20,7 @@ Good mood
 
 - Easy to use
 - Convenient extensions for String and NSData
+- iOS, OSX, AppleTV, watchOS, Linux support
 
 ##What implemented?
 
@@ -30,8 +31,8 @@ Good mood
 - [SHA256](http://tools.ietf.org/html/rfc6234)
 - [SHA384](http://tools.ietf.org/html/rfc6234)
 - [SHA512](http://tools.ietf.org/html/rfc6234)
-- [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (well, kind of hash)
-- [CRC16](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (well, kind of hash)
+- [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (not hash)
+- [CRC16](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (not hash)
 
 #####Cipher
 - [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)
@@ -119,6 +120,13 @@ github "krzyzanowskim/CryptoSwift"
 ```
 
 Run carthage to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started)
+
+####Swift Package Manager
+
+You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding this:
+```
+.Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", majorVersion: 0)
+```
  
 ##Usage
 

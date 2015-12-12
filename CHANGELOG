@@ -1,3 +1,14 @@
+0.2
+- Rabbit cipher (RFC4503)
+- Linux Swift support
+- Swift Package Manager support
+- tvOS support
+- Add optional seed to CRC
+- Add umbrella header (CryptoSwift.h)
+- Fix AES in CTR mode
+- Fix no padding support for CTR and CFB block modes
+- Fix access to AES.Error and ChaCha20.Error
+
 0.1.1
 - Fix Cococapods package (missing Foundation integration)
 

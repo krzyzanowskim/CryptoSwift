@@ -10,7 +10,7 @@ import Foundation
 
 extension Rabbit {
     convenience public init?(key: String) {
-        guard let kkey = key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() else {
+        guard let kkey = (key as NSString).dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() else {
             return nil
         }
         self.init(key: kkey)
@@ -18,8 +18,8 @@ extension Rabbit {
     }
     
     convenience public init?(key: String, iv: String) {
-        guard let kkey = key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(),
-            let iiv = iv.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes()
+        guard let kkey = (key as NSString).dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(),
+            let iiv = (iv as NSString).dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes()
             else {
                 return nil
         }

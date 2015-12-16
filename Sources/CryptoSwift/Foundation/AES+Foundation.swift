@@ -10,7 +10,7 @@ import Foundation
 
 extension AES {
     convenience public init(key:String, iv:String, blockMode:CipherBlockMode = .CBC) throws {
-        guard let kkey = key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(), let iiv = iv.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() else {
+        guard let kkey = (key as NSString).dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(), let iiv = (iv as NSString).dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() else {
             throw Error.InvalidKeyOrInitializationVector
         }
         

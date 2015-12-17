@@ -1,3 +1,7 @@
+0.2.1
+- Fix linux build
+- re-add umbrella header
+
 0.2
 - Rabbit cipher (RFC4503)
 - Linux Swift support

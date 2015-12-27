@@ -20,7 +20,7 @@ final public class ChaCha20 {
         var input:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
         
         deinit {
-            for (var i = 0; i < input.count; i++) {
+            for i in 0..<input.count {
                 input[i] = 0x00;
             }
         }
@@ -89,7 +89,7 @@ final public class ChaCha20 {
         }
         
         // 4 - 8
-        for (var i = 0; i < 4; i++) {
+        for i in 0..<4 {
             let start = i * 4
             ctx.input[i + 4] = wordNumber(key[start..<(start + 4)])
         }
@@ -113,7 +113,7 @@ final public class ChaCha20 {
         }
         
         // 8 - 11
-        for (var i = 0; i < 4; i++) {
+        for i in 0..<4 {
             let start = addPos + (i*4)
             
             let bytes = key[start..<(start + 4)]
@@ -149,12 +149,12 @@ final public class ChaCha20 {
                     /* stopping at 2^70 bytes per nonce is user's responsibility */
                 }
                 if (bytes <= ChaCha20.blockSize) {
-                    for (var i = 0; i < bytes; i++) {
+                    for i in 0..<bytes {
                         c[i + cPos] = message[i + mPos] ^ output[i]
                     }
                     return c
                 }
-                for (var i = 0; i < ChaCha20.blockSize; i++) {
+                for i in 0..<ChaCha20.blockSize {
                     c[i + cPos] = message[i + mPos] ^ output[i]
                 }
                 bytes -= ChaCha20.blockSize
@@ -196,9 +196,10 @@ extension ChaCha20: Cipher {
 /// Change array to number. It's here because arrayOfBytes is too slow
 private func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
     var value:UInt32 = 0
-    for (var i:UInt32 = 0, j = bytes.startIndex; i < 4; i++, j++) {
+    for i:UInt32 in 0..<4 {
+        let j = bytes.startIndex + Int(i)
         value = value | UInt32(bytes[j]) << (8 * i)
     }
-    return value
-}
+
+    return value}
 

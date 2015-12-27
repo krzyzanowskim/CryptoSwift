@@ -23,7 +23,7 @@ extension NSData {
     public func checksum() -> UInt16 {
         var s:UInt32 = 0
         var bytesArray = self.arrayOfBytes()
-        for (var i = 0; i < bytesArray.count; i++) {
+        for i in 0..<bytesArray.count {
             s = s + UInt32(bytesArray[i])
         }
         s = s % 65536

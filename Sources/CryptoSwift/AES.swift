@@ -297,7 +297,8 @@ final public class AES {
         }
         
         var tmp:[UInt8]
-        for (var i = variant.Nk; i < variant.Nb * (variant.Nr + 1); i++) {
+
+        for i in variant.Nk..<variant.Nb * (variant.Nr + 1) {
             tmp = [UInt8](count: 4, repeatedValue: 0)
             
             for wordIdx in 0..<4 {

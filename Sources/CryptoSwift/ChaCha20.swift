@@ -52,9 +52,8 @@ final public class ChaCha20 {
         }
         
         var x = input
-        
-        var i = 10
-        while (i  > 0) {
+
+        for _ in 0..<10 {
             quarterround(&x[0], &x[4], &x[8], &x[12])
             quarterround(&x[1], &x[5], &x[9],  &x[13])
             quarterround(&x[2], &x[6], &x[10], &x[14])
@@ -63,18 +62,14 @@ final public class ChaCha20 {
             quarterround(&x[1], &x[6], &x[11], &x[12])
             quarterround(&x[2], &x[7], &x[8],  &x[13])
             quarterround(&x[3], &x[4], &x[9],  &x[14])
-            i -= 2
         }
 
         var output = [UInt8]()
         output.reserveCapacity(16)
 
         for i in 0..<16 {
-            x[i] = x[i] &+ input[i]            
-            output.appendContentsOf([UInt8((x[i] & 0xFFFFFFFF) >> 24),
-                       UInt8((x[i] & 0xFFFFFF) >> 16),
-                       UInt8((x[i] & 0xFFFF) >> 8),
-                       UInt8((x[i] & 0xFF) >> 0)])
+            x[i] = x[i] &+ input[i]
+            output.appendContentsOf(x[i].bytes().reverse())
         }
 
         return output;

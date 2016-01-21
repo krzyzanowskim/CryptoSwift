@@ -229,7 +229,7 @@ let iv: [UInt8] = AES.randomIV(AES.blockSize)
 
 do {
     let encrypted: [UInt8] = try AES(key: key, iv: iv, blockMode: .CBC).encrypt(input, padding: PKCS7())
-    let decrypted: [UInt8] = try AES(key: key, iv: iv, blockMode: .CBC).decrypt(input, padding: PKCS7())
+    let decrypted: [UInt8] = try AES(key: key, iv: iv, blockMode: .CBC).decrypt(encrypted, padding: PKCS7())
 } catch AES.Error.BlockSizeExceeded {
     // block size exceeded
 } catch {

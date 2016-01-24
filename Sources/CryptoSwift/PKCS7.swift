@@ -35,16 +35,16 @@ public struct PKCS7: Padding {
         }
         return withPadding
     }
-    
-    public func remove(bytes: [UInt8], blockSize:Int?) throws -> [UInt8] {
+
+    public func remove(bytes: [UInt8], blockSize:Int?) -> [UInt8] {
         let lastByte = bytes.last!
         let padding = Int(lastByte) // last byte
         let finalLength = bytes.count - padding
 
         if finalLength < 0 {
-            throw Error.InvalidPaddingValue
+            return bytes
         }
-        
+
         if padding >= 1 {
             return Array(bytes[0..<finalLength])
         }

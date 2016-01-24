@@ -194,7 +194,7 @@ final class AESTests: XCTestCase {
         XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
         let encrypted = try! aes.encrypt(plaintext, padding: PKCS7())
         let decrypted = try? aes2.decrypt(encrypted, padding: PKCS7())
-        XCTAssertTrue(decrypted == nil, "failed")
+        XCTAssertTrue(decrypted! != plaintext, "failed")
     }
 
 }

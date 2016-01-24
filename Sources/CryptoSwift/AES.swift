@@ -187,7 +187,7 @@ final public class AES {
         }
         
         if let padding = padding {
-            return try padding.remove(out, blockSize: AES.blockSize)
+            return padding.remove(out, blockSize: AES.blockSize)
         }
         
         return out

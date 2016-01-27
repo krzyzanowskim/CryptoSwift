@@ -139,10 +139,29 @@ final public class AES {
             t[2] = b[2] ^ rk[r][2]
             t[3] = b[3] ^ rk[r][3]
             
-            b[0] = T0[Int(t[0] & 0xFF)] ^ T1[Int((t[1] >> 8) & 0xFF)] ^ T2[Int((t[2] >> 16) & 0xFF)] ^ T3[Int(t[3] >> 24)]
-            b[1] = T0[Int(t[1] & 0xFF)] ^ T1[Int((t[2] >> 8) & 0xFF)] ^ T2[Int((t[3] >> 16) & 0xFF)] ^ T3[Int(t[0] >> 24)]
-            b[2] = T0[Int(t[2] & 0xFF)] ^ T1[Int((t[3] >> 8) & 0xFF)] ^ T2[Int((t[0] >> 16) & 0xFF)] ^ T3[Int(t[1] >> 24)]
-            b[3] = T0[Int(t[3] & 0xFF)] ^ T1[Int((t[0] >> 8) & 0xFF)] ^ T2[Int((t[1] >> 16) & 0xFF)] ^ T3[Int(t[2] >> 24)]
+            let lb00 = T0[Int(t[0] & 0xFF)]
+            let lb01 = T1[Int((t[1] >> 8) & 0xFF)]
+            let lb02 = T2[Int((t[2] >> 16) & 0xFF)]
+            let lb03 = T3[Int(t[3] >> 24)]
+            b[0] = lb00 ^ lb01 ^ lb02 ^ lb03
+            
+            let lb10 = T0[Int(t[1] & 0xFF)]
+            let lb11 = T1[Int((t[2] >> 8) & 0xFF)]
+            let lb12 = T2[Int((t[3] >> 16) & 0xFF)]
+            let lb13 = T3[Int(t[0] >> 24)]
+            b[1] = lb10 ^ lb11 ^ lb12 ^ lb13
+            
+            let lb20 = T0[Int(t[2] & 0xFF)]
+            let lb21 = T1[Int((t[3] >> 8) & 0xFF)]
+            let lb22 = T2[Int((t[0] >> 16) & 0xFF)]
+            let lb23 = T3[Int(t[1] >> 24)]
+            b[2] = lb20 ^ lb21 ^ lb22 ^ lb23
+            
+            let lb30 = T0[Int(t[3] & 0xFF)]
+            let lb31 = T1[Int((t[0] >> 8) & 0xFF)]
+            let lb32 = T2[Int((t[1] >> 16) & 0xFF)]
+            let lb33 = T3[Int(t[2] >> 24)]
+            b[3] = lb30 ^ lb31 ^ lb32 ^ lb33
         }
         
         // last round
@@ -206,10 +225,29 @@ final public class AES {
             t[2] = b[2] ^ rk[r][2]
             t[3] = b[3] ^ rk[r][3]
             
-            b[0] = T0_INV[Int(t[0] & 0xFF)] ^ T1_INV[Int((t[3] >> 8) & 0xFF)] ^ T2_INV[Int((t[2] >> 16) & 0xFF)] ^ T3_INV[Int(t[1] >> 24)]
-            b[1] = T0_INV[Int(t[1] & 0xFF)] ^ T1_INV[Int((t[0] >> 8) & 0xFF)] ^ T2_INV[Int((t[3] >> 16) & 0xFF)] ^ T3_INV[Int(t[2] >> 24)]
-            b[2] = T0_INV[Int(t[2] & 0xFF)] ^ T1_INV[Int((t[1] >> 8) & 0xFF)] ^ T2_INV[Int((t[0] >> 16) & 0xFF)] ^ T3_INV[Int(t[3] >> 24)]
-            b[3] = T0_INV[Int(t[3] & 0xFF)] ^ T1_INV[Int((t[2] >> 8) & 0xFF)] ^ T2_INV[Int((t[1] >> 16) & 0xFF)] ^ T3_INV[Int(t[0] >> 24)]
+            let b00 = T0_INV[Int(t[0] & 0xFF)]
+            let b01 = T1_INV[Int((t[3] >> 8) & 0xFF)]
+            let b02 = T2_INV[Int((t[2] >> 16) & 0xFF)]
+            let b03 = T3_INV[Int(t[1] >> 24)]
+            b[0] = b00 ^ b01 ^ b02 ^ b03
+            
+            let b10 = T0_INV[Int(t[1] & 0xFF)]
+            let b11 = T1_INV[Int((t[0] >> 8) & 0xFF)]
+            let b12 = T2_INV[Int((t[3] >> 16) & 0xFF)]
+            let b13 = T3_INV[Int(t[2] >> 24)]
+            b[1] = b10 ^ b11 ^ b12 ^ b13
+            
+            let b20 = T0_INV[Int(t[2] & 0xFF)]
+            let b21 = T1_INV[Int((t[1] >> 8) & 0xFF)]
+            let b22 = T2_INV[Int((t[0] >> 16) & 0xFF)]
+            let b23 = T3_INV[Int(t[3] >> 24)]
+            b[2] = b20 ^ b21 ^ b22 ^ b23
+            
+            let b30 = T0_INV[Int(t[3] & 0xFF)]
+            let b31 = T1_INV[Int((t[2] >> 8) & 0xFF)]
+            let b32 = T2_INV[Int((t[1] >> 16) & 0xFF)]
+            let b33 = T3_INV[Int(t[0] >> 24)]
+            b[3] = b30 ^ b31 ^ b32 ^ b33
         }
         
         // last round
@@ -219,10 +257,30 @@ final public class AES {
         t[3] = b[3] ^ rk[1][3]
         
         // rounds
-        b[0] = sBoxInv[Int(B0(t[0]))] | (sBoxInv[Int(B1(t[3]))] << 8) | (sBoxInv[Int(B2(t[2]))] << 16) | (sBoxInv[Int(B3(t[1]))] << 24) ^ rk[0][0]
-        b[1] = sBoxInv[Int(B0(t[1]))] | (sBoxInv[Int(B1(t[0]))] << 8) | (sBoxInv[Int(B2(t[3]))] << 16) | (sBoxInv[Int(B3(t[2]))] << 24) ^ rk[0][1]
-        b[2] = sBoxInv[Int(B0(t[2]))] | (sBoxInv[Int(B1(t[1]))] << 8) | (sBoxInv[Int(B2(t[0]))] << 16) | (sBoxInv[Int(B3(t[3]))] << 24) ^ rk[0][2]
-        b[3] = sBoxInv[Int(B0(t[3]))] | (sBoxInv[Int(B1(t[2]))] << 8) | (sBoxInv[Int(B2(t[1]))] << 16) | (sBoxInv[Int(B3(t[0]))] << 24) ^ rk[0][3]
+        
+        let lb00 = sBoxInv[Int(B0(t[0]))]
+        let lb01 = (sBoxInv[Int(B1(t[3]))] << 8)
+        let lb02 = (sBoxInv[Int(B2(t[2]))] << 16)
+        let lb03 = (sBoxInv[Int(B3(t[1]))] << 24)
+        b[0] = lb00 | lb01 | lb02 | lb03 ^ rk[0][0]
+        
+        let lb10 = sBoxInv[Int(B0(t[1]))]
+        let lb11 = (sBoxInv[Int(B1(t[0]))] << 8)
+        let lb12 = (sBoxInv[Int(B2(t[3]))] << 16)
+        let lb13 = (sBoxInv[Int(B3(t[2]))] << 24)
+        b[1] = lb10 | lb11 | lb12 | lb13 ^ rk[0][1]
+        
+        let lb20 = sBoxInv[Int(B0(t[2]))]
+        let lb21 = (sBoxInv[Int(B1(t[1]))] << 8)
+        let lb22 = (sBoxInv[Int(B2(t[0]))] << 16)
+        let lb23 = (sBoxInv[Int(B3(t[3]))] << 24)
+        b[2] = lb20 | lb21 | lb22 | lb23 ^ rk[0][2]
+        
+        let lb30 = sBoxInv[Int(B0(t[3]))]
+        let lb31 = (sBoxInv[Int(B1(t[2]))] << 8)
+        let lb32 = (sBoxInv[Int(B2(t[1]))] << 16)
+        let lb33 = (sBoxInv[Int(B3(t[0]))] << 24)
+        b[3] = lb30 | lb31 | lb32 | lb33 ^ rk[0][3]
         
         var out = [UInt8]()
         out.reserveCapacity(b.count * 4)

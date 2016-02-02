@@ -198,8 +198,8 @@ final public class AES {
         let blocks = bytes.chunks(AES.blockSize)
         let out:[UInt8]
         switch (blockMode) {
-        case .CFB, .CTR:
-            // CFB, CTR uses encryptBlock to decrypt
+        case .CFB, .OFB, .CTR:
+            // CFB, OFB, CTR uses encryptBlock to decrypt
             out = try blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
         default:
             out = try blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: decryptBlock)

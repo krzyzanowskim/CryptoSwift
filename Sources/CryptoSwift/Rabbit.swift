@@ -176,8 +176,9 @@ final public class Rabbit {
         
         var result = [UInt8](count: bytes.count, repeatedValue: 0)
         var output = nextOutput()
+        var byteIdx = 0
         var outputIdx = 0
-        for byteIdx in 0 ..< bytes.count {
+        while byteIdx < bytes.count {
             if (outputIdx == Rabbit.blockSize) {
                 output = nextOutput()
                 outputIdx = 0
@@ -185,6 +186,7 @@ final public class Rabbit {
             
             result[byteIdx] = bytes[byteIdx] ^ output[outputIdx]
 
+            byteIdx += 1
             outputIdx += 1
         }
         return result

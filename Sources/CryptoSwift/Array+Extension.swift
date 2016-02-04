@@ -12,9 +12,10 @@ extension Array {
     func chunks(chunksize:Int) -> [Array<Element>] {
         var words = [[Element]]()
         words.reserveCapacity(self.count / chunksize)        
-        for var idx = chunksize; idx <= self.count; idx = idx + chunksize {
+        for var idx in chunksize ... self.count {
             let word = Array(self[idx - chunksize..<idx]) // this is slow for large table
             words.append(word)
+            idx = idx + chunksize
         }
         let reminder = Array(self.suffix(self.count % chunksize))
         if (reminder.count > 0) {

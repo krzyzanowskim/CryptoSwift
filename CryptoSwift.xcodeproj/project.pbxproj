@@ -661,8 +661,8 @@
 			targets = (
 				754BE45419693E190098E6F3 /* CryptoSwift iOS */,
 				5596BDBA1BC8F220007E38D5 /* CryptoSwift watchOS */,
-				75D614921BD844F2001358B2 /* CryptoSwift tvOS */,
 				75DF77461BC8EB59006E9520 /* CryptoSwift OSX */,
+				75D614921BD844F2001358B2 /* CryptoSwift tvOS */,
 				754BE45F19693E190098E6F3 /* CryptoSwiftTests */,
 			);
 		};

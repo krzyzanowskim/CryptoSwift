@@ -246,7 +246,7 @@ AES without data padding
 
 ```swift
 let input: [UInt8] = [0,1,2,3,4,5,6,7,8,9]
-let encrypted: [UInt8] = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC).encrypt(input)
+let encrypted: [UInt8] = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC).encrypt(input, padding: nil)
 ```
 
 Using extensions

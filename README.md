@@ -173,7 +173,7 @@ let hash = "123".md5()
 Some content-encryption algorithms assume the input length is a multiple of k octets, where k is greater than one. For such algorithms, the input shall be padded.
 
 ```swift
-let paddedData = PKCS7().add(bytes, AES.blockSize)
+let paddedData = PKCS7().add(arr, blockSize: AES.blockSize)
 ```
 
 Working with Ciphers

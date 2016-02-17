@@ -1,3 +1,8 @@
+0.2.3
+- enable bitcode setting for Debug on an Apple TV
+- faster compilation times
+- improve padding functions
+
 0.2.2
 - Fix ChaCha20 cipher
 - Replace for(;;) with for-in

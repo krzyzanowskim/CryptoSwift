@@ -273,8 +273,13 @@ final class SHA2 : HashProtocol {
         result.reserveCapacity(hh.count / 4)
         variant.resultingArray(hh).forEach {
             let item = $0.bigEndian
-            result += [UInt8(item & 0xff), UInt8((item >> 8) & 0xff), UInt8((item >> 16) & 0xff), UInt8((item >> 24) & 0xff),
-                       UInt8((item >> 32) & 0xff),UInt8((item >> 40) & 0xff), UInt8((item >> 48) & 0xff), UInt8((item >> 56) & 0xff)]
+            var partialResult = [UInt8]()
+            partialResult.reserveCapacity(8)
+            for i in 0..<8 {
+                let shift = UInt64(8 * i)
+                partialResult.append(UInt8((item >> shift) & 0xff))
+            }
+            result += partialResult
         }
         return result
     }

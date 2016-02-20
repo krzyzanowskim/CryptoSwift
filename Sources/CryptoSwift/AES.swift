@@ -5,6 +5,8 @@
 //  Created by Marcin Krzyzanowski on 21/11/14.
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
+//  Implementation of Gladman algorithm http://www.gladman.me.uk/AES
+//
 
 final public class AES {
     

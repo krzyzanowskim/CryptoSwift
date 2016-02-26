@@ -208,7 +208,7 @@ private struct CTRMode: BlockMode {
             throw BlockError.MissingInitializationVector
         }
 
-        var counter:UInt = 0
+        let counter:UInt = 0
         var out:[UInt8] = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
         for plaintext in blocks {
@@ -229,7 +229,7 @@ private struct CTRMode: BlockMode {
         var out = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
         for ciphertext in blocks {
-            let nonce = buildNonce(iv, counter: UInt64(counter++))
+            let nonce = buildNonce(iv, counter: UInt64(counter + 1))
             if let decrypted = cipherOperation(block: nonce) {
                 out.appendContentsOf(xor(decrypted, ciphertext))
             }

@@ -275,16 +275,16 @@ final class SHA2 : HashProtocol {
             let item = $0.bigEndian
             
             var tmp = [UInt8]()
-            tmp += UInt8(item & 0xff)
-            tmp += UInt8((item >> 8) & 0xff)
-            tmp += UInt8((item >> 16) & 0xff)
-            tmp += UInt8((item >> 24) & 0xff)
-            tmp += UInt8((item >> 32) & 0xff)
-            tmp += UInt8((item >> 40) & 0xff)
-            tmp += UInt8((item >> 48) & 0xff)
-            tmp += UInt8((item >> 56) & 0xff)
+            tmp += [UInt8(item & 0xff)]
+            tmp += [UInt8((item >> 8) & 0xff)]
+            tmp += [UInt8((item >> 16) & 0xff)]
+            tmp += [UInt8((item >> 24) & 0xff)]
+            tmp += [UInt8((item >> 32) & 0xff)]
+            tmp += [UInt8((item >> 40) & 0xff)]
+            tmp += [UInt8((item >> 48) & 0xff)]
+            tmp += [UInt8((item >> 56) & 0xff)]
             
-            result += tmp
+            result += [tmp]
         }
         return result
     }

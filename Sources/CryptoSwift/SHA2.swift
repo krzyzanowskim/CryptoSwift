@@ -284,7 +284,7 @@ final class SHA2 : HashProtocol {
             tmp += [UInt8((item >> 48) & 0xff)]
             tmp += [UInt8((item >> 56) & 0xff)]
             
-            result += [tmp]
+            result += tmp
         }
         return result
     }

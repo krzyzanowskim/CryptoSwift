@@ -212,7 +212,7 @@ private struct CTRMode: BlockMode {
         var out:[UInt8] = [UInt8]()
         out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
         for plaintext in blocks {
-            let nonce = buildNonce(iv, counter: UInt64(counter++))
+            let nonce = buildNonce(iv, counter: UInt64(counter + 1))
             if let encrypted = cipherOperation(block: nonce) {
                 out.appendContentsOf(xor(plaintext, encrypted))
             }

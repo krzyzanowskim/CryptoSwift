@@ -275,7 +275,6 @@ final class SHA2 : HashProtocol {
             let item = $0.bigEndian
             
             var tmp = [UInt8]()
-            
             tmp += UInt8(item & 0xff)
             tmp += UInt8((item >> 8) & 0xff)
             tmp += UInt8((item >> 16) & 0xff)

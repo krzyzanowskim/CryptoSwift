@@ -1,5 +1,5 @@
 //
-//  CipherModeGenerator.swift
+//  BlockModeGenerator.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 08/03/16.
@@ -14,7 +14,7 @@ enum BlockError: ErrorType {
 
 typealias CipherOperationOnBlock = (block: [UInt8]) -> [UInt8]?
 
-protocol CipherModeGenerator: GeneratorType {
+protocol BlockModeGenerator: GeneratorType {
     var options: BlockModeOptions { get }
     init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Array<UInt8>>)
 }

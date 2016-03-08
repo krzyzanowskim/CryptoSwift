@@ -8,7 +8,7 @@
 //  Cipher-block chaining (CBC)
 //
 
-struct CBCModeEncryptGenerator: CipherModeGenerator {
+struct CBCModeEncryptGenerator: BlockModeGenerator {
     typealias Element = Array<UInt8>
     let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
 
@@ -36,7 +36,7 @@ struct CBCModeEncryptGenerator: CipherModeGenerator {
     }
 }
 
-struct CBCModeDecryptGenerator: CipherModeGenerator {
+struct CBCModeDecryptGenerator: BlockModeGenerator {
     typealias Element = Array<UInt8>
     let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
 

@@ -123,7 +123,13 @@ final public class AES {
 
 
         let blocks = finalBytes.chunks(AES.blockSize)
-        return try blockMode.encryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
+        let encryptGenerator = blockMode.encryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
+
+        var out = [UInt8]() // can't preallocate because count of blocks is unknown
+        for processedBlock in AnySequence<Array<UInt8>>({ encryptGenerator }) {
+            out.appendContentsOf(processedBlock)
+        }
+        return out
     }
 
     private func encryptBlock(block:[UInt8]) -> [UInt8]? {
@@ -196,13 +202,19 @@ final public class AES {
         }
         
         let blocks = bytes.chunks(AES.blockSize)
-        let out:[UInt8]
+        var out = [UInt8]()
         switch (blockMode) {
         case .CFB, .OFB, .CTR:
             // CFB, OFB, CTR uses encryptBlock to decrypt
-            out = try blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: encryptBlock)
+            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
+            for processedBlock in AnySequence<Array<UInt8>>({ decryptGenerator }) {
+                out.appendContentsOf(processedBlock)
+            }
         default:
-            out = try blockMode.decryptBlocks(blocks, iv: self.iv, cipherOperation: decryptBlock)
+            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: decryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
+            for processedBlock in AnySequence<Array<UInt8>>({ decryptGenerator }) {
+                out.appendContentsOf(processedBlock)
+            }
         }
         
         if let padding = padding {

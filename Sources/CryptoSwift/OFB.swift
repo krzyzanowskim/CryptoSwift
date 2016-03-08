@@ -8,8 +8,8 @@
 // Output Feedback (OFB)
 //
 
-struct OFBMode: BlockMode {
-    let options: BlockModeOptions = [.InitializationVectorRequired]
+struct OFBMode {
+    static let options: BlockModeOptions = [.InitializationVectorRequired]
 
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
         guard let iv = iv else {

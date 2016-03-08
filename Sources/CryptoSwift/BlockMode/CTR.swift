@@ -8,8 +8,8 @@
 //  Counter (CTR)
 //
 
-struct CTRMode: BlockMode {
-    let options = BlockModeOptions.InitializationVectorRequired
+struct CTRMode {
+    static let options = BlockModeOptions.InitializationVectorRequired
 
     private func buildNonce(iv: [UInt8], counter: UInt64) -> [UInt8] {
         let noncePartLen = AES.blockSize / 2

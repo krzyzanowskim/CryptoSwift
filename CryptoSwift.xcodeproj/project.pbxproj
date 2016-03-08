@@ -175,6 +175,10 @@
 		757DA2551A4ED408002BA3EF /* AESTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2541A4ED408002BA3EF /* AESTests.swift */; };
 		757DA2571A4ED47B002BA3EF /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2561A4ED47B002BA3EF /* Helpers.swift */; };
 		757DA2591A4ED4D7002BA3EF /* ChaCha20Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */; };
+		7588034C1C8F8C33008C1576 /* CipherModeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7588034B1C8F8C33008C1576 /* CipherModeGenerator.swift */; };
+		7588034D1C8F8C42008C1576 /* CipherModeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7588034B1C8F8C33008C1576 /* CipherModeGenerator.swift */; };
+		7588034E1C8F8C42008C1576 /* CipherModeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7588034B1C8F8C33008C1576 /* CipherModeGenerator.swift */; };
+		7588034F1C8F8C43008C1576 /* CipherModeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7588034B1C8F8C33008C1576 /* CipherModeGenerator.swift */; };
 		758A94281A65C59200E46135 /* HMACTests.swift in Resources */ = {isa = PBXBuildFile; fileRef = 758A94271A65C59200E46135 /* HMACTests.swift */; };
 		758A94291A65C67400E46135 /* HMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758A94271A65C59200E46135 /* HMACTests.swift */; };
 		75B601EB197D6A6C0009B53D /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
@@ -182,10 +186,6 @@
 		75CB93261C8F5EC10087740D /* CBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB93241C8F5EC10087740D /* CBC.swift */; };
 		75CB93271C8F5EC10087740D /* CBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB93241C8F5EC10087740D /* CBC.swift */; };
 		75CB93281C8F5EC10087740D /* CBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB93241C8F5EC10087740D /* CBC.swift */; };
-		75CB932B1C8F5EE90087740D /* BlockMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB932A1C8F5EE90087740D /* BlockMode.swift */; };
-		75CB932C1C8F5EE90087740D /* BlockMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB932A1C8F5EE90087740D /* BlockMode.swift */; };
-		75CB932D1C8F5EE90087740D /* BlockMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB932A1C8F5EE90087740D /* BlockMode.swift */; };
-		75CB932E1C8F5EE90087740D /* BlockMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB932A1C8F5EE90087740D /* BlockMode.swift */; };
 		75CB93301C8F5F580087740D /* CipherBlockMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB932F1C8F5F580087740D /* CipherBlockMode.swift */; };
 		75CB93311C8F5F580087740D /* CipherBlockMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB932F1C8F5F580087740D /* CipherBlockMode.swift */; };
 		75CB93321C8F5F580087740D /* CipherBlockMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB932F1C8F5F580087740D /* CipherBlockMode.swift */; };
@@ -353,9 +353,9 @@
 		757DA2541A4ED408002BA3EF /* AESTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AESTests.swift; sourceTree = "<group>"; };
 		757DA2561A4ED47B002BA3EF /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChaCha20Tests.swift; sourceTree = "<group>"; };
+		7588034B1C8F8C33008C1576 /* CipherModeGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CipherModeGenerator.swift; path = Sources/CryptoSwift/BlockMode/CipherModeGenerator.swift; sourceTree = SOURCE_ROOT; };
 		758A94271A65C59200E46135 /* HMACTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMACTests.swift; sourceTree = "<group>"; };
 		75CB93241C8F5EC10087740D /* CBC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CBC.swift; path = Sources/CryptoSwift/BlockMode/CBC.swift; sourceTree = SOURCE_ROOT; };
-		75CB932A1C8F5EE90087740D /* BlockMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlockMode.swift; path = Sources/CryptoSwift/BlockMode/BlockMode.swift; sourceTree = SOURCE_ROOT; };
 		75CB932F1C8F5F580087740D /* CipherBlockMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CipherBlockMode.swift; path = Sources/CryptoSwift/BlockMode/CipherBlockMode.swift; sourceTree = SOURCE_ROOT; };
 		75CB93341C8F5FCE0087740D /* PCBC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCBC.swift; path = Sources/CryptoSwift/BlockMode/PCBC.swift; sourceTree = SOURCE_ROOT; };
 		75CB93391C8F5FFD0087740D /* CFB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CFB.swift; path = Sources/CryptoSwift/BlockMode/CFB.swift; sourceTree = SOURCE_ROOT; };
@@ -531,7 +531,7 @@
 		75CB93291C8F5EC60087740D /* BlockMode */ = {
 			isa = PBXGroup;
 			children = (
-				75CB932A1C8F5EE90087740D /* BlockMode.swift */,
+				7588034B1C8F8C33008C1576 /* CipherModeGenerator.swift */,
 				75CB934D1C8F609D0087740D /* BlockModeOptions.swift */,
 				75CB932F1C8F5F580087740D /* CipherBlockMode.swift */,
 				75CB93241C8F5EC10087740D /* CBC.swift */,
@@ -783,8 +783,8 @@
 				757BC96D1C1CA5790093AAA9 /* Generics.swift in Sources */,
 				75CB93261C8F5EC10087740D /* CBC.swift in Sources */,
 				757BC9711C1CA5790093AAA9 /* Hash.swift in Sources */,
-				75CB932C1C8F5EE90087740D /* BlockMode.swift in Sources */,
 				75CB93361C8F5FCE0087740D /* PCBC.swift in Sources */,
+				7588034D1C8F8C42008C1576 /* CipherModeGenerator.swift in Sources */,
 				75CB93311C8F5F580087740D /* CipherBlockMode.swift in Sources */,
 				757BC9171C1CA56A0093AAA9 /* Utils+Foundation.swift in Sources */,
 				757BC9B51C1CA5790093AAA9 /* UInt8Extension.swift in Sources */,
@@ -838,7 +838,6 @@
 				757BC96C1C1CA5790093AAA9 /* Generics.swift in Sources */,
 				75CB93251C8F5EC10087740D /* CBC.swift in Sources */,
 				757BC9701C1CA5790093AAA9 /* Hash.swift in Sources */,
-				75CB932B1C8F5EE90087740D /* BlockMode.swift in Sources */,
 				75CB93351C8F5FCE0087740D /* PCBC.swift in Sources */,
 				75CB93301C8F5F580087740D /* CipherBlockMode.swift in Sources */,
 				757BC9121C1CA56A0093AAA9 /* String+FoundationExtension.swift in Sources */,
@@ -860,6 +859,7 @@
 				757BC9901C1CA5790093AAA9 /* Operators.swift in Sources */,
 				75CB933A1C8F5FFD0087740D /* CFB.swift in Sources */,
 				75CB933F1C8F60070087740D /* OFB.swift in Sources */,
+				7588034C1C8F8C33008C1576 /* CipherModeGenerator.swift in Sources */,
 				757BC9B81C1CA5790093AAA9 /* UInt32Extension.swift in Sources */,
 				757BC8FE1C1CA56A0093AAA9 /* AES+Foundation.swift in Sources */,
 				757BC98C1C1CA5790093AAA9 /* Multiplatform.swift in Sources */,
@@ -909,8 +909,8 @@
 				757BC96E1C1CA5790093AAA9 /* Generics.swift in Sources */,
 				75CB93271C8F5EC10087740D /* CBC.swift in Sources */,
 				757BC9721C1CA5790093AAA9 /* Hash.swift in Sources */,
-				75CB932D1C8F5EE90087740D /* BlockMode.swift in Sources */,
 				75CB93371C8F5FCE0087740D /* PCBC.swift in Sources */,
+				7588034E1C8F8C42008C1576 /* CipherModeGenerator.swift in Sources */,
 				75CB93321C8F5F580087740D /* CipherBlockMode.swift in Sources */,
 				757BC9141C1CA56A0093AAA9 /* String+FoundationExtension.swift in Sources */,
 				757BC9B61C1CA5790093AAA9 /* UInt8Extension.swift in Sources */,
@@ -964,8 +964,8 @@
 				757BC96F1C1CA5790093AAA9 /* Generics.swift in Sources */,
 				75CB93281C8F5EC10087740D /* CBC.swift in Sources */,
 				757BC9731C1CA5790093AAA9 /* Hash.swift in Sources */,
-				75CB932E1C8F5EE90087740D /* BlockMode.swift in Sources */,
 				75CB93381C8F5FCE0087740D /* PCBC.swift in Sources */,
+				7588034F1C8F8C43008C1576 /* CipherModeGenerator.swift in Sources */,
 				75CB93331C8F5F580087740D /* CipherBlockMode.swift in Sources */,
 				757BC9191C1CA56A0093AAA9 /* Utils+Foundation.swift in Sources */,
 				757BC9B71C1CA5790093AAA9 /* UInt8Extension.swift in Sources */,

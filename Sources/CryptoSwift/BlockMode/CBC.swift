@@ -8,43 +8,59 @@
 //  Cipher-block chaining (CBC)
 //
 
-struct CBCMode: BlockMode {
+struct CBCModeEncryptGenerator: CipherModeGenerator {
+    typealias Element = Array<UInt8>
     let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
 
-    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
-        precondition(blocks.count > 0)
-        guard let iv = iv else {
-            throw BlockError.MissingInitializationVector
-        }
+    private let iv: Element
+    private let inputGenerator: AnyGenerator<Element>
 
-        var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
-        var prevCiphertext = iv // for the first time prevCiphertext = iv
-        for plaintext in blocks {
-            if let encrypted = cipherOperation(block: xor(prevCiphertext, plaintext)) {
-                out.appendContentsOf(encrypted)
-                prevCiphertext = encrypted
-            }
-        }
-        return out
+    private let cipherOperation: CipherOperationOnBlock
+    private var prevCiphertext: Element?
+
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Array<UInt8>>) {
+        self.iv = iv
+        self.cipherOperation = cipherOperation
+        self.inputGenerator = inputGenerator
     }
 
-    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
-        precondition(blocks.count > 0)
-        guard let iv = iv else {
-            throw BlockError.MissingInitializationVector
+    mutating func next() -> Element? {
+        guard let plaintext = inputGenerator.next(),
+              let encrypted = cipherOperation(block: xor(prevCiphertext ?? iv, plaintext))
+        else {
+            return nil
         }
 
-        var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
-        var prevCiphertext = iv // for the first time prevCiphertext = iv
-        for ciphertext in blocks {
-            if let decrypted = cipherOperation(block: ciphertext) { // decrypt
-                out.appendContentsOf(xor(prevCiphertext, decrypted))
-            }
-            prevCiphertext = ciphertext
+        self.prevCiphertext = encrypted
+        return encrypted
+    }
+}
+
+struct CBCModeDecryptGenerator: CipherModeGenerator {
+    typealias Element = Array<UInt8>
+    let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
+
+    private let iv: Element
+    private let inputGenerator: AnyGenerator<Element>
+
+    private let cipherOperation: CipherOperationOnBlock
+    private var prevCiphertext: Element?
+
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Element>) {
+        self.iv = iv
+        self.cipherOperation = cipherOperation
+        self.inputGenerator = inputGenerator
+    }
+
+    mutating func next() -> Element? {
+        guard let ciphertext = inputGenerator.next(),
+              let decrypted = cipherOperation(block: ciphertext)
+        else {
+            return nil
         }
 
-        return out
+        let result = xor(prevCiphertext ?? iv, decrypted)
+        self.prevCiphertext = ciphertext
+        return result
     }
 }

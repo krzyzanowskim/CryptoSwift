@@ -8,8 +8,8 @@
 //  Electronic codebook (ECB)
 //
 
-struct ECBMode: BlockMode {
-    let options: BlockModeOptions = [.PaddingRequired]
+struct ECBMode {
+    static let options: BlockModeOptions = [.PaddingRequired]
 
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8] {
         var out:[UInt8] = [UInt8]()

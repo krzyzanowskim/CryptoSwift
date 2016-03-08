@@ -8,8 +8,8 @@
 //  Cipher feedback (CFB)
 //
 
-struct CFBMode: BlockMode {
-    let options: BlockModeOptions = [.InitializationVectorRequired]
+struct CFBMode {
+    static let options: BlockModeOptions = [.InitializationVectorRequired]
 
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
         guard let iv = iv else {

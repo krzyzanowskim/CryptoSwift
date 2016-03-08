@@ -8,8 +8,8 @@
 //  Propagating Cipher Block Chaining (PCBC)
 //
 
-struct PCBCMode: BlockMode {
-    let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
+struct PCBCMode {
+    static let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
 
     func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
         precondition(blocks.count > 0)

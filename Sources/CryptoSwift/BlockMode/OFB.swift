@@ -1,14 +1,14 @@
 //
-//  CFB.swift
+//  OFB.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 08/03/16.
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
-//  Cipher feedback (CFB)
+// Output Feedback (OFB)
 //
 
-struct CFBModeEncryptGenerator: BlockModeGenerator {
+struct OFBModeEncryptGenerator: BlockModeGenerator {
     typealias Element = Array<UInt8>
     let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
 
@@ -31,12 +31,12 @@ struct CFBModeEncryptGenerator: BlockModeGenerator {
                 return nil
         }
 
-        self.prevCiphertext = xor(plaintext, ciphertext)
-        return self.prevCiphertext
+        self.prevCiphertext = ciphertext
+        return xor(plaintext, ciphertext)
     }
 }
 
-struct CFBModeDecryptGenerator: BlockModeGenerator {
+struct OFBModeDecryptGenerator: BlockModeGenerator {
     typealias Element = Array<UInt8>
     let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
 
@@ -59,8 +59,8 @@ struct CFBModeDecryptGenerator: BlockModeGenerator {
                 return nil
         }
 
-        let result = xor(decrypted, ciphertext)
-        self.prevCiphertext = ciphertext
-        return result
+        let plaintext = xor(decrypted, ciphertext)
+        self.prevCiphertext = decrypted
+        return plaintext
     }
 }

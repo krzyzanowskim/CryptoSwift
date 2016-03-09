@@ -8,52 +8,59 @@
 //  Propagating Cipher Block Chaining (PCBC)
 //
 
-struct PCBCMode {
-    static let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
+struct PCBCModeEncryptGenerator: BlockModeGenerator {
+    typealias Element = Array<UInt8>
+    let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
 
-    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
-        precondition(blocks.count > 0)
-        guard let iv = iv else {
-            throw BlockError.MissingInitializationVector
-        }
+    private let iv: Element
+    private let inputGenerator: AnyGenerator<Element>
 
-        var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
-        var prevCiphertext = iv // for the first time prevCiphertext = iv
-        for plaintext in blocks {
-            guard let encrypted = cipherOperation(block: xor(prevCiphertext, plaintext)) else {
-                out.appendContentsOf(plaintext)
-                continue
-            }
+    private let cipherOperation: CipherOperationOnBlock
+    private var prevCiphertext: Element?
 
-            let ciphertext = encrypted
-            out.appendContentsOf(ciphertext)
-
-            prevCiphertext = xor(plaintext, ciphertext)
-        }
-        return out
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Array<UInt8>>) {
+        self.iv = iv
+        self.cipherOperation = cipherOperation
+        self.inputGenerator = inputGenerator
     }
 
-    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
-        precondition(blocks.count > 0)
-        guard let iv = iv else {
-            throw BlockError.MissingInitializationVector
+    mutating func next() -> Element? {
+        guard let plaintext = inputGenerator.next(),
+              let encrypted = cipherOperation(block: xor(prevCiphertext ?? iv, plaintext))
+        else {
+            return nil
         }
 
-        var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
-        var prevCiphertext = iv // for the first time prevCiphertext = iv
-        for ciphertext in blocks {
-            guard let decrypted = cipherOperation(block: ciphertext) else {
-                out.appendContentsOf(ciphertext)
-                continue
-            }
+        self.prevCiphertext = xor(plaintext, encrypted)
+        return encrypted
+    }
+}
 
-            let plaintext = xor(prevCiphertext, decrypted)
-            out.appendContentsOf(plaintext)
-            prevCiphertext = xor(plaintext, ciphertext)
+struct PCBCModeDecryptGenerator: BlockModeGenerator {
+    typealias Element = Array<UInt8>
+    let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
+
+    private let iv: Element
+    private let inputGenerator: AnyGenerator<Element>
+
+    private let cipherOperation: CipherOperationOnBlock
+    private var prevCiphertext: Element?
+
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Element>) {
+        self.iv = iv
+        self.cipherOperation = cipherOperation
+        self.inputGenerator = inputGenerator
+    }
+
+    mutating func next() -> Element? {
+        guard let ciphertext = inputGenerator.next(),
+              let decrypted = cipherOperation(block: ciphertext)
+        else {
+            return nil
         }
-        
-        return out
+
+        let plaintext = xor(prevCiphertext ?? iv, decrypted)
+        self.prevCiphertext = xor(plaintext, ciphertext)
+        return plaintext
     }
 }

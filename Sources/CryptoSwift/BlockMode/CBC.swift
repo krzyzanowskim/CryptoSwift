@@ -18,7 +18,7 @@ struct CBCModeEncryptGenerator: BlockModeGenerator {
     private let cipherOperation: CipherOperationOnBlock
     private var prevCiphertext: Element?
 
-    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Array<UInt8>>) {
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Element>) {
         self.iv = iv
         self.cipherOperation = cipherOperation
         self.inputGenerator = inputGenerator

@@ -8,52 +8,73 @@
 //  Counter (CTR)
 //
 
-struct CTRMode {
-    static let options = BlockModeOptions.InitializationVectorRequired
+struct CTRModeEncryptGenerator: BlockModeGenerator {
+    typealias Element = Array<UInt8>
+    let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
 
-    private func buildNonce(iv: [UInt8], counter: UInt64) -> [UInt8] {
-        let noncePartLen = AES.blockSize / 2
-        let noncePrefix = Array(iv[0..<noncePartLen])
-        let nonceSuffix = Array(iv[noncePartLen..<iv.count])
-        let c = UInt64.withBytes(nonceSuffix) + counter
-        return noncePrefix + arrayOfBytes(c)
+    private let iv: Element
+    private let inputGenerator: AnyGenerator<Element>
+
+    private let cipherOperation: CipherOperationOnBlock
+    private var counter: UInt = 0
+
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Array<UInt8>>) {
+        self.iv = iv
+        self.cipherOperation = cipherOperation
+        self.inputGenerator = inputGenerator
     }
 
-    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
-        //var counter:UInt = 17940646550795321087
-
-        guard let iv = iv else {
-            throw BlockError.MissingInitializationVector
+    mutating func next() -> Element? {
+        guard let plaintext = inputGenerator.next() else {
+            return nil
         }
 
-        var counter:UInt = 0
-        var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
-        for plaintext in blocks {
-            let nonce = buildNonce(iv, counter: UInt64(counter))
-            counter += 1
-            if let encrypted = cipherOperation(block: nonce) {
-                out.appendContentsOf(xor(plaintext, encrypted))
-            }
+        let nonce = buildNonce(iv, counter: UInt64(counter))
+        counter = counter + 1
+        if let encrypted = cipherOperation(block: nonce) {
+            return xor(plaintext, encrypted)
         }
-        return out
+
+        return nil
+    }
+}
+
+struct CTRModeDecryptGenerator: BlockModeGenerator {
+    typealias Element = Array<UInt8>
+    let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
+
+    private let iv: Element
+    private let inputGenerator: AnyGenerator<Element>
+
+    private let cipherOperation: CipherOperationOnBlock
+    private var counter: UInt = 0
+
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Element>) {
+        self.iv = iv
+        self.cipherOperation = cipherOperation
+        self.inputGenerator = inputGenerator
     }
 
-    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) throws -> [UInt8] {
-        guard let iv = iv else {
-            throw BlockError.MissingInitializationVector
+    mutating func next() -> Element? {
+        guard let ciphertext = inputGenerator.next() else {
+            return nil
         }
 
-        var counter:UInt = 0
-        var out = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
-        for ciphertext in blocks {
-            let nonce = buildNonce(iv, counter: UInt64(counter))
-            counter += 1
-            if let decrypted = cipherOperation(block: nonce) {
-                out.appendContentsOf(xor(decrypted, ciphertext))
-            }
+        let nonce = buildNonce(iv, counter: UInt64(counter))
+        counter = counter + 1
+
+        if let decrypted = cipherOperation(block: nonce) {
+            return xor(decrypted, ciphertext)
         }
-        return out
+
+        return nil
     }
+}
+
+private func buildNonce(iv: [UInt8], counter: UInt64) -> [UInt8] {
+    let noncePartLen = AES.blockSize / 2
+    let noncePrefix = Array(iv[0..<noncePartLen])
+    let nonceSuffix = Array(iv[noncePartLen..<iv.count])
+    let c = UInt64.withBytes(nonceSuffix) + counter
+    return noncePrefix + arrayOfBytes(c)
 }

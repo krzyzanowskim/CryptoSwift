@@ -16,5 +16,5 @@ typealias CipherOperationOnBlock = (block: [UInt8]) -> [UInt8]?
 
 protocol BlockModeGenerator: GeneratorType {
     var options: BlockModeOptions { get }
-    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Array<UInt8>>)
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Element>)
 }

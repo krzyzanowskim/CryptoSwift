@@ -15,8 +15,16 @@ public enum CipherBlockMode {
         switch (self) {
         case CBC:
             return AnyGenerator<Array<UInt8>>(CBCModeEncryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
-        default:
-            fatalError("Unimplemented")
+        case CFB:
+            return AnyGenerator<Array<UInt8>>(CFBModeEncryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
+        case OFB:
+            return AnyGenerator<Array<UInt8>>(OFBModeEncryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
+        case CTR:
+            return AnyGenerator<Array<UInt8>>(CTRModeEncryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
+        case PCBC:
+            return AnyGenerator<Array<UInt8>>(PCBCModeEncryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
+        case ECB:
+            return AnyGenerator<Array<UInt8>>(ECBModeEncryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
         }
     }
 
@@ -24,8 +32,16 @@ public enum CipherBlockMode {
         switch (self) {
         case CBC:
             return AnyGenerator<Array<UInt8>>(CBCModeDecryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
-        default:
-            fatalError("Unimplemented")
+        case CFB:
+            return AnyGenerator<Array<UInt8>>(CFBModeDecryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
+        case OFB:
+            return AnyGenerator<Array<UInt8>>(OFBModeDecryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
+        case CTR:
+            return AnyGenerator<Array<UInt8>>(CTRModeDecryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
+        case PCBC:
+            return AnyGenerator<Array<UInt8>>(PCBCModeDecryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
+        case ECB:
+            return AnyGenerator<Array<UInt8>>(ECBModeDecryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
         }
     }
 

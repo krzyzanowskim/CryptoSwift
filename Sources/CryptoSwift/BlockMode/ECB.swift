@@ -8,21 +8,30 @@
 //  Electronic codebook (ECB)
 //
 
-struct ECBMode {
-    static let options: BlockModeOptions = [.PaddingRequired]
+struct ECBModeEncryptGenerator: BlockModeGenerator {
+    typealias Element = Array<UInt8>
+    let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
 
-    func encryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8] {
-        var out:[UInt8] = [UInt8]()
-        out.reserveCapacity(blocks.count * blocks[blocks.startIndex].count)
-        for plaintext in blocks {
-            if let encrypted = cipherOperation(block: plaintext) {
-                out.appendContentsOf(encrypted)
-            }
-        }
-        return out
+    private let iv: Element
+    private let inputGenerator: AnyGenerator<Element>
+
+    private let cipherOperation: CipherOperationOnBlock
+
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Array<UInt8>>) {
+        self.iv = iv
+        self.cipherOperation = cipherOperation
+        self.inputGenerator = inputGenerator
     }
-    
-    func decryptBlocks(blocks:[[UInt8]], iv:[UInt8]?, cipherOperation:CipherOperationOnBlock) -> [UInt8] {
-        return encryptBlocks(blocks, iv: iv, cipherOperation: cipherOperation)
+
+    mutating func next() -> Element? {
+        guard let plaintext = inputGenerator.next(),
+              let encrypted = cipherOperation(block: plaintext)
+        else {
+            return nil
+        }
+
+        return encrypted
     }
 }
+
+typealias ECBModeDecryptGenerator = ECBModeEncryptGenerator

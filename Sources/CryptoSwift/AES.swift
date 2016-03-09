@@ -125,7 +125,8 @@ final public class AES {
         let blocks = finalBytes.chunks(AES.blockSize)
         let encryptGenerator = blockMode.encryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
 
-        var out = [UInt8]() // can't preallocate because count of blocks is unknown
+        var out = [UInt8]()
+        out.reserveCapacity(bytes.count)
         for processedBlock in AnySequence<Array<UInt8>>({ encryptGenerator }) {
             out.appendContentsOf(processedBlock)
         }
@@ -203,6 +204,7 @@ final public class AES {
         
         let blocks = bytes.chunks(AES.blockSize)
         var out = [UInt8]()
+        out.reserveCapacity(bytes.count)
         switch (blockMode) {
         case .CFB, .OFB, .CTR:
             // CFB, OFB, CTR uses encryptBlock to decrypt

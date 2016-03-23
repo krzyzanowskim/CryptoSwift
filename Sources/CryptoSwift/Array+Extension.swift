@@ -7,12 +7,12 @@
 //
 
 extension Array {
-    
+
     /** split in chunks with given chunk size */
     func chunks(chunksize:Int) -> [Array<Element>] {
         var words = [[Element]]()
         words.reserveCapacity(self.count / chunksize)        
-        for var idx = chunksize; idx <= self.count; idx = idx + chunksize {
+        for idx in chunksize.stride(through: self.count, by: chunksize) {
             let word = Array(self[idx - chunksize..<idx]) // this is slow for large table
             words.append(word)
         }

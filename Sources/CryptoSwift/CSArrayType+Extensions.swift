@@ -17,11 +17,30 @@ extension Array: CSArrayType {
 }
 
 public extension CSArrayType where Generator.Element == UInt8 {
-    
     public func toHexString() -> String {
         return self.lazy.reduce("") { $0 + String(format:"%02x", $1) }
     }
-    
+
+    public func toBase64() -> String? {
+        guard let bytesArray = self as? [UInt8] else {
+            return nil
+        }
+
+        return NSData(bytes: bytesArray).base64EncodedStringWithOptions([])
+    }
+
+    public init(base64: String) {
+        self.init()
+
+        guard let decodedData = NSData(base64EncodedString: base64, options: []) else {
+            return
+        }
+
+        self.appendContentsOf(decodedData.arrayOfBytes())
+    }
+}
+
+public extension CSArrayType where Generator.Element == UInt8 {
     public func md5() -> [Generator.Element] {
         return Hash.md5(cs_arrayValue()).calculate()
     }

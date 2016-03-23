@@ -1,3 +1,10 @@
+0.3
+- Swift 2.2 support
+- use generators for cipher block modes should reduce memory overload.
+- add OFB block mode
+- add PCBC block mode
+- String.decryptBase64ToString to decrypt Base64 encoded strings
+
 0.2.3
 - enable bitcode setting for Debug on an Apple TV
 - faster compilation times

@@ -31,8 +31,10 @@ Good mood
 - [SHA256](http://tools.ietf.org/html/rfc6234)
 - [SHA384](http://tools.ietf.org/html/rfc6234)
 - [SHA512](http://tools.ietf.org/html/rfc6234)
-- [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (not hash)
-- [CRC16](http://en.wikipedia.org/wiki/Cyclic_redundancy_check) (not hash)
+
+#### Cyclic Redundancy Check (CRC)
+- [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
+- [CRC16](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
 
 #####Cipher
 - [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)
@@ -276,7 +278,7 @@ let bytes:[UInt8] = data.arrayOfBytes()
 
 ##Author
 
-Cryptoswift is owned and maintained by Marcin Krzyżanowski. You can follow me on Twitter at [@krzyzanowskim](http://twitter.com/krzyzanowskim) for project updates and releases.
+CryptoSwift is owned and maintained by Marcin Krzyżanowski. You can follow me on Twitter at [@krzyzanowskim](http://twitter.com/krzyzanowskim) for project updates and releases.
 
 [Marcin Krzyżanowski](http://www.krzyzanowskim.com)
 

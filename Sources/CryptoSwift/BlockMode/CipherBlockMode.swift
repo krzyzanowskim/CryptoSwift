@@ -6,8 +6,6 @@
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 public enum CipherBlockMode {
     case ECB, CBC, PCBC, CFB, OFB, CTR
 

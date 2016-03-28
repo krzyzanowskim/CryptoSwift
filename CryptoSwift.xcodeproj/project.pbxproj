@@ -63,10 +63,6 @@
 		757BC9491C1CA5790093AAA9 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91D1C1CA5790093AAA9 /* Authenticator.swift */; };
 		757BC94A1C1CA5790093AAA9 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91D1C1CA5790093AAA9 /* Authenticator.swift */; };
 		757BC94B1C1CA5790093AAA9 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91D1C1CA5790093AAA9 /* Authenticator.swift */; };
-		757BC94C1C1CA5790093AAA9 /* BitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91E1C1CA5790093AAA9 /* BitExtension.swift */; };
-		757BC94D1C1CA5790093AAA9 /* BitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91E1C1CA5790093AAA9 /* BitExtension.swift */; };
-		757BC94E1C1CA5790093AAA9 /* BitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91E1C1CA5790093AAA9 /* BitExtension.swift */; };
-		757BC94F1C1CA5790093AAA9 /* BitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91E1C1CA5790093AAA9 /* BitExtension.swift */; };
 		757BC9501C1CA5790093AAA9 /* BytesSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91F1C1CA5790093AAA9 /* BytesSequence.swift */; };
 		757BC9511C1CA5790093AAA9 /* BytesSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91F1C1CA5790093AAA9 /* BytesSequence.swift */; };
 		757BC9521C1CA5790093AAA9 /* BytesSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91F1C1CA5790093AAA9 /* BytesSequence.swift */; };
@@ -214,6 +210,10 @@
 		75CB934F1C8F609D0087740D /* BlockModeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB934D1C8F609D0087740D /* BlockModeOptions.swift */; };
 		75CB93501C8F609D0087740D /* BlockModeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB934D1C8F609D0087740D /* BlockModeOptions.swift */; };
 		75CB93511C8F609D0087740D /* BlockModeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CB934D1C8F609D0087740D /* BlockModeOptions.swift */; };
+		80545D131CA9FECD00474A99 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80545D121CA9FECD00474A99 /* Bit.swift */; };
+		80545D141CA9FECD00474A99 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80545D121CA9FECD00474A99 /* Bit.swift */; };
+		80545D151CA9FECD00474A99 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80545D121CA9FECD00474A99 /* Bit.swift */; };
+		80545D161CA9FECD00474A99 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80545D121CA9FECD00474A99 /* Bit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -321,7 +321,6 @@
 		757BC91B1C1CA5790093AAA9 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+Extension.swift"; path = "Sources/CryptoSwift/Array+Extension.swift"; sourceTree = SOURCE_ROOT; };
 		757BC91C1C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ArraySliceUInt8+Bytes.swift"; path = "Sources/CryptoSwift/ArraySliceUInt8+Bytes.swift"; sourceTree = SOURCE_ROOT; };
 		757BC91D1C1CA5790093AAA9 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Sources/CryptoSwift/Authenticator.swift; sourceTree = SOURCE_ROOT; };
-		757BC91E1C1CA5790093AAA9 /* BitExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BitExtension.swift; path = Sources/CryptoSwift/BitExtension.swift; sourceTree = SOURCE_ROOT; };
 		757BC91F1C1CA5790093AAA9 /* BytesSequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BytesSequence.swift; path = Sources/CryptoSwift/BytesSequence.swift; sourceTree = SOURCE_ROOT; };
 		757BC9201C1CA5790093AAA9 /* ChaCha20.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChaCha20.swift; path = Sources/CryptoSwift/ChaCha20.swift; sourceTree = SOURCE_ROOT; };
 		757BC9211C1CA5790093AAA9 /* Cipher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cipher.swift; path = Sources/CryptoSwift/Cipher.swift; sourceTree = SOURCE_ROOT; };
@@ -365,6 +364,7 @@
 		75CB934D1C8F609D0087740D /* BlockModeOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlockModeOptions.swift; path = Sources/CryptoSwift/BlockMode/BlockModeOptions.swift; sourceTree = SOURCE_ROOT; };
 		75D614BF1BD844F2001358B2 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75DF77721BC8EB59006E9520 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		80545D121CA9FECD00474A99 /* Bit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Bit.swift; path = Sources/CryptoSwift/Bit.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -443,7 +443,7 @@
 				757BC91B1C1CA5790093AAA9 /* Array+Extension.swift */,
 				757BC91C1C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift */,
 				757BC91D1C1CA5790093AAA9 /* Authenticator.swift */,
-				757BC91E1C1CA5790093AAA9 /* BitExtension.swift */,
+				80545D121CA9FECD00474A99 /* Bit.swift */,
 				757BC91F1C1CA5790093AAA9 /* BytesSequence.swift */,
 				757BC9201C1CA5790093AAA9 /* ChaCha20.swift */,
 				757BC9211C1CA5790093AAA9 /* Cipher.swift */,
@@ -772,7 +772,6 @@
 				757BC99D1C1CA5790093AAA9 /* PKCS7.swift in Sources */,
 				757BC9AD1C1CA5790093AAA9 /* SHA2.swift in Sources */,
 				757BC8FF1C1CA56A0093AAA9 /* AES+Foundation.swift in Sources */,
-				757BC94D1C1CA5790093AAA9 /* BitExtension.swift in Sources */,
 				757BC9491C1CA5790093AAA9 /* Authenticator.swift in Sources */,
 				757BC9C11C1CA5790093AAA9 /* Utils.swift in Sources */,
 				75CB934A1C8F60700087740D /* ECB.swift in Sources */,
@@ -811,6 +810,7 @@
 				757BC93D1C1CA5790093AAA9 /* AES.swift in Sources */,
 				757BC9551C1CA5790093AAA9 /* ChaCha20.swift in Sources */,
 				757BC9951C1CA5790093AAA9 /* Padding.swift in Sources */,
+				80545D141CA9FECD00474A99 /* Bit.swift in Sources */,
 				757BC9A51C1CA5790093AAA9 /* Rabbit.swift in Sources */,
 				757BC9591C1CA5790093AAA9 /* Cipher.swift in Sources */,
 				757BC90B1C1CA56A0093AAA9 /* NSData+Extension.swift in Sources */,
@@ -827,7 +827,6 @@
 				757BC99C1C1CA5790093AAA9 /* PKCS7.swift in Sources */,
 				757BC9AC1C1CA5790093AAA9 /* SHA2.swift in Sources */,
 				757BC9161C1CA56A0093AAA9 /* Utils+Foundation.swift in Sources */,
-				757BC94C1C1CA5790093AAA9 /* BitExtension.swift in Sources */,
 				757BC9481C1CA5790093AAA9 /* Authenticator.swift in Sources */,
 				757BC9C01C1CA5790093AAA9 /* Utils.swift in Sources */,
 				75CB93491C8F60700087740D /* ECB.swift in Sources */,
@@ -866,6 +865,7 @@
 				757BC93C1C1CA5790093AAA9 /* AES.swift in Sources */,
 				757BC9541C1CA5790093AAA9 /* ChaCha20.swift in Sources */,
 				757BC9941C1CA5790093AAA9 /* Padding.swift in Sources */,
+				80545D131CA9FECD00474A99 /* Bit.swift in Sources */,
 				757BC9A41C1CA5790093AAA9 /* Rabbit.swift in Sources */,
 				757BC9581C1CA5790093AAA9 /* Cipher.swift in Sources */,
 				757BC9021C1CA56A0093AAA9 /* ArrayUInt8+Foundation.swift in Sources */,
@@ -898,7 +898,6 @@
 				757BC99E1C1CA5790093AAA9 /* PKCS7.swift in Sources */,
 				757BC9AE1C1CA5790093AAA9 /* SHA2.swift in Sources */,
 				757BC9181C1CA56A0093AAA9 /* Utils+Foundation.swift in Sources */,
-				757BC94E1C1CA5790093AAA9 /* BitExtension.swift in Sources */,
 				757BC94A1C1CA5790093AAA9 /* Authenticator.swift in Sources */,
 				757BC9C21C1CA5790093AAA9 /* Utils.swift in Sources */,
 				75CB934B1C8F60700087740D /* ECB.swift in Sources */,
@@ -937,6 +936,7 @@
 				757BC93E1C1CA5790093AAA9 /* AES.swift in Sources */,
 				757BC9561C1CA5790093AAA9 /* ChaCha20.swift in Sources */,
 				757BC9961C1CA5790093AAA9 /* Padding.swift in Sources */,
+				80545D161CA9FECD00474A99 /* Bit.swift in Sources */,
 				757BC9A61C1CA5790093AAA9 /* Rabbit.swift in Sources */,
 				757BC95A1C1CA5790093AAA9 /* Cipher.swift in Sources */,
 				757BC9041C1CA56A0093AAA9 /* ArrayUInt8+Foundation.swift in Sources */,
@@ -953,7 +953,6 @@
 				757BC99F1C1CA5790093AAA9 /* PKCS7.swift in Sources */,
 				757BC9AF1C1CA5790093AAA9 /* SHA2.swift in Sources */,
 				757BC9011C1CA56A0093AAA9 /* AES+Foundation.swift in Sources */,
-				757BC94F1C1CA5790093AAA9 /* BitExtension.swift in Sources */,
 				757BC94B1C1CA5790093AAA9 /* Authenticator.swift in Sources */,
 				757BC9C31C1CA5790093AAA9 /* Utils.swift in Sources */,
 				75CB934C1C8F60700087740D /* ECB.swift in Sources */,
@@ -992,6 +991,7 @@
 				757BC93F1C1CA5790093AAA9 /* AES.swift in Sources */,
 				757BC9571C1CA5790093AAA9 /* ChaCha20.swift in Sources */,
 				757BC9971C1CA5790093AAA9 /* Padding.swift in Sources */,
+				80545D151CA9FECD00474A99 /* Bit.swift in Sources */,
 				757BC9A71C1CA5790093AAA9 /* Rabbit.swift in Sources */,
 				757BC95B1C1CA5790093AAA9 /* Cipher.swift in Sources */,
 				757BC90D1C1CA56A0093AAA9 /* NSData+Extension.swift in Sources */,

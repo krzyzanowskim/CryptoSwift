@@ -1,3 +1,6 @@
+0.3.1
+- replace deprecated Bit with new enum.
+
 0.3
 - Swift 2.2 support
 - use generators for cipher block modes should reduce memory overload.

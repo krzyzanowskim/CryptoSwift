@@ -59,10 +59,6 @@
 		757BC9411C1CA5790093AAA9 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91B1C1CA5790093AAA9 /* Array+Extension.swift */; };
 		757BC9421C1CA5790093AAA9 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91B1C1CA5790093AAA9 /* Array+Extension.swift */; };
 		757BC9431C1CA5790093AAA9 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91B1C1CA5790093AAA9 /* Array+Extension.swift */; };
-		757BC9441C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91C1C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift */; };
-		757BC9451C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91C1C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift */; };
-		757BC9461C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91C1C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift */; };
-		757BC9471C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91C1C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift */; };
 		757BC9481C1CA5790093AAA9 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91D1C1CA5790093AAA9 /* Authenticator.swift */; };
 		757BC9491C1CA5790093AAA9 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91D1C1CA5790093AAA9 /* Authenticator.swift */; };
 		757BC94A1C1CA5790093AAA9 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC91D1C1CA5790093AAA9 /* Authenticator.swift */; };
@@ -324,7 +320,6 @@
 		757BC8FD1C1CA56A0093AAA9 /* Utils+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Utils+Foundation.swift"; sourceTree = "<group>"; };
 		757BC91A1C1CA5790093AAA9 /* AES.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AES.swift; path = Sources/CryptoSwift/AES.swift; sourceTree = SOURCE_ROOT; };
 		757BC91B1C1CA5790093AAA9 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+Extension.swift"; path = "Sources/CryptoSwift/Array+Extension.swift"; sourceTree = SOURCE_ROOT; };
-		757BC91C1C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ArraySliceUInt8+Bytes.swift"; path = "Sources/CryptoSwift/ArraySliceUInt8+Bytes.swift"; sourceTree = SOURCE_ROOT; };
 		757BC91D1C1CA5790093AAA9 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Sources/CryptoSwift/Authenticator.swift; sourceTree = SOURCE_ROOT; };
 		757BC91F1C1CA5790093AAA9 /* BytesSequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BytesSequence.swift; path = Sources/CryptoSwift/BytesSequence.swift; sourceTree = SOURCE_ROOT; };
 		757BC9201C1CA5790093AAA9 /* ChaCha20.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChaCha20.swift; path = Sources/CryptoSwift/ChaCha20.swift; sourceTree = SOURCE_ROOT; };
@@ -446,7 +441,6 @@
 			children = (
 				757BC91A1C1CA5790093AAA9 /* AES.swift */,
 				757BC91B1C1CA5790093AAA9 /* Array+Extension.swift */,
-				757BC91C1C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift */,
 				757BC91D1C1CA5790093AAA9 /* Authenticator.swift */,
 				80545D121CA9FECD00474A99 /* Bit.swift */,
 				757BC91F1C1CA5790093AAA9 /* BytesSequence.swift */,
@@ -799,7 +793,6 @@
 				757BC9611C1CA5790093AAA9 /* CRC.swift in Sources */,
 				757BC9A11C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93451C8F603C0087740D /* CTR.swift in Sources */,
-				757BC9451C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */,
 				753881EC1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F21C8FB6E20054C377 /* OFB.swift in Sources */,
 				757BC9BD1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,
@@ -854,7 +847,6 @@
 				757BC9601C1CA5790093AAA9 /* CRC.swift in Sources */,
 				757BC9A01C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93441C8F603C0087740D /* CTR.swift in Sources */,
-				757BC9441C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */,
 				757BC9BC1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,
 				753881EB1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F11C8FB6E20054C377 /* OFB.swift in Sources */,
@@ -927,7 +919,6 @@
 				757BC9621C1CA5790093AAA9 /* CRC.swift in Sources */,
 				757BC9A21C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93461C8F603C0087740D /* CTR.swift in Sources */,
-				757BC9461C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */,
 				753881EE1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F31C8FB6E20054C377 /* OFB.swift in Sources */,
 				757BC9BE1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,
@@ -983,7 +974,6 @@
 				757BC9631C1CA5790093AAA9 /* CRC.swift in Sources */,
 				757BC9A31C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93471C8F603C0087740D /* CTR.swift in Sources */,
-				757BC9471C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */,
 				753881ED1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F41C8FB6E20054C377 /* OFB.swift in Sources */,
 				757BC9BF1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,

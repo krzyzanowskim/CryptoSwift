@@ -10,7 +10,6 @@
 
 struct CTRModeEncryptGenerator: BlockModeGenerator {
     typealias Element = Array<UInt8>
-    let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
 
     private let iv: Element
     private let inputGenerator: AnyGenerator<Element>
@@ -41,7 +40,6 @@ struct CTRModeEncryptGenerator: BlockModeGenerator {
 
 struct CTRModeDecryptGenerator: BlockModeGenerator {
     typealias Element = Array<UInt8>
-    let options: BlockModeOptions = [.InitializationVectorRequired, .PaddingRequired]
 
     private let iv: Element
     private let inputGenerator: AnyGenerator<Element>

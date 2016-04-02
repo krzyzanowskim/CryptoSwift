@@ -13,6 +13,10 @@
 		54EE1C661C2199C8008DD2E5 /* CryptoSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 54EE1C621C2199B2008DD2E5 /* CryptoSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		674A736F1BF5D85B00866C5B /* RabbitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674A736E1BF5D85B00866C5B /* RabbitTests.swift */; };
 		75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */; };
+		753881EB1CB06E390089101D /* NoPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753881EA1CB06E390089101D /* NoPadding.swift */; };
+		753881EC1CB06E390089101D /* NoPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753881EA1CB06E390089101D /* NoPadding.swift */; };
+		753881ED1CB06E390089101D /* NoPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753881EA1CB06E390089101D /* NoPadding.swift */; };
+		753881EE1CB06E390089101D /* NoPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753881EA1CB06E390089101D /* NoPadding.swift */; };
 		754BE46819693E190098E6F3 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* HashTests.swift */; };
 		754C9D1B1C30800A0003D5FE /* String+LinuxFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C9D1A1C30800A0003D5FE /* String+LinuxFoundation.swift */; };
 		754C9D1C1C30800A0003D5FE /* String+LinuxFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754C9D1A1C30800A0003D5FE /* String+LinuxFoundation.swift */; };
@@ -303,6 +307,7 @@
 		5596BDBB1BC8F220007E38D5 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		674A736E1BF5D85B00866C5B /* RabbitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RabbitTests.swift; sourceTree = "<group>"; };
 		75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Poly1305Tests.swift; sourceTree = "<group>"; };
+		753881EA1CB06E390089101D /* NoPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoPadding.swift; path = Sources/CryptoSwift/NoPadding.swift; sourceTree = SOURCE_ROOT; };
 		754BE45519693E190098E6F3 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		754BE46019693E190098E6F3 /* CryptoSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		754BE46619693E190098E6F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -462,6 +467,7 @@
 				757BC9301C1CA5790093AAA9 /* Padding.swift */,
 				757BC9311C1CA5790093AAA9 /* PKCS5.swift */,
 				757BC9321C1CA5790093AAA9 /* PKCS7.swift */,
+				753881EA1CB06E390089101D /* NoPadding.swift */,
 				757BC9331C1CA5790093AAA9 /* Poly1305.swift */,
 				757BC9341C1CA5790093AAA9 /* Rabbit.swift */,
 				757BC9351C1CA5790093AAA9 /* SHA1.swift */,
@@ -794,6 +800,7 @@
 				757BC9A11C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93451C8F603C0087740D /* CTR.swift in Sources */,
 				757BC9451C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */,
+				753881EC1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F21C8FB6E20054C377 /* OFB.swift in Sources */,
 				757BC9BD1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,
 				757BC9991C1CA5790093AAA9 /* PKCS5.swift in Sources */,
@@ -849,6 +856,7 @@
 				75CB93441C8F603C0087740D /* CTR.swift in Sources */,
 				757BC9441C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */,
 				757BC9BC1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,
+				753881EB1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F11C8FB6E20054C377 /* OFB.swift in Sources */,
 				757BC9981C1CA5790093AAA9 /* PKCS5.swift in Sources */,
 				75CB934E1C8F609D0087740D /* BlockModeOptions.swift in Sources */,
@@ -920,6 +928,7 @@
 				757BC9A21C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93461C8F603C0087740D /* CTR.swift in Sources */,
 				757BC9461C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */,
+				753881EE1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F31C8FB6E20054C377 /* OFB.swift in Sources */,
 				757BC9BE1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,
 				757BC99A1C1CA5790093AAA9 /* PKCS5.swift in Sources */,
@@ -975,6 +984,7 @@
 				757BC9A31C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93471C8F603C0087740D /* CTR.swift in Sources */,
 				757BC9471C1CA5790093AAA9 /* ArraySliceUInt8+Bytes.swift in Sources */,
+				753881ED1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F41C8FB6E20054C377 /* OFB.swift in Sources */,
 				757BC9BF1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,
 				757BC99B1C1CA5790093AAA9 /* PKCS5.swift in Sources */,

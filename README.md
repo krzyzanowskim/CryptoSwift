@@ -235,8 +235,8 @@ let key: [UInt8] = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 let iv: [UInt8] = AES.randomIV(AES.blockSize)
 
 do {
-    let encrypted: [UInt8] = try AES(key: key, iv: iv, blockMode: .CBC).encrypt(input, padding: PKCS7())
-    let decrypted: [UInt8] = try AES(key: key, iv: iv, blockMode: .CBC).decrypt(encrypted, padding: PKCS7())
+    let encrypted: [UInt8] = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).encrypt(input)
+    let decrypted: [UInt8] = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).decrypt(encrypted)
 } catch AES.Error.BlockSizeExceeded {
     // block size exceeded
 } catch {
@@ -248,7 +248,7 @@ AES without data padding
 
 ```swift
 let input: [UInt8] = [0,1,2,3,4,5,6,7,8,9]
-let encrypted: [UInt8] = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC).encrypt(input, padding: nil)
+let encrypted: [UInt8] = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC, padding: NoPadding()).encrypt(input)
 ```
 
 Using extensions

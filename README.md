@@ -55,6 +55,7 @@ Good mood
 
 #####Data padding
 - [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
+- NoPadding
 
 ##Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
@@ -198,7 +199,7 @@ let decrypted = Rabbit(key: key, iv: iv)?.decrypt(encrypted!)
 
 AES
 
-Notice regarding padding: *Manual padding of data is optional and CryptoSwift by default always will add PKCS7 padding before encryption, and remove after decryption when __Cipher__ enum is used. If you need manually disable/enable padding, you can do this by setting parameter for encrypt()/decrypt() on class __AES__.*
+Notice regarding padding: *Manual padding of data is optional and CryptoSwift is using PKCS7 padding by default. If you need manually disable/enable padding, you can do this by setting parameter for __AES__ class*
 
 Basic:
 ```swift

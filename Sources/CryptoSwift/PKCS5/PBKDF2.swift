@@ -21,14 +21,19 @@ public extension PKCS5 {
         private let prf: HMAC
 
         init(password: [UInt8], salt: [UInt8], iterations: Int /* c */, keyLength: Int /* dkLen */ , hashVariant: HMAC.Variant = .sha256) throws {
-            guard let prf = HMAC(key: password, variant: hashVariant) where (keyLength <= Int(pow(2,32) as Float - 1)) && (iterations > 0) && (password.count > 0) && (salt.count > 0) else {
+            guard let prf = HMAC(key: password, variant: hashVariant) where (iterations > 0) && (password.count > 0) && (salt.count > 0) else {
+                throw Error.InvalidInput
+            }
+
+            let hLen = Double(prf.variant.size)
+            if keyLength > Int(((pow(2,32) as Double) - 1) * hLen) {
                 throw Error.InvalidInput
             }
 
             self.salt = salt
             self.iterations = iterations
             self.prf = prf
-            self.numBlocks = UInt(ceil(Double(keyLength) / Double(prf.variant.size)))  // l = ceil(keyLength / hLen)
+            self.numBlocks = UInt(ceil(Double(keyLength) / hLen))  // l = ceil(keyLength / hLen)
         }
 
         func calculate() -> [UInt8] {

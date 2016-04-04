@@ -57,6 +57,9 @@ Good mood
 - [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
 - NoPadding
 
+#####Password-Based Key Derivation Function
+- [PBKDF2](http://tools.ietf.org/html/rfc2898#section-5.2) (Password-Based Key Derivation Function 2)
+
 ##Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
 
@@ -139,6 +142,17 @@ You can use [Swift Package Manager](https://swift.org/package-manager/) and spec
 import CryptoSwift
 ```
 
+#####Conversion between NSData and [UInt8]
+
+For you convenience CryptoSwift provide two function to easily convert array of bytes to NSData and other way around:
+
+```swift
+let data: NSData = NSData(bytes: [0x01, 0x02, 0x03])
+let bytes:[UInt8] = data.arrayOfBytes()
+```
+
+#####Calculate Hash
+
 For your convenience you should use extensions methods like encrypt(), decrypt(), md5(), sha1() and so on.
 
 Hashing a data or array of bytes (aka `Array<UInt8>`)
@@ -151,7 +165,6 @@ let output = input.md5()
 
 print(output.toHexString())
 ```
-
 
 ```swift
 let data = NSData()
@@ -173,7 +186,17 @@ Hashing a String and printing result
 
 ```swift
 let hash = "123".md5()
-```    
+```
+
+#####Message authenticators
+
+```swift
+// Calculate Message Authentication Code (MAC) for message
+let mac: [UInt8] = try! Authenticator.Poly1305(key: key).authenticate(message)
+let hmac: [UInt8] = try! Authenticator.HMAC(key: key, variant: .sha256).authenticate(message)
+```
+
+#####Data Padding
     
 Some content-encryption algorithms assume the input length is a multiple of k octets, where k is greater than one. For such algorithms, the input shall be padded.
 
@@ -181,23 +204,22 @@ Some content-encryption algorithms assume the input length is a multiple of k oc
 let paddedData = PKCS7().add(arr, blockSize: AES.blockSize)
 ```
 
-Working with Ciphers
-
-ChaCha20
+####Working with Ciphers
+#####ChaCha20
 
 ```swift
 let encrypted: [UInt8] = ChaCha20(key: key, iv: iv).encrypt(message)
 let decrypted: [UInt8] = ChaCha20(key: key, iv: iv).decrypt(encrypted)
 ```
 
-Rabbit
+#####Rabbit
 
 ```swift
 let encrypted = Rabbit(key: key, iv: iv)?.encrypt(plaintext)
 let decrypted = Rabbit(key: key, iv: iv)?.decrypt(encrypted!)
 ```
 
-AES
+#####AES
 
 Notice regarding padding: *Manual padding of data is optional and CryptoSwift is using PKCS7 padding by default. If you need manually disable/enable padding, you can do this by setting parameter for __AES__ class*
 
@@ -259,22 +281,6 @@ let plain = NSData()
 let encrypted: NSData = try! plain.encrypt(ChaCha20(key: key, iv: iv))
 let decrypted: NSData = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
 // plain == decrypted
-```
-	
-Message authenticators
-
-```swift
-// Calculate Message Authentication Code (MAC) for message
-let mac: [UInt8] = try! Authenticator.Poly1305(key: key).authenticate(input)
-```
-
-#####Conversion between NSData and [UInt8]
-
-For you convenience CryptoSwift provide two function to easily convert array of bytes to NSData and other way around:
-
-```swift
-let data: NSData = NSData(bytes: [0x01, 0x02, 0x03])
-let bytes:[UInt8] = data.arrayOfBytes()
 ```
 
 ##Author

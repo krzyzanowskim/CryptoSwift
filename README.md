@@ -53,12 +53,12 @@ Good mood
 - Output Feedback ([OFB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Output_Feedback_.28OFB.29))
 - Counter ([CTR](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Counter_.28CTR.29))
 
+#####Password-Based Key Derivation Function
+- [PBKDF2](http://tools.ietf.org/html/rfc2898#section-5.2) (Password-Based Key Derivation Function 2)
+
 #####Data padding
 - [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
 - NoPadding
-
-#####Password-Based Key Derivation Function
-- [PBKDF2](http://tools.ietf.org/html/rfc2898#section-5.2) (Password-Based Key Derivation Function 2)
 
 ##Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
@@ -194,6 +194,16 @@ let hash = "123".md5()
 // Calculate Message Authentication Code (MAC) for message
 let mac: [UInt8] = try! Authenticator.Poly1305(key: key).authenticate(message)
 let hmac: [UInt8] = try! Authenticator.HMAC(key: key, variant: .sha256).authenticate(message)
+```
+
+#####Password-Based Key Derivation Function
+
+```swift
+let password: [UInt8] = "s33krit".utf8.map {$0}
+let salt: [UInt8] = "nacl".utf8.map {$0}
+
+let value = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, hashVariant: .sha256).calculate()
+value.toHexString() // print Hex representation
 ```
 
 #####Data Padding

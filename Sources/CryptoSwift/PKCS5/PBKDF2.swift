@@ -21,7 +21,7 @@ public extension PKCS5 {
         private let prf: HMAC
 
         init(password: [UInt8], salt: [UInt8], iterations: Int /* c */, keyLength: Int /* dkLen */ , hashVariant: HMAC.Variant = .sha256) throws {
-            guard let prf = HMAC(password, variant: hashVariant) where (keyLength <= Int(pow(2,32) as Float - 1)) && (iterations > 0) && (password.count > 0) && (salt.count > 0) else {
+            guard let prf = HMAC(key: password, variant: hashVariant) where (keyLength <= Int(pow(2,32) as Float - 1)) && (iterations > 0) && (password.count > 0) && (salt.count > 0) else {
                 throw Error.InvalidInput
             }
 
@@ -57,7 +57,7 @@ private extension PKCS5.PBKDF2 {
     // F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
     // U_1 = PRF (P, S || INT (i))
     private func calculateBlock(salt salt: [UInt8], blockNum: UInt) -> [UInt8]? {
-        guard let u1 = prf.authenticate(message: salt + INT(blockNum)) else {
+        guard let u1 = prf.authenticate(salt + INT(blockNum)) else {
             return nil
         }
 
@@ -67,7 +67,7 @@ private extension PKCS5.PBKDF2 {
             // U_2 = PRF (P, U_1) ,
             // U_c = PRF (P, U_{c-1}) .
             for _ in 2...self.iterations {
-                u = prf.authenticate(message: u)!
+                u = prf.authenticate(u)!
                 for x in 0..<ret.count {
                     ret[x] = ret[x] ^ u[x]
                 }

@@ -53,14 +53,8 @@ final public class HMAC {
     
     var key:[UInt8]
     let variant:Variant
-    
-    class internal func authenticate(key  key: [UInt8], message: [UInt8], variant:HMAC.Variant = .md5) -> [UInt8]? {
-        return HMAC(key, variant: variant)?.authenticate(message: message)
-    }
 
-    // MARK: - Private
-    
-    internal init? (_ key: [UInt8], variant:HMAC.Variant = .md5) {
+    public init? (key: [UInt8], variant:HMAC.Variant = .md5) {
         self.variant = variant
         self.key = key
 
@@ -74,8 +68,8 @@ final public class HMAC {
             self.key = key + [UInt8](count: variant.blockSize() - key.count, repeatedValue: 0)
         }
     }
-    
-    internal func authenticate(message  message:[UInt8]) -> [UInt8]? {
+
+    public func authenticate(message:[UInt8]) -> [UInt8]? {
         var opad = [UInt8](count: variant.blockSize(), repeatedValue: 0x5c)
         for (idx, _) in key.enumerate() {
             opad[idx] = key[idx] ^ opad[idx]

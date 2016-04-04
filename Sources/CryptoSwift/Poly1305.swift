@@ -74,32 +74,17 @@ final public class Poly1305 {
             }
         }
     }
-    
-    // MARK: - Internal
-    
+
     /**
-    Calculate Message Authentication Code (MAC) for message.
-    Calculation context is discarder on instance deallocation.
-    
-    - parameter key:     256-bit key
-    - parameter message: Message
-    
-    - returns: Message Authentication Code
-    */
-    class internal func authenticate(key  key: [UInt8], message: [UInt8]) -> [UInt8]? {
-        return Poly1305(key)?.authenticate(message: message)
-    }
-    
-    // MARK: - Private
-    
-    private init? (_ key: [UInt8]) {
-        ctx = Context(key)
-        if (ctx == nil) {
-            return nil
-        }
-    }
-    
-    private func authenticate(message  message:[UInt8]) -> [UInt8]? {
+     Calculate Message Authentication Code (MAC) for message.
+     Calculation context is discarder on instance deallocation.
+
+     - parameter key:     256-bit key
+     - parameter message: Message
+
+     - returns: Message Authentication Code
+     */
+    public func authenticate(message:[UInt8]) -> [UInt8]? {
         if let ctx = self.ctx {
             update(ctx, message: message)
             return finish(ctx)
@@ -107,6 +92,15 @@ final public class Poly1305 {
         return nil
     }
     
+    public init? (key: [UInt8]) {
+        ctx = Context(key)
+        if (ctx == nil) {
+            return nil
+        }
+    }
+
+    // MARK: - Private
+
     /**
     Add message to be processed
     

@@ -31,12 +31,12 @@ public enum Authenticator {
     public func authenticate(message: [UInt8]) throws -> [UInt8] {
         switch (self) {
         case .Poly1305(let key):
-            guard let auth = CryptoSwift.Poly1305.authenticate(key: key, message: message) else {
+            guard let auth = CryptoSwift.Poly1305(key: key)?.authenticate(message) else {
                 throw Error.AuthenticateError
             }
             return auth
         case .HMAC(let key, let variant):
-            guard let auth = CryptoSwift.HMAC.authenticate(key: key, message: message, variant: variant) else {
+            guard let auth = CryptoSwift.HMAC(key: key, variant: variant)?.authenticate(message) else {
                 throw Error.AuthenticateError
             }
             return auth

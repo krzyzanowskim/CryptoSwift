@@ -45,7 +45,7 @@ public extension PKCS5 {
             self.numBlocks = UInt(ceil(Double(keyLengthFinal) / hLen))  // l = ceil(keyLength / hLen)
         }
 
-        func calculate() -> [UInt8] {
+        public func calculate() -> [UInt8] {
             var ret = [UInt8]()
             for i in 1...self.numBlocks {
                 // for each block T_i = U_1 ^ U_2 ^ ... ^ U_iter

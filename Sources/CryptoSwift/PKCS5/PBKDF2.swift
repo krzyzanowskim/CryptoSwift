@@ -20,7 +20,7 @@ public extension PKCS5 {
         private let numBlocks: UInt  // l
         private let prf: HMAC
 
-        init(password: [UInt8], salt: [UInt8], iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */ , hashVariant: HMAC.Variant = .sha256) throws {
+        public init(password: [UInt8], salt: [UInt8], iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */ , hashVariant: HMAC.Variant = .sha256) throws {
             guard let prf = HMAC(key: password, variant: hashVariant) where (iterations > 0) && (password.count > 0) && (salt.count > 0) else {
                 throw Error.InvalidInput
             }

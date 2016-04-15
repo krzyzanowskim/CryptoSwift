@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final public class ChaCha20 {
+final public class ChaCha20: BlockCipherType {
     
     public enum Error: ErrorType {
         case MissingContext

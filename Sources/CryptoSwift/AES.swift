@@ -8,7 +8,7 @@
 //  Implementation of Gladman algorithm http://www.gladman.me.uk/AES
 //
 
-final public class AES {
+final public class AES: BlockCipherType {
     
     public enum Error: ErrorType {
         case BlockSizeExceeded

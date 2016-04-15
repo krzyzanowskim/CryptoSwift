@@ -6,7 +6,7 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-final public class Rabbit {
+final public class Rabbit: BlockCipherType {
     
     /// Size of IV in bytes
     public static let ivSize = 64 / 8

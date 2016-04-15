@@ -198,9 +198,9 @@ final public class Rabbit {
 }
 
 
-// MARK: - Cipher
+// MARK: - CipherType
 
-extension Rabbit: Cipher {
+extension Rabbit: CipherType {
     public func cipherEncrypt(bytes:[UInt8]) -> [UInt8] {
         return self.encrypt(bytes)
     }

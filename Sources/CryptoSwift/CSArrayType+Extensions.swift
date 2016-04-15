@@ -73,11 +73,11 @@ public extension CSArrayType where Generator.Element == UInt8 {
         return Hash.crc16(cs_arrayValue(), seed: seed).calculate()
     }
     
-    public func encrypt(cipher: Cipher) throws -> [Generator.Element] {
+    public func encrypt(cipher: CipherType) throws -> [Generator.Element] {
         return try cipher.cipherEncrypt(cs_arrayValue())
     }
 
-    public func decrypt(cipher: Cipher) throws -> [Generator.Element] {
+    public func decrypt(cipher: CipherType) throws -> [Generator.Element] {
         return try cipher.cipherDecrypt(cs_arrayValue())
     }
     

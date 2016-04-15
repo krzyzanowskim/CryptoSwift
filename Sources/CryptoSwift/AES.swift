@@ -440,7 +440,7 @@ extension AES {
     }
 }
 
-extension AES: Cipher {
+extension AES: CipherType {
     // MARK: - Cipher
     
     public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {

@@ -176,7 +176,7 @@ final public class ChaCha20 {
 
 // MARK: - Cipher
 
-extension ChaCha20: Cipher {
+extension ChaCha20: CipherType {
     public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
         return try self.encrypt(bytes)
     }

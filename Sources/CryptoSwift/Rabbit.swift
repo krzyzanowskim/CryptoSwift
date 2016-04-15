@@ -6,6 +6,8 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
+private typealias Key = SecureBytes
+
 final public class Rabbit: BlockCipherType {
     
     /// Size of IV in bytes
@@ -18,7 +20,7 @@ final public class Rabbit: BlockCipherType {
     public static let blockSize = 128 / 8
     
     /// Key
-    private let key: [UInt8]
+    private let key: Key
     
     /// IV (optional)
     private let iv: [UInt8]?
@@ -50,7 +52,7 @@ final public class Rabbit: BlockCipherType {
     }
     
     public init?(key:[UInt8], iv:[UInt8]?) {
-        self.key = key
+        self.key = Key(bytes: key)
         self.iv = iv
         
         guard key.count == Rabbit.keySize && (iv == nil || iv!.count == Rabbit.ivSize) else {

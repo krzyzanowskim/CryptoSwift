@@ -8,10 +8,10 @@
 
 import Foundation
 
-public protocol CSArrayType: Collection {
+public protocol CSArrayType: Collection, RangeReplaceableCollection {
     
     init()
-    
+        
     func cs_arrayValue() -> [Iterator.Element]
 }
 

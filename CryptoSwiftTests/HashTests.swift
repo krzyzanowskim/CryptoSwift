@@ -25,7 +25,7 @@ final class CryptoSwiftTests: XCTestCase {
     }
 
     func testMD5_emptyString() {
-        let data:NSData = "".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        let data:NSData = "".data(using: NSUTF8StringEncoding, allowLossyConversion: false)!
         XCTAssertEqual(Hash.md5(data.arrayOfBytes()).calculate(), [0xd4,0x1d,0x8c,0xd9,0x8f,0x00,0xb2,0x04,0xe9,0x80,0x09,0x98,0xec,0xf8,0x42,0x7e], "MD5 calculation failed")
     }
 

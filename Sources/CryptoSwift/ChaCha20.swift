@@ -69,7 +69,7 @@ final public class ChaCha20 {
 
         for i in 0..<16 {
             x[i] = x[i] &+ input[i]
-            output.append(contentsOf: x[i].bytes().reverse())
+            output.append(contentsOf: x[i].bytes().reversed())
         }
 
         return output;

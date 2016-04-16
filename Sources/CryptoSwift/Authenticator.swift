@@ -28,7 +28,7 @@ public enum Authenticator {
     
     - returns: 16-byte message authentication code
     */
-    public func authenticate(message: [UInt8]) throws -> [UInt8] {
+    public func authenticate(_ message: [UInt8]) throws -> [UInt8] {
         switch (self) {
         case .Poly1305(let key):
             guard let auth = CryptoSwift.Poly1305(key: key)?.authenticate(message) else {

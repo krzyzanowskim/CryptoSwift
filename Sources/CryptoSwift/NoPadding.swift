@@ -7,11 +7,11 @@
 //
 
 public struct NoPadding: Padding {
-    public func add(data: [UInt8], blockSize:Int) -> [UInt8] {
+    public func add(_ data: [UInt8], blockSize:Int) -> [UInt8] {
         return data;
     }
 
-    public func remove(data: [UInt8], blockSize:Int?) -> [UInt8] {
+    public func remove(_ data: [UInt8], blockSize:Int?) -> [UInt8] {
         return data;
     }
 }

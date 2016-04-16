@@ -60,7 +60,7 @@ public extension PKCS5 {
 
 private extension PKCS5.PBKDF2 {
     private func INT(_ i: UInt) -> [UInt8] {
-        var inti = [UInt8](count: 4, repeating: 0)
+        var inti = [UInt8](repeating: 0, count: 4)
         inti[0] = UInt8((i >> 24) & 0xFF)
         inti[1] = UInt8((i >> 16) & 0xFF)
         inti[2] = UInt8((i >> 8) & 0xFF)

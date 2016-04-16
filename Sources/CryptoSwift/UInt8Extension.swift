@@ -27,18 +27,18 @@ extension _UInt8Type {
 extension UInt8 {
     
     /** cast because UInt8(<UInt32>) because std initializer crash if value is > byte */
-    static func withValue(v:UInt64) -> UInt8 {
-        let tmp = v & 0xFF
+    static func with(value: UInt64) -> UInt8 {
+        let tmp = value & 0xFF
         return UInt8(tmp)
     }
 
-    static func withValue(v:UInt32) -> UInt8 {
-        let tmp = v & 0xFF
+    static func with(value :UInt32) -> UInt8 {
+        let tmp = value & 0xFF
         return UInt8(tmp)
     }
     
-    static func withValue(v:UInt16) -> UInt8 {
-        let tmp = v & 0xFF
+    static func with(value: UInt16) -> UInt8 {
+        let tmp = value & 0xFF
         return UInt8(tmp)
     }
 
@@ -82,7 +82,7 @@ extension UInt8 {
 /** Shift bits */
 extension UInt8 {
     /** Shift bits to the right. All bits are shifted (including sign bit) */
-    mutating func shiftRight(count: UInt8) -> UInt8 {
+    mutating func shiftRight(_ count: UInt8) -> UInt8 {
         if (self == 0) {
             return self;
         }

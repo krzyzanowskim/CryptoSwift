@@ -154,7 +154,7 @@ final public class Poly1305 {
     }
     
     private func finish(context:Context) -> [UInt8]? {
-        var mac = [UInt8](count: 16, repeating: 0);
+        var mac = [UInt8](repeating: 0, count: 16);
         
         /* process the remaining block */
         if (context.leftover > 0) {
@@ -183,7 +183,7 @@ final public class Poly1305 {
     
     // MARK: - Utils
     
-    private func add(context:Context, c:[UInt8]) -> Bool {
+    private func add(_ context:Context, c:[UInt8]) -> Bool {
         if (context.h.count != 17 && c.count != 17) {
             return false
         }
@@ -191,13 +191,13 @@ final public class Poly1305 {
         var u:UInt16 = 0
         for i in 0..<17 {
             u += UInt16(context.h[i]) + UInt16(c[i])
-            context.h[i] = UInt8.withValue(u)
+            context.h[i] = UInt8.with(value: u)
             u = u >> 8
         }
         return true
     }
     
-    private func squeeze(context:Context, hr:[UInt32]) -> Bool {
+    private func squeeze(_ context:Context, hr:[UInt32]) -> Bool {
         if (context.h.count != 17 && hr.count != 17) {
             return false
         }
@@ -206,32 +206,32 @@ final public class Poly1305 {
         
         for i in 0..<16 {
             u += hr[i];
-            context.h[i] = UInt8.withValue(u) // crash! h[i] = UInt8(u) & 0xff
+            context.h[i] = UInt8.with(value: u) // crash! h[i] = UInt8(u) & 0xff
             u >>= 8;
         }
         
         u += hr[16]
-        context.h[16] = UInt8.withValue(u) & 0x03
+        context.h[16] = UInt8.with(value: u) & 0x03
         u >>= 2
         u += (u << 2); /* u *= 5; */
         for i in 0..<16 {
             u += UInt32(context.h[i])
-            context.h[i] = UInt8.withValue(u) // crash! h[i] = UInt8(u) & 0xff
+            context.h[i] = UInt8.with(value: u) // crash! h[i] = UInt8(u) & 0xff
             u >>= 8
         }
-        context.h[16] += UInt8.withValue(u);
+        context.h[16] += UInt8.with(value: u);
         
         return true
     }
     
-    private func freeze(context:Context) -> Bool {
+    private func freeze(_ context:Context) -> Bool {
         assert(context.h.count == 17,"Invalid length")
         if (context.h.count != 17) {
             return false
         }
         
         let minusp:[UInt8] = [0x05,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc]
-        var horig:[UInt8] = [UInt8](count: 17, repeating: 0)
+        var horig:[UInt8] = [UInt8](repeating: 0, count: 17)
         
         /* compute h + -p */
         for i in 0..<17 {
@@ -254,15 +254,15 @@ final public class Poly1305 {
         return true;
     }
     
-    private func blocks(context:Context, m:[UInt8], startPos:Int = 0) -> Int {
+    private func blocks(_ context:Context, m:[UInt8], startPos:Int = 0) -> Int {
         var bytes = m.count
         let hibit = context.final ^ 1 // 1 <<128
         var mPos = startPos
         
         while (bytes >= Int(blockSize)) {
-            var hr:[UInt32] = [UInt32](count: 17, repeating: 0)
+            var hr:[UInt32] = [UInt32](repeating: 0, count: 17)
             var u:UInt32 = 0
-            var c:[UInt8] = [UInt8](count: 17, repeating: 0)
+            var c:[UInt8] = [UInt8](repeating: 0, count: 17)
             
             /* h += m */
             for i in 0..<16 {

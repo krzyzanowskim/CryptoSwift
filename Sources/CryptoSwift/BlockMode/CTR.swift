@@ -69,10 +69,10 @@ struct CTRModeDecryptGenerator: BlockModeGenerator {
     }
 }
 
-private func buildNonce(iv: [UInt8], counter: UInt64) -> [UInt8] {
+private func buildNonce(_ iv: [UInt8], counter: UInt64) -> [UInt8] {
     let noncePartLen = AES.blockSize / 2
     let noncePrefix = Array(iv[0..<noncePartLen])
     let nonceSuffix = Array(iv[noncePartLen..<iv.count])
-    let c = UInt64.withBytes(nonceSuffix) + counter
+    let c = UInt64.with(bytes: nonceSuffix) + counter
     return noncePrefix + arrayOfBytes(c)
 }

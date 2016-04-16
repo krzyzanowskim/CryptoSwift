@@ -56,7 +56,7 @@ final class ChaCha20Tests: XCTestCase {
                 let messageData = NSData(bytes: message, length: message.count);
                 let encrypted2 = try! messageData.encrypt(ChaCha20(key: keys[idx], iv: ivs[idx])!)
                 XCTAssertNotNil(encrypted2, "")
-                XCTAssertEqual(NSData.withBytes(encrypted), encrypted2, "ChaCha20 extension failed")
+                XCTAssertEqual(NSData.with(bytes: encrypted), encrypted2, "ChaCha20 extension failed")
             } catch CipherError.Encrypt {
                 XCTAssert(false, "Encryption failed")
             } catch CipherError.Decrypt {

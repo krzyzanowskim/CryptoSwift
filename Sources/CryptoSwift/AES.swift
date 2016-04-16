@@ -230,7 +230,7 @@ final public class AES {
 
         var t = [UInt32](count: 4, repeating: 0)
         
-        for r in (2...rounds).reverse() {
+        for r in (2...rounds).reversed() {
             t[0] = b[0] ^ rk[r][0]
             t[1] = b[1] ^ rk[r][1]
             t[2] = b[2] ^ rk[r][2]
@@ -333,8 +333,8 @@ final public class AES {
         func convertExpandedKey(expanded:[UInt8]) -> [[UInt32]] {
             var arr = [UInt32]()
             for idx in expanded.startIndex.stride(to: expanded.endIndex, by: 4) {
-                let four = Array(expanded[idx..<idx.advanced(by: 4)].reverse())
-                let num = UInt32.withBytes(four)
+                let four = Array(expanded[idx..<idx.advanced(by: 4)].reversed())
+                let num = UInt32.with(bytes: four)
                 arr.append(num)
             }
             
@@ -374,7 +374,7 @@ final public class AES {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
             }
             if ((i % variant.Nk) == 0) {
-                tmp = subWord(rotateLeft(UInt32.withBytes(tmp), 8).bytes(sizeof(UInt32)))
+                tmp = subWord(rotateLeft(UInt32.with(bytes: tmp), 8).bytes(sizeof(UInt32)))
                 tmp[0] = tmp.first! ^ Rcon[i/variant.Nk]
             } else if (variant.Nk > 6 && (i % variant.Nk) == 4) {
                 tmp = subWord(tmp)

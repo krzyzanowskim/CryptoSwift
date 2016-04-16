@@ -17,14 +17,14 @@ public enum CipherError: ErrorType {
     case Decrypt
 }
 
-public protocol Cipher {
+public protocol CipherType {
     func cipherEncrypt(bytes: [UInt8]) throws -> [UInt8]
     func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8]
     
     static func randomIV(blockSize:Int) -> [UInt8]
 }
 
-extension Cipher {
+extension CipherType {
     static public func randomIV(blockSize:Int) -> [UInt8] {
         var randomIV:[UInt8] = [UInt8]();
         for _ in 0..<blockSize {

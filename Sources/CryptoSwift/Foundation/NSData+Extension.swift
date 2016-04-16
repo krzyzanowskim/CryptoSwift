@@ -70,12 +70,12 @@ extension NSData {
         return NSData.withBytes(result)
     }
 
-    public func encrypt(cipher: Cipher) throws -> NSData {
+    public func encrypt(cipher: CipherType) throws -> NSData {
         let encrypted = try cipher.cipherEncrypt(self.arrayOfBytes())
         return NSData.withBytes(encrypted)
     }
 
-    public func decrypt(cipher: Cipher) throws -> NSData {
+    public func decrypt(cipher: CipherType) throws -> NSData {
         let decrypted = try cipher.cipherDecrypt(self.arrayOfBytes())
         return NSData.withBytes(decrypted)
     }

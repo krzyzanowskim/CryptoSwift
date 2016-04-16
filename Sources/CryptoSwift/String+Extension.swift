@@ -41,11 +41,11 @@ extension String {
         return self.utf8.lazy.map({ $0 as UInt8 }).crc16(seed).toHexString()
     }
 
-    public func encrypt(cipher: Cipher) throws -> [UInt8] {
+    public func encrypt(cipher: CipherType) throws -> [UInt8] {
         return try self.utf8.lazy.map({ $0 as UInt8 }).encrypt(cipher)
     }
 
-    public func decrypt(cipher: Cipher) throws -> [UInt8] {
+    public func decrypt(cipher: CipherType) throws -> [UInt8] {
         return try self.utf8.lazy.map({ $0 as UInt8 }).decrypt(cipher)
     }
     

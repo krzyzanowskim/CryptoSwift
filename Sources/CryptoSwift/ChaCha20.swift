@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final public class ChaCha20 {
+final public class ChaCha20: BlockCipherType {
     
     public enum Error: ErrorType {
         case MissingContext
@@ -176,7 +176,7 @@ final public class ChaCha20 {
 
 // MARK: - Cipher
 
-extension ChaCha20: Cipher {
+extension ChaCha20: CipherType {
     public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
         return try self.encrypt(bytes)
     }

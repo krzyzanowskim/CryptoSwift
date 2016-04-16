@@ -15,7 +15,8 @@ struct BytesSequence: Sequence {
         var offset:Int = 0
         
         return AnyIterator {
-            let end = min(self.chunkSize, self.data.count - offset)
+            
+            let end = Swift.min(self.chunkSize, self.data.count - offset)
             let result = self.data[offset..<offset + end]
             offset += result.count
             return result.count > 0 ? result : nil

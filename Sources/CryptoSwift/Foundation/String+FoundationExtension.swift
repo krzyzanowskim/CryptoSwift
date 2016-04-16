@@ -12,7 +12,7 @@ extension String {
 
     /// Return Base64 back to String
     public func decryptBase64ToString(cipher: Cipher) throws -> String {
-        guard let decodedData = NSData(base64EncodedString: self, options: []) else {
+        guard let decodedData = NSData(base64Encoded: self, options: []) else {
             throw CipherError.Decrypt
         }
 
@@ -26,7 +26,7 @@ extension String {
     }
 
     public func decryptBase64(cipher: Cipher) throws -> [UInt8] {
-        guard let decodedData = NSData(base64EncodedString: self, options: []) else {
+        guard let decodedData = NSData(base64Encoded: self, options: []) else {
             throw CipherError.Decrypt
         }
 

@@ -9,7 +9,7 @@
 public enum CipherBlockMode {
     case ECB, CBC, PCBC, CFB, OFB, CTR
 
-    func encryptGenerator(iv: Array<UInt8>?, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyIterator<Array<UInt8>>) -> AnyIterator<Array<UInt8>> {
+    func encryptGenerator(_ iv: Array<UInt8>?, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyIterator<Array<UInt8>>) -> AnyIterator<Array<UInt8>> {
         switch (self) {
         case CBC:
             return AnyIterator<Array<UInt8>>(CBCModeEncryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))
@@ -26,7 +26,7 @@ public enum CipherBlockMode {
         }
     }
 
-    func decryptGenerator(iv: Array<UInt8>?, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyIterator<Array<UInt8>>) -> AnyIterator<Array<UInt8>> {
+    func decryptGenerator(_ iv: Array<UInt8>?, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyIterator<Array<UInt8>>) -> AnyIterator<Array<UInt8>> {
         switch (self) {
         case CBC:
             return AnyIterator<Array<UInt8>>(CBCModeDecryptGenerator(iv: iv ?? [], cipherOperation: cipherOperation, inputGenerator: inputGenerator))

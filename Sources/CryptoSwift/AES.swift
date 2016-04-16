@@ -97,7 +97,7 @@ final public class AES {
         if let iv = iv where iv.count > 0 {
             self.iv = iv
         } else {
-            let defaultIV = [UInt8](count: AES.blockSize, repeating: 0)
+            let defaultIV = [UInt8](repeating: 0, count: AES.blockSize)
             self.iv = defaultIV
         }
 
@@ -124,7 +124,7 @@ final public class AES {
         }
 
         let blocks = finalBytes.chunks(AES.blockSize)
-        let encryptGenerator = blockMode.encryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyIterator<Array<UInt8>>(blocks.generate()))
+        let encryptGenerator = blockMode.encryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyIterator<Array<UInt8>>(blocks.makeIterator()))
 
         var out = [UInt8]()
         out.reserveCapacity(bytes.count)
@@ -209,12 +209,12 @@ final public class AES {
         switch (blockMode) {
         case .CFB, .OFB, .CTR:
             // CFB, OFB, CTR uses encryptBlock to decrypt
-            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyIterator<Array<UInt8>>(blocks.generate()))
+            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyIterator<Array<UInt8>>(blocks.makeIterator()))
             for processedBlock in AnySequence<Array<UInt8>>({ decryptGenerator }) {
                 out.append(contentsOf: processedBlock)
             }
         default:
-            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: decryptBlock, inputGenerator: AnyIterator<Array<UInt8>>(blocks.generate()))
+            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: decryptBlock, inputGenerator: AnyIterator<Array<UInt8>>(blocks.makeIterator()))
             for processedBlock in AnySequence<Array<UInt8>>({ decryptGenerator }) {
                 out.append(contentsOf: processedBlock)
             }
@@ -228,7 +228,7 @@ final public class AES {
         let rk = expandedKeyInv
         var b = toUInt32Array(block[block.startIndex..<block.endIndex])
 
-        var t = [UInt32](count: 4, repeating: 0)
+        var t = [UInt32](repeating: 0, count: 4)
         
         for r in (2...rounds).reversed() {
             t[0] = b[0] ^ rk[r][0]
@@ -330,7 +330,7 @@ final public class AES {
     
     private func expandKey(_ key:[UInt8], variant:AESVariant) -> [[UInt32]] {
         
-        func convertExpandedKey(expanded:[UInt8]) -> [[UInt32]] {
+        func convertExpandedKey(_ expanded:[UInt8]) -> [[UInt32]] {
             var arr = [UInt32]()
             for idx in expanded.startIndex.stride(to: expanded.endIndex, by: 4) {
                 let four = Array(expanded[idx..<idx.advanced(by: 4)].reversed())
@@ -350,7 +350,7 @@ final public class AES {
         * input word and applies an S-box to each of the four bytes to
         * produce an output word.
         */
-        func subWord(word:[UInt8]) -> [UInt8] {
+        func subWord(_ word:[UInt8]) -> [UInt8] {
             var result = word
             for i in 0..<4 {
                 result[i] = UInt8(sBox[Int(word[i])])
@@ -358,7 +358,7 @@ final public class AES {
             return result
         }
         
-        var w = [UInt8](count: variant.Nb * (variant.Nr + 1) * 4, repeating: 0)
+        var w = [UInt8](repeating: 0, count: variant.Nb * (variant.Nr + 1) * 4)
         for i in 0..<variant.Nk {
             for wordIdx in 0..<4 {
                 w[(4*i)+wordIdx] = key[(4*i)+wordIdx]
@@ -368,7 +368,7 @@ final public class AES {
         var tmp:[UInt8]
 
         for i in variant.Nk..<variant.Nb * (variant.Nr + 1) {
-            tmp = [UInt8](count: 4, repeating: 0)
+            tmp = [UInt8](repeating: 0, count: 4)
             
             for wordIdx in 0..<4 {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
@@ -391,23 +391,23 @@ final public class AES {
 
 extension AES {
     
-    private func B0(x: UInt32) -> UInt32 {
+    private func B0(_ x: UInt32) -> UInt32 {
         return x & 0xFF
     }
     
-    private func B1(x: UInt32) -> UInt32 {
+    private func B1(_ x: UInt32) -> UInt32 {
         return (x >> 8) & 0xFF
     }
     
-    private func B2(x: UInt32) -> UInt32 {
+    private func B2(_ x: UInt32) -> UInt32 {
         return (x >> 16) & 0xFF
     }
     
-    private func B3(x: UInt32) -> UInt32 {
+    private func B3(_ x: UInt32) -> UInt32 {
         return (x >> 24) & 0xFF
     }
     
-    private func F1(x0: UInt32, _ x1: UInt32, _ x2: UInt32, _ x3: UInt32) -> UInt32 {
+    private func F1(_ x0: UInt32, _ x1: UInt32, _ x2: UInt32, _ x3: UInt32) -> UInt32 {
         var result:UInt32 = 0
         result |= UInt32(B1(T0[Int(x0 & 255)]))
         result |= UInt32(B1(T0[Int((x1 >> 8) & 255)])) << 8
@@ -417,7 +417,7 @@ extension AES {
     }
     
     private func calculateSBox() -> (sBox:[UInt32], invSBox:[UInt32]) {
-        var sbox = [UInt32](count: 256, repeating: 0)
+        var sbox = [UInt32](repeating: 0, count: 256)
         var invsbox = sbox
         sbox[0] = 0x63
         
@@ -443,11 +443,11 @@ extension AES {
 extension AES: Cipher {
     // MARK: - Cipher
     
-    public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
+    public func cipherEncrypt(_ bytes:[UInt8]) throws -> [UInt8] {
         return try self.encrypt(bytes)
     }
     
-    public func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8] {
+    public func cipherDecrypt(_ bytes: [UInt8]) throws -> [UInt8] {
         return try self.decrypt(bytes)
     }
 }

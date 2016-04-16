@@ -202,8 +202,8 @@ final public class Rabbit: BlockCipherType {
 
 // MARK: - CipherType
 
-extension Rabbit: Cipher {
-    public func cipherEncrypt(_ bytes:[UInt8]) -> [UInt8] {
+extension Rabbit: CipherType {
+    public func cipherEncrypt(bytes:[UInt8]) -> [UInt8] {
         return self.encrypt(bytes)
     }
     

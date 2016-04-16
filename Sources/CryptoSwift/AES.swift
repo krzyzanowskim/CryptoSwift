@@ -8,9 +8,10 @@
 //  Implementation of Gladman algorithm http://www.gladman.me.uk/AES
 //
 
-final public class AES {
-    
-    public enum Error: ErrorProtocol {
+private typealias Key = SecureBytes
+
+final public class AES: BlockCipherType {
+    public enum Error: ErrorType {
         case BlockSizeExceeded
         case InvalidKeyOrInitializationVector
         case InvalidInitializationVector
@@ -305,7 +306,7 @@ final public class AES {
         return out
     }
     
-    private func expandKeyInv(_ key:[UInt8], variant:AESVariant) -> [[UInt32]] {
+    private func expandKeyInv(key: Key, variant: AESVariant) -> [[UInt32]] {
         let rounds = variant.Nr
         var rk2:[[UInt32]] = expandKey(key, variant: variant)
         
@@ -328,7 +329,7 @@ final public class AES {
         return rk2
     }
     
-    private func expandKey(_ key:[UInt8], variant:AESVariant) -> [[UInt32]] {
+    private func expandKey(key:Key, variant:AESVariant) -> [[UInt32]] {
         
         func convertExpandedKey(_ expanded:[UInt8]) -> [[UInt32]] {
             var arr = [UInt32]()

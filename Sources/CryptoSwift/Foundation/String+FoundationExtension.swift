@@ -11,8 +11,8 @@ import Foundation
 extension String {
 
     /// Return Base64 back to String
-    public func decryptBase64ToString(cipher: CipherType) throws -> String {
-        guard let decodedData = NSData(base64EncodedString: self, options: []) else {
+    public func decryptBase64ToString(_ cipher: Cipher) throws -> String {
+        guard let decodedData = NSData(base64Encoded: self, options: []) else {
             throw CipherError.Decrypt
         }
 
@@ -25,8 +25,8 @@ extension String {
         throw CipherError.Decrypt
     }
 
-    public func decryptBase64(cipher: CipherType) throws -> [UInt8] {
-        guard let decodedData = NSData(base64EncodedString: self, options: []) else {
+    public func decryptBase64(_ cipher: Cipher) throws -> [UInt8] {
+        guard let decodedData = NSData(base64Encoded: self, options: []) else {
             throw CipherError.Decrypt
         }
 

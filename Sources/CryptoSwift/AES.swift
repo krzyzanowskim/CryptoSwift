@@ -11,7 +11,7 @@
 private typealias Key = SecureBytes
 
 final public class AES: BlockCipherType {
-    public enum Error: ErrorType {
+    public enum Error: ErrorProtocol {
         case BlockSizeExceeded
         case InvalidKeyOrInitializationVector
         case InvalidInitializationVector
@@ -306,7 +306,7 @@ final public class AES: BlockCipherType {
         return out
     }
     
-    private func expandKeyInv(key: Key, variant: AESVariant) -> [[UInt32]] {
+    private func expandKeyInv(_ key: Key, variant: AESVariant) -> [[UInt32]] {
         let rounds = variant.Nr
         var rk2:[[UInt32]] = expandKey(key, variant: variant)
         
@@ -329,7 +329,7 @@ final public class AES: BlockCipherType {
         return rk2
     }
     
-    private func expandKey(key:Key, variant:AESVariant) -> [[UInt32]] {
+    private func expandKey(_ key: Key, variant: AESVariant) -> [[UInt32]] {
         
         func convertExpandedKey(_ expanded:[UInt8]) -> [[UInt32]] {
             var arr = [UInt32]()
@@ -441,7 +441,8 @@ extension AES {
     }
 }
 
-extension AES: CipherType {
+extension AES: Cipher {
+    
     // MARK: - Cipher
     
     public func cipherEncrypt(_ bytes:[UInt8]) throws -> [UInt8] {

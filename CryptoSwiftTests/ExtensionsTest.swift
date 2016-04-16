@@ -91,7 +91,7 @@ final class ExtensionsTest: XCTestCase {
     }
 
     func test_String_encrypt_base64() {
-        let encryptedBase64 = try! "my secret string".encrypt(AES(key: "secret0key000000", iv: "0123456789012345")).toBase64()
+        let encryptedBase64 = try! "my secret string".encrypt(cipher: AES(key: "secret0key000000", iv: "0123456789012345")).toBase64()
         XCTAssertEqual(encryptedBase64, "aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs=")
     }
 

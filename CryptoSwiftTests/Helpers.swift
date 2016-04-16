@@ -7,8 +7,8 @@
 //
 
 func compareMatrix(a:[[UInt8]], b:[[UInt8]]) -> Bool {
-    for (i,arr) in a.enumerate() {
-        for (j,val) in arr.enumerate() {
+    for (i,arr) in a.enumerated() {
+        for (j,val) in arr.enumerated() {
             if (val != b[i][j]) {
                 print("Not equal: \(val) vs \(b[i][j])") //FIXME: remove verbose
                 return false

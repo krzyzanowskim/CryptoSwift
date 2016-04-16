@@ -332,14 +332,14 @@ final public class AES {
         
         func convertExpandedKey(_ expanded:[UInt8]) -> [[UInt32]] {
             var arr = [UInt32]()
-            for idx in expanded.startIndex.stride(to: expanded.endIndex, by: 4) {
+            for idx in stride(from: expanded.startIndex, to: expanded.endIndex, by: 4) {
                 let four = Array(expanded[idx..<idx.advanced(by: 4)].reversed())
                 let num = UInt32.with(bytes: four)
                 arr.append(num)
             }
             
             var allarr = [[UInt32]]()
-            for idx in arr.startIndex.stride(to: arr.endIndex, by: 4) {
+            for idx in stride(from: arr.startIndex, to: arr.endIndex, by: 4) {
                 allarr.append(Array(arr[idx..<idx.advanced(by: 4)]))
             }
             return allarr

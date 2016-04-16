@@ -19,8 +19,8 @@ final class ExtensionsTest: XCTestCase {
     }
 
     func testArrayChunksPerformance() {
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
-            let message = [UInt8](count: 1024 * 1024, repeating: 7)
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            let message = [UInt8](repeating: 7, count: 1024 * 1024)
             self.startMeasuring()
             message.chunks(AES.blockSize)
             self.stopMeasuring()

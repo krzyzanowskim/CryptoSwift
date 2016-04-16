@@ -56,7 +56,7 @@ func integerWithBytes<T: IntegerType where T:ByteConvertible, T: BitshiftOperati
 
 /// Array of bytes, little-endian representation. Don't use if not necessary.
 /// I found this method slow
-func arrayOfBytes<T>(value:T, length:Int? = nil) -> [UInt8] {
+func arrayOfBytes<T>(_ value:T, length:Int? = nil) -> [UInt8] {
     let totalBytes = length ?? sizeof(T)
     
     let valuePointer = UnsafeMutablePointer<T>.alloc(1)

@@ -5,12 +5,10 @@
 //  Created by Marcin Krzyzanowski on 27/12/14.
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
-
-import Foundation
 import XCTest
-import CryptoSwift
+@testable import CryptoSwift
 
-class AESTests: XCTestCase {
+final class AESTests: XCTestCase {
     // 128 bit key
     let aesKey:[UInt8] = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
 
@@ -21,16 +19,27 @@ class AESTests: XCTestCase {
         
         let expected:[UInt8] = [0xae,0x8c,0x59,0x95,0xb2,0x6f,0x8e,0x3d,0xb0,0x6f,0x0a,0xa5,0xfe,0xc4,0xf0,0xc2];
         
-        if let aes = AES(key: key, iv: iv, blockMode: .CBC) {
-            let encrypted = aes.encrypt(input, padding: nil)
-            XCTAssertEqual(encrypted!, expected, "encryption failed")
-            let decrypted = aes.decrypt(encrypted!, padding: nil)
-            XCTAssertEqual(decrypted!, input, "decryption failed")
-        } else {
-            XCTAssert(false, "failed")
-        }
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: NoPadding())
+        let encrypted = try! aes.encrypt(input)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, input, "decryption failed")
     }
 
+    func testAES_encrypt3() {
+        let key = "679fb1ddf7d81bee"
+        let iv = "kdf67398DF7383fd"
+        let input:[UInt8] = [0x62, 0x72, 0x61, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+        
+        let expected:[UInt8] = [0xae,0x8c,0x59,0x95,0xb2,0x6f,0x8e,0x3d,0xb0,0x6f,0x0a,0xa5,0xfe,0xc4,0xf0,0xc2];
+        
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: NoPadding())
+        let encrypted = try! aes.encrypt(input)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, input, "decryption failed")
+    }
+    
     func testAES_encrypt() {
         let input:[UInt8] = [0x00, 0x11, 0x22, 0x33,
             0x44, 0x55, 0x66, 0x77,
@@ -42,31 +51,39 @@ class AESTests: XCTestCase {
             0xd8, 0xcd, 0xb7, 0x80,
             0x70, 0xb4, 0xc5, 0x5a];
         
-        if let aes = AES(key: aesKey, blockMode: .ECB) {
-            let encrypted = aes.encrypt(input, padding: nil)
-            XCTAssertEqual(encrypted!, expected, "encryption failed")
-            let decrypted = aes.decrypt(encrypted!, padding: nil)
-            XCTAssertEqual(decrypted!, input, "decryption failed")
-        } else {
-            XCTAssert(false, "failed")
-        }
+        let aes = try! AES(key: aesKey, blockMode: .ECB, padding: NoPadding())
+        let encrypted = try! aes.encrypt(input)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, input, "decryption failed")
     }
 
-    func testAES_encrypt_cbc() {
+    func testAES_encrypt_cbc_no_padding() {
         let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
         let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
         let plaintext:[UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
         let expected:[UInt8] = [0x76,0x49,0xab,0xac,0x81,0x19,0xb2,0x46,0xce,0xe9,0x8e,0x9b,0x12,0xe9,0x19,0x7d];
+
+        let aes = try! AES(key: key, iv:iv, blockMode: .CBC, padding: NoPadding())
+        XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
+    }
+
+    func testAES_encrypt_cbc_with_padding() {
+        let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let plaintext:[UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
+        let expected:[UInt8] = [0x76,0x49,0xab,0xac,0x81,0x19,0xb2,0x46,0xce,0xe9,0x8e,0x9b,0x12,0xe9,0x19,0x7d,0x89,0x64,0xe0,0xb1,0x49,0xc1,0x0b,0x7b,0x68,0x2e,0x6e,0x39,0xaa,0xeb,0x73,0x1c]
         
-        if let aes = AES(key: key, iv:iv, blockMode: .CBC) {
-            XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
-            let encrypted = aes.encrypt(plaintext, padding: nil)
-            XCTAssertEqual(encrypted!, expected, "encryption failed")
-            let decrypted = aes.decrypt(encrypted!, padding: nil)
-            XCTAssertEqual(decrypted!, plaintext, "decryption failed")
-        } else {
-            XCTAssert(false, "failed")
-        }
+        let aes = try! AES(key: key, iv:iv, blockMode: .CBC, padding: PKCS7())
+        XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
     
     func testAES_encrypt_cfb() {
@@ -75,125 +92,121 @@ class AESTests: XCTestCase {
         let plaintext:[UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
         let expected:[UInt8] = [0x3b,0x3f,0xd9,0x2e,0xb7,0x2d,0xad,0x20,0x33,0x34,0x49,0xf8,0xe8,0x3c,0xfb,0x4a];
         
-        if let aes = AES(key: key, iv:iv, blockMode: .CFB) {
-            XCTAssertTrue(aes.blockMode == .CFB, "Invalid block mode")
-            let encrypted = aes.encrypt(plaintext, padding: nil)
-            XCTAssertEqual(encrypted!, expected, "encryption failed")
-            let decrypted = aes.decrypt(encrypted!, padding: nil)
-            XCTAssertEqual(decrypted!, plaintext, "decryption failed")
-        } else {
-            XCTAssert(false, "failed")
-        }
+        let aes = try! AES(key: key, iv:iv, blockMode: .CFB, padding: NoPadding())
+        XCTAssertTrue(aes.blockMode == .CFB, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
-    
-    func testAES_SubBytes() {
-        let input:[[UInt8]] = [[0x00, 0x10, 0x20, 0x30],
-            [0x40, 0x50, 0x60, 0x70],
-            [0x80, 0x90, 0xa0, 0xb0],
-            [0xc0, 0xd0, 0xe0, 0xf0]]
-        
-        let expected:[[UInt8]] = [[0x63, 0xca, 0xb7, 0x04],
-            [0x09, 0x53, 0xd0, 0x51],
-            [0xcd, 0x60, 0xe0, 0xe7],
-            [0xba, 0x70, 0xe1, 0x8c]]
-        
-        var substituted = input
-        AES(key: aesKey, blockMode: .CBC)!.subBytes(&substituted)
-        XCTAssertTrue(compareMatrix(expected, substituted), "subBytes failed")
-        let inverted = AES(key: aesKey, blockMode: .CBC)!.invSubBytes(substituted)
-        XCTAssertTrue(compareMatrix(input, inverted), "invSubBytes failed")
+
+    // https://github.com/krzyzanowskim/CryptoSwift/issues/142
+    func testAES_encrypt_cfb_long() {
+        let key: [UInt8] = [56, 118, 37, 51, 125, 78, 103, 107, 119, 40, 74, 88, 117, 112, 123, 75, 122, 89, 72, 36, 46, 91, 106, 60, 54, 110, 34, 126, 69, 126, 61, 87]
+        let iv: [UInt8] = [69, 122, 99, 87, 83, 112, 110, 65, 54, 109, 107, 89, 73, 122, 74, 49]
+        let plaintext: [UInt8] = [123, 10, 32, 32, 34, 67, 111, 110, 102, 105, 114, 109, 34, 32, 58, 32, 34, 116, 101, 115, 116, 105, 110, 103, 34, 44, 10, 32, 32, 34, 70, 105, 114, 115, 116, 78, 97, 109, 101, 34, 32, 58, 32, 34, 84, 101, 115, 116, 34, 44, 10, 32, 32, 34, 69, 109, 97, 105, 108, 34, 32, 58, 32, 34, 116, 101, 115, 116, 64, 116, 101, 115, 116, 46, 99, 111, 109, 34, 44, 10, 32, 32, 34, 76, 97, 115, 116, 78, 97, 109, 101, 34, 32, 58, 32, 34, 84, 101, 115, 116, 101, 114, 34, 44, 10, 32, 32, 34, 80, 97, 115, 115, 119, 111, 114, 100, 34, 32, 58, 32, 34, 116, 101, 115, 116, 105, 110, 103, 34, 44, 10, 32, 32, 34, 85, 115, 101, 114, 110, 97, 109, 101, 34, 32, 58, 32, 34, 84, 101, 115, 116, 34, 10, 125]
+        let encrypted: [UInt8] = try! AES(key: key, iv: iv, blockMode: .CFB).encrypt(plaintext)
+        let decrypted: [UInt8] = try! AES(key: key, iv: iv, blockMode: .CFB).decrypt(encrypted)
+        XCTAssert(decrypted == plaintext, "decryption failed")
     }
-    
-    func testAES_shiftRows() {
-        let input:[[UInt8]] = [[0x63, 0x09, 0xcd, 0xba],
-            [0xca, 0x53, 0x60, 0x70],
-            [0xb7, 0xd0, 0xe0, 0xe1],
-            [0x04, 0x51, 0xe7, 0x8c]]
-        
-        let expected:[[UInt8]] = [[0x63, 0x9, 0xcd, 0xba],
-            [0x53, 0x60, 0x70, 0xca],
-            [0xe0, 0xe1, 0xb7, 0xd0],
-            [0x8c, 0x4, 0x51, 0xe7]]
-        
-        let shifted = AES(key: aesKey, blockMode: .CBC)!.shiftRows(input)
-        XCTAssertTrue(compareMatrix(expected, shifted), "shiftRows failed")
-        let inverted = AES(key: aesKey, blockMode: .CBC)!.invShiftRows(shifted)
-        XCTAssertTrue(compareMatrix(input, inverted), "invShiftRows failed")
+
+    func testAES_encrypt_ofb128() {
+        let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let plaintext:[UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
+        let expected:[UInt8] = [0x3b,0x3f,0xd9,0x2e,0xb7,0x2d,0xad,0x20,0x33,0x34,0x49,0xf8,0xe8,0x3c,0xfb,0x4a];
+
+        let aes = try! AES(key: key, iv:iv, blockMode: .OFB, padding: NoPadding())
+        XCTAssertTrue(aes.blockMode == .OFB, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
-    
-    func testAES_multiply() {
-        XCTAssertTrue(AES(key: aesKey, blockMode: .CBC)?.multiplyPolys(0x0e, 0x5f) == 0x17, "Multiplication failed")
+
+    func testAES_encrypt_ofb256() {
+        let key: [UInt8] = [0x60,0x3d,0xeb,0x10,0x15,0xca,0x71,0xbe,0x2b,0x73,0xae,0xf0,0x85,0x7d,0x77,0x81,0x1f,0x35,0x2c,0x07,0x3b,0x61,0x08,0xd7,0x2d,0x98,0x10,0xa3,0x09,0x14,0xdf,0xf4]
+        let iv: [UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let plaintext: [UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
+        let expected:[UInt8] = [0xdc,0x7e,0x84,0xbf,0xda,0x79,0x16,0x4b,0x7e,0xcd,0x84,0x86,0x98,0x5d,0x38,0x60];
+
+        let aes = try! AES(key: key, iv:iv, blockMode: .OFB, padding: NoPadding())
+        XCTAssertTrue(aes.blockMode == .OFB, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
-    
-    func testAES_expandKey() {
-        let expected:[UInt8] = [0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf, 0xd6, 0xaa, 0x74, 0xfd, 0xd2, 0xaf, 0x72, 0xfa, 0xda, 0xa6, 0x78, 0xf1, 0xd6, 0xab, 0x76, 0xfe, 0xb6, 0x92, 0xcf, 0xb, 0x64, 0x3d, 0xbd, 0xf1, 0xbe, 0x9b, 0xc5, 0x0, 0x68, 0x30, 0xb3, 0xfe, 0xb6, 0xff, 0x74, 0x4e, 0xd2, 0xc2, 0xc9, 0xbf, 0x6c, 0x59, 0xc, 0xbf, 0x4, 0x69, 0xbf, 0x41, 0x47, 0xf7, 0xf7, 0xbc, 0x95, 0x35, 0x3e, 0x3, 0xf9, 0x6c, 0x32, 0xbc, 0xfd, 0x5, 0x8d, 0xfd, 0x3c, 0xaa, 0xa3, 0xe8, 0xa9, 0x9f, 0x9d, 0xeb, 0x50, 0xf3, 0xaf, 0x57, 0xad, 0xf6, 0x22, 0xaa, 0x5e, 0x39, 0xf, 0x7d, 0xf7, 0xa6, 0x92, 0x96, 0xa7, 0x55, 0x3d, 0xc1, 0xa, 0xa3, 0x1f, 0x6b, 0x14, 0xf9, 0x70, 0x1a, 0xe3, 0x5f, 0xe2, 0x8c, 0x44, 0xa, 0xdf, 0x4d, 0x4e, 0xa9, 0xc0, 0x26, 0x47, 0x43, 0x87, 0x35, 0xa4, 0x1c, 0x65, 0xb9, 0xe0, 0x16, 0xba, 0xf4, 0xae, 0xbf, 0x7a, 0xd2, 0x54, 0x99, 0x32, 0xd1, 0xf0, 0x85, 0x57, 0x68, 0x10, 0x93, 0xed, 0x9c, 0xbe, 0x2c, 0x97, 0x4e, 0x13, 0x11, 0x1d, 0x7f, 0xe3, 0x94, 0x4a, 0x17, 0xf3, 0x7, 0xa7, 0x8b, 0x4d, 0x2b, 0x30, 0xc5]
-        
-        if let aes = AES(key: aesKey, blockMode: .CBC) {
-            XCTAssertEqual(expected, aes.expandedKey, "expandKey failed")
-        } else {
-            XCTAssert(false, "")
-        }
+
+    func testAES_encrypt_pcbc256() {
+        let key: [UInt8] = [0x60,0x3d,0xeb,0x10,0x15,0xca,0x71,0xbe,0x2b,0x73,0xae,0xf0,0x85,0x7d,0x77,0x81,0x1f,0x35,0x2c,0x07,0x3b,0x61,0x08,0xd7,0x2d,0x98,0x10,0xa3,0x09,0x14,0xdf,0xf4]
+        let iv: [UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let plaintext: [UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
+        let expected:[UInt8] = [0xf5,0x8c,0x4c,0x04,0xd6,0xe5,0xf1,0xba,0x77,0x9e,0xab,0xfb,0x5f,0x7b,0xfb,0xd6];
+
+        let aes = try! AES(key: key, iv:iv, blockMode: .PCBC, padding: NoPadding())
+        XCTAssertTrue(aes.blockMode == .PCBC, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext)
+        print(encrypted.toHexString())
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
-    
-    func testAES_addRoundKey() {
-        let input:[[UInt8]] = [[0x00, 0x44, 0x88, 0xcc],
-            [0x11, 0x55, 0x99, 0xdd],
-            [0x22, 0x66, 0xaa, 0xee],
-            [0x33, 0x77, 0xbb, 0xff]]
+
+    func testAES_encrypt_ctr() {
+        let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:[UInt8] = [0xf0,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa,0xfb,0xfc,0xfd,0xfe,0xff]
+        let plaintext:[UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
+        let expected:[UInt8] = [0x87,0x4d,0x61,0x91,0xb6,0x20,0xe3,0x26,0x1b,0xef,0x68,0x64,0x99,0x0d,0xb6,0xce]
         
-        let expected:[[UInt8]] = [[0, 64, 128, 192],
-            [16, 80, 144, 208],
-            [32, 96, 160, 224],
-            [48, 112, 176, 240]]
-        
-        if let aes = AES(key: aesKey, blockMode: .CBC) {
-            let result = aes.addRoundKey(input, aes.expandedKey, 0)
-            XCTAssertTrue(compareMatrix(expected, result), "addRoundKey failed")
-        } else {
-            XCTAssert(false, "")
-        }
+        let aes = try! AES(key: key, iv:iv, blockMode: .CTR, padding: NoPadding())
+        XCTAssertTrue(aes.blockMode == .CTR, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
-    
-    func testAES_mixColumns() {
-        let input:[[UInt8]] = [[0x63, 0x9, 0xcd, 0xba],
-            [0x53, 0x60, 0x70, 0xca],
-            [0xe0, 0xe1, 0xb7, 0xd0],
-            [0x8c, 0x4, 0x51, 0xe7]]
-        
-        let expected:[[UInt8]] = [[0x5f, 0x57, 0xf7, 0x1d],
-            [0x72, 0xf5, 0xbe, 0xb9],
-            [0x64, 0xbc, 0x3b, 0xf9],
-            [0x15, 0x92, 0x29, 0x1a]]
-        
-        if let aes = AES(key: aesKey, blockMode: .CBC) {
-            let mixed = aes.mixColumns(input)
-            XCTAssertTrue(compareMatrix(expected, mixed), "mixColumns failed")
-            let inverted = aes.invMixColumns(mixed)
-            XCTAssertTrue(compareMatrix(input, inverted), "invMixColumns failed")
-        } else {
-            XCTAssert(false, "")
-        }
+
+    func testAES_encrypt_ctr_irregular_length() {
+        let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:[UInt8] = [0xf0,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa,0xfb,0xfc,0xfd,0xfe,0xff]
+        let plaintext:[UInt8] = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a,0x01]
+        let expected:[UInt8] = [0x87,0x4d,0x61,0x91,0xb6,0x20,0xe3,0x26,0x1b,0xef,0x68,0x64,0x99,0x0d,0xb6,0xce,0x37]
+
+        let aes = try! AES(key: key, iv:iv, blockMode: .CTR, padding: NoPadding())
+        XCTAssertTrue(aes.blockMode == .CTR, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
-    
-    func testAESPerformance() {
+
+    func testAES_encrypt_performance() {
         let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
         let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
         let message = [UInt8](count: 1024 * 1024, repeatedValue: 7)
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
-            self.startMeasuring()
-            let encrypted = AES(key: key, iv: iv, blockMode: .CBC)?.encrypt(message, padding: PKCS7())
-            self.stopMeasuring()
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, forBlock: { () -> Void in
+            try! aes.encrypt(message)
         })
     }
-    
+
+    func testAES_decrypt_performance() {
+        let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let message = [UInt8](count: 1024 * 1024, repeatedValue: 7)
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, forBlock: { () -> Void in
+            try! aes.decrypt(message)
+        })
+    }
+
     func testAESPerformanceCommonCrypto() {
         let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
         let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
         let message = [UInt8](count: 1024 * 1024, repeatedValue: 7)
         
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
-            self.startMeasuring()
-            
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
             let keyData     = NSData.withBytes(key)
             let keyBytes    = UnsafePointer<Void>(keyData.bytes)
             let ivData      = NSData.withBytes(iv)
@@ -204,12 +217,14 @@ class AESTests: XCTestCase {
             let dataBytes     = UnsafePointer<Void>(data.bytes)
             
             let cryptData    = NSMutableData(length: Int(dataLength) + kCCBlockSizeAES128)
-            var cryptPointer = UnsafeMutablePointer<Void>(cryptData!.mutableBytes)
+            let cryptPointer = UnsafeMutablePointer<Void>(cryptData!.mutableBytes)
             let cryptLength  = cryptData!.length
             
             var numBytesEncrypted:Int = 0
             
-            var cryptStatus = CCCrypt(
+            self.startMeasuring()
+            
+            CCCrypt(
                 UInt32(kCCEncrypt),
                 UInt32(kCCAlgorithmAES128),
                 UInt32(kCCOptionPKCS7Padding),
@@ -223,6 +238,20 @@ class AESTests: XCTestCase {
 
             self.stopMeasuring()
         })
+    }
+
+    func testAESWithWrongKey() {
+        let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let key2:[UInt8] = [0x22,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x33];
+        let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let plaintext:[UInt8] = [49, 46, 50, 50, 50, 51, 51, 51, 51]
+
+        let aes = try! AES(key: key, iv:iv, blockMode: .CBC, padding: PKCS7())
+        let aes2 = try! AES(key: key2, iv:iv, blockMode: .CBC, padding: PKCS7())
+        XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext)
+        let decrypted = try? aes2.decrypt(encrypted)
+        XCTAssertTrue(decrypted! != plaintext, "failed")
     }
 
 }

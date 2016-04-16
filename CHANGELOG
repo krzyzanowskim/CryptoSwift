@@ -1,0 +1,65 @@
+- Padding setup is now part of cipher constructor
+- Added PBKDF2 http://tools.ietf.org/html/rfc2898#section-5.2
+
+0.3.1
+- replace deprecated Bit with new enum.
+
+0.3
+- Swift 2.2 support
+- use generators for cipher block modes should reduce memory overload.
+- add OFB block mode
+- add PCBC block mode
+- String.decryptBase64ToString to decrypt Base64 encoded strings
+- broke up complicated expressions which were taking ages to compile
+
+0.2.3
+- enable bitcode setting for Debug on an Apple TV
+- faster compilation times
+- improve padding functions
+
+0.2.2
+- Fix ChaCha20 cipher
+- Replace for(;;) with for-in
+- Workaround for "NSString are not yet implicitly convertible to String" on Linux
+
+0.2.1
+- Fix linux build
+- re-add umbrella header
+
+0.2
+- Rabbit cipher (RFC4503)
+- Linux Swift support
+- Swift Package Manager support
+- tvOS support
+- Add optional seed to CRC
+- Add umbrella header (CryptoSwift.h)
+- Fix AES in CTR mode
+- Fix no padding support for CTR and CFB block modes
+- Fix access to AES.Error and ChaCha20.Error
+
+0.1.1
+- Fix Cococapods package (missing Foundation integration)
+
+0.1.0
+- Major performance improvements.
+- Transition from Optionals to throw error.
+- Replace enum Cipher with protocol for ciphers.
+- Added CRC16
+- Fixed AES CFB decryption
+- Drop internal "Foundation" dependency, nonetheless it is supported as usual.
+
+0.0.16
+- Critical fix for private "md5" selector issue (#135)
+
+0.0.15
+- Fix 32-bit CTR block mode
+- Carthage support update
+- Mark as App-Extension-Safe API
+
+0.0.14
+- hexString -> toHextString() #105
+- CTR (Counter mode)
+- Hex string is lowercase now
+- Carthage support
+- Tests update
+- Swift 2.0 support - overall update

@@ -12,7 +12,7 @@
     import Darwin
 #endif
 
-public enum CipherError: ErrorType {
+public enum CipherError: ErrorProtocol {
     case Encrypt
     case Decrypt
 }

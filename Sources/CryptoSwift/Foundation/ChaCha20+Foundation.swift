@@ -10,7 +10,7 @@ import Foundation
 
 extension ChaCha20 {
     convenience public init?(key:String, iv:String) {
-        guard let kkey = key.bridge().dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(), let iiv = iv.bridge().dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() else {
+        guard let kkey = key.bridge().data(using: NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(), let iiv = iv.bridge().data(using: NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() else {
             return nil
         }
         self.init(key: kkey, iv: iiv)

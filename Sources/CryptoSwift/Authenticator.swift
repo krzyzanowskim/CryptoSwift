@@ -11,7 +11,7 @@
 */
 public enum Authenticator {
     
-    public enum Error: ErrorType {
+    public enum Error: ErrorProtocol {
         case AuthenticateError
     }
     

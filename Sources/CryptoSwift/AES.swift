@@ -10,7 +10,7 @@
 
 final public class AES {
     
-    public enum Error: ErrorType {
+    public enum Error: ErrorProtocol {
         case BlockSizeExceeded
         case InvalidKeyOrInitializationVector
         case InvalidInitializationVector
@@ -97,7 +97,7 @@ final public class AES {
         if let iv = iv where iv.count > 0 {
             self.iv = iv
         } else {
-            let defaultIV = [UInt8](count: AES.blockSize, repeatedValue: 0)
+            let defaultIV = [UInt8](count: AES.blockSize, repeating: 0)
             self.iv = defaultIV
         }
 
@@ -116,7 +116,7 @@ final public class AES {
     - returns: Encrypted data
     */
     
-    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
+    public func encrypt(_ bytes:[UInt8]) throws -> [UInt8] {
         let finalBytes = self.padding.add(bytes, blockSize: AES.blockSize)
 
         if blockMode.options.contains(.PaddingRequired) && (finalBytes.count % AES.blockSize != 0) {
@@ -124,22 +124,22 @@ final public class AES {
         }
 
         let blocks = finalBytes.chunks(AES.blockSize)
-        let encryptGenerator = blockMode.encryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
+        let encryptGenerator = blockMode.encryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyIterator<Array<UInt8>>(blocks.generate()))
 
         var out = [UInt8]()
         out.reserveCapacity(bytes.count)
         for processedBlock in AnySequence<Array<UInt8>>({ encryptGenerator }) {
-            out.appendContentsOf(processedBlock)
+            out.append(contentsOf: processedBlock)
         }
         return out
     }
 
-    private func encryptBlock(block:[UInt8]) -> [UInt8]? {
+    private func encryptBlock(_ block:[UInt8]) -> [UInt8]? {
         let rounds = self.variant.Nr
         let rk = self.expandedKey
         var b = toUInt32Array(block[block.startIndex..<block.endIndex])
 
-        var t = [UInt32](count: 4, repeatedValue: 0)
+        var t = [UInt32](repeating: 0, count: 4)
         
         for r in 0..<rounds - 1 {
             t[0] = b[0] ^ rk[r][0]
@@ -198,7 +198,7 @@ final public class AES {
         return out
     }
     
-    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
+    public func decrypt(_ bytes:[UInt8]) throws -> [UInt8] {
         if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
             throw Error.BlockSizeExceeded
         }
@@ -209,14 +209,14 @@ final public class AES {
         switch (blockMode) {
         case .CFB, .OFB, .CTR:
             // CFB, OFB, CTR uses encryptBlock to decrypt
-            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
+            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyIterator<Array<UInt8>>(blocks.generate()))
             for processedBlock in AnySequence<Array<UInt8>>({ decryptGenerator }) {
-                out.appendContentsOf(processedBlock)
+                out.append(contentsOf: processedBlock)
             }
         default:
-            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: decryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
+            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: decryptBlock, inputGenerator: AnyIterator<Array<UInt8>>(blocks.generate()))
             for processedBlock in AnySequence<Array<UInt8>>({ decryptGenerator }) {
-                out.appendContentsOf(processedBlock)
+                out.append(contentsOf: processedBlock)
             }
         }
         
@@ -228,7 +228,7 @@ final public class AES {
         let rk = expandedKeyInv
         var b = toUInt32Array(block[block.startIndex..<block.endIndex])
 
-        var t = [UInt32](count: 4, repeatedValue: 0)
+        var t = [UInt32](count: 4, repeating: 0)
         
         for r in (2...rounds).reverse() {
             t[0] = b[0] ^ rk[r][0]
@@ -305,7 +305,7 @@ final public class AES {
         return out
     }
     
-    private func expandKeyInv(key:[UInt8], variant:AESVariant) -> [[UInt32]] {
+    private func expandKeyInv(_ key:[UInt8], variant:AESVariant) -> [[UInt32]] {
         let rounds = variant.Nr
         var rk2:[[UInt32]] = expandKey(key, variant: variant)
         
@@ -328,7 +328,7 @@ final public class AES {
         return rk2
     }
     
-    private func expandKey(key:[UInt8], variant:AESVariant) -> [[UInt32]] {
+    private func expandKey(_ key:[UInt8], variant:AESVariant) -> [[UInt32]] {
         
         func convertExpandedKey(expanded:[UInt8]) -> [[UInt32]] {
             var arr = [UInt32]()
@@ -358,7 +358,7 @@ final public class AES {
             return result
         }
         
-        var w = [UInt8](count: variant.Nb * (variant.Nr + 1) * 4, repeatedValue: 0)
+        var w = [UInt8](count: variant.Nb * (variant.Nr + 1) * 4, repeating: 0)
         for i in 0..<variant.Nk {
             for wordIdx in 0..<4 {
                 w[(4*i)+wordIdx] = key[(4*i)+wordIdx]
@@ -368,7 +368,7 @@ final public class AES {
         var tmp:[UInt8]
 
         for i in variant.Nk..<variant.Nb * (variant.Nr + 1) {
-            tmp = [UInt8](count: 4, repeatedValue: 0)
+            tmp = [UInt8](count: 4, repeating: 0)
             
             for wordIdx in 0..<4 {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
@@ -417,7 +417,7 @@ extension AES {
     }
     
     private func calculateSBox() -> (sBox:[UInt32], invSBox:[UInt32]) {
-        var sbox = [UInt32](count: 256, repeatedValue: 0)
+        var sbox = [UInt32](count: 256, repeating: 0)
         var invsbox = sbox
         sbox[0] = 0x63
         

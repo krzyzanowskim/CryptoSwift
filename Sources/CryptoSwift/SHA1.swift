@@ -30,7 +30,7 @@ final class SHA1 : HashProtocol {
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 32-bit words into eighty 32-bit words:
-            var M:[UInt32] = [UInt32](count: 80, repeatedValue: 0)
+            var M:[UInt32] = [UInt32](count: 80, repeating: 0)
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:

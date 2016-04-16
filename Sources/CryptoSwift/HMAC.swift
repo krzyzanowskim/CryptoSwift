@@ -65,17 +65,17 @@ final public class HMAC {
         }
         
         if (key.count < variant.blockSize()) { // keys shorter than blocksize are zero-padded
-            self.key = key + [UInt8](count: variant.blockSize() - key.count, repeatedValue: 0)
+            self.key = key + [UInt8](repeating: 0, count: variant.blockSize() - key.count)
         }
     }
 
-    public func authenticate(message:[UInt8]) -> [UInt8]? {
-        var opad = [UInt8](count: variant.blockSize(), repeatedValue: 0x5c)
-        for (idx, _) in key.enumerate() {
+    public func authenticate(_ message:[UInt8]) -> [UInt8]? {
+        var opad = [UInt8](repeating: 0x5c, count: variant.blockSize())
+        for (idx, _) in key.enumerated() {
             opad[idx] = key[idx] ^ opad[idx]
         }
-        var ipad = [UInt8](count: variant.blockSize(), repeatedValue: 0x36)
-        for (idx, _) in key.enumerate() {
+        var ipad = [UInt8](repeating: 0x36, count: variant.blockSize())
+        for (idx, _) in key.enumerated() {
             ipad[idx] = key[idx] ^ ipad[idx]
         }
 

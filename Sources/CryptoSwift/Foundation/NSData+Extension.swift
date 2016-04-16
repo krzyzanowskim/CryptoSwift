@@ -94,7 +94,7 @@ extension NSData {
     
     public func arrayOfBytes() -> [UInt8] {
         let count = self.length / sizeof(UInt8)
-        var bytesArray = [UInt8](count: count, repeatedValue: 0)
+        var bytesArray = [UInt8](count: count, repeating: 0)
         self.getBytes(&bytesArray, length:count * sizeof(UInt8))
         return bytesArray
     }

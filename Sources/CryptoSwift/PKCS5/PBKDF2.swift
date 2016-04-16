@@ -11,7 +11,7 @@ public extension PKCS5 {
     //          DK = PBKDF2(PRF, Password, Salt, c, dkLen)
     public struct PBKDF2 {
 
-        public enum Error: ErrorType {
+        public enum Error: ErrorProtocol {
             case InvalidInput
         }
 
@@ -50,7 +50,7 @@ public extension PKCS5 {
             for i in 1...self.numBlocks {
                 // for each block T_i = U_1 ^ U_2 ^ ... ^ U_iter
                 if let value = calculateBlock(salt: self.salt, blockNum: i) {
-                    ret.appendContentsOf(value)
+                    ret.append(contentsOf: value)
                 }
             }
             return ret
@@ -59,8 +59,8 @@ public extension PKCS5 {
 }
 
 private extension PKCS5.PBKDF2 {
-    private func INT(i: UInt) -> [UInt8] {
-        var inti = [UInt8](count: 4, repeatedValue: 0)
+    private func INT(_ i: UInt) -> [UInt8] {
+        var inti = [UInt8](count: 4, repeating: 0)
         inti[0] = UInt8((i >> 24) & 0xFF)
         inti[1] = UInt8((i >> 16) & 0xFF)
         inti[2] = UInt8((i >> 8) & 0xFF)
@@ -70,7 +70,7 @@ private extension PKCS5.PBKDF2 {
 
     // F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
     // U_1 = PRF (P, S || INT (i))
-    private func calculateBlock(salt salt: [UInt8], blockNum: UInt) -> [UInt8]? {
+    private func calculateBlock(salt: [UInt8], blockNum: UInt) -> [UInt8]? {
         guard let u1 = prf.authenticate(salt + INT(blockNum)) else {
             return nil
         }

@@ -34,7 +34,7 @@ extension String {
     }
 
     public func crc32(seed: UInt32? = nil) -> String {
-        return self.utf8.lazy.map({ $0 as UInt8 }).crc32(seed).toHexString()
+        return self.utf8.lazy.map({ $0 as UInt8 }).crc32(seed: seed).toHexString()
     }
 
     public func crc16(seed: UInt16? = nil) -> String {

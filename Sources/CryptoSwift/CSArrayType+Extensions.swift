@@ -9,6 +9,9 @@
 import Foundation
 
 public protocol CSArrayType: Collection {
+    
+    init()
+    
     func cs_arrayValue() -> [Iterator.Element]
 }
 
@@ -28,17 +31,18 @@ public extension CSArrayType where Iterator.Element == UInt8 {
             return nil
         }
 
-        return NSData(bytes: bytesArray).base64EncodedStringWithOptions([])
+        return NSData(bytes: bytesArray).base64EncodedString([])
     }
 
     public init(base64: String) {
+        
         self.init()
 
-        guard let decodedData = NSData(base64EncodedString: base64, options: []) else {
+        guard let decodedData = NSData(base64Encoded: base64, options: []) else {
             return
         }
 
-        self.appendContentsOf(decodedData.arrayOfBytes())
+        self.append(contentsOf: decodedData.arrayOfBytes())
     }
 }
 
@@ -67,23 +71,23 @@ public extension CSArrayType where Iterator.Element == UInt8 {
         return Hash.sha512(cs_arrayValue()).calculate()
     }
     
-    public func crc32(seed: UInt32? = nil) -> [Iterator.Element] {
+    public func crc32(_ seed: UInt32? = nil) -> [Iterator.Element] {
         return Hash.crc32(cs_arrayValue(), seed: seed).calculate()
     }
     
-    public func crc16(seed: UInt16? = nil) -> [Iterator.Element] {
+    public func crc16(_ seed: UInt16? = nil) -> [Iterator.Element] {
         return Hash.crc16(cs_arrayValue(), seed: seed).calculate()
     }
     
-    public func encrypt(cipher: Cipher) throws -> [Iterator.Element] {
+    public func encrypt(_ cipher: Cipher) throws -> [Iterator.Element] {
         return try cipher.cipherEncrypt(cs_arrayValue())
     }
 
-    public func decrypt(cipher: Cipher) throws -> [Iterator.Element] {
+    public func decrypt(_ cipher: Cipher) throws -> [Iterator.Element] {
         return try cipher.cipherDecrypt(cs_arrayValue())
     }
     
-    public func authenticate(authenticator: Authenticator) throws -> [Iterator.Element] {
+    public func authenticate(_ authenticator: Authenticator) throws -> [Iterator.Element] {
         return try authenticator.authenticate(cs_arrayValue())
     }
 }

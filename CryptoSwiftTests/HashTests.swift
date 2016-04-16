@@ -48,8 +48,8 @@ final class CryptoSwiftTests: XCTestCase {
             self.startMeasuring()
                 Hash.md5(arr).calculate()
             self.stopMeasuring()
-            buf.dealloc(1024 * 1024)
-            buf.destroy()
+            buf.deallocateCapacity(1024 * 1024)
+            buf.deinitialize()
         })
     }
     
@@ -62,10 +62,10 @@ final class CryptoSwiftTests: XCTestCase {
                 CC_MD5(data.bytes, CC_LONG(data.length), outbuf)
             //let output = NSData(bytes: outbuf, length: Int(CC_MD5_DIGEST_LENGTH));
             self.stopMeasuring()
-            outbuf.dealloc(Int(CC_MD5_DIGEST_LENGTH))
-            outbuf.destroy()
-            buf.dealloc(1024 * 1024)
-            buf.destroy()
+            outbuf.deallocateCapacity(Int(CC_MD5_DIGEST_LENGTH))
+            outbuf.deinitialize()
+            buf.deallocateCapacity(1024 * 1024)
+            buf.deinitialize()
         })
     }
     

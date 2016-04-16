@@ -24,10 +24,10 @@ final public class Rabbit {
     private let iv: [UInt8]?
     
     /// State variables
-    private var x = [UInt32](count: 8, repeatedValue: 0)
+    private var x = [UInt32](repeating: 0, count: 8)
     
     /// Counter variables
-    private var c = [UInt32](count: 8, repeatedValue: 0)
+    private var c = [UInt32](repeating: 0, count: 8)
     
     /// Counter carry
     private var p7: UInt32 = 0
@@ -63,7 +63,7 @@ final public class Rabbit {
         p7 = 0
         
         // Key divided into 8 subkeys
-        var k = [UInt32](count: 8, repeatedValue: 0)
+        var k = [UInt32](count: 8, repeating: 0)
         for j in 0..<8 {
             k[j] = UInt32(key[Rabbit.blockSize - (2*j + 1)]) | (UInt32(key[Rabbit.blockSize - (2*j + 2)]) << 8)
         }
@@ -131,7 +131,7 @@ final public class Rabbit {
         p7 = carry // save last carry bit
         
         // Iteration of the system
-        var newX = [UInt32](count: 8, repeatedValue: 0)
+        var newX = [UInt32](count: 8, repeating: 0)
         newX[0] = g(0) &+ rotateLeft(g(7), 16) &+ rotateLeft(g(6), 16)
         newX[1] = g(1) &+ rotateLeft(g(0), 8)  &+ g(7)
         newX[2] = g(2) &+ rotateLeft(g(1), 16) &+ rotateLeft(g(0), 16)
@@ -152,7 +152,7 @@ final public class Rabbit {
     private func nextOutput() -> [UInt8] {
         nextState()
         
-        var output16 = [UInt16](count: Rabbit.blockSize / 2, repeatedValue: 0)
+        var output16 = [UInt16](count: Rabbit.blockSize / 2, repeating: 0)
         output16[7] = UInt16(truncatingBitPattern: x[0]) ^ UInt16(truncatingBitPattern: x[5] >> 16)
         output16[6] = UInt16(truncatingBitPattern: x[0] >> 16) ^ UInt16(truncatingBitPattern: x[3])
         output16[5] = UInt16(truncatingBitPattern: x[2]) ^ UInt16(truncatingBitPattern: x[7] >> 16)
@@ -162,7 +162,7 @@ final public class Rabbit {
         output16[1] = UInt16(truncatingBitPattern: x[6]) ^ UInt16(truncatingBitPattern: x[3] >> 16)
         output16[0] = UInt16(truncatingBitPattern: x[6] >> 16) ^ UInt16(truncatingBitPattern: x[1])
         
-        var output8 = [UInt8](count: Rabbit.blockSize, repeatedValue: 0)
+        var output8 = [UInt8](count: Rabbit.blockSize, repeating: 0)
         for j in 0..<output16.count {
             output8[j * 2] = UInt8(truncatingBitPattern: output16[j] >> 8)
             output8[j * 2 + 1] = UInt8(truncatingBitPattern: output16[j])
@@ -174,7 +174,7 @@ final public class Rabbit {
     public func encrypt(bytes: [UInt8]) -> [UInt8] {
         setup()
         
-        var result = [UInt8](count: bytes.count, repeatedValue: 0)
+        var result = [UInt8](count: bytes.count, repeating: 0)
         var output = nextOutput()
         var byteIdx = 0
         var outputIdx = 0

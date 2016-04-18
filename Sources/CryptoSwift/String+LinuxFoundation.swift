@@ -6,10 +6,7 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Foundation
-
 extension String {
-    
 #if !os(Linux)
     
     // Workaround:

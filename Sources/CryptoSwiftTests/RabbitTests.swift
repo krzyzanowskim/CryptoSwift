@@ -7,17 +7,9 @@
 //
 
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
 
-class RabbitTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+final class RabbitTests: XCTestCase {
     
     func testInitialization() {
         var key = [UInt8](repeating: 0, count: Rabbit.keySize - 1)
@@ -117,6 +109,10 @@ class RabbitTests: XCTestCase {
         }
     }
     
+    // MARK: - Performance Tests
+    
+    #if !os(Linux)
+    
     func testRabbitPerformance() {
         let key: [UInt8] = [UInt8](repeating: 0, count: Rabbit.keySize)
         let iv: [UInt8] = [UInt8](repeating: 0, count: Rabbit.ivSize)
@@ -127,4 +123,6 @@ class RabbitTests: XCTestCase {
             XCTAssert(encrypted != nil, "not encrypted")
         })
     }
+    
+    #endif
 }

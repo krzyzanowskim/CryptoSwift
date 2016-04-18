@@ -12,7 +12,6 @@
     import Darwin
 #endif
 
-
 public protocol _UInt8Type { }
 extension UInt8: _UInt8Type {}
 

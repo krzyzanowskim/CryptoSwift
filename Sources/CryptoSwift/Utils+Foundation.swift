@@ -6,8 +6,6 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-#if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
-
 import Foundation
 
 func perf(text: String, closure: () -> ()) {
@@ -20,5 +18,3 @@ func perf(text: String, closure: () -> ()) {
     
     print("\(text) \(executionTime)");
 }
-
-#endif

@@ -6,17 +6,11 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
+import Foundation
+
 
 final class ChaCha20Tests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
 
     func testChaCha20() {
         let keys:[[UInt8]] = [
@@ -78,6 +72,10 @@ final class ChaCha20Tests: XCTestCase {
         let encrypted = try! ChaCha20(key: key, iv: iv)!.encrypt(message)
         XCTAssertEqual(encrypted, expected, "Ciphertext failed")
     }
+    
+    // MARK: - Performance Tests
+    
+    #if !os(Linux)
 
     func testChaCha20Performance() {
         let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
@@ -89,4 +87,6 @@ final class ChaCha20Tests: XCTestCase {
             XCTAssert(encrypted != nil, "not encrypted")
         })
     }
+
+    #endif
 }

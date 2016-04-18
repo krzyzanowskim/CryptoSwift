@@ -2,5 +2,11 @@ import PackageDescription
 
 let package = Package(
     name: "CryptoSwift",
-    exclude: ["CryptoSwiftTests"]
+    targets: [
+                Target(
+                    name: "CryptoSwiftTests",
+                    dependencies: [.Target(name: "CryptoSwift")]),
+                 Target(
+                    name: "CryptoSwift")
+    ]
 )

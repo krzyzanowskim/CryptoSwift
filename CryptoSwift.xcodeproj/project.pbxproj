@@ -11,7 +11,6 @@
 		54EE1C641C2199BE008DD2E5 /* CryptoSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 54EE1C621C2199B2008DD2E5 /* CryptoSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		54EE1C651C2199C4008DD2E5 /* CryptoSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 54EE1C621C2199B2008DD2E5 /* CryptoSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		54EE1C661C2199C8008DD2E5 /* CryptoSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 54EE1C621C2199B2008DD2E5 /* CryptoSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		674A736F1BF5D85B00866C5B /* RabbitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674A736E1BF5D85B00866C5B /* RabbitTests.swift */; };
 		6E646D2D1CC4ACEF0029A4B3 /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646CF91CC4ACEF0029A4B3 /* AES.swift */; };
 		6E646D2E1CC4ACEF0029A4B3 /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646CF91CC4ACEF0029A4B3 /* AES.swift */; };
 		6E646D2F1CC4ACEF0029A4B3 /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646CF91CC4ACEF0029A4B3 /* AES.swift */; };
@@ -108,10 +107,6 @@
 		6E646D8A1CC4ACEF0029A4B3 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D101CC4ACEF0029A4B3 /* HMAC.swift */; };
 		6E646D8B1CC4ACEF0029A4B3 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D101CC4ACEF0029A4B3 /* HMAC.swift */; };
 		6E646D8C1CC4ACEF0029A4B3 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D101CC4ACEF0029A4B3 /* HMAC.swift */; };
-		6E646D8D1CC4ACEF0029A4B3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E646D111CC4ACEF0029A4B3 /* Info.plist */; };
-		6E646D8E1CC4ACEF0029A4B3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E646D111CC4ACEF0029A4B3 /* Info.plist */; };
-		6E646D8F1CC4ACEF0029A4B3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E646D111CC4ACEF0029A4B3 /* Info.plist */; };
-		6E646D901CC4ACEF0029A4B3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E646D111CC4ACEF0029A4B3 /* Info.plist */; };
 		6E646D911CC4ACEF0029A4B3 /* IntegerConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D121CC4ACEF0029A4B3 /* IntegerConvertible.swift */; };
 		6E646D921CC4ACEF0029A4B3 /* IntegerConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D121CC4ACEF0029A4B3 /* IntegerConvertible.swift */; };
 		6E646D931CC4ACEF0029A4B3 /* IntegerConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D121CC4ACEF0029A4B3 /* IntegerConvertible.swift */; };
@@ -220,16 +215,21 @@
 		6E646DFA1CC4ACEF0029A4B3 /* Utils+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D2C1CC4ACEF0029A4B3 /* Utils+Foundation.swift */; };
 		6E646DFB1CC4ACEF0029A4B3 /* Utils+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D2C1CC4ACEF0029A4B3 /* Utils+Foundation.swift */; };
 		6E646DFC1CC4ACEF0029A4B3 /* Utils+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D2C1CC4ACEF0029A4B3 /* Utils+Foundation.swift */; };
-		75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */; };
-		75482EA41CB310B7001F66A5 /* PBKDF2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75482EA31CB310B7001F66A5 /* PBKDF2Tests.swift */; };
-		754BE46819693E190098E6F3 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* HashTests.swift */; };
-		755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755FB1D9199E347D00475437 /* ExtensionsTest.swift */; };
-		757DA2531A4ED0A4002BA3EF /* PaddingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2521A4ED0A4002BA3EF /* PaddingTests.swift */; };
-		757DA2551A4ED408002BA3EF /* AESTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2541A4ED408002BA3EF /* AESTests.swift */; };
-		757DA2571A4ED47B002BA3EF /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2561A4ED47B002BA3EF /* Helpers.swift */; };
-		757DA2591A4ED4D7002BA3EF /* ChaCha20Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */; };
-		758A94281A65C59200E46135 /* HMACTests.swift in Resources */ = {isa = PBXBuildFile; fileRef = 758A94271A65C59200E46135 /* HMACTests.swift */; };
-		758A94291A65C67400E46135 /* HMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758A94271A65C59200E46135 /* HMACTests.swift */; };
+		6EF45F681CC502A2001F7A39 /* AESTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F5D1CC502A2001F7A39 /* AESTests.swift */; };
+		6EF45F691CC502A2001F7A39 /* ChaCha20Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F5F1CC502A2001F7A39 /* ChaCha20Tests.swift */; };
+		6EF45F6A1CC502A2001F7A39 /* ExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F601CC502A2001F7A39 /* ExtensionsTest.swift */; };
+		6EF45F6B1CC502A2001F7A39 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F611CC502A2001F7A39 /* HashTests.swift */; };
+		6EF45F6C1CC502A2001F7A39 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F621CC502A2001F7A39 /* Helpers.swift */; };
+		6EF45F6D1CC502A2001F7A39 /* HMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F631CC502A2001F7A39 /* HMACTests.swift */; };
+		6EF45F6E1CC502A2001F7A39 /* PaddingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F641CC502A2001F7A39 /* PaddingTests.swift */; };
+		6EF45F6F1CC502A2001F7A39 /* PBKDF2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F651CC502A2001F7A39 /* PBKDF2Tests.swift */; };
+		6EF45F701CC502A2001F7A39 /* Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F661CC502A2001F7A39 /* Poly1305Tests.swift */; };
+		6EF45F711CC502A2001F7A39 /* RabbitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F671CC502A2001F7A39 /* RabbitTests.swift */; };
+		6EF45F781CC50CD8001F7A39 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F761CC50A30001F7A39 /* main.swift */; };
+		6EF45F7A1CC52AD1001F7A39 /* Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F791CC52AD1001F7A39 /* Testable.swift */; };
+		6EF45F7B1CC52AD1001F7A39 /* Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F791CC52AD1001F7A39 /* Testable.swift */; };
+		6EF45F7C1CC52AD1001F7A39 /* Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F791CC52AD1001F7A39 /* Testable.swift */; };
+		6EF45F7D1CC52AD1001F7A39 /* Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F791CC52AD1001F7A39 /* Testable.swift */; };
 		75B601EB197D6A6C0009B53D /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
 /* End PBXBuildFile section */
 
@@ -316,13 +316,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		54EE1C621C2199B2008DD2E5 /* CryptoSwift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CryptoSwift.h; path = Sources/CryptoSwift.h; sourceTree = SOURCE_ROOT; };
+		54EE1C621C2199B2008DD2E5 /* CryptoSwift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CryptoSwift.h; path = Sources/CryptoSwift/CryptoSwift.h; sourceTree = SOURCE_ROOT; };
 		5596BDBB1BC8F220007E38D5 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		674A736E1BF5D85B00866C5B /* RabbitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RabbitTests.swift; sourceTree = "<group>"; };
-		6E646CF91CC4ACEF0029A4B3 /* AES.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AES.swift; path = Sources/CryptoSwift/AES.swift; sourceTree = SOURCE_ROOT; };
-		6E646CFA1CC4ACEF0029A4B3 /* AES+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AES+Foundation.swift"; path = "Sources/CryptoSwift/AES+Foundation.swift"; sourceTree = SOURCE_ROOT; };
+		6E646CF91CC4ACEF0029A4B3 /* AES.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AES.swift; sourceTree = "<group>"; };
+		6E646CFA1CC4ACEF0029A4B3 /* AES+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AES+Foundation.swift"; sourceTree = "<group>"; };
 		6E646CFB1CC4ACEF0029A4B3 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Array+Extension.swift"; path = "Sources/CryptoSwift/Array+Extension.swift"; sourceTree = SOURCE_ROOT; };
-		6E646CFC1CC4ACEF0029A4B3 /* ArrayUInt8+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ArrayUInt8+Foundation.swift"; path = "Sources/CryptoSwift/ArrayUInt8+Foundation.swift"; sourceTree = SOURCE_ROOT; };
+		6E646CFC1CC4ACEF0029A4B3 /* ArrayUInt8+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ArrayUInt8+Foundation.swift"; sourceTree = "<group>"; };
 		6E646CFD1CC4ACEF0029A4B3 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Sources/CryptoSwift/Authenticator.swift; sourceTree = SOURCE_ROOT; };
 		6E646CFE1CC4ACEF0029A4B3 /* Bit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Bit.swift; path = Sources/CryptoSwift/Bit.swift; sourceTree = SOURCE_ROOT; };
 		6E646CFF1CC4ACEF0029A4B3 /* BlockCipherType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlockCipherType.swift; path = Sources/CryptoSwift/BlockCipherType.swift; sourceTree = SOURCE_ROOT; };
@@ -332,7 +331,7 @@
 		6E646D031CC4ACEF0029A4B3 /* CBC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CBC.swift; path = Sources/CryptoSwift/CBC.swift; sourceTree = SOURCE_ROOT; };
 		6E646D041CC4ACEF0029A4B3 /* CFB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CFB.swift; path = Sources/CryptoSwift/CFB.swift; sourceTree = SOURCE_ROOT; };
 		6E646D051CC4ACEF0029A4B3 /* ChaCha20.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChaCha20.swift; path = Sources/CryptoSwift/ChaCha20.swift; sourceTree = SOURCE_ROOT; };
-		6E646D061CC4ACEF0029A4B3 /* ChaCha20+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ChaCha20+Foundation.swift"; path = "Sources/CryptoSwift/ChaCha20+Foundation.swift"; sourceTree = SOURCE_ROOT; };
+		6E646D061CC4ACEF0029A4B3 /* ChaCha20+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChaCha20+Foundation.swift"; sourceTree = "<group>"; };
 		6E646D071CC4ACEF0029A4B3 /* CipherBlockMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CipherBlockMode.swift; path = Sources/CryptoSwift/CipherBlockMode.swift; sourceTree = SOURCE_ROOT; };
 		6E646D081CC4ACEF0029A4B3 /* CipherType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CipherType.swift; path = Sources/CryptoSwift/CipherType.swift; sourceTree = SOURCE_ROOT; };
 		6E646D091CC4ACEF0029A4B3 /* CRC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CRC.swift; path = Sources/CryptoSwift/CRC.swift; sourceTree = SOURCE_ROOT; };
@@ -343,7 +342,6 @@
 		6E646D0E1CC4ACEF0029A4B3 /* Hash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Hash.swift; path = Sources/CryptoSwift/Hash.swift; sourceTree = SOURCE_ROOT; };
 		6E646D0F1CC4ACEF0029A4B3 /* HashProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HashProtocol.swift; path = Sources/CryptoSwift/HashProtocol.swift; sourceTree = SOURCE_ROOT; };
 		6E646D101CC4ACEF0029A4B3 /* HMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HMAC.swift; path = Sources/CryptoSwift/HMAC.swift; sourceTree = SOURCE_ROOT; };
-		6E646D111CC4ACEF0029A4B3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/CryptoSwift/Info.plist; sourceTree = SOURCE_ROOT; };
 		6E646D121CC4ACEF0029A4B3 /* IntegerConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntegerConvertible.swift; path = Sources/CryptoSwift/IntegerConvertible.swift; sourceTree = SOURCE_ROOT; };
 		6E646D131CC4ACEF0029A4B3 /* IntExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntExtension.swift; path = Sources/CryptoSwift/IntExtension.swift; sourceTree = SOURCE_ROOT; };
 		6E646D141CC4ACEF0029A4B3 /* MD5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MD5.swift; path = Sources/CryptoSwift/MD5.swift; sourceTree = SOURCE_ROOT; };
@@ -359,32 +357,36 @@
 		6E646D1E1CC4ACEF0029A4B3 /* PKCS7.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PKCS7.swift; path = Sources/CryptoSwift/PKCS7.swift; sourceTree = SOURCE_ROOT; };
 		6E646D1F1CC4ACEF0029A4B3 /* Poly1305.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Poly1305.swift; path = Sources/CryptoSwift/Poly1305.swift; sourceTree = SOURCE_ROOT; };
 		6E646D201CC4ACEF0029A4B3 /* Rabbit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Rabbit.swift; path = Sources/CryptoSwift/Rabbit.swift; sourceTree = SOURCE_ROOT; };
-		6E646D211CC4ACEF0029A4B3 /* Rabbit+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Rabbit+Foundation.swift"; path = "Sources/CryptoSwift/Rabbit+Foundation.swift"; sourceTree = SOURCE_ROOT; };
+		6E646D211CC4ACEF0029A4B3 /* Rabbit+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Rabbit+Foundation.swift"; sourceTree = "<group>"; };
 		6E646D221CC4ACEF0029A4B3 /* SecureBytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SecureBytes.swift; path = Sources/CryptoSwift/SecureBytes.swift; sourceTree = SOURCE_ROOT; };
 		6E646D231CC4ACEF0029A4B3 /* SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SHA1.swift; path = Sources/CryptoSwift/SHA1.swift; sourceTree = SOURCE_ROOT; };
 		6E646D241CC4ACEF0029A4B3 /* SHA2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SHA2.swift; path = Sources/CryptoSwift/SHA2.swift; sourceTree = SOURCE_ROOT; };
 		6E646D251CC4ACEF0029A4B3 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Extension.swift"; path = "Sources/CryptoSwift/String+Extension.swift"; sourceTree = SOURCE_ROOT; };
-		6E646D261CC4ACEF0029A4B3 /* String+FoundationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+FoundationExtension.swift"; path = "Sources/CryptoSwift/String+FoundationExtension.swift"; sourceTree = SOURCE_ROOT; };
-		6E646D271CC4ACEF0029A4B3 /* String+LinuxFoundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+LinuxFoundation.swift"; path = "Sources/CryptoSwift/String+LinuxFoundation.swift"; sourceTree = SOURCE_ROOT; };
+		6E646D261CC4ACEF0029A4B3 /* String+FoundationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+FoundationExtension.swift"; sourceTree = "<group>"; };
+		6E646D271CC4ACEF0029A4B3 /* String+LinuxFoundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+LinuxFoundation.swift"; sourceTree = "<group>"; };
 		6E646D281CC4ACEF0029A4B3 /* UInt8Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UInt8Extension.swift; path = Sources/CryptoSwift/UInt8Extension.swift; sourceTree = SOURCE_ROOT; };
 		6E646D291CC4ACEF0029A4B3 /* UInt32Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UInt32Extension.swift; path = Sources/CryptoSwift/UInt32Extension.swift; sourceTree = SOURCE_ROOT; };
 		6E646D2A1CC4ACEF0029A4B3 /* UInt64Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UInt64Extension.swift; path = Sources/CryptoSwift/UInt64Extension.swift; sourceTree = SOURCE_ROOT; };
 		6E646D2B1CC4ACEF0029A4B3 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Sources/CryptoSwift/Utils.swift; sourceTree = SOURCE_ROOT; };
-		6E646D2C1CC4ACEF0029A4B3 /* Utils+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Utils+Foundation.swift"; path = "Sources/CryptoSwift/Utils+Foundation.swift"; sourceTree = SOURCE_ROOT; };
-		75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Poly1305Tests.swift; sourceTree = "<group>"; };
-		75482EA31CB310B7001F66A5 /* PBKDF2Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBKDF2Tests.swift; sourceTree = "<group>"; };
+		6E646D2C1CC4ACEF0029A4B3 /* Utils+Foundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Utils+Foundation.swift"; sourceTree = "<group>"; };
+		6EF45F5D1CC502A2001F7A39 /* AESTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AESTests.swift; path = Sources/CryptoSwiftTests/AESTests.swift; sourceTree = SOURCE_ROOT; };
+		6EF45F5E1CC502A2001F7A39 /* Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bridging.h; path = Sources/CryptoSwiftTests/Bridging.h; sourceTree = SOURCE_ROOT; };
+		6EF45F5F1CC502A2001F7A39 /* ChaCha20Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChaCha20Tests.swift; path = Sources/CryptoSwiftTests/ChaCha20Tests.swift; sourceTree = SOURCE_ROOT; };
+		6EF45F601CC502A2001F7A39 /* ExtensionsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExtensionsTest.swift; path = Sources/CryptoSwiftTests/ExtensionsTest.swift; sourceTree = SOURCE_ROOT; };
+		6EF45F611CC502A2001F7A39 /* HashTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HashTests.swift; path = Sources/CryptoSwiftTests/HashTests.swift; sourceTree = SOURCE_ROOT; };
+		6EF45F621CC502A2001F7A39 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Helpers.swift; path = Sources/CryptoSwiftTests/Helpers.swift; sourceTree = SOURCE_ROOT; };
+		6EF45F631CC502A2001F7A39 /* HMACTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HMACTests.swift; path = Sources/CryptoSwiftTests/HMACTests.swift; sourceTree = SOURCE_ROOT; };
+		6EF45F641CC502A2001F7A39 /* PaddingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaddingTests.swift; path = Sources/CryptoSwiftTests/PaddingTests.swift; sourceTree = SOURCE_ROOT; };
+		6EF45F651CC502A2001F7A39 /* PBKDF2Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PBKDF2Tests.swift; path = Sources/CryptoSwiftTests/PBKDF2Tests.swift; sourceTree = SOURCE_ROOT; };
+		6EF45F661CC502A2001F7A39 /* Poly1305Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Poly1305Tests.swift; path = Sources/CryptoSwiftTests/Poly1305Tests.swift; sourceTree = SOURCE_ROOT; };
+		6EF45F671CC502A2001F7A39 /* RabbitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RabbitTests.swift; path = Sources/CryptoSwiftTests/RabbitTests.swift; sourceTree = SOURCE_ROOT; };
+		6EF45F751CC504F7001F7A39 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		6EF45F761CC50A30001F7A39 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		6EF45F791CC52AD1001F7A39 /* Testable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Testable.swift; sourceTree = "<group>"; };
 		754BE45519693E190098E6F3 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		754BE46019693E190098E6F3 /* CryptoSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		754BE46619693E190098E6F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		754BE46719693E190098E6F3 /* HashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTests.swift; sourceTree = "<group>"; };
-		755FB1D9199E347D00475437 /* ExtensionsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionsTest.swift; sourceTree = "<group>"; };
-		756BFDCA1A82B87300B9D9A4 /* Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridging.h; sourceTree = "<group>"; };
-		757BC92A1C1CA5790093AAA9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/CryptoSwift/Info.plist; sourceTree = SOURCE_ROOT; };
-		757DA2521A4ED0A4002BA3EF /* PaddingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddingTests.swift; sourceTree = "<group>"; };
-		757DA2541A4ED408002BA3EF /* AESTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AESTests.swift; sourceTree = "<group>"; };
-		757DA2561A4ED47B002BA3EF /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
-		757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChaCha20Tests.swift; sourceTree = "<group>"; };
-		758A94271A65C59200E46135 /* HMACTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMACTests.swift; sourceTree = "<group>"; };
+		754BE46619693E190098E6F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Sources/CryptoSwiftTests/Info.plist; sourceTree = "<group>"; };
+		757BC92A1C1CA5790093AAA9 /* Sources */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = folder; path = Sources; sourceTree = SOURCE_ROOT; };
 		75D614BF1BD844F2001358B2 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75DF77721BC8EB59006E9520 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -443,15 +445,32 @@
 				6E646CFC1CC4ACEF0029A4B3 /* ArrayUInt8+Foundation.swift */,
 				6E646D061CC4ACEF0029A4B3 /* ChaCha20+Foundation.swift */,
 				6E646D2C1CC4ACEF0029A4B3 /* Utils+Foundation.swift */,
+				6E646D211CC4ACEF0029A4B3 /* Rabbit+Foundation.swift */,
 				6E646D261CC4ACEF0029A4B3 /* String+FoundationExtension.swift */,
 				6E646D271CC4ACEF0029A4B3 /* String+LinuxFoundation.swift */,
 			);
 			name = Foundation;
 			sourceTree = "<group>";
 		};
+		6EF45F741CC5035D001F7A39 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6E646CFB1CC4ACEF0029A4B3 /* Array+Extension.swift */,
+				6E646D0A1CC4ACEF0029A4B3 /* CSArrayType+Extensions.swift */,
+				6E646D131CC4ACEF0029A4B3 /* IntExtension.swift */,
+				6E646D171CC4ACEF0029A4B3 /* NSData+Extension.swift */,
+				6E646D251CC4ACEF0029A4B3 /* String+Extension.swift */,
+				6E646D281CC4ACEF0029A4B3 /* UInt8Extension.swift */,
+				6E646D291CC4ACEF0029A4B3 /* UInt32Extension.swift */,
+				6E646D2A1CC4ACEF0029A4B3 /* UInt64Extension.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		754BE44B19693E190098E6F3 = {
 			isa = PBXGroup;
 			children = (
+				6EF45F751CC504F7001F7A39 /* Package.swift */,
 				754BE45719693E190098E6F3 /* CryptoSwift */,
 				754BE46419693E190098E6F3 /* CryptoSwiftTests */,
 				754BE45619693E190098E6F3 /* Products */,
@@ -474,10 +493,9 @@
 		754BE45719693E190098E6F3 /* CryptoSwift */ = {
 			isa = PBXGroup;
 			children = (
-				6E646D111CC4ACEF0029A4B3 /* Info.plist */,
 				6E646DFD1CC4ACFB0029A4B3 /* Foundation */,
+				6EF45F741CC5035D001F7A39 /* Extensions */,
 				6E646CF91CC4ACEF0029A4B3 /* AES.swift */,
-				6E646CFB1CC4ACEF0029A4B3 /* Array+Extension.swift */,
 				6E646CFD1CC4ACEF0029A4B3 /* Authenticator.swift */,
 				6E646CFE1CC4ACEF0029A4B3 /* Bit.swift */,
 				6E646CFF1CC4ACEF0029A4B3 /* BlockCipherType.swift */,
@@ -490,7 +508,6 @@
 				6E646D071CC4ACEF0029A4B3 /* CipherBlockMode.swift */,
 				6E646D081CC4ACEF0029A4B3 /* CipherType.swift */,
 				6E646D091CC4ACEF0029A4B3 /* CRC.swift */,
-				6E646D0A1CC4ACEF0029A4B3 /* CSArrayType+Extensions.swift */,
 				6E646D0B1CC4ACEF0029A4B3 /* CTR.swift */,
 				6E646D0C1CC4ACEF0029A4B3 /* ECB.swift */,
 				6E646D0D1CC4ACEF0029A4B3 /* Generics.swift */,
@@ -498,11 +515,9 @@
 				6E646D0F1CC4ACEF0029A4B3 /* HashProtocol.swift */,
 				6E646D101CC4ACEF0029A4B3 /* HMAC.swift */,
 				6E646D121CC4ACEF0029A4B3 /* IntegerConvertible.swift */,
-				6E646D131CC4ACEF0029A4B3 /* IntExtension.swift */,
 				6E646D141CC4ACEF0029A4B3 /* MD5.swift */,
 				6E646D151CC4ACEF0029A4B3 /* Multiplatform.swift */,
 				6E646D161CC4ACEF0029A4B3 /* NoPadding.swift */,
-				6E646D171CC4ACEF0029A4B3 /* NSData+Extension.swift */,
 				6E646D181CC4ACEF0029A4B3 /* OFB.swift */,
 				6E646D191CC4ACEF0029A4B3 /* Operators.swift */,
 				6E646D1A1CC4ACEF0029A4B3 /* Padding.swift */,
@@ -512,54 +527,53 @@
 				6E646D1E1CC4ACEF0029A4B3 /* PKCS7.swift */,
 				6E646D1F1CC4ACEF0029A4B3 /* Poly1305.swift */,
 				6E646D201CC4ACEF0029A4B3 /* Rabbit.swift */,
-				6E646D211CC4ACEF0029A4B3 /* Rabbit+Foundation.swift */,
 				6E646D221CC4ACEF0029A4B3 /* SecureBytes.swift */,
 				6E646D231CC4ACEF0029A4B3 /* SHA1.swift */,
 				6E646D241CC4ACEF0029A4B3 /* SHA2.swift */,
-				6E646D251CC4ACEF0029A4B3 /* String+Extension.swift */,
-				6E646D281CC4ACEF0029A4B3 /* UInt8Extension.swift */,
-				6E646D291CC4ACEF0029A4B3 /* UInt32Extension.swift */,
-				6E646D2A1CC4ACEF0029A4B3 /* UInt64Extension.swift */,
 				6E646D2B1CC4ACEF0029A4B3 /* Utils.swift */,
+				6EF45F791CC52AD1001F7A39 /* Testable.swift */,
 				754BE45819693E190098E6F3 /* Supporting Files */,
 			);
-			path = CryptoSwift;
+			name = CryptoSwift;
+			path = Sources/CryptoSwift;
 			sourceTree = "<group>";
 		};
 		754BE45819693E190098E6F3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
 				54EE1C621C2199B2008DD2E5 /* CryptoSwift.h */,
-				757BC92A1C1CA5790093AAA9 /* Info.plist */,
+				757BC92A1C1CA5790093AAA9 /* Sources */,
 			);
-			name = "Supporting Files";
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		754BE46419693E190098E6F3 /* CryptoSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				757DA2561A4ED47B002BA3EF /* Helpers.swift */,
-				754BE46719693E190098E6F3 /* HashTests.swift */,
-				75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */,
-				758A94271A65C59200E46135 /* HMACTests.swift */,
-				757DA2541A4ED408002BA3EF /* AESTests.swift */,
-				757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */,
-				674A736E1BF5D85B00866C5B /* RabbitTests.swift */,
-				755FB1D9199E347D00475437 /* ExtensionsTest.swift */,
-				757DA2521A4ED0A4002BA3EF /* PaddingTests.swift */,
-				75482EA31CB310B7001F66A5 /* PBKDF2Tests.swift */,
-				756BFDCA1A82B87300B9D9A4 /* Bridging.h */,
+				6EF45F761CC50A30001F7A39 /* main.swift */,
+				6EF45F5D1CC502A2001F7A39 /* AESTests.swift */,
+				6EF45F5F1CC502A2001F7A39 /* ChaCha20Tests.swift */,
+				6EF45F601CC502A2001F7A39 /* ExtensionsTest.swift */,
+				6EF45F611CC502A2001F7A39 /* HashTests.swift */,
+				6EF45F621CC502A2001F7A39 /* Helpers.swift */,
+				6EF45F631CC502A2001F7A39 /* HMACTests.swift */,
+				6EF45F641CC502A2001F7A39 /* PaddingTests.swift */,
+				6EF45F651CC502A2001F7A39 /* PBKDF2Tests.swift */,
+				6EF45F661CC502A2001F7A39 /* Poly1305Tests.swift */,
+				6EF45F671CC502A2001F7A39 /* RabbitTests.swift */,
 				754BE46519693E190098E6F3 /* Supporting Files */,
 			);
-			path = CryptoSwiftTests;
+			name = CryptoSwiftTests;
+			path = Sources/CryptoSwiftTests;
 			sourceTree = "<group>";
 		};
 		754BE46519693E190098E6F3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6EF45F5E1CC502A2001F7A39 /* Bridging.h */,
 				754BE46619693E190098E6F3 /* Info.plist */,
 			);
-			name = "Supporting Files";
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -747,7 +761,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E646D8E1CC4ACEF0029A4B3 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -755,7 +768,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E646D8D1CC4ACEF0029A4B3 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -763,7 +775,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				758A94281A65C59200E46135 /* HMACTests.swift in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -771,7 +782,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E646D901CC4ACEF0029A4B3 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -779,7 +789,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E646D8F1CC4ACEF0029A4B3 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -795,6 +804,7 @@
 				6E646DEE1CC4ACEF0029A4B3 /* UInt32Extension.swift in Sources */,
 				6E646D3E1CC4ACEF0029A4B3 /* Authenticator.swift in Sources */,
 				6E646D421CC4ACEF0029A4B3 /* Bit.swift in Sources */,
+				6EF45F7B1CC52AD1001F7A39 /* Testable.swift in Sources */,
 				6E646DF61CC4ACEF0029A4B3 /* Utils.swift in Sources */,
 				6E646D9E1CC4ACEF0029A4B3 /* Multiplatform.swift in Sources */,
 				6E646D561CC4ACEF0029A4B3 /* CBC.swift in Sources */,
@@ -853,6 +863,7 @@
 				6E646DED1CC4ACEF0029A4B3 /* UInt32Extension.swift in Sources */,
 				6E646D3D1CC4ACEF0029A4B3 /* Authenticator.swift in Sources */,
 				6E646D411CC4ACEF0029A4B3 /* Bit.swift in Sources */,
+				6EF45F7A1CC52AD1001F7A39 /* Testable.swift in Sources */,
 				6E646DF51CC4ACEF0029A4B3 /* Utils.swift in Sources */,
 				6E646D9D1CC4ACEF0029A4B3 /* Multiplatform.swift in Sources */,
 				6E646D551CC4ACEF0029A4B3 /* CBC.swift in Sources */,
@@ -906,16 +917,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75482EA41CB310B7001F66A5 /* PBKDF2Tests.swift in Sources */,
-				758A94291A65C67400E46135 /* HMACTests.swift in Sources */,
-				75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */,
-				757DA2571A4ED47B002BA3EF /* Helpers.swift in Sources */,
-				754BE46819693E190098E6F3 /* HashTests.swift in Sources */,
-				757DA2591A4ED4D7002BA3EF /* ChaCha20Tests.swift in Sources */,
-				755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */,
-				674A736F1BF5D85B00866C5B /* RabbitTests.swift in Sources */,
-				757DA2531A4ED0A4002BA3EF /* PaddingTests.swift in Sources */,
-				757DA2551A4ED408002BA3EF /* AESTests.swift in Sources */,
+				6EF45F6B1CC502A2001F7A39 /* HashTests.swift in Sources */,
+				6EF45F6D1CC502A2001F7A39 /* HMACTests.swift in Sources */,
+				6EF45F6E1CC502A2001F7A39 /* PaddingTests.swift in Sources */,
+				6EF45F6F1CC502A2001F7A39 /* PBKDF2Tests.swift in Sources */,
+				6EF45F691CC502A2001F7A39 /* ChaCha20Tests.swift in Sources */,
+				6EF45F681CC502A2001F7A39 /* AESTests.swift in Sources */,
+				6EF45F6C1CC502A2001F7A39 /* Helpers.swift in Sources */,
+				6EF45F781CC50CD8001F7A39 /* main.swift in Sources */,
+				6EF45F701CC502A2001F7A39 /* Poly1305Tests.swift in Sources */,
+				6EF45F6A1CC502A2001F7A39 /* ExtensionsTest.swift in Sources */,
+				6EF45F711CC502A2001F7A39 /* RabbitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -928,6 +940,7 @@
 				6E646DF01CC4ACEF0029A4B3 /* UInt32Extension.swift in Sources */,
 				6E646D401CC4ACEF0029A4B3 /* Authenticator.swift in Sources */,
 				6E646D441CC4ACEF0029A4B3 /* Bit.swift in Sources */,
+				6EF45F7D1CC52AD1001F7A39 /* Testable.swift in Sources */,
 				6E646DF81CC4ACEF0029A4B3 /* Utils.swift in Sources */,
 				6E646DA01CC4ACEF0029A4B3 /* Multiplatform.swift in Sources */,
 				6E646D581CC4ACEF0029A4B3 /* CBC.swift in Sources */,
@@ -986,6 +999,7 @@
 				6E646DEF1CC4ACEF0029A4B3 /* UInt32Extension.swift in Sources */,
 				6E646D3F1CC4ACEF0029A4B3 /* Authenticator.swift in Sources */,
 				6E646D431CC4ACEF0029A4B3 /* Bit.swift in Sources */,
+				6EF45F7C1CC52AD1001F7A39 /* Testable.swift in Sources */,
 				6E646DF71CC4ACEF0029A4B3 /* Utils.swift in Sources */,
 				6E646D9F1CC4ACEF0029A4B3 /* Multiplatform.swift in Sources */,
 				6E646D571CC4ACEF0029A4B3 /* CBC.swift in Sources */,
@@ -1158,7 +1172,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Sources/CryptoSwift/Info.plist;
+				INFOPLIST_FILE = $SRCROOT/Sources/CryptoSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = YES;
@@ -1202,7 +1216,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Sources/CryptoSwift/Info.plist;
+				INFOPLIST_FILE = $SRCROOT/Sources/CryptoSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = NO;
@@ -1276,13 +1290,13 @@
 					"/Applications/Xcode6-Beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
 					"includes/**",
 				);
-				INFOPLIST_FILE = CryptoSwiftTests/Info.plist;
+				INFOPLIST_FILE = $SRCROOT/Sources/CryptoSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LLVM_LTO = NO;
 				METAL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.hakore.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = CryptoSwiftTests/Bridging.h;
+				SWIFT_OBJC_BRIDGING_HEADER = $SRCROOT/Sources/CryptoSwiftTests/Bridging.h;
 			};
 			name = Debug;
 		};
@@ -1296,14 +1310,14 @@
 					"/Applications/Xcode6-Beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
 					"includes/**",
 				);
-				INFOPLIST_FILE = CryptoSwiftTests/Info.plist;
+				INFOPLIST_FILE = $SRCROOT/Sources/CryptoSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LLVM_LTO = YES;
 				METAL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.hakore.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_DISABLE_SAFETY_CHECKS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = CryptoSwiftTests/Bridging.h;
+				SWIFT_OBJC_BRIDGING_HEADER = $SRCROOT/Sources/CryptoSwiftTests/Bridging.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;

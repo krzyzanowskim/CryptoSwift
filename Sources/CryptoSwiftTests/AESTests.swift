@@ -5,12 +5,19 @@
 //  Created by Marcin Krzyzanowski on 27/12/14.
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
+
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
+import Foundation
 
 final class AESTests: XCTestCase {
+    
+    static let allTests: [(String, AESTests -> () throws -> Void)] = [("testAES_encrypt2", testAES_encrypt2), ("testAES_encrypt2", testAES_encrypt2), ("testAES_encrypt3", testAES_encrypt3), ("testAES_encrypt", testAES_encrypt), ("testAES_encrypt_cbc_no_padding", testAES_encrypt_cbc_no_padding), ("testAES_encrypt_cbc_with_padding", testAES_encrypt_cbc_with_padding), ("testAES_encrypt_cfb", testAES_encrypt_cfb), ("testAES_encrypt_cfb_long", testAES_encrypt_cfb_long), ("testAES_encrypt_ofb128", testAES_encrypt_ofb128), ("testAES_encrypt_ofb256", testAES_encrypt_ofb256), ("testAES_encrypt_pcbc256", testAES_encrypt_pcbc256), ("testAES_encrypt_ctr", testAES_encrypt_ctr), ("testAES_encrypt_ctr_irregular_length", testAES_encrypt_ctr_irregular_length), ("testAESWithWrongKey", testAESWithWrongKey)]
+    
     // 128 bit key
     let aesKey:[UInt8] = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
+    
+    // MARK: - Functional Tests
 
     func testAES_encrypt2() {
         let key:[UInt8]   = [0x36, 0x37, 0x39, 0x66, 0x62, 0x31, 0x64, 0x64, 0x66, 0x37, 0x64, 0x38, 0x31, 0x62, 0x65, 0x65];
@@ -180,6 +187,24 @@ final class AESTests: XCTestCase {
         let decrypted = try! aes.decrypt(encrypted)
         XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
+    
+    func testAESWithWrongKey() {
+        let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let key2:[UInt8] = [0x22,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x33];
+        let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let plaintext:[UInt8] = [49, 46, 50, 50, 50, 51, 51, 51, 51]
+        
+        let aes = try! AES(key: key, iv:iv, blockMode: .CBC, padding: PKCS7())
+        let aes2 = try! AES(key: key2, iv:iv, blockMode: .CBC, padding: PKCS7())
+        XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
+        let encrypted = try! aes.encrypt(plaintext)
+        let decrypted = try? aes2.decrypt(encrypted)
+        XCTAssertTrue(decrypted! != plaintext, "failed")
+    }
+    
+    // MARK: - Performance Tests
+
+    #if !os(Linux)
 
     func testAES_encrypt_performance() {
         let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
@@ -239,19 +264,6 @@ final class AESTests: XCTestCase {
             self.stopMeasuring()
         })
     }
-
-    func testAESWithWrongKey() {
-        let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
-        let key2:[UInt8] = [0x22,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x33];
-        let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
-        let plaintext:[UInt8] = [49, 46, 50, 50, 50, 51, 51, 51, 51]
-
-        let aes = try! AES(key: key, iv:iv, blockMode: .CBC, padding: PKCS7())
-        let aes2 = try! AES(key: key2, iv:iv, blockMode: .CBC, padding: PKCS7())
-        XCTAssertTrue(aes.blockMode == .CBC, "Invalid block mode")
-        let encrypted = try! aes.encrypt(plaintext)
-        let decrypted = try? aes2.decrypt(encrypted)
-        XCTAssertTrue(decrypted! != plaintext, "failed")
-    }
-
+    
+    #endif
 }

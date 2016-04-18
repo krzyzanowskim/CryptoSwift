@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-extension Array {
+public extension Array {
 
     /** split in chunks with given chunk size */
     func chunks(_ chunksize: Int) -> [Array<Element>] {

@@ -6,17 +6,14 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
+import Foundation
 
 final class ExtensionsTest: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
     
-    override func tearDown() {
-        super.tearDown()
-    }
+    // MARK: - Performance Tests
+    
+    #if !os(Linux)
 
     func testArrayChunksPerformance() {
         measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
@@ -26,7 +23,10 @@ final class ExtensionsTest: XCTestCase {
             self.stopMeasuring()
         })
     }
-
+    
+    #endif
+    
+    // MARK: - Functional Tests
     
     func testIntExtension() {
         let i1:Int = 1024
@@ -78,7 +78,7 @@ final class ExtensionsTest: XCTestCase {
     
     func testtoUInt32Array() {
         let chunk:ArraySlice<UInt8> = [1,1,1,7,2,3,4,5]
-        let result = toUInt32Array(chunk)
+        let result = Testable.toUInt32Array(chunk)
         
         XCTAssert(result.count == 2, "Invalid conversion")
         XCTAssert(result[0] == 117506305, "Invalid conversion")
@@ -91,7 +91,7 @@ final class ExtensionsTest: XCTestCase {
     }
 
     func test_String_encrypt_base64() {
-        let encryptedBase64 = try! "my secret string".encrypt(cipher: AES(key: "secret0key000000", iv: "0123456789012345")).toBase64()
+        let encryptedBase64 = try! "my secret string".encrypt(AES(key: "secret0key000000", iv: "0123456789012345")).toBase64()
         XCTAssertEqual(encryptedBase64, "aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs=")
     }
 

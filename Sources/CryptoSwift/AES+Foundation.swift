@@ -6,8 +6,6 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-#if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
-
 import Foundation
 
 extension AES {
@@ -19,5 +17,3 @@ extension AES {
         try self.init(key: kkey, iv: iiv, blockMode: blockMode, padding: padding)
     }
 }
-
-#endif

@@ -7,17 +7,12 @@
 //
 
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
+import Foundation
 
 final class CryptoSwiftTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+    // MARK: - Functional Tests
     
     func testMD5_data() {
         let data = [0x31, 0x32, 0x33] as [UInt8] // "1", "2", "3"
@@ -38,35 +33,6 @@ final class CryptoSwiftTests: XCTestCase {
         XCTAssertEqual("abcdefghijklmnopqrstuvwxyz".md5(), "c3fcd3d76192e4007dfb496cca67e13b", "MD5 calculation failed")
         XCTAssertEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".md5(), "d174ab98d277d9f5a5611c2c9f419d9f", "MD5 calculation failed")
         XCTAssertEqual("12345678901234567890123456789012345678901234567890123456789012345678901234567890".md5(), "57edf4a22be3c955ac49da2e2107b67a", "MD5 calculation failed")
-    }
-    
-    func testMD5PerformanceSwift() {
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let buf = UnsafeMutablePointer<UInt8>(calloc(1024 * 1024, sizeof(UInt8)))
-            let data = NSData(bytes: buf, length: 1024 * 1024)
-            let arr = data.arrayOfBytes()
-            self.startMeasuring()
-                Hash.md5(arr).calculate()
-            self.stopMeasuring()
-            buf?.deallocateCapacity(1024 * 1024)
-            buf?.deinitialize()
-        })
-    }
-    
-    func testMD5PerformanceCommonCrypto() {
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let buf = UnsafeMutablePointer<UInt8>(calloc(1024 * 1024, sizeof(UInt8)))
-            let data = NSData(bytes: buf, length: 1024 * 1024)
-            let outbuf = UnsafeMutablePointer<UInt8>.init(allocatingCapacity: Int(CC_MD5_DIGEST_LENGTH))
-            self.startMeasuring()
-                CC_MD5(data.bytes, CC_LONG(data.length), outbuf)
-            //let output = NSData(bytes: outbuf, length: Int(CC_MD5_DIGEST_LENGTH));
-            self.stopMeasuring()
-            outbuf.deallocateCapacity(Int(CC_MD5_DIGEST_LENGTH))
-            outbuf.deinitialize()
-            buf?.deallocateCapacity(1024 * 1024)
-            buf?.deinitialize()
-        })
     }
     
     func testSHA1() {
@@ -135,5 +101,40 @@ final class CryptoSwiftTests: XCTestCase {
         let data:NSData = NSData(bytes: [49, 50, 51] as [UInt8], length: 3)
         XCTAssert(data.checksum() == 0x96, "Invalid checksum")
     }
+    
+    // MARK: - Performance Tests
+    
+    #if !os(Linux)
+    
+    func testMD5PerformanceSwift() {
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            let buf = UnsafeMutablePointer<UInt8>(calloc(1024 * 1024, sizeof(UInt8)))
+            let data = NSData(bytes: buf, length: 1024 * 1024)
+            let arr = data.arrayOfBytes()
+            self.startMeasuring()
+            Hash.md5(arr).calculate()
+            self.stopMeasuring()
+            buf?.deallocateCapacity(1024 * 1024)
+            buf?.deinitialize()
+        })
+    }
+    
+    func testMD5PerformanceCommonCrypto() {
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            let buf = UnsafeMutablePointer<UInt8>(calloc(1024 * 1024, sizeof(UInt8)))
+            let data = NSData(bytes: buf, length: 1024 * 1024)
+            let outbuf = UnsafeMutablePointer<UInt8>.init(allocatingCapacity: Int(CC_MD5_DIGEST_LENGTH))
+            self.startMeasuring()
+            CC_MD5(data.bytes, CC_LONG(data.length), outbuf)
+            //let output = NSData(bytes: outbuf, length: Int(CC_MD5_DIGEST_LENGTH));
+            self.stopMeasuring()
+            outbuf.deallocateCapacity(Int(CC_MD5_DIGEST_LENGTH))
+            outbuf.deinitialize()
+            buf?.deallocateCapacity(1024 * 1024)
+            buf?.deinitialize()
+        })
+    }
+    
+    #endif
 
 }

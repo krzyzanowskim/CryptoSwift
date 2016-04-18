@@ -12,7 +12,6 @@
     import Darwin
 #endif
 
-
 public protocol _UInt8Type { }
 extension UInt8: _UInt8Type {}
 
@@ -27,18 +26,18 @@ extension _UInt8Type {
 extension UInt8 {
     
     /** cast because UInt8(<UInt32>) because std initializer crash if value is > byte */
-    static func withValue(v:UInt64) -> UInt8 {
-        let tmp = v & 0xFF
+    static func with(value: UInt64) -> UInt8 {
+        let tmp = value & 0xFF
         return UInt8(tmp)
     }
 
-    static func withValue(v:UInt32) -> UInt8 {
-        let tmp = v & 0xFF
+    static func with(value :UInt32) -> UInt8 {
+        let tmp = value & 0xFF
         return UInt8(tmp)
     }
     
-    static func withValue(v:UInt16) -> UInt8 {
-        let tmp = v & 0xFF
+    static func with(value: UInt16) -> UInt8 {
+        let tmp = value & 0xFF
         return UInt8(tmp)
     }
 
@@ -55,7 +54,7 @@ extension UInt8 {
     func bits() -> [Bit] {
         let totalBitsCount = sizeofValue(self) * 8
         
-        var bitsArray = [Bit](count: totalBitsCount, repeatedValue: Bit.Zero)
+        var bitsArray = [Bit](repeating: Bit.Zero, count: totalBitsCount)
         
         for j in 0..<totalBitsCount {
             let bitVal:UInt8 = 1 << UInt8(totalBitsCount - 1 - j)
@@ -71,7 +70,7 @@ extension UInt8 {
     func bits() -> String {
         var s = String()
         let arr:[Bit] = self.bits()
-        for (idx,b) in arr.enumerate() {
+        for (idx,b) in arr.enumerated() {
             s += (b == Bit.One ? "1" : "0")
             if ((idx + 1) % 8 == 0) { s += " " }
         }
@@ -82,7 +81,7 @@ extension UInt8 {
 /** Shift bits */
 extension UInt8 {
     /** Shift bits to the right. All bits are shifted (including sign bit) */
-    mutating func shiftRight(count: UInt8) -> UInt8 {
+    mutating func shiftRight(_ count: UInt8) -> UInt8 {
         if (self == 0) {
             return self;
         }

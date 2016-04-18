@@ -26,10 +26,10 @@ final public class Rabbit: BlockCipherType {
     private let iv: [UInt8]?
     
     /// State variables
-    private var x = [UInt32](count: 8, repeatedValue: 0)
+    private var x = [UInt32](repeating: 0, count: 8)
     
     /// Counter variables
-    private var c = [UInt32](count: 8, repeatedValue: 0)
+    private var c = [UInt32](repeating: 0, count: 8)
     
     /// Counter carry
     private var p7: UInt32 = 0
@@ -65,7 +65,7 @@ final public class Rabbit: BlockCipherType {
         p7 = 0
         
         // Key divided into 8 subkeys
-        var k = [UInt32](count: 8, repeatedValue: 0)
+        var k = [UInt32](repeating: 0, count: 8)
         for j in 0..<8 {
             k[j] = UInt32(key[Rabbit.blockSize - (2*j + 1)]) | (UInt32(key[Rabbit.blockSize - (2*j + 2)]) << 8)
         }
@@ -97,7 +97,7 @@ final public class Rabbit: BlockCipherType {
         }
     }
     
-    private func setupIV(iv: [UInt8]) {
+    private func setupIV(_ iv: [UInt8]) {
         // 63...56 55...48 47...40 39...32 31...24 23...16 15...8 7...0 IV bits
         //    0       1       2       3       4       5       6     7   IV bytes in array
         let iv0: UInt32 = integerWithBytes([iv[4], iv[5], iv[6], iv[7]])
@@ -133,7 +133,7 @@ final public class Rabbit: BlockCipherType {
         p7 = carry // save last carry bit
         
         // Iteration of the system
-        var newX = [UInt32](count: 8, repeatedValue: 0)
+        var newX = [UInt32](repeating: 0, count: 8)
         newX[0] = g(0) &+ rotateLeft(g(7), 16) &+ rotateLeft(g(6), 16)
         newX[1] = g(1) &+ rotateLeft(g(0), 8)  &+ g(7)
         newX[2] = g(2) &+ rotateLeft(g(1), 16) &+ rotateLeft(g(0), 16)
@@ -145,7 +145,7 @@ final public class Rabbit: BlockCipherType {
         x = newX
     }
     
-    private func g(j: Int) -> UInt32 {
+    private func g(_ j: Int) -> UInt32 {
         let sum = x[j] &+ c[j]
         let square = UInt64(sum) * UInt64(sum)
         return UInt32(truncatingBitPattern: square ^ (square >> 32))
@@ -154,7 +154,7 @@ final public class Rabbit: BlockCipherType {
     private func nextOutput() -> [UInt8] {
         nextState()
         
-        var output16 = [UInt16](count: Rabbit.blockSize / 2, repeatedValue: 0)
+        var output16 = [UInt16](repeating: 0, count: Rabbit.blockSize / 2)
         output16[7] = UInt16(truncatingBitPattern: x[0]) ^ UInt16(truncatingBitPattern: x[5] >> 16)
         output16[6] = UInt16(truncatingBitPattern: x[0] >> 16) ^ UInt16(truncatingBitPattern: x[3])
         output16[5] = UInt16(truncatingBitPattern: x[2]) ^ UInt16(truncatingBitPattern: x[7] >> 16)
@@ -164,7 +164,7 @@ final public class Rabbit: BlockCipherType {
         output16[1] = UInt16(truncatingBitPattern: x[6]) ^ UInt16(truncatingBitPattern: x[3] >> 16)
         output16[0] = UInt16(truncatingBitPattern: x[6] >> 16) ^ UInt16(truncatingBitPattern: x[1])
         
-        var output8 = [UInt8](count: Rabbit.blockSize, repeatedValue: 0)
+        var output8 = [UInt8](repeating: 0, count: Rabbit.blockSize)
         for j in 0..<output16.count {
             output8[j * 2] = UInt8(truncatingBitPattern: output16[j] >> 8)
             output8[j * 2 + 1] = UInt8(truncatingBitPattern: output16[j])
@@ -173,10 +173,10 @@ final public class Rabbit: BlockCipherType {
     }
     
     // MARK: - Public
-    public func encrypt(bytes: [UInt8]) -> [UInt8] {
+    public func encrypt(_ bytes: [UInt8]) -> [UInt8] {
         setup()
         
-        var result = [UInt8](count: bytes.count, repeatedValue: 0)
+        var result = [UInt8](repeating: 0, count: bytes.count)
         var output = nextOutput()
         var byteIdx = 0
         var outputIdx = 0
@@ -194,20 +194,20 @@ final public class Rabbit: BlockCipherType {
         return result
     }
     
-    public func decrypt(bytes: [UInt8]) -> [UInt8] {
+    public func decrypt(_ bytes: [UInt8]) -> [UInt8] {
         return encrypt(bytes)
     }
 }
 
 
-// MARK: - CipherType
+// MARK: - Cipher
 
-extension Rabbit: CipherType {
-    public func cipherEncrypt(bytes:[UInt8]) -> [UInt8] {
+extension Rabbit: Cipher {
+    public func cipherEncrypt(_ bytes:[UInt8]) -> [UInt8] {
         return self.encrypt(bytes)
     }
     
-    public func cipherDecrypt(bytes: [UInt8]) -> [UInt8] {
+    public func cipherDecrypt(_ bytes: [UInt8]) -> [UInt8] {
         return self.decrypt(bytes)
     }
 }

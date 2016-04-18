@@ -7,6 +7,6 @@
 //
 
 public protocol Padding {
-    func add(data: [UInt8], blockSize:Int) -> [UInt8]
-    func remove(data: [UInt8], blockSize:Int?) -> [UInt8]
+    func add(_ data: [UInt8], blockSize:Int) -> [UInt8]
+    func remove(_ data: [UInt8], blockSize:Int?) -> [UInt8]
 }

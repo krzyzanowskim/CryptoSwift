@@ -6,18 +6,10 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
+import Foundation
 
 final class Poly1305Tests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
     
     func testPoly1305() {
         let key:[UInt8] = [0xdd,0xde,0xdf,0xe0,0xe1,0xe2,0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xeb,0xec,0xed,0xee,0xef,0xf0,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa,0xfb,0xfc]
@@ -28,8 +20,8 @@ final class Poly1305Tests: XCTestCase {
         XCTAssertEqual(mac, expectedMac, "Invalid authentication result")
         
         // extensions
-        let msgData = NSData.withBytes(msg)
+        let msgData = NSData.with(bytes: msg)
         let mac2 = try! msgData.authenticate(Authenticator.Poly1305(key: key))
-        XCTAssertEqual(mac2, NSData.withBytes(expectedMac), "Invalid authentication result")
+        XCTAssertEqual(mac2, NSData.with(bytes: expectedMac), "Invalid authentication result")
     }
 }

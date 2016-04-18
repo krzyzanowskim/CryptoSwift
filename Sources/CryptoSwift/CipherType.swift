@@ -12,20 +12,20 @@
     import Darwin
 #endif
 
-public enum CipherError: ErrorType {
+public enum CipherError: ErrorProtocol {
     case Encrypt
     case Decrypt
 }
 
-public protocol CipherType {
-    func cipherEncrypt(bytes: [UInt8]) throws -> [UInt8]
-    func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8]
+public protocol Cipher {
+    func cipherEncrypt(_ bytes: [UInt8]) throws -> [UInt8]
+    func cipherDecrypt(_ bytes: [UInt8]) throws -> [UInt8]
     
-    static func randomIV(blockSize:Int) -> [UInt8]
+    static func randomIV(_ blockSize:Int) -> [UInt8]
 }
 
-extension CipherType {
-    static public func randomIV(blockSize:Int) -> [UInt8] {
+extension Cipher {
+    static public func randomIV(_ blockSize:Int) -> [UInt8] {
         var randomIV:[UInt8] = [UInt8]();
         for _ in 0..<blockSize {
             randomIV.append(UInt8(truncatingBitPattern: cs_arc4random_uniform(256)));

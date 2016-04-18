@@ -99,7 +99,7 @@ final class SHA2 : HashProtocol {
             }
         }
         
-        private func resultingArray<T>(hh:[T]) -> ArraySlice<T> {
+        private func resultingArray<T>(_ hh:[T]) -> ArraySlice<T> {
             switch (self) {
             case .sha224:
                 return hh[0..<7]
@@ -130,7 +130,7 @@ final class SHA2 : HashProtocol {
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 32-bit words into sixty-four 32-bit words:
-            var M:[UInt32] = [UInt32](count: variant.k.count, repeatedValue: 0)
+            var M:[UInt32] = [UInt32](repeating: 0, count: variant.k.count)
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
@@ -213,7 +213,7 @@ final class SHA2 : HashProtocol {
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 64-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 64-bit words into eighty 64-bit words:
-            var M = [UInt64](count: variant.k.count, repeatedValue: 0)
+            var M = [UInt64](repeating: 0, count: variant.k.count)
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:

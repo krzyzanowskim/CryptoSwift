@@ -12,11 +12,11 @@ struct ECBModeEncryptGenerator: BlockModeGenerator {
     typealias Element = Array<UInt8>
 
     private let iv: Element
-    private let inputGenerator: AnyGenerator<Element>
+    private let inputGenerator: AnyIterator<Element>
 
     private let cipherOperation: CipherOperationOnBlock
 
-    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Array<UInt8>>) {
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyIterator<Array<UInt8>>) {
         self.iv = iv
         self.cipherOperation = cipherOperation
         self.inputGenerator = inputGenerator

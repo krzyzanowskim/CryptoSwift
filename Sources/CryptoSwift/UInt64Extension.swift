@@ -12,12 +12,12 @@ extension UInt64 {
         return arrayOfBytes(self, length: totalBytes)
     }
 
-    public static func withBytes(bytes: ArraySlice<UInt8>) -> UInt64 {
-        return UInt64.withBytes(Array(bytes))
+    public static func with(bytes: ArraySlice<UInt8>) -> UInt64 {
+        return UInt64.with(bytes: Array(bytes))
     }
 
     /** Int with array bytes (little-endian) */
-    public static func withBytes(bytes: [UInt8]) -> UInt64 {
+    public static func with(bytes: [UInt8]) -> UInt64 {
         return integerWithBytes(bytes)
     }
 }

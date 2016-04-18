@@ -1,23 +1,20 @@
 //
-//  CryptoSwiftTests.swift
-//  CryptoSwiftTests
+//  HashTests.swift
+//  HashTests
 //
 //  Created by Marcin Krzyzanowski on 06/07/14.
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
+import Foundation
 
-final class CryptoSwiftTests: XCTestCase {
+final class HashTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-    }
+    static let allTests: [(String, HashTests -> () throws -> Void)] = [("testMD5_data", testMD5_data), ("testMD5_emptyString", testMD5_emptyString), ("testMD5_string", testMD5_string), ("testSHA1", testSHA1), ("testSHA224", testSHA224), ("testSHA256", testSHA256), ("testSHA384", testSHA384), ("testSHA512", testSHA512), ("testCRC32", testCRC32), ("testCRC16", testCRC16), ("testChecksum", testChecksum)]
     
-    override func tearDown() {
-        super.tearDown()
-    }
+    // MARK: - Functional Tests
     
     func testMD5_data() {
         let data = [0x31, 0x32, 0x33] as [UInt8] // "1", "2", "3"
@@ -25,7 +22,7 @@ final class CryptoSwiftTests: XCTestCase {
     }
 
     func testMD5_emptyString() {
-        let data:NSData = "".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        let data:NSData = "".data(using: NSUTF8StringEncoding, allowLossyConversion: false) ?? NSData()
         XCTAssertEqual(Hash.md5(data.arrayOfBytes()).calculate(), [0xd4,0x1d,0x8c,0xd9,0x8f,0x00,0xb2,0x04,0xe9,0x80,0x09,0x98,0xec,0xf8,0x42,0x7e], "MD5 calculation failed")
     }
 
@@ -38,35 +35,6 @@ final class CryptoSwiftTests: XCTestCase {
         XCTAssertEqual("abcdefghijklmnopqrstuvwxyz".md5(), "c3fcd3d76192e4007dfb496cca67e13b", "MD5 calculation failed")
         XCTAssertEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".md5(), "d174ab98d277d9f5a5611c2c9f419d9f", "MD5 calculation failed")
         XCTAssertEqual("12345678901234567890123456789012345678901234567890123456789012345678901234567890".md5(), "57edf4a22be3c955ac49da2e2107b67a", "MD5 calculation failed")
-    }
-    
-    func testMD5PerformanceSwift() {
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
-            let buf = UnsafeMutablePointer<UInt8>(calloc(1024 * 1024, sizeof(UInt8)))
-            let data = NSData(bytes: buf, length: 1024 * 1024)
-            let arr = data.arrayOfBytes()
-            self.startMeasuring()
-                Hash.md5(arr).calculate()
-            self.stopMeasuring()
-            buf.dealloc(1024 * 1024)
-            buf.destroy()
-        })
-    }
-    
-    func testMD5PerformanceCommonCrypto() {
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
-            let buf = UnsafeMutablePointer<UInt8>(calloc(1024 * 1024, sizeof(UInt8)))
-            let data = NSData(bytes: buf, length: 1024 * 1024)
-            let outbuf = UnsafeMutablePointer<UInt8>.alloc(Int(CC_MD5_DIGEST_LENGTH))
-            self.startMeasuring()
-                CC_MD5(data.bytes, CC_LONG(data.length), outbuf)
-            //let output = NSData(bytes: outbuf, length: Int(CC_MD5_DIGEST_LENGTH));
-            self.stopMeasuring()
-            outbuf.dealloc(Int(CC_MD5_DIGEST_LENGTH))
-            outbuf.destroy()
-            buf.dealloc(1024 * 1024)
-            buf.destroy()
-        })
     }
     
     func testSHA1() {
@@ -135,5 +103,40 @@ final class CryptoSwiftTests: XCTestCase {
         let data:NSData = NSData(bytes: [49, 50, 51] as [UInt8], length: 3)
         XCTAssert(data.checksum() == 0x96, "Invalid checksum")
     }
+    
+    // MARK: - Performance Tests
+    
+    #if !os(Linux)
+    
+    func testMD5PerformanceSwift() {
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            let buf = UnsafeMutablePointer<UInt8>(calloc(1024 * 1024, sizeof(UInt8)))
+            let data = NSData(bytes: buf, length: 1024 * 1024)
+            let arr = data.arrayOfBytes()
+            self.startMeasuring()
+            Hash.md5(arr).calculate()
+            self.stopMeasuring()
+            buf?.deallocateCapacity(1024 * 1024)
+            buf?.deinitialize()
+        })
+    }
+    
+    func testMD5PerformanceCommonCrypto() {
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            let buf = UnsafeMutablePointer<UInt8>(calloc(1024 * 1024, sizeof(UInt8)))
+            let data = NSData(bytes: buf, length: 1024 * 1024)
+            let outbuf = UnsafeMutablePointer<UInt8>.init(allocatingCapacity: Int(CC_MD5_DIGEST_LENGTH))
+            self.startMeasuring()
+            CC_MD5(data.bytes, CC_LONG(data.length), outbuf)
+            //let output = NSData(bytes: outbuf, length: Int(CC_MD5_DIGEST_LENGTH));
+            self.stopMeasuring()
+            outbuf.deallocateCapacity(Int(CC_MD5_DIGEST_LENGTH))
+            outbuf.deinitialize()
+            buf?.deallocateCapacity(1024 * 1024)
+            buf?.deinitialize()
+        })
+    }
+    
+    #endif
 
 }

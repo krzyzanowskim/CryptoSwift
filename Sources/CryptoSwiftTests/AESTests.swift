@@ -12,16 +12,154 @@ import Foundation
 
 final class AESTests: XCTestCase {
     
-    static let allTests: [(String, AESTests -> () throws -> Void)] = [("testAES_encrypt2", testAES_encrypt2), ("testAES_encrypt2", testAES_encrypt2), ("testAES_encrypt3", testAES_encrypt3), ("testAES_encrypt", testAES_encrypt), ("testAES_encrypt_cbc_no_padding", testAES_encrypt_cbc_no_padding), ("testAES_encrypt_cbc_with_padding", testAES_encrypt_cbc_with_padding), ("testAES_encrypt_cfb", testAES_encrypt_cfb), ("testAES_encrypt_cfb_long", testAES_encrypt_cfb_long), ("testAES_encrypt_ofb128", testAES_encrypt_ofb128), ("testAES_encrypt_ofb256", testAES_encrypt_ofb256), ("testAES_encrypt_pcbc256", testAES_encrypt_pcbc256), ("testAES_encrypt_ctr", testAES_encrypt_ctr), ("testAES_encrypt_ctr_irregular_length", testAES_encrypt_ctr_irregular_length), ("testAESWithWrongKey", testAESWithWrongKey)]
+    static let allTests: [(String, AESTests -> () throws -> Void)] = [("testAES_encrypt2", testAES_encrypt2), ("testAES_encrypt2", testAES_encrypt2), ("testAES_encrypt3", testAES_encrypt3), ("testAES_encrypt", testAES_encrypt), ("testAES_encrypt_cbc_no_padding", testAES_encrypt_cbc_no_padding), ("testAES_encrypt_cbc_with_padding", testAES_encrypt_cbc_with_padding), ("testAES_encrypt_cfb", testAES_encrypt_cfb), ("testAES_encrypt_cfb_long", testAES_encrypt_cfb_long), ("testAES_encrypt_ofb128", testAES_encrypt_ofb128), ("testAES_encrypt_ofb256", testAES_encrypt_ofb256), ("testAES_encrypt_pcbc256", testAES_encrypt_pcbc256), ("testAES_encrypt_ctr", testAES_encrypt_ctr), ("testAES_encrypt_ctr_irregular_length", testAES_encrypt_ctr_irregular_length), ("testAESWithWrongKey", testAESWithWrongKey), ("testAES_encrypt4", testAES_encrypt4)]
     
     // 128 bit key
     let aesKey:[UInt8] = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
     
     // MARK: - Functional Tests
 
-    func testAES_encrypt2() {
-        let key:[UInt8]   = [0x36, 0x37, 0x39, 0x66, 0x62, 0x31, 0x64, 0x64, 0x66, 0x37, 0x64, 0x38, 0x31, 0x62, 0x65, 0x65];
-        let iv:[UInt8]    = [0x6b, 0x64, 0x66, 0x36, 0x37, 0x33, 0x39, 0x38, 0x44, 0x46, 0x37, 0x33, 0x38, 0x33, 0x66, 0x64]
+    func testAES_encrypt4() {
+        
+        let IVSize = AES.blockSize
+        
+        typealias Byte = UInt8
+        
+        /// Encapsulates data.
+        struct Data {
+            
+            var byteValue: [Byte]
+            
+            init(byteValue: [Byte] = []) {
+                
+                self.byteValue = byteValue
+            }
+        }
+        
+        /// Encrypt data
+        func encrypt(key: Data, data: Data) -> (encrypted: Data, iv: InitializationVector) {
+            
+            let iv = InitializationVector()
+            
+            let crypto = try! AES(key: key.byteValue, iv: iv.data.byteValue)
+            
+            let byteValue = try! crypto.encrypt(data.byteValue)
+            
+            return (Data(byteValue: byteValue), iv)
+        }
+        
+        /// Decrypt data
+        func decrypt(key: Data, iv: InitializationVector, data: Data) -> Data {
+            
+            assert(iv.data.byteValue.count == IVSize)
+            
+            let crypto = try! AES(key: key.byteValue, iv: iv.data.byteValue)
+            
+            let byteValue = try! crypto.decrypt(data.byteValue)
+            
+            return Data(byteValue: byteValue)
+        }
+        
+        struct InitializationVector {
+            
+            static let length = AES.blockSize
+            
+            let data: Data
+            
+            init?(data: Data) {
+                
+                guard data.byteValue.count == self.dynamicType.length
+                    else { return nil }
+                
+                self.data = data
+            }
+            
+            init() {
+                
+                /// Generate random data with the specified size.
+                func random(_ size: Int) -> Data {
+                    
+                    let bytes = AES.randomIV(size)
+                    
+                    return Data(byteValue: bytes)
+                }
+                
+                self.data = random(self.dynamicType.length)
+            }
+        }
+        
+        struct KeyData {
+            
+            static let length = 32
+            
+            let data: Data
+            
+            init?(data: Data) {
+                
+                guard data.byteValue.count == self.dynamicType.length
+                    else { return nil }
+                
+                self.data = data
+            }
+            
+            /// Initializes a `Key` with a random value.
+            init() {
+                
+                /// Generate random data with the specified size.
+                func random(_ size: Int) -> Data {
+                    
+                    let bytes = AES.randomIV(size)
+                    
+                    return Data(byteValue: bytes)
+                }
+                
+                self.data = random(self.dynamicType.length)
+            }
+        }
+        
+        /// Cryptographic nonce
+        struct Nonce {
+            
+            static let length = 16
+            
+            let data: Data
+            
+            init?(data: Data) {
+                
+                guard data.byteValue.count == self.dynamicType.length
+                    else { return nil }
+                
+                self.data = data
+            }
+            
+            init() {
+                
+                /// Generate random data with the specified size.
+                func random(_ size: Int) -> Data {
+                    
+                    let bytes = AES.randomIV(size)
+                    
+                    return Data(byteValue: bytes)
+                }
+                
+                self.data = random(self.dynamicType.length)
+            }
+        }
+        
+        let key = KeyData()
+        
+        let nonce = Nonce()
+        
+        let (encryptedData, iv) = encrypt(key: key.data, data: nonce.data)
+        
+        let decryptedData = decrypt(key: key.data, iv: iv, data: encryptedData)
+        
+        XCTAssert(nonce.data.byteValue == decryptedData.byteValue)
+    }
+
+    func testAES_encrypt3() {
+        let key = "679fb1ddf7d81bee"
+        let iv = "kdf67398DF7383fd"
         let input:[UInt8] = [0x62, 0x72, 0x61, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
         
         let expected:[UInt8] = [0xae,0x8c,0x59,0x95,0xb2,0x6f,0x8e,0x3d,0xb0,0x6f,0x0a,0xa5,0xfe,0xc4,0xf0,0xc2];
@@ -32,10 +170,10 @@ final class AESTests: XCTestCase {
         let decrypted = try! aes.decrypt(encrypted)
         XCTAssertEqual(decrypted, input, "decryption failed")
     }
-
-    func testAES_encrypt3() {
-        let key = "679fb1ddf7d81bee"
-        let iv = "kdf67398DF7383fd"
+    
+    func testAES_encrypt2() {
+        let key:[UInt8]   = [0x36, 0x37, 0x39, 0x66, 0x62, 0x31, 0x64, 0x64, 0x66, 0x37, 0x64, 0x38, 0x31, 0x62, 0x65, 0x65];
+        let iv:[UInt8]    = [0x6b, 0x64, 0x66, 0x36, 0x37, 0x33, 0x39, 0x38, 0x44, 0x46, 0x37, 0x33, 0x38, 0x33, 0x66, 0x64]
         let input:[UInt8] = [0x62, 0x72, 0x61, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
         
         let expected:[UInt8] = [0xae,0x8c,0x59,0x95,0xb2,0x6f,0x8e,0x3d,0xb0,0x6f,0x0a,0xa5,0xfe,0xc4,0xf0,0xc2];

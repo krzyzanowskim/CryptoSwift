@@ -11,20 +11,7 @@ import Foundation
 
 final class ExtensionsTest: XCTestCase {
     
-    // MARK: - Performance Tests
-    
-    #if !os(Linux)
-
-    func testArrayChunksPerformance() {
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let message = [UInt8](repeating: 7, count: 1024 * 1024)
-            self.startMeasuring()
-            message.chunks(AES.blockSize)
-            self.stopMeasuring()
-        })
-    }
-    
-    #endif
+    static let allTests: [(String, ExtensionsTest -> () throws -> Void)] = [("testIntExtension", testIntExtension), ("testBytes", testBytes), ("testShiftLeft", testShiftLeft), ("testtoUInt32Array", testtoUInt32Array), ("test_NSData_init", test_NSData_init), ("test_String_encrypt_base64", test_String_encrypt_base64), ("test_String_decrypt_base64", test_String_decrypt_base64)]
     
     // MARK: - Functional Tests
     
@@ -100,5 +87,19 @@ final class ExtensionsTest: XCTestCase {
         let decrypted = try! encryptedBase64.decryptBase64ToString(AES(key: "secret0key000000", iv: "0123456789012345"))
         XCTAssertEqual(decrypted, "my secret string")
     }
-
+    
+    // MARK: - Performance Tests
+    
+    #if !os(Linux)
+    
+    func testArrayChunksPerformance() {
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            let message = [UInt8](repeating: 7, count: 1024 * 1024)
+            self.startMeasuring()
+            message.chunks(AES.blockSize)
+            self.stopMeasuring()
+        })
+    }
+    
+    #endif
 }

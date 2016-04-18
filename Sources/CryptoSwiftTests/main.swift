@@ -17,4 +17,7 @@ import CryptoSwift
     struct XCTestCaseEntry { }
 #endif
 
-XCTMain([testCase(AESTests.allTests)])
+XCTMain([testCase(AESTests.allTests),
+         testCase(ChaCha20Tests.allTests),
+         testCase(ExtensionsTest.allTests),
+         testCase(HashTests.allTests)])

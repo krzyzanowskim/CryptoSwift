@@ -9,8 +9,9 @@ import XCTest
 import CryptoSwift
 import Foundation
 
-
 final class ChaCha20Tests: XCTestCase {
+    
+    static let allTests: [(String, ChaCha20Tests -> () throws -> Void)] = [("testChaCha20", testChaCha20), ("testVector1Py", testVector1Py)]
 
     func testChaCha20() {
         let keys:[[UInt8]] = [

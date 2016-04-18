@@ -1,6 +1,6 @@
 //
-//  CryptoSwiftTests.swift
-//  CryptoSwiftTests
+//  HashTests.swift
+//  HashTests
 //
 //  Created by Marcin Krzyzanowski on 06/07/14.
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
@@ -10,7 +10,9 @@ import XCTest
 import CryptoSwift
 import Foundation
 
-final class CryptoSwiftTests: XCTestCase {
+final class HashTests: XCTestCase {
+    
+    static let allTests: [(String, HashTests -> () throws -> Void)] = [("testMD5_data", testMD5_data), ("testMD5_emptyString", testMD5_emptyString), ("testMD5_string", testMD5_string), ("testSHA1", testSHA1), ("testSHA224", testSHA224), ("testSHA256", testSHA256), ("testSHA384", testSHA384), ("testSHA512", testSHA512), ("testCRC32", testCRC32), ("testCRC16", testCRC16), ("testChecksum", testChecksum)]
     
     // MARK: - Functional Tests
     

@@ -6,6 +6,8 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
+#if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
+
 import Foundation
 
 extension String {
@@ -34,3 +36,5 @@ extension String {
     }
 
 }
+
+#endif

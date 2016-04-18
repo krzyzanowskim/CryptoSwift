@@ -8,12 +8,16 @@
 
 import Foundation
 
-// Workaround:
-// https://github.com/krzyzanowskim/CryptoSwift/issues/177
 extension String {
+    
 #if !os(Linux)
+    
+    // Workaround:
+    // https://github.com/krzyzanowskim/CryptoSwift/issues/177
     func bridge() -> NSString {
         return self as NSString
     }
+    
 #endif
 }
+

@@ -6,6 +6,8 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
+#if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
+
 import Foundation
 
 extension ChaCha20 {
@@ -16,3 +18,5 @@ extension ChaCha20 {
         self.init(key: kkey, iv: iiv)
     }
 }
+
+#endif

@@ -6,6 +6,8 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
+#if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
+
 import Foundation
 
 extension Array where Element: _UInt8Type {
@@ -14,3 +16,5 @@ extension Array where Element: _UInt8Type {
         data.getBytes(&self, length: self.count)
     }
 }
+
+#endif

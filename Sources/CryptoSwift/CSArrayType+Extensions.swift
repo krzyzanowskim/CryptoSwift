@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+    
 public protocol CSArrayType: Collection, RangeReplaceableCollection {
     
     init()
@@ -25,25 +25,29 @@ public extension CSArrayType where Iterator.Element == UInt8 {
     public func toHexString() -> String {
         return self.lazy.reduce("") { $0 + String(format:"%02x", $1) }
     }
-
+    
+    #if os(OSX) || os(iOS) || os(watchOS) || os(tvOS)
+    
     public func toBase64() -> String? {
         guard let bytesArray = self as? [UInt8] else {
             return nil
         }
-
+        
         return NSData(bytes: bytesArray).base64EncodedString([])
     }
-
+    
     public init(base64: String) {
         
         self.init()
-
+        
         guard let decodedData = NSData(base64Encoded: base64, options: []) else {
             return
         }
-
+        
         self.append(contentsOf: decodedData.arrayOfBytes())
     }
+    
+    #endif
 }
 
 public extension CSArrayType where Iterator.Element == UInt8 {

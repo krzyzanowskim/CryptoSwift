@@ -1,23 +1,23 @@
 //
-//  PCBM.swift
+//  CBC.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 08/03/16.
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
-//  Propagating Cipher Block Chaining (PCBC)
+//  Cipher-block chaining (CBC)
 //
 
-struct PCBCModeEncryptGenerator: BlockModeGenerator {
+struct CBCModeEncryptGenerator: BlockModeGenerator {
     typealias Element = Array<UInt8>
 
     private let iv: Element
-    private let inputGenerator: AnyGenerator<Element>
+    private let inputGenerator: AnyIterator<Element>
 
     private let cipherOperation: CipherOperationOnBlock
     private var prevCiphertext: Element?
 
-    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Array<UInt8>>) {
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyIterator<Element>) {
         self.iv = iv
         self.cipherOperation = cipherOperation
         self.inputGenerator = inputGenerator
@@ -30,21 +30,21 @@ struct PCBCModeEncryptGenerator: BlockModeGenerator {
             return nil
         }
 
-        self.prevCiphertext = xor(plaintext, encrypted)
+        self.prevCiphertext = encrypted
         return encrypted
     }
 }
 
-struct PCBCModeDecryptGenerator: BlockModeGenerator {
+struct CBCModeDecryptGenerator: BlockModeGenerator {
     typealias Element = Array<UInt8>
 
     private let iv: Element
-    private let inputGenerator: AnyGenerator<Element>
+    private let inputGenerator: AnyIterator<Element>
 
     private let cipherOperation: CipherOperationOnBlock
     private var prevCiphertext: Element?
 
-    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Element>) {
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyIterator<Element>) {
         self.iv = iv
         self.cipherOperation = cipherOperation
         self.inputGenerator = inputGenerator
@@ -57,8 +57,8 @@ struct PCBCModeDecryptGenerator: BlockModeGenerator {
             return nil
         }
 
-        let plaintext = xor(prevCiphertext ?? iv, decrypted)
-        self.prevCiphertext = xor(plaintext, ciphertext)
-        return plaintext
+        let result = xor(prevCiphertext ?? iv, decrypted)
+        self.prevCiphertext = ciphertext
+        return result
     }
 }

@@ -12,12 +12,12 @@ struct CTRModeEncryptGenerator: BlockModeGenerator {
     typealias Element = Array<UInt8>
 
     private let iv: Element
-    private let inputGenerator: AnyGenerator<Element>
+    private let inputGenerator: AnyIterator<Element>
 
     private let cipherOperation: CipherOperationOnBlock
     private var counter: UInt = 0
 
-    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Array<UInt8>>) {
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyIterator<Array<UInt8>>) {
         self.iv = iv
         self.cipherOperation = cipherOperation
         self.inputGenerator = inputGenerator
@@ -42,12 +42,12 @@ struct CTRModeDecryptGenerator: BlockModeGenerator {
     typealias Element = Array<UInt8>
 
     private let iv: Element
-    private let inputGenerator: AnyGenerator<Element>
+    private let inputGenerator: AnyIterator<Element>
 
     private let cipherOperation: CipherOperationOnBlock
     private var counter: UInt = 0
 
-    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Element>) {
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyIterator<Element>) {
         self.iv = iv
         self.cipherOperation = cipherOperation
         self.inputGenerator = inputGenerator
@@ -69,10 +69,10 @@ struct CTRModeDecryptGenerator: BlockModeGenerator {
     }
 }
 
-private func buildNonce(iv: [UInt8], counter: UInt64) -> [UInt8] {
+private func buildNonce(_ iv: [UInt8], counter: UInt64) -> [UInt8] {
     let noncePartLen = AES.blockSize / 2
     let noncePrefix = Array(iv[0..<noncePartLen])
     let nonceSuffix = Array(iv[noncePartLen..<iv.count])
-    let c = UInt64.withBytes(nonceSuffix) + counter
+    let c = UInt64.with(bytes: nonceSuffix) + counter
     return noncePrefix + arrayOfBytes(c)
 }

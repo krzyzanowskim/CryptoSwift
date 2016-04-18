@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final class CRC {
+public final class CRC {
+    
+    public init() { }
     
     private static let table32:[UInt32] = [0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
         0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91,
@@ -74,7 +76,7 @@ final class CRC {
         0x4400, 0x84C1, 0x8581, 0x4540, 0x8701, 0x47C0, 0x4680, 0x8641,
         0x8201, 0x42C0, 0x4380, 0x8341, 0x4100, 0x81C1, 0x8081, 0x4040]
     
-    func crc32(message:[UInt8], seed: UInt32? = nil) -> UInt32 {
+    public func crc32(_ message:[UInt8], seed: UInt32? = nil) -> UInt32 {
         var crc:UInt32 = seed != nil ? seed! : 0xffffffff
         
         for chunk in BytesSequence(chunkSize: 256, data: message) {
@@ -86,7 +88,7 @@ final class CRC {
         return crc ^ 0xffffffff
     }
     
-    func crc16(message:[UInt8], seed: UInt16? = nil) -> UInt16 {
+    public func crc16(_ message:[UInt8], seed: UInt16? = nil) -> UInt16 {
         var crc:UInt16 = seed != nil ? seed! : 0x0000
         for chunk in BytesSequence(chunkSize: 256, data: message) {
             for b in chunk {

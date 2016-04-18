@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
 
 final class PaddingTests: XCTestCase {
     func testPKCS7_0() {

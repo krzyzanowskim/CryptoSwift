@@ -8,7 +8,7 @@
 
 final public class ChaCha20: BlockCipherType {
     
-    public enum Error: ErrorType {
+    public enum Error: ErrorProtocol {
         case MissingContext
     }
     
@@ -17,7 +17,7 @@ final public class ChaCha20: BlockCipherType {
     private var context:Context?
     
     final private class Context {
-        var input:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
+        var input:[UInt32] = [UInt32](repeating: 0, count: 16)
         
         deinit {
             for i in 0..<input.count {
@@ -34,7 +34,7 @@ final public class ChaCha20: BlockCipherType {
         }
     }
     
-    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
+    public func encrypt(_ bytes:[UInt8]) throws -> [UInt8] {
         guard context != nil else {
             throw Error.MissingContext
         }
@@ -42,11 +42,11 @@ final public class ChaCha20: BlockCipherType {
         return try encryptBytes(bytes)
     }
     
-    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
+    public func decrypt(_ bytes:[UInt8]) throws -> [UInt8] {
         return try encrypt(bytes)
     }
     
-    private final func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
+    private final func wordToByte(_ input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
         if (input.count != stateSize) {
             return nil;
         }
@@ -69,13 +69,13 @@ final public class ChaCha20: BlockCipherType {
 
         for i in 0..<16 {
             x[i] = x[i] &+ input[i]
-            output.appendContentsOf(x[i].bytes().reverse())
+            output.append(contentsOf: x[i].bytes().reversed())
         }
 
         return output;
     }
         
-    private func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
+    private func contextSetup(iv:[UInt8], key:[UInt8]) -> Context? {
         let ctx = Context()
         let kbits = key.count * 8
         
@@ -124,13 +124,13 @@ final public class ChaCha20: BlockCipherType {
         return ctx
     }
     
-    private final func encryptBytes(message:[UInt8]) throws -> [UInt8] {
+    private final func encryptBytes(_ message:[UInt8]) throws -> [UInt8] {
         
         guard let ctx = context else {
             throw Error.MissingContext
         }
         
-        var c:[UInt8] = [UInt8](count: message.count, repeatedValue: 0)
+        var c:[UInt8] = [UInt8](repeating: 0, count: message.count)
         
         var cPos:Int = 0
         var mPos:Int = 0
@@ -159,7 +159,7 @@ final public class ChaCha20: BlockCipherType {
         }
     }
     
-    private final func quarterround(inout a:UInt32, inout _ b:UInt32, inout _ c:UInt32, inout _ d:UInt32) {
+    private final func quarterround(_ a:inout UInt32, _ b:inout UInt32, _ c:inout UInt32, _ d:inout UInt32) {
         a = a &+ b
         d = rotateLeft((d ^ a), 16) //FIXME: WAT? n:
         
@@ -176,12 +176,12 @@ final public class ChaCha20: BlockCipherType {
 
 // MARK: - Cipher
 
-extension ChaCha20: CipherType {
-    public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
+extension ChaCha20: Cipher {
+    public func cipherEncrypt(_ bytes:[UInt8]) throws -> [UInt8] {
         return try self.encrypt(bytes)
     }
     
-    public func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8] {
+    public func cipherDecrypt(_ bytes: [UInt8]) throws -> [UInt8] {
         return try self.decrypt(bytes)
     }
 }
@@ -189,7 +189,7 @@ extension ChaCha20: CipherType {
 // MARK: Helpers
 
 /// Change array to number. It's here because arrayOfBytes is too slow
-private func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
+private func wordNumber(_ bytes: ArraySlice<UInt8>) -> UInt32 {
     var value:UInt32 = 0
     for i:UInt32 in 0..<4 {
         let j = bytes.startIndex + Int(i)

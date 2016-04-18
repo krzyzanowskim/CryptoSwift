@@ -7,17 +7,9 @@
 //
 
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
 
-class PBKDF2Tests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
+final class PBKDF2Tests: XCTestCase {
 
     func test1() {
         let password: [UInt8] = "s33krit".utf8.map {$0}

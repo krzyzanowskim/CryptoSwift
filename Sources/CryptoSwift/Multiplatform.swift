@@ -13,9 +13,9 @@
     import Darwin
 #endif
 
-func cs_arc4random_uniform(upperBound: UInt32) -> UInt32 {
+func cs_arc4random_uniform(_ upperBound: UInt32) -> UInt32 {
     #if os(Linux)
-        return _swift_stdlib_arc4random_uniform(upperBound)
+        return _swift_stdlib_cxx11_mt19937_uniform(upperBound)
     #else
         return arc4random_uniform(upperBound)
     #endif

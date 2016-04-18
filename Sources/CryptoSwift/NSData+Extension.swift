@@ -11,10 +11,9 @@ import Foundation
 extension NSMutableData {
     
     /** Convenient way to append bytes */
-    internal func appendBytes(arrayOfBytes: [UInt8]) {
-        self.appendBytes(arrayOfBytes, length: arrayOfBytes.count)
+    internal func append(_ arrayOfBytes: [UInt8]) {
+        self.append(arrayOfBytes, length: arrayOfBytes.count)
     }
-    
 }
 
 extension NSData {
@@ -32,78 +31,78 @@ extension NSData {
     
     @nonobjc public func md5() -> NSData {
         let result = Hash.md5(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(result)
+        return NSData.with(bytes: result)
     }
 
     public func sha1() -> NSData? {
         let result = Hash.sha1(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(result)
+        return NSData.with(bytes: result)
     }
 
     public func sha224() -> NSData? {
         let result = Hash.sha224(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(result)
+        return NSData.with(bytes: result)
     }
 
     public func sha256() -> NSData? {
         let result = Hash.sha256(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(result)
+        return NSData.with(bytes: result)
     }
 
     public func sha384() -> NSData? {
         let result = Hash.sha384(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(result)
+        return NSData.with(bytes: result)
     }
 
     public func sha512() -> NSData? {
         let result = Hash.sha512(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(result)
+        return NSData.with(bytes: result)
     }
 
-    public func crc32(seed: UInt32? = nil) -> NSData? {
+    public func crc32(_ seed: UInt32? = nil) -> NSData? {
         let result = Hash.crc32(self.arrayOfBytes(), seed: seed).calculate()
-        return NSData.withBytes(result)
+        return NSData.with(bytes: result)
     }
 
-    public func crc16(seed: UInt16? = nil) -> NSData? {
+    public func crc16(_ seed: UInt16? = nil) -> NSData? {
         let result = Hash.crc16(self.arrayOfBytes(), seed: seed).calculate()
-        return NSData.withBytes(result)
+        return NSData.with(bytes: result)
     }
 
-    public func encrypt(cipher: CipherType) throws -> NSData {
+    public func encrypt(_ cipher: Cipher) throws -> NSData {
         let encrypted = try cipher.cipherEncrypt(self.arrayOfBytes())
-        return NSData.withBytes(encrypted)
+        return NSData.with(bytes: encrypted)
     }
 
-    public func decrypt(cipher: CipherType) throws -> NSData {
+    public func decrypt(_ cipher: Cipher) throws -> NSData {
         let decrypted = try cipher.cipherDecrypt(self.arrayOfBytes())
-        return NSData.withBytes(decrypted)
+        return NSData.with(bytes: decrypted)
     }
     
-    public func authenticate(authenticator: Authenticator) throws -> NSData {
+    public func authenticate(_ authenticator: Authenticator) throws -> NSData {
         let result = try authenticator.authenticate(self.arrayOfBytes())
-        return NSData.withBytes(result)
+        return NSData.with(bytes: result)
     }
 }
 
 extension NSData {
     
-    public func toHexString() -> String {
+    final public func toHexString() -> String {
         return self.arrayOfBytes().toHexString()
     }
     
-    public func arrayOfBytes() -> [UInt8] {
+    final public func arrayOfBytes() -> [UInt8] {
         let count = self.length / sizeof(UInt8)
-        var bytesArray = [UInt8](count: count, repeatedValue: 0)
+        var bytesArray = [UInt8](repeating: 0, count: count)
         self.getBytes(&bytesArray, length:count * sizeof(UInt8))
         return bytesArray
     }
 
     public convenience init(bytes: [UInt8]) {
-        self.init(data: NSData.withBytes(bytes))
+        self.init(data: NSData.with(bytes: bytes))
     }
     
-    class public func withBytes(bytes: [UInt8]) -> NSData {
+    final class public func with(bytes: [UInt8]) -> NSData {
         return NSData(bytes: bytes, length: bytes.count)
     }
 }

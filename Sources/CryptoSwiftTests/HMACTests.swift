@@ -6,18 +6,9 @@
 //  Copyright (c) 2015 Marcin Krzyzanowski. All rights reserved.
 //
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
 
 final class HMACTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
     
     func testMD5() {
         let key:[UInt8] = []

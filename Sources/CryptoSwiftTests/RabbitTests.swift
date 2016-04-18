@@ -7,33 +7,25 @@
 //
 
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
 
-class RabbitTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
+final class RabbitTests: XCTestCase {
     
     func testInitialization() {
-        var key = [UInt8](count: Rabbit.keySize - 1, repeatedValue: 0)
+        var key = [UInt8](repeating: 0, count: Rabbit.keySize - 1)
         var iv: [UInt8]?
         XCTAssertNil(Rabbit(key: key, iv: iv))
         
-        key = [UInt8](count: Rabbit.keySize + 1, repeatedValue: 0)
+        key = [UInt8](repeating: 0, count: Rabbit.keySize + 1)
         XCTAssertNil(Rabbit(key: key, iv: iv))
         
-        key = [UInt8](count: Rabbit.keySize, repeatedValue: 0)
+        key = [UInt8](repeating: 0, count: Rabbit.keySize)
         XCTAssertNotNil(Rabbit(key: key, iv: iv))
         
-        iv = [UInt8](count: Rabbit.ivSize - 1, repeatedValue: 0)
+        iv = [UInt8](repeating: 0, count: Rabbit.ivSize - 1)
         XCTAssertNil(Rabbit(key: key, iv: iv))
         
-        iv = [UInt8](count: Rabbit.ivSize, repeatedValue: 0)
+        iv = [UInt8](repeating: 0, count: Rabbit.ivSize)
         XCTAssertNotNil(Rabbit(key: key, iv: iv))
     }
     
@@ -69,7 +61,7 @@ class RabbitTests: XCTestCase {
             ),
         ]
         
-        let plainText = [UInt8](count: 48, repeatedValue: 0)
+        let plainText = [UInt8](repeating: 0, count: 48)
         for (key, expectedCipher) in cases {
             let rabbit = Rabbit(key: key)!
             let cipherText = rabbit.encrypt(plainText)
@@ -80,7 +72,7 @@ class RabbitTests: XCTestCase {
     
     func testRabbitWithIV() {
         // Examples from Appendix A: Test Vectors in http://tools.ietf.org/rfc/rfc4503.txt
-        let key = [UInt8](count: Rabbit.keySize, repeatedValue: 0)
+        let key = [UInt8](repeating: 0, count: Rabbit.keySize)
         let cases: [([UInt8], [UInt8])] = [
             (
                 [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
@@ -108,7 +100,7 @@ class RabbitTests: XCTestCase {
             ),
         ]
         
-        let plainText = [UInt8](count: 48, repeatedValue: 0)
+        let plainText = [UInt8](repeating: 0, count: 48)
         for (iv, expectedCipher) in cases {
             let rabbit = Rabbit(key: key, iv: iv)!
             let cipherText = rabbit.encrypt(plainText)
@@ -117,14 +109,20 @@ class RabbitTests: XCTestCase {
         }
     }
     
+    // MARK: - Performance Tests
+    
+    #if !os(Linux)
+    
     func testRabbitPerformance() {
-        let key: [UInt8] = [UInt8](count: Rabbit.keySize, repeatedValue: 0)
-        let iv: [UInt8] = [UInt8](count: Rabbit.ivSize, repeatedValue: 0)
-        let message = [UInt8](count: (1024 * 1024) * 1, repeatedValue: 7)
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, forBlock: { () -> Void in
+        let key: [UInt8] = [UInt8](repeating: 0, count: Rabbit.keySize)
+        let iv: [UInt8] = [UInt8](repeating: 0, count: Rabbit.ivSize)
+        let message = [UInt8](repeating: 7, count: (1024 * 1024) * 1)
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
             let encrypted = Rabbit(key: key, iv: iv)?.encrypt(message)
             self.stopMeasuring()
             XCTAssert(encrypted != nil, "not encrypted")
         })
     }
+    
+    #endif
 }

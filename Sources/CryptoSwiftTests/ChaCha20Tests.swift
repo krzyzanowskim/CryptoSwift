@@ -6,17 +6,12 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 import XCTest
-@testable import CryptoSwift
+import CryptoSwift
+import Foundation
 
 final class ChaCha20Tests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
     
-    override func tearDown() {
-        super.tearDown()
-    }
+    static let allTests: [(String, ChaCha20Tests -> () throws -> Void)] = [("testChaCha20", testChaCha20), ("testVector1Py", testVector1Py)]
 
     func testChaCha20() {
         let keys:[[UInt8]] = [
@@ -45,7 +40,7 @@ final class ChaCha20Tests: XCTestCase {
 
         for idx in 0..<keys.count {            
             let expectedHex = expectedHexes[idx]
-            let message = [UInt8](count: (expectedHex.characters.count / 2), repeatedValue: 0)
+            let message = [UInt8](repeating: 0, count: (expectedHex.characters.count / 2))
             
             do {
                 let encrypted = try ChaCha20(key: keys[idx], iv: ivs[idx])!.encrypt(message)
@@ -56,7 +51,7 @@ final class ChaCha20Tests: XCTestCase {
                 let messageData = NSData(bytes: message, length: message.count);
                 let encrypted2 = try! messageData.encrypt(ChaCha20(key: keys[idx], iv: ivs[idx])!)
                 XCTAssertNotNil(encrypted2, "")
-                XCTAssertEqual(NSData.withBytes(encrypted), encrypted2, "ChaCha20 extension failed")
+                XCTAssertEqual(NSData.with(bytes: encrypted), encrypted2, "ChaCha20 extension failed")
             } catch CipherError.Encrypt {
                 XCTAssert(false, "Encryption failed")
             } catch CipherError.Decrypt {
@@ -71,22 +66,28 @@ final class ChaCha20Tests: XCTestCase {
         let key:[UInt8] = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00]
         let iv:[UInt8]  = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00]
         let expected:[UInt8] = [0x76,0xB8,0xE0,0xAD,0xA0,0xF1,0x3D,0x90,0x40,0x5D,0x6A,0xE5,0x53,0x86,0xBD,0x28,0xBD,0xD2,0x19,0xB8,0xA0,0x8D,0xED,0x1A,0xA8,0x36,0xEF,0xCC,0x8B,0x77,0x0D,0xC7,0xDA,0x41,0x59,0x7C,0x51,0x57,0x48,0x8D,0x77,0x24,0xE0,0x3F,0xB8,0xD8,0x4A,0x37,0x6A,0x43,0xB8,0xF4,0x15,0x18,0xA1,0x1C,0xC3,0x87,0xB6,0x69,0xB2,0xEE,0x65,0x86]
-        let message = [UInt8](count: expected.count, repeatedValue: 0)
+        let message = [UInt8](repeating: 0, count: expected.count)
 
         print(message.count)
 
         let encrypted = try! ChaCha20(key: key, iv: iv)!.encrypt(message)
         XCTAssertEqual(encrypted, expected, "Ciphertext failed")
     }
+    
+    // MARK: - Performance Tests
+    
+    #if !os(Linux)
 
     func testChaCha20Performance() {
         let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
         let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
-        let message = [UInt8](count: (1024 * 1024) * 1, repeatedValue: 7)
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, forBlock: { () -> Void in
+        let message = [UInt8](repeating: 7, count: (1024 * 1024) * 1)
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
             let encrypted = try! ChaCha20(key: key, iv: iv)?.encrypt(message)
             self.stopMeasuring()
             XCTAssert(encrypted != nil, "not encrypted")
         })
     }
+
+    #endif
 }

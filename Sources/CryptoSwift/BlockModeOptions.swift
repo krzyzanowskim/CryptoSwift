@@ -6,7 +6,7 @@
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
 
-struct BlockModeOptions: OptionSetType {
+struct BlockModeOptions: OptionSet {
     let rawValue: Int
 
     static let None = BlockModeOptions(rawValue: 0)

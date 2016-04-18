@@ -191,10 +191,6 @@
 		6E646DE21CC4ACEF0029A4B3 /* String+FoundationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D261CC4ACEF0029A4B3 /* String+FoundationExtension.swift */; };
 		6E646DE31CC4ACEF0029A4B3 /* String+FoundationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D261CC4ACEF0029A4B3 /* String+FoundationExtension.swift */; };
 		6E646DE41CC4ACEF0029A4B3 /* String+FoundationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D261CC4ACEF0029A4B3 /* String+FoundationExtension.swift */; };
-		6E646DE51CC4ACEF0029A4B3 /* String+LinuxFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D271CC4ACEF0029A4B3 /* String+LinuxFoundation.swift */; };
-		6E646DE61CC4ACEF0029A4B3 /* String+LinuxFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D271CC4ACEF0029A4B3 /* String+LinuxFoundation.swift */; };
-		6E646DE71CC4ACEF0029A4B3 /* String+LinuxFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D271CC4ACEF0029A4B3 /* String+LinuxFoundation.swift */; };
-		6E646DE81CC4ACEF0029A4B3 /* String+LinuxFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D271CC4ACEF0029A4B3 /* String+LinuxFoundation.swift */; };
 		6E646DE91CC4ACEF0029A4B3 /* UInt8Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D281CC4ACEF0029A4B3 /* UInt8Extension.swift */; };
 		6E646DEA1CC4ACEF0029A4B3 /* UInt8Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D281CC4ACEF0029A4B3 /* UInt8Extension.swift */; };
 		6E646DEB1CC4ACEF0029A4B3 /* UInt8Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E646D281CC4ACEF0029A4B3 /* UInt8Extension.swift */; };
@@ -230,6 +226,10 @@
 		6EF45F7B1CC52AD1001F7A39 /* Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F791CC52AD1001F7A39 /* Testable.swift */; };
 		6EF45F7C1CC52AD1001F7A39 /* Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F791CC52AD1001F7A39 /* Testable.swift */; };
 		6EF45F7D1CC52AD1001F7A39 /* Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F791CC52AD1001F7A39 /* Testable.swift */; };
+		6EF45F7F1CC52E8B001F7A39 /* LinuxFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F7E1CC52E8B001F7A39 /* LinuxFoundation.swift */; };
+		6EF45F801CC52E8B001F7A39 /* LinuxFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F7E1CC52E8B001F7A39 /* LinuxFoundation.swift */; };
+		6EF45F811CC52E8B001F7A39 /* LinuxFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F7E1CC52E8B001F7A39 /* LinuxFoundation.swift */; };
+		6EF45F821CC52E8B001F7A39 /* LinuxFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45F7E1CC52E8B001F7A39 /* LinuxFoundation.swift */; };
 		75B601EB197D6A6C0009B53D /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
 /* End PBXBuildFile section */
 
@@ -363,7 +363,6 @@
 		6E646D241CC4ACEF0029A4B3 /* SHA2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SHA2.swift; path = Sources/CryptoSwift/SHA2.swift; sourceTree = SOURCE_ROOT; };
 		6E646D251CC4ACEF0029A4B3 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Extension.swift"; path = "Sources/CryptoSwift/String+Extension.swift"; sourceTree = SOURCE_ROOT; };
 		6E646D261CC4ACEF0029A4B3 /* String+FoundationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+FoundationExtension.swift"; sourceTree = "<group>"; };
-		6E646D271CC4ACEF0029A4B3 /* String+LinuxFoundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+LinuxFoundation.swift"; sourceTree = "<group>"; };
 		6E646D281CC4ACEF0029A4B3 /* UInt8Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UInt8Extension.swift; path = Sources/CryptoSwift/UInt8Extension.swift; sourceTree = SOURCE_ROOT; };
 		6E646D291CC4ACEF0029A4B3 /* UInt32Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UInt32Extension.swift; path = Sources/CryptoSwift/UInt32Extension.swift; sourceTree = SOURCE_ROOT; };
 		6E646D2A1CC4ACEF0029A4B3 /* UInt64Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UInt64Extension.swift; path = Sources/CryptoSwift/UInt64Extension.swift; sourceTree = SOURCE_ROOT; };
@@ -383,6 +382,7 @@
 		6EF45F751CC504F7001F7A39 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		6EF45F761CC50A30001F7A39 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		6EF45F791CC52AD1001F7A39 /* Testable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Testable.swift; sourceTree = "<group>"; };
+		6EF45F7E1CC52E8B001F7A39 /* LinuxFoundation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxFoundation.swift; sourceTree = "<group>"; };
 		754BE45519693E190098E6F3 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		754BE46019693E190098E6F3 /* CryptoSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		754BE46619693E190098E6F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Sources/CryptoSwiftTests/Info.plist; sourceTree = "<group>"; };
@@ -447,7 +447,7 @@
 				6E646D2C1CC4ACEF0029A4B3 /* Utils+Foundation.swift */,
 				6E646D211CC4ACEF0029A4B3 /* Rabbit+Foundation.swift */,
 				6E646D261CC4ACEF0029A4B3 /* String+FoundationExtension.swift */,
-				6E646D271CC4ACEF0029A4B3 /* String+LinuxFoundation.swift */,
+				6EF45F7E1CC52E8B001F7A39 /* LinuxFoundation.swift */,
 			);
 			name = Foundation;
 			sourceTree = "<group>";
@@ -799,7 +799,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E646DE61CC4ACEF0029A4B3 /* String+LinuxFoundation.swift in Sources */,
 				6E646DCE1CC4ACEF0029A4B3 /* Rabbit+Foundation.swift in Sources */,
 				6E646DEE1CC4ACEF0029A4B3 /* UInt32Extension.swift in Sources */,
 				6E646D3E1CC4ACEF0029A4B3 /* Authenticator.swift in Sources */,
@@ -838,6 +837,7 @@
 				6E646D5E1CC4ACEF0029A4B3 /* ChaCha20.swift in Sources */,
 				6E646DBE1CC4ACEF0029A4B3 /* PKCS5.swift in Sources */,
 				6E646D6A1CC4ACEF0029A4B3 /* CipherType.swift in Sources */,
+				6EF45F801CC52E8B001F7A39 /* LinuxFoundation.swift in Sources */,
 				6E646D8A1CC4ACEF0029A4B3 /* HMAC.swift in Sources */,
 				6E646DD61CC4ACEF0029A4B3 /* SHA1.swift in Sources */,
 				6E646D361CC4ACEF0029A4B3 /* Array+Extension.swift in Sources */,
@@ -858,7 +858,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E646DE51CC4ACEF0029A4B3 /* String+LinuxFoundation.swift in Sources */,
 				6E646DCD1CC4ACEF0029A4B3 /* Rabbit+Foundation.swift in Sources */,
 				6E646DED1CC4ACEF0029A4B3 /* UInt32Extension.swift in Sources */,
 				6E646D3D1CC4ACEF0029A4B3 /* Authenticator.swift in Sources */,
@@ -897,6 +896,7 @@
 				6E646D5D1CC4ACEF0029A4B3 /* ChaCha20.swift in Sources */,
 				6E646DBD1CC4ACEF0029A4B3 /* PKCS5.swift in Sources */,
 				6E646D691CC4ACEF0029A4B3 /* CipherType.swift in Sources */,
+				6EF45F7F1CC52E8B001F7A39 /* LinuxFoundation.swift in Sources */,
 				6E646D891CC4ACEF0029A4B3 /* HMAC.swift in Sources */,
 				6E646DD51CC4ACEF0029A4B3 /* SHA1.swift in Sources */,
 				6E646D351CC4ACEF0029A4B3 /* Array+Extension.swift in Sources */,
@@ -935,7 +935,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E646DE81CC4ACEF0029A4B3 /* String+LinuxFoundation.swift in Sources */,
 				6E646DD01CC4ACEF0029A4B3 /* Rabbit+Foundation.swift in Sources */,
 				6E646DF01CC4ACEF0029A4B3 /* UInt32Extension.swift in Sources */,
 				6E646D401CC4ACEF0029A4B3 /* Authenticator.swift in Sources */,
@@ -974,6 +973,7 @@
 				6E646D601CC4ACEF0029A4B3 /* ChaCha20.swift in Sources */,
 				6E646DC01CC4ACEF0029A4B3 /* PKCS5.swift in Sources */,
 				6E646D6C1CC4ACEF0029A4B3 /* CipherType.swift in Sources */,
+				6EF45F821CC52E8B001F7A39 /* LinuxFoundation.swift in Sources */,
 				6E646D8C1CC4ACEF0029A4B3 /* HMAC.swift in Sources */,
 				6E646DD81CC4ACEF0029A4B3 /* SHA1.swift in Sources */,
 				6E646D381CC4ACEF0029A4B3 /* Array+Extension.swift in Sources */,
@@ -994,7 +994,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E646DE71CC4ACEF0029A4B3 /* String+LinuxFoundation.swift in Sources */,
 				6E646DCF1CC4ACEF0029A4B3 /* Rabbit+Foundation.swift in Sources */,
 				6E646DEF1CC4ACEF0029A4B3 /* UInt32Extension.swift in Sources */,
 				6E646D3F1CC4ACEF0029A4B3 /* Authenticator.swift in Sources */,
@@ -1033,6 +1032,7 @@
 				6E646D5F1CC4ACEF0029A4B3 /* ChaCha20.swift in Sources */,
 				6E646DBF1CC4ACEF0029A4B3 /* PKCS5.swift in Sources */,
 				6E646D6B1CC4ACEF0029A4B3 /* CipherType.swift in Sources */,
+				6EF45F811CC52E8B001F7A39 /* LinuxFoundation.swift in Sources */,
 				6E646D8B1CC4ACEF0029A4B3 /* HMAC.swift in Sources */,
 				6E646DD71CC4ACEF0029A4B3 /* SHA1.swift in Sources */,
 				6E646D371CC4ACEF0029A4B3 /* Array+Extension.swift in Sources */,

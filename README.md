@@ -95,11 +95,7 @@ In the project, you'll find three targets, configured for each supported SDK:
 
 You may need to choose the one you need to build `CryptoSwift.framework` for your application.
 
-####CryptoSwift.framework
-
-Alternatively, you can build the Universal Framework and link it in your Xcode project. To do that please run `build.sh` script and find resulting frameworks in `Framework` directory.
-
-Looking for version for Swift 1.2? check branch **swift12**, it's there.
+Looking for version for Swift 1.2? please check branch **swift12**.
 
 ####CocoaPods
 

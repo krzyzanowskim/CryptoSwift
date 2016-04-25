@@ -386,7 +386,6 @@
 		754BE45519693E190098E6F3 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		754BE46019693E190098E6F3 /* CryptoSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		754BE46619693E190098E6F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Sources/CryptoSwiftTests/Info.plist; sourceTree = "<group>"; };
-		757BC92A1C1CA5790093AAA9 /* Sources */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = folder; path = Sources; sourceTree = SOURCE_ROOT; };
 		75D614BF1BD844F2001358B2 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75DF77721BC8EB59006E9520 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -542,7 +541,6 @@
 			isa = PBXGroup;
 			children = (
 				54EE1C621C2199B2008DD2E5 /* CryptoSwift.h */,
-				757BC92A1C1CA5790093AAA9 /* Sources */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";

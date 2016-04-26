@@ -10,7 +10,7 @@
 
 private typealias Key = SecureBytes
 
-final public class AES: BlockCipherType {
+final public class AES: BlockCipher {
     public enum Error: ErrorType {
         case BlockSizeExceeded
         case InvalidKeyOrInitializationVector

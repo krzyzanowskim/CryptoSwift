@@ -8,7 +8,7 @@
 
 private typealias Key = SecureBytes
 
-final public class Rabbit: BlockCipherType {
+final public class Rabbit: BlockCipher {
     
     /// Size of IV in bytes
     public static let ivSize = 64 / 8

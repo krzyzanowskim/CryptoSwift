@@ -6,6 +6,8 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
+import Foundation
+
 public protocol CSArrayType: _ArrayType {
     func cs_arrayValue() -> [Generator.Element]
 }

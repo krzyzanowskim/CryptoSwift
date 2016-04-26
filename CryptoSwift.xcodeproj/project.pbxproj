@@ -80,10 +80,10 @@
 		757BC9551C1CA5790093AAA9 /* ChaCha20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9201C1CA5790093AAA9 /* ChaCha20.swift */; };
 		757BC9561C1CA5790093AAA9 /* ChaCha20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9201C1CA5790093AAA9 /* ChaCha20.swift */; };
 		757BC9571C1CA5790093AAA9 /* ChaCha20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9201C1CA5790093AAA9 /* ChaCha20.swift */; };
-		757BC9581C1CA5790093AAA9 /* CipherType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9211C1CA5790093AAA9 /* CipherType.swift */; };
-		757BC9591C1CA5790093AAA9 /* CipherType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9211C1CA5790093AAA9 /* CipherType.swift */; };
-		757BC95A1C1CA5790093AAA9 /* CipherType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9211C1CA5790093AAA9 /* CipherType.swift */; };
-		757BC95B1C1CA5790093AAA9 /* CipherType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9211C1CA5790093AAA9 /* CipherType.swift */; };
+		757BC9581C1CA5790093AAA9 /* CipherProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9211C1CA5790093AAA9 /* CipherProtocol.swift */; };
+		757BC9591C1CA5790093AAA9 /* CipherProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9211C1CA5790093AAA9 /* CipherProtocol.swift */; };
+		757BC95A1C1CA5790093AAA9 /* CipherProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9211C1CA5790093AAA9 /* CipherProtocol.swift */; };
+		757BC95B1C1CA5790093AAA9 /* CipherProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9211C1CA5790093AAA9 /* CipherProtocol.swift */; };
 		757BC9601C1CA5790093AAA9 /* CRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* CRC.swift */; };
 		757BC9611C1CA5790093AAA9 /* CRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* CRC.swift */; };
 		757BC9621C1CA5790093AAA9 /* CRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* CRC.swift */; };
@@ -339,7 +339,7 @@
 		757BC91D1C1CA5790093AAA9 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Sources/CryptoSwift/Authenticator.swift; sourceTree = SOURCE_ROOT; };
 		757BC91F1C1CA5790093AAA9 /* BytesSequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BytesSequence.swift; path = Sources/CryptoSwift/BytesSequence.swift; sourceTree = SOURCE_ROOT; };
 		757BC9201C1CA5790093AAA9 /* ChaCha20.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChaCha20.swift; path = Sources/CryptoSwift/ChaCha20.swift; sourceTree = SOURCE_ROOT; };
-		757BC9211C1CA5790093AAA9 /* CipherType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CipherType.swift; path = Sources/CryptoSwift/CipherType.swift; sourceTree = SOURCE_ROOT; };
+		757BC9211C1CA5790093AAA9 /* CipherProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CipherProtocol.swift; path = Sources/CryptoSwift/CipherProtocol.swift; sourceTree = SOURCE_ROOT; };
 		757BC9231C1CA5790093AAA9 /* CRC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CRC.swift; path = Sources/CryptoSwift/CRC.swift; sourceTree = SOURCE_ROOT; };
 		757BC9251C1CA5790093AAA9 /* CSArrayType+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CSArrayType+Extensions.swift"; path = "Sources/CryptoSwift/CSArrayType+Extensions.swift"; sourceTree = SOURCE_ROOT; };
 		757BC9261C1CA5790093AAA9 /* Generics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Generics.swift; path = Sources/CryptoSwift/Generics.swift; sourceTree = SOURCE_ROOT; };
@@ -472,7 +472,7 @@
 				757F440D1CC1822A002B1F85 /* SecureBytes.swift */,
 				757BC91F1C1CA5790093AAA9 /* BytesSequence.swift */,
 				757BC9201C1CA5790093AAA9 /* ChaCha20.swift */,
-				757BC9211C1CA5790093AAA9 /* CipherType.swift */,
+				757BC9211C1CA5790093AAA9 /* CipherProtocol.swift */,
 				757F44081CC172B6002B1F85 /* BlockCipherType.swift */,
 				75CB93291C8F5EC60087740D /* BlockMode */,
 				757BC9231C1CA5790093AAA9 /* CRC.swift */,
@@ -843,7 +843,7 @@
 				757BC9951C1CA5790093AAA9 /* Padding.swift in Sources */,
 				80545D141CA9FECD00474A99 /* Bit.swift in Sources */,
 				757BC9A51C1CA5790093AAA9 /* Rabbit.swift in Sources */,
-				757BC9591C1CA5790093AAA9 /* CipherType.swift in Sources */,
+				757BC9591C1CA5790093AAA9 /* CipherProtocol.swift in Sources */,
 				757BC90B1C1CA56A0093AAA9 /* NSData+Extension.swift in Sources */,
 				757BC9791C1CA5790093AAA9 /* HMAC.swift in Sources */,
 				75482EAD1CB329DF001F66A5 /* PKCS5.swift in Sources */,
@@ -901,7 +901,7 @@
 				757BC9941C1CA5790093AAA9 /* Padding.swift in Sources */,
 				80545D131CA9FECD00474A99 /* Bit.swift in Sources */,
 				757BC9A41C1CA5790093AAA9 /* Rabbit.swift in Sources */,
-				757BC9581C1CA5790093AAA9 /* CipherType.swift in Sources */,
+				757BC9581C1CA5790093AAA9 /* CipherProtocol.swift in Sources */,
 				757BC9021C1CA56A0093AAA9 /* ArrayUInt8+Foundation.swift in Sources */,
 				757BC9781C1CA5790093AAA9 /* HMAC.swift in Sources */,
 				75482EAC1CB329DF001F66A5 /* PKCS5.swift in Sources */,
@@ -976,7 +976,7 @@
 				757BC9961C1CA5790093AAA9 /* Padding.swift in Sources */,
 				80545D161CA9FECD00474A99 /* Bit.swift in Sources */,
 				757BC9A61C1CA5790093AAA9 /* Rabbit.swift in Sources */,
-				757BC95A1C1CA5790093AAA9 /* CipherType.swift in Sources */,
+				757BC95A1C1CA5790093AAA9 /* CipherProtocol.swift in Sources */,
 				757BC9041C1CA56A0093AAA9 /* ArrayUInt8+Foundation.swift in Sources */,
 				757BC97A1C1CA5790093AAA9 /* HMAC.swift in Sources */,
 				75482EAF1CB329DF001F66A5 /* PKCS5.swift in Sources */,
@@ -1034,7 +1034,7 @@
 				757BC9971C1CA5790093AAA9 /* Padding.swift in Sources */,
 				80545D151CA9FECD00474A99 /* Bit.swift in Sources */,
 				757BC9A71C1CA5790093AAA9 /* Rabbit.swift in Sources */,
-				757BC95B1C1CA5790093AAA9 /* CipherType.swift in Sources */,
+				757BC95B1C1CA5790093AAA9 /* CipherProtocol.swift in Sources */,
 				757BC90D1C1CA56A0093AAA9 /* NSData+Extension.swift in Sources */,
 				757BC97B1C1CA5790093AAA9 /* HMAC.swift in Sources */,
 				75482EAE1CB329DF001F66A5 /* PKCS5.swift in Sources */,

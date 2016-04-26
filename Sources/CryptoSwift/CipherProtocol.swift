@@ -1,5 +1,5 @@
 //
-//  Cipher.swift
+//  CipherProtocol.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 30/08/14.
@@ -17,14 +17,14 @@ public enum CipherError: ErrorType {
     case Decrypt
 }
 
-public protocol CipherType {
+public protocol CipherProtocol {
     func cipherEncrypt(bytes: [UInt8]) throws -> [UInt8]
     func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8]
     
     static func randomIV(blockSize:Int) -> [UInt8]
 }
 
-extension CipherType {
+extension CipherProtocol {
     static public func randomIV(blockSize:Int) -> [UInt8] {
         var randomIV:[UInt8] = [UInt8]();
         for _ in 0..<blockSize {

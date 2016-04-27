@@ -67,7 +67,7 @@ Good mood
 
 For latest version, please check **develop** branch. This is latest development version that will be merged into **master** branch at some point.
 
-- If you want to contribute, submit a [pull request](https://github.com/krzyzanowskim/CryptoSwift/pulls).
+- If you want to contribute, submit a [pull request](https://github.com/krzyzanowskim/CryptoSwift/pulls) against a development `develop` branch.
 - If you found a bug, [open an issue](https://github.com/krzyzanowskim/CryptoSwift/issues).
 - If you have a feature request, [open an issue](https://github.com/krzyzanowskim/CryptoSwift/issues).
 
@@ -95,7 +95,10 @@ In the project, you'll find three targets, configured for each supported SDK:
 
 You may need to choose the one you need to build `CryptoSwift.framework` for your application.
 
-Looking for version for Swift 1.2? please check branch **swift12**.
+####Older Swift
+
+- Swift 1.2: branch [swift12](https://github.com/krzyzanowskim/CryptoSwift/tree/swift12).
+- Swift 2.1: branch [swift21](https://github.com/krzyzanowskim/CryptoSwift/tree/swift21)
 
 ####CocoaPods
 

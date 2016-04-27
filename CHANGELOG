@@ -1,5 +1,10 @@
 - Padding setup is now part of cipher constructor
 - Added PBKDF2 http://tools.ietf.org/html/rfc2898#section-5.2
+- Add BlockCipher protocol
+- Rename Cipher -> CipherProtocol
+- Remove build-frameworks.sh script
+- Keep sensitive data in memory with SecureBytes
+- Allows direct use of 
 
 0.3.1
 - replace deprecated Bit with new enum.

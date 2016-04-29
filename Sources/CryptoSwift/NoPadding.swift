@@ -7,6 +7,10 @@
 //
 
 public struct NoPadding: Padding {
+    public init() {
+    
+    }
+    
     public func add(data: [UInt8], blockSize:Int) -> [UInt8] {
         return data;
     }

@@ -92,7 +92,7 @@ extension UInt32 {
 }
 
 /** shift left and assign with bits truncation */
-public func &<<= ( lhs: inout UInt32, rhs: UInt32) {
+public func &<<= (lhs: inout UInt32, rhs: UInt32) {
     lhs.shiftLeft(rhs)
 }
 
@@ -104,7 +104,7 @@ public func &<< (lhs: UInt32, rhs: UInt32) -> UInt32 {
 }
 
 /** shift right and assign with bits truncation */
-func &>>= ( lhs: inout UInt32, rhs: UInt32) {
+func &>>= (lhs: inout UInt32, rhs: UInt32) {
     lhs.shiftRight(rhs)
 }
 

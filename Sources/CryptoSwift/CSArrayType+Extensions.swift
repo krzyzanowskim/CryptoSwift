@@ -8,20 +8,18 @@
 
 import Foundation
     
-public protocol CSArrayType: Collection, RangeReplaceableCollection {
-    
+public protocol CSArrayProtocol: Collection, RangeReplaceableCollection {
     init()
-        
     func cs_arrayValue() -> [Iterator.Element]
 }
 
-extension Array: CSArrayType {
+extension Array: CSArrayProtocol {
     public func cs_arrayValue() -> [Iterator.Element] {
         return self
     }
 }
 
-public extension CSArrayType where Iterator.Element == UInt8 {
+public extension CSArrayProtocol where Iterator.Element == UInt8 {
     public func toHexString() -> String {
         return self.lazy.reduce("") { $0 + String(format:"%02x", $1) }
     }
@@ -37,7 +35,6 @@ public extension CSArrayType where Iterator.Element == UInt8 {
     public init(base64: String) {
         
         self.init()
-        
         guard let decodedData = NSData(base64Encoded: base64, options: []) else {
             return
         }
@@ -46,7 +43,7 @@ public extension CSArrayType where Iterator.Element == UInt8 {
     }
 }
 
-public extension CSArrayType where Iterator.Element == UInt8 {
+public extension CSArrayProtocol where Iterator.Element == UInt8 {
     public func md5() -> [Iterator.Element] {
         return Hash.md5(cs_arrayValue()).calculate()
     }

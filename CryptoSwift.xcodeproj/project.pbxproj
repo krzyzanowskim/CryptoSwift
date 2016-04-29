@@ -215,8 +215,8 @@
 		80545D151CA9FECD00474A99 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80545D121CA9FECD00474A99 /* Bit.swift */; };
 		80545D161CA9FECD00474A99 /* Bit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80545D121CA9FECD00474A99 /* Bit.swift */; };
 		842EA67B1CC3054C005DD4C5 /* Salsa20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EA67A1CC3054C005DD4C5 /* Salsa20.swift */; };
-		842EA67E1CC30565005DD4C5 /* CryptoSalsa20Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EA67C1CC30565005DD4C5 /* CryptoSalsa20Test.swift */; };
 		842EA67F1CC30565005DD4C5 /* verified.salsa20.test-vectors.txt in Resources */ = {isa = PBXBuildFile; fileRef = 842EA67D1CC30565005DD4C5 /* verified.salsa20.test-vectors.txt */; };
+		849B45E31CD3E9BF006EB5C8 /* Salsa20Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849B45E21CD3E9BF006EB5C8 /* Salsa20Test.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -369,8 +369,8 @@
 		75DF77721BC8EB59006E9520 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		80545D121CA9FECD00474A99 /* Bit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Bit.swift; path = Sources/CryptoSwift/Bit.swift; sourceTree = SOURCE_ROOT; };
 		842EA67A1CC3054C005DD4C5 /* Salsa20.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Salsa20.swift; path = Sources/CryptoSwift/Salsa20.swift; sourceTree = SOURCE_ROOT; };
-		842EA67C1CC30565005DD4C5 /* CryptoSalsa20Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoSalsa20Test.swift; sourceTree = "<group>"; };
 		842EA67D1CC30565005DD4C5 /* verified.salsa20.test-vectors.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "verified.salsa20.test-vectors.txt"; sourceTree = "<group>"; };
+		849B45E21CD3E9BF006EB5C8 /* Salsa20Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Salsa20Test.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -496,7 +496,6 @@
 		754BE46419693E190098E6F3 /* CryptoSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				842EA67C1CC30565005DD4C5 /* CryptoSalsa20Test.swift */,
 				842EA67D1CC30565005DD4C5 /* verified.salsa20.test-vectors.txt */,
 				757DA2561A4ED47B002BA3EF /* Helpers.swift */,
 				754BE46719693E190098E6F3 /* HashTests.swift */,
@@ -505,6 +504,7 @@
 				757DA2541A4ED408002BA3EF /* AESTests.swift */,
 				757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */,
 				674A736E1BF5D85B00866C5B /* RabbitTests.swift */,
+				849B45E21CD3E9BF006EB5C8 /* Salsa20Test.swift */,
 				755FB1D9199E347D00475437 /* ExtensionsTest.swift */,
 				757DA2521A4ED0A4002BA3EF /* PaddingTests.swift */,
 				756BFDCA1A82B87300B9D9A4 /* Bridging.h */,
@@ -890,10 +890,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				758A94291A65C67400E46135 /* HMACTests.swift in Sources */,
-				842EA67E1CC30565005DD4C5 /* CryptoSalsa20Test.swift in Sources */,
 				75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */,
 				757DA2571A4ED47B002BA3EF /* Helpers.swift in Sources */,
 				754BE46819693E190098E6F3 /* HashTests.swift in Sources */,
+				849B45E31CD3E9BF006EB5C8 /* Salsa20Test.swift in Sources */,
 				757DA2591A4ED4D7002BA3EF /* ChaCha20Tests.swift in Sources */,
 				755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */,
 				674A736F1BF5D85B00866C5B /* RabbitTests.swift in Sources */,

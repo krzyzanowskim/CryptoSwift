@@ -6,22 +6,25 @@
 //  Copyright © 2016 Dennis Michaelis. All rights reserved.
 //
 
-final public class Salsa20 {
+public class Salsa20 {
     
     public enum Error: ErrorType {
         case MissingContext
         case LimitOfNonceExceeded
+        case NotImplementedYet
     }
     
-    static let blockSize = 64
-    private let stateSize = 16
-    private var rounds: UInt8
-    private var context:Context?
+    static let blockSize = 64 // 512 / 8
+    internal let stateSize = 16
+    internal var rounds: UInt8
+    internal var context:Context?
     private var keyStream: [UInt8]?
     private var index: Int = 0
     
+    internal let SIGMA = "expand 32-byte k"
+    internal let TAU = "expand 16-byte k"
     
-    final private class Context {
+    internal final class Context {
         var input:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
         
         deinit {
@@ -29,6 +32,10 @@ final public class Salsa20 {
                 input[i] = 0x00;
             }
         }
+    }
+    
+    internal init?(rounds: UInt8) {
+        self.rounds = rounds
     }
     
     public init?(key:[UInt8], iv:[UInt8], rounds: UInt8) {
@@ -57,7 +64,7 @@ final public class Salsa20 {
         return try encrypt(bytes)
     }
     
-    private final func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
+    internal func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
         if (input.count != stateSize) {
             return nil
         }
@@ -115,7 +122,7 @@ final public class Salsa20 {
         return output
     }
     
-    private func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
+    internal func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
         let ctx = Context()
         let kbits = key.count * 8
         
@@ -130,22 +137,22 @@ final public class Salsa20 {
         }
         
         var addPos = 0;
+        let constant: NSData;
         switch (kbits) {
         case 256:
             addPos += 16
             // sigma
-            ctx.input[0] = 0x61707865 //apxe
-            ctx.input[5] = 0x3320646e //3 dn
-            ctx.input[10] = 0x79622d32 //yb-2
-            ctx.input[15] = 0x6b206574 //k et
+            constant = SIGMA.dataUsingEncoding(NSUTF8StringEncoding)!
         default:
             // tau
-            ctx.input[0] = 0x61707865 //apxe
-            ctx.input[5] = 0x3120646e //1 dn
-            ctx.input[10] = 0x79622d36 //yb-6
-            ctx.input[15] = 0x6b206574 //k et
+            constant = TAU.dataUsingEncoding(NSUTF8StringEncoding)!
             break;
         }
+        ctx.input[0]  = littleEndian(constant, range: 0..<4)
+        ctx.input[5]  = littleEndian(constant, range: 4..<8)
+        ctx.input[10] = littleEndian(constant, range: 8..<12)
+        ctx.input[15] = littleEndian(constant, range: 12..<16)
+        
         
         // 11 - 14
         for i in 0..<4 {
@@ -165,7 +172,7 @@ final public class Salsa20 {
         return ctx
     }
     
-    private final func encryptBytes(message:[UInt8]) throws -> [UInt8] {
+    internal func encryptBytes(message:[UInt8]) throws -> [UInt8] {
         
         guard let ctx = context else {
             throw Error.MissingContext
@@ -237,7 +244,7 @@ extension Salsa20: Cipher {
 // MARK: Helpers
 
 /// Change array to number. It's here because arrayOfBytes is too slow
-private func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
+internal func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
     var value:UInt32 = 0
     for i:UInt32 in 0..<4 {
         let j = bytes.startIndex + Int(i)
@@ -245,5 +252,11 @@ private func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
     }
     
     return value
+}
+
+internal func littleEndian(data: NSData, range: Range<Int>) -> UInt32 {
+    var val: UInt32 = 0
+    data.getBytes(&val, range: NSRange(range))
+    return UInt32.init(littleEndian: val);
 }
 

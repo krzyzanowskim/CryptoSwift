@@ -6,27 +6,10 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final public class ChaCha20 {
-    
-    public enum Error: ErrorType {
-        case MissingContext
-    }
-    
-    static let blockSize = 64 // 512 / 8
-    private let stateSize = 16
-    private var context:Context?
-    
-    final private class Context {
-        var input:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
-        
-        deinit {
-            for i in 0..<input.count {
-                input[i] = 0x00;
-            }
-        }
-    }
+final public class ChaCha20: Salsa20 {
     
     public init?(key:[UInt8], iv:[UInt8]) {
+        super.init(rounds: 20)
         if let c = contextSetup(iv: iv, key: key) {
             context = c
         } else {
@@ -34,26 +17,14 @@ final public class ChaCha20 {
         }
     }
     
-    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
-        guard context != nil else {
-            throw Error.MissingContext
-        }
-        
-        return try encryptBytes(bytes)
-    }
-    
-    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
-        return try encrypt(bytes)
-    }
-    
-    private final func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
+    override final func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
         if (input.count != stateSize) {
             return nil;
         }
         
         var x = input
 
-        for _ in 0..<10 {
+        for _ in 0..<rounds/2 {
             quarterround(&x[0], &x[4], &x[8], &x[12])
             quarterround(&x[1], &x[5], &x[9],  &x[13])
             quarterround(&x[2], &x[6], &x[10], &x[14])
@@ -75,7 +46,7 @@ final public class ChaCha20 {
         return output;
     }
         
-    private func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
+    override internal func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
         let ctx = Context()
         let kbits = key.count * 8
         
@@ -90,22 +61,21 @@ final public class ChaCha20 {
         }
         
         var addPos = 0;
+        let constant: NSData;
         switch (kbits) {
         case 256:
             addPos += 16
             // sigma
-            ctx.input[0] = 0x61707865 //apxe
-            ctx.input[1] = 0x3320646e //3 dn
-            ctx.input[2] = 0x79622d32 //yb-2
-            ctx.input[3] = 0x6b206574 //k et
+            constant = SIGMA.dataUsingEncoding(NSUTF8StringEncoding)!
         default:
             // tau
-            ctx.input[0] = 0x61707865 //apxe
-            ctx.input[1] = 0x3620646e //6 dn
-            ctx.input[2] = 0x79622d31 //yb-1
-            ctx.input[3] = 0x6b206574 //k et
+            constant = TAU.dataUsingEncoding(NSUTF8StringEncoding)!
         break;
         }
+        ctx.input[0] = littleEndian(constant, range: 0..<4)
+        ctx.input[1] = littleEndian(constant, range: 4..<8)
+        ctx.input[2] = littleEndian(constant, range: 8..<12)
+        ctx.input[3] = littleEndian(constant, range: 12..<16)
         
         // 8 - 11
         for i in 0..<4 {
@@ -124,7 +94,7 @@ final public class ChaCha20 {
         return ctx
     }
     
-    private final func encryptBytes(message:[UInt8]) throws -> [UInt8] {
+    override internal final func encryptBytes(message:[UInt8]) throws -> [UInt8] {
         
         guard let ctx = context else {
             throw Error.MissingContext
@@ -172,29 +142,13 @@ final public class ChaCha20 {
         c = c &+ d
         b = rotateLeft((b ^ c), 7);
     }
-}
-
-// MARK: - Cipher
-
-extension ChaCha20: Cipher {
-    public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
-        return try self.encrypt(bytes)
-    }
     
-    public func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8] {
-        return try self.decrypt(bytes)
+    override public func reset() {
+        //reset position
+        context?.input[12] = 0
+        context?.input[13] = 0
     }
 }
 
-// MARK: Helpers
 
-/// Change array to number. It's here because arrayOfBytes is too slow
-private func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
-    var value:UInt32 = 0
-    for i:UInt32 in 0..<4 {
-        let j = bytes.startIndex + Int(i)
-        value = value | UInt32(bytes[j]) << (8 * i)
-    }
-
-    return value}
 

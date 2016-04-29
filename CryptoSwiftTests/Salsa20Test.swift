@@ -1,6 +1,6 @@
 //
 //  CryptoSalsa20Test.swift
-//  KdbxParser
+//  CryptoSwift
 //
 //  Created by Dennis Michaelis on 27.03.16.
 //  Copyright © 2016 Dennis Michaelis. All rights reserved.
@@ -9,7 +9,7 @@
 import XCTest
 import CryptoSwift
 
-class CryptoSalsa20Test: XCTestCase {
+class Salsa20Test: XCTestCase {
     
     var c: Salsa20?
 
@@ -55,7 +55,7 @@ class CryptoSalsa20Test: XCTestCase {
         XCTAssertEqual(pbExpected, pb, "Salsa20 --> Test 1 with reset failed! xpected value should expected value from Test 1")
         
         //Test 2
-        var nPos = CryptoSalsa20Test.salsa20ToPos(c!, nPos: pb.count, nTargetPos: 65536);
+        var nPos = Salsa20Test.salsa20ToPos(c!, nPos: pb.count, nTargetPos: 65536);
         
         let pbExpected2: [UInt8] = [0xAB, 0xF3, 0x9A, 0x21, 0x0E, 0xEE, 0x89, 0x59,
                                     0x8B, 0x71, 0x33, 0x37, 0x70, 0x56, 0xC2, 0xFE]
@@ -67,7 +67,7 @@ class CryptoSalsa20Test: XCTestCase {
         let pbExpected3: [UInt8] = [0x1B, 0xA8, 0x9D, 0xBD, 0x3F, 0x98, 0x83, 0x97,
                                     0x28, 0xF5, 0x67, 0x91, 0xD5, 0xB7, 0xCE, 0x23]
         
-        nPos = CryptoSalsa20Test.salsa20ToPos(c!, nPos: nPos + pb.count, nTargetPos: 131008);
+        nPos = Salsa20Test.salsa20ToPos(c!, nPos: nPos + pb.count, nTargetPos: 131008);
         pb = [UInt8](count: 16,  repeatedValue: 0)
         try! pb = (c?.encrypt(pb))!
         
@@ -292,17 +292,17 @@ class CryptoSalsa20Test: XCTestCase {
              stream2Pos: String, stream2: String, stream3Pos: String, stream3: String,
              stream4Pos: String, stream4: String, xorDigits: String) {
             self.name = name
-            self.key = CryptoSalsa20Test.SalsaTestVector.hexToUInt8Array(key)
-            self.iv = CryptoSalsa20Test.SalsaTestVector.hexToUInt8Array(iv)
-            self.stream1Pos = CryptoSalsa20Test.SalsaTestVector.strToRange(stream1Pos)
-            self.stream1 = CryptoSalsa20Test.SalsaTestVector.hexToUInt8Array(stream1)
-            self.stream2Pos = CryptoSalsa20Test.SalsaTestVector.strToRange(stream2Pos)
-            self.stream2 = CryptoSalsa20Test.SalsaTestVector.hexToUInt8Array(stream2)
-            self.stream3Pos = CryptoSalsa20Test.SalsaTestVector.strToRange(stream3Pos)
-            self.stream3 = CryptoSalsa20Test.SalsaTestVector.hexToUInt8Array(stream3)
-            self.stream4Pos = CryptoSalsa20Test.SalsaTestVector.strToRange(stream4Pos)
-            self.stream4 = CryptoSalsa20Test.SalsaTestVector.hexToUInt8Array(stream4)
-            self.xorDigits = CryptoSalsa20Test.SalsaTestVector.hexToUInt8Array(xorDigits)
+            self.key = Salsa20Test.SalsaTestVector.hexToUInt8Array(key)
+            self.iv = Salsa20Test.SalsaTestVector.hexToUInt8Array(iv)
+            self.stream1Pos = Salsa20Test.SalsaTestVector.strToRange(stream1Pos)
+            self.stream1 = Salsa20Test.SalsaTestVector.hexToUInt8Array(stream1)
+            self.stream2Pos = Salsa20Test.SalsaTestVector.strToRange(stream2Pos)
+            self.stream2 = Salsa20Test.SalsaTestVector.hexToUInt8Array(stream2)
+            self.stream3Pos = Salsa20Test.SalsaTestVector.strToRange(stream3Pos)
+            self.stream3 = Salsa20Test.SalsaTestVector.hexToUInt8Array(stream3)
+            self.stream4Pos = Salsa20Test.SalsaTestVector.strToRange(stream4Pos)
+            self.stream4 = Salsa20Test.SalsaTestVector.hexToUInt8Array(stream4)
+            self.xorDigits = Salsa20Test.SalsaTestVector.hexToUInt8Array(xorDigits)
         }
         
         /**

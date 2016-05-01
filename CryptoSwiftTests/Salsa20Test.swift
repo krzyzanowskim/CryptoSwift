@@ -110,7 +110,7 @@ class Salsa20Test: XCTestCase {
      */
     func testVectors() {
         //load Test-Vectors from file
-        let testVectors = loadTestVectors()
+        let testVectors = Salsa20TestVectors.getVectors();
         
         //Test all Test-Vectors
         for i in 0..<testVectors.count {
@@ -177,50 +177,6 @@ class Salsa20Test: XCTestCase {
         return nTargetPos
     }
 
-    /**
-     Helper function which load the Test-Vector-Data from a File
-     
-     - returns: Returns the data as an array of SalsaTestVector
-     */
-    private func loadTestVectors() -> [SalsaTestVector] {
-        var ret: [SalsaTestVector] = []
-        //Parse test vector file via RegEx
-        let testVectorPattern: String = "(?sm)(Set\\s\\d+,\\svector#\\s*\\d+:)$\\s+?key\\s=\\s([0-9A-F]{32,32}$(?:\\s+[0-9A-F]{32,32}$)?)\\s+IV\\s=\\s([0-9A-F]{16,16}$)\\s+stream\\[(\\d+\\.\\.\\d+)\\]\\s=((?:\\s+[0-9A-F]{32,32}$){4,4})\\s+stream\\[(\\d+\\.\\.\\d+)\\]\\s=((?:\\s+[0-9A-F]{32,32}$){4,4})\\s+stream\\[(\\d+\\.\\.\\d+)\\]\\s=((?:\\s+[0-9A-F]{32,32}$){4,4})\\s+stream\\[(\\d+\\.\\.\\d+)\\]\\s=((?:\\s+[0-9A-F]{32,32}$){4,4})\\s+xor-digest\\s=((?:\\s+[0-9A-F]{32,32}$){4,4})"
-        let bundle = NSBundle(forClass: self.dynamicType)
-        let vectorFileName = bundle.pathForResource("verified.salsa20.test-vectors", ofType: "txt")!
-        
-        do {
-            let vectorFile = try NSString(contentsOfFile: vectorFileName, encoding: NSASCIIStringEncoding)
-            let regex = try NSRegularExpression(pattern: testVectorPattern, options: [.CaseInsensitive])
-            let matches = regex.matchesInString(vectorFile as String, options: [], range: NSMakeRange(0, vectorFile.length))
-            
-            if matches.count > 0 {
-                //create for every match an object
-                for match in matches {
-                    let testVectorName = vectorFile.substringWithRange(match.rangeAtIndex(1))
-                    let key = String(vectorFile.substringWithRange(match.rangeAtIndex(2)).characters.filter({![" ","\n","\r"].contains($0)}))
-                    let iv = String(vectorFile.substringWithRange(match.rangeAtIndex(3)).characters.filter({![" ","\n","\r"].contains($0)}))
-                    let stream1Pos = vectorFile.substringWithRange(match.rangeAtIndex(4))
-                    let stream1 = String(vectorFile.substringWithRange(match.rangeAtIndex(5)).characters.filter({![" ","\n","\r"].contains($0)}))
-                    let stream2Pos = vectorFile.substringWithRange(match.rangeAtIndex(6))
-                    let stream2 = String(vectorFile.substringWithRange(match.rangeAtIndex(7)).characters.filter({![" ","\n","\r"].contains($0)}))
-                    let stream3Pos = vectorFile.substringWithRange(match.rangeAtIndex(8))
-                    let stream3 = String(vectorFile.substringWithRange(match.rangeAtIndex(9)).characters.filter({![" ","\n","\r"].contains($0)}))
-                    let stream4Pos = vectorFile.substringWithRange(match.rangeAtIndex(10))
-                    let stream4 = String(vectorFile.substringWithRange(match.rangeAtIndex(11)).characters.filter({![" ","\n","\r"].contains($0)}))
-                    let xorDigists = String(vectorFile.substringWithRange(match.rangeAtIndex(12)).characters.filter({![" ","\n","\r"].contains($0)}))
-                    
-                    ret.append(SalsaTestVector(name: testVectorName, key: key, iv: iv, stream1Pos: stream1Pos, stream1: stream1,
-                                               stream2Pos: stream2Pos, stream2: stream2, stream3Pos: stream3Pos, stream3: stream3,
-                                               stream4Pos: stream4Pos, stream4: stream4, xorDigits: xorDigists))
-                    
-                }
-            }
-        } catch {
-            XCTFail("Failed to load Test-Vector-File \"\(vectorFileName)\". \(error)")
-        }
-        return ret
-    }
 
     /**
      Helper function to create a XOR array of an defined block size
@@ -252,95 +208,4 @@ class Salsa20Test: XCTestCase {
         
         return ret
     }
-    
-    /**
-     *  A data structure to represent a Test-Vector of the Test-Vector data file
-     */
-    private struct SalsaTestVector {
-        let name: String
-        let key: [UInt8]
-        let iv: [UInt8]
-        let stream1Pos: Range<Int>
-        let stream1: [UInt8]
-        let stream2Pos: Range<Int>
-        let stream2: [UInt8]
-        let stream3Pos: Range<Int>
-        let stream3: [UInt8]
-        let stream4Pos: Range<Int>
-        let stream4: [UInt8]
-        let xorDigits: [UInt8]
-        
-        /**
-         Initialize the data structure
-         
-         - parameter name:       The name of the Test-Case
-         - parameter key:        The key for the Salsa20 test
-         - parameter iv:         The Initial Vector for the Salsa20 test
-         - parameter stream1Pos: The position of the data chunk of stream1
-         - parameter stream1:    The first data chunk of the encrypted data
-         - parameter stream2Pos: The position of the data chunk of stream2
-         - parameter stream2:    The second data chunk of the encrypted data
-         - parameter stream3Pos: The position of the data chunk of stream3
-         - parameter stream3:    The third data chunk of the encrypted data
-         - parameter stream4Pos: The position of the data chunk of stream4
-         - parameter stream4:    The fourth data chunk of the encrypted data
-         - parameter xorDigits:  The XOR representation of the complete encrypted data
-         
-         - returns: The initialized data structure
-         */
-        init(name: String, let key: String, iv: String, stream1Pos: String, stream1: String,
-             stream2Pos: String, stream2: String, stream3Pos: String, stream3: String,
-             stream4Pos: String, stream4: String, xorDigits: String) {
-            self.name = name
-            self.key = Salsa20Test.SalsaTestVector.hexToUInt8Array(key)
-            self.iv = Salsa20Test.SalsaTestVector.hexToUInt8Array(iv)
-            self.stream1Pos = Salsa20Test.SalsaTestVector.strToRange(stream1Pos)
-            self.stream1 = Salsa20Test.SalsaTestVector.hexToUInt8Array(stream1)
-            self.stream2Pos = Salsa20Test.SalsaTestVector.strToRange(stream2Pos)
-            self.stream2 = Salsa20Test.SalsaTestVector.hexToUInt8Array(stream2)
-            self.stream3Pos = Salsa20Test.SalsaTestVector.strToRange(stream3Pos)
-            self.stream3 = Salsa20Test.SalsaTestVector.hexToUInt8Array(stream3)
-            self.stream4Pos = Salsa20Test.SalsaTestVector.strToRange(stream4Pos)
-            self.stream4 = Salsa20Test.SalsaTestVector.hexToUInt8Array(stream4)
-            self.xorDigits = Salsa20Test.SalsaTestVector.hexToUInt8Array(xorDigits)
-        }
-        
-        /**
-         Convert a hexadecimal String to an UInt8-Byte-Array
-         
-         - parameter hexStr: A hex String which will be converted
-         
-         - returns: Returns the UInt8-Byte-Array of the hexadecimal String data
-         */
-        static func hexToUInt8Array(hexStr: String) -> [UInt8] {
-            if (hexStr.characters.count % 2) != 0 {
-                XCTFail("Hex-String count not even: \(hexStr)")
-            }
-            var ret = [UInt8](count: hexStr.characters.count/2, repeatedValue: 0)
-            
-            var tmp = hexStr.characters
-            for i in 0..<ret.count {
-                let hex = String(tmp.popFirst()!)+String(tmp.popFirst()!)
-                ret[i] = UInt8(hex,radix: 16)!
-            }
-            return ret
-        }
-        
-        /**
-         Convert a String of the format <Number>..<Number> into a Range of Int
-         
-         - parameter rangeStr: The String with a Range definition
-         
-         - returns: The Range of Int from the String
-         */
-        static func strToRange(rangeStr: String) -> Range<Int> {
-            var ret: Range<Int>
-            
-            let splitStr = rangeStr.componentsSeparatedByString("..")
-            ret = Range<Int>(Int(splitStr[0])!...Int(splitStr[1])!)
-            
-            return ret
-        }
-    }
-
 }

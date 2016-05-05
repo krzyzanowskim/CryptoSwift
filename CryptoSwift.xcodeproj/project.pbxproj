@@ -475,16 +475,13 @@
 		754BE45719693E190098E6F3 /* CryptoSwift */ = {
 			isa = PBXGroup;
 			children = (
-				757BC91A1C1CA5790093AAA9 /* AES.swift */,
+				75DB81B11CDC0E4100ED181A /* Ciphers */,
 				757BC91B1C1CA5790093AAA9 /* Array+Extension.swift */,
 				757BC91D1C1CA5790093AAA9 /* Authenticator.swift */,
 				80545D121CA9FECD00474A99 /* Bit.swift */,
 				757F440D1CC1822A002B1F85 /* SecureBytes.swift */,
 				757BC91F1C1CA5790093AAA9 /* BytesSequence.swift */,
-				757BC9201C1CA5790093AAA9 /* ChaCha20.swift */,
 				75DB81A71CDC06B100ED181A /* Cryptor.swift */,
-				757BC9211C1CA5790093AAA9 /* CipherProtocol.swift */,
-				757F44081CC172B6002B1F85 /* BlockCipher.swift */,
 				75CB93291C8F5EC60087740D /* BlockMode */,
 				757BC9231C1CA5790093AAA9 /* CRC.swift */,
 				757BC9251C1CA5790093AAA9 /* CSArrayType+Extensions.swift */,
@@ -502,7 +499,6 @@
 				757BC9321C1CA5790093AAA9 /* PKCS7.swift */,
 				753881EA1CB06E390089101D /* NoPadding.swift */,
 				757BC9331C1CA5790093AAA9 /* Poly1305.swift */,
-				757BC9341C1CA5790093AAA9 /* Rabbit.swift */,
 				757BC9351C1CA5790093AAA9 /* SHA1.swift */,
 				757BC9361C1CA5790093AAA9 /* SHA2.swift */,
 				757BC9371C1CA5790093AAA9 /* String+Extension.swift */,
@@ -583,6 +579,18 @@
 				75CB93481C8F60700087740D /* ECB.swift */,
 			);
 			name = BlockMode;
+			sourceTree = "<group>";
+		};
+		75DB81B11CDC0E4100ED181A /* Ciphers */ = {
+			isa = PBXGroup;
+			children = (
+				757F44081CC172B6002B1F85 /* BlockCipher.swift */,
+				757BC9211C1CA5790093AAA9 /* CipherProtocol.swift */,
+				757BC91A1C1CA5790093AAA9 /* AES.swift */,
+				757BC9201C1CA5790093AAA9 /* ChaCha20.swift */,
+				757BC9341C1CA5790093AAA9 /* Rabbit.swift */,
+			);
+			name = Ciphers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -1,3 +1,6 @@
+0.4.1
+- fix NoPadding()
+
 0.4
 - Padding setup is now part of cipher constructor
 - Added PBKDF2 http://tools.ietf.org/html/rfc2898#section-5.2

@@ -56,11 +56,11 @@ public extension CSArrayType where Generator.Element == UInt8 {
     }
     
     public func encrypt(cipher: CipherProtocol) throws -> [Generator.Element] {
-        return try cipher.cipherEncrypt(cs_arrayValue())
+        return try cipher.encrypt(cs_arrayValue())
     }
 
     public func decrypt(cipher: CipherProtocol) throws -> [Generator.Element] {
-        return try cipher.cipherDecrypt(cs_arrayValue())
+        return try cipher.decrypt(cs_arrayValue())
     }
     
     public func authenticate(authenticator: Authenticator) throws -> [Generator.Element] {

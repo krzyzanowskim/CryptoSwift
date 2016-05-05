@@ -107,46 +107,6 @@ final public class AES: BlockCipher {
             throw Error.InvalidInitializationVector
         }
     }
-
-    /// Encrypt given bytes at once
-    ///
-    /// - parameter bytes: Plaintext data
-    /// - returns: Encrypted data
-    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
-        let chunks = bytes.chunks(AES.blockSize)
-
-        var oneTimeCryptor = Encryptor(aes: self)
-        var out = [UInt8]()
-        out.reserveCapacity(bytes.count)
-        for (idx, block) in chunks.enumerate() {
-            out.appendContentsOf(try oneTimeCryptor.update(block, isLast: idx == max(0,chunks.count - 1)))
-        }
-
-        if cipherBlockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
-            throw Error.DataPaddingRequired
-        }
-
-        return out
-    }
-    
-    /// Decrypt given bytes at once
-    ///
-    /// - parameter bytes: Ciphertext data
-    /// - returns: Plaintext data
-    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
-        if cipherBlockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
-            throw Error.DataPaddingRequired
-        }
-
-        var oneTimeCryptor = Decryptor(aes: self)
-        let chunks = bytes.chunks(AES.blockSize)
-        var out = [UInt8]()
-        out.reserveCapacity(bytes.count)
-        for (idx,chunk) in chunks.enumerate() {
-            out.appendContentsOf(try oneTimeCryptor.update(chunk, isLast: idx == max(0,chunks.count - 1)))
-        }
-        return out
-    }
 }
 
 // MARK: Private
@@ -492,12 +452,44 @@ extension AES: CipherProtocol {
     public func decryptor() -> Cryptor {
         return Decryptor(aes: self)
     }
-    
-    public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
-        return try self.encrypt(bytes)
+
+    /// Encrypt given bytes at once
+    ///
+    /// - parameter bytes: Plaintext data
+    /// - returns: Encrypted data
+    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
+        let chunks = bytes.chunks(AES.blockSize)
+
+        var oneTimeCryptor = Encryptor(aes: self)
+        var out = [UInt8]()
+        out.reserveCapacity(bytes.count)
+        for (idx, block) in chunks.enumerate() {
+            out.appendContentsOf(try oneTimeCryptor.update(block, isLast: idx == max(0,chunks.count - 1)))
+        }
+
+        if cipherBlockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
+            throw Error.DataPaddingRequired
+        }
+
+        return out
     }
-    
-    public func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8] {
-        return try self.decrypt(bytes)
+
+    /// Decrypt given bytes at once
+    ///
+    /// - parameter bytes: Ciphertext data
+    /// - returns: Plaintext data
+    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
+        if cipherBlockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
+            throw Error.DataPaddingRequired
+        }
+
+        var oneTimeCryptor = Decryptor(aes: self)
+        let chunks = bytes.chunks(AES.blockSize)
+        var out = [UInt8]()
+        out.reserveCapacity(bytes.count)
+        for (idx,chunk) in chunks.enumerate() {
+            out.appendContentsOf(try oneTimeCryptor.update(chunk, isLast: idx == max(0,chunks.count - 1)))
+        }
+        return out
     }
 }

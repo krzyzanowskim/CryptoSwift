@@ -171,32 +171,6 @@ final public class Rabbit: BlockCipher {
         }
         return output8
     }
-    
-    // MARK: - Public
-    public func encrypt(bytes: [UInt8]) -> [UInt8] {
-        setup()
-        
-        var result = [UInt8](count: bytes.count, repeatedValue: 0)
-        var output = nextOutput()
-        var byteIdx = 0
-        var outputIdx = 0
-        while byteIdx < bytes.count {
-            if (outputIdx == Rabbit.blockSize) {
-                output = nextOutput()
-                outputIdx = 0
-            }
-            
-            result[byteIdx] = bytes[byteIdx] ^ output[outputIdx]
-
-            byteIdx += 1
-            outputIdx += 1
-        }
-        return result
-    }
-    
-    public func decrypt(bytes: [UInt8]) -> [UInt8] {
-        return encrypt(bytes)
-    }
 }
 
 extension Rabbit {
@@ -238,12 +212,29 @@ extension Rabbit: CipherProtocol {
     public func decryptor() -> Cryptor {
         return Decryptor(rabbit: self)
     }
-    
-    public func cipherEncrypt(bytes:[UInt8]) -> [UInt8] {
-        return self.encrypt(bytes)
+
+    public func encrypt(bytes: [UInt8]) -> [UInt8] {
+        setup()
+
+        var result = [UInt8](count: bytes.count, repeatedValue: 0)
+        var output = nextOutput()
+        var byteIdx = 0
+        var outputIdx = 0
+        while byteIdx < bytes.count {
+            if (outputIdx == Rabbit.blockSize) {
+                output = nextOutput()
+                outputIdx = 0
+            }
+
+            result[byteIdx] = bytes[byteIdx] ^ output[outputIdx]
+
+            byteIdx += 1
+            outputIdx += 1
+        }
+        return result
     }
-    
-    public func cipherDecrypt(bytes: [UInt8]) -> [UInt8] {
-        return self.decrypt(bytes)
+
+    public func decrypt(bytes: [UInt8]) -> [UInt8] {
+        return encrypt(bytes)
     }
 }

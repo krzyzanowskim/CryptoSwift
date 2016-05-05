@@ -1,5 +1,5 @@
 //
-//  CipherBlockMode.swift
+//  BlockMode.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 08/03/16.
@@ -8,7 +8,7 @@
 
 typealias CipherOperationOnBlock = (block: [UInt8]) -> [UInt8]?
 
-public enum CipherBlockMode {
+public enum BlockMode {
     case ECB, CBC, PCBC, CFB, OFB, CTR
 
     func worker(iv: Array<UInt8>?, cipherOperation: CipherOperationOnBlock) -> BlockModeWorker {

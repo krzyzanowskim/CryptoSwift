@@ -19,10 +19,22 @@ public enum CipherError: ErrorType {
 
 public protocol CipherProtocol {
 
+    /// Cryptor suitable for encryption
     func encryptor() -> Cryptor;
+
+    /// Cryptor suitable for decryption
     func decryptor() -> Cryptor;
 
+    /// Encrypt given bytes at once
+    ///
+    /// - parameter bytes: Plaintext data
+    /// - returns: Encrypted data
     func encrypt(bytes: [UInt8]) throws -> [UInt8]
+
+    /// Decrypt given bytes at once
+    ///
+    /// - parameter bytes: Ciphertext data
+    /// - returns: Plaintext data
     func decrypt(bytes: [UInt8]) throws -> [UInt8]
     
     static func randomIV(blockSize:Int) -> [UInt8]

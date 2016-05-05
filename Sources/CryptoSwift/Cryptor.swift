@@ -7,5 +7,10 @@
 //
 
 public protocol Cryptor {
+    /// Decrypt given bytes in chunks.
+    ///
+    /// - parameter bytes: Ciphertext data
+    /// - parameter isLast: Given chunk is the last one. No more updates after this call.
+    /// - returns: Plaintext data
     mutating func update(bytes:[UInt8], isLast: Bool) throws -> [UInt8]
 }

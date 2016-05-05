@@ -163,7 +163,7 @@ final public class ChaCha20: BlockCipher {
 }
 
 extension ChaCha20 {
-    public class Encryptor: Cryptor {
+    public struct Encryptor: Cryptor {
         let chacha20: ChaCha20
 
         init(chacha20: ChaCha20) {
@@ -177,7 +177,7 @@ extension ChaCha20 {
 }
 
 extension ChaCha20 {
-    public class Decryptor: Cryptor {
+    public struct Decryptor: Cryptor {
         let chacha20: ChaCha20
 
         init(chacha20: ChaCha20) {

@@ -174,7 +174,7 @@ final public class Rabbit: BlockCipher {
 }
 
 extension Rabbit {
-    public class Encryptor: Cryptor {
+    public struct Encryptor: Cryptor {
         let rabbit: Rabbit
 
         init(rabbit: Rabbit) {
@@ -188,7 +188,7 @@ extension Rabbit {
 }
 
 extension Rabbit {
-    public class Decryptor: Cryptor {
+    public struct Decryptor: Cryptor {
         let rabbit: Rabbit
 
         init(rabbit: Rabbit) {

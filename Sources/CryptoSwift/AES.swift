@@ -453,10 +453,6 @@ extension AES: CipherProtocol {
         return Decryptor(aes: self)
     }
 
-    /// Encrypt given bytes at once
-    ///
-    /// - parameter bytes: Plaintext data
-    /// - returns: Encrypted data
     public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
         let chunks = bytes.chunks(AES.blockSize)
 
@@ -474,10 +470,6 @@ extension AES: CipherProtocol {
         return out
     }
 
-    /// Decrypt given bytes at once
-    ///
-    /// - parameter bytes: Ciphertext data
-    /// - returns: Plaintext data
     public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
         if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
             throw Error.DataPaddingRequired

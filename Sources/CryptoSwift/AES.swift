@@ -129,7 +129,7 @@ final public class AES: BlockCipher {
 
         var out = [UInt8]()
         out.reserveCapacity(bytes.count)
-        for processedBlock in AnySequence<Array<UInt8>>({ encryptGenerator }) {
+        while let processedBlock = encryptGenerator.next() {
             out.appendContentsOf(processedBlock)
         }
         return out

@@ -18,6 +18,10 @@ public enum CipherError: ErrorType {
 }
 
 public protocol CipherProtocol {
+
+    func encryptor() -> Cryptor;
+    func decryptor() -> Cryptor;
+
     func cipherEncrypt(bytes: [UInt8]) throws -> [UInt8]
     func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8]
     

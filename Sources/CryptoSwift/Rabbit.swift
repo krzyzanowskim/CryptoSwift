@@ -199,10 +199,46 @@ final public class Rabbit: BlockCipher {
     }
 }
 
+extension Rabbit {
+    public class Encryptor: Cryptor {
+        let rabbit: Rabbit
 
-// MARK: - CipherType
+        init(rabbit: Rabbit) {
+            self.rabbit = rabbit
+        }
 
+        public func update(bytes: [UInt8], isLast: Bool) throws -> [UInt8] {
+            return rabbit.encrypt(bytes)
+        }
+    }
+}
+
+extension Rabbit {
+    public class Decryptor: Cryptor {
+        let rabbit: Rabbit
+
+        init(rabbit: Rabbit) {
+            self.rabbit = rabbit
+        }
+
+        public func update(bytes: [UInt8], isLast: Bool) throws -> [UInt8] {
+            return rabbit.decrypt(bytes)
+        }
+    }
+}
+
+
+// MARK: CipherType
 extension Rabbit: CipherProtocol {
+
+    public func encryptor() -> Cryptor {
+        return Encryptor(rabbit: self)
+    }
+
+    public func decryptor() -> Cryptor {
+        return Decryptor(rabbit: self)
+    }
+    
     public func cipherEncrypt(bytes:[UInt8]) -> [UInt8] {
         return self.encrypt(bytes)
     }

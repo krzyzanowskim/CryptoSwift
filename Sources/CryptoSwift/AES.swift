@@ -33,54 +33,6 @@ final public class AES: BlockCipher {
         }
     }
 
-    public struct Encryptor {
-        private var worker: BlockModeWorker
-        let padding: Padding
-
-        init(aes: AES) {
-            self.padding = aes.padding;
-            self.worker = aes.cipherBlockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
-        }
-
-        mutating func update(bytes:[UInt8], isLast: Bool) throws -> [UInt8] {
-            if isLast {
-                let paddedBytes = padding.add(bytes, blockSize: AES.blockSize)
-                var result = [UInt8]()
-                for chunk in paddedBytes.chunks(AES.blockSize) ?? [] {
-                    result.appendContentsOf(worker.encrypt(chunk))
-                }
-                return result
-            }
-
-            return worker.encrypt(bytes)
-        }
-    }
-
-    public struct Decryptor {
-        private var worker: BlockModeWorker
-        let padding: Padding
-
-        init(aes: AES) {
-            self.padding = aes.padding;
-
-            switch (aes.cipherBlockMode) {
-                case .CFB, .OFB, .CTR:
-                    // CFB, OFB, CTR uses encryptBlock to decrypt
-                    self.worker = aes.cipherBlockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
-                default:
-                    self.worker = aes.cipherBlockMode.worker(aes.iv, cipherOperation: aes.decryptBlock)
-            }
-        }
-
-        mutating func update(bytes:[UInt8], isLast: Bool) throws -> [UInt8] {
-            let plaintext = worker.decrypt(bytes)
-            if isLast {
-                return padding.remove(plaintext, blockSize: AES.blockSize)
-            }
-            return plaintext
-        }
-    }
-
     private let cipherBlockMode:CipherBlockMode
     public static let blockSize:Int = 16 // 128 /8
     
@@ -156,14 +108,6 @@ final public class AES: BlockCipher {
         }
     }
 
-    public func encryptor() -> Encryptor {
-        return Encryptor(aes: self)
-    }
-
-    public func decryptor() -> Decryptor {
-        return Decryptor(aes: self)
-    }
-
     /// Encrypt given bytes at once
     ///
     /// - parameter bytes: Plaintext data
@@ -182,70 +126,6 @@ final public class AES: BlockCipher {
             throw Error.DataPaddingRequired
         }
 
-        return out
-    }
-
-    private func encryptBlock(block:[UInt8]) -> [UInt8]? {
-        let rounds = self.variant.Nr
-        let rk = self.expandedKey
-        var b = toUInt32Array(block[block.startIndex..<block.endIndex])
-
-        var t = [UInt32](count: 4, repeatedValue: 0)
-        
-        for r in 0..<rounds - 1 {
-            t[0] = b[0] ^ rk[r][0]
-            t[1] = b[1] ^ rk[r][1]
-            t[2] = b[2] ^ rk[r][2]
-            t[3] = b[3] ^ rk[r][3]
-            
-            let lb00 = T0[Int(t[0] & 0xFF)]
-            let lb01 = T1[Int((t[1] >> 8) & 0xFF)]
-            let lb02 = T2[Int((t[2] >> 16) & 0xFF)]
-            let lb03 = T3[Int(t[3] >> 24)]
-            b[0] = lb00 ^ lb01 ^ lb02 ^ lb03
-            
-            let lb10 = T0[Int(t[1] & 0xFF)]
-            let lb11 = T1[Int((t[2] >> 8) & 0xFF)]
-            let lb12 = T2[Int((t[3] >> 16) & 0xFF)]
-            let lb13 = T3[Int(t[0] >> 24)]
-            b[1] = lb10 ^ lb11 ^ lb12 ^ lb13
-            
-            let lb20 = T0[Int(t[2] & 0xFF)]
-            let lb21 = T1[Int((t[3] >> 8) & 0xFF)]
-            let lb22 = T2[Int((t[0] >> 16) & 0xFF)]
-            let lb23 = T3[Int(t[1] >> 24)]
-            b[2] = lb20 ^ lb21 ^ lb22 ^ lb23
-            
-            let lb30 = T0[Int(t[3] & 0xFF)]
-            let lb31 = T1[Int((t[0] >> 8) & 0xFF)]
-            let lb32 = T2[Int((t[1] >> 16) & 0xFF)]
-            let lb33 = T3[Int(t[2] >> 24)]
-            b[3] = lb30 ^ lb31 ^ lb32 ^ lb33
-        }
-        
-        // last round
-        let r = rounds - 1
-
-        t[0] = b[0] ^ rk[r][0]
-        t[1] = b[1] ^ rk[r][1]
-        t[2] = b[2] ^ rk[r][2]
-        t[3] = b[3] ^ rk[r][3]
-
-        // rounds
-        b[0] = F1(t[0], t[1], t[2], t[3]) ^ rk[rounds][0]
-        b[1] = F1(t[1], t[2], t[3], t[0]) ^ rk[rounds][1]
-        b[2] = F1(t[2], t[3], t[0], t[1]) ^ rk[rounds][2]
-        b[3] = F1(t[3], t[0], t[1], t[2]) ^ rk[rounds][3]
-        
-        var out = [UInt8]()
-        out.reserveCapacity(b.count * 4)
-        for num in b {
-            out.append(UInt8(num & 0xFF))
-            out.append(UInt8((num >> 8) & 0xFF))
-            out.append(UInt8((num >> 16) & 0xFF))
-            out.append(UInt8((num >> 24) & 0xFF))
-        }
-        
         return out
     }
     
@@ -267,77 +147,62 @@ final public class AES: BlockCipher {
         }
         return out
     }
-    
-    private func decryptBlock(block:[UInt8]) -> [UInt8]? {
+}
+
+// MARK: Private
+extension AES {
+    private func encryptBlock(block:[UInt8]) -> [UInt8]? {
         let rounds = self.variant.Nr
-        let rk = expandedKeyInv
+        let rk = self.expandedKey
         var b = toUInt32Array(block[block.startIndex..<block.endIndex])
 
         var t = [UInt32](count: 4, repeatedValue: 0)
-        
-        for r in (2...rounds).reverse() {
+
+        for r in 0..<rounds - 1 {
             t[0] = b[0] ^ rk[r][0]
             t[1] = b[1] ^ rk[r][1]
             t[2] = b[2] ^ rk[r][2]
             t[3] = b[3] ^ rk[r][3]
-            
-            let b00 = T0_INV[Int(t[0] & 0xFF)]
-            let b01 = T1_INV[Int((t[3] >> 8) & 0xFF)]
-            let b02 = T2_INV[Int((t[2] >> 16) & 0xFF)]
-            let b03 = T3_INV[Int(t[1] >> 24)]
-            b[0] = b00 ^ b01 ^ b02 ^ b03
-            
-            let b10 = T0_INV[Int(t[1] & 0xFF)]
-            let b11 = T1_INV[Int((t[0] >> 8) & 0xFF)]
-            let b12 = T2_INV[Int((t[3] >> 16) & 0xFF)]
-            let b13 = T3_INV[Int(t[2] >> 24)]
-            b[1] = b10 ^ b11 ^ b12 ^ b13
-            
-            let b20 = T0_INV[Int(t[2] & 0xFF)]
-            let b21 = T1_INV[Int((t[1] >> 8) & 0xFF)]
-            let b22 = T2_INV[Int((t[0] >> 16) & 0xFF)]
-            let b23 = T3_INV[Int(t[3] >> 24)]
-            b[2] = b20 ^ b21 ^ b22 ^ b23
-            
-            let b30 = T0_INV[Int(t[3] & 0xFF)]
-            let b31 = T1_INV[Int((t[2] >> 8) & 0xFF)]
-            let b32 = T2_INV[Int((t[1] >> 16) & 0xFF)]
-            let b33 = T3_INV[Int(t[0] >> 24)]
-            b[3] = b30 ^ b31 ^ b32 ^ b33
+
+            let lb00 = T0[Int(t[0] & 0xFF)]
+            let lb01 = T1[Int((t[1] >> 8) & 0xFF)]
+            let lb02 = T2[Int((t[2] >> 16) & 0xFF)]
+            let lb03 = T3[Int(t[3] >> 24)]
+            b[0] = lb00 ^ lb01 ^ lb02 ^ lb03
+
+            let lb10 = T0[Int(t[1] & 0xFF)]
+            let lb11 = T1[Int((t[2] >> 8) & 0xFF)]
+            let lb12 = T2[Int((t[3] >> 16) & 0xFF)]
+            let lb13 = T3[Int(t[0] >> 24)]
+            b[1] = lb10 ^ lb11 ^ lb12 ^ lb13
+
+            let lb20 = T0[Int(t[2] & 0xFF)]
+            let lb21 = T1[Int((t[3] >> 8) & 0xFF)]
+            let lb22 = T2[Int((t[0] >> 16) & 0xFF)]
+            let lb23 = T3[Int(t[1] >> 24)]
+            b[2] = lb20 ^ lb21 ^ lb22 ^ lb23
+
+            let lb30 = T0[Int(t[3] & 0xFF)]
+            let lb31 = T1[Int((t[0] >> 8) & 0xFF)]
+            let lb32 = T2[Int((t[1] >> 16) & 0xFF)]
+            let lb33 = T3[Int(t[2] >> 24)]
+            b[3] = lb30 ^ lb31 ^ lb32 ^ lb33
         }
-        
+
         // last round
-        t[0] = b[0] ^ rk[1][0]
-        t[1] = b[1] ^ rk[1][1]
-        t[2] = b[2] ^ rk[1][2]
-        t[3] = b[3] ^ rk[1][3]
-        
+        let r = rounds - 1
+
+        t[0] = b[0] ^ rk[r][0]
+        t[1] = b[1] ^ rk[r][1]
+        t[2] = b[2] ^ rk[r][2]
+        t[3] = b[3] ^ rk[r][3]
+
         // rounds
-        
-        let lb00 = sBoxInv[Int(B0(t[0]))]
-        let lb01 = (sBoxInv[Int(B1(t[3]))] << 8)
-        let lb02 = (sBoxInv[Int(B2(t[2]))] << 16)
-        let lb03 = (sBoxInv[Int(B3(t[1]))] << 24)
-        b[0] = lb00 | lb01 | lb02 | lb03 ^ rk[0][0]
-        
-        let lb10 = sBoxInv[Int(B0(t[1]))]
-        let lb11 = (sBoxInv[Int(B1(t[0]))] << 8)
-        let lb12 = (sBoxInv[Int(B2(t[3]))] << 16)
-        let lb13 = (sBoxInv[Int(B3(t[2]))] << 24)
-        b[1] = lb10 | lb11 | lb12 | lb13 ^ rk[0][1]
-        
-        let lb20 = sBoxInv[Int(B0(t[2]))]
-        let lb21 = (sBoxInv[Int(B1(t[1]))] << 8)
-        let lb22 = (sBoxInv[Int(B2(t[0]))] << 16)
-        let lb23 = (sBoxInv[Int(B3(t[3]))] << 24)
-        b[2] = lb20 | lb21 | lb22 | lb23 ^ rk[0][2]
-        
-        let lb30 = sBoxInv[Int(B0(t[3]))]
-        let lb31 = (sBoxInv[Int(B1(t[2]))] << 8)
-        let lb32 = (sBoxInv[Int(B2(t[1]))] << 16)
-        let lb33 = (sBoxInv[Int(B3(t[0]))] << 24)
-        b[3] = lb30 | lb31 | lb32 | lb33 ^ rk[0][3]
-        
+        b[0] = F1(t[0], t[1], t[2], t[3]) ^ rk[rounds][0]
+        b[1] = F1(t[1], t[2], t[3], t[0]) ^ rk[rounds][1]
+        b[2] = F1(t[2], t[3], t[0], t[1]) ^ rk[rounds][2]
+        b[3] = F1(t[3], t[0], t[1], t[2]) ^ rk[rounds][3]
+
         var out = [UInt8]()
         out.reserveCapacity(b.count * 4)
         for num in b {
@@ -346,35 +211,117 @@ final public class AES: BlockCipher {
             out.append(UInt8((num >> 16) & 0xFF))
             out.append(UInt8((num >> 24) & 0xFF))
         }
-        
+
         return out
     }
-    
+
+    private func decryptBlock(block:[UInt8]) -> [UInt8]? {
+        let rounds = self.variant.Nr
+        let rk = expandedKeyInv
+        var b = toUInt32Array(block[block.startIndex..<block.endIndex])
+
+        var t = [UInt32](count: 4, repeatedValue: 0)
+
+        for r in (2...rounds).reverse() {
+            t[0] = b[0] ^ rk[r][0]
+            t[1] = b[1] ^ rk[r][1]
+            t[2] = b[2] ^ rk[r][2]
+            t[3] = b[3] ^ rk[r][3]
+
+            let b00 = T0_INV[Int(t[0] & 0xFF)]
+            let b01 = T1_INV[Int((t[3] >> 8) & 0xFF)]
+            let b02 = T2_INV[Int((t[2] >> 16) & 0xFF)]
+            let b03 = T3_INV[Int(t[1] >> 24)]
+            b[0] = b00 ^ b01 ^ b02 ^ b03
+
+            let b10 = T0_INV[Int(t[1] & 0xFF)]
+            let b11 = T1_INV[Int((t[0] >> 8) & 0xFF)]
+            let b12 = T2_INV[Int((t[3] >> 16) & 0xFF)]
+            let b13 = T3_INV[Int(t[2] >> 24)]
+            b[1] = b10 ^ b11 ^ b12 ^ b13
+
+            let b20 = T0_INV[Int(t[2] & 0xFF)]
+            let b21 = T1_INV[Int((t[1] >> 8) & 0xFF)]
+            let b22 = T2_INV[Int((t[0] >> 16) & 0xFF)]
+            let b23 = T3_INV[Int(t[3] >> 24)]
+            b[2] = b20 ^ b21 ^ b22 ^ b23
+
+            let b30 = T0_INV[Int(t[3] & 0xFF)]
+            let b31 = T1_INV[Int((t[2] >> 8) & 0xFF)]
+            let b32 = T2_INV[Int((t[1] >> 16) & 0xFF)]
+            let b33 = T3_INV[Int(t[0] >> 24)]
+            b[3] = b30 ^ b31 ^ b32 ^ b33
+        }
+
+        // last round
+        t[0] = b[0] ^ rk[1][0]
+        t[1] = b[1] ^ rk[1][1]
+        t[2] = b[2] ^ rk[1][2]
+        t[3] = b[3] ^ rk[1][3]
+
+        // rounds
+
+        let lb00 = sBoxInv[Int(B0(t[0]))]
+        let lb01 = (sBoxInv[Int(B1(t[3]))] << 8)
+        let lb02 = (sBoxInv[Int(B2(t[2]))] << 16)
+        let lb03 = (sBoxInv[Int(B3(t[1]))] << 24)
+        b[0] = lb00 | lb01 | lb02 | lb03 ^ rk[0][0]
+
+        let lb10 = sBoxInv[Int(B0(t[1]))]
+        let lb11 = (sBoxInv[Int(B1(t[0]))] << 8)
+        let lb12 = (sBoxInv[Int(B2(t[3]))] << 16)
+        let lb13 = (sBoxInv[Int(B3(t[2]))] << 24)
+        b[1] = lb10 | lb11 | lb12 | lb13 ^ rk[0][1]
+
+        let lb20 = sBoxInv[Int(B0(t[2]))]
+        let lb21 = (sBoxInv[Int(B1(t[1]))] << 8)
+        let lb22 = (sBoxInv[Int(B2(t[0]))] << 16)
+        let lb23 = (sBoxInv[Int(B3(t[3]))] << 24)
+        b[2] = lb20 | lb21 | lb22 | lb23 ^ rk[0][2]
+
+        let lb30 = sBoxInv[Int(B0(t[3]))]
+        let lb31 = (sBoxInv[Int(B1(t[2]))] << 8)
+        let lb32 = (sBoxInv[Int(B2(t[1]))] << 16)
+        let lb33 = (sBoxInv[Int(B3(t[0]))] << 24)
+        b[3] = lb30 | lb31 | lb32 | lb33 ^ rk[0][3]
+
+        var out = [UInt8]()
+        out.reserveCapacity(b.count * 4)
+        for num in b {
+            out.append(UInt8(num & 0xFF))
+            out.append(UInt8((num >> 8) & 0xFF))
+            out.append(UInt8((num >> 16) & 0xFF))
+            out.append(UInt8((num >> 24) & 0xFF))
+        }
+
+        return out
+    }
+
     private func expandKeyInv(key: Key, variant: AESVariant) -> [[UInt32]] {
         let rounds = variant.Nr
         var rk2:[[UInt32]] = expandKey(key, variant: variant)
-        
+
         for r in 1..<rounds {
             var w:UInt32
-            
+
             w = rk2[r][0];
             rk2[r][0] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
-            
+
             w = rk2[r][1];
             rk2[r][1] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
-            
+
             w = rk2[r][2];
             rk2[r][2] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
-            
+
             w = rk2[r][3];
             rk2[r][3] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
         }
-        
+
         return rk2
     }
-    
+
     private func expandKey(key:Key, variant:AESVariant) -> [[UInt32]] {
-        
+
         func convertExpandedKey(expanded:[UInt8]) -> [[UInt32]] {
             var arr = [UInt32]()
             for idx in expanded.startIndex.stride(to: expanded.endIndex, by: 4) {
@@ -382,19 +329,19 @@ final public class AES: BlockCipher {
                 let num = UInt32.withBytes(four)
                 arr.append(num)
             }
-            
+
             var allarr = [[UInt32]]()
             for idx in arr.startIndex.stride(to: arr.endIndex, by: 4) {
                 allarr.append(Array(arr[idx..<idx.advancedBy(4)]))
             }
             return allarr
         }
-        
+
         /*
-        * Function used in the Key Expansion routine that takes a four-byte
-        * input word and applies an S-box to each of the four bytes to
-        * produce an output word.
-        */
+         * Function used in the Key Expansion routine that takes a four-byte
+         * input word and applies an S-box to each of the four bytes to
+         * produce an output word.
+         */
         func subWord(word:[UInt8]) -> [UInt8] {
             var result = word
             for i in 0..<4 {
@@ -402,19 +349,19 @@ final public class AES: BlockCipher {
             }
             return result
         }
-        
+
         var w = [UInt8](count: variant.Nb * (variant.Nr + 1) * 4, repeatedValue: 0)
         for i in 0..<variant.Nk {
             for wordIdx in 0..<4 {
                 w[(4*i)+wordIdx] = key[(4*i)+wordIdx]
             }
         }
-        
+
         var tmp:[UInt8]
 
         for i in variant.Nk..<variant.Nb * (variant.Nr + 1) {
             tmp = [UInt8](count: 4, repeatedValue: 0)
-            
+
             for wordIdx in 0..<4 {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
             }
@@ -424,7 +371,7 @@ final public class AES: BlockCipher {
             } else if (variant.Nk > 6 && (i % variant.Nk) == 4) {
                 tmp = subWord(tmp)
             }
-            
+
             // xor array of bytes
             for wordIdx in 0..<4 {
                 w[4*i+wordIdx] = w[4*(i-variant.Nk)+wordIdx]^tmp[wordIdx];
@@ -432,10 +379,7 @@ final public class AES: BlockCipher {
         }
         return convertExpandedKey(w)
     }
-}
 
-extension AES {
-    
     private func B0(x: UInt32) -> UInt32 {
         return x & 0xFF
     }
@@ -485,8 +429,69 @@ extension AES {
     }
 }
 
+// MARK: Encryptor
+extension AES {
+    public struct Encryptor: Cryptor {
+        private var worker: BlockModeWorker
+        let padding: Padding
+
+        init(aes: AES) {
+            self.padding = aes.padding;
+            self.worker = aes.cipherBlockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
+        }
+
+        mutating public func update(bytes:[UInt8], isLast: Bool) throws -> [UInt8] {
+            if isLast {
+                let paddedBytes = padding.add(bytes, blockSize: AES.blockSize)
+                var result = [UInt8]()
+                for chunk in paddedBytes.chunks(AES.blockSize) ?? [] {
+                    result.appendContentsOf(worker.encrypt(chunk))
+                }
+                return result
+            }
+
+            return worker.encrypt(bytes)
+        }
+    }
+}
+
+// MARK: Decryptor
+extension AES {
+    public struct Decryptor: Cryptor {
+        private var worker: BlockModeWorker
+        let padding: Padding
+
+        init(aes: AES) {
+            self.padding = aes.padding;
+
+            switch (aes.cipherBlockMode) {
+            case .CFB, .OFB, .CTR:
+                // CFB, OFB, CTR uses encryptBlock to decrypt
+                self.worker = aes.cipherBlockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
+            default:
+                self.worker = aes.cipherBlockMode.worker(aes.iv, cipherOperation: aes.decryptBlock)
+            }
+        }
+
+        mutating public func update(bytes:[UInt8], isLast: Bool) throws -> [UInt8] {
+            let plaintext = worker.decrypt(bytes)
+            if isLast {
+                return padding.remove(plaintext, blockSize: AES.blockSize)
+            }
+            return plaintext
+        }
+    }
+}
+
+// MARK: CipherProtocol
 extension AES: CipherProtocol {
-    // MARK: - Cipher
+    public func encryptor() -> Cryptor {
+        return Encryptor(aes: self)
+    }
+
+    public func decryptor() -> Cryptor {
+        return Decryptor(aes: self)
+    }
     
     public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
         return try self.encrypt(bytes)

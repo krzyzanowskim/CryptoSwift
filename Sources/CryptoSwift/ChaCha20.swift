@@ -174,9 +174,46 @@ final public class ChaCha20: BlockCipher {
     }
 }
 
+extension ChaCha20 {
+    public class Encryptor: Cryptor {
+        let chacha20: ChaCha20
+
+        init(chacha20: ChaCha20) {
+            self.chacha20 = chacha20
+        }
+
+        public func update(bytes: [UInt8], isLast: Bool) throws -> [UInt8] {
+            return try chacha20.encrypt(bytes)
+        }
+    }
+}
+
+extension ChaCha20 {
+    public class Decryptor: Cryptor {
+        let chacha20: ChaCha20
+
+        init(chacha20: ChaCha20) {
+            self.chacha20 = chacha20
+        }
+
+        public func update(bytes: [UInt8], isLast: Bool) throws -> [UInt8] {
+            return try chacha20.decrypt(bytes)
+        }
+    }
+}
+
 // MARK: - Cipher
 
 extension ChaCha20: CipherProtocol {
+
+    public func encryptor() -> Cryptor {
+        return Encryptor(chacha20: self)
+    }
+
+    public func decryptor() -> Cryptor {
+        return Decryptor(chacha20: self)
+    }
+
     public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
         return try self.encrypt(bytes)
     }
@@ -196,5 +233,6 @@ private func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
         value = value | UInt32(bytes[j]) << (8 * i)
     }
 
-    return value}
+    return value
+}
 

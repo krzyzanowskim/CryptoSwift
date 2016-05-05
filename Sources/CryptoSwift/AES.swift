@@ -12,12 +12,12 @@ private typealias Key = SecureBytes
 
 final public class AES: BlockCipher {
     public enum Error: ErrorType {
-        case BlockSizeExceeded
+        case DataPaddingRequired
         case InvalidKeyOrInitializationVector
         case InvalidInitializationVector
     }
     
-    public enum AESVariant:Int {
+    public enum AESVariant: Int {
         case aes128 = 1, aes192, aes256
         
         var Nk:Int { // Nk words
@@ -32,8 +32,56 @@ final public class AES: BlockCipher {
             return Nk + 6
         }
     }
-    
-    public let blockMode:CipherBlockMode
+
+    public struct Encryptor {
+        private var worker: BlockModeWorker
+        let padding: Padding
+
+        init(aes: AES) {
+            self.padding = aes.padding;
+            self.worker = aes.cipherBlockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
+        }
+
+        mutating func update(bytes:[UInt8], isLast: Bool) throws -> [UInt8] {
+            if isLast {
+                let paddedBytes = padding.add(bytes, blockSize: AES.blockSize)
+                var result = [UInt8]()
+                for chunk in paddedBytes.chunks(AES.blockSize) ?? [] {
+                    result.appendContentsOf(worker.encrypt(chunk))
+                }
+                return result
+            }
+
+            return worker.encrypt(bytes)
+        }
+    }
+
+    public struct Decryptor {
+        private var worker: BlockModeWorker
+        let padding: Padding
+
+        init(aes: AES) {
+            self.padding = aes.padding;
+
+            switch (aes.cipherBlockMode) {
+                case .CFB, .OFB, .CTR:
+                    // CFB, OFB, CTR uses encryptBlock to decrypt
+                    self.worker = aes.cipherBlockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
+                default:
+                    self.worker = aes.cipherBlockMode.worker(aes.iv, cipherOperation: aes.decryptBlock)
+            }
+        }
+
+        mutating func update(bytes:[UInt8], isLast: Bool) throws -> [UInt8] {
+            let plaintext = worker.decrypt(bytes)
+            if isLast {
+                return padding.remove(plaintext, blockSize: AES.blockSize)
+            }
+            return plaintext
+        }
+    }
+
+    private let cipherBlockMode:CipherBlockMode
     public static let blockSize:Int = 16 // 128 /8
     
     public var variant:AESVariant {
@@ -92,7 +140,7 @@ final public class AES: BlockCipher {
     
     public init(key:[UInt8], iv:[UInt8]? = nil, blockMode:CipherBlockMode = .CBC, padding: Padding = PKCS7()) throws {
         self.key = Key(bytes: key)
-        self.blockMode = blockMode
+        self.cipherBlockMode = blockMode
         self.padding = padding
 
         if let iv = iv where iv.count > 0 {
@@ -108,30 +156,32 @@ final public class AES: BlockCipher {
         }
     }
 
-    /**
-    Encrypt message. If padding is necessary, then PKCS7 padding is added and needs to be removed after decryption.
-    
-    - parameter message: Plaintext data
-    - parameter padding: Optional padding
-    
-    - returns: Encrypted data
-    */
-    
+    public func encryptor() -> Encryptor {
+        return Encryptor(aes: self)
+    }
+
+    public func decryptor() -> Decryptor {
+        return Decryptor(aes: self)
+    }
+
+    /// Encrypt given bytes at once
+    ///
+    /// - parameter bytes: Plaintext data
+    /// - returns: Encrypted data
     public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
-        let finalBytes = self.padding.add(bytes, blockSize: AES.blockSize)
+        let chunks = bytes.chunks(AES.blockSize)
 
-        if blockMode.options.contains(.PaddingRequired) && (finalBytes.count % AES.blockSize != 0) {
-            throw Error.BlockSizeExceeded
-        }
-
-        let blocks = finalBytes.chunks(AES.blockSize)
-        let encryptGenerator = blockMode.encryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
-
+        var oneTimeCryptor = Encryptor(aes: self)
         var out = [UInt8]()
         out.reserveCapacity(bytes.count)
-        while let processedBlock = encryptGenerator.next() {
-            out.appendContentsOf(processedBlock)
+        for (idx, block) in chunks.enumerate() {
+            out.appendContentsOf(try oneTimeCryptor.update(block, isLast: idx == max(0,chunks.count - 1)))
         }
+
+        if cipherBlockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
+            throw Error.DataPaddingRequired
+        }
+
         return out
     }
 
@@ -199,29 +249,23 @@ final public class AES: BlockCipher {
         return out
     }
     
+    /// Decrypt given bytes at once
+    ///
+    /// - parameter bytes: Ciphertext data
+    /// - returns: Plaintext data
     public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
-        if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
-            throw Error.BlockSizeExceeded
+        if cipherBlockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
+            throw Error.DataPaddingRequired
         }
 
-        let blocks = bytes.chunks(AES.blockSize)
+        var oneTimeCryptor = Decryptor(aes: self)
+        let chunks = bytes.chunks(AES.blockSize)
         var out = [UInt8]()
         out.reserveCapacity(bytes.count)
-        switch (blockMode) {
-        case .CFB, .OFB, .CTR:
-            // CFB, OFB, CTR uses encryptBlock to decrypt
-            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
-            for processedBlock in AnySequence<Array<UInt8>>({ decryptGenerator }) {
-                out.appendContentsOf(processedBlock)
-            }
-        default:
-            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: decryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
-            for processedBlock in AnySequence<Array<UInt8>>({ decryptGenerator }) {
-                out.appendContentsOf(processedBlock)
-            }
+        for (idx,chunk) in chunks.enumerate() {
+            out.appendContentsOf(try oneTimeCryptor.update(chunk, isLast: idx == max(0,chunks.count - 1)))
         }
-        
-        return self.padding.remove(out, blockSize: AES.blockSize)
+        return out
     }
     
     private func decryptBlock(block:[UInt8]) -> [UInt8]? {

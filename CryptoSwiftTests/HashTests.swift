@@ -126,6 +126,16 @@ final class CryptoSwiftTests: XCTestCase {
         XCTAssertEqual("".crc32(nil), "00000000", "CRC32 calculation failed");
     }
     
+    func testCRC32NotReflected() {
+        let bytes : [UInt8] = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39]
+        let data:NSData = NSData(bytes: bytes, length: bytes.count)
+        if let crc = data.crc32(nil, reflect: false) {
+            XCTAssertEqual(crc.toHexString(), "fc891918", "CRC32 (with reflection) calculation failed");
+        }
+        
+        XCTAssertEqual("".crc32(nil, reflect: false), "00000000", "CRC32 (with reflection) calculation failed");
+    }
+    
     func testCRC16() {
         let result = CRC().crc16([49,50,51,52,53,54,55,56,57] as [UInt8])
         XCTAssert(result == 0xBB3D, "CRC16 failed")

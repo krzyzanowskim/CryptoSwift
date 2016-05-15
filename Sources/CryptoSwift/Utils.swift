@@ -34,8 +34,22 @@ func rotateRight(x:UInt64, n:UInt64) -> UInt64 {
     return ((x >> n) | (x << (64 - n)))
 }
 
-func reverseBytes(value: UInt32) -> UInt32 {
-    return ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8)  | ((value & 0xFF000000) >> 24);
+func reverseUInt8(uint8 : UInt8) -> UInt8 {
+    var v : UInt8 = uint8
+    v = (v & 0xF0) >> 4 | (v & 0x0F) << 4
+    v = (v & 0xCC) >> 2 | (v & 0x33) << 2
+    v = (v & 0xAA) >> 1 | (v & 0x55) << 1
+    return v
+}
+
+func reverseUInt32(uint32 : UInt32) -> UInt32 {
+    var v = uint32
+    v = ((v >> 1) & 0x55555555) | ((v & 0x55555555) << 1)
+    v = ((v >> 2) & 0x33333333) | ((v & 0x33333333) << 2)
+    v = ((v >> 4) & 0x0f0f0f0f) | ((v & 0x0f0f0f0f) << 4)
+    v = ((v >> 8) & 0x00ff00ff) | ((v & 0x00ff00ff) << 8)
+    v = ((v >> 16) & 0xffff) | ((v & 0xffff) << 16)
+    return v
 }
 
 func toUInt32Array(slice: ArraySlice<UInt8>) -> Array<UInt32> {

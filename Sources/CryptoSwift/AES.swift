@@ -102,7 +102,7 @@ final public class AES: BlockCipher {
             self.iv = defaultIV
         }
 
-        if (blockMode.options.contains(.InitializationVectorRequired) && iv?.count != AES.blockSize) {
+        if (blockMode.options.contains(.InitializationVectorRequired) && self.iv.count != AES.blockSize) {
             assert(false, "Block size and Initialization Vector must be the same length!")
             throw Error.InvalidInitializationVector
         }

@@ -170,7 +170,7 @@ extension ChaCha20 {
             self.chacha20 = chacha20
         }
 
-        public func update(bytes: [UInt8], isLast: Bool) throws -> [UInt8] {
+        public func updateWith(bytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
             return try chacha20.encrypt(bytes)
         }
     }
@@ -184,7 +184,7 @@ extension ChaCha20 {
             self.chacha20 = chacha20
         }
 
-        public func update(bytes: [UInt8], isLast: Bool) throws -> [UInt8] {
+        public func updateWith(bytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
             return try chacha20.decrypt(bytes)
         }
     }
@@ -192,16 +192,19 @@ extension ChaCha20 {
 
 // MARK: - Cipher
 
-extension ChaCha20: CipherProtocol {
+extension ChaCha20: UpdatableCryptor {
 
-    public func encryptor() -> Cryptor {
+    public func makeEncryptor() -> ChaCha20.Encryptor {
         return Encryptor(chacha20: self)
     }
 
-    public func decryptor() -> Cryptor {
+    public func makeDecryptor() -> ChaCha20.Decryptor {
         return Decryptor(chacha20: self)
     }
+}
 
+// MARK: Cipher
+extension ChaCha20: Cipher {
     public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
         guard context != nil else {
             throw Error.MissingContext

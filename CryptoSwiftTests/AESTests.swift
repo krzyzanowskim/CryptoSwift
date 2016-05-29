@@ -85,9 +85,10 @@ final class AESTests: XCTestCase {
         let encrypted = try! aes.encrypt(plaintext)
 
         var partialEncrypted = [UInt8]()
-        var encryptor = aes.encryptor()
-        partialEncrypted.appendContentsOf(try! encryptor.update(Array(plaintext[0..<16]), isLast: false))
-        partialEncrypted.appendContentsOf(try! encryptor.update(Array(plaintext[16..<32]), isLast: true))
+        var encryptor = aes.makeEncryptor()
+        partialEncrypted.appendContentsOf(try! encryptor.updateWith(bytes: Array(plaintext[0..<16]), isLast: false))
+        //partialEncrypted.appendContentsOf(try! encryptor.finish(bytes: Array(plaintext[16..<32])))
+        partialEncrypted.appendContentsOf(try! encryptor.updateWith(bytes: Array(plaintext[16..<32]), isLast: true))
         XCTAssertEqual(encrypted, partialEncrypted, "encryption failed")
     }
 

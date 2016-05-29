@@ -400,7 +400,7 @@ extension AES {
             self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
         }
 
-        mutating public func update(bytes:[UInt8], isLast: Bool) throws -> [UInt8] {
+        mutating public func updateWith(bytes bytes:[UInt8], isLast: Bool = false) throws -> [UInt8] {
             if isLast {
                 let paddedBytes = padding.add(bytes, blockSize: AES.blockSize)
                 var result = [UInt8]()
@@ -408,6 +408,8 @@ extension AES {
                     result.appendContentsOf(worker.encrypt(chunk))
                 }
                 return result
+            } else if bytes.count == 0 {
+                return bytes;
             }
 
             return worker.encrypt(bytes)
@@ -433,7 +435,11 @@ extension AES {
             }
         }
 
-        mutating public func update(bytes:[UInt8], isLast: Bool) throws -> [UInt8] {
+        mutating public func updateWith(bytes bytes:[UInt8], isLast: Bool = false) throws -> [UInt8] {
+            if bytes.count == 0 {
+                return bytes;
+            }
+
             let plaintext = worker.decrypt(bytes)
             if isLast {
                 return padding.remove(plaintext, blockSize: AES.blockSize)
@@ -443,16 +449,20 @@ extension AES {
     }
 }
 
-// MARK: CipherProtocol
-extension AES: CipherProtocol {
-    public func encryptor() -> Cryptor {
+// MARK: UpdatableCryptor
+extension AES: UpdatableCryptor {
+    
+    public func makeEncryptor() -> AES.Encryptor {
         return Encryptor(aes: self)
     }
 
-    public func decryptor() -> Cryptor {
+    public func makeDecryptor() -> AES.Decryptor {
         return Decryptor(aes: self)
     }
+}
 
+// MARK: Cipher
+extension AES: Cipher {
     public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
         let chunks = bytes.chunks(AES.blockSize)
 
@@ -460,7 +470,7 @@ extension AES: CipherProtocol {
         var out = [UInt8]()
         out.reserveCapacity(bytes.count)
         for (idx, block) in chunks.enumerate() {
-            out.appendContentsOf(try oneTimeCryptor.update(block, isLast: idx == max(0,chunks.count - 1)))
+            out.appendContentsOf(try oneTimeCryptor.updateWith(bytes: block, isLast: idx == max(0,chunks.count - 1)))
         }
 
         if blockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
@@ -480,7 +490,7 @@ extension AES: CipherProtocol {
         var out = [UInt8]()
         out.reserveCapacity(bytes.count)
         for (idx,chunk) in chunks.enumerate() {
-            out.appendContentsOf(try oneTimeCryptor.update(chunk, isLast: idx == max(0,chunks.count - 1)))
+            out.appendContentsOf(try oneTimeCryptor.updateWith(bytes: chunk, isLast: idx == max(0,chunks.count - 1)))
         }
         return out
     }

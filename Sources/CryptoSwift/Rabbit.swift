@@ -181,7 +181,7 @@ extension Rabbit {
             self.rabbit = rabbit
         }
 
-        public func update(bytes: [UInt8], isLast: Bool) throws -> [UInt8] {
+        public func updateWith(bytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
             return rabbit.encrypt(bytes)
         }
     }
@@ -195,24 +195,27 @@ extension Rabbit {
             self.rabbit = rabbit
         }
 
-        public func update(bytes: [UInt8], isLast: Bool) throws -> [UInt8] {
+        public func updateWith(bytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
             return rabbit.decrypt(bytes)
         }
     }
 }
 
 
-// MARK: CipherType
-extension Rabbit: CipherProtocol {
+// MARK: UpdatableCryptor
+extension Rabbit: UpdatableCryptor {
 
-    public func encryptor() -> Cryptor {
+    public func makeEncryptor() -> Rabbit.Encryptor {
         return Encryptor(rabbit: self)
     }
 
-    public func decryptor() -> Cryptor {
+    public func makeDecryptor() -> Rabbit.Decryptor {
         return Decryptor(rabbit: self)
     }
+}
 
+// MARK: Cipher
+extension Rabbit: Cipher {
     public func encrypt(bytes: [UInt8]) -> [UInt8] {
         setup()
 

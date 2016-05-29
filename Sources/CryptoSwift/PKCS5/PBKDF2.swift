@@ -25,15 +25,9 @@ public extension PKCS5 {
                 throw Error.InvalidInput
             }
 
-            let keyLengthFinal: Int
-            if let kl = keyLength {
-                keyLengthFinal = kl
-            } else {
-                keyLengthFinal = hashVariant.size
-            }
-
+            let keyLengthFinal = Double(keyLength ?? hashVariant.size)
             let hLen = Double(prf.variant.size)
-            if keyLength > Int(((pow(2,32) as Double) - 1) * hLen) {
+            if keyLengthFinal > (pow(2,32) - 1) * hLen {
                 throw Error.InvalidInput
             }
 

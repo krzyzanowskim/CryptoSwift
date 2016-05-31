@@ -170,7 +170,7 @@ extension ChaCha20 {
             self.chacha20 = chacha20
         }
 
-        public func updateWith(bytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
+        public func update(withBytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
             return try chacha20.encrypt(bytes)
         }
     }
@@ -184,7 +184,7 @@ extension ChaCha20 {
             self.chacha20 = chacha20
         }
 
-        public func updateWith(bytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
+        public func update(withBytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
             return try chacha20.decrypt(bytes)
         }
     }

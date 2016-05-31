@@ -181,7 +181,7 @@ extension Rabbit {
             self.rabbit = rabbit
         }
 
-        public func updateWith(bytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
+        public func update(withBytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
             return rabbit.encrypt(bytes)
         }
     }
@@ -195,7 +195,7 @@ extension Rabbit {
             self.rabbit = rabbit
         }
 
-        public func updateWith(bytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
+        public func update(withBytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
             return rabbit.decrypt(bytes)
         }
     }

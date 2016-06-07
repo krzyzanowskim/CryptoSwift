@@ -393,26 +393,35 @@ extension AES {
 extension AES {
     public struct Encryptor: Cryptor {
         private var worker: BlockModeWorker
-        let padding: Padding
+        private let padding: Padding
+        private var accumulated = [UInt8]()
+        private let paddingRequired: Bool
 
         init(aes: AES) {
             self.padding = aes.padding;
             self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
+            self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
         }
 
         mutating public func update(withBytes bytes:[UInt8], isLast: Bool = false) throws -> [UInt8] {
-            if isLast {
-                let paddedBytes = padding.add(bytes, blockSize: AES.blockSize)
-                var result = [UInt8]()
-                for chunk in paddedBytes.chunks(AES.blockSize) ?? [] {
-                    result.appendContentsOf(worker.encrypt(chunk))
-                }
-                return result
-            } else if bytes.count == 0 {
-                return bytes;
+            self.accumulated += bytes
+
+            if (isLast) {
+                self.accumulated = padding.add(self.accumulated, blockSize: AES.blockSize)
             }
 
-            return worker.encrypt(bytes)
+            //CTR does not require full block therefore work with anything
+            if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
+                var encrypted = Array<UInt8>()
+                encrypted.reserveCapacity(self.accumulated.count)
+                for chunk in self.accumulated.chunks(AES.blockSize) {
+                    encrypted += worker.encrypt(chunk)
+                    self.accumulated.removeFirst(chunk.count)
+                }
+                return encrypted
+            }
+
+            return []
         }
     }
 }
@@ -421,7 +430,7 @@ extension AES {
 extension AES {
     public struct Decryptor: Cryptor {
         private var worker: BlockModeWorker
-        let padding: Padding
+        private let padding: Padding
 
         init(aes: AES) {
             self.padding = aes.padding;
@@ -466,11 +475,11 @@ extension AES: Cipher {
     public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
         let chunks = bytes.chunks(AES.blockSize)
 
-        var oneTimeCryptor = Encryptor(aes: self)
+        var oneTimeCryptor = self.makeEncryptor()
         var out = [UInt8]()
         out.reserveCapacity(bytes.count)
         for (idx, block) in chunks.enumerate() {
-            out.appendContentsOf(try oneTimeCryptor.update(withBytes: block, isLast: idx == max(0,chunks.count - 1)))
+            out += try oneTimeCryptor.update(withBytes: block, isLast: idx == max(0,chunks.count - 1))
         }
 
         if blockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
@@ -485,12 +494,12 @@ extension AES: Cipher {
             throw Error.DataPaddingRequired
         }
 
-        var oneTimeCryptor = Decryptor(aes: self)
+        var oneTimeCryptor = self.makeDecryptor()
         let chunks = bytes.chunks(AES.blockSize)
         var out = [UInt8]()
         out.reserveCapacity(bytes.count)
         for (idx,chunk) in chunks.enumerate() {
-            out.appendContentsOf(try oneTimeCryptor.update(withBytes: chunk, isLast: idx == max(0,chunks.count - 1)))
+            out += try oneTimeCryptor.update(withBytes: chunk, isLast: idx == max(0,chunks.count - 1))
         }
         return out
     }

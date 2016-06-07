@@ -1,6 +1,6 @@
 0.5
 - Added PBKDF2 https://tools.ietf.org/html/rfc2898#section-5.1
-- UpdatableCryptor protocol allows incremental encryption (per block)
+- UpdatableCryptor protocol allows incremental encryption stream of data
 - CryptoSwift.playground
 
 0.4.1

@@ -201,7 +201,10 @@ let hmac: [UInt8] = try! Authenticator.HMAC(key: key, variant: .sha256).authenti
 let password: [UInt8] = "s33krit".utf8.map {$0}
 let salt: [UInt8] = "nacl".utf8.map {$0}
 
-let value = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, hashVariant: .sha256).calculate()
+let value = try! PKCS5.PBKDF1(password: password, salt: salt, iterations: 4096, variant: .sha1).calculate()
+
+let value = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha256).calculate()
+
 value.toHexString() // print Hex representation
 ```
 

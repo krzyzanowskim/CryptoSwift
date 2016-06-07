@@ -1,3 +1,6 @@
+0.5
+- Added PBKDF2 https://tools.ietf.org/html/rfc2898#section-5.1
+
 0.4.1
 - fix NoPadding()
 

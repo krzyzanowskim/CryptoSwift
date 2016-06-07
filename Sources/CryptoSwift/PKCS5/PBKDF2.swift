@@ -7,28 +7,38 @@
 //
 
 public extension PKCS5 {
-    // PBKDF2 - Password-Based Key Derivation Function 2. Key stretching technique.
-    //          DK = PBKDF2(PRF, Password, Salt, c, dkLen)
+    /// A key derivation function.
+    ///
+    /// PBKDF2 - Password-Based Key Derivation Function 2. Key stretching technique.
+    ///          DK = PBKDF2(PRF, Password, Salt, c, dkLen)
     public struct PBKDF2 {
 
         public enum Error: ErrorType {
             case InvalidInput
+            case DerivedKeyTooLong
         }
 
-        private let salt: [UInt8]
+        private let salt: [UInt8]   // S
         private let iterations: Int // c
-        private let numBlocks: UInt  // l
+        private let numBlocks: UInt // l
         private let prf: HMAC
 
-        public init(password: [UInt8], salt: [UInt8], iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */ , hashVariant: HMAC.Variant = .sha256) throws {
-            guard let prf = HMAC(key: password, variant: hashVariant) where (iterations > 0) && (password.count > 0) && (salt.count > 0) else {
+        /// - parameters:
+        ///   - salt: salt
+        ///   - variant: hash variant
+        ///   - iterations: iteration count, a positive integer
+        ///   - keyLength: intended length of derived key
+        public init(password: [UInt8], salt: [UInt8], iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */, variant: HMAC.Variant = .sha256) throws {
+            precondition(iterations > 0)
+            
+            guard let prf = HMAC(key: password, variant: variant) where iterations > 0 && password.count > 0 && salt.count > 0 else {
                 throw Error.InvalidInput
             }
 
-            let keyLengthFinal = Double(keyLength ?? hashVariant.size)
+            let keyLengthFinal = Double(keyLength ?? variant.size)
             let hLen = Double(prf.variant.size)
             if keyLengthFinal > (pow(2,32) - 1) * hLen {
-                throw Error.InvalidInput
+                throw Error.DerivedKeyTooLong
             }
 
             self.salt = salt

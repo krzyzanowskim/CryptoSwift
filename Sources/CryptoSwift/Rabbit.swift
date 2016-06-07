@@ -173,47 +173,6 @@ final public class Rabbit: BlockCipher {
     }
 }
 
-extension Rabbit {
-    public struct Encryptor: Cryptor {
-        let rabbit: Rabbit
-
-        init(rabbit: Rabbit) {
-            self.rabbit = rabbit
-        }
-
-        public func update(withBytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
-            return rabbit.encrypt(bytes)
-        }
-    }
-}
-
-extension Rabbit {
-    public struct Decryptor: Cryptor {
-        let rabbit: Rabbit
-
-        init(rabbit: Rabbit) {
-            self.rabbit = rabbit
-        }
-
-        public func update(withBytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
-            return rabbit.decrypt(bytes)
-        }
-    }
-}
-
-
-// MARK: UpdatableCryptor
-extension Rabbit: UpdatableCryptor {
-
-    public func makeEncryptor() -> Rabbit.Encryptor {
-        return Encryptor(rabbit: self)
-    }
-
-    public func makeDecryptor() -> Rabbit.Decryptor {
-        return Decryptor(rabbit: self)
-    }
-}
-
 // MARK: Cipher
 extension Rabbit: Cipher {
     public func encrypt(bytes: [UInt8]) -> [UInt8] {

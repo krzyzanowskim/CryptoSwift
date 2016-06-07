@@ -162,47 +162,6 @@ final public class ChaCha20: BlockCipher {
     }
 }
 
-extension ChaCha20 {
-    public struct Encryptor: Cryptor {
-        let chacha20: ChaCha20
-
-        init(chacha20: ChaCha20) {
-            self.chacha20 = chacha20
-        }
-
-        public func update(withBytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
-            return try chacha20.encrypt(bytes)
-        }
-    }
-}
-
-extension ChaCha20 {
-    public struct Decryptor: Cryptor {
-        let chacha20: ChaCha20
-
-        init(chacha20: ChaCha20) {
-            self.chacha20 = chacha20
-        }
-
-        public func update(withBytes bytes: [UInt8], isLast: Bool = false) throws -> [UInt8] {
-            return try chacha20.decrypt(bytes)
-        }
-    }
-}
-
-// MARK: - Cipher
-
-extension ChaCha20: UpdatableCryptor {
-
-    public func makeEncryptor() -> ChaCha20.Encryptor {
-        return Encryptor(chacha20: self)
-    }
-
-    public func makeDecryptor() -> ChaCha20.Decryptor {
-        return Decryptor(chacha20: self)
-    }
-}
-
 // MARK: Cipher
 extension ChaCha20: Cipher {
     public func encrypt(bytes:[UInt8]) throws -> [UInt8] {

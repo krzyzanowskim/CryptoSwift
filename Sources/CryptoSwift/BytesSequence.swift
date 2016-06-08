@@ -18,7 +18,7 @@ struct BytesSequence: SequenceType {
             let end = min(self.chunkSize, self.data.count - offset)
             let result = self.data[offset..<offset + end]
             offset += result.count
-            return result.count > 0 ? result : nil
+            return !result.isEmpty ? result : nil
         }
     }
 }

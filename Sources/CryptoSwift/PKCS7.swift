@@ -37,8 +37,8 @@ public struct PKCS7: Padding {
     }
 
     public func remove(bytes: [UInt8], blockSize:Int?) -> [UInt8] {
-        assert(bytes.count > 0, "Need bytes to remove padding")
-        guard bytes.count > 0, let lastByte = bytes.last else {
+        assert(!bytes.isEmpty, "Need bytes to remove padding")
+        guard !bytes.isEmpty, let lastByte = bytes.last else {
             return bytes
         }
 

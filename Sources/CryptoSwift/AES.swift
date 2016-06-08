@@ -95,7 +95,7 @@ final public class AES: BlockCipher {
         self.blockMode = blockMode
         self.padding = padding
 
-        if let iv = iv where iv.count > 0 {
+        if let iv = iv where !iv.isEmpty {
             self.iv = iv
         } else {
             let defaultIV = [UInt8](count: AES.blockSize, repeatedValue: 0)
@@ -445,7 +445,7 @@ extension AES {
         }
 
         mutating public func update(withBytes bytes:[UInt8], isLast: Bool = false) throws -> [UInt8] {
-            if bytes.count == 0 {
+            if bytes.isEmpty {
                 return bytes;
             }
 

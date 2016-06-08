@@ -6,6 +6,8 @@
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
 
+import Darwin
+
 public extension PKCS5 {
     /// A key derivation function.
     ///
@@ -31,7 +33,7 @@ public extension PKCS5 {
         public init(password: [UInt8], salt: [UInt8], iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */, variant: HMAC.Variant = .sha256) throws {
             precondition(iterations > 0)
             
-            guard let prf = HMAC(key: password, variant: variant) where iterations > 0 && password.count > 0 && salt.count > 0 else {
+            guard let prf = HMAC(key: password, variant: variant) where iterations > 0 && !password.isEmpty && !salt.isEmpty else {
                 throw Error.InvalidInput
             }
 

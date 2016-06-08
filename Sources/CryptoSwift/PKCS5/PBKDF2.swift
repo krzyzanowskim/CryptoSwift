@@ -6,7 +6,11 @@
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
 
-import Darwin
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin
+#endif
 
 public extension PKCS5 {
     /// A key derivation function.

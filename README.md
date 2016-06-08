@@ -144,6 +144,9 @@ You can use [Swift Package Manager](https://swift.org/package-manager/) and spec
 * [Rabbit](#rabbit)
 * [Advanced Encryption Standard (AES)](#aes)
 
+
+also check [Playground](/CryptoSwift.playground/Contents.swift)
+
 #####Basics
 
 ```swift
@@ -272,6 +275,8 @@ ciphertext += try encryptor.update(withBytes: "eget urna mollis ".utf8.map({$0})
 ciphertext += try encryptor.update(withBytes: "ornare vel eu leo.".utf8.map({$0}))
 ciphertext += try encryptor.finish()
 ```
+
+See [Playground](/CryptoSwift.playground/Contents.swift) for sample code to work with streams.
 
 Check this helper functions to work with **Base64** encoded data directly:
 - .decryptBase64ToString()

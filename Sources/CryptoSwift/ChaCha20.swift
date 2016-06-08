@@ -34,18 +34,6 @@ final public class ChaCha20: BlockCipher {
         }
     }
     
-    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
-        guard context != nil else {
-            throw Error.MissingContext
-        }
-        
-        return try encryptBytes(bytes)
-    }
-    
-    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
-        return try encrypt(bytes)
-    }
-    
     private final func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
         if (input.count != stateSize) {
             return nil;
@@ -174,15 +162,18 @@ final public class ChaCha20: BlockCipher {
     }
 }
 
-// MARK: - Cipher
+// MARK: Cipher
+extension ChaCha20: Cipher {
+    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
+        guard context != nil else {
+            throw Error.MissingContext
+        }
 
-extension ChaCha20: CipherProtocol {
-    public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
-        return try self.encrypt(bytes)
+        return try encryptBytes(bytes)
     }
-    
-    public func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8] {
-        return try self.decrypt(bytes)
+
+    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
+        return try encrypt(bytes)
     }
 }
 
@@ -196,5 +187,6 @@ private func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
         value = value | UInt32(bytes[j]) << (8 * i)
     }
 
-    return value}
+    return value
+}
 

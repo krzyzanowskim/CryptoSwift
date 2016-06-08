@@ -1,5 +1,5 @@
 //
-//  CipherProtocol.swift
+//  Cryptors.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 30/08/14.
@@ -12,19 +12,21 @@
     import Darwin
 #endif
 
-public enum CipherError: ErrorType {
-    case Encrypt
-    case Decrypt
-}
+public protocol Cryptors {
+    associatedtype EncryptorType: UpdatableCryptor
+    associatedtype DecryptorType: UpdatableCryptor
 
-public protocol CipherProtocol {
-    func cipherEncrypt(bytes: [UInt8]) throws -> [UInt8]
-    func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8]
-    
+    /// Cryptor suitable for encryption
+    func makeEncryptor() -> EncryptorType
+
+    /// Cryptor suitable for decryption
+    func makeDecryptor() -> DecryptorType
+
+    /// Generate array of random bytes. Helper function.
     static func randomIV(blockSize:Int) -> [UInt8]
 }
 
-extension CipherProtocol {
+extension Cryptors {
     static public func randomIV(blockSize:Int) -> [UInt8] {
         var randomIV:[UInt8] = [UInt8]();
         for _ in 0..<blockSize {

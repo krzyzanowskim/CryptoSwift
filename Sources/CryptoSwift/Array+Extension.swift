@@ -17,7 +17,7 @@ extension Array {
             words.append(word)
         }
         let reminder = Array(self.suffix(self.count % chunksize))
-        if (reminder.count > 0) {
+        if !reminder.isEmpty {
             words.append(reminder)
         }
         return words

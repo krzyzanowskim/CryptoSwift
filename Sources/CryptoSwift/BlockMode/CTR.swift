@@ -8,64 +8,37 @@
 //  Counter (CTR)
 //
 
-struct CTRModeEncryptGenerator: BlockModeGenerator {
+struct CTRModeWorker: BlockModeWorker {
     typealias Element = Array<UInt8>
 
+    let cipherOperation: CipherOperationOnBlock
     private let iv: Element
-    private let inputGenerator: AnyGenerator<Element>
-
-    private let cipherOperation: CipherOperationOnBlock
     private var counter: UInt = 0
 
-    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Array<UInt8>>) {
+    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock) {
         self.iv = iv
         self.cipherOperation = cipherOperation
-        self.inputGenerator = inputGenerator
     }
 
-    mutating func next() -> Element? {
-        guard let plaintext = inputGenerator.next() else {
-            return nil
-        }
-
-        let nonce = buildNonce(iv, counter: UInt64(counter))
-        counter = counter + 1
-        if let encrypted = cipherOperation(block: nonce) {
-            return xor(plaintext, encrypted)
-        }
-
-        return nil
-    }
-}
-
-struct CTRModeDecryptGenerator: BlockModeGenerator {
-    typealias Element = Array<UInt8>
-
-    private let iv: Element
-    private let inputGenerator: AnyGenerator<Element>
-
-    private let cipherOperation: CipherOperationOnBlock
-    private var counter: UInt = 0
-
-    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock, inputGenerator: AnyGenerator<Element>) {
-        self.iv = iv
-        self.cipherOperation = cipherOperation
-        self.inputGenerator = inputGenerator
-    }
-
-    mutating func next() -> Element? {
-        guard let ciphertext = inputGenerator.next() else {
-            return nil
-        }
-
+    mutating func encrypt(plaintext: Array<UInt8>) -> [UInt8] {
         let nonce = buildNonce(iv, counter: UInt64(counter))
         counter = counter + 1
 
-        if let decrypted = cipherOperation(block: nonce) {
-            return xor(decrypted, ciphertext)
+        guard let ciphertext = cipherOperation(block: nonce) else {
+            return plaintext
         }
 
-        return nil
+        return xor(plaintext, ciphertext)
+    }
+
+    mutating func decrypt(ciphertext: Array<UInt8>) -> [UInt8] {
+        let nonce = buildNonce(iv, counter: UInt64(counter))
+        counter = counter + 1
+
+        guard let plaintext = cipherOperation(block: nonce) else {
+            return ciphertext
+        }
+        return xor(plaintext, ciphertext)
     }
 }
 

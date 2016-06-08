@@ -47,20 +47,20 @@ public extension CSArrayType where Generator.Element == UInt8 {
         return Hash.sha512(cs_arrayValue()).calculate()
     }
     
-    public func crc32(seed: UInt32? = nil) -> [Generator.Element] {
-        return Hash.crc32(cs_arrayValue(), seed: seed).calculate()
+    public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> [Generator.Element] {
+        return Hash.crc32(cs_arrayValue(), seed: seed, reflect: reflect).calculate()
     }
     
     public func crc16(seed: UInt16? = nil) -> [Generator.Element] {
         return Hash.crc16(cs_arrayValue(), seed: seed).calculate()
     }
     
-    public func encrypt(cipher: CipherProtocol) throws -> [Generator.Element] {
-        return try cipher.cipherEncrypt(cs_arrayValue())
+    public func encrypt(cipher: Cipher) throws -> [Generator.Element] {
+        return try cipher.encrypt(cs_arrayValue())
     }
 
-    public func decrypt(cipher: CipherProtocol) throws -> [Generator.Element] {
-        return try cipher.cipherDecrypt(cs_arrayValue())
+    public func decrypt(cipher: Cipher) throws -> [Generator.Element] {
+        return try cipher.decrypt(cs_arrayValue())
     }
     
     public func authenticate(authenticator: Authenticator) throws -> [Generator.Element] {

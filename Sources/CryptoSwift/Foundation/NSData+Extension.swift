@@ -60,8 +60,8 @@ extension NSData {
         return NSData.withBytes(result)
     }
 
-    public func crc32(seed: UInt32? = nil) -> NSData? {
-        let result = Hash.crc32(self.arrayOfBytes(), seed: seed).calculate()
+    public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> NSData? {
+        let result = Hash.crc32(self.arrayOfBytes(), seed: seed, reflect: reflect).calculate()
         return NSData.withBytes(result)
     }
 
@@ -70,13 +70,13 @@ extension NSData {
         return NSData.withBytes(result)
     }
 
-    public func encrypt(cipher: CipherProtocol) throws -> NSData {
-        let encrypted = try cipher.cipherEncrypt(self.arrayOfBytes())
+    public func encrypt(cipher: Cipher) throws -> NSData {
+        let encrypted = try cipher.encrypt(self.arrayOfBytes())
         return NSData.withBytes(encrypted)
     }
 
-    public func decrypt(cipher: CipherProtocol) throws -> NSData {
-        let decrypted = try cipher.cipherDecrypt(self.arrayOfBytes())
+    public func decrypt(cipher: Cipher) throws -> NSData {
+        let decrypted = try cipher.decrypt(self.arrayOfBytes())
         return NSData.withBytes(decrypted)
     }
     

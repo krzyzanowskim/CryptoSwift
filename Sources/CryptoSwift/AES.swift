@@ -12,12 +12,12 @@ private typealias Key = SecureBytes
 
 final public class AES: BlockCipher {
     public enum Error: ErrorType {
-        case BlockSizeExceeded
+        case DataPaddingRequired
         case InvalidKeyOrInitializationVector
         case InvalidInitializationVector
     }
     
-    public enum AESVariant:Int {
+    public enum AESVariant: Int {
         case aes128 = 1, aes192, aes256
         
         var Nk:Int { // Nk words
@@ -32,8 +32,8 @@ final public class AES: BlockCipher {
             return Nk + 6
         }
     }
-    
-    public let blockMode:CipherBlockMode
+
+    private let blockMode:BlockMode
     public static let blockSize:Int = 16 // 128 /8
     
     public var variant:AESVariant {
@@ -90,89 +90,65 @@ final public class AES: BlockCipher {
     private var U3:[UInt32] = [0x0, 0x90e0b0d, 0x121c161a, 0x1b121d17, 0x24382c34, 0x2d362739, 0x36243a2e, 0x3f2a3123, 0x48705868, 0x417e5365, 0x5a6c4e72, 0x5362457f, 0x6c48745c, 0x65467f51, 0x7e546246, 0x775a694b, 0x90e0b0d0, 0x99eebbdd, 0x82fca6ca, 0x8bf2adc7, 0xb4d89ce4, 0xbdd697e9, 0xa6c48afe, 0xafca81f3, 0xd890e8b8, 0xd19ee3b5, 0xca8cfea2, 0xc382f5af, 0xfca8c48c, 0xf5a6cf81, 0xeeb4d296, 0xe7bad99b, 0x3bdb7bbb, 0x32d570b6, 0x29c76da1, 0x20c966ac, 0x1fe3578f, 0x16ed5c82, 0xdff4195, 0x4f14a98, 0x73ab23d3, 0x7aa528de, 0x61b735c9, 0x68b93ec4, 0x57930fe7, 0x5e9d04ea, 0x458f19fd, 0x4c8112f0, 0xab3bcb6b, 0xa235c066, 0xb927dd71, 0xb029d67c, 0x8f03e75f, 0x860dec52, 0x9d1ff145, 0x9411fa48, 0xe34b9303, 0xea45980e, 0xf1578519, 0xf8598e14, 0xc773bf37, 0xce7db43a, 0xd56fa92d, 0xdc61a220, 0x76adf66d, 0x7fa3fd60, 0x64b1e077, 0x6dbfeb7a, 0x5295da59, 0x5b9bd154, 0x4089cc43, 0x4987c74e, 0x3eddae05, 0x37d3a508, 0x2cc1b81f, 0x25cfb312, 0x1ae58231, 0x13eb893c, 0x8f9942b, 0x1f79f26, 0xe64d46bd, 0xef434db0, 0xf45150a7, 0xfd5f5baa, 0xc2756a89, 0xcb7b6184, 0xd0697c93, 0xd967779e, 0xae3d1ed5, 0xa73315d8, 0xbc2108cf, 0xb52f03c2, 0x8a0532e1, 0x830b39ec, 0x981924fb, 0x91172ff6, 0x4d768dd6, 0x447886db, 0x5f6a9bcc, 0x566490c1, 0x694ea1e2, 0x6040aaef, 0x7b52b7f8, 0x725cbcf5, 0x506d5be, 0xc08deb3, 0x171ac3a4, 0x1e14c8a9, 0x213ef98a, 0x2830f287, 0x3322ef90, 0x3a2ce49d, 0xdd963d06, 0xd498360b, 0xcf8a2b1c, 0xc6842011, 0xf9ae1132, 0xf0a01a3f, 0xebb20728, 0xe2bc0c25, 0x95e6656e, 0x9ce86e63, 0x87fa7374, 0x8ef47879, 0xb1de495a, 0xb8d04257, 0xa3c25f40, 0xaacc544d, 0xec41f7da, 0xe54ffcd7, 0xfe5de1c0, 0xf753eacd, 0xc879dbee, 0xc177d0e3, 0xda65cdf4, 0xd36bc6f9, 0xa431afb2, 0xad3fa4bf, 0xb62db9a8, 0xbf23b2a5, 0x80098386, 0x8907888b, 0x9215959c, 0x9b1b9e91, 0x7ca1470a, 0x75af4c07, 0x6ebd5110, 0x67b35a1d, 0x58996b3e, 0x51976033, 0x4a857d24, 0x438b7629, 0x34d11f62, 0x3ddf146f, 0x26cd0978, 0x2fc30275, 0x10e93356, 0x19e7385b, 0x2f5254c, 0xbfb2e41, 0xd79a8c61, 0xde94876c, 0xc5869a7b, 0xcc889176, 0xf3a2a055, 0xfaacab58, 0xe1beb64f, 0xe8b0bd42, 0x9fead409, 0x96e4df04, 0x8df6c213, 0x84f8c91e, 0xbbd2f83d, 0xb2dcf330, 0xa9ceee27, 0xa0c0e52a, 0x477a3cb1, 0x4e7437bc, 0x55662aab, 0x5c6821a6, 0x63421085, 0x6a4c1b88, 0x715e069f, 0x78500d92, 0xf0a64d9, 0x6046fd4, 0x1d1672c3, 0x141879ce, 0x2b3248ed, 0x223c43e0, 0x392e5ef7, 0x302055fa, 0x9aec01b7, 0x93e20aba, 0x88f017ad, 0x81fe1ca0, 0xbed42d83, 0xb7da268e, 0xacc83b99, 0xa5c63094, 0xd29c59df, 0xdb9252d2, 0xc0804fc5, 0xc98e44c8, 0xf6a475eb, 0xffaa7ee6, 0xe4b863f1, 0xedb668fc, 0xa0cb167, 0x302ba6a, 0x1810a77d, 0x111eac70, 0x2e349d53, 0x273a965e, 0x3c288b49, 0x35268044, 0x427ce90f, 0x4b72e202, 0x5060ff15, 0x596ef418, 0x6644c53b, 0x6f4ace36, 0x7458d321, 0x7d56d82c, 0xa1377a0c, 0xa8397101, 0xb32b6c16, 0xba25671b, 0x850f5638, 0x8c015d35, 0x97134022, 0x9e1d4b2f, 0xe9472264, 0xe0492969, 0xfb5b347e, 0xf2553f73, 0xcd7f0e50, 0xc471055d, 0xdf63184a, 0xd66d1347, 0x31d7cadc, 0x38d9c1d1, 0x23cbdcc6, 0x2ac5d7cb, 0x15efe6e8, 0x1ce1ede5, 0x7f3f0f2, 0xefdfbff, 0x79a792b4, 0x70a999b9, 0x6bbb84ae, 0x62b58fa3, 0x5d9fbe80, 0x5491b58d, 0x4f83a89a, 0x468da397]
     private var U4:[UInt32] = [0x0, 0xe0b0d09, 0x1c161a12, 0x121d171b, 0x382c3424, 0x3627392d, 0x243a2e36, 0x2a31233f, 0x70586848, 0x7e536541, 0x6c4e725a, 0x62457f53, 0x48745c6c, 0x467f5165, 0x5462467e, 0x5a694b77, 0xe0b0d090, 0xeebbdd99, 0xfca6ca82, 0xf2adc78b, 0xd89ce4b4, 0xd697e9bd, 0xc48afea6, 0xca81f3af, 0x90e8b8d8, 0x9ee3b5d1, 0x8cfea2ca, 0x82f5afc3, 0xa8c48cfc, 0xa6cf81f5, 0xb4d296ee, 0xbad99be7, 0xdb7bbb3b, 0xd570b632, 0xc76da129, 0xc966ac20, 0xe3578f1f, 0xed5c8216, 0xff41950d, 0xf14a9804, 0xab23d373, 0xa528de7a, 0xb735c961, 0xb93ec468, 0x930fe757, 0x9d04ea5e, 0x8f19fd45, 0x8112f04c, 0x3bcb6bab, 0x35c066a2, 0x27dd71b9, 0x29d67cb0, 0x3e75f8f, 0xdec5286, 0x1ff1459d, 0x11fa4894, 0x4b9303e3, 0x45980eea, 0x578519f1, 0x598e14f8, 0x73bf37c7, 0x7db43ace, 0x6fa92dd5, 0x61a220dc, 0xadf66d76, 0xa3fd607f, 0xb1e07764, 0xbfeb7a6d, 0x95da5952, 0x9bd1545b, 0x89cc4340, 0x87c74e49, 0xddae053e, 0xd3a50837, 0xc1b81f2c, 0xcfb31225, 0xe582311a, 0xeb893c13, 0xf9942b08, 0xf79f2601, 0x4d46bde6, 0x434db0ef, 0x5150a7f4, 0x5f5baafd, 0x756a89c2, 0x7b6184cb, 0x697c93d0, 0x67779ed9, 0x3d1ed5ae, 0x3315d8a7, 0x2108cfbc, 0x2f03c2b5, 0x532e18a, 0xb39ec83, 0x1924fb98, 0x172ff691, 0x768dd64d, 0x7886db44, 0x6a9bcc5f, 0x6490c156, 0x4ea1e269, 0x40aaef60, 0x52b7f87b, 0x5cbcf572, 0x6d5be05, 0x8deb30c, 0x1ac3a417, 0x14c8a91e, 0x3ef98a21, 0x30f28728, 0x22ef9033, 0x2ce49d3a, 0x963d06dd, 0x98360bd4, 0x8a2b1ccf, 0x842011c6, 0xae1132f9, 0xa01a3ff0, 0xb20728eb, 0xbc0c25e2, 0xe6656e95, 0xe86e639c, 0xfa737487, 0xf478798e, 0xde495ab1, 0xd04257b8, 0xc25f40a3, 0xcc544daa, 0x41f7daec, 0x4ffcd7e5, 0x5de1c0fe, 0x53eacdf7, 0x79dbeec8, 0x77d0e3c1, 0x65cdf4da, 0x6bc6f9d3, 0x31afb2a4, 0x3fa4bfad, 0x2db9a8b6, 0x23b2a5bf, 0x9838680, 0x7888b89, 0x15959c92, 0x1b9e919b, 0xa1470a7c, 0xaf4c0775, 0xbd51106e, 0xb35a1d67, 0x996b3e58, 0x97603351, 0x857d244a, 0x8b762943, 0xd11f6234, 0xdf146f3d, 0xcd097826, 0xc302752f, 0xe9335610, 0xe7385b19, 0xf5254c02, 0xfb2e410b, 0x9a8c61d7, 0x94876cde, 0x869a7bc5, 0x889176cc, 0xa2a055f3, 0xacab58fa, 0xbeb64fe1, 0xb0bd42e8, 0xead4099f, 0xe4df0496, 0xf6c2138d, 0xf8c91e84, 0xd2f83dbb, 0xdcf330b2, 0xceee27a9, 0xc0e52aa0, 0x7a3cb147, 0x7437bc4e, 0x662aab55, 0x6821a65c, 0x42108563, 0x4c1b886a, 0x5e069f71, 0x500d9278, 0xa64d90f, 0x46fd406, 0x1672c31d, 0x1879ce14, 0x3248ed2b, 0x3c43e022, 0x2e5ef739, 0x2055fa30, 0xec01b79a, 0xe20aba93, 0xf017ad88, 0xfe1ca081, 0xd42d83be, 0xda268eb7, 0xc83b99ac, 0xc63094a5, 0x9c59dfd2, 0x9252d2db, 0x804fc5c0, 0x8e44c8c9, 0xa475ebf6, 0xaa7ee6ff, 0xb863f1e4, 0xb668fced, 0xcb1670a, 0x2ba6a03, 0x10a77d18, 0x1eac7011, 0x349d532e, 0x3a965e27, 0x288b493c, 0x26804435, 0x7ce90f42, 0x72e2024b, 0x60ff1550, 0x6ef41859, 0x44c53b66, 0x4ace366f, 0x58d32174, 0x56d82c7d, 0x377a0ca1, 0x397101a8, 0x2b6c16b3, 0x25671bba, 0xf563885, 0x15d358c, 0x13402297, 0x1d4b2f9e, 0x472264e9, 0x492969e0, 0x5b347efb, 0x553f73f2, 0x7f0e50cd, 0x71055dc4, 0x63184adf, 0x6d1347d6, 0xd7cadc31, 0xd9c1d138, 0xcbdcc623, 0xc5d7cb2a, 0xefe6e815, 0xe1ede51c, 0xf3f0f207, 0xfdfbff0e, 0xa792b479, 0xa999b970, 0xbb84ae6b, 0xb58fa362, 0x9fbe805d, 0x91b58d54, 0x83a89a4f, 0x8da39746]
     
-    public init(key:[UInt8], iv:[UInt8]? = nil, blockMode:CipherBlockMode = .CBC, padding: Padding = PKCS7()) throws {
+    public init(key:[UInt8], iv:[UInt8]? = nil, blockMode:BlockMode = .CBC, padding: Padding = PKCS7()) throws {
         self.key = Key(bytes: key)
         self.blockMode = blockMode
         self.padding = padding
 
-        if let iv = iv where iv.count > 0 {
+        if let iv = iv where !iv.isEmpty {
             self.iv = iv
         } else {
             let defaultIV = [UInt8](count: AES.blockSize, repeatedValue: 0)
             self.iv = defaultIV
         }
 
-        if (blockMode.options.contains(.InitializationVectorRequired) && iv?.count != AES.blockSize) {
+        if (blockMode.options.contains(.InitializationVectorRequired) && self.iv.count != AES.blockSize) {
             assert(false, "Block size and Initialization Vector must be the same length!")
             throw Error.InvalidInitializationVector
         }
     }
+}
 
-    /**
-    Encrypt message. If padding is necessary, then PKCS7 padding is added and needs to be removed after decryption.
-    
-    - parameter message: Plaintext data
-    - parameter padding: Optional padding
-    
-    - returns: Encrypted data
-    */
-    
-    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
-        let finalBytes = self.padding.add(bytes, blockSize: AES.blockSize)
-
-        if blockMode.options.contains(.PaddingRequired) && (finalBytes.count % AES.blockSize != 0) {
-            throw Error.BlockSizeExceeded
-        }
-
-        let blocks = finalBytes.chunks(AES.blockSize)
-        let encryptGenerator = blockMode.encryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
-
-        var out = [UInt8]()
-        out.reserveCapacity(bytes.count)
-        for processedBlock in AnySequence<Array<UInt8>>({ encryptGenerator }) {
-            out.appendContentsOf(processedBlock)
-        }
-        return out
-    }
-
+// MARK: Private
+extension AES {
     private func encryptBlock(block:[UInt8]) -> [UInt8]? {
         let rounds = self.variant.Nr
         let rk = self.expandedKey
         var b = toUInt32Array(block[block.startIndex..<block.endIndex])
 
         var t = [UInt32](count: 4, repeatedValue: 0)
-        
+
         for r in 0..<rounds - 1 {
             t[0] = b[0] ^ rk[r][0]
             t[1] = b[1] ^ rk[r][1]
             t[2] = b[2] ^ rk[r][2]
             t[3] = b[3] ^ rk[r][3]
-            
+
             let lb00 = T0[Int(t[0] & 0xFF)]
             let lb01 = T1[Int((t[1] >> 8) & 0xFF)]
             let lb02 = T2[Int((t[2] >> 16) & 0xFF)]
             let lb03 = T3[Int(t[3] >> 24)]
             b[0] = lb00 ^ lb01 ^ lb02 ^ lb03
-            
+
             let lb10 = T0[Int(t[1] & 0xFF)]
             let lb11 = T1[Int((t[2] >> 8) & 0xFF)]
             let lb12 = T2[Int((t[3] >> 16) & 0xFF)]
             let lb13 = T3[Int(t[0] >> 24)]
             b[1] = lb10 ^ lb11 ^ lb12 ^ lb13
-            
+
             let lb20 = T0[Int(t[2] & 0xFF)]
             let lb21 = T1[Int((t[3] >> 8) & 0xFF)]
             let lb22 = T2[Int((t[0] >> 16) & 0xFF)]
             let lb23 = T3[Int(t[1] >> 24)]
             b[2] = lb20 ^ lb21 ^ lb22 ^ lb23
-            
+
             let lb30 = T0[Int(t[3] & 0xFF)]
             let lb31 = T1[Int((t[0] >> 8) & 0xFF)]
             let lb32 = T2[Int((t[1] >> 16) & 0xFF)]
             let lb33 = T3[Int(t[2] >> 24)]
             b[3] = lb30 ^ lb31 ^ lb32 ^ lb33
         }
-        
+
         // last round
         let r = rounds - 1
 
@@ -186,7 +162,7 @@ final public class AES: BlockCipher {
         b[1] = F1(t[1], t[2], t[3], t[0]) ^ rk[rounds][1]
         b[2] = F1(t[2], t[3], t[0], t[1]) ^ rk[rounds][2]
         b[3] = F1(t[3], t[0], t[1], t[2]) ^ rk[rounds][3]
-        
+
         var out = [UInt8]()
         out.reserveCapacity(b.count * 4)
         for num in b {
@@ -195,105 +171,80 @@ final public class AES: BlockCipher {
             out.append(UInt8((num >> 16) & 0xFF))
             out.append(UInt8((num >> 24) & 0xFF))
         }
-        
+
         return out
     }
-    
-    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
-        if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
-            throw Error.BlockSizeExceeded
-        }
 
-        let blocks = bytes.chunks(AES.blockSize)
-        var out = [UInt8]()
-        out.reserveCapacity(bytes.count)
-        switch (blockMode) {
-        case .CFB, .OFB, .CTR:
-            // CFB, OFB, CTR uses encryptBlock to decrypt
-            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: encryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
-            for processedBlock in AnySequence<Array<UInt8>>({ decryptGenerator }) {
-                out.appendContentsOf(processedBlock)
-            }
-        default:
-            let decryptGenerator = blockMode.decryptGenerator(iv, cipherOperation: decryptBlock, inputGenerator: AnyGenerator<Array<UInt8>>(blocks.generate()))
-            for processedBlock in AnySequence<Array<UInt8>>({ decryptGenerator }) {
-                out.appendContentsOf(processedBlock)
-            }
-        }
-        
-        return self.padding.remove(out, blockSize: AES.blockSize)
-    }
-    
     private func decryptBlock(block:[UInt8]) -> [UInt8]? {
         let rounds = self.variant.Nr
         let rk = expandedKeyInv
         var b = toUInt32Array(block[block.startIndex..<block.endIndex])
 
         var t = [UInt32](count: 4, repeatedValue: 0)
-        
+
         for r in (2...rounds).reverse() {
             t[0] = b[0] ^ rk[r][0]
             t[1] = b[1] ^ rk[r][1]
             t[2] = b[2] ^ rk[r][2]
             t[3] = b[3] ^ rk[r][3]
-            
+
             let b00 = T0_INV[Int(t[0] & 0xFF)]
             let b01 = T1_INV[Int((t[3] >> 8) & 0xFF)]
             let b02 = T2_INV[Int((t[2] >> 16) & 0xFF)]
             let b03 = T3_INV[Int(t[1] >> 24)]
             b[0] = b00 ^ b01 ^ b02 ^ b03
-            
+
             let b10 = T0_INV[Int(t[1] & 0xFF)]
             let b11 = T1_INV[Int((t[0] >> 8) & 0xFF)]
             let b12 = T2_INV[Int((t[3] >> 16) & 0xFF)]
             let b13 = T3_INV[Int(t[2] >> 24)]
             b[1] = b10 ^ b11 ^ b12 ^ b13
-            
+
             let b20 = T0_INV[Int(t[2] & 0xFF)]
             let b21 = T1_INV[Int((t[1] >> 8) & 0xFF)]
             let b22 = T2_INV[Int((t[0] >> 16) & 0xFF)]
             let b23 = T3_INV[Int(t[3] >> 24)]
             b[2] = b20 ^ b21 ^ b22 ^ b23
-            
+
             let b30 = T0_INV[Int(t[3] & 0xFF)]
             let b31 = T1_INV[Int((t[2] >> 8) & 0xFF)]
             let b32 = T2_INV[Int((t[1] >> 16) & 0xFF)]
             let b33 = T3_INV[Int(t[0] >> 24)]
             b[3] = b30 ^ b31 ^ b32 ^ b33
         }
-        
+
         // last round
         t[0] = b[0] ^ rk[1][0]
         t[1] = b[1] ^ rk[1][1]
         t[2] = b[2] ^ rk[1][2]
         t[3] = b[3] ^ rk[1][3]
-        
+
         // rounds
-        
+
         let lb00 = sBoxInv[Int(B0(t[0]))]
         let lb01 = (sBoxInv[Int(B1(t[3]))] << 8)
         let lb02 = (sBoxInv[Int(B2(t[2]))] << 16)
         let lb03 = (sBoxInv[Int(B3(t[1]))] << 24)
         b[0] = lb00 | lb01 | lb02 | lb03 ^ rk[0][0]
-        
+
         let lb10 = sBoxInv[Int(B0(t[1]))]
         let lb11 = (sBoxInv[Int(B1(t[0]))] << 8)
         let lb12 = (sBoxInv[Int(B2(t[3]))] << 16)
         let lb13 = (sBoxInv[Int(B3(t[2]))] << 24)
         b[1] = lb10 | lb11 | lb12 | lb13 ^ rk[0][1]
-        
+
         let lb20 = sBoxInv[Int(B0(t[2]))]
         let lb21 = (sBoxInv[Int(B1(t[1]))] << 8)
         let lb22 = (sBoxInv[Int(B2(t[0]))] << 16)
         let lb23 = (sBoxInv[Int(B3(t[3]))] << 24)
         b[2] = lb20 | lb21 | lb22 | lb23 ^ rk[0][2]
-        
+
         let lb30 = sBoxInv[Int(B0(t[3]))]
         let lb31 = (sBoxInv[Int(B1(t[2]))] << 8)
         let lb32 = (sBoxInv[Int(B2(t[1]))] << 16)
         let lb33 = (sBoxInv[Int(B3(t[0]))] << 24)
         b[3] = lb30 | lb31 | lb32 | lb33 ^ rk[0][3]
-        
+
         var out = [UInt8]()
         out.reserveCapacity(b.count * 4)
         for num in b {
@@ -302,35 +253,35 @@ final public class AES: BlockCipher {
             out.append(UInt8((num >> 16) & 0xFF))
             out.append(UInt8((num >> 24) & 0xFF))
         }
-        
+
         return out
     }
-    
+
     private func expandKeyInv(key: Key, variant: AESVariant) -> [[UInt32]] {
         let rounds = variant.Nr
         var rk2:[[UInt32]] = expandKey(key, variant: variant)
-        
+
         for r in 1..<rounds {
             var w:UInt32
-            
+
             w = rk2[r][0];
             rk2[r][0] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
-            
+
             w = rk2[r][1];
             rk2[r][1] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
-            
+
             w = rk2[r][2];
             rk2[r][2] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
-            
+
             w = rk2[r][3];
             rk2[r][3] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
         }
-        
+
         return rk2
     }
-    
+
     private func expandKey(key:Key, variant:AESVariant) -> [[UInt32]] {
-        
+
         func convertExpandedKey(expanded:[UInt8]) -> [[UInt32]] {
             var arr = [UInt32]()
             for idx in expanded.startIndex.stride(to: expanded.endIndex, by: 4) {
@@ -338,19 +289,19 @@ final public class AES: BlockCipher {
                 let num = UInt32.withBytes(four)
                 arr.append(num)
             }
-            
+
             var allarr = [[UInt32]]()
             for idx in arr.startIndex.stride(to: arr.endIndex, by: 4) {
                 allarr.append(Array(arr[idx..<idx.advancedBy(4)]))
             }
             return allarr
         }
-        
+
         /*
-        * Function used in the Key Expansion routine that takes a four-byte
-        * input word and applies an S-box to each of the four bytes to
-        * produce an output word.
-        */
+         * Function used in the Key Expansion routine that takes a four-byte
+         * input word and applies an S-box to each of the four bytes to
+         * produce an output word.
+         */
         func subWord(word:[UInt8]) -> [UInt8] {
             var result = word
             for i in 0..<4 {
@@ -358,19 +309,19 @@ final public class AES: BlockCipher {
             }
             return result
         }
-        
+
         var w = [UInt8](count: variant.Nb * (variant.Nr + 1) * 4, repeatedValue: 0)
         for i in 0..<variant.Nk {
             for wordIdx in 0..<4 {
                 w[(4*i)+wordIdx] = key[(4*i)+wordIdx]
             }
         }
-        
+
         var tmp:[UInt8]
 
         for i in variant.Nk..<variant.Nb * (variant.Nr + 1) {
             tmp = [UInt8](count: 4, repeatedValue: 0)
-            
+
             for wordIdx in 0..<4 {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
             }
@@ -380,7 +331,7 @@ final public class AES: BlockCipher {
             } else if (variant.Nk > 6 && (i % variant.Nk) == 4) {
                 tmp = subWord(tmp)
             }
-            
+
             // xor array of bytes
             for wordIdx in 0..<4 {
                 w[4*i+wordIdx] = w[4*(i-variant.Nk)+wordIdx]^tmp[wordIdx];
@@ -388,10 +339,7 @@ final public class AES: BlockCipher {
         }
         return convertExpandedKey(w)
     }
-}
 
-extension AES {
-    
     private func B0(x: UInt32) -> UInt32 {
         return x & 0xFF
     }
@@ -441,14 +389,127 @@ extension AES {
     }
 }
 
-extension AES: CipherProtocol {
-    // MARK: - Cipher
-    
-    public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
-        return try self.encrypt(bytes)
+// MARK: Encryptor
+extension AES {
+    public struct Encryptor: UpdatableCryptor {
+        private var worker: BlockModeWorker
+        private let padding: Padding
+        private var accumulated = [UInt8]()
+        private let paddingRequired: Bool
+
+        init(aes: AES) {
+            self.padding = aes.padding;
+            self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
+            self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
+        }
+
+        mutating public func update(withBytes bytes:[UInt8], isLast: Bool = false) throws -> [UInt8] {
+            self.accumulated += bytes
+
+            if (isLast) {
+                self.accumulated = padding.add(self.accumulated, blockSize: AES.blockSize)
+            }
+
+            //CTR does not require full block therefore work with anything
+            var encrypted = Array<UInt8>()
+            encrypted.reserveCapacity(self.accumulated.count)
+            for chunk in self.accumulated.chunks(AES.blockSize) {
+                if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
+                    encrypted += worker.encrypt(chunk)
+                    self.accumulated.removeFirst(chunk.count)
+                }
+            }
+            return encrypted
+        }
     }
+}
+
+// MARK: Decryptor
+extension AES {
+    public struct Decryptor: UpdatableCryptor {
+        private var worker: BlockModeWorker
+        private let padding: Padding
+        private var accumulated = [UInt8]()
+        private let paddingRequired: Bool
+
+        init(aes: AES) {
+            self.padding = aes.padding;
+
+            switch (aes.blockMode) {
+            case .CFB, .OFB, .CTR:
+                // CFB, OFB, CTR uses encryptBlock to decrypt
+                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
+            default:
+                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.decryptBlock)
+            }
+
+            self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired);
+        }
+
+        mutating public func update(withBytes bytes:[UInt8], isLast: Bool = false) throws -> [UInt8] {
+            self.accumulated += bytes
+
+            var plaintext = Array<UInt8>()
+            plaintext.reserveCapacity(self.accumulated.count)
+            for chunk in self.accumulated.chunks(AES.blockSize) {
+                if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
+                    plaintext += worker.decrypt(chunk)
+                    self.accumulated.removeFirst(chunk.count)
+                }
+            }
+
+            if (isLast) {
+                plaintext = padding.remove(plaintext, blockSize: AES.blockSize)
+            }
+
+            return plaintext
+        }
+    }
+}
+
+// MARK: Cryptors
+extension AES: Cryptors {
     
-    public func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8] {
-        return try self.decrypt(bytes)
+    public func makeEncryptor() -> AES.Encryptor {
+        return Encryptor(aes: self)
+    }
+
+    public func makeDecryptor() -> AES.Decryptor {
+        return Decryptor(aes: self)
+    }
+}
+
+// MARK: Cipher
+extension AES: Cipher {
+    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
+        let chunks = bytes.chunks(AES.blockSize)
+
+        var oneTimeCryptor = self.makeEncryptor()
+        var out = [UInt8]()
+        out.reserveCapacity(bytes.count)
+        for (idx, block) in chunks.enumerate() {
+            out += try oneTimeCryptor.update(withBytes: block, isLast: idx == max(0,chunks.count - 1))
+        }
+
+        if blockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
+            throw Error.DataPaddingRequired
+        }
+
+        return out
+    }
+
+    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
+        if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
+            throw Error.DataPaddingRequired
+        }
+
+        var oneTimeCryptor = self.makeDecryptor()
+        let chunks = bytes.chunks(AES.blockSize)
+        var out = [UInt8]()
+        out.reserveCapacity(bytes.count)
+        for (idx,chunk) in chunks.enumerate() {
+            out += try oneTimeCryptor.update(withBytes: chunk, isLast: idx == max(0,chunks.count - 1))
+        }
+        return out
     }
 }

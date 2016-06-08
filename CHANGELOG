@@ -1,3 +1,12 @@
+0.5
+- Added PBKDF1 https://tools.ietf.org/html/rfc2898#section-5.1
+- Added PBKDF2 https://tools.ietf.org/html/rfc2898#section-5.2
+- UpdatableCryptor protocol allows incremental encryption stream of data
+- CryptoSwift.playground
+- Docs update
+- Added reflection control to CRC-32 (Luís Silva)
+- Fix AES.init() (Pascal Pfiffner)
+
 0.4.1
 - fix NoPadding()
 

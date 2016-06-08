@@ -2,16 +2,15 @@
 
 Crypto related functions and helpers for [Swift](https://developer.apple.com/swift/) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
--------
-<p align="center">
-    <a href="#features">Features</a> &bull;
-    <a href="#contribution">Contribution</a> &bull;
-    <a href="#installation">Installation</a> &bull;
-    <a href="#usage">Usage</a> &bull; 
-    <a href="#author">Author</a> &bull;
-    <a href="#changelog">Changelog</a>
-</p>
--------
+#Table of Contents
+- [Requirements](#requirements)
+- [Features](#features)
+- [Contribution](#contribution)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Author](#author)
+- [License](#license)
+- [Changelog](#changelog)
 
 ##Requirements
 Good mood
@@ -22,9 +21,7 @@ Good mood
 - Convenient extensions for String and NSData
 - iOS, OSX, AppleTV, watchOS, Linux support
 
-##What implemented?
-
-#### Hash
+#### Hash (Digest)
 - [MD5](http://tools.ietf.org/html/rfc1321)
 - [SHA1](http://tools.ietf.org/html/rfc3174)
 - [SHA224](http://tools.ietf.org/html/rfc6234)
@@ -36,16 +33,16 @@ Good mood
 - [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
 - [CRC16](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
 
-#####Cipher
+#### Cipher
 - [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)
 - [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
 - [Rabbit](https://tools.ietf.org/html/rfc4503)
 
-#####Message authenticators
+#### Message authenticators
 - [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
 - [HMAC](https://www.ietf.org/rfc/rfc2104.txt) MD5, SHA1, SHA256
 
-#####Cipher block mode
+#### Cipher block mode
 - Electronic codebook ([ECB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_.28ECB.29))
 - Cipher-block chaining ([CBC](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher-block_chaining_.28CBC.29))
 - Propagating Cipher Block Chaining ([PCBC](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Propagating_Cipher_Block_Chaining_.28PCBC.29))
@@ -53,10 +50,11 @@ Good mood
 - Output Feedback ([OFB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Output_Feedback_.28OFB.29))
 - Counter ([CTR](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Counter_.28CTR.29))
 
-#####Password-Based Key Derivation Function
+#### Password-Based Key Derivation Function
+- [PBKDF1](http://tools.ietf.org/html/rfc2898#section-5.1) (Password-Based Key Derivation Function 1)
 - [PBKDF2](http://tools.ietf.org/html/rfc2898#section-5.2) (Password-Based Key Derivation Function 2)
 
-#####Data padding
+#### Data padding
 - [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
 - NoPadding
 
@@ -137,11 +135,27 @@ You can use [Swift Package Manager](https://swift.org/package-manager/) and spec
  
 ##Usage
 
+* [Basics (data types, conversion, ...)](#basics)
+* [Calculate Hash (MD5, SHA...)](#calculate-hash)
+* [Message authenticators (HMAC...)](#message-authenticators)
+* [Password-Based Key Derivation Function (PBKDF2, ...)](password-based-key-derivation-function)
+* [Data Padding](#data-padding)
+* [ChaCha20](#chacha20)
+* [Rabbit](#rabbit)
+* [Advanced Encryption Standard (AES)](#aes)
+
+
+also check [Playground](/CryptoSwift.playground/Contents.swift)
+
+#####Basics
+
 ```swift
 import CryptoSwift
 ```
 
-#####Conversion between NSData and [UInt8]
+CryptoSwift use array of bytes aka `Array<UInt8>` as base type for all operations. Every data can be converted to stream of bytes. you will find convenience functions that accept String or NSData, and it will be internally converted to array of bytes anyway.
+
+#####Data conversions
 
 For you convenience CryptoSwift provide two function to easily convert array of bytes to NSData and other way around:
 
@@ -150,9 +164,12 @@ let data: NSData = NSData(bytes: [0x01, 0x02, 0x03])
 let bytes:[UInt8] = data.arrayOfBytes()
 ```
 
-#####Calculate Hash
+Make bytes out of `String`:
+```swift
+let bytes = "string".utf8.map({$0})
+```
 
-For your convenience you should use extensions methods like encrypt(), decrypt(), md5(), sha1() and so on.
+#####Calculate Hash
 
 Hashing a data or array of bytes (aka `Array<UInt8>`)
 ```swift
@@ -201,7 +218,10 @@ let hmac: [UInt8] = try! Authenticator.HMAC(key: key, variant: .sha256).authenti
 let password: [UInt8] = "s33krit".utf8.map {$0}
 let salt: [UInt8] = "nacl".utf8.map {$0}
 
-let value = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, hashVariant: .sha256).calculate()
+let value = try! PKCS5.PBKDF1(password: password, salt: salt, iterations: 4096, variant: .sha1).calculate()
+
+let value = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha256).calculate()
+
 value.toHexString() // print Hex representation
 ```
 
@@ -232,7 +252,7 @@ let decrypted = Rabbit(key: key, iv: iv)?.decrypt(encrypted!)
 
 Notice regarding padding: *Manual padding of data is optional and CryptoSwift is using PKCS7 padding by default. If you need manually disable/enable padding, you can do this by setting parameter for __AES__ class*
 
-Basic:
+######All at once
 ```swift
 let input = NSData()
 let encrypted = try! input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345"))
@@ -241,25 +261,28 @@ let input: [UInt8] = [0,1,2,3,4,5,6,7,8,9]
 input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC))
 ```
 
-Encrypt/Decrypt String to Base64 encoded string:
+######Incremental updates
+
+Incremental operations uses instance of Cryptor and encrypt/decrypt one part at time, this way you can save on memory for large files. 
 
 ```swift
-// Encrypt string and get Base64 representation of result
-let base64String = try! "my secret string".encrypt(AES(key: "secret0key000000", iv: "0123456789012345")).toBase64()
+let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap")
+var encryptor = aes.makeEncryptor()
 
-// Decrypt Base64 encrypted message with helper function:
-let decrypted = try! encryptedBase64.decryptBase64ToString(AES(key: "secret0key000000", iv: "0123456789012345"))
+var ciphertext = Array<UInt8>()
+ciphertext += try encryptor.update(withBytes: "Nullam quis risus ".utf8.map({$0}))
+ciphertext += try encryptor.update(withBytes: "eget urna mollis ".utf8.map({$0}))
+ciphertext += try encryptor.update(withBytes: "ornare vel eu leo.".utf8.map({$0}))
+ciphertext += try encryptor.finish()
 ```
 
-...under the hood, this is [UInt8] converted to NSData converted to Base64 string representation:
+See [Playground](/CryptoSwift.playground/Contents.swift) for sample code to work with streams.
 
-```swift
-let encryptedBytes: [UInt8] = try! "my secret string".encrypt(AES(key: "secret0key000000", iv: "0123456789012345"))
+Check this helper functions to work with **Base64** encoded data directly:
+- .decryptBase64ToString()
+- .toBase64()
 
-let base64 = NSData(bytes: encryptedBytes).base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength)
-```
-
-Advanced:
+######AES Advanced usage
 ```swift
 let input: [UInt8] = [0,1,2,3,4,5,6,7,8,9]
 
@@ -267,12 +290,10 @@ let key: [UInt8] = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 let iv: [UInt8] = AES.randomIV(AES.blockSize)
 
 do {
-    let encrypted: [UInt8] = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).encrypt(input)
-    let decrypted: [UInt8] = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).decrypt(encrypted)
-} catch AES.Error.BlockSizeExceeded {
-    // block size exceeded
+    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).encrypt(input)
+    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).decrypt(encrypted)
 } catch {
-    // some error
+	print(error)
 }	
 ```
 	
@@ -283,7 +304,7 @@ let input: [UInt8] = [0,1,2,3,4,5,6,7,8,9]
 let encrypted: [UInt8] = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC, padding: NoPadding()).encrypt(input)
 ```
 
-Using extensions
+Using convenience extensions
 	
 ```swift
 let plain = NSData()
@@ -294,20 +315,20 @@ let decrypted: NSData = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
 
 ##Author
 
-CryptoSwift is owned and maintained by Marcin Krzyżanowski. You can follow me on Twitter at [@krzyzanowskim](http://twitter.com/krzyzanowskim) for project updates and releases.
+CryptoSwift is owned and maintained by [Marcin Krzyżanowski](http://www.krzyzanowskim.com)
 
-[Marcin Krzyżanowski](http://www.krzyzanowskim.com)
+You can follow me on Twitter at [@krzyzanowskim](http://twitter.com/krzyzanowskim) for project updates and releases.
 
 ##License
 
-Copyright (C) 2014 Marcin Krzyżanowski <marcin.krzyzanowski@gmail.com>
+Copyright (C) 2014-2016 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 This software is provided 'as-is', without any express or implied warranty. 
 
 In no event will the authors be held liable for any damages arising from the use of this software. 
 
 Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
 
-- The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
+- The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, **an acknowledgment in the product documentation is required**.
 - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 - This notice may not be removed or altered from any source or binary distribution.
 

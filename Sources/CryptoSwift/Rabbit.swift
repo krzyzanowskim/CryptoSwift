@@ -171,11 +171,13 @@ final public class Rabbit: BlockCipher {
         }
         return output8
     }
-    
-    // MARK: - Public
+}
+
+// MARK: Cipher
+extension Rabbit: Cipher {
     public func encrypt(bytes: [UInt8]) -> [UInt8] {
         setup()
-        
+
         var result = [UInt8](count: bytes.count, repeatedValue: 0)
         var output = nextOutput()
         var byteIdx = 0
@@ -185,7 +187,7 @@ final public class Rabbit: BlockCipher {
                 output = nextOutput()
                 outputIdx = 0
             }
-            
+
             result[byteIdx] = bytes[byteIdx] ^ output[outputIdx]
 
             byteIdx += 1
@@ -193,21 +195,8 @@ final public class Rabbit: BlockCipher {
         }
         return result
     }
-    
+
     public func decrypt(bytes: [UInt8]) -> [UInt8] {
         return encrypt(bytes)
-    }
-}
-
-
-// MARK: - CipherType
-
-extension Rabbit: CipherProtocol {
-    public func cipherEncrypt(bytes:[UInt8]) -> [UInt8] {
-        return self.encrypt(bytes)
-    }
-    
-    public func cipherDecrypt(bytes: [UInt8]) -> [UInt8] {
-        return self.decrypt(bytes)
     }
 }

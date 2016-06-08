@@ -2,36 +2,26 @@
 //  UpdatableCryptor.swift
 //  CryptoSwift
 //
-//  Created by Marcin Krzyzanowski on 30/08/14.
-//  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
+//  Created by Marcin Krzyzanowski on 06/05/16.
+//  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Darwin
-#endif
-
-
 public protocol UpdatableCryptor {
-    associatedtype EncryptorType: Cryptor
-    associatedtype DecryptorType: Cryptor
+    /// Encrypt/Decrypt given bytes in chunks.
+    ///
+    /// - parameter bytes: Bytes to process
+    /// - parameter isLast: (Optional) Given chunk is the last one. No more updates after this call.
+    /// - returns: Processed data or empty array.
+    mutating func update(withBytes bytes:[UInt8], isLast: Bool) throws -> [UInt8]
 
-    /// Cryptor suitable for encryption
-    func makeEncryptor() -> EncryptorType
-
-    /// Cryptor suitable for decryption
-    func makeDecryptor() -> DecryptorType
-
-    static func randomIV(blockSize:Int) -> [UInt8]
+    /// Finish encryption/decryption. This may apply padding.
+    /// - parameter bytes: Bytes to process
+    /// - returns: Processed data.
+    mutating func finish(withBytes bytes:[UInt8]) throws  -> [UInt8]
 }
 
 extension UpdatableCryptor {
-    static public func randomIV(blockSize:Int) -> [UInt8] {
-        var randomIV:[UInt8] = [UInt8]();
-        for _ in 0..<blockSize {
-            randomIV.append(UInt8(truncatingBitPattern: cs_arc4random_uniform(256)));
-        }
-        return randomIV
+    mutating public func finish(withBytes bytes:[UInt8] = []) throws  -> [UInt8] {
+        return try self.update(withBytes: bytes, isLast: true)
     }
 }

@@ -391,7 +391,7 @@ extension AES {
 
 // MARK: Encryptor
 extension AES {
-    public struct Encryptor: Cryptor {
+    public struct Encryptor: UpdatableCryptor {
         private var worker: BlockModeWorker
         private let padding: Padding
         private var accumulated = [UInt8]()
@@ -428,7 +428,7 @@ extension AES {
 
 // MARK: Decryptor
 extension AES {
-    public struct Decryptor: Cryptor {
+    public struct Decryptor: UpdatableCryptor {
         private var worker: BlockModeWorker
         private let padding: Padding
 
@@ -459,7 +459,7 @@ extension AES {
 }
 
 // MARK: UpdatableCryptor
-extension AES: UpdatableCryptor {
+extension AES: Cryptors {
     
     public func makeEncryptor() -> AES.Encryptor {
         return Encryptor(aes: self)

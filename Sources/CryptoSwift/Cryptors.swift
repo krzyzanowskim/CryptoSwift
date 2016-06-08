@@ -12,7 +12,6 @@
     import Darwin
 #endif
 
-
 public protocol Cryptors {
     associatedtype EncryptorType: UpdatableCryptor
     associatedtype DecryptorType: UpdatableCryptor
@@ -23,6 +22,7 @@ public protocol Cryptors {
     /// Cryptor suitable for decryption
     func makeDecryptor() -> DecryptorType
 
+    /// Generate array of random bytes. Helper function.
     static func randomIV(blockSize:Int) -> [UInt8]
 }
 

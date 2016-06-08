@@ -431,6 +431,8 @@ extension AES {
     public struct Decryptor: UpdatableCryptor {
         private var worker: BlockModeWorker
         private let padding: Padding
+        private var accumulated = [UInt8]()
+        private let paddingRequired: Bool
 
         init(aes: AES) {
             self.padding = aes.padding;
@@ -442,23 +444,33 @@ extension AES {
             default:
                 self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.decryptBlock)
             }
+
+            self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired);
         }
 
         mutating public func update(withBytes bytes:[UInt8], isLast: Bool = false) throws -> [UInt8] {
-            if bytes.isEmpty {
-                return bytes;
-            }
+            self.accumulated += bytes
 
-            let plaintext = worker.decrypt(bytes)
-            if isLast {
-                return padding.remove(plaintext, blockSize: AES.blockSize)
+            if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
+                var plaintext = Array<UInt8>()
+                plaintext.reserveCapacity(self.accumulated.count)
+                for chunk in self.accumulated.chunks(AES.blockSize) {
+                    plaintext += worker.decrypt(chunk)
+                    self.accumulated.removeFirst(chunk.count)
+                }
+
+                if (isLast) {
+                    plaintext = padding.remove(plaintext, blockSize: AES.blockSize)
+                }
+
+                return plaintext
             }
-            return plaintext
+            return []
         }
     }
 }
 
-// MARK: UpdatableCryptor
+// MARK: Cryptors
 extension AES: Cryptors {
     
     public func makeEncryptor() -> AES.Encryptor {

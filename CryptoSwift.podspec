@@ -8,13 +8,9 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/krzyzanowskim/CryptoSwift.git", :tag => "#{s.version}" }
   s.authors      = {'Marcin Krzyżanowski' => 'marcin@krzyzanowskim.com'}
   s.social_media_url   = "https://twitter.com/krzyzanowskim"
-  s.ios.platform  = :ios, '8.0'
   s.ios.deployment_target = "8.0"
-  s.osx.platform  = :osx, '10.9'
   s.osx.deployment_target = "10.9"
-  s.watchos.platform = :watchos, '2.0'
   s.watchos.deployment_target = "2.0"
-  s.tvos.platform = :tvos, '9.0'
   s.tvos.deployment_target = "9.0"
   s.source_files  = "Sources/CryptoSwift/**/*.swift"
   s.requires_arc = true

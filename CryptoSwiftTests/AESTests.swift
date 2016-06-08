@@ -92,6 +92,20 @@ final class AESTests: XCTestCase {
         XCTAssertEqual(try! aes.encrypt(plaintext), ciphertext, "encryption failed")
     }
 
+    func testAES_encrypt_incremental() {
+        do {
+            var ciphertext = Array<UInt8>()
+            let plaintext = "Today Apple launched the open source Swift community, as well as amazing new tools and resources."
+            let aes = try AES(key: "passwordpassword".utf8.map({$0}), iv: "drowssapdrowssap".utf8.map({$0}))
+            var encryptor = aes.makeEncryptor()
+
+            ciphertext += try encryptor.update(withBytes: plaintext.utf8.map({$0}))
+            ciphertext += try encryptor.finish()
+        } catch {
+            XCTAssert(false, "\(error)")
+        }
+    }
+
     func testAES_decrypt_cbc_with_padding_partial() {
         let key:[UInt8] = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
         let iv:[UInt8] = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]

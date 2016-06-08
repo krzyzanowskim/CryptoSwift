@@ -411,17 +411,15 @@ extension AES {
             }
 
             //CTR does not require full block therefore work with anything
-            if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
-                var encrypted = Array<UInt8>()
-                encrypted.reserveCapacity(self.accumulated.count)
-                for chunk in self.accumulated.chunks(AES.blockSize) {
+            var encrypted = Array<UInt8>()
+            encrypted.reserveCapacity(self.accumulated.count)
+            for chunk in self.accumulated.chunks(AES.blockSize) {
+                if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
                     encrypted += worker.encrypt(chunk)
                     self.accumulated.removeFirst(chunk.count)
                 }
-                return encrypted
             }
-
-            return []
+            return encrypted
         }
     }
 }
@@ -451,21 +449,20 @@ extension AES {
         mutating public func update(withBytes bytes:[UInt8], isLast: Bool = false) throws -> [UInt8] {
             self.accumulated += bytes
 
-            if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
-                var plaintext = Array<UInt8>()
-                plaintext.reserveCapacity(self.accumulated.count)
-                for chunk in self.accumulated.chunks(AES.blockSize) {
+            var plaintext = Array<UInt8>()
+            plaintext.reserveCapacity(self.accumulated.count)
+            for chunk in self.accumulated.chunks(AES.blockSize) {
+                if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
                     plaintext += worker.decrypt(chunk)
                     self.accumulated.removeFirst(chunk.count)
                 }
-
-                if (isLast) {
-                    plaintext = padding.remove(plaintext, blockSize: AES.blockSize)
-                }
-
-                return plaintext
             }
-            return []
+
+            if (isLast) {
+                plaintext = padding.remove(plaintext, blockSize: AES.blockSize)
+            }
+
+            return plaintext
         }
     }
 }

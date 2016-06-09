@@ -48,7 +48,7 @@ extension UInt8 {
 extension UInt8 {
 
     init(bits: [Bit]) {
-        self.init(integerFromBitsArray(bits: bits) as UInt8)
+        self.init(integerFrom(bits: bits) as UInt8)
     }
     
     /** array of bits */

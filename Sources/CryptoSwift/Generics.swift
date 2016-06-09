@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-/** Protocol and extensions for integerFromBitsArray. Bit hakish for me, but I can't do it in any other way */
+/** Protocol and extensions for integerFrom(bits:). Bit hakish for me, but I can't do it in any other way */
 protocol Initiable  {
     init(_ v: Int)
     init(_ v: UInt)
@@ -20,7 +20,7 @@ extension UInt32:Initiable {}
 extension UInt64:Initiable {}
 
 /** build bit pattern from array of bits */
-func integerFromBitsArray<T: UnsignedInteger>(bits: [Bit]) -> T
+func integerFrom<T: UnsignedInteger>(bits: [Bit]) -> T
 {
     var bitPattern:T = 0
     for (idx,b) in bits.enumerated() {
@@ -34,7 +34,7 @@ func integerFromBitsArray<T: UnsignedInteger>(bits: [Bit]) -> T
 
 /// Initialize integer from array of bytes.
 /// This method may be slow
-func integerWithBytes<T:Integer where T:ByteConvertible, T: BitshiftOperationsType>(bytes: Array<UInt8>) -> T {
+func integerWith<T:Integer where T:ByteConvertible, T: BitshiftOperationsType>(bytes: Array<UInt8>) -> T {
     var bytes = bytes.reversed() as Array<UInt8> //FIXME: check it this is equivalent of Array(...)
     if bytes.count < sizeof(T) {
         let paddingCount = sizeof(T) - bytes.count
@@ -91,7 +91,7 @@ func << <T:UnsignedInteger>(lhs: T, rhs: Int) -> UInt {
 
 // Generic function itself
 // FIXME: this generic function is not as generic as I would. It crashes for smaller types
-func shiftLeft<T: SignedInteger where T: Initiable>(value: T, count: Int) -> T {
+func shiftLeft<T: SignedInteger where T: Initiable>(value: T, by count: Int) -> T {
     if (value == 0) {
         return 0;
     }
@@ -115,39 +115,39 @@ func shiftLeft<T: SignedInteger where T: Initiable>(value: T, count: Int) -> T {
 }
 
 // for any f*** other Integer type - this part is so non-Generic
-func shiftLeft(value: UInt, count: Int) -> UInt {
-    return UInt(shiftLeft(value: Int(value), count: count)) //FIXME: count:
+func shiftLeft(value: UInt, by count: Int) -> UInt {
+    return UInt(shiftLeft(value: Int(value), by: count))
 }
 
-func shiftLeft(value: UInt8, count: Int) -> UInt8 {
-    return UInt8(shiftLeft(value: UInt(value), count: count))
+func shiftLeft(value: UInt8, by count: Int) -> UInt8 {
+    return UInt8(shiftLeft(value: UInt(value), by: count))
 }
 
-func shiftLeft(value: UInt16, count: Int) -> UInt16 {
-    return UInt16(shiftLeft(value: UInt(value), count: count))
+func shiftLeft(value: UInt16, by count: Int) -> UInt16 {
+    return UInt16(shiftLeft(value: UInt(value), by: count))
 }
 
-func shiftLeft(value: UInt32, count: Int) -> UInt32 {
-    return UInt32(shiftLeft(value: UInt(value), count: count))
+func shiftLeft(value: UInt32, by count: Int) -> UInt32 {
+    return UInt32(shiftLeft(value: UInt(value), by: count))
 }
 
-func shiftLeft(value: UInt64, count: Int) -> UInt64 {
-    return UInt64(shiftLeft(value: UInt(value), count: count))
+func shiftLeft(value: UInt64, by count: Int) -> UInt64 {
+    return UInt64(shiftLeft(value: UInt(value), by: count))
 }
 
-func shiftLeft(value: Int8, count: Int) -> Int8 {
-    return Int8(shiftLeft(value: Int(value), count: count))
+func shiftLeft(value: Int8, by count: Int) -> Int8 {
+    return Int8(shiftLeft(value: Int(value), by: count))
 }
 
-func shiftLeft(value: Int16, count: Int) -> Int16 {
-    return Int16(shiftLeft(value: Int(value), count: count))
+func shiftLeft(value: Int16, by count: Int) -> Int16 {
+    return Int16(shiftLeft(value: Int(value), by: count))
 }
 
-func shiftLeft(value: Int32, count: Int) -> Int32 {
-    return Int32(shiftLeft(value: Int(value), count: count))
+func shiftLeft(value: Int32, by count: Int) -> Int32 {
+    return Int32(shiftLeft(value: Int(value), by: count))
 }
 
-func shiftLeft(value: Int64, count: Int) -> Int64 {
-    return Int64(shiftLeft(value: Int(value), count: count))
+func shiftLeft(value: Int64, by count: Int) -> Int64 {
+    return Int64(shiftLeft(value: Int(value), by: count))
 }
 

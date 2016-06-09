@@ -32,57 +32,57 @@ extension NSData {
     
     @nonobjc public func md5() -> NSData {
         let result = Hash.md5(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(bytes: result)
+        return NSData.with(bytes: result)
     }
 
     public func sha1() -> NSData? {
         let result = Hash.sha1(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(bytes: result)
+        return NSData.with(bytes: result)
     }
 
     public func sha224() -> NSData? {
         let result = Hash.sha224(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(bytes: result)
+        return NSData.with(bytes: result)
     }
 
     public func sha256() -> NSData? {
         let result = Hash.sha256(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(bytes: result)
+        return NSData.with(bytes: result)
     }
 
     public func sha384() -> NSData? {
         let result = Hash.sha384(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(bytes: result)
+        return NSData.with(bytes: result)
     }
 
     public func sha512() -> NSData? {
         let result = Hash.sha512(self.arrayOfBytes()).calculate()
-        return NSData.withBytes(bytes: result)
+        return NSData.with(bytes: result)
     }
 
     public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> NSData? {
         let result = Hash.crc32(self.arrayOfBytes(), seed: seed, reflect: reflect).calculate()
-        return NSData.withBytes(bytes: result)
+        return NSData.with(bytes: result)
     }
 
     public func crc16(seed: UInt16? = nil) -> NSData? {
         let result = Hash.crc16(self.arrayOfBytes(), seed: seed).calculate()
-        return NSData.withBytes(bytes: result)
+        return NSData.with(bytes: result)
     }
 
     public func encrypt(cipher: Cipher) throws -> NSData {
         let encrypted = try cipher.encrypt(bytes: self.arrayOfBytes())
-        return NSData.withBytes(bytes: encrypted)
+        return NSData.with(bytes: encrypted)
     }
 
     public func decrypt(cipher: Cipher) throws -> NSData {
         let decrypted = try cipher.decrypt(bytes: self.arrayOfBytes())
-        return NSData.withBytes(bytes: decrypted)
+        return NSData.with(bytes: decrypted)
     }
     
     public func authenticate(authenticator: Authenticator) throws -> NSData {
         let result = try authenticator.authenticate(message: self.arrayOfBytes())
-        return NSData.withBytes(bytes: result)
+        return NSData.with(bytes: result)
     }
 }
 
@@ -100,10 +100,10 @@ extension NSData {
     }
 
     public convenience init(bytes: Array<UInt8>) {
-        self.init(data: NSData.withBytes(bytes: bytes))
+        self.init(data: NSData.with(bytes: bytes))
     }
     
-    class public func withBytes(bytes: Array<UInt8>) -> NSData {
+    class public func with(bytes: Array<UInt8>) -> NSData {
         return NSData(bytes: bytes, length: bytes.count)
     }
 }

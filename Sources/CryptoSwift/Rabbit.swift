@@ -100,10 +100,10 @@ final public class Rabbit: BlockCipher {
     private func setupIV(iv: Array<UInt8>) {
         // 63...56 55...48 47...40 39...32 31...24 23...16 15...8 7...0 IV bits
         //    0       1       2       3       4       5       6     7   IV bytes in array
-        let iv0: UInt32 = integerWithBytes(bytes: [iv[4], iv[5], iv[6], iv[7]])
-        let iv1: UInt32 = integerWithBytes(bytes: [iv[0], iv[1], iv[4], iv[5]])
-        let iv2: UInt32 = integerWithBytes(bytes: [iv[0], iv[1], iv[2], iv[3]])
-        let iv3: UInt32 = integerWithBytes(bytes: [iv[2], iv[3], iv[6], iv[7]])
+        let iv0: UInt32 = integerWith(bytes: [iv[4], iv[5], iv[6], iv[7]])
+        let iv1: UInt32 = integerWith(bytes: [iv[0], iv[1], iv[4], iv[5]])
+        let iv2: UInt32 = integerWith(bytes: [iv[0], iv[1], iv[2], iv[3]])
+        let iv3: UInt32 = integerWith(bytes: [iv[2], iv[3], iv[6], iv[7]])
         
         // Modify the counter state as function of the IV
         c[0] = c[0] ^ iv0

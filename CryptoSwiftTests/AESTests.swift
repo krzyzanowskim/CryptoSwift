@@ -236,12 +236,12 @@ final class AESTests: XCTestCase {
         let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
         
         measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let keyData     = NSData.withBytes(bytes: key)
+            let keyData     = NSData.with(bytes: key)
             let keyBytes    = UnsafePointer<Void>(keyData.bytes)
-            let ivData      = NSData.withBytes(bytes: iv)
+            let ivData      = NSData.with(bytes: iv)
             let ivBytes     = UnsafePointer<Void>(ivData.bytes)
             
-            let data = NSData.withBytes(bytes: message)
+            let data = NSData.with(bytes: message)
             let dataLength    = data.length
             let dataBytes     = UnsafePointer<Void>(data.bytes)
             

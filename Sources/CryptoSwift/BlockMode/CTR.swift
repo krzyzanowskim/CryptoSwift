@@ -46,6 +46,6 @@ private func buildNonce(iv: Array<UInt8>, counter: UInt64) -> Array<UInt8> {
     let noncePartLen = AES.blockSize / 2
     let noncePrefix = Array(iv[0..<noncePartLen])
     let nonceSuffix = Array(iv[noncePartLen..<iv.count])
-    let c = UInt64.withBytes(bytes: nonceSuffix) + counter
+    let c = UInt64.with(bytes: nonceSuffix) + counter
     return noncePrefix + arrayOfBytes(value: c)
 }

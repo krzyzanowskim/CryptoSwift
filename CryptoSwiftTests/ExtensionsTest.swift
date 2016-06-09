@@ -22,7 +22,7 @@ final class ExtensionsTest: XCTestCase {
         measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
             let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
             self.startMeasuring()
-            message.chunks(chunksize: AES.blockSize)
+            _ = message.chunks(chunksize: AES.blockSize)
             self.stopMeasuring()
         })
     }

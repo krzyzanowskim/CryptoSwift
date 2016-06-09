@@ -183,9 +183,10 @@ final public class Poly1305 {
     
     // MARK: - Utils
     
-    private func add(context:Context, c:Array<UInt8>) -> Bool {
+    private func add(context:Context, c:Array<UInt8>) {
         if (context.h.count != 17 && c.count != 17) {
-            return false
+            assertionFailure()
+            return
         }
         
         var u:UInt16 = 0
@@ -194,12 +195,13 @@ final public class Poly1305 {
             context.h[i] = UInt8.withValue(v: u)
             u = u >> 8
         }
-        return true
+        return
     }
     
-    private func squeeze(context:Context, hr:Array<UInt32>) -> Bool {
+    private func squeeze(context:Context, hr:Array<UInt32>) {
         if (context.h.count != 17 && hr.count != 17) {
-            return false
+            assertionFailure()
+            return
         }
         
         var u:UInt32 = 0
@@ -220,14 +222,12 @@ final public class Poly1305 {
             u >>= 8
         }
         context.h[16] += UInt8.withValue(v: u);
-        
-        return true
     }
     
-    private func freeze(context:Context) -> Bool {
+    private func freeze(context:Context) {
         assert(context.h.count == 17,"Invalid length")
         if (context.h.count != 17) {
-            return false
+            return
         }
         
         let minusp:Array<UInt8> = [0x05,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc]
@@ -250,11 +250,9 @@ final public class Poly1305 {
         for i in 0..<17 {
             context.h[i] ^= negative & (horig[i] ^ context.h[i]);
         }
-        
-        return true;
     }
     
-    private func blocks(context:Context, m:Array<UInt8>, startPos:Int = 0) -> Int {
+    private func blocks(context:Context, m:Array<UInt8>, startPos:Int = 0) {
         var bytes = m.count
         let hibit = context.final ^ 1 // 1 <<128
         var mPos = startPos
@@ -291,6 +289,5 @@ final public class Poly1305 {
             mPos += blockSize
             bytes -= blockSize
         }
-        return mPos
     }
 }

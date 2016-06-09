@@ -51,21 +51,20 @@ extension Int {
 extension Int {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
-    private mutating func shiftLeft(count: Int) -> Int {
+    private mutating func shiftLeft(by count: Int) {
         self = CryptoSwift.shiftLeft(value: self, count: count) //FIXME: count:
-        return self
     }
     
     /** Shift bits to the right. All bits are shifted (including sign bit) */
-    private mutating func shiftRight(count: Int) -> Int {
+    private mutating func shiftRight(by count: Int) {
         if (self == 0) {
-            return self;
+            return
         }
         
         let bitsCount = sizeofValue(self) * 8
 
         if (count >= bitsCount) {
-            return 0
+            return
         }
 
         let maxBitsForValue = Int(floor(log2(Double(self)) + 1))
@@ -80,7 +79,6 @@ extension Int {
             }
         }
         self = Int(shiftedValue)
-        return self
     }
 }
 
@@ -88,13 +86,13 @@ extension Int {
 
 /** shift left and assign with bits truncation */
 public func &<<= (lhs: inout Int, rhs: Int) {
-    lhs.shiftLeft(count: rhs)
+    lhs.shiftLeft(by: rhs)
 }
 
 /** shift left with bits truncation */
 public func &<< (lhs: Int, rhs: Int) -> Int {
     var l = lhs;
-    l.shiftLeft(count: rhs)
+    l.shiftLeft(by: rhs)
     return l
 }
 
@@ -102,12 +100,12 @@ public func &<< (lhs: Int, rhs: Int) -> Int {
 
 /** shift right and assign with bits truncation */
 func &>>= (lhs: inout Int, rhs: Int) {
-    lhs.shiftRight(count: rhs)
+    lhs.shiftRight(by: rhs)
 }
 
 /** shift right and assign with bits truncation */
 func &>> (lhs: Int, rhs: Int) -> Int {
     var l = lhs;
-    l.shiftRight(count: rhs)
+    l.shiftRight(by: rhs)
     return l
 }

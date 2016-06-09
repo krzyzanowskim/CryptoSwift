@@ -82,15 +82,15 @@ extension UInt8 {
 /** Shift bits */
 extension UInt8 {
     /** Shift bits to the right. All bits are shifted (including sign bit) */
-    mutating func shiftRight(count: UInt8) -> UInt8 {
+    mutating func shiftRight(by count: UInt8) {
         if (self == 0) {
-            return self;
+            return
         }
 
         let bitsCount = UInt8(sizeof(UInt8) * 8)
 
         if (count >= bitsCount) {
-            return 0
+            return
         }
 
         let maxBitsForValue = UInt8(floor(log2(Double(self) + 1)))
@@ -104,13 +104,12 @@ extension UInt8 {
             }
         }
         self = shiftedValue
-        return self
     }
 }
 
 /** shift right and assign with bits truncation */
 func &>> (lhs: UInt8, rhs: UInt8) -> UInt8 {
     var l = lhs;
-    l.shiftRight(count: rhs)
+    l.shiftRight(by: rhs)
     return l
 }

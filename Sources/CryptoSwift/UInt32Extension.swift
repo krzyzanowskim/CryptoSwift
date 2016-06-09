@@ -36,9 +36,9 @@ extension UInt32 {
 extension UInt32 {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
-    private mutating func shiftLeft(count: UInt32) -> UInt32 {
+    private mutating func shiftLeft(by count: UInt32) {
         if (self == 0) {
-            return self;
+            return
         }
         
         let bitsCount = UInt32(sizeof(UInt32) * 8)
@@ -59,19 +59,18 @@ extension UInt32 {
         }
 
         self = shiftedValue
-        return self
     }
     
     /** Shift bits to the right. All bits are shifted (including sign bit) */
-    private mutating func shiftRight(count: UInt32) -> UInt32 {
+    private mutating func shiftRight(by count: UInt32) {
         if (self == 0) {
-            return self;
+            return
         }
         
         let bitsCount = UInt32(sizeofValue(self) * 8)
 
         if (count >= bitsCount) {
-            return 0
+            return
         }
 
         let maxBitsForValue = UInt32(floor(log2(Double(self)) + 1))
@@ -86,31 +85,30 @@ extension UInt32 {
             }
         }
         self = shiftedValue
-        return self
     }
 
 }
 
 /** shift left and assign with bits truncation */
 public func &<<= (lhs: inout UInt32, rhs: UInt32) {
-    lhs.shiftLeft(count: rhs)
+    lhs.shiftLeft(by: rhs)
 }
 
 /** shift left with bits truncation */
 public func &<< (lhs: UInt32, rhs: UInt32) -> UInt32 {
     var l = lhs;
-    l.shiftLeft(count: rhs)
+    l.shiftLeft(by: rhs)
     return l
 }
 
 /** shift right and assign with bits truncation */
 func &>>= (lhs: inout UInt32, rhs: UInt32) {
-    lhs.shiftRight(count: rhs)
+    lhs.shiftRight(by: rhs)
 }
 
 /** shift right and assign with bits truncation */
 func &>> (lhs: UInt32, rhs: UInt32) -> UInt32 {
     var l = lhs;
-    l.shiftRight(count: rhs)
+    l.shiftRight(by: rhs)
     return l
 }

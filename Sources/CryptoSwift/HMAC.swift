@@ -26,7 +26,7 @@ final public class HMAC {
             }
         }
         
-        func calculateHash(bytes bytes:Array<UInt8>) -> Array<UInt8>? {
+        func calculateHash(bytes:Array<UInt8>) -> Array<UInt8>? {
             switch (self) {
             case .sha1:
                 return Hash.sha1(bytes).calculate()

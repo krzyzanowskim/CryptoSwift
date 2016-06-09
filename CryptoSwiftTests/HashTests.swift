@@ -46,7 +46,7 @@ final class CryptoSwiftTests: XCTestCase {
             let data = NSData(bytes: buf, length: 1024 * 1024)
             let arr = data.arrayOfBytes()
             self.startMeasuring()
-                Hash.md5(arr).calculate()
+                _ = Hash.md5(arr).calculate()
             self.stopMeasuring()
             buf?.deallocateCapacity(1024 * 1024)
             buf?.deinitialize()

@@ -17,30 +17,30 @@ final class SHA1 : HashProtocol {
     private let h:Array<UInt32> = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
         
     func calculate() -> Array<UInt8> {
-        var tmpMessage = self.prepare(64)
+        var tmpMessage = self.prepare(len: 64)
         
         // hash values
         var hh = h
         
         // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
-        tmpMessage += (self.message.count * 8).bytes(64 / 8)
+        tmpMessage += (self.message.count * 8).bytes(totalBytes: 64 / 8)
         
         // Process the message in successive 512-bit chunks:
         let chunkSizeBytes = 512 / 8 // 64
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 32-bit words into eighty 32-bit words:
-            var M:Array<UInt32> = Array<UInt32>(count: 80, repeatedValue: 0)
+            var M:Array<UInt32> = Array<UInt32>(repeating: 0, count: 80)
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
                     let start = chunk.startIndex + (x * sizeofValue(M[x]))
                     let end = start + sizeofValue(M[x])
-                    let le = toUInt32Array(chunk[start..<end])[0]
+                    let le = toUInt32Array(slice: chunk[start..<end])[0]
                     M[x] = le.bigEndian
                     break
                 default:
-                    M[x] = rotateLeft(M[x-3] ^ M[x-8] ^ M[x-14] ^ M[x-16], 1) //FIXME: n:
+                    M[x] = rotateLeft(v: M[x-3] ^ M[x-8] ^ M[x-14] ^ M[x-16], 1) //FIXME: n:
                     break
                 }
             }
@@ -77,10 +77,10 @@ final class SHA1 : HashProtocol {
                     break
                 }
                 
-                let temp = (rotateLeft(A,5) &+ f &+ E &+ M[j] &+ k) & 0xffffffff
+                let temp = (rotateLeft(v: A,5) &+ f &+ E &+ M[j] &+ k) & 0xffffffff
                 E = D
                 D = C
-                C = rotateLeft(B, 30)
+                C = rotateLeft(v: B, 30)
                 B = A
                 A = temp
             }

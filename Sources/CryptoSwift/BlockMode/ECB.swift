@@ -24,6 +24,6 @@ struct ECBModeWorker: BlockModeWorker {
     }
 
     mutating func decrypt(ciphertext: Array<UInt8>) -> Array<UInt8> {
-        return encrypt(ciphertext)
+        return encrypt(plaintext: ciphertext)
     }
 }

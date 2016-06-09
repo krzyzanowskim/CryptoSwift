@@ -11,7 +11,7 @@
 private typealias Key = SecureBytes
 
 final public class AES: BlockCipher {
-    public enum Error: ErrorType {
+    public enum Error: ErrorProtocol {
         case DataPaddingRequired
         case InvalidKeyOrInitializationVector
         case InvalidInitializationVector
@@ -51,8 +51,8 @@ final public class AES: BlockCipher {
     private let key: Key
     private let iv:Array<UInt8>
     private let padding:Padding
-    private lazy var expandedKey:Array<Array<UInt32>> = self.expandKey(self.key, variant: self.variant)
-    private lazy var expandedKeyInv:Array<Array<UInt32>> = self.expandKeyInv(self.key, variant: self.variant)
+    private lazy var expandedKey:Array<Array<UInt32>> = self.expandKey(key: self.key, variant: self.variant)
+    private lazy var expandedKeyInv:Array<Array<UInt32>> = self.expandKeyInv(key: self.key, variant: self.variant)
     
     private lazy var sBoxes:(sBox:Array<UInt32>, invSBox:Array<UInt32>) = self.calculateSBox()
     private lazy var sBox:Array<UInt32> = self.sBoxes.sBox
@@ -98,7 +98,7 @@ final public class AES: BlockCipher {
         if let iv = iv where !iv.isEmpty {
             self.iv = iv
         } else {
-            let defaultIV = Array<UInt8>(count: AES.blockSize, repeatedValue: 0)
+            let defaultIV = Array<UInt8>(repeating: 0, count: AES.blockSize)
             self.iv = defaultIV
         }
 
@@ -114,9 +114,9 @@ extension AES {
     private func encryptBlock(block:Array<UInt8>) -> Array<UInt8>? {
         let rounds = self.variant.Nr
         let rk = self.expandedKey
-        var b = toUInt32Array(block[block.startIndex..<block.endIndex])
+        var b = toUInt32Array(slice: block[block.startIndex..<block.endIndex])
 
-        var t = Array<UInt32>(count: 4, repeatedValue: 0)
+        var t = Array<UInt32>(repeating: 0, count: 4)
 
         for r in 0..<rounds - 1 {
             t[0] = b[0] ^ rk[r][0]
@@ -158,10 +158,10 @@ extension AES {
         t[3] = b[3] ^ rk[r][3]
 
         // rounds
-        b[0] = F1(t[0], t[1], t[2], t[3]) ^ rk[rounds][0]
-        b[1] = F1(t[1], t[2], t[3], t[0]) ^ rk[rounds][1]
-        b[2] = F1(t[2], t[3], t[0], t[1]) ^ rk[rounds][2]
-        b[3] = F1(t[3], t[0], t[1], t[2]) ^ rk[rounds][3]
+        b[0] = F1(x0: t[0], t[1], t[2], t[3]) ^ rk[rounds][0]
+        b[1] = F1(x0: t[1], t[2], t[3], t[0]) ^ rk[rounds][1]
+        b[2] = F1(x0: t[2], t[3], t[0], t[1]) ^ rk[rounds][2]
+        b[3] = F1(x0: t[3], t[0], t[1], t[2]) ^ rk[rounds][3]
 
         var out = Array<UInt8>()
         out.reserveCapacity(b.count * 4)
@@ -178,11 +178,11 @@ extension AES {
     private func decryptBlock(block:Array<UInt8>) -> Array<UInt8>? {
         let rounds = self.variant.Nr
         let rk = expandedKeyInv
-        var b = toUInt32Array(block[block.startIndex..<block.endIndex])
+        var b = toUInt32Array(slice: block[block.startIndex..<block.endIndex])
 
-        var t = Array<UInt32>(count: 4, repeatedValue: 0)
+        var t = Array<UInt32>(repeating: 0, count: 4)
 
-        for r in (2...rounds).reverse() {
+        for r in (2...rounds).reversed() {
             t[0] = b[0] ^ rk[r][0]
             t[1] = b[1] ^ rk[r][1]
             t[2] = b[2] ^ rk[r][2]
@@ -221,28 +221,28 @@ extension AES {
 
         // rounds
 
-        let lb00 = sBoxInv[Int(B0(t[0]))]
-        let lb01 = (sBoxInv[Int(B1(t[3]))] << 8)
-        let lb02 = (sBoxInv[Int(B2(t[2]))] << 16)
-        let lb03 = (sBoxInv[Int(B3(t[1]))] << 24)
+        let lb00 = sBoxInv[Int(B0(x: t[0]))]
+        let lb01 = (sBoxInv[Int(B1(x: t[3]))] << 8)
+        let lb02 = (sBoxInv[Int(B2(x: t[2]))] << 16)
+        let lb03 = (sBoxInv[Int(B3(x: t[1]))] << 24)
         b[0] = lb00 | lb01 | lb02 | lb03 ^ rk[0][0]
 
-        let lb10 = sBoxInv[Int(B0(t[1]))]
-        let lb11 = (sBoxInv[Int(B1(t[0]))] << 8)
-        let lb12 = (sBoxInv[Int(B2(t[3]))] << 16)
-        let lb13 = (sBoxInv[Int(B3(t[2]))] << 24)
+        let lb10 = sBoxInv[Int(B0(x: t[1]))]
+        let lb11 = (sBoxInv[Int(B1(x: t[0]))] << 8)
+        let lb12 = (sBoxInv[Int(B2(x: t[3]))] << 16)
+        let lb13 = (sBoxInv[Int(B3(x: t[2]))] << 24)
         b[1] = lb10 | lb11 | lb12 | lb13 ^ rk[0][1]
 
-        let lb20 = sBoxInv[Int(B0(t[2]))]
-        let lb21 = (sBoxInv[Int(B1(t[1]))] << 8)
-        let lb22 = (sBoxInv[Int(B2(t[0]))] << 16)
-        let lb23 = (sBoxInv[Int(B3(t[3]))] << 24)
+        let lb20 = sBoxInv[Int(B0(x: t[2]))]
+        let lb21 = (sBoxInv[Int(B1(x: t[1]))] << 8)
+        let lb22 = (sBoxInv[Int(B2(x: t[0]))] << 16)
+        let lb23 = (sBoxInv[Int(B3(x: t[3]))] << 24)
         b[2] = lb20 | lb21 | lb22 | lb23 ^ rk[0][2]
 
-        let lb30 = sBoxInv[Int(B0(t[3]))]
-        let lb31 = (sBoxInv[Int(B1(t[2]))] << 8)
-        let lb32 = (sBoxInv[Int(B2(t[1]))] << 16)
-        let lb33 = (sBoxInv[Int(B3(t[0]))] << 24)
+        let lb30 = sBoxInv[Int(B0(x: t[3]))]
+        let lb31 = (sBoxInv[Int(B1(x: t[2]))] << 8)
+        let lb32 = (sBoxInv[Int(B2(x: t[1]))] << 16)
+        let lb33 = (sBoxInv[Int(B3(x: t[0]))] << 24)
         b[3] = lb30 | lb31 | lb32 | lb33 ^ rk[0][3]
 
         var out = Array<UInt8>()
@@ -259,22 +259,22 @@ extension AES {
 
     private func expandKeyInv(key: Key, variant: AESVariant) -> Array<Array<UInt32>> {
         let rounds = variant.Nr
-        var rk2:Array<Array<UInt32>> = expandKey(key, variant: variant)
+        var rk2:Array<Array<UInt32>> = expandKey(key: key, variant: variant)
 
         for r in 1..<rounds {
             var w:UInt32
 
             w = rk2[r][0];
-            rk2[r][0] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            rk2[r][0] = U1[Int(B0(x: w))] ^ U2[Int(B1(x: w))] ^ U3[Int(B2(x: w))] ^ U4[Int(B3(x: w))]
 
             w = rk2[r][1];
-            rk2[r][1] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            rk2[r][1] = U1[Int(B0(x: w))] ^ U2[Int(B1(x: w))] ^ U3[Int(B2(x: w))] ^ U4[Int(B3(x: w))]
 
             w = rk2[r][2];
-            rk2[r][2] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            rk2[r][2] = U1[Int(B0(x: w))] ^ U2[Int(B1(x: w))] ^ U3[Int(B2(x: w))] ^ U4[Int(B3(x: w))]
 
             w = rk2[r][3];
-            rk2[r][3] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            rk2[r][3] = U1[Int(B0(x: w))] ^ U2[Int(B1(x: w))] ^ U3[Int(B2(x: w))] ^ U4[Int(B3(x: w))]
         }
 
         return rk2
@@ -284,15 +284,15 @@ extension AES {
 
         func convertExpandedKey(expanded:Array<UInt8>) -> Array<Array<UInt32>> {
             var arr = Array<UInt32>()
-            for idx in expanded.startIndex.stride(to: expanded.endIndex, by: 4) {
-                let four = Array(expanded[idx..<idx.advancedBy(4)].reverse())
-                let num = UInt32.withBytes(four)
+            for idx in stride(from: expanded.startIndex, to: expanded.endIndex, by: 4) {
+                let four = Array(expanded[idx..<idx.advanced(by: 4)].reversed())
+                let num = UInt32.withBytes(bytes: four)
                 arr.append(num)
             }
 
             var allarr = Array<Array<UInt32>>()
-            for idx in arr.startIndex.stride(to: arr.endIndex, by: 4) {
-                allarr.append(Array(arr[idx..<idx.advancedBy(4)]))
+            for idx in stride(from: arr.startIndex, to: arr.endIndex, by: 4) {
+                allarr.append(Array(arr[idx..<idx.advanced(by: 4)]))
             }
             return allarr
         }
@@ -310,7 +310,7 @@ extension AES {
             return result
         }
 
-        var w = Array<UInt8>(count: variant.Nb * (variant.Nr + 1) * 4, repeatedValue: 0)
+        var w = Array<UInt8>(repeating: 0, count: variant.Nb * (variant.Nr + 1) * 4)
         for i in 0..<variant.Nk {
             for wordIdx in 0..<4 {
                 w[(4*i)+wordIdx] = key[(4*i)+wordIdx]
@@ -320,16 +320,16 @@ extension AES {
         var tmp:Array<UInt8>
 
         for i in variant.Nk..<variant.Nb * (variant.Nr + 1) {
-            tmp = Array<UInt8>(count: 4, repeatedValue: 0)
+            tmp = Array<UInt8>(repeating: 0, count: 4)
 
             for wordIdx in 0..<4 {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
             }
             if ((i % variant.Nk) == 0) {
-                tmp = subWord(rotateLeft(UInt32.withBytes(tmp), 8).bytes(sizeof(UInt32)))
+                tmp = subWord(word: rotateLeft(v: UInt32.withBytes(bytes: tmp), 8).bytes(totalBytes: sizeof(UInt32)))
                 tmp[0] = tmp.first! ^ Rcon[i/variant.Nk]
             } else if (variant.Nk > 6 && (i % variant.Nk) == 4) {
-                tmp = subWord(tmp)
+                tmp = subWord(word: tmp)
             }
 
             // xor array of bytes
@@ -337,7 +337,7 @@ extension AES {
                 w[4*i+wordIdx] = w[4*(i-variant.Nk)+wordIdx]^tmp[wordIdx];
             }
         }
-        return convertExpandedKey(w)
+        return convertExpandedKey(expanded: w)
     }
 
     private func B0(x: UInt32) -> UInt32 {
@@ -358,15 +358,15 @@ extension AES {
     
     private func F1(x0: UInt32, _ x1: UInt32, _ x2: UInt32, _ x3: UInt32) -> UInt32 {
         var result:UInt32 = 0
-        result |= UInt32(B1(T0[Int(x0 & 255)]))
-        result |= UInt32(B1(T0[Int((x1 >> 8) & 255)])) << 8
-        result |= UInt32(B1(T0[Int((x2 >> 16) & 255)])) << 16
-        result |= UInt32(B1(T0[Int(x3 >> 24)])) << 24
+        result |= UInt32(B1(x: T0[Int(x0 & 255)]))
+        result |= UInt32(B1(x: T0[Int((x1 >> 8) & 255)])) << 8
+        result |= UInt32(B1(x: T0[Int((x2 >> 16) & 255)])) << 16
+        result |= UInt32(B1(x: T0[Int(x3 >> 24)])) << 24
         return result
     }
     
     private func calculateSBox() -> (sBox:Array<UInt32>, invSBox:Array<UInt32>) {
-        var sbox = Array<UInt32>(count: 256, repeatedValue: 0)
+        var sbox = Array<UInt32>(repeating: 0, count: 256)
         var invsbox = sbox
         sbox[0] = 0x63
         
@@ -379,7 +379,7 @@ extension AES {
             q ^= q << 4
             q ^= (q & 0x80) == 0x80 ? 0x09 : 0
             
-            let s = 0x63 ^ q ^ rotateLeft(q, 1) ^ rotateLeft(q, 2) ^ rotateLeft(q, 3) ^ rotateLeft(q, 4)
+            let s = 0x63 ^ q ^ rotateLeft(v: q, 1) ^ rotateLeft(v: q, 2) ^ rotateLeft(v: q, 3) ^ rotateLeft(v: q, 4)
             
             sbox[Int(p)] = UInt32(s)
             invsbox[Int(s)] = UInt32(p)
@@ -399,7 +399,7 @@ extension AES {
 
         init(aes: AES) {
             self.padding = aes.padding;
-            self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
+            self.worker = aes.blockMode.worker(iv: aes.iv, cipherOperation: aes.encryptBlock)
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
         }
 
@@ -407,15 +407,15 @@ extension AES {
             self.accumulated += bytes
 
             if (isLast) {
-                self.accumulated = padding.add(self.accumulated, blockSize: AES.blockSize)
+                self.accumulated = padding.add(data: self.accumulated, blockSize: AES.blockSize)
             }
 
             //CTR does not require full block therefore work with anything
             var encrypted = Array<UInt8>()
             encrypted.reserveCapacity(self.accumulated.count)
-            for chunk in self.accumulated.chunks(AES.blockSize) {
+            for chunk in self.accumulated.chunks(chunksize: AES.blockSize) {
                 if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
-                    encrypted += worker.encrypt(chunk)
+                    encrypted += worker.encrypt(plaintext: chunk)
                     self.accumulated.removeFirst(chunk.count)
                 }
             }
@@ -438,9 +438,9 @@ extension AES {
             switch (aes.blockMode) {
             case .CFB, .OFB, .CTR:
                 // CFB, OFB, CTR uses encryptBlock to decrypt
-                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
+                self.worker = aes.blockMode.worker(iv: aes.iv, cipherOperation: aes.encryptBlock)
             default:
-                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.decryptBlock)
+                self.worker = aes.blockMode.worker(iv: aes.iv, cipherOperation: aes.decryptBlock)
             }
 
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired);
@@ -451,15 +451,15 @@ extension AES {
 
             var plaintext = Array<UInt8>()
             plaintext.reserveCapacity(self.accumulated.count)
-            for chunk in self.accumulated.chunks(AES.blockSize) {
+            for chunk in self.accumulated.chunks(chunksize: AES.blockSize) {
                 if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
-                    plaintext += worker.decrypt(chunk)
+                    plaintext += worker.decrypt(ciphertext: chunk)
                     self.accumulated.removeFirst(chunk.count)
                 }
             }
 
             if (isLast) {
-                plaintext = padding.remove(plaintext, blockSize: AES.blockSize)
+                plaintext = padding.remove(data: plaintext, blockSize: AES.blockSize)
             }
 
             return plaintext
@@ -482,12 +482,12 @@ extension AES: Cryptors {
 // MARK: Cipher
 extension AES: Cipher {
     public func encrypt(bytes:Array<UInt8>) throws -> Array<UInt8> {
-        let chunks = bytes.chunks(AES.blockSize)
+        let chunks = bytes.chunks(chunksize: AES.blockSize)
 
         var oneTimeCryptor = self.makeEncryptor()
         var out = Array<UInt8>()
         out.reserveCapacity(bytes.count)
-        for (idx, block) in chunks.enumerate() {
+        for (idx, block) in chunks.enumerated() {
             out += try oneTimeCryptor.update(withBytes: block, isLast: idx == max(0,chunks.count - 1))
         }
 
@@ -504,10 +504,10 @@ extension AES: Cipher {
         }
 
         var oneTimeCryptor = self.makeDecryptor()
-        let chunks = bytes.chunks(AES.blockSize)
+        let chunks = bytes.chunks(chunksize: AES.blockSize)
         var out = Array<UInt8>()
         out.reserveCapacity(bytes.count)
-        for (idx,chunk) in chunks.enumerate() {
+        for (idx,chunk) in chunks.enumerated() {
             out += try oneTimeCryptor.update(withBytes: chunk, isLast: idx == max(0,chunks.count - 1))
         }
         return out

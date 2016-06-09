@@ -24,7 +24,7 @@ struct CFBModeWorker: BlockModeWorker {
         guard let ciphertext = cipherOperation(block: prev ?? iv) else {
             return plaintext
         }
-        prev = xor(plaintext, ciphertext)
+        prev = xor(a: plaintext, ciphertext)
         return prev ?? []
     }
 
@@ -32,7 +32,7 @@ struct CFBModeWorker: BlockModeWorker {
         guard let plaintext = cipherOperation(block: prev ?? iv) else {
             return ciphertext
         }
-        let result = xor(plaintext, ciphertext)
+        let result = xor(a: plaintext, ciphertext)
         self.prev = ciphertext
         return result
     }

@@ -15,10 +15,10 @@ final public class Poly1305 {
     private var ctx:Context?
     
     private class Context {
-        var r            = Array<UInt8>(count: 17, repeatedValue: 0)
-        var h            = Array<UInt8>(count: 17, repeatedValue: 0)
-        var pad          = Array<UInt8>(count: 17, repeatedValue: 0)
-        var buffer       = Array<UInt8>(count: 16, repeatedValue: 0)
+        var r            = Array<UInt8>(repeating: 0, count: 17)
+        var h            = Array<UInt8>(repeating: 0, count: 17)
+        var pad          = Array<UInt8>(repeating: 0, count: 17)
+        var buffer       = Array<UInt8>(repeating: 0, count: 16)
         
         var final:UInt8   = 0
         var leftover:Int = 0
@@ -86,8 +86,8 @@ final public class Poly1305 {
      */
     public func authenticate(message:Array<UInt8>) -> Array<UInt8>? {
         if let ctx = self.ctx {
-            update(ctx, message: message)
-            return finish(ctx)
+            update(context: ctx, message: message)
+            return finish(context: ctx)
         }
         return nil
     }
@@ -131,14 +131,14 @@ final public class Poly1305 {
                 return
             }
             
-            blocks(context, m: context.buffer)
+            blocks(context: context, m: context.buffer)
             context.leftover = 0
         }
         
         /* process full blocks */
         if (bytes >= blockSize) {
             let want = bytes & ~(blockSize - 1)
-            blocks(context, m: message, startPos: mPos)
+            blocks(context: context, m: message, startPos: mPos)
             mPos += want
             bytes -= want;
         }
@@ -154,7 +154,7 @@ final public class Poly1305 {
     }
     
     private func finish(context:Context) -> Array<UInt8>? {
-        var mac = Array<UInt8>(count: 16, repeatedValue: 0);
+        var mac = Array<UInt8>(repeating: 0, count: 16);
         
         /* process the remaining block */
         if (context.leftover > 0) {
@@ -165,15 +165,15 @@ final public class Poly1305 {
             }
             context.final = 1
             
-            blocks(context, m: context.buffer)
+            blocks(context: context, m: context.buffer)
         }
         
         
         /* fully reduce h */
-        freeze(context)
+        freeze(context: context)
         
         /* h = (h + pad) % (1 << 128) */
-        add(context, c: context.pad)
+        add(context: context, c: context.pad)
         for i in 0..<mac.count {
             mac[i] = context.h[i]
         }
@@ -191,7 +191,7 @@ final public class Poly1305 {
         var u:UInt16 = 0
         for i in 0..<17 {
             u += UInt16(context.h[i]) + UInt16(c[i])
-            context.h[i] = UInt8.withValue(u)
+            context.h[i] = UInt8.withValue(v: u)
             u = u >> 8
         }
         return true
@@ -206,20 +206,20 @@ final public class Poly1305 {
         
         for i in 0..<16 {
             u += hr[i];
-            context.h[i] = UInt8.withValue(u) // crash! h[i] = UInt8(u) & 0xff
+            context.h[i] = UInt8.withValue(v: u) // crash! h[i] = UInt8(u) & 0xff
             u >>= 8;
         }
         
         u += hr[16]
-        context.h[16] = UInt8.withValue(u) & 0x03
+        context.h[16] = UInt8.withValue(v: u) & 0x03
         u >>= 2
         u += (u << 2); /* u *= 5; */
         for i in 0..<16 {
             u += UInt32(context.h[i])
-            context.h[i] = UInt8.withValue(u) // crash! h[i] = UInt8(u) & 0xff
+            context.h[i] = UInt8.withValue(v: u) // crash! h[i] = UInt8(u) & 0xff
             u >>= 8
         }
-        context.h[16] += UInt8.withValue(u);
+        context.h[16] += UInt8.withValue(v: u);
         
         return true
     }
@@ -231,14 +231,14 @@ final public class Poly1305 {
         }
         
         let minusp:Array<UInt8> = [0x05,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc]
-        var horig:Array<UInt8> = Array<UInt8>(count: 17, repeatedValue: 0)
+        var horig:Array<UInt8> = Array<UInt8>(repeating: 0, count: 17)
         
         /* compute h + -p */
         for i in 0..<17 {
             horig[i] = context.h[i]
         }
         
-        add(context, c: minusp)
+        add(context: context, c: minusp)
         
         /* select h if h < p, or h + -p if h >= p */
         let bits:[Bit] = (context.h[16] >> 7).bits()
@@ -260,9 +260,9 @@ final public class Poly1305 {
         var mPos = startPos
         
         while (bytes >= Int(blockSize)) {
-            var hr:Array<UInt32> = Array<UInt32>(count: 17, repeatedValue: 0)
+            var hr:Array<UInt32> = Array<UInt32>(repeating: 0, count: 17)
             var u:UInt32 = 0
-            var c:Array<UInt8> = Array<UInt8>(count: 17, repeatedValue: 0)
+            var c:Array<UInt8> = Array<UInt8>(repeating: 0, count: 17)
             
             /* h += m */
             for i in 0..<16 {
@@ -270,7 +270,7 @@ final public class Poly1305 {
             }
             c[16] = hibit
             
-            add(context, c: c)
+            add(context: context, c: c)
             
             /* h *= r */
             for i in 0..<17 {
@@ -286,7 +286,7 @@ final public class Poly1305 {
                 hr[i] = u
             }
             
-            squeeze(context, hr: hr)
+            squeeze(context: context, hr: hr)
             
             mPos += blockSize
             bytes -= blockSize

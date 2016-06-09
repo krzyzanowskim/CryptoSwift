@@ -15,7 +15,7 @@ public extension PKCS5 {
     /// some applications.
     public struct PBKDF1 {
 
-        public enum Error: ErrorType {
+        public enum Error: ErrorProtocol {
             case InvalidInput
             case DerivedKeyTooLong
         }
@@ -32,7 +32,7 @@ public extension PKCS5 {
                 }
             }
 
-            private func calculateHash(bytes bytes:Array<UInt8>) -> Array<UInt8>? {
+            private func calculateHash(bytes:Array<UInt8>) -> Array<UInt8>? {
                 switch (self) {
                 case .sha1:
                     return Hash.sha1(bytes).calculate()

@@ -19,16 +19,16 @@ extension UInt32: _UInt32Type {}
 /** array of bytes */
 extension UInt32 {
     public func bytes(totalBytes: Int = sizeof(UInt32)) -> Array<UInt8> {
-        return arrayOfBytes(self, length: totalBytes)
+        return arrayOfBytes(value: self, length: totalBytes)
     }
 
     public static func withBytes(bytes: ArraySlice<UInt8>) -> UInt32 {
-        return UInt32.withBytes(Array(bytes))
+        return UInt32.withBytes(bytes: Array(bytes))
     }
 
     /** Int with array bytes (little-endian) */
     public static func withBytes(bytes: Array<UInt8>) -> UInt32 {
-        return integerWithBytes(bytes)
+        return integerWithBytes(bytes: bytes)
     }
 }
 
@@ -92,25 +92,25 @@ extension UInt32 {
 }
 
 /** shift left and assign with bits truncation */
-public func &<<= (inout lhs: UInt32, rhs: UInt32) {
-    lhs.shiftLeft(rhs)
+public func &<<= (lhs: inout UInt32, rhs: UInt32) {
+    lhs.shiftLeft(count: rhs)
 }
 
 /** shift left with bits truncation */
 public func &<< (lhs: UInt32, rhs: UInt32) -> UInt32 {
     var l = lhs;
-    l.shiftLeft(rhs)
+    l.shiftLeft(count: rhs)
     return l
 }
 
 /** shift right and assign with bits truncation */
-func &>>= (inout lhs: UInt32, rhs: UInt32) {
-    lhs.shiftRight(rhs)
+func &>>= (lhs: inout UInt32, rhs: UInt32) {
+    lhs.shiftRight(count: rhs)
 }
 
 /** shift right and assign with bits truncation */
 func &>> (lhs: UInt32, rhs: UInt32) -> UInt32 {
     var l = lhs;
-    l.shiftRight(rhs)
+    l.shiftRight(count: rhs)
     return l
 }

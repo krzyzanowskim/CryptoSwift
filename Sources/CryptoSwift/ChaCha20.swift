@@ -8,7 +8,7 @@
 
 final public class ChaCha20: BlockCipher {
     
-    public enum Error: ErrorType {
+    public enum Error: ErrorProtocol {
         case MissingContext
     }
     
@@ -17,7 +17,7 @@ final public class ChaCha20: BlockCipher {
     private var context:Context?
     
     final private class Context {
-        var input:Array<UInt32> = Array<UInt32>(count: 16, repeatedValue: 0)
+        var input:Array<UInt32> = Array<UInt32>(repeating: 0, count: 16)
         
         deinit {
             for i in 0..<input.count {
@@ -42,14 +42,14 @@ final public class ChaCha20: BlockCipher {
         var x = input
 
         for _ in 0..<10 {
-            quarterround(&x[0], &x[4], &x[8], &x[12])
-            quarterround(&x[1], &x[5], &x[9],  &x[13])
-            quarterround(&x[2], &x[6], &x[10], &x[14])
-            quarterround(&x[3], &x[7], &x[11], &x[15])
-            quarterround(&x[0], &x[5], &x[10], &x[15])
-            quarterround(&x[1], &x[6], &x[11], &x[12])
-            quarterround(&x[2], &x[7], &x[8],  &x[13])
-            quarterround(&x[3], &x[4], &x[9],  &x[14])
+            quarterround(a: &x[0], &x[4], &x[8], &x[12])
+            quarterround(a: &x[1], &x[5], &x[9],  &x[13])
+            quarterround(a: &x[2], &x[6], &x[10], &x[14])
+            quarterround(a: &x[3], &x[7], &x[11], &x[15])
+            quarterround(a: &x[0], &x[5], &x[10], &x[15])
+            quarterround(a: &x[1], &x[6], &x[11], &x[12])
+            quarterround(a: &x[2], &x[7], &x[8],  &x[13])
+            quarterround(a: &x[3], &x[4], &x[9],  &x[14])
         }
 
         var output = Array<UInt8>()
@@ -57,13 +57,13 @@ final public class ChaCha20: BlockCipher {
 
         for i in 0..<16 {
             x[i] = x[i] &+ input[i]
-            output.appendContentsOf(x[i].bytes().reverse())
+            output.append(contentsOf: x[i].bytes().reversed())
         }
 
         return output;
     }
         
-    private func contextSetup(iv  iv:Array<UInt8>, key:Array<UInt8>) -> Context? {
+    private func contextSetup(iv:Array<UInt8>, key:Array<UInt8>) -> Context? {
         let ctx = Context()
         let kbits = key.count * 8
         
@@ -74,7 +74,7 @@ final public class ChaCha20: BlockCipher {
         // 4 - 8
         for i in 0..<4 {
             let start = i * 4
-            ctx.input[i + 4] = wordNumber(key[start..<(start + 4)])
+            ctx.input[i + 4] = wordNumber(bytes: key[start..<(start + 4)])
         }
         
         var addPos = 0;
@@ -100,14 +100,14 @@ final public class ChaCha20: BlockCipher {
             let start = addPos + (i*4)
             
             let bytes = key[start..<(start + 4)]
-            ctx.input[i + 8] = wordNumber(bytes)
+            ctx.input[i + 8] = wordNumber(bytes: bytes)
         }
 
         // iv
         ctx.input[12] = 0
         ctx.input[13] = 0
-        ctx.input[14] = wordNumber(iv[0..<4])
-        ctx.input[15] = wordNumber(iv[4..<8])
+        ctx.input[14] = wordNumber(bytes: iv[0..<4])
+        ctx.input[15] = wordNumber(bytes: iv[4..<8])
         
         return ctx
     }
@@ -118,14 +118,14 @@ final public class ChaCha20: BlockCipher {
             throw Error.MissingContext
         }
         
-        var c:Array<UInt8> = Array<UInt8>(count: message.count, repeatedValue: 0)
+        var c:Array<UInt8> = Array<UInt8>(repeating: 0, count: message.count)
         
         var cPos:Int = 0
         var mPos:Int = 0
         var bytes = message.count
         
         while (true) {
-            if let output = wordToByte(ctx.input) {
+            if let output = wordToByte(input: ctx.input) {
                 ctx.input[12] = ctx.input[12] &+ 1
                 if (ctx.input[12] == 0) {
                     ctx.input[13] = ctx.input[13] &+ 1
@@ -147,18 +147,18 @@ final public class ChaCha20: BlockCipher {
         }
     }
     
-    private final func quarterround(inout a:UInt32, inout _ b:UInt32, inout _ c:UInt32, inout _ d:UInt32) {
+    private final func quarterround(a:inout UInt32, _ b:inout UInt32, _ c:inout UInt32, _ d:inout UInt32) {
         a = a &+ b
-        d = rotateLeft((d ^ a), 16) //FIXME: WAT? n:
+        d = rotateLeft(v: (d ^ a), 16) //FIXME: WAT? n:
         
         c = c &+ d
-        b = rotateLeft((b ^ c), 12);
+        b = rotateLeft(v: (b ^ c), 12);
         
         a = a &+ b
-        d = rotateLeft((d ^ a), 8);
+        d = rotateLeft(v: (d ^ a), 8);
 
         c = c &+ d
-        b = rotateLeft((b ^ c), 7);
+        b = rotateLeft(v: (b ^ c), 7);
     }
 }
 
@@ -169,11 +169,11 @@ extension ChaCha20: Cipher {
             throw Error.MissingContext
         }
 
-        return try encryptBytes(bytes)
+        return try encryptBytes(message: bytes)
     }
 
     public func decrypt(bytes:Array<UInt8>) throws -> Array<UInt8> {
-        return try encrypt(bytes)
+        return try encrypt(bytes: bytes)
     }
 }
 

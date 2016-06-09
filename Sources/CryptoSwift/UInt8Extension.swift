@@ -48,14 +48,14 @@ extension UInt8 {
 extension UInt8 {
 
     init(bits: [Bit]) {
-        self.init(integerFromBitsArray(bits) as UInt8)
+        self.init(integerFromBitsArray(bits: bits) as UInt8)
     }
     
     /** array of bits */
     func bits() -> [Bit] {
         let totalBitsCount = sizeofValue(self) * 8
         
-        var bitsArray = [Bit](count: totalBitsCount, repeatedValue: Bit.Zero)
+        var bitsArray = [Bit](repeating: Bit.Zero, count: totalBitsCount)
         
         for j in 0..<totalBitsCount {
             let bitVal:UInt8 = 1 << UInt8(totalBitsCount - 1 - j)
@@ -71,7 +71,7 @@ extension UInt8 {
     func bits() -> String {
         var s = String()
         let arr:[Bit] = self.bits()
-        for (idx,b) in arr.enumerate() {
+        for (idx,b) in arr.enumerated() {
             s += (b == Bit.One ? "1" : "0")
             if ((idx + 1) % 8 == 0) { s += " " }
         }
@@ -111,6 +111,6 @@ extension UInt8 {
 /** shift right and assign with bits truncation */
 func &>> (lhs: UInt8, rhs: UInt8) -> UInt8 {
     var l = lhs;
-    l.shiftRight(rhs)
+    l.shiftRight(count: rhs)
     return l
 }

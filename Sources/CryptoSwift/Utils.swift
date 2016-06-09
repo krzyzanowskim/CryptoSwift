@@ -55,11 +55,10 @@ func reverseUInt32(uint32 : UInt32) -> UInt32 {
 func toUInt32Array(slice: ArraySlice<UInt8>) -> Array<UInt32> {
     var result = Array<UInt32>()
     result.reserveCapacity(16)
-    
-    for idx in slice.startIndex.stride(to: slice.endIndex, by: sizeof(UInt32)) {
-        let val1:UInt32 = (UInt32(slice[idx.advancedBy(3)]) << 24)
-        let val2:UInt32 = (UInt32(slice[idx.advancedBy(2)]) << 16)
-        let val3:UInt32 = (UInt32(slice[idx.advancedBy(1)]) << 8)
+    for idx in stride(from: slice.startIndex, to: slice.endIndex, by: sizeof(UInt32)) {
+        let val1:UInt32 = (UInt32(slice[idx.advanced(by: 3)]) << 24)
+        let val2:UInt32 = (UInt32(slice[idx.advanced(by: 2)]) << 16)
+        let val3:UInt32 = (UInt32(slice[idx.advanced(by: 1)]) << 8)
         let val4:UInt32 = UInt32(slice[idx])
         let val:UInt32 = val1 | val2 | val3 | val4
         result.append(val)
@@ -70,23 +69,23 @@ func toUInt32Array(slice: ArraySlice<UInt8>) -> Array<UInt32> {
 func toUInt64Array(slice: ArraySlice<UInt8>) -> Array<UInt64> {
     var result = Array<UInt64>()
     result.reserveCapacity(32)
-    for idx in slice.startIndex.stride(to: slice.endIndex, by: sizeof(UInt64)) {
+    for idx in stride(from: slice.startIndex, to: slice.endIndex, by: sizeof(UInt64)) {
         var val:UInt64 = 0
-        val |= UInt64(slice[idx.advancedBy(7)]) << 56
-        val |= UInt64(slice[idx.advancedBy(6)]) << 48
-        val |= UInt64(slice[idx.advancedBy(5)]) << 40
-        val |= UInt64(slice[idx.advancedBy(4)]) << 32
-        val |= UInt64(slice[idx.advancedBy(3)]) << 24
-        val |= UInt64(slice[idx.advancedBy(2)]) << 16
-        val |= UInt64(slice[idx.advancedBy(1)]) << 8
-        val |= UInt64(slice[idx.advancedBy(0)]) << 0
+        val |= UInt64(slice[idx.advanced(by: 7)]) << 56
+        val |= UInt64(slice[idx.advanced(by: 6)]) << 48
+        val |= UInt64(slice[idx.advanced(by: 5)]) << 40
+        val |= UInt64(slice[idx.advanced(by: 4)]) << 32
+        val |= UInt64(slice[idx.advanced(by: 3)]) << 24
+        val |= UInt64(slice[idx.advanced(by: 2)]) << 16
+        val |= UInt64(slice[idx.advanced(by: 1)]) << 8
+        val |= UInt64(slice[idx.advanced(by: 0)]) << 0
         result.append(val)
     }
     return result
 }
 
 func xor(a: Array<UInt8>, _ b:Array<UInt8>) -> Array<UInt8> {
-    var xored = Array<UInt8>(count: min(a.count, b.count), repeatedValue: 0)
+    var xored = Array<UInt8>(repeating: 0, count: min(a.count, b.count))
     for i in 0..<xored.count {
         xored[i] = a[i] ^ b[i]
     }

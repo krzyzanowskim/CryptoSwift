@@ -30,7 +30,7 @@ extension HashProtocol {
             msgLength += 1
         }
 
-        tmpMessage += Array<UInt8>(count: counter, repeatedValue: 0)
+        tmpMessage += Array<UInt8>(repeating: 0, count: counter)
         return tmpMessage
     }
 }

@@ -28,9 +28,9 @@ public enum Hash {
         case sha512(let bytes):
             return SHA2(bytes, variant: .sha512).calculate64()
         case crc32(let bytes):
-            return CRC().crc32(bytes.0, seed: bytes.seed, reflect: bytes.reflect).bytes()
+            return CRC().crc32(message: bytes.0, seed: bytes.seed, reflect: bytes.reflect).bytes()
         case crc16(let bytes):
-            return UInt32(CRC().crc16(bytes.0, seed: bytes.seed)).bytes(2)
+            return UInt32(CRC().crc16(message: bytes.0, seed: bytes.seed)).bytes(totalBytes: 2)
         }
     }
 }

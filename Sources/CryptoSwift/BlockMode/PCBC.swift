@@ -21,10 +21,10 @@ struct PCBCModeWorker: BlockModeWorker {
     }
 
     mutating func encrypt(plaintext: Array<UInt8>) -> Array<UInt8> {
-        guard let ciphertext = cipherOperation(block: xor(prev ?? iv, plaintext)) else {
+        guard let ciphertext = cipherOperation(block: xor(a: prev ?? iv, plaintext)) else {
             return plaintext
         }
-        prev = xor(plaintext, ciphertext)
+        prev = xor(a: plaintext, ciphertext)
         return ciphertext ?? []
     }
 
@@ -32,8 +32,8 @@ struct PCBCModeWorker: BlockModeWorker {
         guard let plaintext = cipherOperation(block: ciphertext) else {
             return ciphertext
         }
-        let result = xor(prev ?? iv, plaintext)
-        self.prev = xor(plaintext, ciphertext)
+        let result = xor(a: prev ?? iv, plaintext)
+        self.prev = xor(a: plaintext, ciphertext)
         return result
     }
 }

@@ -25,14 +25,14 @@ struct OFBModeWorker: BlockModeWorker {
             return plaintext
         }
         prev = ciphertext
-        return xor(plaintext, ciphertext)
+        return xor(a: plaintext, ciphertext)
     }
 
     mutating func decrypt(ciphertext: Array<UInt8>) -> Array<UInt8> {
         guard let decrypted = cipherOperation(block: prev ?? iv) else {
             return ciphertext
         }
-        let plaintext = xor(decrypted, ciphertext)
+        let plaintext = xor(a: decrypted, ciphertext)
         self.prev = decrypted
         return plaintext
     }

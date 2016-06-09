@@ -58,7 +58,7 @@ do {
     inputStream.open()
     outputStream.open()
 
-    var buffer = Array<UInt8>(count: 2, repeatedValue: 0)
+    var buffer = Array<UInt8>(repeating: 0, count: 2)
 
     // encrypt input stream data and write encrypted result to output stream
     while (inputStream.hasBytesAvailable) {

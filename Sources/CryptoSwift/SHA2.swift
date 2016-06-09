@@ -8,7 +8,7 @@
 
 final class SHA2 : HashProtocol {
     var size:Int { return variant.rawValue }
-    let variant:SHA2.Variant
+    let variant: Variant
     
     let message: Array<UInt8>
     
@@ -55,7 +55,7 @@ final class SHA2 : HashProtocol {
         
         var size:Int { return self.rawValue }
         
-        private var h:[UInt64] {
+        private var h:Array<UInt64> {
             switch (self) {
             case .sha224:
                 return [0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939, 0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4]
@@ -68,7 +68,7 @@ final class SHA2 : HashProtocol {
             }
         }
         
-        private var k:[UInt64] {
+        private var k:Array<UInt64> {
             switch (self) {
             case .sha224, .sha256:
                 return [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -114,7 +114,7 @@ final class SHA2 : HashProtocol {
     
     //FIXME: I can't do Generic func out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.
     func calculate32() -> Array<UInt8> {
-        var tmpMessage = self.prepare(64)
+        var tmpMessage = self.prepare(len: 64)
         
         // hash values
         var hh = Array<UInt32>()
@@ -123,25 +123,25 @@ final class SHA2 : HashProtocol {
         }
 		
         // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
-        tmpMessage += (message.count * 8).bytes(64 / 8)
+        tmpMessage += (message.count * 8).bytes(totalBytes: 64 / 8)
         
         // Process the message in successive 512-bit chunks:
         let chunkSizeBytes = 512 / 8 // 64
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 32-bit words into sixty-four 32-bit words:
-            var M:Array<UInt32> = Array<UInt32>(count: variant.k.count, repeatedValue: 0)
+            var M:Array<UInt32> = Array<UInt32>(repeating: 0, count: variant.k.count)
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
                     let start = chunk.startIndex + (x * sizeofValue(M[x]))
                     let end = start + sizeofValue(M[x])
-                    let le = toUInt32Array(chunk[start..<end])[0]
+                    let le = toUInt32Array(slice: chunk[start..<end])[0]
                     M[x] = le.bigEndian
                     break
                 default:
-                    let s0 = rotateRight(M[x-15], n: 7) ^ rotateRight(M[x-15], n: 18) ^ (M[x-15] >> 3) //FIXME: n
-                    let s1 = rotateRight(M[x-2], n: 17) ^ rotateRight(M[x-2], n: 19) ^ (M[x-2] >> 10)
+                    let s0 = rotateRight(x: M[x-15], n: 7) ^ rotateRight(x: M[x-15], n: 18) ^ (M[x-15] >> 3) //FIXME: n
+                    let s1 = rotateRight(x: M[x-2], n: 17) ^ rotateRight(x: M[x-2], n: 19) ^ (M[x-2] >> 10)
                     M[x] = M[x-16] &+ s0 &+ M[x-7] &+ s1
                     break
                 }
@@ -158,10 +158,10 @@ final class SHA2 : HashProtocol {
             
             // Main loop
             for j in 0..<variant.k.count {
-                let s0 = rotateRight(A,n: 2) ^ rotateRight(A,n: 13) ^ rotateRight(A,n: 22)
+                let s0 = rotateRight(x: A,n: 2) ^ rotateRight(x: A,n: 13) ^ rotateRight(x: A,n: 22)
                 let maj = (A & B) ^ (A & C) ^ (B & C)
                 let t2 = s0 &+ maj
-                let s1 = rotateRight(E,n: 6) ^ rotateRight(E,n: 11) ^ rotateRight(E,n: 25)
+                let s1 = rotateRight(x: E,n: 6) ^ rotateRight(x: E,n: 11) ^ rotateRight(x: E,n: 25)
                 let ch = (E & F) ^ ((~E) & G)
                 let t1 = H &+ s1 &+ ch &+ UInt32(variant.k[j]) &+ M[j]
                 
@@ -188,7 +188,7 @@ final class SHA2 : HashProtocol {
         // Produce the final hash value (big-endian) as a 160 bit number:
         var result = Array<UInt8>()
         result.reserveCapacity(hh.count / 4)
-        variant.resultingArray(hh).forEach {
+        variant.resultingArray(hh: hh).forEach {
             let item = $0.bigEndian
             result += [UInt8(item & 0xff), UInt8((item >> 8) & 0xff), UInt8((item >> 16) & 0xff), UInt8((item >> 24) & 0xff)]
         }
@@ -196,35 +196,35 @@ final class SHA2 : HashProtocol {
     }
     
     func calculate64() -> Array<UInt8> {
-        var tmpMessage = self.prepare(128)
+        var tmpMessage = self.prepare(len: 128)
         
         // hash values
-        var hh = [UInt64]()
+        var hh = Array<UInt64>()
         variant.h.forEach {(h) -> () in
             hh.append(h)
         }
 		
   
         // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
-        tmpMessage += (message.count * 8).bytes(64 / 8)
+        tmpMessage += (message.count * 8).bytes(totalBytes: 64 / 8)
         
         // Process the message in successive 1024-bit chunks:
         let chunkSizeBytes = 1024 / 8 // 128
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 64-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 64-bit words into eighty 64-bit words:
-            var M = [UInt64](count: variant.k.count, repeatedValue: 0)
+            var M = Array<UInt64>(repeating: 0, count: variant.k.count)
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
                     let start = chunk.startIndex + (x * sizeofValue(M[x]))
                     let end = start + sizeofValue(M[x])
-                    let le = toUInt64Array(chunk[start..<end])[0]
+                    let le = toUInt64Array(slice: chunk[start..<end])[0]
                     M[x] = le.bigEndian
                     break
                 default:
-                    let s0 = rotateRight(M[x-15], n: 1) ^ rotateRight(M[x-15], n: 8) ^ (M[x-15] >> 7)
-                    let s1 = rotateRight(M[x-2], n: 19) ^ rotateRight(M[x-2], n: 61) ^ (M[x-2] >> 6)
+                    let s0 = rotateRight(x: M[x-15], n: 1) ^ rotateRight(x: M[x-15], n: 8) ^ (x: M[x-15] >> 7)
+                    let s1 = rotateRight(x: M[x-2], n: 19) ^ rotateRight(x: M[x-2], n: 61) ^ (x: M[x-2] >> 6)
                     M[x] = M[x-16] &+ s0 &+ M[x-7] &+ s1
                     break
                 }
@@ -241,10 +241,10 @@ final class SHA2 : HashProtocol {
             
             // Main loop
             for j in 0..<variant.k.count {
-                let s0 = rotateRight(A,n: 28) ^ rotateRight(A,n: 34) ^ rotateRight(A,n: 39) //FIXME: n:
+                let s0 = rotateRight(x: A,n: 28) ^ rotateRight(x: A,n: 34) ^ rotateRight(x: A,n: 39) //FIXME: n:
                 let maj = (A & B) ^ (A & C) ^ (B & C)
                 let t2 = s0 &+ maj
-                let s1 = rotateRight(E,n: 14) ^ rotateRight(E,n: 18) ^ rotateRight(E,n: 41)
+                let s1 = rotateRight(x: E,n: 14) ^ rotateRight(x: E,n: 18) ^ rotateRight(x: E,n: 41)
                 let ch = (E & F) ^ ((~E) & G)
                 let t1 = H &+ s1 &+ ch &+ variant.k[j] &+ UInt64(M[j])
                 
@@ -271,7 +271,7 @@ final class SHA2 : HashProtocol {
         // Produce the final hash value (big-endian)
         var result = Array<UInt8>()
         result.reserveCapacity(hh.count / 4)
-        variant.resultingArray(hh).forEach {
+        variant.resultingArray(hh: hh).forEach {
             let item = $0.bigEndian
             var partialResult = Array<UInt8>()
             partialResult.reserveCapacity(8)

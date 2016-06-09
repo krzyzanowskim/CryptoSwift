@@ -80,8 +80,8 @@ extension NSData {
         return NSData.with(bytes: decrypted)
     }
     
-    public func authenticate(authenticator: Authenticator) throws -> NSData {
-        let result = try authenticator.authenticate(message: self.arrayOfBytes())
+    public func authenticate(with authenticator: Authenticator) throws -> NSData {
+        let result = try authenticator.authenticate(bytes: self.arrayOfBytes())
         return NSData.with(bytes: result)
     }
 }

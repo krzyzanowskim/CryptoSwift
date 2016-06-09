@@ -58,7 +58,7 @@ func integerWith<T:Integer where T:ByteConvertible, T: BitshiftOperationsType>(b
 /// I found this method slow
 func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
     let totalBytes = length ?? sizeof(T)
-    
+
     let valuePointer = UnsafeMutablePointer<T>(allocatingCapacity: 1)
     valuePointer.pointee = value
     

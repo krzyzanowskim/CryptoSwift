@@ -95,7 +95,7 @@ final class MD5 : HashProtocol  {
                 dTemp = D
                 D = C
                 C = B
-                B = B &+ rotateLeft(v: (A &+ F &+ k[j] &+ M[g]), s[j])
+                B = B &+ rotateLeft(A &+ F &+ k[j] &+ M[g], by: s[j])
                 A = dTemp    
             }
             

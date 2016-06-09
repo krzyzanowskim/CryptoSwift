@@ -84,9 +84,9 @@ final public class Poly1305 {
 
      - returns: Message Authentication Code
      */
-    public func authenticate(message:Array<UInt8>) -> Array<UInt8>? {
+    public func authenticate(bytes:Array<UInt8>) -> Array<UInt8>? {
         if let ctx = self.ctx {
-            update(context: ctx, message: message)
+            update(context: ctx, message: bytes)
             return finish(context: ctx)
         }
         return nil

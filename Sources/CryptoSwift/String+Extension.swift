@@ -50,7 +50,7 @@ extension String {
     }
     
     /// Returns hex string of bytes.
-    public func authenticate(authenticator: Authenticator) throws -> String {
-        return  try self.utf8.lazy.map({ $0 as UInt8 }).authenticate(authenticator: authenticator).toHexString()
+    public func authenticate(with authenticator: Authenticator) throws -> String {
+        return try self.utf8.lazy.map({ $0 as UInt8 }).authenticate(with: authenticator).toHexString()
     }
 }

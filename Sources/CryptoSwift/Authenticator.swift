@@ -28,15 +28,15 @@ public enum Authenticator {
     
     - returns: 16-byte message authentication code
     */
-    public func authenticate(message: Array<UInt8>) throws -> Array<UInt8> {
+    public func authenticate(bytes: Array<UInt8>) throws -> Array<UInt8> {
         switch (self) {
         case .Poly1305(let key):
-            guard let auth = CryptoSwift.Poly1305(key: key)?.authenticate(message: message) else {
+            guard let auth = CryptoSwift.Poly1305(key: key)?.authenticate(bytes: bytes) else {
                 throw Error.AuthenticateError
             }
             return auth
         case .HMAC(let key, let variant):
-            guard let auth = CryptoSwift.HMAC(key: key, variant: variant)?.authenticate(message: message) else {
+            guard let auth = CryptoSwift.HMAC(key: key, variant: variant)?.authenticate(bytes: bytes) else {
                 throw Error.AuthenticateError
             }
             return auth

@@ -6,43 +6,43 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-func rotateLeft(v:UInt8, _ n:UInt8) -> UInt8 {
-    return ((v << n) & 0xFF) | (v >> (8 - n))
+func rotateLeft(_ value:UInt8, by:UInt8) -> UInt8 {
+    return ((value << by) & 0xFF) | (value >> (8 - by))
 }
 
-func rotateLeft(v:UInt16, _ n:UInt16) -> UInt16 {
-    return ((v << n) & 0xFFFF) | (v >> (16 - n))
+func rotateLeft(_ value:UInt16, by:UInt16) -> UInt16 {
+    return ((value << by) & 0xFFFF) | (value >> (16 - by))
 }
 
-func rotateLeft(v:UInt32, _ n:UInt32) -> UInt32 {
-    return ((v << n) & 0xFFFFFFFF) | (v >> (32 - n))
+func rotateLeft(_ value:UInt32, by:UInt32) -> UInt32 {
+    return ((value << by) & 0xFFFFFFFF) | (value >> (32 - by))
 }
 
-func rotateLeft(x:UInt64, _ n:UInt64) -> UInt64 {
-    return (x << n) | (x >> (64 - n))
+func rotateLeft(_ value:UInt64, by:UInt64) -> UInt64 {
+    return (value << by) | (value >> (64 - by))
 }
 
-func rotateRight(x:UInt16, n:UInt16) -> UInt16 {
-    return (x >> n) | (x << (16 - n))
+func rotateRight(_ value:UInt16, by:UInt16) -> UInt16 {
+    return (value >> by) | (value << (16 - by))
 }
 
-func rotateRight(x:UInt32, n:UInt32) -> UInt32 {
-    return (x >> n) | (x << (32 - n))
+func rotateRight(_ value:UInt32, by:UInt32) -> UInt32 {
+    return (value >> by) | (value << (32 - by))
 }
 
-func rotateRight(x:UInt64, n:UInt64) -> UInt64 {
-    return ((x >> n) | (x << (64 - n)))
+func rotateRight(_ value:UInt64, by:UInt64) -> UInt64 {
+    return ((value >> by) | (value << (64 - by)))
 }
 
-func reverseUInt8(uint8 : UInt8) -> UInt8 {
-    var v : UInt8 = uint8
+func reverse(uint8 : UInt8) -> UInt8 {
+    var v = uint8
     v = (v & 0xF0) >> 4 | (v & 0x0F) << 4
     v = (v & 0xCC) >> 2 | (v & 0x33) << 2
     v = (v & 0xAA) >> 1 | (v & 0x55) << 1
     return v
 }
 
-func reverseUInt32(uint32 : UInt32) -> UInt32 {
+func reverse(uint32 : UInt32) -> UInt32 {
     var v = uint32
     v = ((v >> 1) & 0x55555555) | ((v & 0x55555555) << 1)
     v = ((v >> 2) & 0x33333333) | ((v & 0x33333333) << 2)
@@ -52,7 +52,7 @@ func reverseUInt32(uint32 : UInt32) -> UInt32 {
     return v
 }
 
-func toUInt32Array(slice: ArraySlice<UInt8>) -> Array<UInt32> {
+func sliceToUInt32Array(_ slice: ArraySlice<UInt8>) -> Array<UInt32> {
     var result = Array<UInt32>()
     result.reserveCapacity(16)
     for idx in stride(from: slice.startIndex, to: slice.endIndex, by: sizeof(UInt32)) {
@@ -66,7 +66,7 @@ func toUInt32Array(slice: ArraySlice<UInt8>) -> Array<UInt32> {
     return result
 }
 
-func toUInt64Array(slice: ArraySlice<UInt8>) -> Array<UInt64> {
+func sliceToUInt64Array(_ slice: ArraySlice<UInt8>) -> Array<UInt64> {
     var result = Array<UInt64>()
     result.reserveCapacity(32)
     for idx in stride(from: slice.startIndex, to: slice.endIndex, by: sizeof(UInt64)) {

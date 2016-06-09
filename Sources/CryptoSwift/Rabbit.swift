@@ -134,14 +134,14 @@ final public class Rabbit: BlockCipher {
         
         // Iteration of the system
         var newX = Array<UInt32>(repeating: 0, count: 8)
-        newX[0] = g(j: 0) &+ rotateLeft(v: g(j: 7), 16) &+ rotateLeft(v: g(j: 6), 16)
-        newX[1] = g(j: 1) &+ rotateLeft(v: g(j: 0), 8)  &+ g(j: 7)
-        newX[2] = g(j: 2) &+ rotateLeft(v: g(j: 1), 16) &+ rotateLeft(v: g(j: 0), 16)
-        newX[3] = g(j: 3) &+ rotateLeft(v: g(j: 2), 8)  &+ g(j: 1)
-        newX[4] = g(j: 4) &+ rotateLeft(v: g(j: 3), 16) &+ rotateLeft(v: g(j: 2), 16)
-        newX[5] = g(j: 5) &+ rotateLeft(v: g(j: 4), 8)  &+ g(j: 3)
-        newX[6] = g(j: 6) &+ rotateLeft(v: g(j: 5), 16) &+ rotateLeft(v: g(j: 4), 16)
-        newX[7] = g(j: 7) &+ rotateLeft(v: g(j: 6), 8)  &+ g(j: 5)
+        newX[0] = g(j: 0) &+ rotateLeft(g(j: 7), by: 16) &+ rotateLeft(g(j: 6), by: 16)
+        newX[1] = g(j: 1) &+ rotateLeft(g(j: 0), by: 8)  &+ g(j: 7)
+        newX[2] = g(j: 2) &+ rotateLeft(g(j: 1), by: 16) &+ rotateLeft(g(j: 0), by: 16)
+        newX[3] = g(j: 3) &+ rotateLeft(g(j: 2), by: 8)  &+ g(j: 1)
+        newX[4] = g(j: 4) &+ rotateLeft(g(j: 3), by: 16) &+ rotateLeft(g(j: 2), by: 16)
+        newX[5] = g(j: 5) &+ rotateLeft(g(j: 4), by: 8)  &+ g(j: 3)
+        newX[6] = g(j: 6) &+ rotateLeft(g(j: 5), by: 16) &+ rotateLeft(g(j: 4), by: 16)
+        newX[7] = g(j: 7) &+ rotateLeft(g(j: 6), by: 8)  &+ g(j: 5)
         x = newX
     }
     

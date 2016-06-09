@@ -149,16 +149,16 @@ final public class ChaCha20: BlockCipher {
     
     private final func quarterround(a:inout UInt32, _ b:inout UInt32, _ c:inout UInt32, _ d:inout UInt32) {
         a = a &+ b
-        d = rotateLeft(v: (d ^ a), 16) //FIXME: WAT? n:
+        d = rotateLeft((d ^ a), by: 16) //FIXME: WAT? n:
         
         c = c &+ d
-        b = rotateLeft(v: (b ^ c), 12);
+        b = rotateLeft((b ^ c), by: 12);
         
         a = a &+ b
-        d = rotateLeft(v: (d ^ a), 8);
+        d = rotateLeft((d ^ a), by: 8);
 
         c = c &+ d
-        b = rotateLeft(v: (b ^ c), 7);
+        b = rotateLeft((b ^ c), by: 7);
     }
 }
 

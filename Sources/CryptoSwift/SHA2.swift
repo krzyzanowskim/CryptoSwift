@@ -136,12 +136,12 @@ final class SHA2 : HashProtocol {
                 case 0...15:
                     let start = chunk.startIndex + (x * sizeofValue(M[x]))
                     let end = start + sizeofValue(M[x])
-                    let le = toUInt32Array(slice: chunk[start..<end])[0]
+                    let le = sliceToUInt32Array(chunk[start..<end])[0]
                     M[x] = le.bigEndian
                     break
                 default:
-                    let s0 = rotateRight(x: M[x-15], n: 7) ^ rotateRight(x: M[x-15], n: 18) ^ (M[x-15] >> 3) //FIXME: n
-                    let s1 = rotateRight(x: M[x-2], n: 17) ^ rotateRight(x: M[x-2], n: 19) ^ (M[x-2] >> 10)
+                    let s0 = rotateRight(M[x-15], by: 7) ^ rotateRight(M[x-15], by: 18) ^ (M[x-15] >> 3)
+                    let s1 = rotateRight(M[x-2], by: 17) ^ rotateRight(M[x-2], by: 19) ^ (M[x-2] >> 10)
                     M[x] = M[x-16] &+ s0 &+ M[x-7] &+ s1
                     break
                 }
@@ -158,10 +158,10 @@ final class SHA2 : HashProtocol {
             
             // Main loop
             for j in 0..<variant.k.count {
-                let s0 = rotateRight(x: A,n: 2) ^ rotateRight(x: A,n: 13) ^ rotateRight(x: A,n: 22)
+                let s0 = rotateRight(A, by: 2) ^ rotateRight(A, by: 13) ^ rotateRight(A, by: 22)
                 let maj = (A & B) ^ (A & C) ^ (B & C)
                 let t2 = s0 &+ maj
-                let s1 = rotateRight(x: E,n: 6) ^ rotateRight(x: E,n: 11) ^ rotateRight(x: E,n: 25)
+                let s1 = rotateRight(E, by: 6) ^ rotateRight(E, by: 11) ^ rotateRight(E, by: 25)
                 let ch = (E & F) ^ ((~E) & G)
                 let t1 = H &+ s1 &+ ch &+ UInt32(variant.k[j]) &+ M[j]
                 
@@ -219,12 +219,12 @@ final class SHA2 : HashProtocol {
                 case 0...15:
                     let start = chunk.startIndex + (x * sizeofValue(M[x]))
                     let end = start + sizeofValue(M[x])
-                    let le = toUInt64Array(slice: chunk[start..<end])[0]
+                    let le = sliceToUInt64Array(chunk[start..<end])[0]
                     M[x] = le.bigEndian
                     break
                 default:
-                    let s0 = rotateRight(x: M[x-15], n: 1) ^ rotateRight(x: M[x-15], n: 8) ^ (x: M[x-15] >> 7)
-                    let s1 = rotateRight(x: M[x-2], n: 19) ^ rotateRight(x: M[x-2], n: 61) ^ (x: M[x-2] >> 6)
+                    let s0 = rotateRight(M[x-15], by: 1) ^ rotateRight(M[x-15], by: 8) ^ (M[x-15] >> 7)
+                    let s1 = rotateRight(M[x-2], by: 19) ^ rotateRight(M[x-2], by: 61) ^ (M[x-2] >> 6)
                     M[x] = M[x-16] &+ s0 &+ M[x-7] &+ s1
                     break
                 }
@@ -241,10 +241,10 @@ final class SHA2 : HashProtocol {
             
             // Main loop
             for j in 0..<variant.k.count {
-                let s0 = rotateRight(x: A,n: 28) ^ rotateRight(x: A,n: 34) ^ rotateRight(x: A,n: 39) //FIXME: n:
+                let s0 = rotateRight(A, by: 28) ^ rotateRight(A, by: 34) ^ rotateRight(A, by: 39) //FIXME: n:
                 let maj = (A & B) ^ (A & C) ^ (B & C)
                 let t2 = s0 &+ maj
-                let s1 = rotateRight(x: E,n: 14) ^ rotateRight(x: E,n: 18) ^ rotateRight(x: E,n: 41)
+                let s1 = rotateRight(E, by: 14) ^ rotateRight(E, by: 18) ^ rotateRight(E, by: 41)
                 let ch = (E & F) ^ ((~E) & G)
                 let t1 = H &+ s1 &+ ch &+ variant.k[j] &+ UInt64(M[j])
                 

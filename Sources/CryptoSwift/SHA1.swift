@@ -40,7 +40,7 @@ final class SHA1 : HashProtocol {
                     M[x] = le.bigEndian
                     break
                 default:
-                    M[x] = rotateLeft(v: M[x-3] ^ M[x-8] ^ M[x-14] ^ M[x-16], 1) //FIXME: n:
+                    M[x] = rotateLeft(M[x-3] ^ M[x-8] ^ M[x-14] ^ M[x-16], by: 1)
                     break
                 }
             }
@@ -77,10 +77,10 @@ final class SHA1 : HashProtocol {
                     break
                 }
                 
-                let temp = (rotateLeft(v: A,5) &+ f &+ E &+ M[j] &+ k) & 0xffffffff
+                let temp = (rotateLeft(A, by: 5) &+ f &+ E &+ M[j] &+ k) & 0xffffffff
                 E = D
                 D = C
-                C = rotateLeft(v: B, 30)
+                C = rotateLeft(B, by: 30)
                 B = A
                 A = temp
             }

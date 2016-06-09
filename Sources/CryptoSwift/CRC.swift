@@ -78,11 +78,11 @@ final class CRC {
         var crc:UInt32 = seed != nil ? seed! : 0xffffffff
         for chunk in BytesSequence(chunkSize: 256, data: message) {
             for b in chunk {
-                let idx = Int((crc ^ UInt32(reflect ? b : reverseUInt8(uint8: b))) & 0xff)
+                let idx = Int((crc ^ UInt32(reflect ? b : reverse(uint8: b))) & 0xff)
                 crc = (crc >> 8) ^ CRC.table32[idx]
             }
         }
-        return (reflect ? crc : reverseUInt32(uint32: crc)) ^ 0xffffffff
+        return (reflect ? crc : reverse(uint32: crc)) ^ 0xffffffff
     }
     
     func crc16(message:Array<UInt8>, seed: UInt16? = nil) -> UInt16 {

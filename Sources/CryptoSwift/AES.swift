@@ -326,7 +326,7 @@ extension AES {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
             }
             if ((i % variant.Nk) == 0) {
-                tmp = subWord(word: rotateLeft(v: UInt32.with(bytes: tmp), 8).bytes(totalBytes: sizeof(UInt32)))
+                tmp = subWord(word: rotateLeft(UInt32.with(bytes: tmp), by: 8).bytes(totalBytes: sizeof(UInt32)))
                 tmp[0] = tmp.first! ^ Rcon[i/variant.Nk]
             } else if (variant.Nk > 6 && (i % variant.Nk) == 4) {
                 tmp = subWord(word: tmp)
@@ -379,7 +379,7 @@ extension AES {
             q ^= q << 4
             q ^= (q & 0x80) == 0x80 ? 0x09 : 0
             
-            let s = 0x63 ^ q ^ rotateLeft(v: q, 1) ^ rotateLeft(v: q, 2) ^ rotateLeft(v: q, 3) ^ rotateLeft(v: q, 4)
+            let s = 0x63 ^ q ^ rotateLeft(q, by: 1) ^ rotateLeft(q, by: 2) ^ rotateLeft(q, by: 3) ^ rotateLeft(q, by: 4)
             
             sbox[Int(p)] = UInt32(s)
             invsbox[Int(s)] = UInt32(p)
@@ -407,7 +407,7 @@ extension AES {
             self.accumulated += bytes
 
             if (isLast) {
-                self.accumulated = padding.add(data: self.accumulated, blockSize: AES.blockSize)
+                self.accumulated = padding.add(to: self.accumulated, blockSize: AES.blockSize)
             }
 
             //CTR does not require full block therefore work with anything
@@ -459,7 +459,7 @@ extension AES {
             }
 
             if (isLast) {
-                plaintext = padding.remove(data: plaintext, blockSize: AES.blockSize)
+                plaintext = padding.remove(from: plaintext, blockSize: AES.blockSize)
             }
 
             return plaintext

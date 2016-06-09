@@ -81,7 +81,7 @@ private extension PKCS5.PBKDF2 {
     // F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
     // U_1 = PRF (P, S || INT (i))
     private func calculateBlock(salt: Array<UInt8>, blockNum: UInt) -> Array<UInt8>? {
-        guard let u1 = prf.authenticate(message: salt + INT(i: blockNum)) else {
+        guard let u1 = prf.authenticate(bytes: salt + INT(i: blockNum)) else {
             return nil
         }
 
@@ -91,7 +91,7 @@ private extension PKCS5.PBKDF2 {
             // U_2 = PRF (P, U_1) ,
             // U_c = PRF (P, U_{c-1}) .
             for _ in 2...self.iterations {
-                u = prf.authenticate(message: u)!
+                u = prf.authenticate(bytes: u)!
                 for x in 0..<ret.count {
                     ret[x] = ret[x] ^ u[x]
                 }

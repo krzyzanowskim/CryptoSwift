@@ -36,7 +36,7 @@ final class SHA1 : HashProtocol {
                 case 0...15:
                     let start = chunk.startIndex + (x * sizeofValue(M[x]))
                     let end = start + sizeofValue(M[x])
-                    let le = toUInt32Array(slice: chunk[start..<end])[0]
+                    let le = sliceToUInt32Array(chunk[start..<end])[0]
                     M[x] = le.bigEndian
                     break
                 default:

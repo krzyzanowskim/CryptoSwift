@@ -20,7 +20,7 @@ struct CTRModeWorker: BlockModeWorker {
         self.cipherOperation = cipherOperation
     }
 
-    mutating func encrypt(plaintext: Array<UInt8>) -> [UInt8] {
+    mutating func encrypt(plaintext: Array<UInt8>) -> Array<UInt8> {
         let nonce = buildNonce(iv, counter: UInt64(counter))
         counter = counter + 1
 
@@ -31,7 +31,7 @@ struct CTRModeWorker: BlockModeWorker {
         return xor(plaintext, ciphertext)
     }
 
-    mutating func decrypt(ciphertext: Array<UInt8>) -> [UInt8] {
+    mutating func decrypt(ciphertext: Array<UInt8>) -> Array<UInt8> {
         let nonce = buildNonce(iv, counter: UInt64(counter))
         counter = counter + 1
 
@@ -42,7 +42,7 @@ struct CTRModeWorker: BlockModeWorker {
     }
 }
 
-private func buildNonce(iv: [UInt8], counter: UInt64) -> [UInt8] {
+private func buildNonce(iv: Array<UInt8>, counter: UInt64) -> Array<UInt8> {
     let noncePartLen = AES.blockSize / 2
     let noncePrefix = Array(iv[0..<noncePartLen])
     let nonceSuffix = Array(iv[noncePartLen..<iv.count])

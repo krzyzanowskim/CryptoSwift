@@ -16,10 +16,10 @@
 #endif
 
 class SecureBytes {
-    private let bytes: [UInt8]
+    private let bytes: Array<UInt8>
     let count: Int
 
-    init(bytes: [UInt8]) {
+    init(bytes: Array<UInt8>) {
         self.bytes = bytes
         self.count = bytes.count
         self.bytes.withUnsafeBufferPointer { (pointer) -> Void in

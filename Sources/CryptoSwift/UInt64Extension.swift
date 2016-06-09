@@ -8,7 +8,7 @@
 
 /** array of bytes */
 extension UInt64 {
-    public func bytes(totalBytes: Int = sizeof(UInt64)) -> [UInt8] {
+    public func bytes(totalBytes: Int = sizeof(UInt64)) -> Array<UInt8> {
         return arrayOfBytes(self, length: totalBytes)
     }
 
@@ -17,7 +17,7 @@ extension UInt64 {
     }
 
     /** Int with array bytes (little-endian) */
-    public static func withBytes(bytes: [UInt8]) -> UInt64 {
+    public static func withBytes(bytes: Array<UInt8>) -> UInt64 {
         return integerWithBytes(bytes)
     }
 }

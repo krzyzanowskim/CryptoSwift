@@ -20,15 +20,15 @@ public enum Authenticator {
     
     - parameter key: 256-bit key
     */
-    case Poly1305(key: [UInt8])
-    case HMAC(key: [UInt8], variant:CryptoSwift.HMAC.Variant)
+    case Poly1305(key: Array<UInt8>)
+    case HMAC(key: Array<UInt8>, variant:CryptoSwift.HMAC.Variant)
     
     /**
     Generates an authenticator for message using a one-time key and returns the 16-byte result
     
     - returns: 16-byte message authentication code
     */
-    public func authenticate(message: [UInt8]) throws -> [UInt8] {
+    public func authenticate(message: Array<UInt8>) throws -> Array<UInt8> {
         switch (self) {
         case .Poly1305(let key):
             guard let auth = CryptoSwift.Poly1305(key: key)?.authenticate(message) else {

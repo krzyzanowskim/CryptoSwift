@@ -11,7 +11,7 @@ import Foundation
 extension NSMutableData {
     
     /** Convenient way to append bytes */
-    internal func appendBytes(arrayOfBytes: [UInt8]) {
+    internal func appendBytes(arrayOfBytes: Array<UInt8>) {
         self.appendBytes(arrayOfBytes, length: arrayOfBytes.count)
     }
     
@@ -92,18 +92,18 @@ extension NSData {
         return self.arrayOfBytes().toHexString()
     }
     
-    public func arrayOfBytes() -> [UInt8] {
+    public func arrayOfBytes() -> Array<UInt8> {
         let count = self.length / sizeof(UInt8)
-        var bytesArray = [UInt8](count: count, repeatedValue: 0)
+        var bytesArray = Array<UInt8>(count: count, repeatedValue: 0)
         self.getBytes(&bytesArray, length:count * sizeof(UInt8))
         return bytesArray
     }
 
-    public convenience init(bytes: [UInt8]) {
+    public convenience init(bytes: Array<UInt8>) {
         self.init(data: NSData.withBytes(bytes))
     }
     
-    class public func withBytes(bytes: [UInt8]) -> NSData {
+    class public func withBytes(bytes: Array<UInt8>) -> NSData {
         return NSData(bytes: bytes, length: bytes.count)
     }
 }

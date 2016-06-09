@@ -6,7 +6,7 @@
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
 
-typealias CipherOperationOnBlock = (block: [UInt8]) -> [UInt8]?
+typealias CipherOperationOnBlock = (block: Array<UInt8>) -> Array<UInt8>?
 
 public enum BlockMode {
     case ECB, CBC, PCBC, CFB, OFB, CTR

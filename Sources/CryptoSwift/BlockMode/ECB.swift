@@ -16,14 +16,14 @@ struct ECBModeWorker: BlockModeWorker {
         self.cipherOperation = cipherOperation
     }
 
-    mutating func encrypt(plaintext: Array<UInt8>) -> [UInt8] {
+    mutating func encrypt(plaintext: Array<UInt8>) -> Array<UInt8> {
         guard let ciphertext = cipherOperation(block: plaintext) else {
             return plaintext
         }
         return ciphertext
     }
 
-    mutating func decrypt(ciphertext: Array<UInt8>) -> [UInt8] {
+    mutating func decrypt(ciphertext: Array<UInt8>) -> Array<UInt8> {
         return encrypt(ciphertext)
     }
 }

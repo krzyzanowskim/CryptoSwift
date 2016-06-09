@@ -26,7 +26,7 @@ final public class HMAC {
             }
         }
         
-        func calculateHash(bytes bytes:[UInt8]) -> [UInt8]? {
+        func calculateHash(bytes bytes:Array<UInt8>) -> Array<UInt8>? {
             switch (self) {
             case .sha1:
                 return Hash.sha1(bytes).calculate()
@@ -51,10 +51,10 @@ final public class HMAC {
         }
     }
     
-    var key:[UInt8]
+    var key:Array<UInt8>
     let variant:Variant
 
-    public init? (key: [UInt8], variant:HMAC.Variant = .md5) {
+    public init? (key: Array<UInt8>, variant:HMAC.Variant = .md5) {
         self.variant = variant
         self.key = key
 
@@ -65,21 +65,21 @@ final public class HMAC {
         }
         
         if (key.count < variant.blockSize()) { // keys shorter than blocksize are zero-padded
-            self.key = key + [UInt8](count: variant.blockSize() - key.count, repeatedValue: 0)
+            self.key = key + Array<UInt8>(count: variant.blockSize() - key.count, repeatedValue: 0)
         }
     }
 
-    public func authenticate(message:[UInt8]) -> [UInt8]? {
-        var opad = [UInt8](count: variant.blockSize(), repeatedValue: 0x5c)
+    public func authenticate(message:Array<UInt8>) -> Array<UInt8>? {
+        var opad = Array<UInt8>(count: variant.blockSize(), repeatedValue: 0x5c)
         for (idx, _) in key.enumerate() {
             opad[idx] = key[idx] ^ opad[idx]
         }
-        var ipad = [UInt8](count: variant.blockSize(), repeatedValue: 0x36)
+        var ipad = Array<UInt8>(count: variant.blockSize(), repeatedValue: 0x36)
         for (idx, _) in key.enumerate() {
             ipad[idx] = key[idx] ^ ipad[idx]
         }
 
-        var finalHash:[UInt8]? = nil;
+        var finalHash:Array<UInt8>? = nil;
         if let ipadAndMessageHash = variant.calculateHash(bytes: ipad + message) {
             finalHash = variant.calculateHash(bytes: opad + ipadAndMessageHash);
         }

@@ -161,7 +161,7 @@ For you convenience CryptoSwift provide two function to easily convert array of 
 
 ```swift
 let data: NSData = NSData(bytes: [0x01, 0x02, 0x03])
-let bytes:[UInt8] = data.arrayOfBytes()
+let bytes:Array<UInt8> = data.arrayOfBytes()
 ```
 
 Make bytes out of `String`:
@@ -174,7 +174,7 @@ let bytes = "string".utf8.map({$0})
 Hashing a data or array of bytes (aka `Array<UInt8>`)
 ```swift
 /* Hash enum usage */
-let input:[UInt8] = [49, 50, 51]
+let input:Array<UInt8> = [49, 50, 51]
 
 let output = input.md5()
 // alternatively: let output = CryptoSwift.Hash.md5(input).calculate()
@@ -208,15 +208,15 @@ let hash = "123".md5()
 
 ```swift
 // Calculate Message Authentication Code (MAC) for message
-let mac: [UInt8] = try! Authenticator.Poly1305(key: key).authenticate(message)
-let hmac: [UInt8] = try! Authenticator.HMAC(key: key, variant: .sha256).authenticate(message)
+let mac: Array<UInt8> = try! Authenticator.Poly1305(key: key).authenticate(message)
+let hmac: Array<UInt8> = try! Authenticator.HMAC(key: key, variant: .sha256).authenticate(message)
 ```
 
 #####Password-Based Key Derivation Function
 
 ```swift
-let password: [UInt8] = "s33krit".utf8.map {$0}
-let salt: [UInt8] = "nacl".utf8.map {$0}
+let password: Array<UInt8> = "s33krit".utf8.map {$0}
+let salt: Array<UInt8> = "nacl".utf8.map {$0}
 
 let value = try! PKCS5.PBKDF1(password: password, salt: salt, iterations: 4096, variant: .sha1).calculate()
 
@@ -237,8 +237,8 @@ let paddedData = PKCS7().add(arr, blockSize: AES.blockSize)
 #####ChaCha20
 
 ```swift
-let encrypted: [UInt8] = ChaCha20(key: key, iv: iv).encrypt(message)
-let decrypted: [UInt8] = ChaCha20(key: key, iv: iv).decrypt(encrypted)
+let encrypted: Array<UInt8> = ChaCha20(key: key, iv: iv).encrypt(message)
+let decrypted: Array<UInt8> = ChaCha20(key: key, iv: iv).decrypt(encrypted)
 ```
 
 #####Rabbit
@@ -257,7 +257,7 @@ Notice regarding padding: *Manual padding of data is optional and CryptoSwift is
 let input = NSData()
 let encrypted = try! input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345"))
 
-let input: [UInt8] = [0,1,2,3,4,5,6,7,8,9]
+let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]
 input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC))
 ```
 
@@ -284,10 +284,10 @@ Check this helper functions to work with **Base64** encoded data directly:
 
 ######AES Advanced usage
 ```swift
-let input: [UInt8] = [0,1,2,3,4,5,6,7,8,9]
+let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]
 
-let key: [UInt8] = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00]
-let iv: [UInt8] = AES.randomIV(AES.blockSize)
+let key: Array<UInt8> = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00]
+let iv: Array<UInt8> = AES.randomIV(AES.blockSize)
 
 do {
     let encrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).encrypt(input)
@@ -300,8 +300,8 @@ do {
 AES without data padding
 
 ```swift
-let input: [UInt8] = [0,1,2,3,4,5,6,7,8,9]
-let encrypted: [UInt8] = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC, padding: NoPadding()).encrypt(input)
+let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]
+let encrypted: Array<UInt8> = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC, padding: NoPadding()).encrypt(input)
 ```
 
 Using convenience extensions

@@ -19,10 +19,10 @@ final class ExtensionsTest: XCTestCase {
     }
 
     func testArrayChunksPerformance() {
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
-            let message = Array<UInt8>(count: 1024 * 1024, repeatedValue: 7)
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
             self.startMeasuring()
-            message.chunks(AES.blockSize)
+            message.chunks(chunksize: AES.blockSize)
             self.stopMeasuring()
         })
     }
@@ -30,14 +30,14 @@ final class ExtensionsTest: XCTestCase {
     
     func testIntExtension() {
         let i1:Int = 1024
-        let i1Array = i1.bytes(32 / 8) // 32 bit
-        let i1recovered = Int.withBytes(i1Array)
+        let i1Array = i1.bytes(totalBytes: 32 / 8) // 32 bit
+        let i1recovered = Int.withBytes(bytes: i1Array)
         
         XCTAssertEqual(i1, i1recovered, "Bytes conversion failed")
         
         let i2:Int = 1024
-        let i2Array = i2.bytes(160 / 8) // 160 bit
-        let i2recovered = Int.withBytes(i2Array)
+        let i2Array = i2.bytes(totalBytes: 160 / 8) // 160 bit
+        let i2recovered = Int.withBytes(bytes: i2Array)
         
         XCTAssertEqual(i2, i2recovered, "Bytes conversion failed")
     }
@@ -50,7 +50,7 @@ final class ExtensionsTest: XCTestCase {
         XCTAssertTrue(bytes.count == size, "Invalid bytes length =  \(bytes.count)")
         
         // test padding
-        bytes = i.bytes(16)
+        bytes = i.bytes(totalBytes: 16)
         XCTAssertTrue(bytes.count == 16, "Invalid return type \(bytes.count)")
         XCTAssertTrue(bytes[14] == 4, "Invalid return type \(bytes.count)")
     }
@@ -78,7 +78,7 @@ final class ExtensionsTest: XCTestCase {
     
     func testtoUInt32Array() {
         let chunk:ArraySlice<UInt8> = [1,1,1,7,2,3,4,5]
-        let result = toUInt32Array(chunk)
+        let result = toUInt32Array(slice: chunk)
         
         XCTAssert(result.count == 2, "Invalid conversion")
         XCTAssert(result[0] == 117506305, "Invalid conversion")
@@ -91,13 +91,13 @@ final class ExtensionsTest: XCTestCase {
     }
 
     func test_String_encrypt_base64() {
-        let encryptedBase64 = try! "my secret string".encrypt(AES(key: "secret0key000000", iv: "0123456789012345")).toBase64()
+        let encryptedBase64 = try! "my secret string".encrypt(cipher: AES(key: "secret0key000000", iv: "0123456789012345")).toBase64()
         XCTAssertEqual(encryptedBase64, "aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs=")
     }
 
     func test_String_decrypt_base64() {
         let encryptedBase64 = "aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs="
-        let decrypted = try! encryptedBase64.decryptBase64ToString(AES(key: "secret0key000000", iv: "0123456789012345"))
+        let decrypted = try! encryptedBase64.decryptBase64ToString(cipher: AES(key: "secret0key000000", iv: "0123456789012345"))
         XCTAssertEqual(decrypted, "my secret string")
     }
 

@@ -72,9 +72,9 @@ class RabbitTests: XCTestCase {
         let plainText = Array<UInt8>(repeating: 0, count: 48)
         for (key, expectedCipher) in cases {
             let rabbit = Rabbit(key: key)!
-            let cipherText = rabbit.encrypt(plainText)
+            let cipherText = rabbit.encrypt(bytes: plainText)
             XCTAssertEqual(cipherText, expectedCipher)
-            XCTAssertEqual(rabbit.decrypt(cipherText), plainText)
+            XCTAssertEqual(rabbit.decrypt(bytes: cipherText), plainText)
         }
     }
     
@@ -111,18 +111,18 @@ class RabbitTests: XCTestCase {
         let plainText = Array<UInt8>(repeating: 0, count: 48)
         for (iv, expectedCipher) in cases {
             let rabbit = Rabbit(key: key, iv: iv)!
-            let cipherText = rabbit.encrypt(plainText)
+            let cipherText = rabbit.encrypt(bytes: plainText)
             XCTAssertEqual(cipherText, expectedCipher)
-            XCTAssertEqual(rabbit.decrypt(cipherText), plainText)
+            XCTAssertEqual(rabbit.decrypt(bytes: cipherText), plainText)
         }
     }
     
     func testRabbitPerformance() {
         let key: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.keySize)
         let iv: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.ivSize)
-        let message = Array<UInt8>(count: (1024 * 1024) * 1, repeatedValue: 7)
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, forBlock: { () -> Void in
-            let encrypted = Rabbit(key: key, iv: iv)?.encrypt(message)
+        let message = Array<UInt8>(repeating: 7, count: (1024 * 1024) * 1)
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+            let encrypted = Rabbit(key: key, iv: iv)?.encrypt(bytes: message)
             self.stopMeasuring()
             XCTAssert(encrypted != nil, "not encrypted")
         })

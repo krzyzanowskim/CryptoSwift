@@ -25,7 +25,7 @@ final class CryptoSwiftTests: XCTestCase {
     }
 
     func testMD5_emptyString() {
-        let data:NSData = "".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        let data:NSData = "".data(using: NSUTF8StringEncoding, allowLossyConversion: false)!
         XCTAssertEqual(Hash.md5(data.arrayOfBytes()).calculate(), [0xd4,0x1d,0x8c,0xd9,0x8f,0x00,0xb2,0x04,0xe9,0x80,0x09,0x98,0xec,0xf8,0x42,0x7e], "MD5 calculation failed")
     }
 
@@ -41,31 +41,31 @@ final class CryptoSwiftTests: XCTestCase {
     }
     
     func testMD5PerformanceSwift() {
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
             let buf = UnsafeMutablePointer<UInt8>(calloc(1024 * 1024, sizeof(UInt8)))
             let data = NSData(bytes: buf, length: 1024 * 1024)
             let arr = data.arrayOfBytes()
             self.startMeasuring()
                 Hash.md5(arr).calculate()
             self.stopMeasuring()
-            buf.dealloc(1024 * 1024)
-            buf.destroy()
+            buf?.deallocateCapacity(1024 * 1024)
+            buf?.deinitialize()
         })
     }
     
     func testMD5PerformanceCommonCrypto() {
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, forBlock: { () -> Void in
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
             let buf = UnsafeMutablePointer<UInt8>(calloc(1024 * 1024, sizeof(UInt8)))
             let data = NSData(bytes: buf, length: 1024 * 1024)
-            let outbuf = UnsafeMutablePointer<UInt8>.alloc(Int(CC_MD5_DIGEST_LENGTH))
+            let outbuf = UnsafeMutablePointer<UInt8>(allocatingCapacity: Int(CC_MD5_DIGEST_LENGTH))
             self.startMeasuring()
                 CC_MD5(data.bytes, CC_LONG(data.length), outbuf)
             //let output = NSData(bytes: outbuf, length: Int(CC_MD5_DIGEST_LENGTH));
             self.stopMeasuring()
-            outbuf.dealloc(Int(CC_MD5_DIGEST_LENGTH))
-            outbuf.destroy()
-            buf.dealloc(1024 * 1024)
-            buf.destroy()
+            outbuf.deallocateCapacity(Int(CC_MD5_DIGEST_LENGTH))
+            outbuf.deinitialize()
+            buf?.deallocateCapacity(1024 * 1024)
+            buf?.deinitialize()
         })
     }
     
@@ -119,25 +119,25 @@ final class CryptoSwiftTests: XCTestCase {
     
     func testCRC32() {
         let data:NSData = NSData(bytes: [49, 50, 51] as Array<UInt8>, length: 3)
-        if let crc = data.crc32(nil) {
+        if let crc = data.crc32(seed: nil) {
             XCTAssertEqual(crc.toHexString(), "884863d2", "CRC32 calculation failed");
         }
         
-        XCTAssertEqual("".crc32(nil), "00000000", "CRC32 calculation failed");
+        XCTAssertEqual("".crc32(seed: nil), "00000000", "CRC32 calculation failed");
     }
     
     func testCRC32NotReflected() {
         let bytes : Array<UInt8> = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39]
         let data:NSData = NSData(bytes: bytes, length: bytes.count)
-        if let crc = data.crc32(nil, reflect: false) {
+        if let crc = data.crc32(seed: nil, reflect: false) {
             XCTAssertEqual(crc.toHexString(), "fc891918", "CRC32 (with reflection) calculation failed");
         }
         
-        XCTAssertEqual("".crc32(nil, reflect: false), "00000000", "CRC32 (with reflection) calculation failed");
+        XCTAssertEqual("".crc32(seed: nil, reflect: false), "00000000", "CRC32 (with reflection) calculation failed");
     }
     
     func testCRC16() {
-        let result = CRC().crc16([49,50,51,52,53,54,55,56,57] as Array<UInt8>)
+        let result = CRC().crc16(message: [49,50,51,52,53,54,55,56,57] as Array<UInt8>)
         XCTAssert(result == 0xBB3D, "CRC16 failed")
     }
     

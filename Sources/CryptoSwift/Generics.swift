@@ -20,11 +20,11 @@ extension UInt32:Initiable {}
 extension UInt64:Initiable {}
 
 /** build bit pattern from array of bits */
-func integerFrom<T: UnsignedInteger>(bits: [Bit]) -> T
+func integerFrom<T: UnsignedInteger>(bits: Array<Bit>) -> T
 {
     var bitPattern:T = 0
-    for (idx,b) in bits.enumerated() {
-        if (b == Bit.One) {
+    for idx in bits.indices {
+        if bits[idx] == Bit.One {
             let bit = T(UIntMax(1) << UIntMax(idx))
             bitPattern = bitPattern | bit
         }

@@ -71,9 +71,9 @@ extension UInt8 {
     func bits() -> String {
         var s = String()
         let arr:[Bit] = self.bits()
-        for (idx,b) in arr.enumerated() {
-            s += (b == Bit.One ? "1" : "0")
-            if ((idx + 1) % 8 == 0) { s += " " }
+        for idx in arr.indices {
+            s += (arr[idx] == Bit.One ? "1" : "0")
+            if (idx.advanced(by: 1) % 8 == 0) { s += " " }
         }
         return s
     }

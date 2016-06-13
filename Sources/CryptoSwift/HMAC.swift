@@ -69,11 +69,11 @@ final public class HMAC {
 
     public func authenticate(bytes:Array<UInt8>) -> Array<UInt8>? {
         var opad = Array<UInt8>(repeating: 0x5c, count: variant.blockSize())
-        for (idx, _) in key.enumerated() {
+        for idx in key.indices {
             opad[idx] = key[idx] ^ opad[idx]
         }
         var ipad = Array<UInt8>(repeating: 0x36, count: variant.blockSize())
-        for (idx, _) in key.enumerated() {
+        for idx in key.indices {
             ipad[idx] = key[idx] ^ ipad[idx]
         }
 

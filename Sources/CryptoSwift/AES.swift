@@ -487,8 +487,8 @@ extension AES: Cipher {
         var oneTimeCryptor = self.makeEncryptor()
         var out = Array<UInt8>()
         out.reserveCapacity(bytes.count)
-        for (idx, block) in chunks.enumerated() {
-            out += try oneTimeCryptor.update(withBytes: block, isLast: idx == max(0,chunks.count - 1))
+        for idx in chunks.indices {
+            out += try oneTimeCryptor.update(withBytes: chunks[idx], isLast: idx == chunks.endIndex)
         }
 
         if blockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
@@ -507,8 +507,8 @@ extension AES: Cipher {
         let chunks = bytes.chunks(chunksize: AES.blockSize)
         var out = Array<UInt8>()
         out.reserveCapacity(bytes.count)
-        for (idx,chunk) in chunks.enumerated() {
-            out += try oneTimeCryptor.update(withBytes: chunk, isLast: idx == max(0,chunks.count - 1))
+        for idx in chunks.indices {
+            out += try oneTimeCryptor.update(withBytes: chunks[idx], isLast: idx == chunks.endIndex)
         }
         return out
     }

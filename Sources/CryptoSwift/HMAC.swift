@@ -63,10 +63,8 @@ final public class HMAC {
                 self.key = hash
             }
         }
-        
-        if (key.count < variant.blockSize()) { // keys shorter than blocksize are zero-padded
-            self.key = key + Array<UInt8>(repeating: 0, count: variant.blockSize() - key.count)
-        }
+
+        self.key = ZeroPadding().add(to: key, blockSize: variant.blockSize())
     }
 
     public func authenticate(bytes:Array<UInt8>) -> Array<UInt8>? {

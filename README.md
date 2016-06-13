@@ -56,6 +56,7 @@ Good mood
 
 #### Data padding
 - [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
+- Zero padding
 - NoPadding
 
 ##Why

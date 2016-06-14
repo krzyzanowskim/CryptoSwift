@@ -13,11 +13,11 @@ extension UInt64 {
     }
 
     public static func with(bytes: ArraySlice<UInt8>) -> UInt64 {
-        return UInt64.with(bytes: Array(bytes))
+        return integerWith(Array(bytes))
     }
 
     /** Int with array bytes (little-endian) */
     public static func with(bytes: Array<UInt8>) -> UInt64 {
-        return integerWith(bytes: bytes)
+        return integerWith(bytes)
     }
 }

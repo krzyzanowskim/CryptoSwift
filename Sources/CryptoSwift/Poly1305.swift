@@ -84,10 +84,10 @@ final public class Poly1305 {
 
      - returns: Message Authentication Code
      */
-    public func authenticate(bytes:Array<UInt8>) -> Array<UInt8>? {
+    public func authenticate(_ bytes:Array<UInt8>) -> Array<UInt8>? {
         if let ctx = self.ctx {
-            update(context: ctx, message: bytes)
-            return finish(context: ctx)
+            update(ctx, message: bytes)
+            return finish(ctx)
         }
         return nil
     }
@@ -108,7 +108,7 @@ final public class Poly1305 {
     - parameter message: message
     - parameter bytes:   length of the message fragment to be processed
     */
-    private func update(context:Context, message:Array<UInt8>, bytes:Int? = nil) {
+    private func update(_ context:Context, message:Array<UInt8>, bytes:Int? = nil) {
         var bytes = bytes ?? message.count
         var mPos = 0
         
@@ -131,14 +131,14 @@ final public class Poly1305 {
                 return
             }
             
-            blocks(context: context, m: context.buffer)
+            blocks(context, m: context.buffer)
             context.leftover = 0
         }
         
         /* process full blocks */
         if (bytes >= blockSize) {
             let want = bytes & ~(blockSize - 1)
-            blocks(context: context, m: message, startPos: mPos)
+            blocks(context, m: message, startPos: mPos)
             mPos += want
             bytes -= want;
         }
@@ -153,7 +153,7 @@ final public class Poly1305 {
         }
     }
     
-    private func finish(context:Context) -> Array<UInt8>? {
+    private func finish(_ context:Context) -> Array<UInt8>? {
         var mac = Array<UInt8>(repeating: 0, count: 16);
         
         /* process the remaining block */
@@ -165,15 +165,15 @@ final public class Poly1305 {
             }
             context.final = 1
             
-            blocks(context: context, m: context.buffer)
+            blocks(context, m: context.buffer)
         }
         
         
         /* fully reduce h */
-        freeze(context: context)
+        freeze(context)
         
         /* h = (h + pad) % (1 << 128) */
-        add(context: context, c: context.pad)
+        add(context, c: context.pad)
         for i in 0..<mac.count {
             mac[i] = context.h[i]
         }
@@ -183,7 +183,7 @@ final public class Poly1305 {
     
     // MARK: - Utils
     
-    private func add(context:Context, c:Array<UInt8>) {
+    private func add(_ context:Context, c:Array<UInt8>) {
         if (context.h.count != 17 && c.count != 17) {
             assertionFailure()
             return
@@ -192,13 +192,13 @@ final public class Poly1305 {
         var u:UInt16 = 0
         for i in 0..<17 {
             u += UInt16(context.h[i]) + UInt16(c[i])
-            context.h[i] = UInt8.withValue(v: u)
+            context.h[i] = UInt8.with(value: u)
             u = u >> 8
         }
         return
     }
     
-    private func squeeze(context:Context, hr:Array<UInt32>) {
+    private func squeeze(_ context:Context, hr:Array<UInt32>) {
         if (context.h.count != 17 && hr.count != 17) {
             assertionFailure()
             return
@@ -208,23 +208,23 @@ final public class Poly1305 {
         
         for i in 0..<16 {
             u += hr[i];
-            context.h[i] = UInt8.withValue(v: u) // crash! h[i] = UInt8(u) & 0xff
+            context.h[i] = UInt8.with(value: u) // crash! h[i] = UInt8(u) & 0xff
             u >>= 8;
         }
         
         u += hr[16]
-        context.h[16] = UInt8.withValue(v: u) & 0x03
+        context.h[16] = UInt8.with(value: u) & 0x03
         u >>= 2
         u += (u << 2); /* u *= 5; */
         for i in 0..<16 {
             u += UInt32(context.h[i])
-            context.h[i] = UInt8.withValue(v: u) // crash! h[i] = UInt8(u) & 0xff
+            context.h[i] = UInt8.with(value: u) // crash! h[i] = UInt8(u) & 0xff
             u >>= 8
         }
-        context.h[16] += UInt8.withValue(v: u);
+        context.h[16] += UInt8.with(value: u);
     }
     
-    private func freeze(context:Context) {
+    private func freeze(_ context:Context) {
         assert(context.h.count == 17,"Invalid length")
         if (context.h.count != 17) {
             return
@@ -238,7 +238,7 @@ final public class Poly1305 {
             horig[i] = context.h[i]
         }
         
-        add(context: context, c: minusp)
+        add(context, c: minusp)
         
         /* select h if h < p, or h + -p if h >= p */
         let bits:[Bit] = (context.h[16] >> 7).bits()
@@ -252,7 +252,7 @@ final public class Poly1305 {
         }
     }
     
-    private func blocks(context:Context, m:Array<UInt8>, startPos:Int = 0) {
+    private func blocks(_ context:Context, m:Array<UInt8>, startPos:Int = 0) {
         var bytes = m.count
         let hibit = context.final ^ 1 // 1 <<128
         var mPos = startPos
@@ -268,7 +268,7 @@ final public class Poly1305 {
             }
             c[16] = hibit
             
-            add(context: context, c: c)
+            add(context, c: c)
             
             /* h *= r */
             for i in 0..<17 {
@@ -284,7 +284,7 @@ final public class Poly1305 {
                 hr[i] = u
             }
             
-            squeeze(context: context, hr: hr)
+            squeeze(context, hr: hr)
             
             mPos += blockSize
             bytes -= blockSize

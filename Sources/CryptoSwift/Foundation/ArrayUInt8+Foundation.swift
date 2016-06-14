@@ -9,8 +9,8 @@
 import Foundation
 
 extension Array where Element: _UInt8Type {
-    public init(_ data: NSData) {
-        self = Array<Element>(repeating: Element.Zero(), count: data.length)
-        data.getBytes(&self, length: self.count)
+    public init(_ data: Data) {
+        self = Array<Element>(repeating: Element.Zero(), count: data.count)
+        (data as NSData).getBytes(&self, length: self.count)
     }
 }

@@ -16,8 +16,8 @@ public extension PKCS5 {
     public struct PBKDF1 {
 
         public enum Error: ErrorProtocol {
-            case InvalidInput
-            case DerivedKeyTooLong
+            case invalidInput
+            case derivedKeyTooLong
         }
 
         public enum Variant {
@@ -32,7 +32,7 @@ public extension PKCS5 {
                 }
             }
 
-            private func calculateHash(bytes:Array<UInt8>) -> Array<UInt8>? {
+            private func calculateHash(_ bytes:Array<UInt8>) -> Array<UInt8>? {
                 switch (self) {
                 case .sha1:
                     return Hash.sha1(bytes).calculate()
@@ -57,11 +57,11 @@ public extension PKCS5 {
             precondition(salt.count == 8)
 
             if (keyLength > variant.size) {
-                throw Error.DerivedKeyTooLong
+                throw Error.derivedKeyTooLong
             }
 
-            guard let t1 = variant.calculateHash(bytes: password + salt) else {
-                throw Error.InvalidInput
+            guard let t1 = variant.calculateHash(password + salt) else {
+                throw Error.invalidInput
             }
 
             self.iterations = iterations
@@ -74,7 +74,7 @@ public extension PKCS5 {
         public func calculate() -> Array<UInt8> {
             var t = t1
             for _ in 2...self.iterations {
-                t = self.variant.calculateHash(bytes: t)!
+                t = self.variant.calculateHash(t)!
             }
             return Array(t[0..<self.keyLength])
         }

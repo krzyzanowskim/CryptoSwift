@@ -23,12 +23,12 @@ extension UInt32 {
     }
 
     public static func with(bytes: ArraySlice<UInt8>) -> UInt32 {
-        return UInt32.with(bytes: Array(bytes))
+        return integerWith(Array(bytes))
     }
 
     /** Int with array bytes (little-endian) */
     public static func with(bytes: Array<UInt8>) -> UInt32 {
-        return integerWith(bytes: bytes)
+        return integerWith(bytes)
     }
 }
 

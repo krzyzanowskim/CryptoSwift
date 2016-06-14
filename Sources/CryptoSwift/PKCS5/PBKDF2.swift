@@ -20,8 +20,8 @@ public extension PKCS5 {
     public struct PBKDF2 {
 
         public enum Error: ErrorProtocol {
-            case InvalidInput
-            case DerivedKeyTooLong
+            case invalidInput
+            case derivedKeyTooLong
         }
 
         private let salt: Array<UInt8>   // S
@@ -38,13 +38,13 @@ public extension PKCS5 {
             precondition(iterations > 0)
             
             guard let prf = HMAC(key: password, variant: variant) where iterations > 0 && !password.isEmpty && !salt.isEmpty else {
-                throw Error.InvalidInput
+                throw Error.invalidInput
             }
 
             let keyLengthFinal = Double(keyLength ?? variant.size)
             let hLen = Double(prf.variant.size)
             if keyLengthFinal > (pow(2,32) - 1) * hLen {
-                throw Error.DerivedKeyTooLong
+                throw Error.derivedKeyTooLong
             }
 
             self.salt = salt
@@ -59,7 +59,7 @@ public extension PKCS5 {
             var ret = Array<UInt8>()
             for i in 1...self.numBlocks {
                 // for each block T_i = U_1 ^ U_2 ^ ... ^ U_iter
-                if let value = calculateBlock(salt: self.salt, blockNum: i) {
+                if let value = calculateBlock(self.salt, blockNum: i) {
                     ret.append(contentsOf: value)
                 }
             }
@@ -69,7 +69,7 @@ public extension PKCS5 {
 }
 
 private extension PKCS5.PBKDF2 {
-    private func INT(i: UInt) -> Array<UInt8> {
+    private func INT(_ i: UInt) -> Array<UInt8> {
         var inti = Array<UInt8>(repeating: 0, count: 4)
         inti[0] = UInt8((i >> 24) & 0xFF)
         inti[1] = UInt8((i >> 16) & 0xFF)
@@ -80,8 +80,8 @@ private extension PKCS5.PBKDF2 {
 
     // F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
     // U_1 = PRF (P, S || INT (i))
-    private func calculateBlock(salt: Array<UInt8>, blockNum: UInt) -> Array<UInt8>? {
-        guard let u1 = prf.authenticate(bytes: salt + INT(i: blockNum)) else {
+    private func calculateBlock(_ salt: Array<UInt8>, blockNum: UInt) -> Array<UInt8>? {
+        guard let u1 = prf.authenticate(salt + INT(blockNum)) else {
             return nil
         }
 
@@ -91,7 +91,7 @@ private extension PKCS5.PBKDF2 {
             // U_2 = PRF (P, U_1) ,
             // U_c = PRF (P, U_{c-1}) .
             for _ in 2...self.iterations {
-                u = prf.authenticate(bytes: u)!
+                u = prf.authenticate(u)!
                 for x in 0..<ret.count {
                     ret[x] = ret[x] ^ u[x]
                 }

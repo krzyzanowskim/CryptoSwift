@@ -9,7 +9,7 @@
 extension Array {
 
     /** split in chunks with given chunk size */
-    func chunks(chunksize:Int) -> [Array<Element>] {
+    func chunks(size chunksize: Int) -> [Array<Element>] {
         var words = Array<Array<Element>>()
         words.reserveCapacity(self.count / chunksize)
         for idx in stride(from: chunksize, through: self.count, by: chunksize) {

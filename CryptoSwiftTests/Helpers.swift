@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-func compareMatrix(a:Array<Array<UInt8>>, b:Array<Array<UInt8>>) -> Bool {
+func compareMatrix(_ a:Array<Array<UInt8>>, b:Array<Array<UInt8>>) -> Bool {
     for (i,arr) in a.enumerated() {
         for (j,val) in arr.enumerated() {
             if (val != b[i][j]) {

@@ -74,18 +74,18 @@ final class CRC {
         0x4400, 0x84C1, 0x8581, 0x4540, 0x8701, 0x47C0, 0x4680, 0x8641,
         0x8201, 0x42C0, 0x4380, 0x8341, 0x4100, 0x81C1, 0x8081, 0x4040]
     
-    func crc32(message:Array<UInt8>, seed: UInt32? = nil, reflect : Bool = true) -> UInt32 {
+    func crc32(_ message:Array<UInt8>, seed: UInt32? = nil, reflect : Bool = true) -> UInt32 {
         var crc:UInt32 = seed != nil ? seed! : 0xffffffff
         for chunk in BytesSequence(chunkSize: 256, data: message) {
             for b in chunk {
-                let idx = Int((crc ^ UInt32(reflect ? b : reverse(uint8: b))) & 0xff)
+                let idx = Int((crc ^ UInt32(reflect ? b : reversed(b))) & 0xff)
                 crc = (crc >> 8) ^ CRC.table32[idx]
             }
         }
-        return (reflect ? crc : reverse(uint32: crc)) ^ 0xffffffff
+        return (reflect ? crc : reversed(crc)) ^ 0xffffffff
     }
     
-    func crc16(message:Array<UInt8>, seed: UInt16? = nil) -> UInt16 {
+    func crc16(_ message:Array<UInt8>, seed: UInt16? = nil) -> UInt16 {
         var crc:UInt16 = seed != nil ? seed! : 0x0000
         for chunk in BytesSequence(chunkSize: 256, data: message) {
             for b in chunk {

@@ -20,19 +20,19 @@ struct OFBModeWorker: BlockModeWorker {
         self.cipherOperation = cipherOperation
     }
 
-    mutating func encrypt(plaintext: Array<UInt8>) -> Array<UInt8> {
+    mutating func encrypt(_ plaintext: Array<UInt8>) -> Array<UInt8> {
         guard let ciphertext = cipherOperation(block: prev ?? iv) else {
             return plaintext
         }
         prev = ciphertext
-        return xor(a: plaintext, ciphertext)
+        return xor(plaintext, ciphertext)
     }
 
-    mutating func decrypt(ciphertext: Array<UInt8>) -> Array<UInt8> {
+    mutating func decrypt(_ ciphertext: Array<UInt8>) -> Array<UInt8> {
         guard let decrypted = cipherOperation(block: prev ?? iv) else {
             return ciphertext
         }
-        let plaintext = xor(a: decrypted, ciphertext)
+        let plaintext = xor(decrypted, ciphertext)
         self.prev = decrypted
         return plaintext
     }

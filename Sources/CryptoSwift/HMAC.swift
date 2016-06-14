@@ -26,7 +26,7 @@ final public class HMAC {
             }
         }
         
-        func calculateHash(bytes:Array<UInt8>) -> Array<UInt8>? {
+        func calculateHash(_ bytes:Array<UInt8>) -> Array<UInt8>? {
             switch (self) {
             case .sha1:
                 return Hash.sha1(bytes).calculate()
@@ -59,7 +59,7 @@ final public class HMAC {
         self.key = key
 
         if (key.count > variant.blockSize()) {
-            if let hash = variant.calculateHash(bytes: key) {
+            if let hash = variant.calculateHash(key) {
                 self.key = hash
             }
         }
@@ -67,7 +67,7 @@ final public class HMAC {
         self.key = ZeroPadding().add(to: key, blockSize: variant.blockSize())
     }
 
-    public func authenticate(bytes:Array<UInt8>) -> Array<UInt8>? {
+    public func authenticate(_ bytes:Array<UInt8>) -> Array<UInt8>? {
         var opad = Array<UInt8>(repeating: 0x5c, count: variant.blockSize())
         for idx in key.indices {
             opad[idx] = key[idx] ^ opad[idx]
@@ -78,8 +78,8 @@ final public class HMAC {
         }
 
         var finalHash:Array<UInt8>? = nil;
-        if let ipadAndMessageHash = variant.calculateHash(bytes: ipad + bytes) {
-            finalHash = variant.calculateHash(bytes: opad + ipadAndMessageHash);
+        if let ipadAndMessageHash = variant.calculateHash(ipad + bytes) {
+            finalHash = variant.calculateHash(opad + ipadAndMessageHash);
         }
         return finalHash
     }

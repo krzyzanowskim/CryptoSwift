@@ -22,7 +22,7 @@ final class ExtensionsTest: XCTestCase {
         measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
             let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
             self.startMeasuring()
-            _ = message.chunks(chunksize: AES.blockSize)
+            _ = message.chunks(size: AES.blockSize)
             self.stopMeasuring()
         })
     }
@@ -31,13 +31,13 @@ final class ExtensionsTest: XCTestCase {
     func testIntExtension() {
         let i1:Int = 1024
         let i1Array = i1.bytes(totalBytes: 32 / 8) // 32 bit
-        let i1recovered = Int.with(bytes: i1Array)
+        let i1recovered = Int.with(i1Array)
         
         XCTAssertEqual(i1, i1recovered, "Bytes conversion failed")
         
         let i2:Int = 1024
         let i2Array = i2.bytes(totalBytes: 160 / 8) // 160 bit
-        let i2recovered = Int.with(bytes: i2Array)
+        let i2recovered = Int.with(i2Array)
         
         XCTAssertEqual(i2, i2recovered, "Bytes conversion failed")
     }
@@ -86,8 +86,8 @@ final class ExtensionsTest: XCTestCase {
     }
 
     func test_NSData_init() {
-        let data = NSData(bytes: [0x01, 0x02, 0x03])
-        XCTAssert(data.length == 3, "Invalid data")
+        let data = Data(bytes: [0x01, 0x02, 0x03])
+        XCTAssert(data.count == 3, "Invalid data")
     }
 
     func test_String_encrypt_base64() {

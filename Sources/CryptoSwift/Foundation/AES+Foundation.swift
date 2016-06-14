@@ -10,8 +10,8 @@ import Foundation
 
 extension AES {
     convenience public init(key:String, iv:String, blockMode:BlockMode = .CBC, padding: Padding = PKCS7()) throws {
-        guard let kkey = key.bridge().data(using: NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(), let iiv = iv.bridge().data(using: NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() else {
-            throw Error.InvalidKeyOrInitializationVector
+        guard let kkey = key.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.arrayOfBytes(), let iiv = iv.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.arrayOfBytes() else {
+            throw Error.invalidKeyOrInitializationVector
         }
         
         try self.init(key: kkey, iv: iiv, blockMode: blockMode, padding: padding)

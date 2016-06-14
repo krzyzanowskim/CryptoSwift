@@ -24,7 +24,7 @@
 /* array of bits */
 extension Int {
     init(bits: [Bit]) {
-        self.init(bitPattern: integerFrom(bits: bits) as UInt)
+        self.init(bitPattern: integerFrom(bits) as UInt)
     }
 }
 
@@ -35,13 +35,13 @@ extension Int {
         return arrayOfBytes(value: self, length: totalBytes)
     }
 
-    public static func with(bytes: ArraySlice<UInt8>) -> Int {
-        return Int.with(bytes: Array(bytes))
+    public static func with(_ bytes: ArraySlice<UInt8>) -> Int {
+        return integerWith(Array(bytes))
     }
 
     /** Int with array bytes (little-endian) */
-    public static func with(bytes: Array<UInt8>) -> Int {
-        return integerWith(bytes: bytes)
+    public static func with(_ bytes: Array<UInt8>) -> Int {
+        return integerWith(bytes)
     }
 }
 
@@ -52,7 +52,7 @@ extension Int {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
     private mutating func shiftLeft(by count: Int) {
-        self = CryptoSwift.shiftLeft(value: self, by: count) //FIXME: count:
+        self = CryptoSwift.shiftLeft(self, by: count) //FIXME: count:
     }
     
     /** Shift bits to the right. All bits are shifted (including sign bit) */

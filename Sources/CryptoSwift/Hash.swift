@@ -27,10 +27,10 @@ public enum Hash {
             return SHA2(bytes, variant: .sha384).calculate64()
         case sha512(let bytes):
             return SHA2(bytes, variant: .sha512).calculate64()
-        case crc32(let bytes):
-            return CRC().crc32(message: bytes.0, seed: bytes.seed, reflect: bytes.reflect).bytes()
-        case crc16(let bytes):
-            return UInt32(CRC().crc16(message: bytes.0, seed: bytes.seed)).bytes(totalBytes: 2)
+        case crc32(let bytes, let seed, let reflect):
+            return CRC().crc32(bytes, seed: seed, reflect: reflect).bytes()
+        case crc16(let bytes, let seed):
+            return UInt32(CRC().crc16(bytes, seed: seed)).bytes(totalBytes: 2)
         }
     }
 }

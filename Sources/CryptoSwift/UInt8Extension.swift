@@ -27,18 +27,18 @@ extension _UInt8Type {
 extension UInt8 {
     
     /** cast because UInt8(<UInt32>) because std initializer crash if value is > byte */
-    static func withValue(v:UInt64) -> UInt8 {
-        let tmp = v & 0xFF
+    static func with(value:UInt64) -> UInt8 {
+        let tmp = value & 0xFF
         return UInt8(tmp)
     }
 
-    static func withValue(v:UInt32) -> UInt8 {
-        let tmp = v & 0xFF
+    static func with(value: UInt32) -> UInt8 {
+        let tmp = value & 0xFF
         return UInt8(tmp)
     }
     
-    static func withValue(v:UInt16) -> UInt8 {
-        let tmp = v & 0xFF
+    static func with(value: UInt16) -> UInt8 {
+        let tmp = value & 0xFF
         return UInt8(tmp)
     }
 
@@ -48,21 +48,21 @@ extension UInt8 {
 extension UInt8 {
 
     init(bits: [Bit]) {
-        self.init(integerFrom(bits: bits) as UInt8)
+        self.init(integerFrom(bits) as UInt8)
     }
     
     /** array of bits */
     func bits() -> [Bit] {
         let totalBitsCount = sizeofValue(self) * 8
         
-        var bitsArray = [Bit](repeating: Bit.Zero, count: totalBitsCount)
+        var bitsArray = [Bit](repeating: Bit.zero, count: totalBitsCount)
         
         for j in 0..<totalBitsCount {
             let bitVal:UInt8 = 1 << UInt8(totalBitsCount - 1 - j)
             let check = self & bitVal
             
             if (check != 0) {
-                bitsArray[j] = Bit.One;
+                bitsArray[j] = Bit.one;
             }
         }
         return bitsArray
@@ -72,7 +72,7 @@ extension UInt8 {
         var s = String()
         let arr:[Bit] = self.bits()
         for idx in arr.indices {
-            s += (arr[idx] == Bit.One ? "1" : "0")
+            s += (arr[idx] == Bit.one ? "1" : "0")
             if (idx.advanced(by: 1) % 8 == 0) { s += " " }
         }
         return s

@@ -56,14 +56,14 @@ public extension CSArrayType where Iterator.Element == UInt8 {
     }
     
     public func encrypt(cipher: Cipher) throws -> [Iterator.Element] {
-        return try cipher.encrypt(bytes: cs_arrayValue())
+        return try cipher.encrypt(cs_arrayValue())
     }
 
     public func decrypt(cipher: Cipher) throws -> [Iterator.Element] {
-        return try cipher.decrypt(bytes: cs_arrayValue())
+        return try cipher.decrypt(cs_arrayValue())
     }
     
     public func authenticate(with authenticator: Authenticator) throws -> [Iterator.Element] {
-        return try authenticator.authenticate(bytes: cs_arrayValue())
+        return try authenticator.authenticate(cs_arrayValue())
     }
 }

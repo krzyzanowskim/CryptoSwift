@@ -34,7 +34,7 @@ func rotateRight(_ value:UInt64, by:UInt64) -> UInt64 {
     return ((value >> by) | (value << (64 - by)))
 }
 
-func reverse(uint8 : UInt8) -> UInt8 {
+func reversed(_ uint8 : UInt8) -> UInt8 {
     var v = uint8
     v = (v & 0xF0) >> 4 | (v & 0x0F) << 4
     v = (v & 0xCC) >> 2 | (v & 0x33) << 2
@@ -42,7 +42,7 @@ func reverse(uint8 : UInt8) -> UInt8 {
     return v
 }
 
-func reverse(uint32 : UInt32) -> UInt32 {
+func reversed(_ uint32 : UInt32) -> UInt32 {
     var v = uint32
     v = ((v >> 1) & 0x55555555) | ((v & 0x55555555) << 1)
     v = ((v >> 2) & 0x33333333) | ((v & 0x33333333) << 2)
@@ -84,7 +84,7 @@ func sliceToUInt64Array(_ slice: ArraySlice<UInt8>) -> Array<UInt64> {
     return result
 }
 
-func xor(a: Array<UInt8>, _ b:Array<UInt8>) -> Array<UInt8> {
+func xor(_ a: Array<UInt8>, _ b:Array<UInt8>) -> Array<UInt8> {
     var xored = Array<UInt8>(repeating: 0, count: min(a.count, b.count))
     for i in 0..<xored.count {
         xored[i] = a[i] ^ b[i]

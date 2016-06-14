@@ -93,17 +93,17 @@ final public class Rabbit: BlockCipher {
         }
         
         if let iv = iv {
-            setupIV(iv: iv)
+            setupIV(iv)
         }
     }
     
-    private func setupIV(iv: Array<UInt8>) {
+    private func setupIV(_ iv: Array<UInt8>) {
         // 63...56 55...48 47...40 39...32 31...24 23...16 15...8 7...0 IV bits
         //    0       1       2       3       4       5       6     7   IV bytes in array
-        let iv0: UInt32 = integerWith(bytes: [iv[4], iv[5], iv[6], iv[7]])
-        let iv1: UInt32 = integerWith(bytes: [iv[0], iv[1], iv[4], iv[5]])
-        let iv2: UInt32 = integerWith(bytes: [iv[0], iv[1], iv[2], iv[3]])
-        let iv3: UInt32 = integerWith(bytes: [iv[2], iv[3], iv[6], iv[7]])
+        let iv0: UInt32 = integerWith([iv[4], iv[5], iv[6], iv[7]])
+        let iv1: UInt32 = integerWith([iv[0], iv[1], iv[4], iv[5]])
+        let iv2: UInt32 = integerWith([iv[0], iv[1], iv[2], iv[3]])
+        let iv3: UInt32 = integerWith([iv[2], iv[3], iv[6], iv[7]])
         
         // Modify the counter state as function of the IV
         c[0] = c[0] ^ iv0
@@ -134,18 +134,18 @@ final public class Rabbit: BlockCipher {
         
         // Iteration of the system
         var newX = Array<UInt32>(repeating: 0, count: 8)
-        newX[0] = g(j: 0) &+ rotateLeft(g(j: 7), by: 16) &+ rotateLeft(g(j: 6), by: 16)
-        newX[1] = g(j: 1) &+ rotateLeft(g(j: 0), by: 8)  &+ g(j: 7)
-        newX[2] = g(j: 2) &+ rotateLeft(g(j: 1), by: 16) &+ rotateLeft(g(j: 0), by: 16)
-        newX[3] = g(j: 3) &+ rotateLeft(g(j: 2), by: 8)  &+ g(j: 1)
-        newX[4] = g(j: 4) &+ rotateLeft(g(j: 3), by: 16) &+ rotateLeft(g(j: 2), by: 16)
-        newX[5] = g(j: 5) &+ rotateLeft(g(j: 4), by: 8)  &+ g(j: 3)
-        newX[6] = g(j: 6) &+ rotateLeft(g(j: 5), by: 16) &+ rotateLeft(g(j: 4), by: 16)
-        newX[7] = g(j: 7) &+ rotateLeft(g(j: 6), by: 8)  &+ g(j: 5)
+        newX[0] = g(0) &+ rotateLeft(g(7), by: 16) &+ rotateLeft(g(6), by: 16)
+        newX[1] = g(1) &+ rotateLeft(g(0), by: 8)  &+ g(7)
+        newX[2] = g(2) &+ rotateLeft(g(1), by: 16) &+ rotateLeft(g(0), by: 16)
+        newX[3] = g(3) &+ rotateLeft(g(2), by: 8)  &+ g(1)
+        newX[4] = g(4) &+ rotateLeft(g(3), by: 16) &+ rotateLeft(g(2), by: 16)
+        newX[5] = g(5) &+ rotateLeft(g(4), by: 8)  &+ g(3)
+        newX[6] = g(6) &+ rotateLeft(g(5), by: 16) &+ rotateLeft(g(4), by: 16)
+        newX[7] = g(7) &+ rotateLeft(g(6), by: 8)  &+ g(5)
         x = newX
     }
     
-    private func g(j: Int) -> UInt32 {
+    private func g(_ j: Int) -> UInt32 {
         let sum = x[j] &+ c[j]
         let square = UInt64(sum) * UInt64(sum)
         return UInt32(truncatingBitPattern: square ^ (square >> 32))
@@ -175,7 +175,7 @@ final public class Rabbit: BlockCipher {
 
 // MARK: Cipher
 extension Rabbit: Cipher {
-    public func encrypt(bytes: Array<UInt8>) -> Array<UInt8> {
+    public func encrypt(_ bytes: Array<UInt8>) -> Array<UInt8> {
         setup()
 
         var result = Array<UInt8>(repeating: 0, count: bytes.count)
@@ -196,7 +196,7 @@ extension Rabbit: Cipher {
         return result
     }
 
-    public func decrypt(bytes: Array<UInt8>) -> Array<UInt8> {
-        return encrypt(bytes: bytes)
+    public func decrypt(_ bytes: Array<UInt8>) -> Array<UInt8> {
+        return encrypt(bytes)
     }
 }

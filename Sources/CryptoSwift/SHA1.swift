@@ -17,7 +17,7 @@ final class SHA1 : HashProtocol {
     private let h:Array<UInt32> = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
         
     func calculate() -> Array<UInt8> {
-        var tmpMessage = self.prepare(len: 64)
+        var tmpMessage = self.prepare(64)
         
         // hash values
         var hh = h

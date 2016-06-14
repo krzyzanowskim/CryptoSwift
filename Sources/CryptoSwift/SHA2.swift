@@ -99,7 +99,7 @@ final class SHA2 : HashProtocol {
             }
         }
         
-        private func resultingArray<T>(hh:[T]) -> ArraySlice<T> {
+        private func resultingArray<T>(_ hh:[T]) -> ArraySlice<T> {
             switch (self) {
             case .sha224:
                 return hh[0..<7]
@@ -114,7 +114,7 @@ final class SHA2 : HashProtocol {
     
     //FIXME: I can't do Generic func out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.
     func calculate32() -> Array<UInt8> {
-        var tmpMessage = self.prepare(len: 64)
+        var tmpMessage = self.prepare(64)
         
         // hash values
         var hh = Array<UInt32>()
@@ -188,7 +188,7 @@ final class SHA2 : HashProtocol {
         // Produce the final hash value (big-endian) as a 160 bit number:
         var result = Array<UInt8>()
         result.reserveCapacity(hh.count / 4)
-        variant.resultingArray(hh: hh).forEach {
+        variant.resultingArray(hh).forEach {
             let item = $0.bigEndian
             result += [UInt8(item & 0xff), UInt8((item >> 8) & 0xff), UInt8((item >> 16) & 0xff), UInt8((item >> 24) & 0xff)]
         }
@@ -196,7 +196,7 @@ final class SHA2 : HashProtocol {
     }
     
     func calculate64() -> Array<UInt8> {
-        var tmpMessage = self.prepare(len: 128)
+        var tmpMessage = self.prepare(128)
         
         // hash values
         var hh = Array<UInt64>()
@@ -271,7 +271,7 @@ final class SHA2 : HashProtocol {
         // Produce the final hash value (big-endian)
         var result = Array<UInt8>()
         result.reserveCapacity(hh.count / 4)
-        variant.resultingArray(hh: hh).forEach {
+        variant.resultingArray(hh).forEach {
             let item = $0.bigEndian
             var partialResult = Array<UInt8>()
             partialResult.reserveCapacity(8)

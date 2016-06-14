@@ -12,7 +12,7 @@
 public struct PKCS7: Padding {
 
     public enum Error: ErrorProtocol {
-        case InvalidPaddingValue
+        case invalidPaddingValue
     }
     
     public init() {

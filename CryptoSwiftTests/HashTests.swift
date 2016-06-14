@@ -25,7 +25,7 @@ final class CryptoSwiftTests: XCTestCase {
     }
 
     func testMD5_emptyString() {
-        let data:NSData = "".data(using: NSUTF8StringEncoding, allowLossyConversion: false)!
+        let data:Data = "".data(using: String.Encoding.utf8, allowLossyConversion: false)!
         XCTAssertEqual(Hash.md5(data.arrayOfBytes()).calculate(), [0xd4,0x1d,0x8c,0xd9,0x8f,0x00,0xb2,0x04,0xe9,0x80,0x09,0x98,0xec,0xf8,0x42,0x7e], "MD5 calculation failed")
     }
 
@@ -42,14 +42,10 @@ final class CryptoSwiftTests: XCTestCase {
     
     func testMD5PerformanceSwift() {
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let buf = UnsafeMutablePointer<UInt8>(calloc(1024 * 1024, sizeof(UInt8)))
-            let data = NSData(bytes: buf, length: 1024 * 1024)
-            let arr = data.arrayOfBytes()
+            let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
             self.startMeasuring()
-                _ = Hash.md5(arr).calculate()
+            _ = Hash.md5(arr).calculate()
             self.stopMeasuring()
-            buf?.deallocateCapacity(1024 * 1024)
-            buf?.deinitialize()
         })
     }
     
@@ -70,7 +66,7 @@ final class CryptoSwiftTests: XCTestCase {
     }
     
     func testSHA1() {
-        let data:NSData = NSData(bytes: [0x31, 0x32, 0x33] as Array<UInt8>, length: 3)
+        let data:Data = Data(bytes: UnsafePointer<UInt8>([0x31, 0x32, 0x33] as Array<UInt8>), count: 3)
         if let hash = data.sha1() {
             XCTAssertEqual(hash.toHexString(), "40bd001563085fc35165329ea1ff5c5ecbdbbeef", "SHA1 calculation failed");
         }
@@ -81,14 +77,14 @@ final class CryptoSwiftTests: XCTestCase {
     }
     
     func testSHA224() {
-        let data:NSData = NSData(bytes: [0x31, 0x32, 0x33] as Array<UInt8>, length: 3)
+        let data:Data = Data(bytes: UnsafePointer<UInt8>([0x31, 0x32, 0x33] as Array<UInt8>), count: 3)
         if let hash = data.sha224() {
             XCTAssertEqual(hash.toHexString(), "78d8045d684abd2eece923758f3cd781489df3a48e1278982466017f", "SHA224 calculation failed");
         }
     }
 
     func testSHA256() {
-        let data:NSData = NSData(bytes: [0x31, 0x32, 0x33] as Array<UInt8>, length: 3)
+        let data:Data = Data(bytes: UnsafePointer<UInt8>([0x31, 0x32, 0x33] as Array<UInt8>), count: 3)
         if let hash = data.sha256() {
             XCTAssertEqual(hash.toHexString(), "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", "SHA256 calculation failed");
         }
@@ -98,7 +94,7 @@ final class CryptoSwiftTests: XCTestCase {
     }
 
     func testSHA384() {
-        let data:NSData = NSData(bytes: [49, 50, 51] as Array<UInt8>, length: 3)
+        let data:Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
         if let hash = data.sha384() {
             XCTAssertEqual(hash.toHexString(), "9a0a82f0c0cf31470d7affede3406cc9aa8410671520b727044eda15b4c25532a9b5cd8aaf9cec4919d76255b6bfb00f", "SHA384 calculation failed");
         }
@@ -108,7 +104,7 @@ final class CryptoSwiftTests: XCTestCase {
     }
 
     func testSHA512() {
-        let data:NSData = NSData(bytes: [49, 50, 51] as Array<UInt8>, length: 3)
+        let data:Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
         if let hash = data.sha512() {
             XCTAssertEqual(hash.toHexString(), "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2", "SHA512 calculation failed");
         }
@@ -118,7 +114,7 @@ final class CryptoSwiftTests: XCTestCase {
     }
     
     func testCRC32() {
-        let data:NSData = NSData(bytes: [49, 50, 51] as Array<UInt8>, length: 3)
+        let data:Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
         if let crc = data.crc32(seed: nil) {
             XCTAssertEqual(crc.toHexString(), "884863d2", "CRC32 calculation failed");
         }
@@ -128,7 +124,7 @@ final class CryptoSwiftTests: XCTestCase {
     
     func testCRC32NotReflected() {
         let bytes : Array<UInt8> = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39]
-        let data:NSData = NSData(bytes: bytes, length: bytes.count)
+        let data:Data = Data(bytes: UnsafePointer<UInt8>(bytes), count: bytes.count)
         if let crc = data.crc32(seed: nil, reflect: false) {
             XCTAssertEqual(crc.toHexString(), "fc891918", "CRC32 (with reflection) calculation failed");
         }
@@ -137,12 +133,12 @@ final class CryptoSwiftTests: XCTestCase {
     }
     
     func testCRC16() {
-        let result = CRC().crc16(message: [49,50,51,52,53,54,55,56,57] as Array<UInt8>)
+        let result = CRC().crc16([49,50,51,52,53,54,55,56,57] as Array<UInt8>)
         XCTAssert(result == 0xBB3D, "CRC16 failed")
     }
     
     func testChecksum() {
-        let data:NSData = NSData(bytes: [49, 50, 51] as Array<UInt8>, length: 3)
+        let data:Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
         XCTAssert(data.checksum() == 0x96, "Invalid checksum")
     }
 

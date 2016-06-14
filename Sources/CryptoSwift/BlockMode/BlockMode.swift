@@ -11,19 +11,19 @@ typealias CipherOperationOnBlock = (block: Array<UInt8>) -> Array<UInt8>?
 public enum BlockMode {
     case ECB, CBC, PCBC, CFB, OFB, CTR
 
-    func worker(iv: Array<UInt8>?, cipherOperation: CipherOperationOnBlock) -> BlockModeWorker {
+    func worker(_ iv: Array<UInt8>?, cipherOperation: CipherOperationOnBlock) -> BlockModeWorker {
         switch (self) {
-        case ECB:
+        case .ECB:
             return ECBModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
-        case CBC:
+        case .CBC:
             return CBCModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
-        case PCBC:
+        case .PCBC:
             return PCBCModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
-        case CFB:
+        case .CFB:
             return CFBModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
-        case OFB:
+        case .OFB:
             return OFBModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
-        case CTR:
+        case .CTR:
             return CTRModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
         }
     }

@@ -30,7 +30,7 @@ extension String {
             throw CipherError.decrypt
         }
 
-        return try decodedData.decrypt(cipher: cipher).arrayOfBytes()
+        return try decodedData.decrypt(cipher: cipher).bytes
     }
 
 }

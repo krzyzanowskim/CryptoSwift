@@ -10,7 +10,7 @@ import Foundation
 
 extension Rabbit {
     convenience public init?(key: String) {
-        guard let kkey = key.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.arrayOfBytes() else {
+        guard let kkey = key.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.bytes else {
             return nil
         }
         self.init(key: kkey)
@@ -18,8 +18,8 @@ extension Rabbit {
     }
     
     convenience public init?(key: String, iv: String) {
-        guard let kkey = key.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.arrayOfBytes(),
-            let iiv = iv.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.arrayOfBytes()
+        guard let kkey = key.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.bytes,
+            let iiv = iv.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.bytes
             else {
                 return nil
         }

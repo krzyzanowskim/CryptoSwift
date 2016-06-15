@@ -161,8 +161,8 @@ CryptoSwift use array of bytes aka `Array<UInt8>` as base type for all operation
 For you convenience CryptoSwift provide two function to easily convert array of bytes to NSData and other way around:
 
 ```swift
-let data: NSData = NSData(bytes: [0x01, 0x02, 0x03])
-let bytes:Array<UInt8> = data.arrayOfBytes()
+let data = Data(bytes: [0x01, 0x02, 0x03])
+let bytes = data.bytes
 ```
 
 Make bytes out of `String`:

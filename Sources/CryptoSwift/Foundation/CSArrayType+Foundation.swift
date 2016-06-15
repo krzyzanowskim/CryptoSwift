@@ -24,6 +24,6 @@ public extension CSArrayType where Iterator.Element == UInt8 {
             return
         }
 
-        self.append(contentsOf: decodedData.arrayOfBytes())
+        self.append(contentsOf: decodedData.bytes)
     }
 }

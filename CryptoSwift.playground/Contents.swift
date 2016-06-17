@@ -52,8 +52,8 @@ do {
     var encryptor = aes.makeEncryptor()
 
     // prepare streams
-    let data = NSData(bytes: (0..<100).map { $0 })
-    let inputStream = NSInputStream(data: data)
+    let data = Data(bytes: (0..<100).map { $0 })
+    let inputStream = InputStream(data: data)
     let outputStream = NSOutputStream(toMemory: ())
     inputStream.open()
     outputStream.open()
@@ -65,18 +65,18 @@ do {
         let readCount = inputStream.read(&buffer, maxLength: buffer.count)
         if (readCount > 0) {
             try encryptor.update(withBytes: Array(buffer[0..<readCount])) { (bytes) in
-                writeToStream(outputStream, bytes: bytes)
+                writeToStream(stream: outputStream, bytes: bytes)
             }
         }
     }
 
     // finalize encryption
     try encryptor.finish { (bytes) in
-        writeToStream(outputStream, bytes: bytes)
+        writeToStream(stream: outputStream, bytes: bytes)
     }
 
     // print result
-    if let ciphertext = outputStream.propertyForKey(NSStreamDataWrittenToMemoryStreamKey) as? NSData {
+    if let ciphertext = outputStream.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey.rawValue) as? Data {
         print("Encrypted stream data: \(ciphertext.toHexString())")
     }
 

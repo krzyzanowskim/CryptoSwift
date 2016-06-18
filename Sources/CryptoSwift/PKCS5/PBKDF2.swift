@@ -27,6 +27,7 @@ public extension PKCS5 {
         private let salt: Array<UInt8>   // S
         private let iterations: Int // c
         private let numBlocks: UInt // l
+        private let dkLen: Int;
         private let prf: HMAC
 
         /// - parameters:
@@ -41,7 +42,8 @@ public extension PKCS5 {
                 throw Error.InvalidInput
             }
 
-            let keyLengthFinal = Double(keyLength ?? variant.size)
+            self.dkLen = keyLength ?? variant.size
+            let keyLengthFinal = Double(self.dkLen)
             let hLen = Double(prf.variant.size)
             if keyLengthFinal > (pow(2,32) - 1) * hLen {
                 throw Error.DerivedKeyTooLong
@@ -50,7 +52,6 @@ public extension PKCS5 {
             self.salt = salt
             self.iterations = iterations
             self.prf = prf
-
 
             self.numBlocks = UInt(ceil(Double(keyLengthFinal) / hLen))  // l = ceil(keyLength / hLen)
         }
@@ -63,7 +64,7 @@ public extension PKCS5 {
                     ret.appendContentsOf(value)
                 }
             }
-            return ret
+            return Array(ret.prefix(self.dkLen))
         }
     }
 }

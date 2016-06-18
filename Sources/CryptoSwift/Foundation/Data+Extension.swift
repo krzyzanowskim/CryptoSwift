@@ -89,7 +89,7 @@ extension Data {
 extension Data {
 
     public var bytes: Array<UInt8> {
-        return self.map { $0 }
+        return Array(self)
     }
     
     public func toHexString() -> String {

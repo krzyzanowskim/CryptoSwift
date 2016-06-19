@@ -20,7 +20,7 @@ struct OFBModeWorker: BlockModeWorker {
         self.cipherOperation = cipherOperation
     }
 
-    mutating func encrypt(plaintext: Array<UInt8>) -> [UInt8] {
+    mutating func encrypt(plaintext: Array<UInt8>) -> Array<UInt8> {
         guard let ciphertext = cipherOperation(block: prev ?? iv) else {
             return plaintext
         }
@@ -28,7 +28,7 @@ struct OFBModeWorker: BlockModeWorker {
         return xor(plaintext, ciphertext)
     }
 
-    mutating func decrypt(ciphertext: Array<UInt8>) -> [UInt8] {
+    mutating func decrypt(ciphertext: Array<UInt8>) -> Array<UInt8> {
         guard let decrypted = cipherOperation(block: prev ?? iv) else {
             return ciphertext
         }

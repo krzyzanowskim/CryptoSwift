@@ -13,7 +13,7 @@ public enum Hash {
     case crc32(Array<UInt8>, seed: UInt32?, reflect: Bool)
     case crc16(Array<UInt8>, seed: UInt16?)
     
-    public func calculate() -> [UInt8] {
+    public func calculate() -> Array<UInt8> {
         switch self {
         case md5(let bytes):
             return MD5(bytes).calculate()

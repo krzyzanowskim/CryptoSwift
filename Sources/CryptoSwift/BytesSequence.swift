@@ -8,7 +8,7 @@
 
 struct BytesSequence: SequenceType {
     let chunkSize: Int
-    let data: [UInt8]
+    let data: Array<UInt8>
     
     func generate() -> AnyGenerator<ArraySlice<UInt8>> {
         

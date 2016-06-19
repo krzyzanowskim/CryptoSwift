@@ -23,12 +23,12 @@ public protocol Cryptors {
     func makeDecryptor() -> DecryptorType
 
     /// Generate array of random bytes. Helper function.
-    static func randomIV(blockSize:Int) -> [UInt8]
+    static func randomIV(blockSize:Int) -> Array<UInt8>
 }
 
 extension Cryptors {
-    static public func randomIV(blockSize:Int) -> [UInt8] {
-        var randomIV:[UInt8] = [UInt8]();
+    static public func randomIV(blockSize:Int) -> Array<UInt8> {
+        var randomIV:Array<UInt8> = Array<UInt8>();
         for _ in 0..<blockSize {
             randomIV.append(UInt8(truncatingBitPattern: cs_arc4random_uniform(256)));
         }

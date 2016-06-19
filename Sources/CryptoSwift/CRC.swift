@@ -8,7 +8,7 @@
 
 final class CRC {
     
-    private static let table32:[UInt32] = [0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
+    private static let table32:Array<UInt32> = [0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
         0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91,
         0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de, 0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7,
         0x136c9856, 0x646ba8c0, 0xfd62f97a, 0x8a65c9ec, 0x14015c4f, 0x63066cd9, 0xfa0f3d63, 0x8d080df5,
@@ -74,7 +74,7 @@ final class CRC {
         0x4400, 0x84C1, 0x8581, 0x4540, 0x8701, 0x47C0, 0x4680, 0x8641,
         0x8201, 0x42C0, 0x4380, 0x8341, 0x4100, 0x81C1, 0x8081, 0x4040]
     
-    func crc32(message:[UInt8], seed: UInt32? = nil, reflect : Bool = true) -> UInt32 {
+    func crc32(message:Array<UInt8>, seed: UInt32? = nil, reflect : Bool = true) -> UInt32 {
         var crc:UInt32 = seed != nil ? seed! : 0xffffffff
         for chunk in BytesSequence(chunkSize: 256, data: message) {
             for b in chunk {
@@ -85,7 +85,7 @@ final class CRC {
         return (reflect ? crc : reverseUInt32(crc)) ^ 0xffffffff
     }
     
-    func crc16(message:[UInt8], seed: UInt16? = nil) -> UInt16 {
+    func crc16(message:Array<UInt8>, seed: UInt16? = nil) -> UInt16 {
         var crc:UInt16 = seed != nil ? seed! : 0x0000
         for chunk in BytesSequence(chunkSize: 256, data: message) {
             for b in chunk {

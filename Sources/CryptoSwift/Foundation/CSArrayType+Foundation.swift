@@ -10,7 +10,7 @@ import Foundation
 
 public extension CSArrayType where Generator.Element == UInt8 {
     public func toBase64() -> String? {
-        guard let bytesArray = self as? [UInt8] else {
+        guard let bytesArray = self as? Array<UInt8> else {
             return nil
         }
 

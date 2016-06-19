@@ -34,12 +34,12 @@ func integerFromBitsArray<T: UnsignedIntegerType>(bits: [Bit]) -> T
 
 /// Initialize integer from array of bytes.
 /// This method may be slow
-func integerWithBytes<T: IntegerType where T:ByteConvertible, T: BitshiftOperationsType>(bytes: [UInt8]) -> T {
+func integerWithBytes<T: IntegerType where T:ByteConvertible, T: BitshiftOperationsType>(bytes: Array<UInt8>) -> T {
     var bytes = bytes.reverse() as Array<UInt8> //FIXME: check it this is equivalent of Array(...)
     if bytes.count < sizeof(T) {
         let paddingCount = sizeof(T) - bytes.count
         if (paddingCount > 0) {
-            bytes += [UInt8](count: paddingCount, repeatedValue: 0)
+            bytes += Array<UInt8>(count: paddingCount, repeatedValue: 0)
         }
     }
     
@@ -56,14 +56,14 @@ func integerWithBytes<T: IntegerType where T:ByteConvertible, T: BitshiftOperati
 
 /// Array of bytes, little-endian representation. Don't use if not necessary.
 /// I found this method slow
-func arrayOfBytes<T>(value:T, length:Int? = nil) -> [UInt8] {
+func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
     let totalBytes = length ?? sizeof(T)
     
     let valuePointer = UnsafeMutablePointer<T>.alloc(1)
     valuePointer.memory = value
     
     let bytesPointer = UnsafeMutablePointer<UInt8>(valuePointer)
-    var bytes = [UInt8](count: totalBytes, repeatedValue: 0)
+    var bytes = Array<UInt8>(count: totalBytes, repeatedValue: 0)
     for j in 0..<min(sizeof(T),totalBytes) {
         bytes[totalBytes - 1 - j] = (bytesPointer + j).memory
     }

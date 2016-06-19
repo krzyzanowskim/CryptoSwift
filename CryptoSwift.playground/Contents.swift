@@ -10,7 +10,7 @@ import XCPlayground
 //: # AES
 //: One-time shot
 do {
-    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap")
+    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap") // aes128
     let ciphertext = try aes.encrypt("Nullam quis risus eget urna mollis ornare vel eu leo.".utf8.map({$0}))
     print(ciphertext.toHexString())
 } catch {
@@ -19,7 +19,7 @@ do {
 
 //: Incremental encryption
 do {
-    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap")
+    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap") // aes128
     var encryptor = aes.makeEncryptor()
 
     var ciphertext = Array<UInt8>()
@@ -36,7 +36,7 @@ do {
 //: Encrypt stream incrementally
 do {
     // write until all is written
-    func writeToStream(stream: NSOutputStream, bytes: [UInt8]) {
+    func writeToStream(stream: NSOutputStream, bytes: Array<UInt8>) {
         var writtenCount = 0
         while stream.hasSpaceAvailable && writtenCount < bytes.count {
             let c = stream.write(bytes, maxLength: bytes.count)
@@ -58,7 +58,7 @@ do {
     inputStream.open()
     outputStream.open()
 
-    var buffer = [UInt8](count: 2, repeatedValue: 0)
+    var buffer = Array<UInt8>(count: 2, repeatedValue: 0)
 
     // encrypt input stream data and write encrypted result to output stream
     while (inputStream.hasBytesAvailable) {

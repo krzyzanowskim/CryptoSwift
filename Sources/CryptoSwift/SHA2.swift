@@ -10,9 +10,9 @@ final class SHA2 : HashProtocol {
     var size:Int { return variant.rawValue }
     let variant:SHA2.Variant
     
-    let message: [UInt8]
+    let message: Array<UInt8>
     
-    init(_ message:[UInt8], variant: SHA2.Variant) {
+    init(_ message:Array<UInt8>, variant: SHA2.Variant) {
         self.variant = variant
         self.message = message
     }
@@ -113,11 +113,11 @@ final class SHA2 : HashProtocol {
     }
     
     //FIXME: I can't do Generic func out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.
-    func calculate32() -> [UInt8] {
+    func calculate32() -> Array<UInt8> {
         var tmpMessage = self.prepare(64)
         
         // hash values
-        var hh = [UInt32]()
+        var hh = Array<UInt32>()
         variant.h.forEach {(h) -> () in
             hh.append(UInt32(h))
         }
@@ -130,7 +130,7 @@ final class SHA2 : HashProtocol {
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 32-bit words into sixty-four 32-bit words:
-            var M:[UInt32] = [UInt32](count: variant.k.count, repeatedValue: 0)
+            var M:Array<UInt32> = Array<UInt32>(count: variant.k.count, repeatedValue: 0)
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
@@ -186,7 +186,7 @@ final class SHA2 : HashProtocol {
         }
         
         // Produce the final hash value (big-endian) as a 160 bit number:
-        var result = [UInt8]()
+        var result = Array<UInt8>()
         result.reserveCapacity(hh.count / 4)
         variant.resultingArray(hh).forEach {
             let item = $0.bigEndian
@@ -195,7 +195,7 @@ final class SHA2 : HashProtocol {
         return result
     }
     
-    func calculate64() -> [UInt8] {
+    func calculate64() -> Array<UInt8> {
         var tmpMessage = self.prepare(128)
         
         // hash values
@@ -269,11 +269,11 @@ final class SHA2 : HashProtocol {
         }
         
         // Produce the final hash value (big-endian)
-        var result = [UInt8]()
+        var result = Array<UInt8>()
         result.reserveCapacity(hh.count / 4)
         variant.resultingArray(hh).forEach {
             let item = $0.bigEndian
-            var partialResult = [UInt8]()
+            var partialResult = Array<UInt8>()
             partialResult.reserveCapacity(8)
             for i in 0..<8 {
                 let shift = UInt64(8 * i)

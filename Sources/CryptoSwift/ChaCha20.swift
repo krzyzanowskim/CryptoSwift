@@ -17,7 +17,7 @@ final public class ChaCha20: BlockCipher {
     private var context:Context?
     
     final private class Context {
-        var input:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
+        var input:Array<UInt32> = Array<UInt32>(count: 16, repeatedValue: 0)
         
         deinit {
             for i in 0..<input.count {
@@ -26,7 +26,7 @@ final public class ChaCha20: BlockCipher {
         }
     }
     
-    public init?(key:[UInt8], iv:[UInt8]) {
+    public init?(key:Array<UInt8>, iv:Array<UInt8>) {
         if let c = contextSetup(iv: iv, key: key) {
             context = c
         } else {
@@ -34,7 +34,7 @@ final public class ChaCha20: BlockCipher {
         }
     }
     
-    private final func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
+    private final func wordToByte(input:Array<UInt32> /* 64 */) -> Array<UInt8>? /* 16 */ {
         if (input.count != stateSize) {
             return nil;
         }
@@ -52,7 +52,7 @@ final public class ChaCha20: BlockCipher {
             quarterround(&x[3], &x[4], &x[9],  &x[14])
         }
 
-        var output = [UInt8]()
+        var output = Array<UInt8>()
         output.reserveCapacity(16)
 
         for i in 0..<16 {
@@ -63,7 +63,7 @@ final public class ChaCha20: BlockCipher {
         return output;
     }
         
-    private func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
+    private func contextSetup(iv  iv:Array<UInt8>, key:Array<UInt8>) -> Context? {
         let ctx = Context()
         let kbits = key.count * 8
         
@@ -112,13 +112,13 @@ final public class ChaCha20: BlockCipher {
         return ctx
     }
     
-    private final func encryptBytes(message:[UInt8]) throws -> [UInt8] {
+    private final func encryptBytes(message:Array<UInt8>) throws -> Array<UInt8> {
         
         guard let ctx = context else {
             throw Error.MissingContext
         }
         
-        var c:[UInt8] = [UInt8](count: message.count, repeatedValue: 0)
+        var c:Array<UInt8> = Array<UInt8>(count: message.count, repeatedValue: 0)
         
         var cPos:Int = 0
         var mPos:Int = 0
@@ -164,7 +164,7 @@ final public class ChaCha20: BlockCipher {
 
 // MARK: Cipher
 extension ChaCha20: Cipher {
-    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
+    public func encrypt(bytes:Array<UInt8>) throws -> Array<UInt8> {
         guard context != nil else {
             throw Error.MissingContext
         }
@@ -172,7 +172,7 @@ extension ChaCha20: Cipher {
         return try encryptBytes(bytes)
     }
 
-    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
+    public func decrypt(bytes:Array<UInt8>) throws -> Array<UInt8> {
         return try encrypt(bytes)
     }
 }

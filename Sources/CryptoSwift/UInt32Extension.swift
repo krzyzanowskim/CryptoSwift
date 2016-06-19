@@ -18,7 +18,7 @@ extension UInt32: _UInt32Type {}
 
 /** array of bytes */
 extension UInt32 {
-    public func bytes(totalBytes: Int = sizeof(UInt32)) -> [UInt8] {
+    public func bytes(totalBytes: Int = sizeof(UInt32)) -> Array<UInt8> {
         return arrayOfBytes(self, length: totalBytes)
     }
 
@@ -27,7 +27,7 @@ extension UInt32 {
     }
 
     /** Int with array bytes (little-endian) */
-    public static func withBytes(bytes: [UInt8]) -> UInt32 {
+    public static func withBytes(bytes: Array<UInt8>) -> UInt32 {
         return integerWithBytes(bytes)
     }
 }

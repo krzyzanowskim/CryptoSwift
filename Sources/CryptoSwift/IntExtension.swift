@@ -31,7 +31,7 @@ extension Int {
 /* array of bytes */
 extension Int {
     /** Array of bytes with optional padding (little-endian) */
-    public func bytes(totalBytes: Int = sizeof(Int)) -> [UInt8] {
+    public func bytes(totalBytes: Int = sizeof(Int)) -> Array<UInt8> {
         return arrayOfBytes(self, length: totalBytes)
     }
 
@@ -40,7 +40,7 @@ extension Int {
     }
 
     /** Int with array bytes (little-endian) */
-    public static func withBytes(bytes: [UInt8]) -> Int {
+    public static func withBytes(bytes: Array<UInt8>) -> Int {
         return integerWithBytes(bytes)
     }
 }

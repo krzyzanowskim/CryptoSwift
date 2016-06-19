@@ -1,3 +1,7 @@
+0.5.1
+- Fixed PBKDF2 not taking key length parameter into account
+- Switch to Array<> in code
+
 0.5
 - Added PBKDF1 https://tools.ietf.org/html/rfc2898#section-5.1
 - Added PBKDF2 https://tools.ietf.org/html/rfc2898#section-5.2

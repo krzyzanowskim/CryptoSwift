@@ -16,11 +16,11 @@ public protocol Cipher {
     ///
     /// - parameter bytes: Plaintext data
     /// - returns: Encrypted data
-    func encrypt(bytes: [UInt8]) throws -> [UInt8]
+    func encrypt(bytes: Array<UInt8>) throws -> Array<UInt8>
 
     /// Decrypt given bytes at once
     ///
     /// - parameter bytes: Ciphertext data
     /// - returns: Plaintext data
-    func decrypt(bytes: [UInt8]) throws -> [UInt8]
+    func decrypt(bytes: Array<UInt8>) throws -> Array<UInt8>
 }

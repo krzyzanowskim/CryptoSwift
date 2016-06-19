@@ -10,7 +10,7 @@ import XCPlayground
 //: # AES
 //: One-time shot
 do {
-    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap")
+    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap") // aes128
     let ciphertext = try aes.encrypt("Nullam quis risus eget urna mollis ornare vel eu leo.".utf8.map({$0}))
     print(ciphertext.toHexString())
 } catch {
@@ -19,7 +19,7 @@ do {
 
 //: Incremental encryption
 do {
-    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap")
+    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap") // aes128
     var encryptor = aes.makeEncryptor()
 
     var ciphertext = Array<UInt8>()

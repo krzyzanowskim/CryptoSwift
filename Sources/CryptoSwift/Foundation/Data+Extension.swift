@@ -87,8 +87,8 @@ extension Data {
 }
 
 extension Data {
-    
-    internal var bytes: Array<UInt8> {
+
+    public var bytes: Array<UInt8> {
         return Array(self)
     }
     

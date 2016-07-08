@@ -326,7 +326,7 @@ extension AES {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
             }
             if ((i % variant.Nk) == 0) {
-                tmp = subWord(rotateLeft(UInt32.with(bytes: tmp), by: 8).bytes(totalBytes: sizeof(UInt32)))
+                tmp = subWord(rotateLeft(UInt32.with(bytes: tmp), by: 8).bytes(totalBytes: sizeof(UInt32.self)))
                 tmp[0] = tmp.first! ^ Rcon[i/variant.Nk]
             } else if (variant.Nk > 6 && (i % variant.Nk) == 4) {
                 tmp = subWord(tmp)

@@ -36,14 +36,14 @@ func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T
 /// This method may be slow
 func integerWith<T:Integer where T:ByteConvertible, T: BitshiftOperationsType>(_ bytes: Array<UInt8>) -> T {
     var bytes = bytes.reversed() as Array<UInt8> //FIXME: check it this is equivalent of Array(...)
-    if bytes.count < sizeof(T) {
-        let paddingCount = sizeof(T) - bytes.count
+    if bytes.count < sizeof(T.self) {
+        let paddingCount = sizeof(T.self) - bytes.count
         if (paddingCount > 0) {
             bytes += Array<UInt8>(repeating: 0, count: paddingCount)
         }
     }
     
-    if sizeof(T) == 1 {
+    if sizeof(T.self) == 1 {
         return T(truncatingBitPattern: UInt64(bytes.first!))
     }
     
@@ -57,14 +57,14 @@ func integerWith<T:Integer where T:ByteConvertible, T: BitshiftOperationsType>(_
 /// Array of bytes, little-endian representation. Don't use if not necessary.
 /// I found this method slow
 func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
-    let totalBytes = length ?? sizeof(T)
+    let totalBytes = length ?? sizeof(T.self)
 
     let valuePointer = UnsafeMutablePointer<T>(allocatingCapacity: 1)
     valuePointer.pointee = value
     
     let bytesPointer = UnsafeMutablePointer<UInt8>(valuePointer)
     var bytes = Array<UInt8>(repeating: 0, count: totalBytes)
-    for j in 0..<min(sizeof(T),totalBytes) {
+    for j in 0..<min(sizeof(T.self),totalBytes) {
         bytes[totalBytes - 1 - j] = (bytesPointer + j).pointee
     }
     

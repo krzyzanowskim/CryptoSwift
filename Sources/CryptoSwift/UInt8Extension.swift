@@ -80,7 +80,7 @@ extension UInt8 {
             return
         }
 
-        let bitsCount = UInt8(sizeof(UInt8) * 8)
+        let bitsCount = UInt8(sizeof(UInt8.self) * 8)
 
         if (count >= bitsCount) {
             return

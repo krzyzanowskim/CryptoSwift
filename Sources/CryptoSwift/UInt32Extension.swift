@@ -18,7 +18,7 @@ extension UInt32: _UInt32Type {}
 
 /** array of bytes */
 extension UInt32 {
-    public func bytes(totalBytes: Int = sizeof(UInt32)) -> Array<UInt8> {
+    public func bytes(totalBytes: Int = sizeof(UInt32.self)) -> Array<UInt8> {
         return arrayOfBytes(value: self, length: totalBytes)
     }
 
@@ -41,7 +41,7 @@ extension UInt32 {
             return
         }
         
-        let bitsCount = UInt32(sizeof(UInt32) * 8)
+        let bitsCount = UInt32(sizeof(UInt32.self) * 8)
         let shiftCount = Swift.min(count, bitsCount - 1)
         var shiftedValue:UInt32 = 0;
         

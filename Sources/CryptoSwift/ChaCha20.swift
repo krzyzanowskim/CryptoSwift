@@ -8,7 +8,7 @@
 
 final public class ChaCha20: BlockCipher {
     
-    public enum Error: ErrorProtocol {
+    public enum Error: Swift.Error {
         case missingContext
     }
     

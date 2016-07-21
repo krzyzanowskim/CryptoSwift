@@ -11,7 +11,7 @@
 */
 public enum Authenticator {
     
-    public enum Error: ErrorProtocol {
+    public enum Error: Swift.Error {
         case authenticateError
     }
     

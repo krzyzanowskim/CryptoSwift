@@ -11,7 +11,7 @@
 private typealias Key = SecureBytes
 
 final public class AES: BlockCipher {
-    public enum Error: ErrorProtocol {
+    public enum Error: Swift.Error {
         case dataPaddingRequired
         case invalidKeyOrInitializationVector
         case invalidInitializationVector

@@ -3,7 +3,7 @@
 //  CryptoSwift
 //
 //  Created by Dennis Michaelis on 27.03.16.
-//  Copyright © 2016 Dennis Michaelis. All rights reserved.
+//  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
 public class Salsa20 {
@@ -15,16 +15,16 @@ public class Salsa20 {
     }
     
     static let blockSize = 64 // 512 / 8
-    internal let stateSize = 16
-    internal var rounds: UInt8
-    internal var context:Context?
+    let stateSize = 16
+    var rounds: UInt8
+    var context:Context?
     private var keyStream: [UInt8]?
     private var index: Int = 0
     
-    internal let SIGMA = "expand 32-byte k"
-    internal let TAU = "expand 16-byte k"
+    let SIGMA = "expand 32-byte k"
+    let TAU = "expand 16-byte k"
     
-    internal final class Context {
+    final class Context {
         var input:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
         
         deinit {
@@ -34,7 +34,7 @@ public class Salsa20 {
         }
     }
     
-    internal init?(rounds: UInt8) {
+    init?(rounds: UInt8) {
         self.rounds = rounds
     }
     
@@ -64,7 +64,7 @@ public class Salsa20 {
         return try encrypt(bytes)
     }
     
-    internal func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
+    func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
         if (input.count != stateSize) {
             return nil
         }
@@ -122,7 +122,7 @@ public class Salsa20 {
         return output
     }
     
-    internal func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
+    func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
         let ctx = Context()
         let kbits = key.count * 8
         
@@ -172,7 +172,7 @@ public class Salsa20 {
         return ctx
     }
     
-    internal func encryptBytes(message:[UInt8]) throws -> [UInt8] {
+    func encryptBytes(message:[UInt8]) throws -> [UInt8] {
         
         guard let ctx = context else {
             throw Error.MissingContext
@@ -244,7 +244,7 @@ extension Salsa20: Cipher {
 // MARK: Helpers
 
 /// Change array to number. It's here because arrayOfBytes is too slow
-internal func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
+func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
     var value:UInt32 = 0
     for i:UInt32 in 0..<4 {
         let j = bytes.startIndex + Int(i)
@@ -254,7 +254,7 @@ internal func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
     return value
 }
 
-internal func littleEndian(data: NSData, range: Range<Int>) -> UInt32 {
+func littleEndian(data: NSData, range: Range<Int>) -> UInt32 {
     var val: UInt32 = 0
     data.getBytes(&val, range: NSRange(range))
     return UInt32.init(littleEndian: val);

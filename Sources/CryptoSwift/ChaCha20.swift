@@ -46,7 +46,7 @@ final public class ChaCha20: Salsa20 {
         return output;
     }
         
-    override internal func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
+    override func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
         let ctx = Context()
         let kbits = key.count * 8
         
@@ -94,7 +94,7 @@ final public class ChaCha20: Salsa20 {
         return ctx
     }
     
-    override internal final func encryptBytes(message:[UInt8]) throws -> [UInt8] {
+    override final func encryptBytes(message:[UInt8]) throws -> [UInt8] {
         
         guard let ctx = context else {
             throw Error.MissingContext

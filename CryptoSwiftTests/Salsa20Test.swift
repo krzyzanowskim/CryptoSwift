@@ -3,7 +3,7 @@
 //  CryptoSwift
 //
 //  Created by Dennis Michaelis on 27.03.16.
-//  Copyright © 2016 Dennis Michaelis. All rights reserved.
+//  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
 import XCTest

@@ -59,7 +59,7 @@ func integerWith<T:Integer where T:ByteConvertible, T: BitshiftOperationsType>(_
 func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
     let totalBytes = length ?? sizeof(T.self)
 
-    let valuePointer = UnsafeMutablePointer<T>(allocatingCapacity: 1)
+    let valuePointer = UnsafeMutablePointer<T>.allocate(capacity: 1)
     valuePointer.pointee = value
     
     let bytesPointer = UnsafeMutablePointer<UInt8>(valuePointer)
@@ -69,7 +69,7 @@ func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
     }
     
     valuePointer.deinitialize()
-    valuePointer.deallocateCapacity(1)
+    valuePointer.deallocate(capacity: 1)
     
     return bytes
 }

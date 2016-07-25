@@ -19,7 +19,7 @@ public extension PKCS5 {
     ///          DK = PBKDF2(PRF, Password, Salt, c, dkLen)
     public struct PBKDF2 {
 
-        public enum Error: ErrorProtocol {
+        public enum ErrorProblem: Error {
             case invalidInput
             case derivedKeyTooLong
         }
@@ -39,14 +39,14 @@ public extension PKCS5 {
             precondition(iterations > 0)
             
             guard let prf = HMAC(key: password, variant: variant), iterations > 0 && !password.isEmpty && !salt.isEmpty else {
-                throw Error.invalidInput
+                throw ErrorProblem.invalidInput
             }
 
             self.dkLen = keyLength ?? variant.size
             let keyLengthFinal = Double(self.dkLen)
             let hLen = Double(prf.variant.size)
             if keyLengthFinal > (pow(2,32) - 1) * hLen {
-                throw Error.derivedKeyTooLong
+                throw ErrorProblem.derivedKeyTooLong
             }
 
             self.salt = salt

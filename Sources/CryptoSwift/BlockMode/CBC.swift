@@ -25,7 +25,7 @@ struct CBCModeWorker: BlockModeWorker {
             return plaintext
         }
         prev = ciphertext
-        return ciphertext ?? []
+        return ciphertext 
     }
 
     mutating func decrypt(_ ciphertext: Array<UInt8>) -> Array<UInt8> {

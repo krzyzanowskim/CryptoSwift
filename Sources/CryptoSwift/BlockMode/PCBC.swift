@@ -25,7 +25,7 @@ struct PCBCModeWorker: BlockModeWorker {
             return plaintext
         }
         prev = xor(plaintext, ciphertext)
-        return ciphertext ?? []
+        return ciphertext
     }
 
     mutating func decrypt(_ ciphertext: Array<UInt8>) -> Array<UInt8> {

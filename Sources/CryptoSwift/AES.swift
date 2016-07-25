@@ -11,13 +11,13 @@
 private typealias Key = SecureBytes
 
 final public class AES: BlockCipher {
-    public enum Error: ErrorProtocol {
+    public enum ErrorProblem: Error {
         case dataPaddingRequired
         case invalidKeyOrInitializationVector
         case invalidInitializationVector
     }
     
-    public enum AESVariant: Int {
+    public enum Variant: Int {
         case aes128 = 1, aes192, aes256
         
         var Nk:Int { // Nk words
@@ -36,7 +36,7 @@ final public class AES: BlockCipher {
     private let blockMode:BlockMode
     public static let blockSize:Int = 16 // 128 /8
     
-    public var variant:AESVariant {
+    public var variant:Variant {
         switch (self.key.count * 8) {
         case 128:
             return .aes128
@@ -104,7 +104,7 @@ final public class AES: BlockCipher {
 
         if (blockMode.options.contains(.InitializationVectorRequired) && self.iv.count != AES.blockSize) {
             assert(false, "Block size and Initialization Vector must be the same length!")
-            throw Error.invalidInitializationVector
+            throw ErrorProblem.invalidInitializationVector
         }
     }
 }
@@ -257,7 +257,7 @@ extension AES {
         return out
     }
 
-    private func expandKeyInv(_ key: Key, variant: AESVariant) -> Array<Array<UInt32>> {
+    private func expandKeyInv(_ key: Key, variant: Variant) -> Array<Array<UInt32>> {
         let rounds = variant.Nr
         var rk2:Array<Array<UInt32>> = expandKey(key, variant: variant)
 
@@ -280,7 +280,7 @@ extension AES {
         return rk2
     }
 
-    private func expandKey(_ key:Key, variant:AESVariant) -> Array<Array<UInt32>> {
+    private func expandKey(_ key:Key, variant:Variant) -> Array<Array<UInt32>> {
 
         func convertExpandedKey(_ expanded:Array<UInt8>) -> Array<Array<UInt32>> {
             var arr = Array<UInt32>()
@@ -492,7 +492,7 @@ extension AES: Cipher {
         }
 
         if blockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
-            throw Error.dataPaddingRequired
+            throw ErrorProblem.dataPaddingRequired
         }
 
         return out
@@ -500,7 +500,7 @@ extension AES: Cipher {
 
     public func decrypt(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
         if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
-            throw Error.dataPaddingRequired
+            throw ErrorProblem.dataPaddingRequired
         }
 
         var oneTimeCryptor = self.makeDecryptor()

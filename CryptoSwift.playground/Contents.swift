@@ -5,8 +5,6 @@
 */
 import CryptoSwift
 import Foundation
-import XCPlayground
-
 /*: 
  # AES
  ### One-time shot.

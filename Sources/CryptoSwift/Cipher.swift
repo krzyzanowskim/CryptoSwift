@@ -6,7 +6,7 @@
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
 
-public enum CipherError: ErrorProtocol {
+public enum CipherError: Error {
     case encrypt
     case decrypt
 }

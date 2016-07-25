@@ -8,7 +8,7 @@
 
 final public class ChaCha20: BlockCipher {
     
-    public enum Error: ErrorProtocol {
+    public enum ErrorProblem: Error {
         case missingContext
     }
     
@@ -115,7 +115,7 @@ final public class ChaCha20: BlockCipher {
     private final func encryptBytes(_ message:Array<UInt8>) throws -> Array<UInt8> {
         
         guard let ctx = context else {
-            throw Error.missingContext
+            throw ErrorProblem.missingContext
         }
         
         var c:Array<UInt8> = Array<UInt8>(repeating: 0, count: message.count)
@@ -166,7 +166,7 @@ final public class ChaCha20: BlockCipher {
 extension ChaCha20: Cipher {
     public func encrypt(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
         guard context != nil else {
-            throw Error.missingContext
+            throw ErrorProblem.missingContext
         }
 
         return try encryptBytes(bytes)

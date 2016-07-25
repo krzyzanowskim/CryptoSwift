@@ -22,7 +22,7 @@ class PBKDF: XCTestCase {
     func test_pbkdf1() {
         let password: Array<UInt8> = [0x70,0x61,0x73,0x73,0x77,0x6F,0x72,0x64]
         let salt: Array<UInt8> = [0x78,0x57,0x8E,0x5A,0x5D,0x63,0xCB,0x06]
-        let value = try! PKCS5.PBKDF1(password: password, salt: salt, iterations: 1000, keyLength: 16, variant: .sha1).calculate()
+        let value = try! PKCS5.PBKDF1(password: password, salt: salt, iterations: 1000, keyLength: 16).calculate()
         XCTAssertEqual(value.toHexString(), "dc19847e05c64d2faf10ebfb4a3d2a20")
     }
 

@@ -86,7 +86,7 @@ do {
     }
 
     // print result
-    if let ciphertext = outputStream.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey.rawValue) as? Data {
+    if let ciphertext = outputStream.property(forKey: Stream.PropertyKey(rawValue: Stream.PropertyKey.dataWrittenToMemoryStreamKey.rawValue)) as? Data {
         print("Encrypted stream data: \(ciphertext.toHexString())")
     }
 

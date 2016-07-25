@@ -15,7 +15,7 @@ public extension PKCS5 {
     /// some applications.
     public struct PBKDF1 {
 
-        public enum ErrorProblem: Error {
+        public enum Error: Swift.Error {
             case invalidInput
             case derivedKeyTooLong
         }
@@ -59,11 +59,11 @@ public extension PKCS5 {
             let keyLength = keyLength ?? variant.size
 
             if (keyLength > variant.size) {
-                throw ErrorProblem.derivedKeyTooLong
+                throw Error.derivedKeyTooLong
             }
 
             guard let t1 = variant.calculateHash(password + salt) else {
-                throw ErrorProblem.invalidInput
+                throw Error.invalidInput
             }
 
             self.iterations = iterations

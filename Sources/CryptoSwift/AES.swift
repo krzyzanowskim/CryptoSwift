@@ -11,7 +11,7 @@
 private typealias Key = SecureBytes
 
 final public class AES: BlockCipher {
-    public enum ErrorProblem: Error {
+    public enum Error: Swift.Error {
         case dataPaddingRequired
         case invalidKeyOrInitializationVector
         case invalidInitializationVector
@@ -104,7 +104,7 @@ final public class AES: BlockCipher {
 
         if (blockMode.options.contains(.InitializationVectorRequired) && self.iv.count != AES.blockSize) {
             assert(false, "Block size and Initialization Vector must be the same length!")
-            throw ErrorProblem.invalidInitializationVector
+            throw Error.invalidInitializationVector
         }
     }
 }
@@ -492,7 +492,7 @@ extension AES: Cipher {
         }
 
         if blockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
-            throw ErrorProblem.dataPaddingRequired
+            throw Error.dataPaddingRequired
         }
 
         return out
@@ -500,7 +500,7 @@ extension AES: Cipher {
 
     public func decrypt(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
         if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
-            throw ErrorProblem.dataPaddingRequired
+            throw Error.dataPaddingRequired
         }
 
         var oneTimeCryptor = self.makeDecryptor()

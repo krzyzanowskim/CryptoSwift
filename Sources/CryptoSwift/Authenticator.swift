@@ -11,7 +11,7 @@
 */
 public enum Authenticator {
     
-    public enum ErrorProblem: Error {
+    public enum Error: Swift.Error {
         case authenticateError
     }
     
@@ -32,12 +32,12 @@ public enum Authenticator {
         switch (self) {
         case .Poly1305(let key):
             guard let auth = CryptoSwift.Poly1305(key: key)?.authenticate(bytes) else {
-                throw ErrorProblem.authenticateError
+                throw Error.authenticateError
             }
             return auth
         case .HMAC(let key, let variant):
             guard let auth = CryptoSwift.HMAC(key: key, variant: variant)?.authenticate(bytes) else {
-                throw ErrorProblem.authenticateError
+                throw Error.authenticateError
             }
             return auth
         }

@@ -38,7 +38,7 @@ public extension PKCS5 {
         public init(password: Array<UInt8>, salt: Array<UInt8>, iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */, variant: HMAC.Variant = .sha256) throws {
             precondition(iterations > 0)
             
-            guard let prf = HMAC(key: password, variant: variant) where iterations > 0 && !password.isEmpty && !salt.isEmpty else {
+            guard let prf = HMAC(key: password, variant: variant), iterations > 0 && !password.isEmpty && !salt.isEmpty else {
                 throw Error.invalidInput
             }
 

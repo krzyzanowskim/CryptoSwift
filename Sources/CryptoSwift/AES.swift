@@ -95,7 +95,7 @@ final public class AES: BlockCipher {
         self.blockMode = blockMode
         self.padding = padding
 
-        if let iv = iv where !iv.isEmpty {
+        if let iv = iv, !iv.isEmpty {
             self.iv = iv
         } else {
             let defaultIV = Array<UInt8>(repeating: 0, count: AES.blockSize)

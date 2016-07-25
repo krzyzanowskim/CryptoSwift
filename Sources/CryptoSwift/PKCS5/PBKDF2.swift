@@ -19,7 +19,7 @@ public extension PKCS5 {
     ///          DK = PBKDF2(PRF, Password, Salt, c, dkLen)
     public struct PBKDF2 {
 
-        public enum Error: ErrorProtocol {
+        public enum Error: Swift.Error {
             case invalidInput
             case derivedKeyTooLong
         }

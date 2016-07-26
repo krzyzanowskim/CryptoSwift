@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-internal protocol HashProtocol {
+internal protocol HashProtocol: class {
     var message: Array<UInt8> { get }
     
     /** Common part for hash calculation. Prepare header data. */

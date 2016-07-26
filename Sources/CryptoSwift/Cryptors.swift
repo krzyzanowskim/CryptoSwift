@@ -12,7 +12,7 @@
     import Darwin
 #endif
 
-public protocol Cryptors {
+public protocol Cryptors: class {
     associatedtype EncryptorType: UpdatableCryptor
     associatedtype DecryptorType: UpdatableCryptor
 

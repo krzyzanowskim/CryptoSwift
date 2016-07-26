@@ -20,6 +20,7 @@ extension UInt32:Initiable {}
 extension UInt64:Initiable {}
 
 /** build bit pattern from array of bits */
+@_specialize(UInt8)
 func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T
 {
     var bitPattern:T = 0
@@ -34,6 +35,7 @@ func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T
 
 /// Initialize integer from array of bytes.
 /// This method may be slow
+@_specialize(UInt32)
 func integerWith<T:Integer where T:ByteConvertible, T: BitshiftOperationsType>(_ bytes: Array<UInt8>) -> T {
     var bytes = bytes.reversed() as Array<UInt8> //FIXME: check it this is equivalent of Array(...)
     if bytes.count < sizeof(T.self) {
@@ -77,12 +79,14 @@ func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
 // MARK: - shiftLeft
 
 // helper to be able tomake shift operation on T
+@_specialize(Int)
 func << <T:SignedInteger>(lhs: T, rhs: Int) -> Int {
     let a = lhs as! Int
     let b = rhs
     return a << b
 }
 
+@_specialize(UInt)
 func << <T:UnsignedInteger>(lhs: T, rhs: Int) -> UInt {
     let a = lhs as! UInt
     let b = rhs
@@ -91,6 +95,7 @@ func << <T:UnsignedInteger>(lhs: T, rhs: Int) -> UInt {
 
 // Generic function itself
 // FIXME: this generic function is not as generic as I would. It crashes for smaller types
+@_specialize(Int)
 func shiftLeft<T: SignedInteger where T: Initiable>(_ value: T, by count: Int) -> T {
     if (value == 0) {
         return 0;

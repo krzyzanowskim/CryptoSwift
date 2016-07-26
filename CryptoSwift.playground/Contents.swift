@@ -44,7 +44,7 @@ do {
  */
 do {
     // write until all is written
-    func writeToStream(stream: NSOutputStream, bytes: Array<UInt8>) {
+    func writeToStream(stream: OutputStream, bytes: Array<UInt8>) {
         var writtenCount = 0
         while stream.hasSpaceAvailable && writtenCount < bytes.count {
             let c = stream.write(bytes, maxLength: bytes.count)
@@ -62,7 +62,7 @@ do {
     // prepare streams
     let data = Data(bytes: (0..<100).map { $0 })
     let inputStream = InputStream(data: data)
-    let outputStream = NSOutputStream(toMemory: ())
+    let outputStream = OutputStream(toMemory: ())
     inputStream.open()
     outputStream.open()
 

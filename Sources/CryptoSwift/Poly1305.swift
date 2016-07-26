@@ -14,7 +14,7 @@ final public class Poly1305 {
     let blockSize = 16
     private var ctx:Context?
     
-    private class Context {
+    private final class Context {
         var r            = Array<UInt8>(repeating: 0, count: 17)
         var h            = Array<UInt8>(repeating: 0, count: 17)
         var pad          = Array<UInt8>(repeating: 0, count: 17)

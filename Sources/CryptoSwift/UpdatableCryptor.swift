@@ -32,6 +32,8 @@ public protocol UpdatableCryptor {
     /// - parameter output: Resulting data
     /// - returns: Processed data.
     mutating func finish(withBytes bytes:Array<UInt8>, output: (Array<UInt8>) -> Void) throws
+    
+    mutating func seek(position: UInt) throws
 }
 
 extension UpdatableCryptor {

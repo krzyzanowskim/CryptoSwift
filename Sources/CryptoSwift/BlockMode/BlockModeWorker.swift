@@ -11,3 +11,7 @@ protocol BlockModeWorker {
     mutating func encrypt(plaintext: Array<UInt8>) -> Array<UInt8>
     mutating func decrypt(ciphertext: Array<UInt8>) -> Array<UInt8>
 }
+
+protocol RandomAccessBlockModeWorker: BlockModeWorker {
+    mutating func seek(counter: UInt)
+}

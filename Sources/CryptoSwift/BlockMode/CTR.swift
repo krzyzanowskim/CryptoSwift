@@ -32,13 +32,7 @@ struct CTRModeWorker: BlockModeWorker {
     }
 
     mutating func decrypt(ciphertext: Array<UInt8>) -> Array<UInt8> {
-        let nonce = buildNonce(iv, counter: UInt64(counter))
-        counter = counter + 1
-
-        guard let plaintext = cipherOperation(block: nonce) else {
-            return ciphertext
-        }
-        return xor(plaintext, ciphertext)
+        return encrypt(ciphertext)
     }
 }
 

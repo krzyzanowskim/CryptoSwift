@@ -15,6 +15,7 @@ final public class AES: BlockCipher {
         case DataPaddingRequired
         case InvalidKeyOrInitializationVector
         case InvalidInitializationVector
+        case NotSupported
     }
     
     public enum AESVariant: Int {
@@ -421,6 +422,15 @@ extension AES {
             }
             return encrypted
         }
+        
+        mutating public func seek(position: UInt) throws {
+            guard var worker = self.worker as? RandomAccessBlockModeWorker else {
+                throw Error.NotSupported
+            }
+            
+            worker.seek(position)
+            self.worker = worker
+        }
     }
 }
 
@@ -463,6 +473,15 @@ extension AES {
             }
 
             return plaintext
+        }
+        
+        mutating public func seek(position: UInt) throws {
+            guard var worker = self.worker as? RandomAccessBlockModeWorker else {
+                throw Error.NotSupported
+            }
+            
+            worker.seek(position)
+            self.worker = worker
         }
     }
 }

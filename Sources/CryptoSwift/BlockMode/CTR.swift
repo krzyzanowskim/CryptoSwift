@@ -8,7 +8,7 @@
 //  Counter (CTR)
 //
 
-struct CTRModeWorker: BlockModeWorker {
+struct CTRModeWorker: RandomAccessBlockModeWorker {
     typealias Element = Array<UInt8>
 
     let cipherOperation: CipherOperationOnBlock
@@ -53,6 +53,11 @@ struct CTRModeWorker: BlockModeWorker {
 
     mutating func decrypt(ciphertext: Array<UInt8>) -> Array<UInt8> {
         return encrypt(ciphertext)
+    }
+    
+    mutating func seek(position: UInt) -> () {
+        counter = position / UInt(AES.blockSize)
+        offset = position % UInt(AES.blockSize)
     }
     
     mutating func incrementCounter(size: Int) {

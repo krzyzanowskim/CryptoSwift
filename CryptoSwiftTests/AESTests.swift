@@ -230,6 +230,42 @@ final class AESTests: XCTestCase {
         decrypted += try! decryptor.update(withBytes: Array(expected[15..<plaintext.count]))
         XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
+    
+    func testAES_encrypt_ctr_seek() {
+        let key:Array<UInt8> = [0x52, 0x72, 0xb5, 0x9c, 0xab, 0x07, 0xc5, 0x01, 0x11, 0x7a, 0x39, 0xb6, 0x10, 0x35, 0x87, 0x02];
+        let iv:Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03, 0x00, 0x00, 0x00,
+                               0x00, 0x00, 0x00, 0x00, 0x01]
+        var plaintext:Array<UInt8> = Array<UInt8>(count: 6000, repeatedValue: 0)
+        for i in 0..<plaintext.count / 6 {
+            let s = String(format: "%05d", i).utf8.map {$0}
+            plaintext[i * 6 + 0] = s[0];
+            plaintext[i * 6 + 1] = s[1];
+            plaintext[i * 6 + 2] = s[2];
+            plaintext[i * 6 + 3] = s[3];
+            plaintext[i * 6 + 4] = s[4];
+            plaintext[i * 6 + 5] = "|".utf8.first!;
+        }
+        
+        let aes = try! AES(key: key, iv:iv, blockMode: .CTR, padding: NoPadding())
+        let encrypted = try! aes.encrypt(plaintext)
+        
+        var decryptor = aes.makeDecryptor()
+        try! decryptor.seek(1)
+        let part1 = try! decryptor.update(withBytes: Array(encrypted[1..<5]))
+        XCTAssertEqual(part1, Array(plaintext[1..<5]), "seek decryption failed")
+        
+        try! decryptor.seek(1000)
+        let part2 = try! decryptor.update(withBytes: Array(encrypted[1000..<1200]))
+        XCTAssertEqual(part2, Array(plaintext[1000..<1200]), "seek decryption failed")
+        
+        try! decryptor.seek(5500)
+        let part3 = try! decryptor.update(withBytes: Array(encrypted[5500..<6000]))
+        XCTAssertEqual(part3, Array(plaintext[5500..<6000]), "seek decryption failed")
+        
+        try! decryptor.seek(0)
+        let part4 = try! decryptor.update(withBytes: Array(encrypted[0..<80]))
+        XCTAssertEqual(part4, Array(plaintext[0..<80]), "seek decryption failed")
+    }
 
     func testAES_encrypt_performance() {
         let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];

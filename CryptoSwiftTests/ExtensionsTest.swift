@@ -43,7 +43,7 @@ final class ExtensionsTest: XCTestCase {
     }
     
     func testBytes() {
-        let size = sizeof(UInt32) // 32 or 64  bit
+        let size = sizeof(UInt32.self) // 32 or 64  bit
         
         let i:UInt32 = 1024
         var bytes = i.bytes()

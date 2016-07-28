@@ -406,15 +406,14 @@ extension AES {
         mutating public func update(withBytes bytes:Array<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
             self.accumulated += bytes
 
-            if (isLast) {
+            if isLast {
                 self.accumulated = padding.add(to: self.accumulated, blockSize: AES.blockSize)
             }
 
-            //CTR does not require full block therefore work with anything
             var encrypted = Array<UInt8>()
             encrypted.reserveCapacity(self.accumulated.count)
             for chunk in self.accumulated.chunks(size: AES.blockSize) {
-                if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
+                if (isLast || self.accumulated.count >= AES.blockSize) {
                     encrypted += worker.encrypt(chunk)
                     self.accumulated.removeFirst(chunk.count)
                 }
@@ -452,13 +451,13 @@ extension AES {
             var plaintext = Array<UInt8>()
             plaintext.reserveCapacity(self.accumulated.count)
             for chunk in self.accumulated.chunks(size: AES.blockSize) {
-                if (!self.paddingRequired || self.accumulated.count >= AES.blockSize) {
+                if (isLast || self.accumulated.count >= AES.blockSize) {
                     plaintext += worker.decrypt(chunk)
                     self.accumulated.removeFirst(chunk.count)
                 }
             }
 
-            if (isLast) {
+            if isLast {
                 plaintext = padding.remove(from: plaintext, blockSize: AES.blockSize)
             }
 

@@ -36,7 +36,7 @@ func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T
 /// Initialize integer from array of bytes.
 /// This method may be slow
 @_specialize(UInt32)
-func integerWith<T:Integer where T:ByteConvertible, T: BitshiftOperationsType>(_ bytes: Array<UInt8>) -> T {
+func integerWith<T:Integer>(_ bytes: Array<UInt8>) -> T where T:ByteConvertible, T: BitshiftOperationsType {
     var bytes = bytes.reversed() as Array<UInt8> //FIXME: check it this is equivalent of Array(...)
     if bytes.count < sizeof(T.self) {
         let paddingCount = sizeof(T.self) - bytes.count
@@ -96,7 +96,7 @@ func << <T:UnsignedInteger>(lhs: T, rhs: Int) -> UInt {
 // Generic function itself
 // FIXME: this generic function is not as generic as I would. It crashes for smaller types
 @_specialize(Int)
-func shiftLeft<T: SignedInteger where T: Initiable>(_ value: T, by count: Int) -> T {
+func shiftLeft<T: SignedInteger>(_ value: T, by count: Int) -> T where T: Initiable {
     if (value == 0) {
         return 0;
     }

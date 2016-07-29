@@ -8,12 +8,12 @@
 //  Counter (CTR)
 //
 
-struct CTRModeWorker: BlockModeWorker {
+struct CTRModeWorker: RandomAccessBlockModeWorker {
     typealias Element = Array<UInt8>
 
     let cipherOperation: CipherOperationOnBlock
     private let iv: Element
-    private var counter: UInt = 0
+    var counter: UInt = 0
 
     init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock) {
         self.iv = iv

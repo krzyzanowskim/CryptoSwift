@@ -8,5 +8,5 @@
 
 public protocol RandomAccessCryptor: UpdatableCryptor {
     /// Seek to position in file. Usable if block mode allows random access.
-    @discardableResult mutating func seek(to: Int) -> Bool
+    mutating func seek(to: Int) -> Bool
 }

@@ -425,11 +425,14 @@ extension AES {
 
 // MARK: Decryptor
 extension AES {
-    public struct Decryptor: UpdatableCryptor {
+    public struct Decryptor: RandomAccessCryptor {
         private var worker: BlockModeWorker
         private let padding: Padding
         private var accumulated = Array<UInt8>()
         private let paddingRequired: Bool
+
+        private var offset: Int = 0
+        private var offsetToRemove: Int = 0
 
         init(aes: AES) {
             self.padding = aes.padding;
@@ -446,13 +449,27 @@ extension AES {
         }
 
         mutating public func update<T: SequenceType where T.Generator.Element == UInt8>(withBytes bytes:T, isLast: Bool = false) throws -> Array<UInt8> {
-            self.accumulated += bytes
+            // prepend "offset" number of bytes at the begining
+            if self.offset > 0 {
+                self.accumulated += Array<UInt8>(count: offset, repeatedValue: 0) + bytes
+                self.offsetToRemove = offset
+                self.offset = 0
+            } else {
+                self.accumulated += bytes
+            }
 
             var plaintext = Array<UInt8>()
             plaintext.reserveCapacity(self.accumulated.count)
             for chunk in self.accumulated.chunks(AES.blockSize) {
                 if (isLast || self.accumulated.count >= AES.blockSize) {
-                    plaintext += worker.decrypt(chunk)
+                    plaintext += self.worker.decrypt(chunk)
+
+                    // remove "offset" from the beginning of first chunk
+                    if self.offsetToRemove > 0 {
+                        plaintext.removeFirst(self.offsetToRemove);
+                        self.offsetToRemove = 0
+                    }
+
                     self.accumulated.removeFirst(chunk.count)
                 }
             }
@@ -462,6 +479,18 @@ extension AES {
             }
 
             return plaintext
+        }
+
+        mutating public func seek(position: Int) -> Bool {
+            guard var worker = self.worker as? RandomAccessBlockModeWorker else {
+                return false
+            }
+
+            worker.counter = UInt(position / AES.blockSize)
+            self.worker = worker
+
+            self.offset = position % AES.blockSize
+            return false
         }
     }
 }

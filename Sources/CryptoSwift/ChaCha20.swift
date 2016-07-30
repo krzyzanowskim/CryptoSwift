@@ -10,6 +10,7 @@ final public class ChaCha20: BlockCipher {
     
     public enum Error: Swift.Error {
         case missingContext
+        case invalidKeyOrInitializationVector
     }
     
     static let blockSize = 64 // 512 / 8
@@ -26,12 +27,8 @@ final public class ChaCha20: BlockCipher {
         }
     }
     
-    public init?(key:Array<UInt8>, iv:Array<UInt8>) {
-        if let c = contextSetup(iv, key: key) {
-            context = c
-        } else {
-            return nil
-        }
+    public init(key:Array<UInt8>, iv:Array<UInt8>) throws {
+        self.context = try contextSetup(iv, key: key)
     }
     
     private final func wordToByte(_ input:Array<UInt32> /* 64 */) -> Array<UInt8>? /* 16 */ {
@@ -63,12 +60,12 @@ final public class ChaCha20: BlockCipher {
         return output;
     }
         
-    private func contextSetup(_ iv:Array<UInt8>, key:Array<UInt8>) -> Context? {
+    private func contextSetup(_ iv:Array<UInt8>, key:Array<UInt8>) throws -> Context {
         let ctx = Context()
         let kbits = key.count * 8
         
         if (kbits != 128 && kbits != 256) {
-            return nil
+            throw Error.invalidKeyOrInitializationVector
         }
         
         // 4 - 8

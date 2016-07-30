@@ -48,13 +48,13 @@ final class ChaCha20Tests: XCTestCase {
             let message = Array<UInt8>(repeating: 0, count: (expectedHex.characters.count / 2))
             
             do {
-                let encrypted = try ChaCha20(key: keys[idx], iv: ivs[idx])!.encrypt(message)
-                let decrypted = try ChaCha20(key: keys[idx], iv: ivs[idx])!.decrypt(encrypted)
+                let encrypted = try ChaCha20(key: keys[idx], iv: ivs[idx]).encrypt(message)
+                let decrypted = try ChaCha20(key: keys[idx], iv: ivs[idx]).decrypt(encrypted)
                 XCTAssertEqual(message, decrypted, "ChaCha20 decryption failed");
                 
                 // check extension
                 let messageData = Data(bytes: message);
-                let encrypted2 = try! messageData.encrypt(cipher: ChaCha20(key: keys[idx], iv: ivs[idx])!)
+                let encrypted2 = try messageData.encrypt(cipher: ChaCha20(key: keys[idx], iv: ivs[idx]))
                 XCTAssertNotNil(encrypted2, "")
                 XCTAssertEqual(Data(bytes: encrypted), encrypted2, "ChaCha20 extension failed")
             } catch CipherError.encrypt {
@@ -73,10 +73,32 @@ final class ChaCha20Tests: XCTestCase {
         let expected:Array<UInt8> = [0x76,0xB8,0xE0,0xAD,0xA0,0xF1,0x3D,0x90,0x40,0x5D,0x6A,0xE5,0x53,0x86,0xBD,0x28,0xBD,0xD2,0x19,0xB8,0xA0,0x8D,0xED,0x1A,0xA8,0x36,0xEF,0xCC,0x8B,0x77,0x0D,0xC7,0xDA,0x41,0x59,0x7C,0x51,0x57,0x48,0x8D,0x77,0x24,0xE0,0x3F,0xB8,0xD8,0x4A,0x37,0x6A,0x43,0xB8,0xF4,0x15,0x18,0xA1,0x1C,0xC3,0x87,0xB6,0x69,0xB2,0xEE,0x65,0x86]
         let message = Array<UInt8>(repeating: 0, count: expected.count)
 
-        print(message.count)
+        do {
+            let encrypted = try ChaCha20(key: key, iv: iv).encrypt(message)
+            XCTAssertEqual(encrypted, expected, "Ciphertext failed")
+        } catch {
+            XCTFail()
+        }
+    }
 
-        let encrypted = try! ChaCha20(key: key, iv: iv)!.encrypt(message)
-        XCTAssertEqual(encrypted, expected, "Ciphertext failed")
+    func testChaCha20_encrypt_partial() {
+        let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let plaintext:Array<UInt8> = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a,0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a]
+
+        do {
+            let cipher = try ChaCha20(key: key, iv:iv)
+
+            var ciphertext = Array<UInt8>()
+            var encryptor = cipher.makeEncryptor()
+            ciphertext += try encryptor.update(withBytes: Array(plaintext[0..<8]))
+            ciphertext += try encryptor.update(withBytes: Array(plaintext[8..<16]))
+            ciphertext += try encryptor.update(withBytes: Array(plaintext[16..<32]))
+            ciphertext += try encryptor.finish()
+            XCTAssertEqual(try cipher.encrypt(plaintext), ciphertext, "encryption failed")
+        } catch {
+            XCTFail()
+        }
     }
 
     func testChaCha20Performance() {
@@ -84,9 +106,12 @@ final class ChaCha20Tests: XCTestCase {
         let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
         let message = Array<UInt8>(repeating: 7, count: (1024 * 1024) * 1)
         measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
-            let encrypted = try! ChaCha20(key: key, iv: iv)?.encrypt(message)
+            do {
+                let encrypted = try ChaCha20(key: key, iv: iv).encrypt(message)
+            } catch {
+                XCTFail()
+            }
             self.stopMeasuring()
-            XCTAssert(encrypted != nil, "not encrypted")
         })
     }
 }

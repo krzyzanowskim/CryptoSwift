@@ -9,33 +9,67 @@
 final public class ChaCha20: BlockCipher {
     
     public enum Error: Swift.Error {
-        case missingContext
         case invalidKeyOrInitializationVector
     }
     
     public static let blockSize = 64 // 512 / 8
-    private let stateSize = 16
-    private var context:Context?
-    
-    final private class Context {
+    private let context: Context
+
+    private struct Context {
         var input = Array<UInt32>(repeating: 0, count: 16)
-        
-        deinit {
-            for i in 0..<input.count {
-                input[i] = 0x00;
+
+        init(key:Array<UInt8>, iv:Array<UInt8>) throws {
+            let kbits = key.count * 8
+
+            if (kbits != 128 && kbits != 256) {
+                throw Error.invalidKeyOrInitializationVector
             }
+
+            // 4 - 8
+            for i in 0..<4 {
+                let start = i * 4
+                input[i + 4] = wordNumber(key[start..<(start + 4)])
+            }
+
+            var addPos = 0;
+            switch (kbits) {
+                case 256:
+                    addPos += 16
+                    // sigma
+                    input[0] = 0x61707865 //apxe
+                    input[1] = 0x3320646e //3 dn
+                    input[2] = 0x79622d32 //yb-2
+                    input[3] = 0x6b206574 //k et
+                default:
+                    // tau
+                    input[0] = 0x61707865 //apxe
+                    input[1] = 0x3620646e //6 dn
+                    input[2] = 0x79622d31 //yb-1
+                    input[3] = 0x6b206574 //k et
+            }
+
+            // 8 - 11
+            for i in 0..<4 {
+                let start = addPos + (i*4)
+
+                let bytes = key[start..<(start + 4)]
+                input[i + 8] = wordNumber(bytes)
+            }
+
+            // iv
+            input[12] = 0
+            input[13] = 0
+            input[14] = wordNumber(iv[0..<4])
+            input[15] = wordNumber(iv[4..<8])
         }
     }
     
     public init(key:Array<UInt8>, iv:Array<UInt8>) throws {
-        self.context = try contextSetup(iv, key: key)
+        self.context = try Context(key: key, iv: iv)
     }
     
     private final func wordToByte(_ input:Array<UInt32> /* 64 */) -> Array<UInt8>? /* 16 */ {
-        if (input.count != stateSize) {
-            return nil;
-        }
-        
+        assert(input.count == 16)
         var x = input
 
         for _ in 0..<10 {
@@ -59,61 +93,9 @@ final public class ChaCha20: BlockCipher {
 
         return output;
     }
-        
-    private func contextSetup(_ iv:Array<UInt8>, key:Array<UInt8>) throws -> Context {
-        let ctx = Context()
-        let kbits = key.count * 8
-        
-        if (kbits != 128 && kbits != 256) {
-            throw Error.invalidKeyOrInitializationVector
-        }
-        
-        // 4 - 8
-        for i in 0..<4 {
-            let start = i * 4
-            ctx.input[i + 4] = wordNumber(key[start..<(start + 4)])
-        }
-        
-        var addPos = 0;
-        switch (kbits) {
-            case 256:
-                addPos += 16
-                // sigma
-                ctx.input[0] = 0x61707865 //apxe
-                ctx.input[1] = 0x3320646e //3 dn
-                ctx.input[2] = 0x79622d32 //yb-2
-                ctx.input[3] = 0x6b206574 //k et
-            default:
-                // tau
-                ctx.input[0] = 0x61707865 //apxe
-                ctx.input[1] = 0x3620646e //6 dn
-                ctx.input[2] = 0x79622d31 //yb-1
-                ctx.input[3] = 0x6b206574 //k et
-        }
-        
-        // 8 - 11
-        for i in 0..<4 {
-            let start = addPos + (i*4)
-            
-            let bytes = key[start..<(start + 4)]
-            ctx.input[i + 8] = wordNumber(bytes)
-        }
-
-        // iv
-        ctx.input[12] = 0
-        ctx.input[13] = 0
-        ctx.input[14] = wordNumber(iv[0..<4])
-        ctx.input[15] = wordNumber(iv[4..<8])
-        
-        return ctx
-    }
     
     private final func encryptBytes(_ message:Array<UInt8>) throws -> Array<UInt8> {
-        
-        guard let ctx = context else {
-            throw Error.missingContext
-        }
-        
+        var ctx = context
         var c = Array<UInt8>(repeating: 0, count: message.count)
         
         var cPos:Int = 0
@@ -244,10 +226,6 @@ extension ChaCha20: Cryptors {
 // MARK: Cipher
 extension ChaCha20: Cipher {
     public func encrypt(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
-        guard context != nil else {
-            throw Error.missingContext
-        }
-
         return try encryptBytes(bytes)
     }
 

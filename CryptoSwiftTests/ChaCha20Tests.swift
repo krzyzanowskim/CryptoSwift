@@ -95,7 +95,7 @@ final class ChaCha20Tests: XCTestCase {
             ciphertext += try encryptor.update(withBytes: Array(plaintext[8..<16]))
             ciphertext += try encryptor.update(withBytes: Array(plaintext[16..<32]))
             ciphertext += try encryptor.finish()
-            XCTAssertEqual(try ChaCha20(key: key, iv:iv).encrypt(plaintext), ciphertext, "encryption failed")
+            XCTAssertEqual(try cipher.encrypt(plaintext), ciphertext, "encryption failed")
         } catch {
             XCTFail()
         }

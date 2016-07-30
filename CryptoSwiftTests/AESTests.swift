@@ -101,6 +101,7 @@ final class AESTests: XCTestCase {
 
             ciphertext += try encryptor.update(withBytes: plaintext.utf8.map({$0}))
             ciphertext += try encryptor.finish()
+            XCTAssertEqual(try aes.encrypt(plaintext.utf8.map({$0})), ciphertext, "encryption failed")
         } catch {
             XCTAssert(false, "\(error)")
         }

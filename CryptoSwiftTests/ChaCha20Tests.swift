@@ -95,7 +95,7 @@ final class ChaCha20Tests: XCTestCase {
             ciphertext += try encryptor.update(withBytes: Array(plaintext[8..<16]))
             ciphertext += try encryptor.update(withBytes: Array(plaintext[16..<32]))
             ciphertext += try encryptor.finish()
-            XCTAssertEqual(try cipher.encrypt(plaintext), ciphertext, "encryption failed")
+            XCTAssertEqual(try ChaCha20(key: key, iv:iv).encrypt(plaintext), ciphertext, "encryption failed")
         } catch {
             XCTFail()
         }
@@ -107,7 +107,7 @@ final class ChaCha20Tests: XCTestCase {
         let message = Array<UInt8>(repeating: 7, count: (1024 * 1024) * 1)
         measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
             do {
-                let encrypted = try ChaCha20(key: key, iv: iv).encrypt(message)
+                let _ = try ChaCha20(key: key, iv: iv).encrypt(message)
             } catch {
                 XCTFail()
             }

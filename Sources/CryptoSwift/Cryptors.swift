@@ -13,8 +13,8 @@
 #endif
 
 public protocol Cryptors: class {
-    associatedtype EncryptorType: UpdatableCryptor
-    associatedtype DecryptorType: UpdatableCryptor
+    associatedtype EncryptorType: Updatable
+    associatedtype DecryptorType: Updatable
 
     /// Cryptor suitable for encryption
     func makeEncryptor() -> EncryptorType

@@ -391,7 +391,7 @@ extension AES {
 
 // MARK: Encryptor
 extension AES {
-    public struct Encryptor: UpdatableCryptor {
+    public struct Encryptor: Updatable {
         private var worker: BlockModeWorker
         private let padding: Padding
         private var accumulated = Array<UInt8>()

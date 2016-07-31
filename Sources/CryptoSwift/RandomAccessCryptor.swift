@@ -6,7 +6,7 @@
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
 
-public protocol RandomAccessCryptor: UpdatableCryptor {
+public protocol RandomAccessCryptor: Updatable {
     /// Seek to position in file. Usable if block mode allows random access.
     @discardableResult mutating func seek(to: Int) -> Bool
 }

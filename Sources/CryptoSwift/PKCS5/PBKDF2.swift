@@ -25,10 +25,10 @@ public extension PKCS5 {
         }
 
         private let salt: Array<UInt8>   // S
-        private let iterations: Int // c
+        fileprivate let iterations: Int // c
         private let numBlocks: UInt // l
         private let dkLen: Int;
-        private let prf: HMAC
+        fileprivate let prf: HMAC
 
         /// - parameters:
         ///   - salt: salt
@@ -69,8 +69,8 @@ public extension PKCS5 {
     }
 }
 
-private extension PKCS5.PBKDF2 {
-    private func INT(_ i: UInt) -> Array<UInt8> {
+fileprivate extension PKCS5.PBKDF2 {
+    func INT(_ i: UInt) -> Array<UInt8> {
         var inti = Array<UInt8>(repeating: 0, count: 4)
         inti[0] = UInt8((i >> 24) & 0xFF)
         inti[1] = UInt8((i >> 16) & 0xFF)
@@ -81,7 +81,7 @@ private extension PKCS5.PBKDF2 {
 
     // F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
     // U_1 = PRF (P, S || INT (i))
-    private func calculateBlock(_ salt: Array<UInt8>, blockNum: UInt) -> Array<UInt8>? {
+    func calculateBlock(_ salt: Array<UInt8>, blockNum: UInt) -> Array<UInt8>? {
         guard let u1 = prf.authenticate(salt + INT(blockNum)) else {
             return nil
         }

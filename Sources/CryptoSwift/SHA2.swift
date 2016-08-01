@@ -55,7 +55,7 @@ final class SHA2 : HashProtocol {
         
         var size:Int { return self.rawValue }
         
-        private var h:Array<UInt64> {
+        fileprivate var h:Array<UInt64> {
             switch (self) {
             case .sha224:
                 return [0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939, 0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4]
@@ -68,7 +68,7 @@ final class SHA2 : HashProtocol {
             }
         }
         
-        private var k:Array<UInt64> {
+        fileprivate var k:Array<UInt64> {
             switch (self) {
             case .sha224, .sha256:
                 return [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -99,7 +99,7 @@ final class SHA2 : HashProtocol {
             }
         }
         
-        private func resultingArray<T>(_ hh:[T]) -> ArraySlice<T> {
+        fileprivate func resultingArray<T>(_ hh:[T]) -> ArraySlice<T> {
             switch (self) {
             case .sha224:
                 return hh[0..<7]

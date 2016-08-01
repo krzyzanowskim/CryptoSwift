@@ -32,7 +32,7 @@ public extension PKCS5 {
                 }
             }
 
-            private func calculateHash(_ bytes:Array<UInt8>) -> Array<UInt8>? {
+            fileprivate func calculateHash(_ bytes:Array<UInt8>) -> Array<UInt8>? {
                 switch (self) {
                 case .sha1:
                     return Hash.sha1(bytes).calculate()

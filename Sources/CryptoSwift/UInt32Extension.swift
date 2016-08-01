@@ -36,7 +36,7 @@ extension UInt32 {
 extension UInt32 {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
-    private mutating func shiftLeft(by count: UInt32) {
+    fileprivate mutating func shiftLeft(by count: UInt32) {
         if (self == 0) {
             return
         }
@@ -62,7 +62,7 @@ extension UInt32 {
     }
     
     /** Shift bits to the right. All bits are shifted (including sign bit) */
-    private mutating func shiftRight(by count: UInt32) {
+    fileprivate mutating func shiftRight(by count: UInt32) {
         if (self == 0) {
             return
         }

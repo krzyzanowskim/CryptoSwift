@@ -51,12 +51,12 @@ extension Int {
 extension Int {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
-    private mutating func shiftLeft(by count: Int) {
+    fileprivate mutating func shiftLeft(by count: Int) {
         self = CryptoSwift.shiftLeft(self, by: count) //FIXME: count:
     }
     
     /** Shift bits to the right. All bits are shifted (including sign bit) */
-    private mutating func shiftRight(by count: Int) {
+    fileprivate mutating func shiftRight(by count: Int) {
         if (self == 0) {
             return
         }

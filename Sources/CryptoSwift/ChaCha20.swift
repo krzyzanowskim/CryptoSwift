@@ -94,7 +94,7 @@ final public class ChaCha20: BlockCipher {
         return output;
     }
     
-    private final func encryptBytes(_ message:Array<UInt8>) throws -> Array<UInt8> {
+    fileprivate final func encryptBytes(_ message:Array<UInt8>) throws -> Array<UInt8> {
         var ctx = context
         var c = Array<UInt8>(repeating: 0, count: message.count)
         

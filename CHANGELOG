@@ -2,6 +2,7 @@
 - Fix AES-CTR incremental updates. #287
 - Fixed PBKDF2 tests. #295
 - Fixed assertion check in PKCS7. #288
+- Updatable protocol accept SequenceType in place of Array
 
 0.5.1
 - Fixed PBKDF2 not taking key length parameter into account

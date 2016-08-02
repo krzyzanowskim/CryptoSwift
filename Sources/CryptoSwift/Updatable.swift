@@ -12,7 +12,7 @@ public protocol Updatable {
     /// - parameter bytes: Bytes to process
     /// - parameter isLast: (Optional) Given chunk is the last one. No more updates after this call.
     /// - returns: Processed data or empty array.
-    mutating func update<T: SequenceType where T.Generator.Element == UInt8>(withBytes bytes:T, isLast: Bool) throws -> Array<UInt8>
+    mutating func update<T: Sequence where T.Iterator.Element == UInt8>(withBytes bytes:T, isLast: Bool) throws -> Array<UInt8>
 
     /// Update given bytes in chunks.
     ///
@@ -20,29 +20,29 @@ public protocol Updatable {
     /// - parameter isLast: (Optional) Given chunk is the last one. No more updates after this call.
     /// - parameter output: Resulting data
     /// - returns: Processed data or empty array.
-    mutating func update<T: SequenceType where T.Generator.Element == UInt8>(withBytes bytes:T, isLast: Bool, output: (Array<UInt8>) -> Void) throws
+    mutating func update<T: Sequence where T.Iterator.Element == UInt8>(withBytes bytes:T, isLast: Bool, output: (Array<UInt8>) -> Void) throws
 
     /// Finish updates. This may apply padding.
     /// - parameter bytes: Bytes to process
     /// - returns: Processed data.
-    mutating func finish<T: SequenceType where T.Generator.Element == UInt8>(withBytes bytes:T) throws -> Array<UInt8>
+    mutating func finish<T: Sequence where T.Iterator.Element == UInt8>(withBytes bytes:T) throws -> Array<UInt8>
 
     /// Finish updates. This may apply padding.
     /// - parameter bytes: Bytes to process
     /// - parameter output: Resulting data
     /// - returns: Processed data.
-    mutating func finish<T: SequenceType where T.Generator.Element == UInt8>(withBytes bytes:T, output: (Array<UInt8>) -> Void) throws
+    mutating func finish<T: Sequence where T.Iterator.Element == UInt8>(withBytes bytes:T, output: (Array<UInt8>) -> Void) throws
 }
 
 extension Updatable {
-    mutating public func update<T: SequenceType where T.Generator.Element == UInt8>(withBytes bytes:T, isLast: Bool = false, output: (Array<UInt8>) -> Void) throws {
+    mutating public func update<T: Sequence where T.Iterator.Element == UInt8>(withBytes bytes:T, isLast: Bool = false, output: (Array<UInt8>) -> Void) throws {
         let processed = try self.update(withBytes: bytes, isLast: isLast)
         if (!processed.isEmpty) {
             output(processed)
         }
     }
 
-    mutating public func finish<T: SequenceType where T.Generator.Element == UInt8>(withBytes bytes:T) throws -> Array<UInt8> {
+    mutating public func finish<T: Sequence where T.Iterator.Element == UInt8>(withBytes bytes:T) throws -> Array<UInt8> {
         return try self.update(withBytes: bytes, isLast: true)
     }
     
@@ -50,7 +50,7 @@ extension Updatable {
         return try self.update(withBytes: [], isLast: true)
     }
 
-    mutating public func finish<T: SequenceType where T.Generator.Element == UInt8>(withBytes bytes:T, output: (Array<UInt8>) -> Void) throws {
+    mutating public func finish<T: Sequence where T.Iterator.Element == UInt8>(withBytes bytes:T, output: (Array<UInt8>) -> Void) throws {
         let processed = try self.update(withBytes: bytes, isLast: true)
         if (!processed.isEmpty) {
             output(processed)

@@ -64,7 +64,7 @@ do {
     while (inputStream.hasBytesAvailable) {
         let readCount = inputStream.read(&buffer, maxLength: buffer.count)
         if (readCount > 0) {
-            try encryptor.update(withBytes: Array(buffer[0..<readCount])) { (bytes) in
+            try encryptor.update(withBytes: buffer[0..<readCount]) { (bytes) in
                 writeToStream(outputStream, bytes: bytes)
             }
         }

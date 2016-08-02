@@ -2,6 +2,10 @@
 
 Crypto related functions and helpers for [Swift](https://developer.apple.com/swift/) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
+## Swift 3
+
+You can find preliminary Swift 3 support from branch [swift3](https://github.com/krzyzanowskim/CryptoSwift/tree/swift3).
+
 #Table of Contents
 - [Requirements](#requirements)
 - [Features](#features)

@@ -85,9 +85,9 @@ final class AESTests: XCTestCase {
 
         var ciphertext = Array<UInt8>()
         var encryptor = aes.makeEncryptor()
-        ciphertext += try! encryptor.update(withBytes: Array(plaintext[0..<8]))
-        ciphertext += try! encryptor.update(withBytes: Array(plaintext[8..<16]))
-        ciphertext += try! encryptor.update(withBytes: Array(plaintext[16..<32]))
+        ciphertext += try! encryptor.update(withBytes: plaintext[0..<8])
+        ciphertext += try! encryptor.update(withBytes: plaintext[8..<16])
+        ciphertext += try! encryptor.update(withBytes: plaintext[16..<32])
         ciphertext += try! encryptor.finish()
         XCTAssertEqual(try! aes.encrypt(plaintext), ciphertext, "encryption failed")
     }
@@ -115,9 +115,9 @@ final class AESTests: XCTestCase {
         let aes = try! AES(key: key, iv:iv, blockMode: .CBC, padding: PKCS7())
         var plaintext = Array<UInt8>()
         var decryptor = aes.makeDecryptor()
-        plaintext += try! decryptor.update(withBytes: Array(ciphertext[0..<8]))
-        plaintext += try! decryptor.update(withBytes: Array(ciphertext[8..<16]))
-        plaintext += try! decryptor.update(withBytes: Array(ciphertext[16..<32]))
+        plaintext += try! decryptor.update(withBytes: ciphertext[0..<8])
+        plaintext += try! decryptor.update(withBytes: ciphertext[8..<16])
+        plaintext += try! decryptor.update(withBytes: ciphertext[16..<32])
         plaintext += try! decryptor.finish()
         XCTAssertEqual(try! aes.decrypt(ciphertext), plaintext, "encryption failed")
     }
@@ -275,6 +275,31 @@ final class AESTests: XCTestCase {
         var part4 = try! decryptor.update(withBytes: Array(encrypted[0..<80]))
         part4 += try! decryptor.finish()
         XCTAssertEqual(part4, Array(plaintext[0..<80]), "seek decryption failed")
+    }
+    
+    // https://github.com/krzyzanowskim/CryptoSwift/pull/289
+    func testAES_encrypt_ctr_irregular_length_incremental_update() {
+        let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:Array<UInt8> = [0xf0,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa,0xfb,0xfc,0xfd,0xfe,0xff]
+        let plaintext:Array<UInt8> = [0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a,0x01,0x6b,0xc1,0xbe,0xe2,0x2e,0x40,0x9f,0x96,0xe9,0x3d,0x7e,0x11,0x73,0x93,0x17,0x2a,0x01]
+        let expected:Array<UInt8> = [0x87,0x4d,0x61,0x91,0xb6,0x20,0xe3,0x26,0x1b,0xef,0x68,0x64,0x99,0xd,0xb6,0xce,0x37,0x40,0xbd,0x82,0x85,0x5d,0x11,0xfc,0x8e,0x49,0x4a,0xa9,0xed,0x23,0xe0,0xb9,0x40,0x2d]
+
+        let aes = try! AES(key: key, iv:iv, blockMode: .CTR, padding: NoPadding())
+        var encryptor = aes.makeEncryptor()
+        var encrypted = Array<UInt8>()
+        encrypted += try! encryptor.update(withBytes: plaintext[0..<5])
+        encrypted += try! encryptor.update(withBytes: plaintext[5..<15])
+        encrypted += try! encryptor.update(withBytes: plaintext[15..<plaintext.count])
+        encrypted += try! encryptor.finish()
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        
+        var decryptor = aes.makeDecryptor()
+        var decrypted = Array<UInt8>()
+        decrypted += try! decryptor.update(withBytes: expected[0..<5])
+        decrypted += try! decryptor.update(withBytes: expected[5..<15])
+        decrypted += try! decryptor.update(withBytes: expected[15..<plaintext.count])
+        decrypted += try! decryptor.finish()
+        XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
 
 //    func testAES_encrypt_performance() {

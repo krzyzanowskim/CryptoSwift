@@ -11,7 +11,7 @@ import Foundation
  Encrypt all data at once.
  */
 do {
-    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap")
+    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap") // aes128
     let ciphertext = try aes.encrypt("Nullam quis risus eget urna mollis ornare vel eu leo.".utf8.map({$0}))
     print(ciphertext.toHexString())
 } catch {
@@ -72,8 +72,8 @@ do {
     while (inputStream.hasBytesAvailable) {
         let readCount = inputStream.read(&buffer, maxLength: buffer.count)
         if (readCount > 0) {
-            try encryptor.update(withBytes: Array(buffer[0..<readCount])) { (bytes) in
-                writeToStream(stream: outputStream, bytes: bytes)
+            try encryptor.update(withBytes: buffer[0..<readCount]) { (bytes) in
+                writeToStream(outputStream, bytes: bytes)
             }
         }
     }

@@ -403,7 +403,7 @@ extension AES {
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
         }
 
-        mutating public func update(withBytes bytes:Array<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
+        mutating public func update<T: SequenceType where T.Generator.Element == UInt8>(withBytes bytes:T, isLast: Bool = false) throws -> Array<UInt8> {
             self.accumulated += bytes
 
             if isLast {
@@ -445,7 +445,7 @@ extension AES {
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired);
         }
 
-        mutating public func update(withBytes bytes:Array<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
+        mutating public func update<T: SequenceType where T.Generator.Element == UInt8>(withBytes bytes:T, isLast: Bool = false) throws -> Array<UInt8> {
             self.accumulated += bytes
 
             var plaintext = Array<UInt8>()

@@ -237,10 +237,10 @@ extension ChaCha20: Cipher {
 // MARK: Helpers
 
 /// Change array to number. It's here because arrayOfBytes is too slow
-private func wordNumber(_ bytes:ArraySlice<UInt8>) -> UInt32 {
+private func wordNumber<T: Collection>(_ bytes: T) -> UInt32 where T.Iterator.Element == UInt8, T.IndexDistance == Int {
     var value:UInt32 = 0
     for i:UInt32 in 0..<4 {
-        let j = bytes.startIndex + Int(i)
+        let j = bytes.index(bytes.startIndex, offsetBy: Int(i))
         value = value | UInt32(bytes[j]) << (8 * i)
     }
 

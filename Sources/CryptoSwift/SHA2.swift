@@ -136,7 +136,7 @@ final class SHA2 : HashProtocol {
                 case 0...15:
                     let start = chunk.startIndex + (x * sizeofValue(M[x]))
                     let end = start + sizeofValue(M[x])
-                    let le = sliceToUInt32Array(chunk[start..<end])[0]
+                    let le = chunk[start..<end].toUInt32Array()[0]
                     M[x] = le.bigEndian
                     break
                 default:
@@ -219,7 +219,7 @@ final class SHA2 : HashProtocol {
                 case 0...15:
                     let start = chunk.startIndex + (x * sizeofValue(M[x]))
                     let end = start + sizeofValue(M[x])
-                    let le = sliceToUInt64Array(chunk[start..<end])[0]
+                    let le = chunk[start..<end].toUInt64Array()[0]
                     M[x] = le.bigEndian
                     break
                 default:

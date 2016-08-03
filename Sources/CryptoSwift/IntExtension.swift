@@ -35,13 +35,9 @@ extension Int {
         return arrayOfBytes(value: self, length: totalBytes)
     }
 
-    public static func with(_ bytes: ArraySlice<UInt8>) -> Int {
-        return integerWith(Array(bytes))
-    }
-
-    /** Int with array bytes (little-endian) */
-    public static func with(_ bytes: Array<UInt8>) -> Int {
-        return integerWith(bytes)
+    /** Int with collection of bytes (little-endian) */
+    public static func with<T: Collection>(_ bytes: T) -> Int where T.Iterator.Element == UInt8, T.Index == Int {
+        return bytes.toInteger()
     }
 }
 

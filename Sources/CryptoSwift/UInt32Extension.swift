@@ -22,13 +22,9 @@ extension UInt32 {
         return arrayOfBytes(value: self, length: totalBytes)
     }
 
-    public static func with(bytes: ArraySlice<UInt8>) -> UInt32 {
-        return integerWith(Array(bytes))
-    }
-
     /** Int with array bytes (little-endian) */
-    public static func with(bytes: Array<UInt8>) -> UInt32 {
-        return integerWith(bytes)
+    public static func with<T: Collection>(_ bytes: T) -> UInt32 where T.Iterator.Element == UInt8, T.Index == Int {
+        return bytes.toInteger()
     }
 }
 

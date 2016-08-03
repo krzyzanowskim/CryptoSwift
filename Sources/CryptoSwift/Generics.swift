@@ -33,29 +33,6 @@ func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T
     return bitPattern
 }
 
-/// Initialize integer from array of bytes.
-/// This method may be slow
-@_specialize(UInt32)
-func integerWith<T:Integer>(_ bytes: Array<UInt8>) -> T where T:ByteConvertible, T: BitshiftOperationsType {
-    var bytes = bytes.reversed() as Array<UInt8> //FIXME: check it this is equivalent of Array(...)
-    if bytes.count < sizeof(T.self) {
-        let paddingCount = sizeof(T.self) - bytes.count
-        if (paddingCount > 0) {
-            bytes += Array<UInt8>(repeating: 0, count: paddingCount)
-        }
-    }
-    
-    if sizeof(T.self) == 1 {
-        return T(truncatingBitPattern: UInt64(bytes.first!))
-    }
-    
-    var result: T = 0
-    for byte in bytes.reversed() {
-        result = result << 8 | T(byte)
-    }
-    return result
-}
-
 /// Array of bytes, little-endian representation. Don't use if not necessary.
 /// I found this method slow
 func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
@@ -78,7 +55,7 @@ func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
 
 // MARK: - shiftLeft
 
-// helper to be able tomake shift operation on T
+// helper to be able to make shift operation on T
 @_specialize(Int)
 func << <T:SignedInteger>(lhs: T, rhs: Int) -> Int {
     let a = lhs as! Int

@@ -38,4 +38,29 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
         }
         return result
     }
+
+    /// Initialize integer from array of bytes. Caution: may be slow!
+    func toInteger<T:Integer>() -> T where T: ByteConvertible, T: BitshiftOperationsType {
+        if self.count == 0 {
+            return 0;
+        }
+
+        var bytes = self.reversed() //FIXME: check it this is equivalent of Array(...)
+        if bytes.count < sizeof(T.self) {
+            let paddingCount = sizeof(T.self) - bytes.count
+            if (paddingCount > 0) {
+                bytes += Array<UInt8>(repeating: 0, count: paddingCount)
+            }
+        }
+
+        if sizeof(T.self) == 1 {
+            return T(truncatingBitPattern: UInt64(bytes[0]))
+        }
+
+        var result: T = 0
+        for byte in bytes.reversed() {
+            result = result << 8 | T(byte)
+        }
+        return result
+    }
 }

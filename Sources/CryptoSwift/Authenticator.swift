@@ -21,7 +21,7 @@ public enum Authenticator {
     - parameter key: 256-bit key
     */
     case Poly1305(key: Array<UInt8>)
-    case HMAC(key: Array<UInt8>, variant:CryptoSwift.HMAC.Variant)
+    case HMAC(key: Array<UInt8>, variant: HMAC.Variant)
     
     /**
     Generates an authenticator for message using a one-time key and returns the 16-byte result

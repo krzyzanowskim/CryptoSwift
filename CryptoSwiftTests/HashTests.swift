@@ -59,7 +59,7 @@ final class CryptoSwiftTests: XCTestCase {
             self.stopMeasuring()
             md.deallocate(capacity: Int(CC_MD5_DIGEST_LENGTH))
             md.deinitialize()
-            buf.deallocate(bytes: 1024 * 1024, alignedTo: alignof(UInt8.self))
+            buf.deallocate(bytes: 1024 * 1024, alignedTo: MemoryLayout<UInt8>.alignment)
         })
     }
     

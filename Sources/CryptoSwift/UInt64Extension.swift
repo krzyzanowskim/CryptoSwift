@@ -8,7 +8,7 @@
 
 /** array of bytes */
 extension UInt64 {
-    public func bytes(totalBytes: Int = sizeof(UInt64.self)) -> Array<UInt8> {
+    public func bytes(totalBytes: Int = MemoryLayout<UInt64>.size) -> Array<UInt8> {
         return arrayOfBytes(value: self, length: totalBytes)
     }
 

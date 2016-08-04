@@ -10,7 +10,7 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
     func toUInt32Array() -> Array<UInt32> {
         var result = Array<UInt32>()
         result.reserveCapacity(16)
-        for idx in stride(from: self.startIndex, to: self.endIndex, by: sizeof(UInt32.self)) {
+        for idx in stride(from: self.startIndex, to: self.endIndex, by: MemoryLayout<UInt32>.size) {
             let val1:UInt32 = (UInt32(self[idx.advanced(by: 3)]) << 24)
             let val2:UInt32 = (UInt32(self[idx.advanced(by: 2)]) << 16)
             let val3:UInt32 = (UInt32(self[idx.advanced(by: 1)]) << 8)
@@ -24,7 +24,7 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
     func toUInt64Array() -> Array<UInt64> {
         var result = Array<UInt64>()
         result.reserveCapacity(32)
-        for idx in stride(from: self.startIndex, to: self.endIndex, by: sizeof(UInt64.self)) {
+        for idx in stride(from: self.startIndex, to: self.endIndex, by: MemoryLayout<UInt64>.size) {
             var val:UInt64 = 0
             val |= UInt64(self[idx.advanced(by: 7)]) << 56
             val |= UInt64(self[idx.advanced(by: 6)]) << 48
@@ -46,14 +46,14 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
         }
 
         var bytes = self.reversed() //FIXME: check it this is equivalent of Array(...)
-        if bytes.count < sizeof(T.self) {
-            let paddingCount = sizeof(T.self) - bytes.count
+        if bytes.count < MemoryLayout<T>.size {
+            let paddingCount = MemoryLayout<T>.size - bytes.count
             if (paddingCount > 0) {
                 bytes += Array<UInt8>(repeating: 0, count: paddingCount)
             }
         }
 
-        if sizeof(T.self) == 1 {
+        if MemoryLayout<T>.size == 1 {
             return T(truncatingBitPattern: UInt64(bytes[0]))
         }
 

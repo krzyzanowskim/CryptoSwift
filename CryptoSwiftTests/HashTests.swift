@@ -51,7 +51,7 @@ final class CryptoSwiftTests: XCTestCase {
     
     func testMD5PerformanceCommonCrypto() {
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let buf: UnsafeMutableRawPointer = calloc(1024 * 1024, sizeof(UInt8.self))
+            let buf: UnsafeMutableRawPointer = calloc(1024 * 1024, MemoryLayout<UInt8>.size)
             let data = NSData(bytes: buf, length: 1024 * 1024)
             let md = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(CC_MD5_DIGEST_LENGTH))
             self.startMeasuring()

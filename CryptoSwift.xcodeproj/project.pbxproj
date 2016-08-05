@@ -124,10 +124,10 @@
 		757BC9811C1CA5790093AAA9 /* IntegerConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92B1C1CA5790093AAA9 /* IntegerConvertible.swift */; };
 		757BC9821C1CA5790093AAA9 /* IntegerConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92B1C1CA5790093AAA9 /* IntegerConvertible.swift */; };
 		757BC9831C1CA5790093AAA9 /* IntegerConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92B1C1CA5790093AAA9 /* IntegerConvertible.swift */; };
-		757BC9841C1CA5790093AAA9 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92C1C1CA5790093AAA9 /* IntExtension.swift */; };
-		757BC9851C1CA5790093AAA9 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92C1C1CA5790093AAA9 /* IntExtension.swift */; };
-		757BC9861C1CA5790093AAA9 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92C1C1CA5790093AAA9 /* IntExtension.swift */; };
-		757BC9871C1CA5790093AAA9 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92C1C1CA5790093AAA9 /* IntExtension.swift */; };
+		757BC9841C1CA5790093AAA9 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92C1C1CA5790093AAA9 /* Int+Extension.swift */; };
+		757BC9851C1CA5790093AAA9 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92C1C1CA5790093AAA9 /* Int+Extension.swift */; };
+		757BC9861C1CA5790093AAA9 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92C1C1CA5790093AAA9 /* Int+Extension.swift */; };
+		757BC9871C1CA5790093AAA9 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92C1C1CA5790093AAA9 /* Int+Extension.swift */; };
 		757BC9881C1CA5790093AAA9 /* MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92D1C1CA5790093AAA9 /* MD5.swift */; };
 		757BC9891C1CA5790093AAA9 /* MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92D1C1CA5790093AAA9 /* MD5.swift */; };
 		757BC98A1C1CA5790093AAA9 /* MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92D1C1CA5790093AAA9 /* MD5.swift */; };
@@ -168,18 +168,18 @@
 		757BC9B11C1CA5790093AAA9 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9371C1CA5790093AAA9 /* String+Extension.swift */; };
 		757BC9B21C1CA5790093AAA9 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9371C1CA5790093AAA9 /* String+Extension.swift */; };
 		757BC9B31C1CA5790093AAA9 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9371C1CA5790093AAA9 /* String+Extension.swift */; };
-		757BC9B41C1CA5790093AAA9 /* UInt8Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9381C1CA5790093AAA9 /* UInt8Extension.swift */; };
-		757BC9B51C1CA5790093AAA9 /* UInt8Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9381C1CA5790093AAA9 /* UInt8Extension.swift */; };
-		757BC9B61C1CA5790093AAA9 /* UInt8Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9381C1CA5790093AAA9 /* UInt8Extension.swift */; };
-		757BC9B71C1CA5790093AAA9 /* UInt8Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9381C1CA5790093AAA9 /* UInt8Extension.swift */; };
-		757BC9B81C1CA5790093AAA9 /* UInt32Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9391C1CA5790093AAA9 /* UInt32Extension.swift */; };
-		757BC9B91C1CA5790093AAA9 /* UInt32Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9391C1CA5790093AAA9 /* UInt32Extension.swift */; };
-		757BC9BA1C1CA5790093AAA9 /* UInt32Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9391C1CA5790093AAA9 /* UInt32Extension.swift */; };
-		757BC9BB1C1CA5790093AAA9 /* UInt32Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9391C1CA5790093AAA9 /* UInt32Extension.swift */; };
-		757BC9BC1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC93A1C1CA5790093AAA9 /* UInt64Extension.swift */; };
-		757BC9BD1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC93A1C1CA5790093AAA9 /* UInt64Extension.swift */; };
-		757BC9BE1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC93A1C1CA5790093AAA9 /* UInt64Extension.swift */; };
-		757BC9BF1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC93A1C1CA5790093AAA9 /* UInt64Extension.swift */; };
+		757BC9B41C1CA5790093AAA9 /* UInt8+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9381C1CA5790093AAA9 /* UInt8+Extension.swift */; };
+		757BC9B51C1CA5790093AAA9 /* UInt8+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9381C1CA5790093AAA9 /* UInt8+Extension.swift */; };
+		757BC9B61C1CA5790093AAA9 /* UInt8+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9381C1CA5790093AAA9 /* UInt8+Extension.swift */; };
+		757BC9B71C1CA5790093AAA9 /* UInt8+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9381C1CA5790093AAA9 /* UInt8+Extension.swift */; };
+		757BC9B81C1CA5790093AAA9 /* UInt32+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9391C1CA5790093AAA9 /* UInt32+Extension.swift */; };
+		757BC9B91C1CA5790093AAA9 /* UInt32+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9391C1CA5790093AAA9 /* UInt32+Extension.swift */; };
+		757BC9BA1C1CA5790093AAA9 /* UInt32+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9391C1CA5790093AAA9 /* UInt32+Extension.swift */; };
+		757BC9BB1C1CA5790093AAA9 /* UInt32+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9391C1CA5790093AAA9 /* UInt32+Extension.swift */; };
+		757BC9BC1C1CA5790093AAA9 /* UInt64+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC93A1C1CA5790093AAA9 /* UInt64+Extension.swift */; };
+		757BC9BD1C1CA5790093AAA9 /* UInt64+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC93A1C1CA5790093AAA9 /* UInt64+Extension.swift */; };
+		757BC9BE1C1CA5790093AAA9 /* UInt64+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC93A1C1CA5790093AAA9 /* UInt64+Extension.swift */; };
+		757BC9BF1C1CA5790093AAA9 /* UInt64+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC93A1C1CA5790093AAA9 /* UInt64+Extension.swift */; };
 		757BC9C01C1CA5790093AAA9 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC93B1C1CA5790093AAA9 /* Utils.swift */; };
 		757BC9C11C1CA5790093AAA9 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC93B1C1CA5790093AAA9 /* Utils.swift */; };
 		757BC9C21C1CA5790093AAA9 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC93B1C1CA5790093AAA9 /* Utils.swift */; };
@@ -380,7 +380,7 @@
 		757BC9291C1CA5790093AAA9 /* HMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HMAC.swift; path = Sources/CryptoSwift/HMAC.swift; sourceTree = SOURCE_ROOT; };
 		757BC92A1C1CA5790093AAA9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/CryptoSwift/Info.plist; sourceTree = SOURCE_ROOT; };
 		757BC92B1C1CA5790093AAA9 /* IntegerConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntegerConvertible.swift; path = Sources/CryptoSwift/IntegerConvertible.swift; sourceTree = SOURCE_ROOT; };
-		757BC92C1C1CA5790093AAA9 /* IntExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntExtension.swift; path = Sources/CryptoSwift/IntExtension.swift; sourceTree = SOURCE_ROOT; };
+		757BC92C1C1CA5790093AAA9 /* Int+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Int+Extension.swift"; path = "Sources/CryptoSwift/Int+Extension.swift"; sourceTree = SOURCE_ROOT; };
 		757BC92D1C1CA5790093AAA9 /* MD5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MD5.swift; path = Sources/CryptoSwift/MD5.swift; sourceTree = SOURCE_ROOT; };
 		757BC92E1C1CA5790093AAA9 /* Multiplatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Multiplatform.swift; path = Sources/CryptoSwift/Multiplatform.swift; sourceTree = SOURCE_ROOT; };
 		757BC92F1C1CA5790093AAA9 /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Operators.swift; path = Sources/CryptoSwift/Operators.swift; sourceTree = SOURCE_ROOT; };
@@ -391,9 +391,9 @@
 		757BC9351C1CA5790093AAA9 /* SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SHA1.swift; path = Sources/CryptoSwift/SHA1.swift; sourceTree = SOURCE_ROOT; };
 		757BC9361C1CA5790093AAA9 /* SHA2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SHA2.swift; path = Sources/CryptoSwift/SHA2.swift; sourceTree = SOURCE_ROOT; };
 		757BC9371C1CA5790093AAA9 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Extension.swift"; path = "Sources/CryptoSwift/String+Extension.swift"; sourceTree = SOURCE_ROOT; };
-		757BC9381C1CA5790093AAA9 /* UInt8Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UInt8Extension.swift; path = Sources/CryptoSwift/UInt8Extension.swift; sourceTree = SOURCE_ROOT; };
-		757BC9391C1CA5790093AAA9 /* UInt32Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UInt32Extension.swift; path = Sources/CryptoSwift/UInt32Extension.swift; sourceTree = SOURCE_ROOT; };
-		757BC93A1C1CA5790093AAA9 /* UInt64Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UInt64Extension.swift; path = Sources/CryptoSwift/UInt64Extension.swift; sourceTree = SOURCE_ROOT; };
+		757BC9381C1CA5790093AAA9 /* UInt8+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UInt8+Extension.swift"; path = "Sources/CryptoSwift/UInt8+Extension.swift"; sourceTree = SOURCE_ROOT; };
+		757BC9391C1CA5790093AAA9 /* UInt32+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UInt32+Extension.swift"; path = "Sources/CryptoSwift/UInt32+Extension.swift"; sourceTree = SOURCE_ROOT; };
+		757BC93A1C1CA5790093AAA9 /* UInt64+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UInt64+Extension.swift"; path = "Sources/CryptoSwift/UInt64+Extension.swift"; sourceTree = SOURCE_ROOT; };
 		757BC93B1C1CA5790093AAA9 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Sources/CryptoSwift/Utils.swift; sourceTree = SOURCE_ROOT; };
 		757DA2521A4ED0A4002BA3EF /* PaddingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddingTests.swift; sourceTree = "<group>"; };
 		757DA2541A4ED408002BA3EF /* AESTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AESTests.swift; sourceTree = "<group>"; };
@@ -504,8 +504,6 @@
 			isa = PBXGroup;
 			children = (
 				75DB81B11CDC0E4100ED181A /* Ciphers */,
-				757BC91B1C1CA5790093AAA9 /* Array+Extension.swift */,
-				756B575E1D5131A4001C0C72 /* Collection+Extension.swift */,
 				757BC91D1C1CA5790093AAA9 /* Authenticator.swift */,
 				80545D121CA9FECD00474A99 /* Bit.swift */,
 				757F440D1CC1822A002B1F85 /* SecureBytes.swift */,
@@ -532,12 +530,14 @@
 				757BC9331C1CA5790093AAA9 /* Poly1305.swift */,
 				757BC9351C1CA5790093AAA9 /* SHA1.swift */,
 				757BC9361C1CA5790093AAA9 /* SHA2.swift */,
-				757BC9371C1CA5790093AAA9 /* String+Extension.swift */,
-				757BC92C1C1CA5790093AAA9 /* IntExtension.swift */,
-				757BC9381C1CA5790093AAA9 /* UInt8Extension.swift */,
-				757BC9391C1CA5790093AAA9 /* UInt32Extension.swift */,
-				757BC93A1C1CA5790093AAA9 /* UInt64Extension.swift */,
 				757BC93B1C1CA5790093AAA9 /* Utils.swift */,
+				757BC91B1C1CA5790093AAA9 /* Array+Extension.swift */,
+				756B575E1D5131A4001C0C72 /* Collection+Extension.swift */,
+				757BC9371C1CA5790093AAA9 /* String+Extension.swift */,
+				757BC92C1C1CA5790093AAA9 /* Int+Extension.swift */,
+				757BC9381C1CA5790093AAA9 /* UInt8+Extension.swift */,
+				757BC9391C1CA5790093AAA9 /* UInt32+Extension.swift */,
+				757BC93A1C1CA5790093AAA9 /* UInt64+Extension.swift */,
 				757BC8F61C1CA56A0093AAA9 /* Foundation */,
 				754BE45819693E190098E6F3 /* Supporting Files */,
 			);
@@ -867,7 +867,7 @@
 				756B57601D5131A4001C0C72 /* Collection+Extension.swift in Sources */,
 				757BC9071C1CA56A0093AAA9 /* ChaCha20+Foundation.swift in Sources */,
 				75D0E05D1CFB9B9400FCEA0E /* Cipher.swift in Sources */,
-				757BC9851C1CA5790093AAA9 /* IntExtension.swift in Sources */,
+				757BC9851C1CA5790093AAA9 /* Int+Extension.swift in Sources */,
 				757BC9B11C1CA5790093AAA9 /* String+Extension.swift in Sources */,
 				757BC96D1C1CA5790093AAA9 /* Generics.swift in Sources */,
 				757F440A1CC172B6002B1F85 /* BlockCipher.swift in Sources */,
@@ -877,7 +877,7 @@
 				75CB93361C8F5FCE0087740D /* PCBC.swift in Sources */,
 				75CB93311C8F5F580087740D /* BlockMode.swift in Sources */,
 				757BC9171C1CA56A0093AAA9 /* Utils+Foundation.swift in Sources */,
-				757BC9B51C1CA5790093AAA9 /* UInt8Extension.swift in Sources */,
+				757BC9B51C1CA5790093AAA9 /* UInt8+Extension.swift in Sources */,
 				757BC9411C1CA5790093AAA9 /* Array+Extension.swift in Sources */,
 				75482EA81CB329C1001F66A5 /* PBKDF2.swift in Sources */,
 				757BC90F1C1CA56A0093AAA9 /* Rabbit+Foundation.swift in Sources */,
@@ -887,7 +887,7 @@
 				75CB93451C8F603C0087740D /* CTR.swift in Sources */,
 				753881EC1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F21C8FB6E20054C377 /* OFB.swift in Sources */,
-				757BC9BD1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,
+				757BC9BD1C1CA5790093AAA9 /* UInt64+Extension.swift in Sources */,
 				75CB934F1C8F609D0087740D /* BlockModeOptions.swift in Sources */,
 				757BC9811C1CA5790093AAA9 /* IntegerConvertible.swift in Sources */,
 				757BC9511C1CA5790093AAA9 /* BytesSequence.swift in Sources */,
@@ -898,7 +898,7 @@
 				755655C81D080E3F00F004E7 /* Cryptors.swift in Sources */,
 				757BC9911C1CA5790093AAA9 /* Operators.swift in Sources */,
 				75CB933B1C8F5FFD0087740D /* CFB.swift in Sources */,
-				757BC9B91C1CA5790093AAA9 /* UInt32Extension.swift in Sources */,
+				757BC9B91C1CA5790093AAA9 /* UInt32+Extension.swift in Sources */,
 				757BC9131C1CA56A0093AAA9 /* String+FoundationExtension.swift in Sources */,
 				757BC98D1C1CA5790093AAA9 /* Multiplatform.swift in Sources */,
 				757BC93D1C1CA5790093AAA9 /* AES.swift in Sources */,
@@ -932,7 +932,7 @@
 				756B575F1D5131A4001C0C72 /* Collection+Extension.swift in Sources */,
 				757BC90E1C1CA56A0093AAA9 /* Rabbit+Foundation.swift in Sources */,
 				75D0E05C1CFB9B9400FCEA0E /* Cipher.swift in Sources */,
-				757BC9841C1CA5790093AAA9 /* IntExtension.swift in Sources */,
+				757BC9841C1CA5790093AAA9 /* Int+Extension.swift in Sources */,
 				757BC9B01C1CA5790093AAA9 /* String+Extension.swift in Sources */,
 				757BC96C1C1CA5790093AAA9 /* Generics.swift in Sources */,
 				757F44091CC172B6002B1F85 /* BlockCipher.swift in Sources */,
@@ -942,7 +942,7 @@
 				75CB93351C8F5FCE0087740D /* PCBC.swift in Sources */,
 				75CB93301C8F5F580087740D /* BlockMode.swift in Sources */,
 				757BC9121C1CA56A0093AAA9 /* String+FoundationExtension.swift in Sources */,
-				757BC9B41C1CA5790093AAA9 /* UInt8Extension.swift in Sources */,
+				757BC9B41C1CA5790093AAA9 /* UInt8+Extension.swift in Sources */,
 				757BC9401C1CA5790093AAA9 /* Array+Extension.swift in Sources */,
 				757BC9061C1CA56A0093AAA9 /* ChaCha20+Foundation.swift in Sources */,
 				75482EA71CB329C1001F66A5 /* PBKDF2.swift in Sources */,
@@ -950,7 +950,7 @@
 				757BC9601C1CA5790093AAA9 /* CRC.swift in Sources */,
 				757BC9A01C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93441C8F603C0087740D /* CTR.swift in Sources */,
-				757BC9BC1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,
+				757BC9BC1C1CA5790093AAA9 /* UInt64+Extension.swift in Sources */,
 				753881EB1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F11C8FB6E20054C377 /* OFB.swift in Sources */,
 				75CB934E1C8F609D0087740D /* BlockModeOptions.swift in Sources */,
@@ -963,7 +963,7 @@
 				755655C71D080E3F00F004E7 /* Cryptors.swift in Sources */,
 				757BC9901C1CA5790093AAA9 /* Operators.swift in Sources */,
 				75CB933A1C8F5FFD0087740D /* CFB.swift in Sources */,
-				757BC9B81C1CA5790093AAA9 /* UInt32Extension.swift in Sources */,
+				757BC9B81C1CA5790093AAA9 /* UInt32+Extension.swift in Sources */,
 				757BC8FE1C1CA56A0093AAA9 /* AES+Foundation.swift in Sources */,
 				757BC98C1C1CA5790093AAA9 /* Multiplatform.swift in Sources */,
 				757BC93C1C1CA5790093AAA9 /* AES.swift in Sources */,
@@ -1014,7 +1014,7 @@
 				756B57621D5131A4001C0C72 /* Collection+Extension.swift in Sources */,
 				757BC9101C1CA56A0093AAA9 /* Rabbit+Foundation.swift in Sources */,
 				75D0E05F1CFB9B9400FCEA0E /* Cipher.swift in Sources */,
-				757BC9861C1CA5790093AAA9 /* IntExtension.swift in Sources */,
+				757BC9861C1CA5790093AAA9 /* Int+Extension.swift in Sources */,
 				757BC9B21C1CA5790093AAA9 /* String+Extension.swift in Sources */,
 				757BC96E1C1CA5790093AAA9 /* Generics.swift in Sources */,
 				757F440C1CC172B6002B1F85 /* BlockCipher.swift in Sources */,
@@ -1024,7 +1024,7 @@
 				75CB93371C8F5FCE0087740D /* PCBC.swift in Sources */,
 				75CB93321C8F5F580087740D /* BlockMode.swift in Sources */,
 				757BC9141C1CA56A0093AAA9 /* String+FoundationExtension.swift in Sources */,
-				757BC9B61C1CA5790093AAA9 /* UInt8Extension.swift in Sources */,
+				757BC9B61C1CA5790093AAA9 /* UInt8+Extension.swift in Sources */,
 				757BC9421C1CA5790093AAA9 /* Array+Extension.swift in Sources */,
 				75482EAA1CB329C1001F66A5 /* PBKDF2.swift in Sources */,
 				757BC9081C1CA56A0093AAA9 /* ChaCha20+Foundation.swift in Sources */,
@@ -1034,7 +1034,7 @@
 				75CB93461C8F603C0087740D /* CTR.swift in Sources */,
 				753881EE1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F31C8FB6E20054C377 /* OFB.swift in Sources */,
-				757BC9BE1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,
+				757BC9BE1C1CA5790093AAA9 /* UInt64+Extension.swift in Sources */,
 				75CB93501C8F609D0087740D /* BlockModeOptions.swift in Sources */,
 				757BC9821C1CA5790093AAA9 /* IntegerConvertible.swift in Sources */,
 				757BC9521C1CA5790093AAA9 /* BytesSequence.swift in Sources */,
@@ -1045,7 +1045,7 @@
 				755655CA1D080E3F00F004E7 /* Cryptors.swift in Sources */,
 				757BC9921C1CA5790093AAA9 /* Operators.swift in Sources */,
 				75CB933C1C8F5FFD0087740D /* CFB.swift in Sources */,
-				757BC9BA1C1CA5790093AAA9 /* UInt32Extension.swift in Sources */,
+				757BC9BA1C1CA5790093AAA9 /* UInt32+Extension.swift in Sources */,
 				757BC9001C1CA56A0093AAA9 /* AES+Foundation.swift in Sources */,
 				757BC98E1C1CA5790093AAA9 /* Multiplatform.swift in Sources */,
 				757BC93E1C1CA5790093AAA9 /* AES.swift in Sources */,
@@ -1079,7 +1079,7 @@
 				756B57611D5131A4001C0C72 /* Collection+Extension.swift in Sources */,
 				757BC9091C1CA56A0093AAA9 /* ChaCha20+Foundation.swift in Sources */,
 				75D0E05E1CFB9B9400FCEA0E /* Cipher.swift in Sources */,
-				757BC9871C1CA5790093AAA9 /* IntExtension.swift in Sources */,
+				757BC9871C1CA5790093AAA9 /* Int+Extension.swift in Sources */,
 				757BC9B31C1CA5790093AAA9 /* String+Extension.swift in Sources */,
 				757BC96F1C1CA5790093AAA9 /* Generics.swift in Sources */,
 				757F440B1CC172B6002B1F85 /* BlockCipher.swift in Sources */,
@@ -1089,7 +1089,7 @@
 				75CB93381C8F5FCE0087740D /* PCBC.swift in Sources */,
 				75CB93331C8F5F580087740D /* BlockMode.swift in Sources */,
 				757BC9191C1CA56A0093AAA9 /* Utils+Foundation.swift in Sources */,
-				757BC9B71C1CA5790093AAA9 /* UInt8Extension.swift in Sources */,
+				757BC9B71C1CA5790093AAA9 /* UInt8+Extension.swift in Sources */,
 				757BC9431C1CA5790093AAA9 /* Array+Extension.swift in Sources */,
 				75482EA91CB329C1001F66A5 /* PBKDF2.swift in Sources */,
 				757BC9111C1CA56A0093AAA9 /* Rabbit+Foundation.swift in Sources */,
@@ -1099,7 +1099,7 @@
 				75CB93471C8F603C0087740D /* CTR.swift in Sources */,
 				753881ED1CB06E390089101D /* NoPadding.swift in Sources */,
 				758F58F41C8FB6E20054C377 /* OFB.swift in Sources */,
-				757BC9BF1C1CA5790093AAA9 /* UInt64Extension.swift in Sources */,
+				757BC9BF1C1CA5790093AAA9 /* UInt64+Extension.swift in Sources */,
 				75CB93511C8F609D0087740D /* BlockModeOptions.swift in Sources */,
 				757BC9831C1CA5790093AAA9 /* IntegerConvertible.swift in Sources */,
 				757BC9531C1CA5790093AAA9 /* BytesSequence.swift in Sources */,
@@ -1110,7 +1110,7 @@
 				755655C91D080E3F00F004E7 /* Cryptors.swift in Sources */,
 				757BC9931C1CA5790093AAA9 /* Operators.swift in Sources */,
 				75CB933D1C8F5FFD0087740D /* CFB.swift in Sources */,
-				757BC9BB1C1CA5790093AAA9 /* UInt32Extension.swift in Sources */,
+				757BC9BB1C1CA5790093AAA9 /* UInt32+Extension.swift in Sources */,
 				757BC9151C1CA56A0093AAA9 /* String+FoundationExtension.swift in Sources */,
 				757BC98F1C1CA5790093AAA9 /* Multiplatform.swift in Sources */,
 				757BC93F1C1CA5790093AAA9 /* AES.swift in Sources */,

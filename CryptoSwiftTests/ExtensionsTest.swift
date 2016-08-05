@@ -101,4 +101,9 @@ final class ExtensionsTest: XCTestCase {
         XCTAssertEqual(decrypted, "my secret string")
     }
 
+    func test_Array_init_hex() {
+        let bytes = Array<UInt8>(hex: "0xb1b1b2b2")
+        XCTAssertEqual(bytes, [177,177,178,178])
+    }
+
 }

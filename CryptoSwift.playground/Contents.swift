@@ -44,7 +44,7 @@ do {
  */
 do {
     // write until all is written
-    func writeToStream(stream: OutputStream, bytes: Array<UInt8>) {
+    func writeTo(stream: NSOutputStream, bytes: Array<UInt8>) {
         var writtenCount = 0
         while stream.hasSpaceAvailable && writtenCount < bytes.count {
             let c = stream.write(bytes, maxLength: bytes.count)
@@ -62,7 +62,7 @@ do {
     // prepare streams
     let data = Data(bytes: (0..<100).map { $0 })
     let inputStream = InputStream(data: data)
-    let outputStream = OutputStream(toMemory: ())
+    let outputStream = NSOutputStream(toMemory: ())
     inputStream.open()
     outputStream.open()
 
@@ -73,14 +73,14 @@ do {
         let readCount = inputStream.read(&buffer, maxLength: buffer.count)
         if (readCount > 0) {
             try encryptor.update(withBytes: buffer[0..<readCount]) { (bytes) in
-                writeToStream(outputStream, bytes: bytes)
+                writeTo(stream: outputStream, bytes: bytes)
             }
         }
     }
 
     // finalize encryption
     try encryptor.finish { (bytes) in
-        writeToStream(stream: outputStream, bytes: bytes)
+        writeTo(stream: outputStream, bytes: bytes)
     }
 
     // print result

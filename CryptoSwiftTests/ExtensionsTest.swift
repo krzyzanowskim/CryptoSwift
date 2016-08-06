@@ -108,6 +108,11 @@ final class ExtensionsTest: XCTestCase {
     func test_Array_init_hex() {
         let bytes = Array<UInt8>(hex: "0xb1b1b2b2")
         XCTAssertEqual(bytes, [177,177,178,178])
+
+        let str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
+        let array = Array<UInt8>(hex: str)
+        let hex = array.toHexString()
+        XCTAssertEqual(str, hex)
     }
 
 }

@@ -41,8 +41,9 @@ extension String {
         return self.utf8.lazy.map({ $0 as UInt8 }).crc16(seed: seed).bytes().toHexString()
     }
 
-    public func encrypt(cipher: Cipher) throws -> Array<UInt8> {
-        return try self.utf8.lazy.map({ $0 as UInt8 }).encrypt(cipher: cipher)
+    /// Returns hex string of bytes
+    public func encrypt(cipher: Cipher) throws -> String {
+        return try self.utf8.lazy.map({ $0 as UInt8 }).encrypt(cipher: cipher).toHexString()
     }
 
     // decrypt() does not make sense for String

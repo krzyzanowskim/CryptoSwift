@@ -90,9 +90,13 @@ final class ExtensionsTest: XCTestCase {
         XCTAssert(data.count == 3, "Invalid data")
     }
 
-    func test_String_encrypt_base64() {
-        let encryptedBase64 = try! "my secret string".encrypt(cipher: AES(key: "secret0key000000", iv: "0123456789012345")).toBase64()
-        XCTAssertEqual(encryptedBase64, "aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs=")
+    func test_String_encrypt() {
+        do {
+            let encryptedHex = try "my secret string".encrypt(cipher: AES(key: "secret0key000000", iv: "0123456789012345"))
+            XCTAssertEqual(encryptedHex, "68f7ff8bdb61f625febdfe3d791ecf624daaed2e719a6de39112de8e0cc7349b")
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func test_String_decrypt_base64() {

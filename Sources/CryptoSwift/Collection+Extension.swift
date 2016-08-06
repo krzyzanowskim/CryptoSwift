@@ -11,13 +11,18 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
         var result = Array<UInt32>()
         result.reserveCapacity(16)
         for idx in stride(from: self.startIndex, to: self.endIndex, by: MemoryLayout<UInt32>.size) {
-            let val1:UInt32 = (UInt32(self[idx.advanced(by: 3)]) << 24)
-            let val2:UInt32 = (UInt32(self[idx.advanced(by: 2)]) << 16)
-            let val3:UInt32 = (UInt32(self[idx.advanced(by: 1)]) << 8)
-            let val4:UInt32 = UInt32(self[idx])
-            let val:UInt32 = val1 | val2 | val3 | val4
+            var val: UInt32 = 0
+            val |= self.count > 3 ? UInt32(self[idx.advanced(by: 3)]) << 24 : 0
+            val |= self.count > 2 ? UInt32(self[idx.advanced(by: 2)]) << 16 : 0
+            val |= self.count > 1 ? UInt32(self[idx.advanced(by: 1)]) << 8  : 0
+            val |= self.count > 0 ? UInt32(self[idx]) : 0
             result.append(val)
         }
+
+        for _ in result.count..<MemoryLayout<UInt32>.size {
+            result.append(0)
+        }
+
         return result
     }
 
@@ -26,16 +31,21 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
         result.reserveCapacity(32)
         for idx in stride(from: self.startIndex, to: self.endIndex, by: MemoryLayout<UInt64>.size) {
             var val:UInt64 = 0
-            val |= UInt64(self[idx.advanced(by: 7)]) << 56
-            val |= UInt64(self[idx.advanced(by: 6)]) << 48
-            val |= UInt64(self[idx.advanced(by: 5)]) << 40
-            val |= UInt64(self[idx.advanced(by: 4)]) << 32
-            val |= UInt64(self[idx.advanced(by: 3)]) << 24
-            val |= UInt64(self[idx.advanced(by: 2)]) << 16
-            val |= UInt64(self[idx.advanced(by: 1)]) << 8
-            val |= UInt64(self[idx.advanced(by: 0)]) << 0
+            val |= self.count > 7 ? UInt64(self[idx.advanced(by: 7)]) << 56 : 0
+            val |= self.count > 6 ? UInt64(self[idx.advanced(by: 6)]) << 48 : 0
+            val |= self.count > 5 ? UInt64(self[idx.advanced(by: 5)]) << 40 : 0
+            val |= self.count > 4 ? UInt64(self[idx.advanced(by: 4)]) << 32 : 0
+            val |= self.count > 3 ? UInt64(self[idx.advanced(by: 3)]) << 24 : 0
+            val |= self.count > 2 ? UInt64(self[idx.advanced(by: 2)]) << 16 : 0
+            val |= self.count > 1 ? UInt64(self[idx.advanced(by: 1)]) << 8 : 0
+            val |= self.count > 0 ? UInt64(self[idx.advanced(by: 0)]) << 0 : 0
             result.append(val)
         }
+
+        for _ in result.count..<MemoryLayout<UInt64>.size {
+            result.append(0)
+        }
+
         return result
     }
 

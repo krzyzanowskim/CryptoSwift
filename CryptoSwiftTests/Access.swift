@@ -166,6 +166,8 @@ class Access: XCTestCase {
             let enc = try aes.encrypt([1,2,3])
             let _ = try aes.decrypt(enc)
 
+            let _ = try AES(key: [1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6], iv: [1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6], blockMode: .CBC, padding: NoPadding())
+
             let _ = AES.Variant.aes128
             let _ = AES.blockSize
         } catch {
@@ -175,10 +177,11 @@ class Access: XCTestCase {
 
     func testRabbit() {
         do {
-            XCTAssertThrowsError(try Rabbit(key: "123"))
             let rabbit = try Rabbit(key: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
             let enc = rabbit.encrypt([1,2,3])
             let _   = rabbit.decrypt(enc)
+
+            XCTAssertThrowsError(try Rabbit(key: "123"))
 
             let _ = Rabbit.blockSize
             let _ = Rabbit.keySize
@@ -189,7 +192,23 @@ class Access: XCTestCase {
     }
 
     func testChaCha20() {
-        // TODO
+        let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+
+        do {
+            let _ = ChaCha20.blockSize
+            let chacha20 = try ChaCha20(key: key, iv: iv)
+            let enc = try chacha20.encrypt([1,3,4])
+            let _ = try chacha20.decrypt(enc)
+
+            XCTAssertThrowsError(try ChaCha20(key: "123", iv: "12345678"))
+
+            let _ = chacha20.makeEncryptor()
+            let _ = chacha20.makeDecryptor()
+
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testUpdatable() {

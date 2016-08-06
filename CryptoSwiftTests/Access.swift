@@ -165,7 +165,7 @@ class Access: XCTestCase {
             let _ = aes.makeDecryptor()
             let enc = try aes.encrypt([1,2,3])
             let _ = try aes.decrypt(enc)
-            
+
             let _ = AES.Variant.aes128
             let _ = AES.blockSize
         } catch {
@@ -175,7 +175,7 @@ class Access: XCTestCase {
 
     func testRabbit() {
         do {
-            let _ = try Rabbit(key: "123")
+            XCTAssertThrowsError(try Rabbit(key: "123"))
             let rabbit = try Rabbit(key: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
             let enc = rabbit.encrypt([1,2,3])
             let _   = rabbit.decrypt(enc)

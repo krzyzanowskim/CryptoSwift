@@ -11,7 +11,7 @@ import CryptoSwift
 
 class Access: XCTestCase {
     let cipher = try! AES(key: "secret0key000000", iv: "0123456789012345")
-    let authenticator = Authenticator.HMAC(key: Array<UInt8>(hex: "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"), variant: .sha1)
+    let authenticator = HMAC(key: Array<UInt8>(hex: "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"), variant: .sha1)
 
     func testChecksum() {
         let _ = Checksum.crc32([1,2,3])
@@ -149,16 +149,13 @@ class Access: XCTestCase {
         }
     }
 
-    func testAuthenticator() {
-        // TODO
-    }
-
-    func testHMAC() {
-        // TODO
-    }
-
-    func testPoly1305() {
-        // TODO
+    func testAuthenticators() {
+        do {
+            let _ = try HMAC(key: Array<UInt8>(hex: "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"), variant: .sha1).authenticate([1,2,3])
+            let _ = try Poly1305(key: [1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2]).authenticate([1,2,3])
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testAES() {

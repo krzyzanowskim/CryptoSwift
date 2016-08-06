@@ -63,7 +63,7 @@ public extension CSArrayType where Iterator.Element == UInt8 {
         return try cipher.decrypt(cs_arrayValue())
     }
     
-    public func authenticate(with authenticator: Authenticator) throws -> [Iterator.Element] {
+    public func authenticate<A: Authenticator>(with authenticator: A) throws -> [Iterator.Element] {
         return try authenticator.authenticate(cs_arrayValue())
     }
 }

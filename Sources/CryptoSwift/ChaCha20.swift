@@ -19,6 +19,8 @@ final public class ChaCha20: BlockCipher {
         var input = Array<UInt32>(repeating: 0, count: 16)
 
         init(key:Array<UInt8>, iv:Array<UInt8>) throws {
+            precondition(iv.count >= 8)
+
             let kbits = key.count * 8
 
             if (kbits != 128 && kbits != 256) {
@@ -69,7 +71,8 @@ final public class ChaCha20: BlockCipher {
     }
     
     private final func wordToByte(_ input:Array<UInt32> /* 64 */) -> Array<UInt8>? /* 16 */ {
-        assert(input.count == 16)
+        precondition(input.count == 16)
+
         var x = input
 
         for _ in 0..<10 {

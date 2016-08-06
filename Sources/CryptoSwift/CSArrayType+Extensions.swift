@@ -24,35 +24,35 @@ public extension CSArrayType where Iterator.Element == UInt8 {
 
 public extension CSArrayType where Iterator.Element == UInt8 {
     public func md5() -> [Iterator.Element] {
-        return Hash.md5(cs_arrayValue()).calculate()
+        return Hash.md5(cs_arrayValue())
     }
     
     public func sha1() -> [Iterator.Element] {
-        return Hash.sha1(cs_arrayValue()).calculate()
+        return Hash.sha1(cs_arrayValue())
     }
     
     public func sha224() -> [Iterator.Element] {
-        return Hash.sha224(cs_arrayValue()).calculate()
+        return Hash.sha224(cs_arrayValue())
     }
     
     public func sha256() -> [Iterator.Element] {
-        return Hash.sha256(cs_arrayValue()).calculate()
+        return Hash.sha256(cs_arrayValue())
     }
     
     public func sha384() -> [Iterator.Element] {
-        return Hash.sha384(cs_arrayValue()).calculate()
+        return Hash.sha384(cs_arrayValue())
     }
     
     public func sha512() -> [Iterator.Element] {
-        return Hash.sha512(cs_arrayValue()).calculate()
+        return Hash.sha512(cs_arrayValue())
     }
     
-    public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> [Iterator.Element] {
-        return Hash.crc32(cs_arrayValue(), seed: seed, reflect: reflect).calculate()
+    public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> UInt32 {
+        return CRC.crc32(cs_arrayValue(), seed: seed, reflect: reflect)
     }
     
-    public func crc16(seed: UInt16? = nil) -> [Iterator.Element] {
-        return Hash.crc16(cs_arrayValue(), seed: seed).calculate()
+    public func crc16(seed: UInt16? = nil) -> UInt16 {
+        return CRC.crc16(cs_arrayValue(), seed: seed)
     }
     
     public func encrypt(cipher: Cipher) throws -> [Iterator.Element] {

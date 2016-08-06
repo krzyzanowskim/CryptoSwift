@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final class CRC {
-    
+public final class CRC {
     private static let table32:Array<UInt32> = [0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
         0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91,
         0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de, 0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7,
@@ -93,5 +92,16 @@ final class CRC {
             }
         }
         return crc
+    }
+}
+
+//MARK: Public interface
+public extension CRC {
+    static func crc32(_ message:Array<UInt8>, seed: UInt32? = nil, reflect : Bool = true) -> UInt32 {
+        return CRC().crc32(message, seed: seed, reflect: reflect)
+    }
+
+    static func crc16(_ message:Array<UInt8>, seed: UInt16? = nil) -> UInt16 {
+        return CRC().crc16(message, seed: seed)
     }
 }

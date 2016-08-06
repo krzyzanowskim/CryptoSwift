@@ -178,11 +178,11 @@ let bytes = "string".utf8.map({$0})
 
 Hashing a data or array of bytes (aka `Array<UInt8>`)
 ```swift
-/* Hash enum usage */
+/* Hash struct usage */
 let input:Array<UInt8> = [49, 50, 51]
 
 let output = input.md5()
-// alternatively: let output = CryptoSwift.Hash.md5(input).calculate()
+// alternatively: let output = CryptoSwift.Hash.md5(input)
 
 print(output.toHexString())
 ```

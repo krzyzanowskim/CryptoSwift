@@ -34,11 +34,11 @@ extension String {
     }
 
     public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> String {
-        return self.utf8.lazy.map({ $0 as UInt8 }).crc32(seed: seed, reflect: reflect).toHexString()
+        return self.utf8.lazy.map({ $0 as UInt8 }).crc32(seed: seed, reflect: reflect).bytes().toHexString()
     }
 
     public func crc16(seed: UInt16? = nil) -> String {
-        return self.utf8.lazy.map({ $0 as UInt8 }).crc16(seed: seed).toHexString()
+        return self.utf8.lazy.map({ $0 as UInt8 }).crc16(seed: seed).bytes().toHexString()
     }
 
     public func encrypt(cipher: Cipher) throws -> Array<UInt8> {

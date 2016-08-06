@@ -9,7 +9,11 @@
 private typealias Key = SecureBytes
 
 final public class Rabbit: BlockCipher {
-    
+
+    public enum Error: Swift.Error {
+        case invalidKeyOrInitializationVector
+    }
+
     /// Size of IV in bytes
     public static let ivSize = 64 / 8
     
@@ -47,16 +51,16 @@ final public class Rabbit: BlockCipher {
     ]
     
     // MARK: - Initializers
-    convenience public init?(key:Array<UInt8>) {
-        self.init(key: key, iv: nil)
+    convenience public init(key:Array<UInt8>) throws {
+        try self.init(key: key, iv: nil)
     }
     
-    public init?(key:Array<UInt8>, iv:Array<UInt8>?) {
+    public init(key:Array<UInt8>, iv:Array<UInt8>?) throws {
         self.key = Key(bytes: key)
         self.iv = iv
         
         guard key.count == Rabbit.keySize && (iv == nil || iv!.count == Rabbit.ivSize) else {
-            return nil
+            throw Error.invalidKeyOrInitializationVector
         }
     }
     

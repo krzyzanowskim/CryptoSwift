@@ -159,11 +159,33 @@ class Access: XCTestCase {
     }
 
     func testAES() {
-        // TODO
+        do {
+            let aes = try AES(key: "secret0key000000", iv: "0123456789012345")
+            let _ = aes.makeEncryptor()
+            let _ = aes.makeDecryptor()
+            let enc = try aes.encrypt([1,2,3])
+            let _ = try aes.decrypt(enc)
+            
+            let _ = AES.Variant.aes128
+            let _ = AES.blockSize
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testRabbit() {
-        // TODO
+        do {
+            let _ = try Rabbit(key: "123")
+            let rabbit = try Rabbit(key: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+            let enc = rabbit.encrypt([1,2,3])
+            let _   = rabbit.decrypt(enc)
+
+            let _ = Rabbit.blockSize
+            let _ = Rabbit.keySize
+            let _ = Rabbit.ivSize
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testChaCha20() {

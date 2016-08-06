@@ -9,20 +9,20 @@
 import Foundation
 
 extension Rabbit {
-    convenience public init?(key: String) {
+    convenience public init(key: String) throws {
         guard let kkey = key.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.bytes else {
-            return nil
+            throw Error.invalidKeyOrInitializationVector
         }
-        self.init(key: kkey)
-        
+        try self.init(key: kkey)
     }
     
-    convenience public init?(key: String, iv: String) {
+    convenience public init(key: String, iv: String) throws {
         guard let kkey = key.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.bytes,
-            let iiv = iv.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.bytes
-            else {
-                return nil
+              let iiv = iv.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.bytes
+        else {
+            throw Error.invalidKeyOrInitializationVector
         }
-        self.init(key: kkey, iv: iiv)
+
+        try self.init(key: kkey, iv: iiv)
     }
 }

@@ -221,7 +221,7 @@ let hmac: Array<UInt8> = try! Authenticator.HMAC(key: key, variant: .sha256).aut
 
 ```swift
 let password: Array<UInt8> = "s33krit".utf8.map {$0}
-let salt: Array<UInt8> = "nacl".utf8.map {$0}
+let salt: Array<UInt8> = "nacllcan".utf8.map {$0}
 
 let value = try! PKCS5.PBKDF1(password: password, salt: salt, iterations: 4096, variant: .sha1).calculate()
 

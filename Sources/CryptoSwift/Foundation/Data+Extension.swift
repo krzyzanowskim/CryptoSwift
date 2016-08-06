@@ -8,15 +8,6 @@
 
 import Foundation
 
-extension NSMutableData {
-    
-    /** Convenient way to append bytes */
-    internal func appendBytes(_ arrayOfBytes: Array<UInt8>) {
-        self.append(arrayOfBytes, length: arrayOfBytes.count)
-    }
-    
-}
-
 extension Data {
 
     /// Two octet checksum as defined in RFC-4880. Sum of all octets, mod 65536

@@ -10,7 +10,7 @@ import XCTest
 import CryptoSwift
 
 class Access: XCTestCase {
-    let cipher = try! AES(key: Array<UInt8>(hex: "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"))
+    let cipher = try! AES(key: "secret0key000000", iv: "0123456789012345")
     let authenticator = Authenticator.HMAC(key: Array<UInt8>(hex: "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"), variant: .sha1)
 
     func testChecksum() {
@@ -49,6 +49,7 @@ class Access: XCTestCase {
     }
 
     func testCollectionExtension() {
+        // nothing public
     }
 
     func testStringExtension() {
@@ -68,5 +69,111 @@ class Access: XCTestCase {
         } catch {
             XCTFail(error.localizedDescription)
         }
+    }
+
+    func testStringFoundationExtension() {
+        let string = "aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs="
+        do {
+            let _ = try string.decryptBase64ToString(cipher: cipher)
+            let _ = try string.decryptBase64(cipher: cipher)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testIntExtension() {
+        // nothing public
+    }
+
+    func testUInt16Extension() {
+        // nothing public
+    }
+
+    func testUInt32Extension() {
+        // nothing public
+    }
+
+    func testUInt64Extension() {
+        // nothing public
+    }
+
+    func testUInt8Extension() {
+        // nothing public
+    }
+
+    func testDataExtension() {
+        let data = Data(bytes: [1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8])
+        let _ = data.checksum()
+        let _ = data.md5()
+        let _ = data.sha1()
+        let _ = data.sha224()
+        let _ = data.sha256()
+        let _ = data.sha384()
+        let _ = data.sha512()
+        let _ = data.crc16()
+        let _ = data.crc32()
+
+        let _ = data.bytes
+        let _ = data.toHexString()
+
+        do {
+            let _ = try data.encrypt(cipher: cipher)
+            let _ = try data.decrypt(cipher: cipher)
+            let _ = try data.authenticate(with: authenticator)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testPadding() {
+        // PKCS7
+        let _ = PKCS7().add(to: [1,2,3], blockSize: 16)
+        let _ = PKCS7().remove(from: [1,2,3], blockSize: 16)
+
+        // NoPadding
+        let _ = NoPadding().add(to: [1,2,3], blockSize: 16)
+        let _ = NoPadding().remove(from: [1,2,3], blockSize: 16)
+
+        // ZeroPadding
+        let _ = ZeroPadding().add(to: [1,2,3], blockSize: 16)
+        let _ = ZeroPadding().remove(from: [1,2,3], blockSize: 16)
+    }
+
+    func testPBKDF() {
+        do {
+            let _ = PKCS5.PBKDF1.Variant.md5
+            let _ = try PKCS5.PBKDF1(password: [1,2,3,4,5,6,7], salt: [1,2,3,4,5,6,7,8]).calculate()
+            let _ = try PKCS5.PBKDF2(password: [1,2,3,4,5,6,7], salt: [1,2,3,4]).calculate()
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testAuthenticator() {
+        // TODO
+    }
+
+    func testHMAC() {
+        // TODO
+    }
+
+    func testPoly1305() {
+        // TODO
+    }
+
+    func testAES() {
+        // TODO
+    }
+
+    func testRabbit() {
+        // TODO
+    }
+
+    func testChaCha20() {
+        // TODO
+    }
+
+    func testUpdatable() {
+        // TODO
     }
 }

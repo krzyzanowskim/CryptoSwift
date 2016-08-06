@@ -286,7 +286,7 @@ fileprivate extension AES {
             var arr = Array<UInt32>()
             for idx in stride(from: expanded.startIndex, to: expanded.endIndex, by: 4) {
                 let four = Array(expanded[idx..<idx.advanced(by: 4)].reversed())
-                let num = UInt32.with(four)
+                let num = UInt32(bytes: four)
                 arr.append(num)
             }
 
@@ -326,7 +326,7 @@ fileprivate extension AES {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
             }
             if ((i % variant.Nk) == 0) {
-                tmp = subWord(rotateLeft(UInt32.with(tmp), by: 8).bytes(totalBytes: MemoryLayout<UInt32>.size))
+                tmp = subWord(rotateLeft(UInt32(bytes: tmp), by: 8).bytes(totalBytes: MemoryLayout<UInt32>.size))
                 tmp[0] = tmp.first! ^ Rcon[i/variant.Nk]
             } else if (variant.Nk > 6 && (i % variant.Nk) == 4) {
                 tmp = subWord(tmp)

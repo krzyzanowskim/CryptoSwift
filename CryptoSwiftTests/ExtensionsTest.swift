@@ -31,13 +31,13 @@ final class ExtensionsTest: XCTestCase {
     func testIntExtension() {
         let i1:Int = 1024
         let i1Array = i1.bytes(totalBytes: 32 / 8) // 32 bit
-        let i1recovered = Int.with(i1Array)
+        let i1recovered = Int(bytes: i1Array)
         
         XCTAssertEqual(i1, i1recovered, "Bytes conversion failed")
         
         let i2:Int = 1024
         let i2Array = i2.bytes(totalBytes: 160 / 8) // 160 bit
-        let i2recovered = Int.with(i2Array)
+        let i2recovered = Int(bytes: i2Array)
         
         XCTAssertEqual(i2, i2recovered, "Bytes conversion failed")
     }

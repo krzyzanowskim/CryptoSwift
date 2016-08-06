@@ -18,13 +18,12 @@ extension UInt32: _UInt32Type {}
 
 /** array of bytes */
 extension UInt32 {
-    public func bytes(totalBytes: Int = MemoryLayout<UInt32>.size) -> Array<UInt8> {
-        return arrayOfBytes(value: self, length: totalBytes)
+    init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.Index == Int {
+        self = bytes.toInteger()
     }
 
-    /** Int with array bytes (little-endian) */
-    public static func with<T: Collection>(_ bytes: T) -> UInt32 where T.Iterator.Element == UInt8, T.Index == Int {
-        return bytes.toInteger()
+    func bytes(totalBytes: Int = MemoryLayout<UInt32>.size) -> Array<UInt8> {
+        return arrayOfBytes(value: self, length: totalBytes)
     }
 }
 

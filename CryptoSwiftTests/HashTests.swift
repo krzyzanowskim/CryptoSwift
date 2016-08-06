@@ -131,7 +131,7 @@ final class CryptoSwiftTests: XCTestCase {
     }
     
     func testCRC16() {
-        let result = CRC.crc16([49,50,51,52,53,54,55,56,57] as Array<UInt8>)
+        let result = Checksum.crc16([49,50,51,52,53,54,55,56,57] as Array<UInt8>)
         XCTAssert(result == 0xBB3D, "CRC16 failed")
     }
     

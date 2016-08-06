@@ -96,10 +96,10 @@
 		757BC9551C1CA5790093AAA9 /* ChaCha20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9201C1CA5790093AAA9 /* ChaCha20.swift */; };
 		757BC9561C1CA5790093AAA9 /* ChaCha20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9201C1CA5790093AAA9 /* ChaCha20.swift */; };
 		757BC9571C1CA5790093AAA9 /* ChaCha20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9201C1CA5790093AAA9 /* ChaCha20.swift */; };
-		757BC9601C1CA5790093AAA9 /* CRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* CRC.swift */; };
-		757BC9611C1CA5790093AAA9 /* CRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* CRC.swift */; };
-		757BC9621C1CA5790093AAA9 /* CRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* CRC.swift */; };
-		757BC9631C1CA5790093AAA9 /* CRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* CRC.swift */; };
+		757BC9601C1CA5790093AAA9 /* Checksum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* Checksum.swift */; };
+		757BC9611C1CA5790093AAA9 /* Checksum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* Checksum.swift */; };
+		757BC9621C1CA5790093AAA9 /* Checksum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* Checksum.swift */; };
+		757BC9631C1CA5790093AAA9 /* Checksum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* Checksum.swift */; };
 		757BC9681C1CA5790093AAA9 /* CSArrayType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9251C1CA5790093AAA9 /* CSArrayType+Extensions.swift */; };
 		757BC9691C1CA5790093AAA9 /* CSArrayType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9251C1CA5790093AAA9 /* CSArrayType+Extensions.swift */; };
 		757BC96A1C1CA5790093AAA9 /* CSArrayType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9251C1CA5790093AAA9 /* CSArrayType+Extensions.swift */; };
@@ -377,7 +377,7 @@
 		757BC91D1C1CA5790093AAA9 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Authenticator.swift; path = Sources/CryptoSwift/Authenticator.swift; sourceTree = SOURCE_ROOT; };
 		757BC91F1C1CA5790093AAA9 /* BytesSequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BytesSequence.swift; path = Sources/CryptoSwift/BytesSequence.swift; sourceTree = SOURCE_ROOT; };
 		757BC9201C1CA5790093AAA9 /* ChaCha20.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChaCha20.swift; path = Sources/CryptoSwift/ChaCha20.swift; sourceTree = SOURCE_ROOT; };
-		757BC9231C1CA5790093AAA9 /* CRC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CRC.swift; path = Sources/CryptoSwift/CRC.swift; sourceTree = SOURCE_ROOT; };
+		757BC9231C1CA5790093AAA9 /* Checksum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Checksum.swift; path = Sources/CryptoSwift/Checksum.swift; sourceTree = SOURCE_ROOT; };
 		757BC9251C1CA5790093AAA9 /* CSArrayType+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CSArrayType+Extensions.swift"; path = "Sources/CryptoSwift/CSArrayType+Extensions.swift"; sourceTree = SOURCE_ROOT; };
 		757BC9261C1CA5790093AAA9 /* Generics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Generics.swift; path = Sources/CryptoSwift/Generics.swift; sourceTree = SOURCE_ROOT; };
 		757BC9271C1CA5790093AAA9 /* Hash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Hash.swift; path = Sources/CryptoSwift/Hash.swift; sourceTree = SOURCE_ROOT; };
@@ -519,8 +519,7 @@
 				75DB81A71CDC06B100ED181A /* Updatable.swift */,
 				75558FCB1D4BA93C00CF6C18 /* RandomAccessCryptor.swift */,
 				75CB93291C8F5EC60087740D /* BlockMode */,
-				757BC9231C1CA5790093AAA9 /* CRC.swift */,
-				757BC9251C1CA5790093AAA9 /* CSArrayType+Extensions.swift */,
+				757BC9231C1CA5790093AAA9 /* Checksum.swift */,
 				757BC9261C1CA5790093AAA9 /* Generics.swift */,
 				757BC9271C1CA5790093AAA9 /* Hash.swift */,
 				757BC9281C1CA5790093AAA9 /* HashProtocol.swift */,
@@ -539,6 +538,7 @@
 				757BC9361C1CA5790093AAA9 /* SHA2.swift */,
 				757BC93B1C1CA5790093AAA9 /* Utils.swift */,
 				757BC91B1C1CA5790093AAA9 /* Array+Extension.swift */,
+				757BC9251C1CA5790093AAA9 /* CSArrayType+Extensions.swift */,
 				756B575E1D5131A4001C0C72 /* Collection+Extension.swift */,
 				757BC9371C1CA5790093AAA9 /* String+Extension.swift */,
 				757BC92C1C1CA5790093AAA9 /* Int+Extension.swift */,
@@ -891,7 +891,7 @@
 				75482EA81CB329C1001F66A5 /* PBKDF2.swift in Sources */,
 				757BC90F1C1CA56A0093AAA9 /* Rabbit+Foundation.swift in Sources */,
 				757BC9691C1CA5790093AAA9 /* CSArrayType+Extensions.swift in Sources */,
-				757BC9611C1CA5790093AAA9 /* CRC.swift in Sources */,
+				757BC9611C1CA5790093AAA9 /* Checksum.swift in Sources */,
 				757BC9A11C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93451C8F603C0087740D /* CTR.swift in Sources */,
 				753881EC1CB06E390089101D /* NoPadding.swift in Sources */,
@@ -957,7 +957,7 @@
 				757BC9061C1CA56A0093AAA9 /* ChaCha20+Foundation.swift in Sources */,
 				75482EA71CB329C1001F66A5 /* PBKDF2.swift in Sources */,
 				757BC9681C1CA5790093AAA9 /* CSArrayType+Extensions.swift in Sources */,
-				757BC9601C1CA5790093AAA9 /* CRC.swift in Sources */,
+				757BC9601C1CA5790093AAA9 /* Checksum.swift in Sources */,
 				757BC9A01C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93441C8F603C0087740D /* CTR.swift in Sources */,
 				757BC9BC1C1CA5790093AAA9 /* UInt64+Extension.swift in Sources */,
@@ -1041,7 +1041,7 @@
 				75482EAA1CB329C1001F66A5 /* PBKDF2.swift in Sources */,
 				757BC9081C1CA56A0093AAA9 /* ChaCha20+Foundation.swift in Sources */,
 				757BC96A1C1CA5790093AAA9 /* CSArrayType+Extensions.swift in Sources */,
-				757BC9621C1CA5790093AAA9 /* CRC.swift in Sources */,
+				757BC9621C1CA5790093AAA9 /* Checksum.swift in Sources */,
 				757BC9A21C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93461C8F603C0087740D /* CTR.swift in Sources */,
 				753881EE1CB06E390089101D /* NoPadding.swift in Sources */,
@@ -1107,7 +1107,7 @@
 				75482EA91CB329C1001F66A5 /* PBKDF2.swift in Sources */,
 				757BC9111C1CA56A0093AAA9 /* Rabbit+Foundation.swift in Sources */,
 				757BC96B1C1CA5790093AAA9 /* CSArrayType+Extensions.swift in Sources */,
-				757BC9631C1CA5790093AAA9 /* CRC.swift in Sources */,
+				757BC9631C1CA5790093AAA9 /* Checksum.swift in Sources */,
 				757BC9A31C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75CB93471C8F603C0087740D /* CTR.swift in Sources */,
 				753881ED1CB06E390089101D /* NoPadding.swift in Sources */,

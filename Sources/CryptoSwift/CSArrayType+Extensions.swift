@@ -48,11 +48,11 @@ public extension CSArrayType where Iterator.Element == UInt8 {
     }
     
     public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> UInt32 {
-        return CRC.crc32(cs_arrayValue(), seed: seed, reflect: reflect)
+        return Checksum.crc32(cs_arrayValue(), seed: seed, reflect: reflect)
     }
     
     public func crc16(seed: UInt16? = nil) -> UInt16 {
-        return CRC.crc16(cs_arrayValue(), seed: seed)
+        return Checksum.crc16(cs_arrayValue(), seed: seed)
     }
     
     public func encrypt(cipher: Cipher) throws -> [Iterator.Element] {

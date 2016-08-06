@@ -61,12 +61,12 @@ extension Data {
     }
 
     public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> Data? {
-        let result = CRC.crc32(self.bytes, seed: seed, reflect: reflect)
+        let result = Checksum.crc32(self.bytes, seed: seed, reflect: reflect)
         return Data(bytes: result.bytes())
     }
 
     public func crc16(seed: UInt16? = nil) -> Data? {
-        let result = CRC.crc16(self.bytes, seed: seed)
+        let result = Checksum.crc16(self.bytes, seed: seed)
         return Data(bytes: result.bytes())
     }
 

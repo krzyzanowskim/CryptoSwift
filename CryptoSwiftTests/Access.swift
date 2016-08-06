@@ -13,9 +13,9 @@ class Access: XCTestCase {
     let cipher = try! AES(key: Array<UInt8>(hex: "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"))
     let authenticator = Authenticator.HMAC(key: Array<UInt8>(hex: "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"), variant: .sha1)
 
-    func testCRC() {
-        let _ = CRC.crc32([1,2,3])
-        let _ = CRC.crc16([1,2,3])
+    func testChecksum() {
+        let _ = Checksum.crc32([1,2,3])
+        let _ = Checksum.crc16([1,2,3])
     }
 
     func testHash() {

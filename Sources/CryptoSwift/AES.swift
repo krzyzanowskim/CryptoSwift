@@ -490,7 +490,10 @@ extension AES {
             self.worker = worker
 
             self.offset = position % AES.blockSize
-            return false
+            
+            self.accumulated = []
+            
+            return true
         }
     }
 }

@@ -294,6 +294,67 @@ final class AESTests: XCTestCase {
         XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
 
+    // https://github.com/krzyzanowskim/CryptoSwift/pull/290
+    func testAES_decrypt_ctr_seek() {
+        let key:Array<UInt8> = [0x52, 0x72, 0xb5, 0x9c, 0xab, 0x07, 0xc5, 0x01, 0x11, 0x7a, 0x39, 0xb6, 0x10, 0x35, 0x87, 0x02];
+        let iv:Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01]
+        var plaintext:Array<UInt8> = Array<UInt8>(repeating: 0, count: 6000)
+        
+        for i in 0..<plaintext.count / 6 {
+            let s = String(format: "%05d", i).utf8.map {$0}
+            plaintext[i * 6 + 0] = s[0];
+            plaintext[i * 6 + 1] = s[1];
+            plaintext[i * 6 + 2] = s[2];
+            plaintext[i * 6 + 3] = s[3];
+            plaintext[i * 6 + 4] = s[4];
+            plaintext[i * 6 + 5] = "|".utf8.first!;
+        }
+
+        let aes = try! AES(key: key, iv:iv, blockMode: .CTR, padding: NoPadding())
+        let encrypted = try! aes.encrypt(plaintext)
+
+        var decryptor = aes.makeDecryptor()
+        decryptor.seek(to: 2)
+        var part1 = try! decryptor.update(withBytes: Array(encrypted[2..<5]))
+        part1 += try! decryptor.finish()
+        XCTAssertEqual(part1, Array(plaintext[2..<5]), "seek decryption failed")
+
+        decryptor.seek(to: 1000)
+        var part2 = try! decryptor.update(withBytes: Array(encrypted[1000..<1200]))
+        part2 += try! decryptor.finish()
+        XCTAssertEqual(part2, Array(plaintext[1000..<1200]), "seek decryption failed")
+
+        decryptor.seek(to: 5500)
+        var part3 = try! decryptor.update(withBytes: Array(encrypted[5500..<6000]))
+        part3 += try! decryptor.finish()
+        XCTAssertEqual(part3, Array(plaintext[5500..<6000]), "seek decryption failed")
+
+        decryptor.seek(to: 0)
+        var part4 = try! decryptor.update(withBytes: Array(encrypted[0..<80]))
+        part4 += try! decryptor.finish()
+        XCTAssertEqual(part4, Array(plaintext[0..<80]), "seek decryption failed")
+    }
+
+//    func testAES_encrypt_performance() {
+//        let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+//        let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+//        let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
+//        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
+//        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+//            _ = try! aes.encrypt(message)
+//        })
+//    }
+//
+//    func testAES_decrypt_performance() {
+//        let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+//        let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+//        let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
+//        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
+//        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+//            _ = try! aes.decrypt(message)
+//        })
+//    }
+
     func testAESWithWrongKey() {
         let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
         let key2:Array<UInt8> = [0x22,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x33];

@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BF2137B41D5C12F0003563A2"
+               BlueprintIdentifier = "75D614921BD844F2001358B2"
                BuildableName = "CryptoSwift.framework"
-               BlueprintName = "CryptoSwift-iOS"
+               BlueprintName = "CryptoSwift tvOS"
                ReferencedContainer = "container:CryptoSwift.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,9 +33,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BF21383A1D5C22E4003563A2"
-               BuildableName = "CryptoSwift-iOS-Tests.xctest"
-               BlueprintName = "CryptoSwift-iOS-Tests"
+               BlueprintIdentifier = "754BE45F19693E190098E6F3"
+               BuildableName = "CryptoSwiftTests.xctest"
+               BlueprintName = "CryptoSwiftTests"
                ReferencedContainer = "container:CryptoSwift.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -43,9 +43,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "BF2137B41D5C12F0003563A2"
+            BlueprintIdentifier = "75D614921BD844F2001358B2"
             BuildableName = "CryptoSwift.framework"
-            BlueprintName = "CryptoSwift-iOS"
+            BlueprintName = "CryptoSwift tvOS"
             ReferencedContainer = "container:CryptoSwift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -65,9 +65,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "BF2137B41D5C12F0003563A2"
+            BlueprintIdentifier = "75D614921BD844F2001358B2"
             BuildableName = "CryptoSwift.framework"
-            BlueprintName = "CryptoSwift-iOS"
+            BlueprintName = "CryptoSwift tvOS"
             ReferencedContainer = "container:CryptoSwift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -83,9 +83,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "BF2137B41D5C12F0003563A2"
+            BlueprintIdentifier = "75D614921BD844F2001358B2"
             BuildableName = "CryptoSwift.framework"
-            BlueprintName = "CryptoSwift-iOS"
+            BlueprintName = "CryptoSwift tvOS"
             ReferencedContainer = "container:CryptoSwift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

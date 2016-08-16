@@ -43,7 +43,7 @@ final class ExtensionsTest: XCTestCase {
     }
     
     func testBytes() {
-        let size = sizeof(UInt32.self) // 32 or 64  bit
+        let size = MemoryLayout<UInt32>.size // 32 or 64  bit
         
         let i:UInt32 = 1024
         var bytes = i.bytes()
@@ -67,8 +67,8 @@ final class ExtensionsTest: XCTestCase {
         let ii:Int = 21
         XCTAssert(ii &<< 1 == ii << 1, "shift left failed")
         XCTAssert(ii &<< 8 == ii << 8, "shift left failed")
-        XCTAssert(ii &<< ((sizeofValue(ii) * 8) - 1) == ii << ((sizeofValue(ii) * 8) - 1), "shift left failed")
-        XCTAssert(ii &<< ((sizeofValue(ii) * 8)) == 0, "shift left failed")
+        XCTAssert(ii &<< ((MemoryLayout<Int>.size * 8) - 1) == ii << ((MemoryLayout<Int>.size * 8) - 1), "shift left failed")
+        XCTAssert(ii &<< ((MemoryLayout<Int>.size * 8)) == 0, "shift left failed")
         
         let iii:UInt32 = 21
         XCTAssert(iii &<< 1 == iii << 1, "shift left failed")

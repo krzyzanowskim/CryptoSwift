@@ -31,7 +31,7 @@ extension Int {
 /* array of bytes */
 extension Int {
     /** Array of bytes with optional padding (little-endian) */
-    public func bytes(totalBytes: Int = sizeof(Int.self)) -> Array<UInt8> {
+    public func bytes(totalBytes: Int = MemoryLayout<Int>.size) -> Array<UInt8> {
         return arrayOfBytes(value: self, length: totalBytes)
     }
 
@@ -61,7 +61,7 @@ extension Int {
             return
         }
         
-        let bitsCount = sizeofValue(self) * 8
+        let bitsCount = MemoryLayout<Int>.size * 8
 
         if (count >= bitsCount) {
             return

@@ -17,7 +17,7 @@ struct ECBModeWorker: BlockModeWorker {
     }
 
     mutating func encrypt(_ plaintext: Array<UInt8>) -> Array<UInt8> {
-        guard let ciphertext = cipherOperation(block: plaintext) else {
+        guard let ciphertext = cipherOperation(plaintext) else {
             return plaintext
         }
         return ciphertext

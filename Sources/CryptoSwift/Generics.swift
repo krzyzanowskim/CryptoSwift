@@ -38,14 +38,14 @@ func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T
 @_specialize(UInt32)
 func integerWith<T:Integer>(_ bytes: Array<UInt8>) -> T where T:ByteConvertible, T: BitshiftOperationsType {
     var bytes = bytes.reversed() as Array<UInt8> //FIXME: check it this is equivalent of Array(...)
-    if bytes.count < sizeof(T.self) {
-        let paddingCount = sizeof(T.self) - bytes.count
+    if bytes.count < MemoryLayout<T>.size {
+        let paddingCount = MemoryLayout<T>.size - bytes.count
         if (paddingCount > 0) {
             bytes += Array<UInt8>(repeating: 0, count: paddingCount)
         }
     }
     
-    if sizeof(T.self) == 1 {
+    if MemoryLayout<T>.size == 1 {
         return T(truncatingBitPattern: UInt64(bytes.first!))
     }
     
@@ -59,14 +59,14 @@ func integerWith<T:Integer>(_ bytes: Array<UInt8>) -> T where T:ByteConvertible,
 /// Array of bytes, little-endian representation. Don't use if not necessary.
 /// I found this method slow
 func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
-    let totalBytes = length ?? sizeof(T.self)
+    let totalBytes = length ?? MemoryLayout<T>.size
 
     let valuePointer = UnsafeMutablePointer<T>.allocate(capacity: 1)
     valuePointer.pointee = value
 
     let bytesPointer = UnsafeMutablePointer<UInt8>(OpaquePointer(valuePointer))
     var bytes = Array<UInt8>(repeating: 0, count: totalBytes)
-    for j in 0..<min(sizeof(T.self),totalBytes) {
+    for j in 0..<min(MemoryLayout<T>.size,totalBytes) {
         bytes[totalBytes - 1 - j] = (bytesPointer + j).pointee
     }
     
@@ -101,7 +101,7 @@ func shiftLeft<T: SignedInteger>(_ value: T, by count: Int) -> T where T: Initia
         return 0;
     }
     
-    let bitsCount = (sizeofValue(value) * 8)
+    let bitsCount = (MemoryLayout<T>.size * 8)
     let shiftCount = Int(Swift.min(count, bitsCount - 1))
     
     var shiftedValue:T = 0;

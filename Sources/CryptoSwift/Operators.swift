@@ -22,22 +22,32 @@ j &<<= 2        //shift left and assign
 @see: https://medium.com/@krzyzanowskim/swiftly-shift-bits-and-protect-yourself-be33016ce071
 */
 
-infix operator &<<= {
-  associativity none
-  precedence 160
+
+precedencegroup CryptoPrecedence {
+    associativity: none
+    higherThan: MultiplicationPrecedence
 }
 
-infix operator &<< {
-  associativity none
-  precedence 160
-}
+infix operator &<<= : CryptoPrecedence
+//{
+//  associativity none
+//  precedence 160
+//}
 
-infix operator &>>= {
-  associativity none
-  precedence 160
-}
+infix operator &<< : CryptoPrecedence
+//{
+//  associativity none
+//  precedence 160
+//}
 
-infix operator &>> {
-  associativity none
-  precedence 160
-}
+infix operator &>>= : CryptoPrecedence
+//{
+//  associativity none
+//  precedence 160
+//}
+
+infix operator &>> : CryptoPrecedence
+//{
+//  associativity none
+//  precedence 160
+//}

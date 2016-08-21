@@ -178,11 +178,11 @@ let bytes = "string".utf8.map({$0})
 
 Hashing a data or array of bytes (aka `Array<UInt8>`)
 ```swift
-/* Hash enum usage */
+/* Hash struct usage */
 let input:Array<UInt8> = [49, 50, 51]
 
 let output = input.md5()
-// alternatively: let output = CryptoSwift.Hash.md5(input).calculate()
+// alternatively: let output = CryptoSwift.Hash.md5(input)
 
 print(output.toHexString())
 ```
@@ -221,7 +221,7 @@ let hmac: Array<UInt8> = try! Authenticator.HMAC(key: key, variant: .sha256).aut
 
 ```swift
 let password: Array<UInt8> = "s33krit".utf8.map {$0}
-let salt: Array<UInt8> = "nacl".utf8.map {$0}
+let salt: Array<UInt8> = "nacllcan".utf8.map {$0}
 
 let value = try! PKCS5.PBKDF1(password: password, salt: salt, iterations: 4096, variant: .sha1).calculate()
 

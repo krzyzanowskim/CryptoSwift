@@ -10,7 +10,12 @@
 //  Poly1305 takes a 32-byte, one-time key and a message and produces a 16-byte tag that authenticates the
 //  message such that an attacker has a negligible chance of producing a valid tag for an inauthentic message.
 
-final public class Poly1305 {
+final public class Poly1305: Authenticator {
+
+    public enum Error: Swift.Error {
+        case authenticateError
+    }
+
     let blockSize = 16
     private var ctx:Context?
     
@@ -23,12 +28,9 @@ final public class Poly1305 {
         var final:UInt8   = 0
         var leftover:Int = 0
         
-        init?(_ key: Array<UInt8>) {
-            assert(key.count == 32,"Invalid key length");
-            if (key.count != 32) {
-                return nil;
-            }
-            
+        init(_ key: Array<UInt8>) {
+            precondition(key.count == 32, "Invalid key length")
+
             for i in 0..<17 {
                 h[i] = 0
             }
@@ -74,29 +76,9 @@ final public class Poly1305 {
             }
         }
     }
-
-    /**
-     Calculate Message Authentication Code (MAC) for message.
-     Calculation context is discarder on instance deallocation.
-
-     - parameter key:     256-bit key
-     - parameter message: Message
-
-     - returns: Message Authentication Code
-     */
-    public func authenticate(_ bytes:Array<UInt8>) -> Array<UInt8>? {
-        if let ctx = self.ctx {
-            update(ctx, message: bytes)
-            return finish(ctx)
-        }
-        return nil
-    }
     
-    public init? (key: Array<UInt8>) {
+    public init (key: Array<UInt8>) {
         ctx = Context(key)
-        if (ctx == nil) {
-            return nil
-        }
     }
 
     // MARK: - Private
@@ -289,5 +271,30 @@ final public class Poly1305 {
             mPos += blockSize
             bytes -= blockSize
         }
+    }
+
+    //MARK: - Authenticator
+
+    /**
+     Calculate Message Authentication Code (MAC) for message.
+     Calculation context is discarder on instance deallocation.
+
+     - parameter key:     256-bit key
+     - parameter message: Message
+
+     - returns: Message Authentication Code
+     */
+    public func authenticate(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
+        guard let ctx = self.ctx else {
+            throw Error.authenticateError
+        }
+
+        update(ctx, message: bytes)
+
+        guard let result = finish(ctx) else {
+            throw Error.authenticateError
+        }
+
+        return result
     }
 }

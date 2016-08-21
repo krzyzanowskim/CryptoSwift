@@ -130,13 +130,13 @@ final class SHA2 : HashProtocol {
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
             // Extend the sixteen 32-bit words into sixty-four 32-bit words:
-            var M:Array<UInt32> = Array<UInt32>(repeating: 0, count: variant.k.count)
+            var M = Array<UInt32>(repeating: 0, count: variant.k.count)
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
-                    let start = chunk.startIndex + (x * sizeofValue(M[x]))
-                    let end = start + sizeofValue(M[x])
-                    let le = sliceToUInt32Array(chunk[start..<end])[0]
+                    let start = chunk.startIndex + (x * MemoryLayout<UInt32>.size)
+                    let end = start + MemoryLayout<UInt32>.size
+                    let le = chunk[start..<end].toUInt32Array()[0]
                     M[x] = le.bigEndian
                     break
                 default:
@@ -217,9 +217,9 @@ final class SHA2 : HashProtocol {
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
-                    let start = chunk.startIndex + (x * sizeofValue(M[x]))
-                    let end = start + sizeofValue(M[x])
-                    let le = sliceToUInt64Array(chunk[start..<end])[0]
+                    let start = chunk.startIndex + (x * MemoryLayout<UInt64>.size)
+                    let end = start + MemoryLayout<UInt64>.size
+                    let le = chunk[start..<end].toUInt64Array()[0]
                     M[x] = le.bigEndian
                     break
                 default:

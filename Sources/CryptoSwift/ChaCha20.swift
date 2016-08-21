@@ -19,6 +19,8 @@ final public class ChaCha20: BlockCipher {
         var input = Array<UInt32>(repeating: 0, count: 16)
 
         init(key:Array<UInt8>, iv:Array<UInt8>) throws {
+            precondition(iv.count >= 8)
+
             let kbits = key.count * 8
 
             if (kbits != 128 && kbits != 256) {
@@ -69,7 +71,8 @@ final public class ChaCha20: BlockCipher {
     }
     
     private final func wordToByte(_ input:Array<UInt32> /* 64 */) -> Array<UInt8>? /* 16 */ {
-        assert(input.count == 16)
+        precondition(input.count == 16)
+
         var x = input
 
         for _ in 0..<10 {
@@ -150,7 +153,7 @@ extension ChaCha20 {
             self.chacha = chacha
         }
 
-        mutating public func update<T: Sequence where T.Iterator.Element == UInt8>(withBytes bytes:T, isLast: Bool = false) throws -> Array<UInt8> {
+        mutating public func update<T: Sequence>(withBytes bytes:T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
             self.accumulated += bytes
 
             var encrypted = Array<UInt8>()
@@ -179,7 +182,7 @@ extension ChaCha20 {
             self.chacha = chacha
         }
 
-        mutating public func update<T: Sequence where T.Iterator.Element == UInt8>(withBytes bytes:T, isLast: Bool = true) throws -> Array<UInt8> {
+        mutating public func update<T: Sequence>(withBytes bytes:T, isLast: Bool = true) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
             // prepend "offset" number of bytes at the begining
             if self.offset > 0 {
                 self.accumulated += Array<UInt8>(repeating: 0, count: offset) + bytes
@@ -237,10 +240,10 @@ extension ChaCha20: Cipher {
 // MARK: Helpers
 
 /// Change array to number. It's here because arrayOfBytes is too slow
-private func wordNumber(_ bytes:ArraySlice<UInt8>) -> UInt32 {
+private func wordNumber<T: Collection>(_ bytes: T) -> UInt32 where T.Iterator.Element == UInt8, T.IndexDistance == Int {
     var value:UInt32 = 0
     for i:UInt32 in 0..<4 {
-        let j = bytes.startIndex + Int(i)
+        let j = bytes.index(bytes.startIndex, offsetBy: Int(i))
         value = value | UInt32(bytes[j]) << (8 * i)
     }
 

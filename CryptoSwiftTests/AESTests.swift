@@ -277,6 +277,22 @@ final class AESTests: XCTestCase {
         XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
 
+    // https://github.com/krzyzanowskim/CryptoSwift/issues/298
+    func test_issue298() {
+        let encryptedValue = "47595cfa90f7b0b0e0d9d7240a2e035f7f4acde27d7ca778a7d8b05add32a0a92d945c0a59f7f0e029d7f2fbb258b2f0"
+        let key = "0123456789abcdef"
+        let iv = "fedcba9876543210"
+
+        do {
+            let aes = try AES(key: key, iv: iv, blockMode: .CBC, padding: NoPadding())
+            let ciphertext = try aes.decrypt(Array<UInt8>(hex: encryptedValue))
+            let str = String(data: Data(ciphertext), encoding: String.Encoding.utf8)
+            XCTAssertEqual(str!, "74b653e36430d7a9cd91a24d9944b032OrFeckrWo\0\0\0\0\0\0\0")
+        } catch {
+            XCTFail("failed")
+        }
+    }
+
 //    func testAES_encrypt_performance() {
 //        let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
 //        let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]

@@ -21,12 +21,12 @@ final class CryptoSwiftTests: XCTestCase {
     
     func testMD5_data() {
         let data = [0x31, 0x32, 0x33] as Array<UInt8> // "1", "2", "3"
-        XCTAssertEqual(Hash.md5(data).calculate(), [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70], "MD5 calculation failed");
+        XCTAssertEqual(Hash.md5(data), [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70], "MD5 calculation failed");
     }
 
     func testMD5_emptyString() {
         let data:Data = "".data(using: String.Encoding.utf8, allowLossyConversion: false)!
-        XCTAssertEqual(Hash.md5(data.bytes).calculate(), [0xd4,0x1d,0x8c,0xd9,0x8f,0x00,0xb2,0x04,0xe9,0x80,0x09,0x98,0xec,0xf8,0x42,0x7e], "MD5 calculation failed")
+        XCTAssertEqual(Hash.md5(data.bytes), [0xd4,0x1d,0x8c,0xd9,0x8f,0x00,0xb2,0x04,0xe9,0x80,0x09,0x98,0xec,0xf8,0x42,0x7e], "MD5 calculation failed")
     }
 
     func testMD5_string() {
@@ -44,23 +44,22 @@ final class CryptoSwiftTests: XCTestCase {
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
             let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
             self.startMeasuring()
-            _ = Hash.md5(arr).calculate()
+            _ = Hash.md5(arr)
             self.stopMeasuring()
         })
     }
     
     func testMD5PerformanceCommonCrypto() {
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let size = 1024 * 1024
-            let buf = UnsafeMutablePointer<NSData>.allocate(capacity: size)
-            let data = NSData(bytes: buf, length: size)
+            let buf: UnsafeMutableRawPointer = calloc(1024 * 1024, MemoryLayout<UInt8>.size)
+            let data = NSData(bytes: buf, length: 1024 * 1024)
             let md = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(CC_MD5_DIGEST_LENGTH))
             self.startMeasuring()
             CC_MD5(data.bytes, CC_LONG(data.length), md)
             self.stopMeasuring()
             md.deallocate(capacity: Int(CC_MD5_DIGEST_LENGTH))
             md.deinitialize()
-            buf.deallocate(capacity: size)
+            buf.deallocate(bytes: 1024 * 1024, alignedTo: MemoryLayout<UInt8>.alignment)
         })
     }
     
@@ -132,7 +131,7 @@ final class CryptoSwiftTests: XCTestCase {
     }
     
     func testCRC16() {
-        let result = CRC().crc16([49,50,51,52,53,54,55,56,57] as Array<UInt8>)
+        let result = Checksum.crc16([49,50,51,52,53,54,55,56,57] as Array<UInt8>)
         XCTAssert(result == 0xBB3D, "CRC16 failed")
     }
     

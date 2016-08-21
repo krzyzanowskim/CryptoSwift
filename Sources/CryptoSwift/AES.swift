@@ -114,7 +114,7 @@ fileprivate extension AES {
     func encryptBlock(_ block:Array<UInt8>) -> Array<UInt8>? {
         let rounds = self.variant.Nr
         let rk = self.expandedKey
-        var b = sliceToUInt32Array(block[block.indices])
+        var b = block[block.indices].toUInt32Array()
 
         var t = Array<UInt32>(repeating: 0, count: 4)
 
@@ -178,7 +178,7 @@ fileprivate extension AES {
     func decryptBlock(_ block:Array<UInt8>) -> Array<UInt8>? {
         let rounds = self.variant.Nr
         let rk = expandedKeyInv
-        var b = sliceToUInt32Array(block[block.indices])
+        var b = block[block.indices].toUInt32Array()
 
         var t = Array<UInt32>(repeating: 0, count: 4)
 
@@ -286,7 +286,7 @@ fileprivate extension AES {
             var arr = Array<UInt32>()
             for idx in stride(from: expanded.startIndex, to: expanded.endIndex, by: 4) {
                 let four = Array(expanded[idx..<idx.advanced(by: 4)].reversed())
-                let num = UInt32.with(bytes: four)
+                let num = UInt32(bytes: four)
                 arr.append(num)
             }
 
@@ -326,7 +326,7 @@ fileprivate extension AES {
                 tmp[wordIdx] = w[4*(i-1)+wordIdx]
             }
             if ((i % variant.Nk) == 0) {
-                tmp = subWord(rotateLeft(UInt32.with(bytes: tmp), by: 8).bytes(totalBytes: sizeof(UInt32.self)))
+                tmp = subWord(rotateLeft(UInt32(bytes: tmp), by: 8).bytes(totalBytes: MemoryLayout<UInt32>.size))
                 tmp[0] = tmp.first! ^ Rcon[i/variant.Nk]
             } else if (variant.Nk > 6 && (i % variant.Nk) == 4) {
                 tmp = subWord(tmp)
@@ -403,7 +403,7 @@ extension AES {
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
         }
 
-        mutating public func update<T: Sequence where T.Iterator.Element == UInt8>(withBytes bytes:T, isLast: Bool = false) throws -> Array<UInt8> {
+        mutating public func update<T: Sequence>(withBytes bytes:T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
             self.accumulated += bytes
 
             if isLast {
@@ -448,7 +448,7 @@ extension AES {
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired);
         }
 
-        mutating public func update<T: Sequence where T.Iterator.Element == UInt8>(withBytes bytes:T, isLast: Bool = false) throws -> Array<UInt8> {
+        mutating public func update<T: Sequence>(withBytes bytes:T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
             // prepend "offset" number of bytes at the begining
             if self.offset > 0 {
                 self.accumulated += Array<UInt8>(repeating: 0, count: offset) + bytes

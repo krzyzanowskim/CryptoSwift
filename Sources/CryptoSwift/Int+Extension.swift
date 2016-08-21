@@ -30,18 +30,14 @@ extension Int {
 
 /* array of bytes */
 extension Int {
+    /** Int with collection of bytes (little-endian) */
+    init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.Index == Int {
+        self = bytes.toInteger()
+    }
+
     /** Array of bytes with optional padding (little-endian) */
-    public func bytes(totalBytes: Int = sizeof(Int.self)) -> Array<UInt8> {
+    func bytes(totalBytes: Int = MemoryLayout<Int>.size) -> Array<UInt8> {
         return arrayOfBytes(value: self, length: totalBytes)
-    }
-
-    public static func with(_ bytes: ArraySlice<UInt8>) -> Int {
-        return integerWith(Array(bytes))
-    }
-
-    /** Int with array bytes (little-endian) */
-    public static func with(_ bytes: Array<UInt8>) -> Int {
-        return integerWith(bytes)
     }
 }
 
@@ -51,17 +47,17 @@ extension Int {
 extension Int {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
-    fileprivate mutating func shiftLeft(by count: Int) {
+    mutating func shiftLeft(by count: Int) {
         self = CryptoSwift.shiftLeft(self, by: count) //FIXME: count:
     }
     
     /** Shift bits to the right. All bits are shifted (including sign bit) */
-    fileprivate mutating func shiftRight(by count: Int) {
+    mutating func shiftRight(by count: Int) {
         if (self == 0) {
             return
         }
         
-        let bitsCount = sizeofValue(self) * 8
+        let bitsCount = MemoryLayout<Int>.size * 8
 
         if (count >= bitsCount) {
             return
@@ -85,12 +81,12 @@ extension Int {
 // Left operator
 
 /** shift left and assign with bits truncation */
-public func &<<= (lhs: inout Int, rhs: Int) {
+func &<<= (lhs: inout Int, rhs: Int) {
     lhs.shiftLeft(by: rhs)
 }
 
 /** shift left with bits truncation */
-public func &<< (lhs: Int, rhs: Int) -> Int {
+func &<< (lhs: Int, rhs: Int) -> Int {
     var l = lhs;
     l.shiftLeft(by: rhs)
     return l

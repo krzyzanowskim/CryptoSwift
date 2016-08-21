@@ -21,7 +21,7 @@ struct CBCModeWorker: BlockModeWorker {
     }
 
     mutating func encrypt(_ plaintext: Array<UInt8>) -> Array<UInt8> {
-        guard let ciphertext = cipherOperation(block: xor(prev ?? iv, plaintext)) else {
+        guard let ciphertext = cipherOperation(xor(prev ?? iv, plaintext)) else {
             return plaintext
         }
         prev = ciphertext
@@ -29,7 +29,7 @@ struct CBCModeWorker: BlockModeWorker {
     }
 
     mutating func decrypt(_ ciphertext: Array<UInt8>) -> Array<UInt8> {
-        guard let plaintext = cipherOperation(block: ciphertext) else {
+        guard let plaintext = cipherOperation(ciphertext) else {
             return ciphertext
         }
         let result = xor(prev ?? iv, plaintext)

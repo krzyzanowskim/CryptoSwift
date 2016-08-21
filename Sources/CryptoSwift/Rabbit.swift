@@ -9,7 +9,11 @@
 private typealias Key = SecureBytes
 
 final public class Rabbit: BlockCipher {
-    
+
+    public enum Error: Swift.Error {
+        case invalidKeyOrInitializationVector
+    }
+
     /// Size of IV in bytes
     public static let ivSize = 64 / 8
     
@@ -47,16 +51,16 @@ final public class Rabbit: BlockCipher {
     ]
     
     // MARK: - Initializers
-    convenience public init?(key:Array<UInt8>) {
-        self.init(key: key, iv: nil)
+    convenience public init(key:Array<UInt8>) throws {
+        try self.init(key: key, iv: nil)
     }
     
-    public init?(key:Array<UInt8>, iv:Array<UInt8>?) {
+    public init(key:Array<UInt8>, iv:Array<UInt8>?) throws {
         self.key = Key(bytes: key)
         self.iv = iv
         
         guard key.count == Rabbit.keySize && (iv == nil || iv!.count == Rabbit.ivSize) else {
-            return nil
+            throw Error.invalidKeyOrInitializationVector
         }
     }
     
@@ -100,10 +104,10 @@ final public class Rabbit: BlockCipher {
     private func setupIV(_ iv: Array<UInt8>) {
         // 63...56 55...48 47...40 39...32 31...24 23...16 15...8 7...0 IV bits
         //    0       1       2       3       4       5       6     7   IV bytes in array
-        let iv0: UInt32 = integerWith([iv[4], iv[5], iv[6], iv[7]])
-        let iv1: UInt32 = integerWith([iv[0], iv[1], iv[4], iv[5]])
-        let iv2: UInt32 = integerWith([iv[0], iv[1], iv[2], iv[3]])
-        let iv3: UInt32 = integerWith([iv[2], iv[3], iv[6], iv[7]])
+        let iv0 = UInt32(bytes: [iv[4], iv[5], iv[6], iv[7]])
+        let iv1 = UInt32(bytes: [iv[0], iv[1], iv[4], iv[5]])
+        let iv2 = UInt32(bytes: [iv[0], iv[1], iv[2], iv[3]])
+        let iv3 = UInt32(bytes: [iv[2], iv[3], iv[6], iv[7]])
         
         // Modify the counter state as function of the IV
         c[0] = c[0] ^ iv0

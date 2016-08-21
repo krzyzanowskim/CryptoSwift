@@ -18,17 +18,12 @@ extension UInt32: _UInt32Type {}
 
 /** array of bytes */
 extension UInt32 {
-    public func bytes(totalBytes: Int = sizeof(UInt32.self)) -> Array<UInt8> {
+    init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.Index == Int {
+        self = bytes.toInteger()
+    }
+
+    func bytes(totalBytes: Int = MemoryLayout<UInt32>.size) -> Array<UInt8> {
         return arrayOfBytes(value: self, length: totalBytes)
-    }
-
-    public static func with(bytes: ArraySlice<UInt8>) -> UInt32 {
-        return integerWith(Array(bytes))
-    }
-
-    /** Int with array bytes (little-endian) */
-    public static func with(bytes: Array<UInt8>) -> UInt32 {
-        return integerWith(bytes)
     }
 }
 
@@ -36,12 +31,12 @@ extension UInt32 {
 extension UInt32 {
     
     /** Shift bits to the left. All bits are shifted (including sign bit) */
-    fileprivate mutating func shiftLeft(by count: UInt32) {
+    mutating func shiftLeft(by count: UInt32) {
         if (self == 0) {
             return
         }
         
-        let bitsCount = UInt32(sizeof(UInt32.self) * 8)
+        let bitsCount = UInt32(MemoryLayout<UInt32>.size * 8)
         let shiftCount = Swift.min(count, bitsCount - 1)
         var shiftedValue:UInt32 = 0;
         
@@ -62,12 +57,12 @@ extension UInt32 {
     }
     
     /** Shift bits to the right. All bits are shifted (including sign bit) */
-    fileprivate mutating func shiftRight(by count: UInt32) {
+    mutating func shiftRight(by count: UInt32) {
         if (self == 0) {
             return
         }
         
-        let bitsCount = UInt32(sizeofValue(self) * 8)
+        let bitsCount = UInt32(MemoryLayout<UInt32>.size * 8)
 
         if (count >= bitsCount) {
             return
@@ -90,12 +85,12 @@ extension UInt32 {
 }
 
 /** shift left and assign with bits truncation */
-public func &<<= (lhs: inout UInt32, rhs: UInt32) {
+func &<<= (lhs: inout UInt32, rhs: UInt32) {
     lhs.shiftLeft(by: rhs)
 }
 
 /** shift left with bits truncation */
-public func &<< (lhs: UInt32, rhs: UInt32) -> UInt32 {
+func &<< (lhs: UInt32, rhs: UInt32) -> UInt32 {
     var l = lhs;
     l.shiftLeft(by: rhs)
     return l

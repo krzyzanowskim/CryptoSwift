@@ -31,19 +31,19 @@ final class ExtensionsTest: XCTestCase {
     func testIntExtension() {
         let i1:Int = 1024
         let i1Array = i1.bytes(totalBytes: 32 / 8) // 32 bit
-        let i1recovered = Int.with(i1Array)
+        let i1recovered = Int(bytes: i1Array)
         
         XCTAssertEqual(i1, i1recovered, "Bytes conversion failed")
         
         let i2:Int = 1024
         let i2Array = i2.bytes(totalBytes: 160 / 8) // 160 bit
-        let i2recovered = Int.with(i2Array)
+        let i2recovered = Int(bytes: i2Array)
         
         XCTAssertEqual(i2, i2recovered, "Bytes conversion failed")
     }
     
     func testBytes() {
-        let size = sizeof(UInt32.self) // 32 or 64  bit
+        let size = MemoryLayout<UInt32>.size // 32 or 64  bit
         
         let i:UInt32 = 1024
         var bytes = i.bytes()
@@ -67,8 +67,8 @@ final class ExtensionsTest: XCTestCase {
         let ii:Int = 21
         XCTAssert(ii &<< 1 == ii << 1, "shift left failed")
         XCTAssert(ii &<< 8 == ii << 8, "shift left failed")
-        XCTAssert(ii &<< ((sizeofValue(ii) * 8) - 1) == ii << ((sizeofValue(ii) * 8) - 1), "shift left failed")
-        XCTAssert(ii &<< ((sizeofValue(ii) * 8)) == 0, "shift left failed")
+        XCTAssert(ii &<< ((MemoryLayout<Int>.size * 8) - 1) == ii << ((MemoryLayout<Int>.size * 8) - 1), "shift left failed")
+        XCTAssert(ii &<< ((MemoryLayout<Int>.size * 8)) == 0, "shift left failed")
         
         let iii:UInt32 = 21
         XCTAssert(iii &<< 1 == iii << 1, "shift left failed")
@@ -78,7 +78,7 @@ final class ExtensionsTest: XCTestCase {
     
     func testtoUInt32Array() {
         let chunk:ArraySlice<UInt8> = [1,1,1,7,2,3,4,5]
-        let result = sliceToUInt32Array(chunk)
+        let result = chunk.toUInt32Array()
         
         XCTAssert(result.count == 2, "Invalid conversion")
         XCTAssert(result[0] == 117506305, "Invalid conversion")
@@ -90,15 +90,29 @@ final class ExtensionsTest: XCTestCase {
         XCTAssert(data.count == 3, "Invalid data")
     }
 
-    func test_String_encrypt_base64() {
-        let encryptedBase64 = try! "my secret string".encrypt(cipher: AES(key: "secret0key000000", iv: "0123456789012345")).toBase64()
-        XCTAssertEqual(encryptedBase64, "aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs=")
+    func test_String_encrypt() {
+        do {
+            let encryptedHex = try "my secret string".encrypt(cipher: AES(key: "secret0key000000", iv: "0123456789012345"))
+            XCTAssertEqual(encryptedHex, "68f7ff8bdb61f625febdfe3d791ecf624daaed2e719a6de39112de8e0cc7349b")
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func test_String_decrypt_base64() {
         let encryptedBase64 = "aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs="
         let decrypted = try! encryptedBase64.decryptBase64ToString(cipher: AES(key: "secret0key000000", iv: "0123456789012345"))
         XCTAssertEqual(decrypted, "my secret string")
+    }
+
+    func test_Array_init_hex() {
+        let bytes = Array<UInt8>(hex: "0xb1b1b2b2")
+        XCTAssertEqual(bytes, [177,177,178,178])
+
+        let str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
+        let array = Array<UInt8>(hex: str)
+        let hex = array.toHexString()
+        XCTAssertEqual(str, hex)
     }
 
 }

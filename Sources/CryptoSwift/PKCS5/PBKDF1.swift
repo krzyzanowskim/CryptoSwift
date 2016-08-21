@@ -35,9 +35,9 @@ public extension PKCS5 {
             fileprivate func calculateHash(_ bytes:Array<UInt8>) -> Array<UInt8>? {
                 switch (self) {
                 case .sha1:
-                    return Hash.sha1(bytes).calculate()
+                    return Hash.sha1(bytes)
                 case .md5:
-                    return Hash.md5(bytes).calculate()
+                    return Hash.md5(bytes)
                 }
             }
         }

@@ -37,8 +37,10 @@ public extension PKCS5 {
         ///   - keyLength: intended length of derived key
         public init(password: Array<UInt8>, salt: Array<UInt8>, iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */, variant: HMAC.Variant = .sha256) throws {
             precondition(iterations > 0)
+
+            let prf = HMAC(key: password, variant: variant)
             
-            guard let prf = HMAC(key: password, variant: variant), iterations > 0 && !password.isEmpty && !salt.isEmpty else {
+            guard iterations > 0 && !password.isEmpty && !salt.isEmpty else {
                 throw Error.invalidInput
             }
 
@@ -82,22 +84,26 @@ fileprivate extension PKCS5.PBKDF2 {
     // F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
     // U_1 = PRF (P, S || INT (i))
     func calculateBlock(_ salt: Array<UInt8>, blockNum: UInt) -> Array<UInt8>? {
-        guard let u1 = prf.authenticate(salt + INT(blockNum)) else {
+        guard let u1 = try? prf.authenticate(salt + INT(blockNum)) else {
             return nil
         }
 
-        var u = u1
-        var ret = u
-        if self.iterations > 1 {
-            // U_2 = PRF (P, U_1) ,
-            // U_c = PRF (P, U_{c-1}) .
-            for _ in 2...self.iterations {
-                u = prf.authenticate(u)!
-                for x in 0..<ret.count {
-                    ret[x] = ret[x] ^ u[x]
+        do {
+            var u = u1
+            var ret = u
+            if self.iterations > 1 {
+                // U_2 = PRF (P, U_1) ,
+                // U_c = PRF (P, U_{c-1}) .
+                for _ in 2...self.iterations {
+                    u = try prf.authenticate(u)
+                    for x in 0..<ret.count {
+                        ret[x] = ret[x] ^ u[x]
+                    }
                 }
             }
+            return ret
+        } catch {
+            return nil
         }
-        return ret
     }
 }

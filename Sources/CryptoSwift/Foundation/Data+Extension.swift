@@ -8,15 +8,6 @@
 
 import Foundation
 
-extension NSMutableData {
-    
-    /** Convenient way to append bytes */
-    internal func appendBytes(_ arrayOfBytes: Array<UInt8>) {
-        self.append(arrayOfBytes, length: arrayOfBytes.count)
-    }
-    
-}
-
 extension Data {
 
     /// Two octet checksum as defined in RFC-4880. Sum of all octets, mod 65536
@@ -31,43 +22,43 @@ extension Data {
     }
     
     public func md5() -> Data {
-        let result = Hash.md5(self.bytes).calculate()
+        let result = Hash.md5(self.bytes)
         return Data(bytes: result)
     }
 
     public func sha1() -> Data? {
-        let result = Hash.sha1(self.bytes).calculate()
+        let result = Hash.sha1(self.bytes)
         return Data(bytes: result)
     }
 
     public func sha224() -> Data? {
-        let result = Hash.sha224(self.bytes).calculate()
+        let result = Hash.sha224(self.bytes)
         return Data(bytes: result)
     }
 
     public func sha256() -> Data? {
-        let result = Hash.sha256(self.bytes).calculate()
+        let result = Hash.sha256(self.bytes)
         return Data(bytes: result)
     }
 
     public func sha384() -> Data? {
-        let result = Hash.sha384(self.bytes).calculate()
+        let result = Hash.sha384(self.bytes)
         return Data(bytes: result)
     }
 
     public func sha512() -> Data? {
-        let result = Hash.sha512(self.bytes).calculate()
+        let result = Hash.sha512(self.bytes)
         return Data(bytes: result)
     }
 
     public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> Data? {
-        let result = Hash.crc32(self.bytes, seed: seed, reflect: reflect).calculate()
-        return Data(bytes: result)
+        let result = Checksum.crc32(self.bytes, seed: seed, reflect: reflect)
+        return Data(bytes: result.bytes())
     }
 
     public func crc16(seed: UInt16? = nil) -> Data? {
-        let result = Hash.crc16(self.bytes, seed: seed).calculate()
-        return Data(bytes: result)
+        let result = Checksum.crc16(self.bytes, seed: seed)
+        return Data(bytes: result.bytes())
     }
 
     public func encrypt(cipher: Cipher) throws -> Data {

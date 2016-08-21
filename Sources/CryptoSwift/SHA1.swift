@@ -34,9 +34,9 @@ final class SHA1 : HashProtocol {
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
-                    let start = chunk.startIndex + (x * sizeofValue(M[x]))
-                    let end = start + sizeofValue(M[x])
-                    let le = sliceToUInt32Array(chunk[start..<end])[0]
+                    let start = chunk.startIndex + (x * MemoryLayout<UInt32>.size)
+                    let end = start + MemoryLayout<UInt32>.size
+                    let le = chunk[start..<end].toUInt32Array()[0]
                     M[x] = le.bigEndian
                     break
                 default:

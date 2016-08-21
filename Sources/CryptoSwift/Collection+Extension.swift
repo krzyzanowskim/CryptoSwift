@@ -19,10 +19,6 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
             result.append(val)
         }
 
-        for _ in result.count..<MemoryLayout<UInt32>.size {
-            result.append(0)
-        }
-
         return result
     }
 
@@ -40,10 +36,6 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
             val |= self.count > 1 ? UInt64(self[idx.advanced(by: 1)]) << 8 : 0
             val |= self.count > 0 ? UInt64(self[idx.advanced(by: 0)]) << 0 : 0
             result.append(val)
-        }
-
-        for _ in result.count..<MemoryLayout<UInt64>.size {
-            result.append(0)
         }
 
         return result

@@ -1,5 +1,4 @@
 os:
-    - linux
     - osx
 language: generic
 sudo: required

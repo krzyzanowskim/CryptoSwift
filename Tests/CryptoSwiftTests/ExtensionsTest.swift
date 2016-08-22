@@ -6,17 +6,10 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 import XCTest
+import Foundation
 @testable import CryptoSwift
 
 final class ExtensionsTest: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
 
     func testArrayChunksPerformance() {
         measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
@@ -76,7 +69,7 @@ final class ExtensionsTest: XCTestCase {
         XCTAssert((iii &<< 32) == 0, "shift left failed")
     }
     
-    func testtoUInt32Array() {
+    func testToUInt32Array() {
         let chunk:ArraySlice<UInt8> = [1,1,1,7,2,3,4,5]
         let result = chunk.toUInt32Array()
         
@@ -85,12 +78,12 @@ final class ExtensionsTest: XCTestCase {
         XCTAssert(result[1] == 84148994, "Invalid conversion")
     }
 
-    func test_NSData_init() {
+    func testDataInit() {
         let data = Data(bytes: [0x01, 0x02, 0x03])
         XCTAssert(data.count == 3, "Invalid data")
     }
 
-    func test_String_encrypt() {
+    func testStringEncrypt() {
         do {
             let encryptedHex = try "my secret string".encrypt(cipher: AES(key: "secret0key000000", iv: "0123456789012345"))
             XCTAssertEqual(encryptedHex, "68f7ff8bdb61f625febdfe3d791ecf624daaed2e719a6de39112de8e0cc7349b")
@@ -99,13 +92,13 @@ final class ExtensionsTest: XCTestCase {
         }
     }
 
-    func test_String_decrypt_base64() {
+    func testStringDecryptBase64() {
         let encryptedBase64 = "aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs="
         let decrypted = try! encryptedBase64.decryptBase64ToString(cipher: AES(key: "secret0key000000", iv: "0123456789012345"))
         XCTAssertEqual(decrypted, "my secret string")
     }
 
-    func test_Array_init_hex() {
+    func testArrayInitHex() {
         let bytes = Array<UInt8>(hex: "0xb1b1b2b2")
         XCTAssertEqual(bytes, [177,177,178,178])
 
@@ -115,4 +108,15 @@ final class ExtensionsTest: XCTestCase {
         XCTAssertEqual(str, hex)
     }
 
+    static let allTests =  [
+        ("testArrayChunksPerformance", testArrayChunksPerformance),
+        ("testIntExtension", testIntExtension),
+        ("testBytes", testBytes),
+        ("testShiftLeft", testShiftLeft),
+        ("testToUInt32Array", testToUInt32Array),
+        ("testDataInit", testDataInit),
+        ("testStringEncrypt", testStringEncrypt),
+        ("testStringDecryptBase64", testStringDecryptBase64),
+        ("testArrayInitHex", testArrayInitHex)
+    ]
 }

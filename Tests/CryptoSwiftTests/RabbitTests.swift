@@ -10,14 +10,6 @@ import XCTest
 @testable import CryptoSwift
 
 class RabbitTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
 
     func testInitialization() {
         var key = Array<UInt8>(repeating: 0, count: Rabbit.keySize - 1)
@@ -127,4 +119,11 @@ class RabbitTests: XCTestCase {
             XCTAssert(!encrypted.isEmpty, "not encrypted")
         })
     }
+    
+    static let allTests =  [
+        ("testInitialization", testInitialization),
+        ("testRabbitWithoutIV", testRabbitWithoutIV),
+        ("testRabbitWithIV", testRabbitWithIV),
+        ("testRabbitPerformance", testRabbitPerformance)
+    ]
 }

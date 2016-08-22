@@ -7,7 +7,8 @@
 //
 
 import XCTest
-import CryptoSwift
+import Foundation
+@testable import CryptoSwift
 
 class Access: XCTestCase {
     let cipher = try! AES(key: "secret0key000000", iv: "0123456789012345")
@@ -214,4 +215,26 @@ class Access: XCTestCase {
     func testUpdatable() {
         // TODO
     }
+    
+    static let allTests =  [
+        ("testChecksum", testChecksum),
+        ("testHash", testHash),
+        ("testArrayExtension", testArrayExtension),
+        ("testCollectionExtension", testCollectionExtension),
+        ("testStringExtension", testStringExtension),
+        ("testStringFoundationExtension", testStringFoundationExtension),
+        ("testIntExtension", testIntExtension),
+        ("testUInt16Extension", testUInt16Extension),
+        ("testUInt32Extension", testUInt32Extension),
+        ("testUInt64Extension", testUInt64Extension),
+        ("testUInt8Extension", testUInt8Extension),
+        ("testDataExtension", testDataExtension),
+        ("testPadding", testPadding),
+        ("testPBKDF", testPBKDF),
+        ("testAuthenticators", testAuthenticators),
+        ("testAES", testAES),
+        ("testRabbit", testRabbit),
+        ("testChaCha20", testChaCha20),
+        ("testUpdatable", testUpdatable)
+    ]
 }

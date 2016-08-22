@@ -2,15 +2,6 @@
 
 set -ex
 
-OS_NAME=$TRAVIS_OS_NAME
-OS_PREFIX=""
-
-if [ $OS_NAME != "osx" ]; then
-    OS_PREFIX=".$OS_NAME"
-fi
-
-export SWIFT_VERSION=$(cat "$OS_PREFIX.swift-version")
-
 echo "Build script running as user $(whoami) in directory $(pwd)"
 
 if [ -e "/usr/local/bin/swiftenv" ]; then

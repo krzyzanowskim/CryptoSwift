@@ -52,4 +52,10 @@ extension String {
     public func authenticate<A: Authenticator>(with authenticator: A) throws -> String {
         return try self.utf8.lazy.map({ $0 as UInt8 }).authenticate(with: authenticator).toHexString()
     }
+    
+    #if !_runtime(_ObjC)
+    public func hasPrefix(_ prefix: String) -> Bool {
+        return prefix == String(self.characters.prefix(prefix.characters.count))
+    }
+    #endif
 }

@@ -18,7 +18,13 @@ extension Array: CSArrayType {
 
 public extension CSArrayType where Iterator.Element == UInt8 {
     public func toHexString() -> String {
-        return self.lazy.reduce("") { $0 + String(format:"%02x", $1) }
+        return self.lazy.reduce("") {
+            var s = String($1, radix: 16)
+            if s.characters.count == 1 {
+                s = "0" + s
+            }
+            return $0 + s
+        }
     }
 }
 

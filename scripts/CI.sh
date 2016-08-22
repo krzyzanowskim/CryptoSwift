@@ -12,8 +12,6 @@ eval "$(swiftenv init -)"
 
 swiftenv version
 
-swiftenv install
-
 swift build --clean dist
 swift package fetch
 

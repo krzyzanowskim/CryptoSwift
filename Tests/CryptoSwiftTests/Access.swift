@@ -8,7 +8,8 @@
 
 import XCTest
 import Foundation
-@testable import CryptoSwift
+// import without @testable to test public API
+import CryptoSwift
 
 class Access: XCTestCase {
     let cipher = try! AES(key: "secret0key000000", iv: "0123456789012345")

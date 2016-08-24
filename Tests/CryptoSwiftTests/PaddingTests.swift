@@ -43,4 +43,11 @@ final class PaddingTests: XCTestCase {
         XCTAssertEqual(padding.add(to: input, blockSize: 16), expected, "ZeroPadding failed")
         XCTAssertEqual(padding.remove(from: padding.add(to: input, blockSize: 16), blockSize: 16), input, "ZeroPadding failed")
     }
+    
+    static let allTests =  [
+        ("testPKCS7_0", testPKCS7_0),
+        ("testPKCS7_1", testPKCS7_1),
+        ("testPKCS7_2", testPKCS7_2),
+        ("testZeroPadding", testZeroPadding)
+    ]
 }

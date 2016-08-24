@@ -9,16 +9,7 @@ import XCTest
 @testable import CryptoSwift
 
 final class HMACTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
-    
+ 
     func testMD5() {
         let key:Array<UInt8> = []
         let msg:Array<UInt8> = []
@@ -63,4 +54,13 @@ final class HMACTests: XCTestCase {
         let hmac = try! HMAC(key: key, variant: .sha512).authenticate(msg)
         XCTAssertEqual(hmac, expectedMac, "Invalid authentication result")
     }
+    
+    static let allTests =  [
+        ("testMD5", testMD5),
+        ("testSHA1", testSHA1),
+        ("testSHA256", testSHA256),
+        ("testSHA384", testSHA384),
+        ("testSHA512", testSHA512)
+    ]
+
 }

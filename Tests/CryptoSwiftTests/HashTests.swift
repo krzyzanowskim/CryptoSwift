@@ -7,29 +7,22 @@
 //
 
 import XCTest
+import Foundation
 @testable import CryptoSwift
 
-final class CryptoSwiftTests: XCTestCase {
+final class HashTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
-    func testMD5_data() {
+    func testMD5Data() {
         let data = [0x31, 0x32, 0x33] as Array<UInt8> // "1", "2", "3"
         XCTAssertEqual(Hash.md5(data), [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70], "MD5 calculation failed");
     }
 
-    func testMD5_emptyString() {
-        let data:Data = "".data(using: String.Encoding.utf8, allowLossyConversion: false)!
+    func testMD5EmptyString() {
+        let data:Data = "".data(using: String.Encoding.utf8, allowLossyConversion: false) ?? Data()
         XCTAssertEqual(Hash.md5(data.bytes), [0xd4,0x1d,0x8c,0xd9,0x8f,0x00,0xb2,0x04,0xe9,0x80,0x09,0x98,0xec,0xf8,0x42,0x7e], "MD5 calculation failed")
     }
 
-    func testMD5_string() {
+    func testMD5String() {
         XCTAssertEqual("123".md5(), "202cb962ac59075b964b07152d234b70", "MD5 calculation failed");
         XCTAssertEqual("".md5(), "d41d8cd98f00b204e9800998ecf8427e", "MD5 calculation failed")
         XCTAssertEqual("a".md5(), "0cc175b9c0f1b6a831c399e269772661", "MD5 calculation failed")
@@ -46,20 +39,6 @@ final class CryptoSwiftTests: XCTestCase {
             self.startMeasuring()
             _ = Hash.md5(arr)
             self.stopMeasuring()
-        })
-    }
-    
-    func testMD5PerformanceCommonCrypto() {
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let buf: UnsafeMutableRawPointer = calloc(1024 * 1024, MemoryLayout<UInt8>.size)
-            let data = NSData(bytes: buf, length: 1024 * 1024)
-            let md = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(CC_MD5_DIGEST_LENGTH))
-            self.startMeasuring()
-            CC_MD5(data.bytes, CC_LONG(data.length), md)
-            self.stopMeasuring()
-            md.deallocate(capacity: Int(CC_MD5_DIGEST_LENGTH))
-            md.deinitialize()
-            buf.deallocate(bytes: 1024 * 1024, alignedTo: MemoryLayout<UInt8>.alignment)
         })
     }
     
@@ -140,4 +119,19 @@ final class CryptoSwiftTests: XCTestCase {
         XCTAssert(data.checksum() == 0x96, "Invalid checksum")
     }
 
+    static let allTests =  [
+        ("testMD5Data", testMD5Data),
+        ("testMD5EmptyString", testMD5EmptyString),
+        ("testMD5String", testMD5String),
+        ("testMD5PerformanceSwift", testMD5PerformanceSwift),
+        ("testSHA1", testSHA1),
+        ("testSHA224", testSHA224),
+        ("testSHA256", testSHA256),
+        ("testSHA384", testSHA384),
+        ("testSHA512", testSHA512),
+        ("testCRC32", testCRC32),
+        ("testCRC32NotReflected", testCRC32NotReflected),
+        ("testCRC15", testCRC16),
+        ("testChecksum", testChecksum)
+    ]
 }

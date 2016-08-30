@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "754BE45419693E190098E6F3"
                BuildableName = "CryptoSwift.framework"
-               BlueprintName = "CryptoSwift iOS"
+               BlueprintName = "CryptoSwift"
                ReferencedContainer = "container:CryptoSwift.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,8 +34,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "754BE45F19693E190098E6F3"
-               BuildableName = "CryptoSwiftTests.xctest"
-               BlueprintName = "CryptoSwiftTests"
+               BuildableName = "Tests.xctest"
+               BlueprintName = "Tests"
                ReferencedContainer = "container:CryptoSwift.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -45,7 +45,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "754BE45419693E190098E6F3"
             BuildableName = "CryptoSwift.framework"
-            BlueprintName = "CryptoSwift iOS"
+            BlueprintName = "CryptoSwift"
             ReferencedContainer = "container:CryptoSwift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -67,7 +67,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "754BE45419693E190098E6F3"
             BuildableName = "CryptoSwift.framework"
-            BlueprintName = "CryptoSwift iOS"
+            BlueprintName = "CryptoSwift"
             ReferencedContainer = "container:CryptoSwift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -85,7 +85,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "754BE45419693E190098E6F3"
             BuildableName = "CryptoSwift.framework"
-            BlueprintName = "CryptoSwift iOS"
+            BlueprintName = "CryptoSwift"
             ReferencedContainer = "container:CryptoSwift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

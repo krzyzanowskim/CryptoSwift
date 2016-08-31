@@ -23,7 +23,7 @@ Good mood
 
 - Easy to use
 - Convenient extensions for String and NSData
-- iOS, OSX, AppleTV, watchOS, Linux support
+- iOS, macOS, AppleTV, watchOS, Linux support
 
 #### Hash (Digest)
 - [MD5](http://tools.ietf.org/html/rfc1321)
@@ -86,17 +86,10 @@ Embedded frameworks require a minimum deployment target of iOS 8 or OS X Maveric
 
 ![](https://cloud.githubusercontent.com/assets/758033/10834511/25a26852-7e9a-11e5-8c01-6cc8f1838459.png)
 
+#####iOS, macOS, watchOS, tvOS
 
-
-#####iOS, OSX, watchOS, tvOS
-
-In the project, you'll find three targets, configured for each supported SDK:
-- CryptoSwift iOS
-- CryptoSwift OSX
-- CryptoSwift watchOS
-- CryptoSwift tvOS
-
-You may need to choose the one you need to build `CryptoSwift.framework` for your application.
+In the project, you'll find [single scheme](http://promisekit.org/news/2016/08/Multiplatform-Single-Scheme-Xcode-Projects/) for all platforms:
+- CryptoSwift
 
 ####Older Swift
 

@@ -1,3 +1,20 @@
+0.6.0-beta1
+- Swift 3 compatibility
+- Multiplatform, Single-scheme Xcode Project
+- Swift Package Manager fully supported (build and tests)
+- Improved Linux support
+- Travis configuration added
+- Public interface tests added
+- enum Authenticator -> protocol Authenticator
+- CRC -> Checksum
+- String.encrypt() returns hex string instead of Array<UInt8>
+- removed String.decrypt()
+- enum Hash -> struct Hash
+- Convenience initializer of Array of bytes with Hex string. Array<UInt8>(hex: "0xb1b1b2b2")
+- Fix reusability of ChaCha20 instance
+- Replace optional initializers with throwable initializers
+- Allow to set initial counter explicitly (AES block modes). RandomAccessCryptor.seek()
+
 0.5.2
 - Fix AES-CTR incremental updates. #287
 - Fixed PBKDF2 tests. #295

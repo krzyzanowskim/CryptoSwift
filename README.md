@@ -206,8 +206,8 @@ let hash = "123".md5()
 
 ```swift
 // Calculate Message Authentication Code (MAC) for message
-let mac: Array<UInt8> = try! Authenticator.Poly1305(key: key).authenticate(message)
-let hmac: Array<UInt8> = try! Authenticator.HMAC(key: key, variant: .sha256).authenticate(message)
+let mac: Array<UInt8> = try! Poly1305(key: key).authenticate(bytes)
+let hmac: Array<UInt8> = try! HMAC(key: key, variant: .sha256).authenticate(bytes)
 ```
 
 #####Password-Based Key Derivation Function

@@ -196,7 +196,7 @@ final class SHA2 : HashProtocol {
     }
     
     func calculate64() -> Array<UInt8> {
-        var tmpMessage = self.prepare(128)
+        var tmpMessage = self.prepare(128, allowance: 16)
         
         // hash values
         var hh = Array<UInt64>()
@@ -205,8 +205,8 @@ final class SHA2 : HashProtocol {
         }
 		
   
-        // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
-        tmpMessage += (message.count * 8).bytes(totalBytes: 64 / 8)
+        // append message length, in a 128-bit big-endian integer. So now the message length is a multiple of 1024 bits.
+        tmpMessage += (message.count * 8).bytes(totalBytes: 128 / 8)
         
         // Process the message in successive 1024-bit chunks:
         let chunkSizeBytes = 1024 / 8 // 128

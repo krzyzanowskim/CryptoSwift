@@ -16,6 +16,10 @@ internal protocol HashProtocol: class {
 extension HashProtocol {
     
     func prepare(_ len:Int) -> Array<UInt8> {
+        return self.prepare(len, allowance: len / 8)
+    }
+    
+    func prepare(_ len:Int, allowance: Int) -> Array<UInt8> {
         var tmpMessage = message
         
         // Step 1. Append Padding Bits
@@ -25,11 +29,11 @@ extension HashProtocol {
         var msgLength = tmpMessage.count
         var counter = 0
         
-        while msgLength % len != (len - 8) {
+        while msgLength % len != (len - allowance) {
             counter += 1
             msgLength += 1
         }
-
+        
         tmpMessage += Array<UInt8>(repeating: 0, count: counter)
         return tmpMessage
     }

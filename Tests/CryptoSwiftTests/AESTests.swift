@@ -281,14 +281,14 @@ final class AESTests: XCTestCase {
     // https://github.com/krzyzanowskim/CryptoSwift/issues/298
     func testIssue298() {
         let encryptedValue = "47595cfa90f7b0b0e0d9d7240a2e035f7f4acde27d7ca778a7d8b05add32a0a92d945c0a59f7f0e029d7f2fbb258b2f0"
+        let expected:Array<UInt8> = [55, 52, 98, 54, 53, 51, 101, 51, 54, 52, 51, 48, 100, 55, 97, 57, 99, 100, 57, 49, 97, 50, 52, 100, 57, 57, 52, 52, 98, 48, 51, 50, 79, 114, 70, 101, 99, 107, 114, 87, 111, 0, 0, 0, 0, 0, 0, 0]
         let key = "0123456789abcdef"
         let iv = "fedcba9876543210"
 
         do {
             let aes = try AES(key: key, iv: iv, blockMode: .CBC, padding: NoPadding())
             let ciphertext = try aes.decrypt(Array<UInt8>(hex: encryptedValue))
-            let str = String(data: Data(bytes: ciphertext), encoding: String.Encoding.utf8)
-            XCTAssertEqual(str!, "74b653e36430d7a9cd91a24d9944b032OrFeckrWo\0\0\0\0\0\0\0")
+            XCTAssertEqual(ciphertext, expected)
         } catch {
             XCTFail("failed")
         }

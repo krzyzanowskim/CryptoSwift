@@ -68,6 +68,7 @@ final public class HMAC: Authenticator {
             }
         }
 
+        //TODO: validate 64 bytes long key
         self.key = ZeroPadding().add(to: key, blockSize: variant.blockSize())
     }
 
@@ -89,6 +90,7 @@ final public class HMAC: Authenticator {
             throw Error.authenticateError
         }
 
+        // return Array(result[0..<10]) // 80 bits
         return result
     }
 }

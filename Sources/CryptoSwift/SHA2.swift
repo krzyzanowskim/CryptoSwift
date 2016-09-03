@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final class SHA2 : HashProtocol {
+final class SHA2 : Digest {
     var size:Int { return variant.rawValue }
     let variant: Variant
     
@@ -114,8 +114,8 @@ final class SHA2 : HashProtocol {
     
     //FIXME: I can't do Generic func out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.
     func calculate32() -> Array<UInt8> {
-        var tmpMessage = self.prepare(64)
-        
+        var tmpMessage = bitPadding(to: self.message, blockSize: 64, allowance: 64 / 8)
+
         // hash values
         var hh = Array<UInt32>()
         variant.h.forEach {(h) -> () in
@@ -196,7 +196,7 @@ final class SHA2 : HashProtocol {
     }
     
     func calculate64() -> Array<UInt8> {
-        var tmpMessage = self.prepare(128, allowance: 16)
+        var tmpMessage = bitPadding(to: self.message, blockSize: 128, allowance: 128 / 8)
         
         // hash values
         var hh = Array<UInt64>()

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final class MD5 : HashProtocol  {
+final class MD5 : Digest  {
     static let size:Int = 16 // 128 / 8
     let message: Array<UInt8>
     
@@ -41,7 +41,7 @@ final class MD5 : HashProtocol  {
     private let h:Array<UInt32> = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
     
     func calculate() -> Array<UInt8> {
-        var tmpMessage = prepare(64)
+        var tmpMessage = bitPadding(to: self.message, blockSize: 64, allowance: 64 / 8)
         tmpMessage.reserveCapacity(tmpMessage.count + 4)
 
         // initialize hh with hash values

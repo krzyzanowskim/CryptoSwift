@@ -11,7 +11,7 @@ public typealias Hash = Digest
 
 public struct Digest {
     public static func md5(_ bytes: Array<UInt8>) -> Array<UInt8> {
-        return MD5(bytes).calculate()
+        return MD5().calculate(for: bytes)
     }
 
     public static func sha1(_ bytes: Array<UInt8>) -> Array<UInt8> {

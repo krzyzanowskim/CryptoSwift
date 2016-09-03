@@ -19,11 +19,6 @@ final class HashTests: XCTestCase {
         XCTAssertEqual(Digest.md5(data), [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70], "MD5 calculation failed");
     }
 
-    func testMD5EmptyString() {
-        let data:Data = "".data(using: String.Encoding.utf8, allowLossyConversion: false) ?? Data()
-        XCTAssertEqual(Digest.md5(data.bytes), [0xd4,0x1d,0x8c,0xd9,0x8f,0x00,0xb2,0x04,0xe9,0x80,0x09,0x98,0xec,0xf8,0x42,0x7e], "MD5 calculation failed")
-    }
-
     func testMD5String() {
         XCTAssertEqual("123".md5(), "202cb962ac59075b964b07152d234b70", "MD5 calculation failed");
         XCTAssertEqual("".md5(), "d41d8cd98f00b204e9800998ecf8427e", "MD5 calculation failed")
@@ -123,8 +118,8 @@ final class HashTests: XCTestCase {
 
     static let allTests =  [
         ("testMD5Data", testMD5Data),
-        ("testMD5EmptyString", testMD5EmptyString),
         ("testMD5String", testMD5String),
+        ("testMD5Updates", testMD5Updates),
         ("testMD5PerformanceSwift", testMD5PerformanceSwift),
         ("testSHA1", testSHA1),
         ("testSHA224", testSHA224),

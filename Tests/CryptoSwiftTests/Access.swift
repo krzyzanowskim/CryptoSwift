@@ -163,8 +163,14 @@ class Access: XCTestCase {
     func testAES() {
         do {
             let aes = try AES(key: "secret0key000000", iv: "0123456789012345")
-            let _ = aes.makeEncryptor()
-            let _ = aes.makeDecryptor()
+            var encryptor = aes.makeEncryptor()
+            let _ = try encryptor.update(withBytes: [1,2,3])
+            let _ = try encryptor.finish()
+
+            var decryptor = aes.makeDecryptor()
+            let _ = try decryptor.update(withBytes: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])
+            let _ = try decryptor.finish()
+
             let enc = try aes.encrypt([1,2,3])
             let _ = try aes.decrypt(enc)
 

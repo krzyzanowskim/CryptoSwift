@@ -7,7 +7,7 @@
 //
 
 @available(*, deprecated:0.6.0, renamed: "Digest")
-typealias Hash = Digest
+public typealias Hash = Digest
 
 public struct Digest {
     public static func md5(_ bytes: Array<UInt8>) -> Array<UInt8> {

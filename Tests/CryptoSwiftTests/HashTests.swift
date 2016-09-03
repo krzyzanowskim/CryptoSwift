@@ -16,12 +16,12 @@ final class HashTests: XCTestCase {
     
     func testMD5Data() {
         let data = [0x31, 0x32, 0x33] as Array<UInt8> // "1", "2", "3"
-        XCTAssertEqual(Hash.md5(data), [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70], "MD5 calculation failed");
+        XCTAssertEqual(Digest.md5(data), [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70], "MD5 calculation failed");
     }
 
     func testMD5EmptyString() {
         let data:Data = "".data(using: String.Encoding.utf8, allowLossyConversion: false) ?? Data()
-        XCTAssertEqual(Hash.md5(data.bytes), [0xd4,0x1d,0x8c,0xd9,0x8f,0x00,0xb2,0x04,0xe9,0x80,0x09,0x98,0xec,0xf8,0x42,0x7e], "MD5 calculation failed")
+        XCTAssertEqual(Digest.md5(data.bytes), [0xd4,0x1d,0x8c,0xd9,0x8f,0x00,0xb2,0x04,0xe9,0x80,0x09,0x98,0xec,0xf8,0x42,0x7e], "MD5 calculation failed")
     }
 
     func testMD5String() {
@@ -39,7 +39,7 @@ final class HashTests: XCTestCase {
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
             let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
             self.startMeasuring()
-            _ = Hash.md5(arr)
+            _ = Digest.md5(arr)
             self.stopMeasuring()
         })
     }

@@ -21,12 +21,12 @@ class Access: XCTestCase {
     }
 
     func testHash() {
-        let _ = Hash.md5([1,2,3])
-        let _ = Hash.sha1([1,2,3])
-        let _ = Hash.sha224([1,2,3])
-        let _ = Hash.sha256([1,2,3])
-        let _ = Hash.sha384([1,2,3])
-        let _ = Hash.sha512([1,2,3])
+        let _ = Digest.md5([1,2,3])
+        let _ = Digest.sha1([1,2,3])
+        let _ = Digest.sha224([1,2,3])
+        let _ = Digest.sha256([1,2,3])
+        let _ = Digest.sha384([1,2,3])
+        let _ = Digest.sha512([1,2,3])
     }
 
     func testArrayExtension() {

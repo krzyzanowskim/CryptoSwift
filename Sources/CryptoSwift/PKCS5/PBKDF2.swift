@@ -44,9 +44,9 @@ public extension PKCS5 {
                 throw Error.invalidInput
             }
 
-            self.dkLen = keyLength ?? variant.size
+            self.dkLen = keyLength ?? variant.digestSize
             let keyLengthFinal = Double(self.dkLen)
-            let hLen = Double(prf.variant.size)
+            let hLen = Double(prf.variant.digestSize)
             if keyLengthFinal > (pow(2,32) - 1) * hLen {
                 throw Error.derivedKeyTooLong
             }

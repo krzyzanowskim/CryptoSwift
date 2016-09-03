@@ -26,9 +26,9 @@ public extension PKCS5 {
             var size:Int {
                 switch (self) {
                 case .md5:
-                    return MD5.size
+                    return MD5.digestSize
                 case .sha1:
-                    return SHA1.size
+                    return SHA1.digestSize
                 }
             }
 

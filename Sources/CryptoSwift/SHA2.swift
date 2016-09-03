@@ -53,7 +53,7 @@ final class SHA2: DigestType {
             }
         }
         
-        var size:Int { return self.rawValue }
+        var digestSize:Int { return self.rawValue }
         
         fileprivate var h:Array<UInt64> {
             switch (self) {

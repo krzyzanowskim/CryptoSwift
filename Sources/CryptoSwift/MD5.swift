@@ -7,12 +7,13 @@
 //
 
 final class MD5: DigestType  {
-    static let size:Int = 16 // 128 / 8
     let message: Array<UInt8>
     
     init (_ message: Array<UInt8>) {
         self.message = message
     }
+    static let blockSize:Int = 64
+    static let digestSize:Int = 16 // 128 / 8
 
     /** specifies the per-round shift amounts */
     private let s: Array<UInt32> = [7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,

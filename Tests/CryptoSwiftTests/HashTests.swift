@@ -29,7 +29,19 @@ final class HashTests: XCTestCase {
         XCTAssertEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".md5(), "d174ab98d277d9f5a5611c2c9f419d9f", "MD5 calculation failed")
         XCTAssertEqual("12345678901234567890123456789012345678901234567890123456789012345678901234567890".md5(), "57edf4a22be3c955ac49da2e2107b67a", "MD5 calculation failed")
     }
-    
+
+    func testMD5Updates() {
+        do {
+            var hash = MD5()
+            let _ = try hash.update(withBytes: [0x31, 0x32])
+            let _ = try hash.update(withBytes: [0x33])
+            let result = try hash.finish()
+            XCTAssertEqual(result, [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70])
+        } catch {
+            XCTFail()
+        }
+    }
+
     func testMD5PerformanceSwift() {
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
             let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)

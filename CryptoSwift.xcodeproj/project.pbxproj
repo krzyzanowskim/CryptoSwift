@@ -36,7 +36,7 @@
 		757BC9601C1CA5790093AAA9 /* Checksum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9231C1CA5790093AAA9 /* Checksum.swift */; };
 		757BC9681C1CA5790093AAA9 /* CSArrayType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9251C1CA5790093AAA9 /* CSArrayType+Extensions.swift */; };
 		757BC96C1C1CA5790093AAA9 /* Generics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9261C1CA5790093AAA9 /* Generics.swift */; };
-		757BC9701C1CA5790093AAA9 /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9271C1CA5790093AAA9 /* Hash.swift */; };
+		757BC9701C1CA5790093AAA9 /* Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9271C1CA5790093AAA9 /* Digest.swift */; };
 		757BC9741C1CA5790093AAA9 /* DigestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9281C1CA5790093AAA9 /* DigestType.swift */; };
 		757BC9781C1CA5790093AAA9 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC9291C1CA5790093AAA9 /* HMAC.swift */; };
 		757BC9801C1CA5790093AAA9 /* IntegerConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757BC92B1C1CA5790093AAA9 /* IntegerConvertible.swift */; };
@@ -183,7 +183,7 @@
 		757BC9231C1CA5790093AAA9 /* Checksum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Checksum.swift; path = Sources/CryptoSwift/Checksum.swift; sourceTree = SOURCE_ROOT; };
 		757BC9251C1CA5790093AAA9 /* CSArrayType+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CSArrayType+Extensions.swift"; path = "Sources/CryptoSwift/CSArrayType+Extensions.swift"; sourceTree = SOURCE_ROOT; };
 		757BC9261C1CA5790093AAA9 /* Generics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Generics.swift; path = Sources/CryptoSwift/Generics.swift; sourceTree = SOURCE_ROOT; };
-		757BC9271C1CA5790093AAA9 /* Hash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Hash.swift; path = Sources/CryptoSwift/Hash.swift; sourceTree = SOURCE_ROOT; };
+		757BC9271C1CA5790093AAA9 /* Digest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Digest.swift; path = Sources/CryptoSwift/Digest.swift; sourceTree = SOURCE_ROOT; };
 		757BC9281C1CA5790093AAA9 /* DigestType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DigestType.swift; path = Sources/CryptoSwift/DigestType.swift; sourceTree = SOURCE_ROOT; };
 		757BC9291C1CA5790093AAA9 /* HMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HMAC.swift; path = Sources/CryptoSwift/HMAC.swift; sourceTree = SOURCE_ROOT; };
 		757BC92A1C1CA5790093AAA9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/CryptoSwift/Info.plist; sourceTree = SOURCE_ROOT; };
@@ -300,7 +300,7 @@
 				75CB93291C8F5EC60087740D /* BlockMode */,
 				757BC9231C1CA5790093AAA9 /* Checksum.swift */,
 				757BC9261C1CA5790093AAA9 /* Generics.swift */,
-				757BC9271C1CA5790093AAA9 /* Hash.swift */,
+				757BC9271C1CA5790093AAA9 /* Digest.swift */,
 				757BC9281C1CA5790093AAA9 /* DigestType.swift */,
 				757BC9291C1CA5790093AAA9 /* HMAC.swift */,
 				757BC92B1C1CA5790093AAA9 /* IntegerConvertible.swift */,
@@ -557,7 +557,7 @@
 				757F44091CC172B6002B1F85 /* BlockCipher.swift in Sources */,
 				75558FCC1D4BA93C00CF6C18 /* RandomAccessCryptor.swift in Sources */,
 				75CB93251C8F5EC10087740D /* CBC.swift in Sources */,
-				757BC9701C1CA5790093AAA9 /* Hash.swift in Sources */,
+				757BC9701C1CA5790093AAA9 /* Digest.swift in Sources */,
 				75CB93351C8F5FCE0087740D /* PCBC.swift in Sources */,
 				75CB93301C8F5F580087740D /* BlockMode.swift in Sources */,
 				757BC9121C1CA56A0093AAA9 /* String+FoundationExtension.swift in Sources */,

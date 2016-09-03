@@ -30,27 +30,27 @@ public extension CSArrayType where Iterator.Element == UInt8 {
 
 public extension CSArrayType where Iterator.Element == UInt8 {
     public func md5() -> [Iterator.Element] {
-        return Hash.md5(cs_arrayValue())
+        return Digest.md5(cs_arrayValue())
     }
     
     public func sha1() -> [Iterator.Element] {
-        return Hash.sha1(cs_arrayValue())
+        return Digest.sha1(cs_arrayValue())
     }
     
     public func sha224() -> [Iterator.Element] {
-        return Hash.sha224(cs_arrayValue())
+        return Digest.sha224(cs_arrayValue())
     }
     
     public func sha256() -> [Iterator.Element] {
-        return Hash.sha256(cs_arrayValue())
+        return Digest.sha256(cs_arrayValue())
     }
     
     public func sha384() -> [Iterator.Element] {
-        return Hash.sha384(cs_arrayValue())
+        return Digest.sha384(cs_arrayValue())
     }
     
     public func sha512() -> [Iterator.Element] {
-        return Hash.sha512(cs_arrayValue())
+        return Digest.sha512(cs_arrayValue())
     }
     
     public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> UInt32 {

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final class MD5 : Digest  {
+final class MD5: DigestType  {
     static let size:Int = 16 // 128 / 8
     let message: Array<UInt8>
     

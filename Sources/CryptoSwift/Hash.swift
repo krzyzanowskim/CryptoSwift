@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-public struct Hash {
+typealias Hash = Digest
+
+public struct Digest {
     public static func md5(_ bytes: Array<UInt8>) -> Array<UInt8> {
         return MD5(bytes).calculate()
     }

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final class SHA2 : Digest {
+final class SHA2: DigestType {
     var size:Int { return variant.rawValue }
     let variant: Variant
     

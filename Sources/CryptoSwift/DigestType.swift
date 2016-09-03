@@ -6,4 +6,4 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-internal protocol Digest { }
+internal protocol DigestType { }

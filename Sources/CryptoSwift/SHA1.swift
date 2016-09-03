@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final class SHA1 : Digest {
+final class SHA1: DigestType {
     static let size:Int = 20 // 160 / 8
     let message: Array<UInt8>
     

@@ -6,17 +6,20 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-struct BytesSequence: Sequence {
-    let chunkSize: Int
-    let data: Array<UInt8>
+struct BytesSequence<D: RandomAccessCollection>: Sequence where D.Iterator.Element == UInt8, D.IndexDistance == Int, D.SubSequence.IndexDistance == Int, D.Index == Int {
+    let chunkSize: D.IndexDistance
+    let data: D
 
-    func makeIterator() -> AnyIterator<ArraySlice<UInt8>> {
-        var offset:Int = 0
+    func makeIterator() -> AnyIterator<D.SubSequence> {
+        var offset = data.startIndex
         return AnyIterator {
             let end = Swift.min(self.chunkSize, self.data.count - offset)
             let result = self.data[offset..<offset + end]
-            offset += result.count
-            return !result.isEmpty ? result : nil
+            offset = offset.advanced(by: result.count)
+            if !result.isEmpty {
+                return result
+            }
+            return nil
         }
     }
 }

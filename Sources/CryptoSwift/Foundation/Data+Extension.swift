@@ -37,7 +37,7 @@ extension Data {
     }
 
     public func sha256() -> Data? {
-        let result = Hash.sha256(self.bytes)
+        let result = Digest.sha256(self.bytes)
         return Data(bytes: result)
     }
 

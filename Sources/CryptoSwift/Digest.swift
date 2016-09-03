@@ -6,6 +6,11 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
+
+
+
+
+@available(*, deprecated:0.6.0, renamed: "Digest")
 typealias Hash = Digest
 
 public struct Digest {

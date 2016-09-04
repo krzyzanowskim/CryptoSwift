@@ -13,7 +13,7 @@ final public class ChaCha20: BlockCipher {
     }
     
     public static let blockSize = 64 // 512 / 8
-    private let context: Context
+    fileprivate let context: Context
 
     private struct Context {
         var input = Array<UInt32>(repeating: 0, count: 16)
@@ -70,7 +70,7 @@ final public class ChaCha20: BlockCipher {
         self.context = try Context(key: key, iv: iv)
     }
     
-    private final func wordToByte(_ input:Array<UInt32> /* 64 */) -> Array<UInt8>? /* 16 */ {
+    fileprivate func wordToByte(_ input:Array<UInt32> /* 64 */) -> Array<UInt8>? /* 16 */ {
         precondition(input.count == 16)
 
         var x = input
@@ -96,15 +96,32 @@ final public class ChaCha20: BlockCipher {
 
         return output;
     }
-    
-    fileprivate final func encryptBytes(_ message:Array<UInt8>) throws -> Array<UInt8> {
+
+    private final func quarterround(_ a:inout UInt32, _ b:inout UInt32, _ c:inout UInt32, _ d:inout UInt32) {
+        a = a &+ b
+        d = rotateLeft((d ^ a), by: 16) //FIXME: WAT? n:
+        
+        c = c &+ d
+        b = rotateLeft((b ^ c), by: 12);
+        
+        a = a &+ b
+        d = rotateLeft((d ^ a), by: 8);
+
+        c = c &+ d
+        b = rotateLeft((b ^ c), by: 7);
+    }
+}
+
+// MARK: Cipher
+extension ChaCha20: Cipher {
+    public func encrypt(_ message:Array<UInt8>) throws -> Array<UInt8> {
         var ctx = context
         var c = Array<UInt8>(repeating: 0, count: message.count)
-        
+
         var cPos:Int = 0
         var mPos:Int = 0
         var bytes = message.count
-        
+
         while (true) {
             if let output = wordToByte(ctx.input) {
                 ctx.input[12] = ctx.input[12] &+ 1
@@ -127,19 +144,9 @@ final public class ChaCha20: BlockCipher {
             }
         }
     }
-    
-    private final func quarterround(_ a:inout UInt32, _ b:inout UInt32, _ c:inout UInt32, _ d:inout UInt32) {
-        a = a &+ b
-        d = rotateLeft((d ^ a), by: 16) //FIXME: WAT? n:
-        
-        c = c &+ d
-        b = rotateLeft((b ^ c), by: 12);
-        
-        a = a &+ b
-        d = rotateLeft((d ^ a), by: 8);
 
-        c = c &+ d
-        b = rotateLeft((b ^ c), by: 7);
+    public func decrypt(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
+        return try encrypt(bytes)
     }
 }
 
@@ -216,24 +223,12 @@ extension ChaCha20 {
 
 // MARK: Cryptors
 extension ChaCha20: Cryptors {
-
     public func makeEncryptor() -> ChaCha20.Encryptor {
         return Encryptor(chacha: self)
     }
 
     public func makeDecryptor() -> ChaCha20.Decryptor {
         return Decryptor(chacha: self)
-    }
-}
-
-// MARK: Cipher
-extension ChaCha20: Cipher {
-    public func encrypt(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
-        return try encryptBytes(bytes)
-    }
-
-    public func decrypt(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
-        return try encrypt(bytes)
     }
 }
 

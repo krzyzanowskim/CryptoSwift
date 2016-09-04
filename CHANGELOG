@@ -1,6 +1,8 @@
 0.6.0-beta2
 - SHA-2 fix #319
 - HashProtocol -> Digest and refactor
+- MD5 conforms to Updatable protocol and may be calculated incrementally
+- Cipher protocol accepts Collection input now
 
 0.6.0-beta1
 - Swift 3 compatibility

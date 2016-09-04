@@ -114,13 +114,13 @@ final public class ChaCha20: BlockCipher {
 
 // MARK: Cipher
 extension ChaCha20: Cipher {
-    public func encrypt(_ message:Array<UInt8>) throws -> Array<UInt8> {
+    public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
         var ctx = context
-        var c = Array<UInt8>(repeating: 0, count: message.count)
+        var c = Array<UInt8>(repeating: 0, count: bytes.count)
 
         var cPos:Int = 0
         var mPos:Int = 0
-        var bytes = message.count
+        var bytesCount = bytes.count
 
         while (true) {
             if let output = wordToByte(ctx.input) {
@@ -129,23 +129,23 @@ extension ChaCha20: Cipher {
                     ctx.input[13] = ctx.input[13] &+ 1
                     /* stopping at 2^70 bytes per nonce is user's responsibility */
                 }
-                if (bytes <= ChaCha20.blockSize) {
-                    for i in 0..<bytes {
-                        c[i + cPos] = message[i + mPos] ^ output[i]
+                if (bytesCount <= ChaCha20.blockSize) {
+                    for i in 0..<bytesCount {
+                        c[i + cPos] = bytes[i + mPos] ^ output[i]
                     }
                     return c
                 }
                 for i in 0..<ChaCha20.blockSize {
-                    c[i + cPos] = message[i + mPos] ^ output[i]
+                    c[i + cPos] = bytes[i + mPos] ^ output[i]
                 }
-                bytes -= ChaCha20.blockSize
+                bytesCount -= ChaCha20.blockSize
                 cPos += ChaCha20.blockSize
                 mPos += ChaCha20.blockSize
             }
         }
     }
 
-    public func decrypt(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
+    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
         return try encrypt(bytes)
     }
 }

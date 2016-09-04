@@ -512,8 +512,8 @@ extension AES: Cryptors {
 
 // MARK: Cipher
 extension AES: Cipher {
-    public func encrypt(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
-        let chunks = bytes.chunks(size: AES.blockSize)
+    public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
+        let chunks = Array(bytes).chunks(size: AES.blockSize)
 
         var oneTimeCryptor = self.makeEncryptor()
         var out = Array<UInt8>()
@@ -529,13 +529,13 @@ extension AES: Cipher {
         return out
     }
 
-    public func decrypt(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
+    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
         if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
             throw Error.dataPaddingRequired
         }
 
         var oneTimeCryptor = self.makeDecryptor()
-        let chunks = bytes.chunks(size: AES.blockSize)
+        let chunks = Array(bytes).chunks(size: AES.blockSize)
         var out = Array<UInt8>()
         out.reserveCapacity(bytes.count)
         for idx in chunks.indices {

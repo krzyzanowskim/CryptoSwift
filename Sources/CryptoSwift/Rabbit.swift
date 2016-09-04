@@ -179,7 +179,7 @@ final public class Rabbit: BlockCipher {
 
 // MARK: Cipher
 extension Rabbit: Cipher {
-    public func encrypt(_ bytes: Array<UInt8>) -> Array<UInt8> {
+    public func encrypt<C: Collection>(_ bytes: C) -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
         setup()
 
         var result = Array<UInt8>(repeating: 0, count: bytes.count)
@@ -200,7 +200,7 @@ extension Rabbit: Cipher {
         return result
     }
 
-    public func decrypt(_ bytes: Array<UInt8>) -> Array<UInt8> {
+    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
         return encrypt(bytes)
     }
 }

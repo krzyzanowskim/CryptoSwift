@@ -103,8 +103,9 @@ final class MD5: DigestType  {
 
 extension MD5: Updatable {
     func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+        let prevAccumulatedLength = self.accumulated.count
         self.accumulated += bytes
-        self.accumulatedLength += Array(bytes).count //FIXME: oh no! no nononoonooono. I need that but it's bad for performance. Shouldn't need it ¯\_(ツ)_/¯
+        self.accumulatedLength += self.accumulated.count - prevAccumulatedLength //avoid Array(bytes).count
 
         if isLast {
             // Step 1. Append padding

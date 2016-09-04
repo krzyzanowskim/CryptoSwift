@@ -5,6 +5,8 @@
 //  Created by Marcin Krzyzanowski on 06/05/16.
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
+//  TODO: Consider if Updatable shoud use Collection rather than Sequence
+//
 
 public protocol Updatable {
     /// Update given bytes in chunks.

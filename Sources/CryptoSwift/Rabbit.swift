@@ -200,7 +200,7 @@ extension Rabbit: Cipher {
         return result
     }
 
-    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
+    public func decrypt<C: Collection>(_ bytes: C) -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
         return encrypt(bytes)
     }
 }

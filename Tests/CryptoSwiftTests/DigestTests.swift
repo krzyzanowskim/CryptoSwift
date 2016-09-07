@@ -12,7 +12,7 @@ import XCTest
 import Foundation
 @testable import CryptoSwift
 
-final class HashTests: XCTestCase {
+final class DigestTests: XCTestCase {
     
     func testMD5Data() {
         let data = [0x31, 0x32, 0x33] as Array<UInt8> // "1", "2", "3"

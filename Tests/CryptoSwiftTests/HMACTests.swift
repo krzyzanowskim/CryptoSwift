@@ -20,12 +20,11 @@ final class HMACTests: XCTestCase {
     }
     
     func testSHA1() {
-        let key:Array<UInt8> = []
-        let msg:Array<UInt8> = []
-        let expectedMac:Array<UInt8> = [0xfb,0xdb,0x1d,0x1b,0x18,0xaa,0x6c,0x08,0x32,0x4b,0x7d,0x64,0xb7,0x1f,0xb7,0x63,0x70,0x69,0x0e,0x1d]
-        
-        let hmac = try! HMAC(key: key, variant: .sha1).authenticate(msg)
-        XCTAssertEqual(hmac, expectedMac, "Invalid authentication result")
+        XCTAssertEqual(try HMAC(key: [], variant: .sha1).authenticate([]), Array<UInt8>(hex:"fbdb1d1b18aa6c08324b7d64b71fb76370690e1d"))
+        // echo -n "test" | openssl sha1 -hmac 'test'
+        XCTAssertEqual(try HMAC(key: Array<UInt8>(hex: "74657374"), variant: .sha1).authenticate(Array<UInt8>(hex: "74657374")), Array<UInt8>(hex:"0c94515c15e5095b8a87a50ba0df3bf38ed05fe6"))
+        // echo -n "test" | openssl sha1 -hmac '0123456789012345678901234567890123456789012345678901234567890123'
+        XCTAssertEqual(try HMAC(key: Array<UInt8>(hex: "30313233343536373839303132333435363738393031323334353637383930313233343536373839303132333435363738393031323334353637383930313233"), variant: .sha1).authenticate(Array<UInt8>(hex: "74657374")), Array<UInt8>(hex:"23cea58b0c484ed005434938ee70a938d7524e91"))
     }
 
     func testSHA256() {
@@ -54,7 +53,7 @@ final class HMACTests: XCTestCase {
         let hmac = try! HMAC(key: key, variant: .sha512).authenticate(msg)
         XCTAssertEqual(hmac, expectedMac, "Invalid authentication result")
     }
-    
+
     static let allTests =  [
         ("testMD5", testMD5),
         ("testSHA1", testSHA1),

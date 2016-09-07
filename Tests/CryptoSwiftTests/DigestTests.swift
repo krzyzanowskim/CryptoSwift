@@ -1,5 +1,5 @@
 //
-//  CryptoSwiftTests.swift
+//  DigestTests.swift
 //  CryptoSwiftTests
 //
 //  Created by Marcin Krzyzanowski on 06/07/14.

@@ -11,7 +11,7 @@ typealias CipherOperationOnBlock = (_ block: Array<UInt8>) -> Array<UInt8>?
 public enum BlockMode {
     case ECB, CBC, PCBC, CFB, OFB, CTR
 
-    func worker(_ iv: Array<UInt8>?, cipherOperation: CipherOperationOnBlock) -> BlockModeWorker {
+    func worker(_ iv: Array<UInt8>?, cipherOperation: @escaping CipherOperationOnBlock) -> BlockModeWorker {
         switch (self) {
         case .ECB:
             return ECBModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)

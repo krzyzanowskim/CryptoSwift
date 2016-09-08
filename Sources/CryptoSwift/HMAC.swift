@@ -64,14 +64,15 @@ final public class HMAC: Authenticator {
         self.variant = variant
         self.key = key
 
-        if (key.count > variant.blockSize()) {
+        if key.count > variant.blockSize() {
             if let hash = variant.calculateHash(key) {
                 self.key = hash
             }
         }
 
-        //TODO: validate 64 bytes long key
-        self.key = ZeroPadding().add(to: key, blockSize: variant.blockSize())
+        if key.count < variant.blockSize() {
+            self.key = ZeroPadding().add(to: key, blockSize: variant.blockSize())
+        }
     }
 
     //MARK: Authenticator

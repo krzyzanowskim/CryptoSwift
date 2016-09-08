@@ -2,7 +2,7 @@ import XCTest
 @testable import CryptoSwiftTests
 
 XCTMain([
-    testCase(HashTests.allTests),
+    testCase(DigestTests.allTests),
     testCase(Poly1305Tests.allTests),
     testCase(HMACTests.allTests),
     testCase(AESTests.allTests),

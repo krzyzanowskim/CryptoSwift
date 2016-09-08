@@ -60,7 +60,9 @@ final class ExtensionsTest: XCTestCase {
         let ii:Int = 21
         XCTAssert(ii &<< 1 == ii << 1, "shift left failed")
         XCTAssert(ii &<< 8 == ii << 8, "shift left failed")
-        XCTAssert(ii &<< ((MemoryLayout<Int>.size * 8) - 1) == ii << ((MemoryLayout<Int>.size * 8) - 1), "shift left failed")
+        let shiftLeft1 = ii &<< ((MemoryLayout<Int>.size * 8) - 1)
+        let shiftLeft2 = ii << ((MemoryLayout<Int>.size * 8) - 1)
+        XCTAssert(shiftLeft1 == shiftLeft2, "shift left failed")
         XCTAssert(ii &<< ((MemoryLayout<Int>.size * 8)) == 0, "shift left failed")
         
         let iii:UInt32 = 21

@@ -15,7 +15,7 @@ struct CFBModeWorker: BlockModeWorker {
     private let iv: Element
     private var prev: Element?
 
-    init(iv: Array<UInt8>, cipherOperation: CipherOperationOnBlock) {
+    init(iv: Array<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
         self.iv = iv
         self.cipherOperation = cipherOperation
     }

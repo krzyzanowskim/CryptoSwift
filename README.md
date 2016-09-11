@@ -86,6 +86,10 @@ Embedded frameworks require a minimum deployment target of iOS 8 or OS X Maveric
 
 ![](https://cloud.githubusercontent.com/assets/758033/10834511/25a26852-7e9a-11e5-8c01-6cc8f1838459.png)
 
+Sometimes "embedded framework" option is not available. In that case you have to add new build phase for the target
+
+![](https://cloud.githubusercontent.com/assets/758033/18415615/d5edabb0-77f8-11e6-8c94-f41d9fc2b8cb.png)
+
 #####iOS, macOS, watchOS, tvOS
 
 In the project, you'll find [single scheme](http://promisekit.org/news/2016/08/Multiplatform-Single-Scheme-Xcode-Projects/) for all platforms:

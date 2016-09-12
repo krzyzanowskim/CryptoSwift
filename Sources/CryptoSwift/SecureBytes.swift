@@ -5,9 +5,6 @@
 //  Created by Marcin Krzyzanowski on 15/04/16.
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
-//  SecureBytes keeps bytes in memory. Because this is class, bytes are not copied
-//  and memory area is locked as long as referenced, then unlocked on deinit
-//
 
 #if os(Linux)
     import Glibc
@@ -15,6 +12,8 @@
     import Darwin
 #endif
 
+///  Keeps bytes in memory. Because this is class, bytes are not copied
+///  and memory area is locked as long as referenced, then unlocked on deinit
 final class SecureBytes {
     private let bytes: Array<UInt8>
     let count: Int

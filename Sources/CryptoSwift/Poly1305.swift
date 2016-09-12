@@ -7,9 +7,8 @@
 //
 //  http://tools.ietf.org/html/draft-agl-tls-chacha20poly1305-04#section-4
 //
-//  Poly1305 takes a 32-byte, one-time key and a message and produces a 16-byte tag that authenticates the
-//  message such that an attacker has a negligible chance of producing a valid tag for an inauthentic message.
-
+///  Poly1305 takes a 32-byte, one-time key and a message and produces a 16-byte tag that authenticates the
+///  message such that an attacker has a negligible chance of producing a valid tag for an inauthentic message.
 final public class Poly1305: Authenticator {
 
     public enum Error: Swift.Error {
@@ -76,7 +75,8 @@ final public class Poly1305: Authenticator {
             }
         }
     }
-    
+
+    /// - parameter key: 32-byte key
     public init (key: Array<UInt8>) {
         ctx = Context(key)
     }
@@ -279,10 +279,9 @@ final public class Poly1305: Authenticator {
      Calculate Message Authentication Code (MAC) for message.
      Calculation context is discarder on instance deallocation.
 
-     - parameter key:     256-bit key
-     - parameter message: Message
+     - parameter bytes: Message
 
-     - returns: Message Authentication Code
+     - returns: 16-byte tag that authenticates the message
      */
     public func authenticate(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
         guard let ctx = self.ctx else {

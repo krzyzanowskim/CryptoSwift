@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
+/// Message authentication code.
 public protocol Authenticator {
-    /// Generates an authenticator for message using a one-time key and returns the 16-byte result
+    /// Calculate Message Authentication Code (MAC) for message.
     func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8>
 }

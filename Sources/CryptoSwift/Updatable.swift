@@ -8,6 +8,8 @@
 //  TODO: Consider if Updatable shoud use Collection rather than Sequence
 //
 
+/// A type that supports incremental updates. For example Digest or Cipher may be updatable
+/// and calculate result incerementally.
 public protocol Updatable {
     /// Update given bytes in chunks.
     ///

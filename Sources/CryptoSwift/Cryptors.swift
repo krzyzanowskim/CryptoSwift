@@ -12,6 +12,7 @@
     import Darwin
 #endif
 
+/// Worker cryptor/decryptor of `Updatable` types
 public protocol Cryptors: class {
     associatedtype EncryptorType: Updatable
     associatedtype DecryptorType: Updatable

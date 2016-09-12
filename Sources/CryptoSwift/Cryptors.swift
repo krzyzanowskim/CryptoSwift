@@ -23,6 +23,7 @@ public protocol Cryptors: class {
     func makeDecryptor() -> DecryptorType
 
     /// Generate array of random bytes. Helper function.
+    @available(*, deprecated: 0.6.0, message: "Use system random generator")
     static func randomIV(_ blockSize:Int) -> Array<UInt8>
 }
 

@@ -10,7 +10,7 @@ import Foundation
 
 extension HMAC {
     convenience public init (key: String, variant:HMAC.Variant = .md5) throws {
-        guard let kkey = key.bridge().data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)?.bytes else {
+        guard let kkey = key.data(using: String.Encoding.utf8, allowLossyConversion: false)?.bytes else {
             throw Error.invalidInput
         }
         

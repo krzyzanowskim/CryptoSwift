@@ -22,7 +22,8 @@ Good mood
 ##Features
 
 - Easy to use
-- Convenient extensions for String and NSData
+- Convenient extensions for String and Data
+- Support for incremental updates (stream, ...)
 - iOS, macOS, AppleTV, watchOS, Linux support
 
 #### Hash (Digest)

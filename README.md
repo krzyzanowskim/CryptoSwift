@@ -60,7 +60,7 @@ Good mood
 
 #### Data padding
 - [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
-- Zero padding
+- [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
 - NoPadding
 
 ##Why
@@ -68,7 +68,7 @@ Good mood
 
 ##Contribution
 
-For latest version, please check **develop** branch. This is latest development version that will be merged into **master** branch at some point.
+For the latest version, please check **develop** branch. Changes from this branch will be merged into the **master** branch at some point.
 
 - If you want to contribute, submit a [pull request](https://github.com/krzyzanowskim/CryptoSwift/pulls) against a development `develop` branch.
 - If you found a bug, [open an issue](https://github.com/krzyzanowskim/CryptoSwift/issues).
@@ -78,7 +78,7 @@ For latest version, please check **develop** branch. This is latest development 
 
 To install CryptoSwift, add it as a submodule to your project (on the top level project directory):
 
-	git submodule add https://github.com/krzyzanowskim/CryptoSwift.git
+    git submodule add https://github.com/krzyzanowskim/CryptoSwift.git
 
 ####Embedded Framework
 
@@ -86,7 +86,7 @@ Embedded frameworks require a minimum deployment target of iOS 8 or OS X Maveric
 
 ![](https://cloud.githubusercontent.com/assets/758033/10834511/25a26852-7e9a-11e5-8c01-6cc8f1838459.png)
 
-Sometimes "embedded framework" option is not available. In that case you have to add new build phase for the target
+Sometimes "embedded framework" option is not available. In that case, you have to add new build phase for the target
 
 ![](https://cloud.githubusercontent.com/assets/758033/18415615/d5edabb0-77f8-11e6-8c94-f41d9fc2b8cb.png)
 
@@ -99,6 +99,7 @@ In the project, you'll find [single scheme](http://promisekit.org/news/2016/08/M
 
 - Swift 1.2: branch [swift12](https://github.com/krzyzanowskim/CryptoSwift/tree/swift12).
 - Swift 2.1: branch [swift21](https://github.com/krzyzanowskim/CryptoSwift/tree/swift21)
+- Swift 2.x: branch [swift2](https://github.com/krzyzanowskim/CryptoSwift/tree/swift2)
 
 ####CocoaPods
 
@@ -126,7 +127,7 @@ Specify in Cartfile:
 github "krzyzanowskim/CryptoSwift"
 ```
 
-Run carthage to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started)
+Run `carthage` to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started)
 
 ####Swift Package Manager
 
@@ -134,13 +135,15 @@ You can use [Swift Package Manager](https://swift.org/package-manager/) and spec
 ```
 .Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", majorVersion: 0)
 ```
+
+See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
  
 ##Usage
 
 * [Basics (data types, conversion, ...)](#basics)
-* [Calculate Hash (MD5, SHA...)](#calculate-hash)
+* [Digest (MD5, SHA...)](#calculate-digest)
 * [Message authenticators (HMAC...)](#message-authenticators)
-* [Password-Based Key Derivation Function (PBKDF2, ...)](password-based-key-derivation-function)
+* [Password-Based Key Derivation Function (PBKDF2, ...)](password-based-key-derivation-functions)
 * [Data Padding](#data-padding)
 * [ChaCha20](#chacha20)
 * [Rabbit](#rabbit)
@@ -155,76 +158,107 @@ also check [Playground](/CryptoSwift.playground/Contents.swift)
 import CryptoSwift
 ```
 
-CryptoSwift use array of bytes aka `Array<UInt8>` as base type for all operations. Every data can be converted to stream of bytes. you will find convenience functions that accept String or NSData, and it will be internally converted to array of bytes anyway.
+CryptoSwift uses array of bytes aka `Array<UInt8>` as a base type for all operations. Every data may be converted to a stream of bytes. You will find convenience functions that accept String or NSData, and it will be internally converted to the array of bytes.
 
-#####Data conversions
+#####Data types conversion
 
-For you convenience CryptoSwift provide two function to easily convert array of bytes to NSData and other way around:
+For you convenience **CryptoSwift** provides two functions to easily convert array of bytes to NSData and another way around:
+
+Data from bytes:
 
 ```swift
 let data = Data(bytes: [0x01, 0x02, 0x03])
-let bytes = data.bytes
 ```
 
-Make bytes out of `String`:
+`Data` to `Array<UInt8>`
+
+```swift
+let bytes = data.bytes                     // [1,2,3]
+```
+
+[Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) encoding:
+
+```swift
+let bytes = Array<UInt8>(hex: "0x010203")  // [1,2,3]
+let hex   = bytes.toHexString()            // "010203"
+```
+
+Build bytes out of `String`
 ```swift
 let bytes = "string".utf8.map({$0})
 ```
 
-#####Calculate Hash
+Also... check out helpers that work with **Base64** encoded data:
+```swift
+"aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs=".decryptBase64ToString(cipher)
+"aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs=".decryptBase64(cipher)
+bytes.toBase64()
+```
+
+#####Calculate Digest
 
 Hashing a data or array of bytes (aka `Array<UInt8>`)
 ```swift
 /* Hash struct usage */
-let input:Array<UInt8> = [49, 50, 51]
-
-let output = input.md5()
-// alternatively: let output = CryptoSwift.Hash.md5(input)
-
-print(output.toHexString())
+let bytes:Array<UInt8> = [0x01, 0x02, 0x03]
+let digest = input.md5()
+let digest = Digest.md5(bytes)
 ```
 
 ```swift
-let data = NSData()
+let data = Data(bytes: [0x01, 0x02, 0x03])
 
 let hash = data.md5()
 let hash = data.sha1()
 let hash = data.sha224()
 let hash = data.sha256()
 let hash = data.sha384()
-let hash = data.sha512()
-	
-let crc32 = data.crc32()
-let crc16 = data.crc16()
-
-print(hash.toHexString())
+let hash = data.sha512()    
 ```
-	
+```swift
+do {
+    var digest = MD5()
+    let partial1 = try digest.update(withBytes: [0x31, 0x32])
+    let partial2 = try digest.update(withBytes: [0x33])
+    let result = try digest.finish()
+} catch { }
+```
+    
 Hashing a String and printing result
 
 ```swift
 let hash = "123".md5()
 ```
 
+#####Calculate CRC
+
+```swift
+bytes.crc16()
+data.crc16()
+
+bytes.crc32()
+data.crc32()
+```
+
 #####Message authenticators
 
 ```swift
 // Calculate Message Authentication Code (MAC) for message
-let mac: Array<UInt8> = try! Poly1305(key: key).authenticate(bytes)
-let hmac: Array<UInt8> = try! HMAC(key: key, variant: .sha256).authenticate(bytes)
+let key:Array<UInt8> = [1,2,3,4,5,6,7,8,9,10,...]
+
+try Poly1305(key: key).authenticate(bytes)
+try HMAC(key: key, variant: .sha256).authenticate(bytes)
 ```
 
-#####Password-Based Key Derivation Function
+#####Password-Based Key Derivation Functions
 
 ```swift
 let password: Array<UInt8> = "s33krit".utf8.map {$0}
 let salt: Array<UInt8> = "nacllcan".utf8.map {$0}
 
-let value = try! PKCS5.PBKDF1(password: password, salt: salt, iterations: 4096, variant: .sha1).calculate()
+try PKCS5.PBKDF1(password: password, salt: salt, variant: .sha1, iterations: 4096).calculate()
 
-let value = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha256).calculate()
-
-value.toHexString() // print Hex representation
+try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha256).calculate()
 ```
 
 #####Data Padding
@@ -232,57 +266,59 @@ value.toHexString() // print Hex representation
 Some content-encryption algorithms assume the input length is a multiple of k octets, where k is greater than one. For such algorithms, the input shall be padded.
 
 ```swift
-let paddedData = PKCS7().add(arr, blockSize: AES.blockSize)
+PKCS7().add(to: bytes, blockSize: AES.blockSize)
 ```
 
 ####Working with Ciphers
 #####ChaCha20
 
 ```swift
-let encrypted: Array<UInt8> = ChaCha20(key: key, iv: iv).encrypt(message)
-let decrypted: Array<UInt8> = ChaCha20(key: key, iv: iv).decrypt(encrypted)
+let encrypted = try ChaCha20(key: key, iv: iv).encrypt(message)
+let decrypted = try ChaCha20(key: key, iv: iv).decrypt(encrypted)
 ```
 
 #####Rabbit
 
 ```swift
-let encrypted = Rabbit(key: key, iv: iv)?.encrypt(plaintext)
-let decrypted = Rabbit(key: key, iv: iv)?.decrypt(encrypted!)
+let encrypted = try Rabbit(key: key, iv: iv).encrypt(message)
+let decrypted = try Rabbit(key: key, iv: iv).decrypt(encrypted)
 ```
 
 #####AES
 
-Notice regarding padding: *Manual padding of data is optional and CryptoSwift is using PKCS7 padding by default. If you need manually disable/enable padding, you can do this by setting parameter for __AES__ class*
+Notice regarding padding: *Manual padding of data is optional, and CryptoSwift is using PKCS7 padding by default. If you need manually disable/enable padding, you can do this by setting parameter for __AES__ class*
 
 ######All at once
 ```swift
-let input = NSData()
-let encrypted = try! input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345"))
-
-let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]
-input.encrypt(AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC))
+do {
+    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap") // aes128
+    let ciphertext = try aes.encrypt("Nullam quis risus eget urna mollis ornare vel eu leo.".utf8.map({$0}))
+} catch { }
 ```
 
 ######Incremental updates
 
-Incremental operations uses instance of Cryptor and encrypt/decrypt one part at time, this way you can save on memory for large files. 
+Incremental operations use instance of Cryptor and encrypt/decrypt one part at a time, this way you can save on memory for large files. 
 
 ```swift
-let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap")
-var encryptor = aes.makeEncryptor()
+do {
+    var encryptor = try AES(key: "passwordpassword", iv: "drowssapdrowssap").makeEncryptor()
 
-var ciphertext = Array<UInt8>()
-ciphertext += try encryptor.update(withBytes: "Nullam quis risus ".utf8.map({$0}))
-ciphertext += try encryptor.update(withBytes: "eget urna mollis ".utf8.map({$0}))
-ciphertext += try encryptor.update(withBytes: "ornare vel eu leo.".utf8.map({$0}))
-ciphertext += try encryptor.finish()
+    var ciphertext = Array<UInt8>()
+    // aggregate partial results
+    ciphertext += try encryptor.update(withBytes: "Nullam quis risus ".utf8.map({$0}))
+    ciphertext += try encryptor.update(withBytes: "eget urna mollis ".utf8.map({$0}))
+    ciphertext += try encryptor.update(withBytes: "ornare vel eu leo.".utf8.map({$0}))
+    // finish at the end
+    ciphertext += try encryptor.finish()
+
+    print(ciphertext.toHexString())
+} catch {
+    print(error)
+}
 ```
 
-See [Playground](/CryptoSwift.playground/Contents.swift) for sample code to work with streams.
-
-Check this helper functions to work with **Base64** encoded data directly:
-- .decryptBase64ToString()
-- .toBase64()
+See [Playground](/CryptoSwift.playground/Contents.swift) for sample code that work with stream.
 
 ######AES Advanced usage
 ```swift
@@ -295,10 +331,10 @@ do {
     let encrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).encrypt(input)
     let decrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).decrypt(encrypted)
 } catch {
-	print(error)
-}	
+    print(error)
+}    
 ```
-	
+    
 AES without data padding
 
 ```swift
@@ -307,12 +343,11 @@ let encrypted: Array<UInt8> = try! AES(key: "secret0key000000", iv:"012345678901
 ```
 
 Using convenience extensions
-	
+    
 ```swift
-let plain = NSData()
-let encrypted: NSData = try! plain.encrypt(ChaCha20(key: key, iv: iv))
-let decrypted: NSData = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
-// plain == decrypted
+let plain = Data(bytes: [0x01, 0x02, 0x03])
+let encrypted = try! plain.encrypt(ChaCha20(key: key, iv: iv))
+let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
 ```
 
 ##Author

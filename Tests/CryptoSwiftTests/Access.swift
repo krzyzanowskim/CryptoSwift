@@ -20,13 +20,15 @@ class Access: XCTestCase {
         let _ = Checksum.crc16([1,2,3])
     }
 
-    func testHash() {
+    func testDigest() {
         let _ = Digest.md5([1,2,3])
         let _ = Digest.sha1([1,2,3])
         let _ = Digest.sha224([1,2,3])
         let _ = Digest.sha256([1,2,3])
         let _ = Digest.sha384([1,2,3])
         let _ = Digest.sha512([1,2,3])
+
+        let _ = MD5()
     }
 
     func testArrayExtension() {
@@ -225,7 +227,7 @@ class Access: XCTestCase {
     
     static let allTests =  [
         ("testChecksum", testChecksum),
-        ("testHash", testHash),
+        ("testDigest", testDigest),
         ("testArrayExtension", testArrayExtension),
         ("testCollectionExtension", testCollectionExtension),
         ("testStringExtension", testStringExtension),

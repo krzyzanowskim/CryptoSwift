@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final class MD5: DigestType  {
+public class MD5: DigestType  {
     static let blockSize:Int = 64
     static let digestSize:Int = 16 // 128 / 8
     fileprivate static let hashInitialValue:Array<UInt32> = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
@@ -38,6 +38,10 @@ final class MD5: DigestType  {
                        0x655b59c3,0x8f0ccc92,0xffeff47d,0x85845dd1,
                        0x6fa87e4f,0xfe2ce6e0,0xa3014314,0x4e0811a1,
                        0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391]
+
+    public init() {
+        
+    }
 
     func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
         do {
@@ -102,7 +106,7 @@ final class MD5: DigestType  {
 }
 
 extension MD5: Updatable {
-    func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+    public func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
         let prevAccumulatedLength = self.accumulated.count
         self.accumulated += bytes
         self.accumulatedLength += self.accumulated.count - prevAccumulatedLength //avoid Array(bytes).count

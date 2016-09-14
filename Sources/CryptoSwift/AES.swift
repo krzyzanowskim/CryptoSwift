@@ -10,10 +10,14 @@
 
 private typealias Key = SecureBytes
 
+/// The Advanced Encryption Standard (AES)
 final public class AES: BlockCipher {
     public enum Error: Swift.Error {
+        /// Data padding is required
         case dataPaddingRequired
+        /// Invalid key or IV
         case invalidKeyOrInitializationVector
+        /// Invalid IV
         case invalidInitializationVector
     }
     

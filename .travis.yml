@@ -16,56 +16,18 @@ matrix:
   include:
     - os: osx
       osx_image: xcode7.3
-      env: DESTINATION="OS=8.1,name=iPhone 4S" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3"
-    - os: osx
-      osx_image: xcode7.3
-      env: DESTINATION="OS=8.2,name=iPhone 5" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3"
-    - os: osx
-      osx_image: xcode7.3
-      env: DESTINATION="OS=8.3,name=iPhone 5S" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3"
-    - os: osx
-      osx_image: xcode7.3
-      env: DESTINATION="OS=8.4,name=iPhone 6" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3"
-    - os: osx
-      osx_image: xcode7.3
-      env: DESTINATION="OS=9.0,name=iPhone 6" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3"
-    - os: osx
-      osx_image: xcode7.3
-      env: DESTINATION="OS=9.1,name=iPhone 6 Plus" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3"
-    - os: osx
-      osx_image: xcode7.3
-      env: DESTINATION="OS=9.2,name=iPhone 6S" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3"
-    - os: osx
-      osx_image: xcode7.3
       env: DESTINATION="OS=9.3,name=iPhone 6S Plus" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}9.3"
-    - os: osx
-      osx_image: xcode7.3
-      env: DESTINATION="arch=x86_64" SCHEME="$OSX_SCHEME" SDK="${OSX_SIM}10.11"
-    - os: osx
-      osx_image: xcode7.3
-      env: DESTINATION="OS=9.2,name=Apple TV 1080p" SCHEME="$TVOS_SCHEME" SDK="${TVOS_SIM}9.2"
-    - os: osx
-      osx_image: xcode7.3
-      env: DESTINATION="OS=2.2,name=Apple Watch - 42mm" SCHEME="$WATCHOS_SCHEME" SDK="${WATCHOS_SIM}2.2"
 
     - os: osx
+      osx_image: xcode8
       env: DESTINATION="OS=10.0,name=iPhone 6S" SCHEME="$IOS_SCHEME" SDK="${IOS_SIM}10.0"
-      osx_image: xcode8
-    - os: osx
-      osx_image: xcode8
-      env: DESTINATION="arch=x86_64" SCHEME="$OSX_SCHEME" SDK="${OSX_SIM}10.12"
-    - os: osx
-      osx_image: xcode8
-      env: DESTINATION="OS=10.0,name=Apple TV 1080p" SCHEME="$TVOS_SCHEME" SDK="${TVOS_SIM}10.0"
-    - os: osx
-      osx_image: xcode8
-      env: DESTINATION="OS=3.0,name=Apple Watch - 42mm" SCHEME="$WATCHOS_SCHEME" SDK="${WATCHOS_SIM}3.0"
 
 script:
   - set -o pipefail
   - xcodebuild -version
   - xcodebuild -showsdks
 
+  - xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES | xcpretty -c;
   - xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty -c;
-
+  - xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES | xcpretty -c;
   - xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES test | xcpretty -c;

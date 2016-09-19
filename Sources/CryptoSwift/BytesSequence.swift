@@ -11,7 +11,7 @@ private func CS_AnyGenerator<Element>(body: () -> Element?) -> AnyGenerator<Elem
  #if os(Linux)
     return AnyGenerator(body: body)
  #else
-     return AnyGenerator(body: body)
+     return anyGenerator(body)
  #endif
 }
 

@@ -26,8 +26,8 @@ extension HashProtocol {
         var counter = 0
         
         while msgLength % len != (len - 8) {
-            counter += 1
-            msgLength += 1
+            counter++
+            msgLength++
         }
 
         tmpMessage += Array<UInt8>(count: counter, repeatedValue: 0)

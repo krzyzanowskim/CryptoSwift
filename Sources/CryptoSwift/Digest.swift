@@ -30,27 +30,27 @@ public struct Digest {
     /// - parameter bytes: input message
     /// - returns: Digest bytes
     public static func sha224(_ bytes: Array<UInt8>) -> Array<UInt8> {
-        return SHA2(bytes, variant: .sha224).calculate32()
+        return SHA2(variant: .sha224).calculate(for: bytes)
     }
 
     /// Calculate SHA2-256 Digest
     /// - parameter bytes: input message
     /// - returns: Digest bytes
     public static func sha256(_ bytes: Array<UInt8>) -> Array<UInt8> {
-        return SHA2(bytes, variant: .sha256).calculate32()
+        return SHA2(variant: .sha256).calculate(for: bytes)
     }
 
     /// Calculate SHA2-384 Digest
     /// - parameter bytes: input message
     /// - returns: Digest bytes
     public static func sha384(_ bytes: Array<UInt8>) -> Array<UInt8> {
-        return SHA2(bytes, variant: .sha384).calculate64()
+        return SHA2(variant: .sha384).calculate(for: bytes)
     }
 
     /// Calculate SHA2-512 Digest
     /// - parameter bytes: input message
     /// - returns: Digest bytes
     public static func sha512(_ bytes: Array<UInt8>) -> Array<UInt8> {
-        return SHA2(bytes, variant: .sha512).calculate64()
+        return SHA2(variant: .sha512).calculate(for: bytes)
     }
 }

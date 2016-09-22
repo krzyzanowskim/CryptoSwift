@@ -5,24 +5,46 @@
 //  Created by Marcin Krzyzanowski on 24/08/14.
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
+//  TODO: generic for process32/64 (UInt32/UInt64)
+//
 
 final class SHA2: DigestType {
-    var size:Int { return variant.rawValue }
     let variant: Variant
-    
-    let message: Array<UInt8>
-    
-    init(_ message:Array<UInt8>, variant: SHA2.Variant) {
+    var size: Int { return variant.rawValue }
+    var blockSize: Int { return variant.blockSize }
+    var digestSize: Int { return variant.digestSize }
+
+    fileprivate var accumulated = Array<UInt8>()
+    fileprivate var accumulatedLength: Int = 0
+    fileprivate var accumulatedHash32 = Array<UInt32>()
+    fileprivate var accumulatedHash64 = Array<UInt64>()
+
+    public init(variant: SHA2.Variant) {
         self.variant = variant
-        self.message = message
+        switch self.variant {
+            case .sha224, .sha256:
+                self.accumulatedHash32 = variant.h.map { UInt32($0) } //FIXME: UInt64 for process64
+            case .sha384, .sha512:
+                self.accumulatedHash64 = variant.h
+        }
     }
-    
+
     enum Variant: RawRepresentable {
         case sha224, sha256, sha384, sha512
-        
+
+        var digestSize:Int { return self.rawValue }
+        var blockSize: Int {
+            switch self {
+            case .sha224, .sha256:
+                return 64
+            case .sha384, .sha512:
+                return 128
+            }
+        }
+
         typealias RawValue = Int
         var rawValue: RawValue {
-            switch (self) {
+            switch self {
             case .sha224:
                 return 224
             case .sha256:
@@ -52,11 +74,9 @@ final class SHA2: DigestType {
                 return nil
             }
         }
-        
-        var digestSize:Int { return self.rawValue }
-        
+
         fileprivate var h:Array<UInt64> {
-            switch (self) {
+            switch self {
             case .sha224:
                 return [0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939, 0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4]
             case .sha256:
@@ -69,7 +89,7 @@ final class SHA2: DigestType {
         }
         
         fileprivate var k:Array<UInt64> {
-            switch (self) {
+            switch self {
             case .sha224, .sha256:
                 return [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
                         0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -106,181 +126,199 @@ final class SHA2: DigestType {
             case .sha384:
                 return hh[0..<6]
             default:
-                break;
+                return ArraySlice(hh)
             }
-            return ArraySlice(hh)
         }
     }
-    
-    //FIXME: I can't do Generic func out of calculate32 and calculate64 (UInt32 vs UInt64), but if you can - please do pull request.
-    func calculate32() -> Array<UInt8> {
-        var tmpMessage = bitPadding(to: self.message, blockSize: 64, allowance: 64 / 8)
 
-        // hash values
-        var hh = Array<UInt32>()
-        variant.h.forEach {(h) -> () in
-            hh.append(UInt32(h))
+    func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
+        do {
+            return try self.update(withBytes: bytes, isLast: true)
+        } catch {
+            fatalError()
         }
-		
-        // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
-        tmpMessage += (message.count * 8).bytes(totalBytes: 64 / 8)
-        
-        // Process the message in successive 512-bit chunks:
-        let chunkSizeBytes = 512 / 8 // 64
-        for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
-            // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
-            // Extend the sixteen 32-bit words into sixty-four 32-bit words:
-            var M = Array<UInt32>(repeating: 0, count: variant.k.count)
-            for x in 0..<M.count {
-                switch (x) {
-                case 0...15:
-                    let start = chunk.startIndex + (x * MemoryLayout<UInt32>.size)
-                    let end = start + MemoryLayout<UInt32>.size
-                    let le = chunk[start..<end].toUInt32Array()[0]
-                    M[x] = le.bigEndian
-                    break
-                default:
-                    let s0 = rotateRight(M[x-15], by: 7) ^ rotateRight(M[x-15], by: 18) ^ (M[x-15] >> 3)
-                    let s1 = rotateRight(M[x-2], by: 17) ^ rotateRight(M[x-2], by: 19) ^ (M[x-2] >> 10)
-                    M[x] = M[x-16] &+ s0 &+ M[x-7] &+ s1
-                    break
-                }
-            }
-            
-            var A = hh[0]
-            var B = hh[1]
-            var C = hh[2]
-            var D = hh[3]
-            var E = hh[4]
-            var F = hh[5]
-            var G = hh[6]
-            var H = hh[7]
-            
-            // Main loop
-            for j in 0..<variant.k.count {
-                let s0 = rotateRight(A, by: 2) ^ rotateRight(A, by: 13) ^ rotateRight(A, by: 22)
-                let maj = (A & B) ^ (A & C) ^ (B & C)
-                let t2 = s0 &+ maj
-                let s1 = rotateRight(E, by: 6) ^ rotateRight(E, by: 11) ^ rotateRight(E, by: 25)
-                let ch = (E & F) ^ ((~E) & G)
-                let t1 = H &+ s1 &+ ch &+ UInt32(variant.k[j]) &+ M[j]
-                
-                H = G
-                G = F
-                F = E
-                E = D &+ t1
-                D = C
-                C = B
-                B = A
-                A = t1 &+ t2
-            }
-            
-            hh[0] = (hh[0] &+ A)
-            hh[1] = (hh[1] &+ B)
-            hh[2] = (hh[2] &+ C)
-            hh[3] = (hh[3] &+ D)
-            hh[4] = (hh[4] &+ E)
-            hh[5] = (hh[5] &+ F)
-            hh[6] = (hh[6] &+ G)
-            hh[7] = (hh[7] &+ H)
-        }
-        
-        // Produce the final hash value (big-endian) as a 160 bit number:
-        var result = Array<UInt8>()
-        result.reserveCapacity(hh.count / 4)
-        variant.resultingArray(hh).forEach {
-            let item = $0.bigEndian
-            result += [UInt8(item & 0xff), UInt8((item >> 8) & 0xff), UInt8((item >> 16) & 0xff), UInt8((item >> 24) & 0xff)]
-        }
-        return result
     }
-    
-    func calculate64() -> Array<UInt8> {
-        var tmpMessage = bitPadding(to: self.message, blockSize: 128, allowance: 128 / 8)
-        
-        // hash values
-        var hh = Array<UInt64>()
-        variant.h.forEach {(h) -> () in
-            hh.append(h)
+
+    fileprivate func process64(block chunk: ArraySlice<UInt8>, currentHash hh: inout Array<UInt64>) {
+        // break chunk into sixteen 64-bit words M[j], 0 ≤ j ≤ 15, big-endian
+        // Extend the sixteen 64-bit words into eighty 64-bit words:
+        var M = Array<UInt64>(repeating: 0, count: variant.k.count)
+        for x in 0..<M.count {
+            switch (x) {
+            case 0...15:
+                let start = chunk.startIndex.advanced(by: (x * MemoryLayout<UInt64>.size))
+                let end = start.advanced(by: MemoryLayout<UInt64>.size)
+                let le = chunk[start..<end].toUInt64Array()[0]
+                M[x] = le.bigEndian
+                break
+            default:
+                let s0 = rotateRight(M[x-15], by: 1) ^ rotateRight(M[x-15], by: 8) ^ (M[x-15] >> 7)
+                let s1 = rotateRight(M[x-2], by: 19) ^ rotateRight(M[x-2], by: 61) ^ (M[x-2] >> 6)
+                M[x] = M[x-16] &+ s0 &+ M[x-7] &+ s1
+                break
+            }
         }
-		
-  
-        // append message length, in a 128-bit big-endian integer. So now the message length is a multiple of 1024 bits.
-        tmpMessage += (message.count * 8).bytes(totalBytes: 128 / 8)
+
+        var A = hh[0]
+        var B = hh[1]
+        var C = hh[2]
+        var D = hh[3]
+        var E = hh[4]
+        var F = hh[5]
+        var G = hh[6]
+        var H = hh[7]
+
+        // Main loop
+        for j in 0..<variant.k.count {
+            let s0 = rotateRight(A, by: 28) ^ rotateRight(A, by: 34) ^ rotateRight(A, by: 39)
+            let maj = (A & B) ^ (A & C) ^ (B & C)
+            let t2 = s0 &+ maj
+            let s1 = rotateRight(E, by: 14) ^ rotateRight(E, by: 18) ^ rotateRight(E, by: 41)
+            let ch = (E & F) ^ ((~E) & G)
+            let t1 = H &+ s1 &+ ch &+ variant.k[j] &+ UInt64(M[j])
+
+            H = G
+            G = F
+            F = E
+            E = D &+ t1
+            D = C
+            C = B
+            B = A
+            A = t1 &+ t2
+        }
         
-        // Process the message in successive 1024-bit chunks:
-        let chunkSizeBytes = 1024 / 8 // 128
-        for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
-            // break chunk into sixteen 64-bit words M[j], 0 ≤ j ≤ 15, big-endian
-            // Extend the sixteen 64-bit words into eighty 64-bit words:
-            var M = Array<UInt64>(repeating: 0, count: variant.k.count)
-            for x in 0..<M.count {
-                switch (x) {
-                case 0...15:
-                    let start = chunk.startIndex + (x * MemoryLayout<UInt64>.size)
-                    let end = start + MemoryLayout<UInt64>.size
-                    let le = chunk[start..<end].toUInt64Array()[0]
-                    M[x] = le.bigEndian
-                    break
-                default:
-                    let s0 = rotateRight(M[x-15], by: 1) ^ rotateRight(M[x-15], by: 8) ^ (M[x-15] >> 7)
-                    let s1 = rotateRight(M[x-2], by: 19) ^ rotateRight(M[x-2], by: 61) ^ (M[x-2] >> 6)
-                    M[x] = M[x-16] &+ s0 &+ M[x-7] &+ s1
-                    break
+        hh[0] = (hh[0] &+ A)
+        hh[1] = (hh[1] &+ B)
+        hh[2] = (hh[2] &+ C)
+        hh[3] = (hh[3] &+ D)
+        hh[4] = (hh[4] &+ E)
+        hh[5] = (hh[5] &+ F)
+        hh[6] = (hh[6] &+ G)
+        hh[7] = (hh[7] &+ H)
+    }
+
+    // mutating currentHash in place is way faster than returning new result
+    fileprivate func process32(block chunk: ArraySlice<UInt8>, currentHash hh: inout Array<UInt32>) {
+        // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
+        // Extend the sixteen 32-bit words into sixty-four 32-bit words:
+        var M = Array<UInt32>(repeating: 0, count: variant.k.count)
+        for x in 0..<M.count {
+            switch (x) {
+            case 0...15:
+                let start = chunk.startIndex + (x * MemoryLayout<UInt32>.size)
+                let end = start + MemoryLayout<UInt32>.size
+                let le = chunk[start..<end].toUInt32Array()[0]
+                M[x] = le.bigEndian
+                break
+            default:
+                let s0 = rotateRight(M[x-15], by: 7) ^ rotateRight(M[x-15], by: 18) ^ (M[x-15] >> 3)
+                let s1 = rotateRight(M[x-2], by: 17) ^ rotateRight(M[x-2], by: 19) ^ (M[x-2] >> 10)
+                M[x] = M[x-16] &+ s0 &+ M[x-7] &+ s1
+                break
+            }
+        }
+
+        var A = hh[0]
+        var B = hh[1]
+        var C = hh[2]
+        var D = hh[3]
+        var E = hh[4]
+        var F = hh[5]
+        var G = hh[6]
+        var H = hh[7]
+
+        // Main loop
+        for j in 0..<variant.k.count {
+            let s0 = rotateRight(A, by: 2) ^ rotateRight(A, by: 13) ^ rotateRight(A, by: 22)
+            let maj = (A & B) ^ (A & C) ^ (B & C)
+            let t2 = s0 &+ maj
+            let s1 = rotateRight(E, by: 6) ^ rotateRight(E, by: 11) ^ rotateRight(E, by: 25)
+            let ch = (E & F) ^ ((~E) & G)
+            let t1 = H &+ s1 &+ ch &+ UInt32(variant.k[j]) &+ M[j]
+
+            H = G
+            G = F
+            F = E
+            E = D &+ t1
+            D = C
+            C = B
+            B = A
+            A = t1 &+ t2
+        }
+
+        hh[0] = hh[0] &+ A
+        hh[1] = hh[1] &+ B
+        hh[2] = hh[2] &+ C
+        hh[3] = hh[3] &+ D
+        hh[4] = hh[4] &+ E
+        hh[5] = hh[5] &+ F
+        hh[6] = hh[6] &+ G
+        hh[7] = hh[7] &+ H
+    }
+}
+
+extension SHA2: Updatable {
+
+    public func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+        let prevAccumulatedLength = self.accumulated.count
+        self.accumulated += bytes
+        self.accumulatedLength += self.accumulated.count - prevAccumulatedLength //avoid Array(bytes).count
+
+        if isLast {
+            // Step 1. Append padding
+            self.accumulated = bitPadding(to: self.accumulated, blockSize: self.blockSize, allowance: self.blockSize / 8)
+
+            // Step 2. Append Length a 64-bit representation of lengthInBits
+            let lengthInBits = self.accumulatedLength * 8
+            self.accumulated += lengthInBits.bytes(totalBytes: self.blockSize / 8) // A 64-bit/128-bit representation of b. blockSize fit by accident.
+        }
+
+        for chunk in BytesSequence(chunkSize: self.blockSize, data: self.accumulated) {
+            if (isLast || self.accumulated.count >= self.blockSize) {
+                switch self.variant {
+                    case .sha224, .sha256:
+                        self.process32(block: chunk, currentHash: &self.accumulatedHash32)
+                    case .sha384, .sha512:
+                        self.process64(block: chunk, currentHash: &self.accumulatedHash64)
                 }
+                self.accumulated.removeFirst(chunk.count)
             }
-            
-            var A = hh[0]
-            var B = hh[1]
-            var C = hh[2]
-            var D = hh[3]
-            var E = hh[4]
-            var F = hh[5]
-            var G = hh[6]
-            var H = hh[7]
-            
-            // Main loop
-            for j in 0..<variant.k.count {
-                let s0 = rotateRight(A, by: 28) ^ rotateRight(A, by: 34) ^ rotateRight(A, by: 39) //FIXME: n:
-                let maj = (A & B) ^ (A & C) ^ (B & C)
-                let t2 = s0 &+ maj
-                let s1 = rotateRight(E, by: 14) ^ rotateRight(E, by: 18) ^ rotateRight(E, by: 41)
-                let ch = (E & F) ^ ((~E) & G)
-                let t1 = H &+ s1 &+ ch &+ variant.k[j] &+ UInt64(M[j])
-                
-                H = G
-                G = F
-                F = E
-                E = D &+ t1
-                D = C
-                C = B
-                B = A
-                A = t1 &+ t2
-            }
-            
-            hh[0] = (hh[0] &+ A)
-            hh[1] = (hh[1] &+ B)
-            hh[2] = (hh[2] &+ C)
-            hh[3] = (hh[3] &+ D)
-            hh[4] = (hh[4] &+ E)
-            hh[5] = (hh[5] &+ F)
-            hh[6] = (hh[6] &+ G)
-            hh[7] = (hh[7] &+ H)
         }
-        
-        // Produce the final hash value (big-endian)
+
+        // output current hash
         var result = Array<UInt8>()
-        result.reserveCapacity(hh.count / 4)
-        variant.resultingArray(hh).forEach {
-            let item = $0.bigEndian
-            var partialResult = Array<UInt8>()
-            partialResult.reserveCapacity(8)
-            for i in 0..<8 {
-                let shift = UInt64(8 * i)
-                partialResult.append(UInt8((item >> shift) & 0xff))
+
+        switch self.variant {
+            case .sha224, .sha256:
+                result.reserveCapacity(self.accumulatedHash32.count / 4)
+                self.variant.resultingArray(self.accumulatedHash32).forEach { //TODO: rename resultingArray -> resultSlice
+                    let item = $0.bigEndian
+                    result += [UInt8(item & 0xff), UInt8((item >> 8) & 0xff), UInt8((item >> 16) & 0xff), UInt8((item >> 24) & 0xff)]
             }
-            result += partialResult
+            case .sha384, .sha512:
+                result.reserveCapacity(self.accumulatedHash64.count / 4)
+                variant.resultingArray(self.accumulatedHash64).forEach {
+                    let item = $0.bigEndian
+                    var partialResult = Array<UInt8>()
+                    partialResult.reserveCapacity(8)
+                    for i in 0..<8 {
+                        let shift = UInt64(8 * i)
+                        partialResult.append(UInt8((item >> shift) & 0xff))
+                    }
+                    result += partialResult
+                }
         }
+
+        // reset hash value for instance
+        if isLast {
+            switch self.variant {
+            case .sha224, .sha256:
+                self.accumulatedHash32 = variant.h.map { UInt32($0) } //FIXME: UInt64 for process64
+            case .sha384, .sha512:
+                self.accumulatedHash64 = variant.h
+            }
+        }
+
         return result
     }
 }

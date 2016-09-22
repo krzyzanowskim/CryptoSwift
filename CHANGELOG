@@ -1,3 +1,5 @@
+- SHA-2 conforms to Updatable protocol and may be calculated incrementally. 
+
 0.6.0
 - Remove bridge() workaround for Linux (not needed)
 - make MD5() public

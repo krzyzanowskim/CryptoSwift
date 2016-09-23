@@ -48,29 +48,6 @@ final class ExtensionsTest: XCTestCase {
         XCTAssertTrue(bytes[14] == 4, "Invalid return type \(bytes.count)")
     }
     
-    func testShiftLeft() {
-        // Unsigned
-        let i:UInt32 = 1
-        XCTAssert(i &<< 1 == 2, "shift left failed")
-        XCTAssert(i &<< 8 == 256, "shift left failed")
-        XCTAssert(i &<< 31 == i << 31, "shift left failed")
-        XCTAssert(i &<< 32 == 0, "shift left failed")
-
-        // Signed
-        let ii:Int = 21
-        XCTAssert(ii &<< 1 == ii << 1, "shift left failed")
-        XCTAssert(ii &<< 8 == ii << 8, "shift left failed")
-        let shiftLeft1 = ii &<< ((MemoryLayout<Int>.size * 8) - 1)
-        let shiftLeft2 = ii << ((MemoryLayout<Int>.size * 8) - 1)
-        XCTAssert(shiftLeft1 == shiftLeft2, "shift left failed")
-        XCTAssert(ii &<< ((MemoryLayout<Int>.size * 8)) == 0, "shift left failed")
-        
-        let iii:UInt32 = 21
-        XCTAssert(iii &<< 1 == iii << 1, "shift left failed")
-        XCTAssert(iii &<< 8 == iii << 8, "shift left failed")
-        XCTAssert((iii &<< 32) == 0, "shift left failed")
-    }
-    
     func testToUInt32Array() {
         let chunk:ArraySlice<UInt8> = [1,1,1,7,2,3,4,5]
         let result = chunk.toUInt32Array()
@@ -114,7 +91,6 @@ final class ExtensionsTest: XCTestCase {
         ("testArrayChunksPerformance", testArrayChunksPerformance),
         ("testIntExtension", testIntExtension),
         ("testBytes", testBytes),
-        ("testShiftLeft", testShiftLeft),
         ("testToUInt32Array", testToUInt32Array),
         ("testDataInit", testDataInit),
         ("testStringEncrypt", testStringEncrypt),

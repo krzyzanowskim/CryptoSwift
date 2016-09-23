@@ -18,11 +18,7 @@ var i = 1       // init
 var j = i &<< 2 //shift left
 j &<<= 2        //shift left and assign
 
-
 @see: https://medium.com/@krzyzanowskim/swiftly-shift-bits-and-protect-yourself-be33016ce071
+ 
+This fuctonality is now implemented as part of Swift 3, SE-0104 https://github.com/apple/swift-evolution/blob/master/proposals/0104-improved-integers.md
 */
-
-infix operator &<<= : BitwiseShiftPrecedence
-infix operator &<< : BitwiseShiftPrecedence
-infix operator &>>= : BitwiseShiftPrecedence
-infix operator &>> : BitwiseShiftPrecedence

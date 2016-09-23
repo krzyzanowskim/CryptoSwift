@@ -8,7 +8,7 @@
 
 public class MD5: DigestType  {
     static let blockSize:Int = 64
-    static let digestSize:Int = 16 // 128 / 8
+    static let digestLength:Int = 16 // 128 / 8
     fileprivate static let hashInitialValue:Array<UInt32> = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
 
     fileprivate var accumulated = Array<UInt8>()

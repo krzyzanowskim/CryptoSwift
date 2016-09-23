@@ -7,7 +7,7 @@
 //
 
 final class SHA1: DigestType {
-    static let digestSize:Int = 20 // 160 / 8
+    static let digestLength:Int = 20 // 160 / 8
     private let message: Array<UInt8>
     
     init(_ message: Array<UInt8>) {

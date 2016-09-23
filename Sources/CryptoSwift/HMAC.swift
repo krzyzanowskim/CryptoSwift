@@ -16,18 +16,18 @@ final public class HMAC: Authenticator {
     public enum Variant {
         case sha1, sha256, sha384, sha512, md5
         
-        var digestSize:Int {
+        var digestLength:Int {
             switch (self) {
             case .sha1:
-                return SHA1.digestSize
+                return SHA1.digestLength
             case .sha256:
-                return SHA2.Variant.sha256.digestSize
+                return SHA2.Variant.sha256.digestLength
             case .sha384:
-                return SHA2.Variant.sha384.digestSize
+                return SHA2.Variant.sha384.digestLength
             case .sha512:
-                return SHA2.Variant.sha512.digestSize
+                return SHA2.Variant.sha512.digestLength
             case .md5:
-                return MD5.digestSize
+                return MD5.digestLength
             }
         }
 

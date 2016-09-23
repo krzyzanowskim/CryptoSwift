@@ -12,7 +12,7 @@ final class SHA2: DigestType {
     let variant: Variant
     var size: Int { return variant.rawValue }
     var blockSize: Int { return variant.blockSize }
-    var digestSize: Int { return variant.digestSize }
+    var digestLength: Int { return variant.digestLength }
 
     fileprivate var accumulated = Array<UInt8>()
     fileprivate var accumulatedLength: Int = 0
@@ -32,7 +32,10 @@ final class SHA2: DigestType {
     enum Variant: RawRepresentable {
         case sha224, sha256, sha384, sha512
 
-        var digestSize:Int { return self.rawValue }
+        var digestLength:Int {
+            return self.rawValue
+        }
+
         var blockSize: Int {
             switch self {
             case .sha224, .sha256:

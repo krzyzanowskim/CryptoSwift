@@ -33,7 +33,7 @@ final class SHA2: DigestType {
         case sha224, sha256, sha384, sha512
 
         var digestLength:Int {
-            return self.rawValue
+            return self.rawValue / 8
         }
 
         var blockSize: Int {

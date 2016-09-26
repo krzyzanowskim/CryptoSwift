@@ -78,7 +78,7 @@ func bitPadding(to data: Array<UInt8>, blockSize: Int, allowance: Int = 0) -> Ar
     var msgLength = tmp.count
     var counter = 0
 
-    while msgLength % blockSize != (blockSize - allowance) {
+    while msgLength % blockSize != blockSize - allowance {
         counter += 1
         msgLength += 1
     }

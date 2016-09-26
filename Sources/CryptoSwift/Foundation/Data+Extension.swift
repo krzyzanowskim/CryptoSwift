@@ -51,6 +51,11 @@ extension Data {
         return Data(bytes: result)
     }
 
+    public func sha3(_ variant: SHA3.Variant) -> Data? {
+        let result = Digest.sha3(self.bytes, variant: variant)
+        return Data(bytes: result)
+    }
+
     public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> Data? {
         let result = Checksum.crc32(self.bytes, seed: seed, reflect: reflect)
         return Data(bytes: result.bytes())

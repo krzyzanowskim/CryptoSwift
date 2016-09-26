@@ -53,4 +53,13 @@ public struct Digest {
     public static func sha512(_ bytes: Array<UInt8>) -> Array<UInt8> {
         return SHA2(variant: .sha512).calculate(for: bytes)
     }
+
+    /// Calculate SHA3 Digest
+    /// - parameter bytes: input message
+    /// - parameter variant: SHA-3 variant
+    /// - returns: Digest bytes
+    public static func sha3(_ bytes: Array<UInt8>, variant: SHA3.Variant) -> Array<UInt8> {
+        return SHA3(variant: variant).calculate(for: bytes)
+    }
+
 }

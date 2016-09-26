@@ -33,6 +33,10 @@ extension String {
         return self.utf8.lazy.map({ $0 as UInt8 }).sha512().toHexString()
     }
 
+    public func sha3(_ variant: SHA3.Variant) -> String {
+        return self.utf8.lazy.map({ $0 as UInt8 }).sha3(variant).toHexString()
+    }
+
     public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> String {
         return self.utf8.lazy.map({ $0 as UInt8 }).crc32(seed: seed, reflect: reflect).bytes().toHexString()
     }

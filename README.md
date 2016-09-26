@@ -29,6 +29,7 @@ Good mood
 - [SHA256](http://tools.ietf.org/html/rfc6234)
 - [SHA384](http://tools.ietf.org/html/rfc6234)
 - [SHA512](http://tools.ietf.org/html/rfc6234)
+- [SHA3](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
 
 #### Cyclic Redundancy Check (CRC)
 - [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)

@@ -27,6 +27,7 @@ class Access: XCTestCase {
         let _ = Digest.sha256([1,2,3])
         let _ = Digest.sha384([1,2,3])
         let _ = Digest.sha512([1,2,3])
+        let _ = Digest.sha3([1,2,3], variant: .sha224)
 
         let _ = MD5()
     }
@@ -40,6 +41,7 @@ class Access: XCTestCase {
         let _ = array.sha256()
         let _ = array.sha384()
         let _ = array.sha512()
+        let _ = array.sha3(.sha224)
         let _ = array.crc32()
         let _ = array.crc16()
 
@@ -64,6 +66,7 @@ class Access: XCTestCase {
         let _ = string.sha256()
         let _ = string.sha384()
         let _ = string.sha512()
+        let _ = string.sha3(.sha224)
         let _ = string.crc16()
         let _ = string.crc32()
 
@@ -114,6 +117,7 @@ class Access: XCTestCase {
         let _ = data.sha256()
         let _ = data.sha384()
         let _ = data.sha512()
+        let _ = data.sha3(.sha224)
         let _ = data.crc16()
         let _ = data.crc32()
 

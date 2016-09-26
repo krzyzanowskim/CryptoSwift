@@ -52,7 +52,11 @@ public extension CSArrayType where Iterator.Element == UInt8 {
     public func sha512() -> [Iterator.Element] {
         return Digest.sha512(cs_arrayValue())
     }
-    
+
+    public func sha3(_ variant: SHA3.Variant) -> [Iterator.Element] {
+        return Digest.sha3(cs_arrayValue(), variant: variant)
+    }
+
     public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> UInt32 {
         return Checksum.crc32(cs_arrayValue(), seed: seed, reflect: reflect)
     }

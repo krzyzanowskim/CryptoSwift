@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-public class MD5: DigestType  {
+public final class MD5: DigestType  {
     static let blockSize:Int = 64
     static let digestLength:Int = 16 // 128 / 8
     fileprivate static let hashInitialValue:Array<UInt32> = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]

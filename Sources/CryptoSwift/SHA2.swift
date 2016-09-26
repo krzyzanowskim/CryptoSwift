@@ -8,7 +8,7 @@
 //  TODO: generic for process32/64 (UInt32/UInt64)
 //
 
-final class SHA2: DigestType {
+public final class SHA2: DigestType {
     let variant: Variant
     var size: Int { return variant.rawValue }
     var blockSize: Int { return variant.blockSize }
@@ -29,14 +29,14 @@ final class SHA2: DigestType {
         }
     }
 
-    enum Variant: RawRepresentable {
+    public enum Variant: RawRepresentable {
         case sha224, sha256, sha384, sha512
 
-        var digestLength:Int {
+        public var digestLength:Int {
             return self.rawValue / 8
         }
 
-        var blockSize: Int {
+        public var blockSize: Int {
             switch self {
             case .sha224, .sha256:
                 return 64
@@ -45,8 +45,8 @@ final class SHA2: DigestType {
             }
         }
 
-        typealias RawValue = Int
-        var rawValue: RawValue {
+        public typealias RawValue = Int
+        public var rawValue: RawValue {
             switch self {
             case .sha224:
                 return 224
@@ -59,7 +59,7 @@ final class SHA2: DigestType {
             }
         }
         
-        init?(rawValue: RawValue) {
+        public init?(rawValue: RawValue) {
             switch (rawValue) {
             case 224:
                 self = .sha224
@@ -138,7 +138,7 @@ final class SHA2: DigestType {
         do {
             return try self.update(withBytes: bytes, isLast: true)
         } catch {
-            fatalError()
+            return []
         }
     }
 
@@ -300,13 +300,12 @@ extension SHA2: Updatable {
             }
             case .sha384, .sha512:
                 result.reserveCapacity(self.accumulatedHash64.count / 4)
-                variant.resultingArray(self.accumulatedHash64).forEach {
+                self.variant.resultingArray(self.accumulatedHash64).forEach {
                     let item = $0.bigEndian
                     var partialResult = Array<UInt8>()
                     partialResult.reserveCapacity(8)
                     for i in 0..<8 {
-                        let shift = UInt64(8 * i)
-                        partialResult.append(UInt8((item >> shift) & 0xff))
+                        partialResult.append(UInt8((item >> UInt64(8 * i)) & 0xff))
                     }
                     result += partialResult
                 }

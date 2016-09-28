@@ -149,10 +149,8 @@ public final class SHA2: DigestType {
         for x in 0..<M.count {
             switch (x) {
             case 0...15:
-                let start = chunk.startIndex.advanced(by: (x * MemoryLayout<UInt64>.size))
-                let end = start.advanced(by: MemoryLayout<UInt64>.size)
-                let le = chunk[start..<end].toUInt64Array()[0]
-                M[x] = le.bigEndian
+                let start = chunk.startIndex.advanced(by: x * 8) // * MemoryLayout<UInt64>.size
+                M[x] = UInt64(bytes: chunk, fromIndex: start)
                 break
             default:
                 let s0 = rotateRight(M[x-15], by: 1) ^ rotateRight(M[x-15], by: 8) ^ (M[x-15] >> 7)
@@ -208,10 +206,8 @@ public final class SHA2: DigestType {
         for x in 0..<M.count {
             switch (x) {
             case 0...15:
-                let start = chunk.startIndex + (x * MemoryLayout<UInt32>.size)
-                let end = start + MemoryLayout<UInt32>.size
-                let le = chunk[start..<end].toUInt32Array()[0]
-                M[x] = le.bigEndian
+                let start = chunk.startIndex.advanced(by: x * 4) // * MemoryLayout<UInt32>.size
+                M[x] = UInt32(bytes: chunk, fromIndex: start)
                 break
             default:
                 let s0 = rotateRight(M[x-15], by: 7) ^ rotateRight(M[x-15], by: 18) ^ (M[x-15] >> 3)

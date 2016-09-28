@@ -120,20 +120,16 @@ final class DigestTests: XCTestCase {
 
     func testCRC32() {
         let data:Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
-        if let crc = data.crc32(seed: nil) {
-            XCTAssertEqual(crc.toHexString(), "884863d2", "CRC32 calculation failed");
-        }
-        
+        XCTAssertEqual(data.crc32(seed: nil).toHexString(), "884863d2", "CRC32 calculation failed");
+
         XCTAssertEqual("".crc32(seed: nil), "00000000", "CRC32 calculation failed");
     }
     
     func testCRC32NotReflected() {
         let bytes : Array<UInt8> = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39]
         let data:Data = Data(bytes: UnsafePointer<UInt8>(bytes), count: bytes.count)
-        if let crc = data.crc32(seed: nil, reflect: false) {
-            XCTAssertEqual(crc.toHexString(), "fc891918", "CRC32 (with reflection) calculation failed");
-        }
-        
+        XCTAssertEqual(data.crc32(seed: nil, reflect: false).toHexString(), "fc891918", "CRC32 (with reflection) calculation failed");
+
         XCTAssertEqual("".crc32(seed: nil, reflect: false), "00000000", "CRC32 (with reflection) calculation failed");
     }
     

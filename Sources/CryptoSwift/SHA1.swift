@@ -24,7 +24,7 @@ final class SHA1: DigestType {
         
         // append message length, in a 64-bit big-endian integer. So now the message length is a multiple of 512 bits.
         tmpMessage += (self.message.count * 8).bytes(totalBytes: 64 / 8)
-        
+
         // Process the message in successive 512-bit chunks:
         let chunkSizeBytes = 512 / 8 // 64
         for chunk in BytesSequence(chunkSize: chunkSizeBytes, data: tmpMessage) {
@@ -34,10 +34,8 @@ final class SHA1: DigestType {
             for x in 0..<M.count {
                 switch (x) {
                 case 0...15:
-                    let start = chunk.startIndex + (x * MemoryLayout<UInt32>.size)
-                    let end = start + MemoryLayout<UInt32>.size
-                    let le = chunk[start..<end].toUInt32Array()[0]
-                    M[x] = le.bigEndian
+                    let start = chunk.startIndex.advanced(by: x * 4) // * MemoryLayout<UInt32>.size
+                    M[x] = UInt32(bytes: chunk, fromIndex: start)
                     break
                 default:
                     M[x] = rotateLeft(M[x-3] ^ M[x-8] ^ M[x-14] ^ M[x-16], by: 1)

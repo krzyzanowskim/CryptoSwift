@@ -97,8 +97,8 @@ fileprivate extension PKCS5.PBKDF2 {
             if self.iterations > 1 {
                 // U_2 = PRF (P, U_1) ,
                 // U_c = PRF (P, U_{c-1}) .
-                u = try prf.authenticate(u)
                 for _ in 2...self.iterations {
+                    u = try prf.authenticate(u)
                     for x in 0..<ret.count {
                         ret[x] = ret[x] ^ u[x]
                     }

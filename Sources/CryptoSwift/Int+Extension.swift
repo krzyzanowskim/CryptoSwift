@@ -14,7 +14,7 @@
 //  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 //  - This notice may not be removed or altered from any source or binary distribution.
 
-#if os(Linux) || os(Android)
+#if os(Linux) || os(Android) || os(FreeBSD)
     import Glibc
 #else
     import Darwin

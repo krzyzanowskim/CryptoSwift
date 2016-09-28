@@ -9,7 +9,7 @@
 //  http://keccak.noekeon.org/specs_summary.html
 //
 
-#if os(Linux) || os(Android)
+#if os(Linux) || os(Android) || os(FreeBSD)
     import Glibc
 #else
     import Darwin

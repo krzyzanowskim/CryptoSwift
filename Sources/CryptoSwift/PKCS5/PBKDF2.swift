@@ -8,7 +8,7 @@
 //  https://www.ietf.org/rfc/rfc2898.txt
 //
 
-#if os(Linux)
+#if os(Linux) || os(Android)
     import Glibc
 #else
     import Darwin

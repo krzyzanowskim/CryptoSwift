@@ -5,6 +5,8 @@
 //  Created by Marcin Krzyzanowski on 05/04/16.
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
+//  https://www.ietf.org/rfc/rfc2898.txt
+//
 
 #if os(Linux)
     import Glibc
@@ -26,7 +28,7 @@ public extension PKCS5 {
 
         private let salt: Array<UInt8>   // S
         fileprivate let iterations: Int // c
-        private let numBlocks: UInt // l
+        private let numBlocks: Int // l
         private let dkLen: Int;
         fileprivate let prf: HMAC
 
@@ -55,11 +57,12 @@ public extension PKCS5 {
             self.iterations = iterations
             self.prf = prf
 
-            self.numBlocks = UInt(ceil(Double(keyLengthFinal) / hLen))  // l = ceil(keyLength / hLen)
+            self.numBlocks = Int(ceil(Double(keyLengthFinal) / hLen))  // l = ceil(keyLength / hLen)
         }
 
         public func calculate() -> Array<UInt8> {
             var ret = Array<UInt8>()
+            ret.reserveCapacity(self.numBlocks * self.prf.variant.digestLength)
             for i in 1...self.numBlocks {
                 // for each block T_i = U_1 ^ U_2 ^ ... ^ U_iter
                 if let value = calculateBlock(self.salt, blockNum: i) {
@@ -72,7 +75,7 @@ public extension PKCS5 {
 }
 
 fileprivate extension PKCS5.PBKDF2 {
-    func INT(_ i: UInt) -> Array<UInt8> {
+    func ARR(_ i: Int) -> Array<UInt8> {
         var inti = Array<UInt8>(repeating: 0, count: 4)
         inti[0] = UInt8((i >> 24) & 0xFF)
         inti[1] = UInt8((i >> 16) & 0xFF)
@@ -83,8 +86,8 @@ fileprivate extension PKCS5.PBKDF2 {
 
     // F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
     // U_1 = PRF (P, S || INT (i))
-    func calculateBlock(_ salt: Array<UInt8>, blockNum: UInt) -> Array<UInt8>? {
-        guard let u1 = try? prf.authenticate(salt + INT(blockNum)) else {
+    func calculateBlock(_ salt: Array<UInt8>, blockNum: Int) -> Array<UInt8>? {
+        guard let u1 = try? prf.authenticate(salt + ARR(blockNum)) else { // blockNum.bytes() is slower
             return nil
         }
 

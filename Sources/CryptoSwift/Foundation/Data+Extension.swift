@@ -26,59 +26,48 @@ extension Data {
         return Data(bytes: result)
     }
 
-    public func sha1() -> Data? {
-        let result = Digest.sha1(self.bytes)
-        return Data(bytes: result)
+    public func sha1() -> Data {
+        return Data(bytes: Digest.sha1(self.bytes))
     }
 
-    public func sha224() -> Data? {
-        let result = Digest.sha224(self.bytes)
-        return Data(bytes: result)
+    public func sha224() -> Data {
+        return Data(bytes: Digest.sha224(self.bytes))
     }
 
-    public func sha256() -> Data? {
-        let result = Digest.sha256(self.bytes)
-        return Data(bytes: result)
+    public func sha256() -> Data {
+        return Data(bytes: Digest.sha256(self.bytes))
     }
 
-    public func sha384() -> Data? {
-        let result = Digest.sha384(self.bytes)
-        return Data(bytes: result)
+    public func sha384() -> Data {
+        return Data(bytes: Digest.sha384(self.bytes))
     }
 
-    public func sha512() -> Data? {
-        let result = Digest.sha512(self.bytes)
-        return Data(bytes: result)
+    public func sha512() -> Data {
+        return Data(bytes: Digest.sha512(self.bytes))
     }
 
-    public func sha3(_ variant: SHA3.Variant) -> Data? {
-        let result = Digest.sha3(self.bytes, variant: variant)
-        return Data(bytes: result)
+    public func sha3(_ variant: SHA3.Variant) -> Data {
+        return Data(bytes: Digest.sha3(self.bytes, variant: variant))
     }
 
-    public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> Data? {
-        let result = Checksum.crc32(self.bytes, seed: seed, reflect: reflect)
-        return Data(bytes: result.bytes())
+    public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> Data {
+        return Data(bytes: Checksum.crc32(self.bytes, seed: seed, reflect: reflect).bytes())
     }
 
-    public func crc16(seed: UInt16? = nil) -> Data? {
-        let result = Checksum.crc16(self.bytes, seed: seed)
-        return Data(bytes: result.bytes())
+    public func crc16(seed: UInt16? = nil) -> Data {
+        return Data(bytes: Checksum.crc16(self.bytes, seed: seed).bytes())
     }
 
     public func encrypt(cipher: Cipher) throws -> Data {
-        let encrypted = try cipher.encrypt(self.bytes)
-        return Data(bytes: encrypted)
+        return Data(bytes: try cipher.encrypt(self.bytes))
     }
 
     public func decrypt(cipher: Cipher) throws -> Data {
-        let decrypted = try cipher.decrypt(self.bytes)
-        return Data(bytes: decrypted)
+        return Data(bytes: try cipher.decrypt(self.bytes))
     }
     
     public func authenticate(with authenticator: Authenticator) throws -> Data {
-        let result = try authenticator.authenticate(self.bytes)
-        return Data(bytes: result)
+        return Data(bytes: try authenticator.authenticate(self.bytes))
     }
 }
 

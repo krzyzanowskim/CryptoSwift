@@ -19,21 +19,6 @@ final class ExtensionsTest: XCTestCase {
             self.stopMeasuring()
         })
     }
-
-    
-    func testIntExtension() {
-        let i1:Int = 1024
-        let i1Array = i1.bytes(totalBytes: 32 / 8) // 32 bit
-        let i1recovered = Int(bytes: i1Array)
-        
-        XCTAssertEqual(i1, i1recovered, "Bytes conversion failed")
-        
-        let i2:Int = 1024
-        let i2Array = i2.bytes(totalBytes: 160 / 8) // 160 bit
-        let i2recovered = Int(bytes: i2Array)
-        
-        XCTAssertEqual(i2, i2recovered, "Bytes conversion failed")
-    }
     
     func testBytes() {
         let size = MemoryLayout<UInt32>.size // 32 or 64  bit
@@ -89,7 +74,6 @@ final class ExtensionsTest: XCTestCase {
 
     static let allTests =  [
         ("testArrayChunksPerformance", testArrayChunksPerformance),
-        ("testIntExtension", testIntExtension),
         ("testBytes", testBytes),
         ("testToUInt32Array", testToUInt32Array),
         ("testDataInit", testDataInit),

@@ -9,7 +9,14 @@
 /** array of bytes */
 extension UInt16 {
     init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.Index == Int {
-        self = bytes.toInteger()
+        self = UInt16(bytes: bytes, fromIndex: bytes.startIndex)
+    }
+
+    init<T: Collection>(bytes: T, fromIndex index: T.Index) where T.Iterator.Element == UInt8, T.Index == Int {
+        let val0 = UInt16(bytes[index.advanced(by: 0)]) << 8
+        let val1 = UInt16(bytes[index.advanced(by: 1)])
+
+        self = val0 | val1
     }
 
     func bytes(totalBytes: Int = MemoryLayout<UInt16>.size) -> Array<UInt8> {

@@ -20,6 +20,11 @@ class Access: XCTestCase {
         let _ = Checksum.crc16([1,2,3])
     }
 
+    func testRandomIV() {
+        let _ = AES.randomIV(AES.blockSize)
+        let _ = ChaCha20.randomIV(ChaCha20.blockSize)
+    }
+
     func testDigest() {
         let _ = Digest.md5([1,2,3])
         let _ = Digest.sha1([1,2,3])
@@ -248,6 +253,7 @@ class Access: XCTestCase {
         ("testAES", testAES),
         ("testRabbit", testRabbit),
         ("testChaCha20", testChaCha20),
-        ("testUpdatable", testUpdatable)
+        ("testUpdatable", testUpdatable),
+        ("testRandomIV", testRandomIV)
     ]
 }

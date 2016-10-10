@@ -59,7 +59,16 @@ final class DigestTests: XCTestCase {
         XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha1(), "84983e441c3bd26ebaae4aa1f95129e5e54670f1", "SHA1 calculation failed")
         XCTAssertEqual("".sha1(), "da39a3ee5e6b4b0d3255bfef95601890afd80709", "SHA1 calculation failed")
     }
-    
+
+    func testSHA1Performance() {
+//        let _ = "".sha1()
+        self.measure {
+            for _ in 0..<10_000 {
+                let _ = "".sha1()
+            }
+        }
+    }
+
     func testSHA224() {
         let data:Data = Data(bytes: UnsafePointer<UInt8>([0x31, 0x32, 0x33] as Array<UInt8>), count: 3)
         XCTAssertEqual(data.sha224().toHexString(), "78d8045d684abd2eece923758f3cd781489df3a48e1278982466017f", "SHA224 calculation failed");
@@ -149,6 +158,7 @@ final class DigestTests: XCTestCase {
         ("testMD5Updates", testMD5Updates),
         ("testMD5PerformanceSwift", testMD5PerformanceSwift),
         ("testSHA1", testSHA1),
+        ("testSHA1Performance", testSHA1Performance),
         ("testSHA224", testSHA224),
         ("testSHA256", testSHA256),
         ("testSHA384", testSHA384),

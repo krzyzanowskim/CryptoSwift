@@ -42,27 +42,6 @@ final class DigestTests: XCTestCase {
         }
     }
 
-    func testMD5PerformanceSwift() {
-        #if !CI
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
-            self.startMeasuring()
-            _ = Digest.md5(arr)
-            self.stopMeasuring()
-        })
-        #endif
-    }
-
-    func testSHA1Performance() {
-        #if !CI
-        self.measure {
-            for _ in 0..<10_000 {
-                let _ = "".sha1()
-            }
-        }
-        #endif
-    }
-
     func testSHA1() {
         let data:Data = Data(bytes: UnsafePointer<UInt8>([0x31, 0x32, 0x33] as Array<UInt8>), count: 3)
         XCTAssertEqual(data.sha1().toHexString(), "40bd001563085fc35165329ea1ff5c5ecbdbbeef", "SHA1 calculation failed");
@@ -154,22 +133,54 @@ final class DigestTests: XCTestCase {
         let data:Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
         XCTAssert(data.checksum() == 0x96, "Invalid checksum")
     }
+}
 
-    static let allTests =  [
-        ("testMD5Data", testMD5Data),
-        ("testMD5String", testMD5String),
-        ("testMD5Updates", testMD5Updates),
-        ("testMD5PerformanceSwift", testMD5PerformanceSwift),
-        ("testSHA1Performance", testSHA1Performance),
-        ("testSHA1", testSHA1),
-        ("testSHA224", testSHA224),
-        ("testSHA256", testSHA256),
-        ("testSHA384", testSHA384),
-        ("testSHA512", testSHA512),
-        ("testSHA3", testSHA3),
-        ("testCRC32", testCRC32),
-        ("testCRC32NotReflected", testCRC32NotReflected),
-        ("testCRC15", testCRC16),
-        ("testChecksum", testChecksum)
-    ]
+#if !CI
+extension DigestTests {
+    func testMD5Performance() {
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
+            self.startMeasuring()
+            _ = Digest.md5(arr)
+            self.stopMeasuring()
+        })
+    }
+
+    func testSHA1Performance() {
+        self.measure {
+            for _ in 0..<10_000 {
+                let _ = "".sha1()
+            }
+        }
+    }
+}
+#endif
+
+extension DigestTests {
+    static func allTests() -> [(String, (DigestTests) -> () -> Void)] {
+        var tests = [
+            ("testMD5Data", testMD5Data),
+            ("testMD5String", testMD5String),
+            ("testMD5Updates", testMD5Updates),
+            ("testSHA1", testSHA1),
+            ("testSHA224", testSHA224),
+            ("testSHA256", testSHA256),
+            ("testSHA384", testSHA384),
+            ("testSHA512", testSHA512),
+            ("testSHA3", testSHA3),
+            ("testCRC32", testCRC32),
+            ("testCRC32NotReflected", testCRC32NotReflected),
+            ("testCRC15", testCRC16),
+            ("testChecksum", testChecksum)
+        ]
+
+        #if !CI
+            tests += [
+                ("testMD5Performance", testMD5Performance),
+                ("testSHA1Performance", testSHA1Performance)
+            ]
+        #endif
+
+        return tests
+    }
 }

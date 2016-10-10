@@ -11,17 +11,6 @@ import Foundation
 
 final class ExtensionsTest: XCTestCase {
 
-    func testArrayChunksPerformance() {
-        #if !CI
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
-            self.startMeasuring()
-            _ = message.chunks(size: AES.blockSize)
-            self.stopMeasuring()
-        })
-        #endif
-    }
-    
     func testBytes() {
         let size = MemoryLayout<UInt32>.size // 32 or 64  bit
         
@@ -73,14 +62,37 @@ final class ExtensionsTest: XCTestCase {
         let hex = array.toHexString()
         XCTAssertEqual(str, hex)
     }
+}
 
-    static let allTests =  [
-        ("testArrayChunksPerformance", testArrayChunksPerformance),
-        ("testBytes", testBytes),
-        ("testToUInt32Array", testToUInt32Array),
-        ("testDataInit", testDataInit),
-        ("testStringEncrypt", testStringEncrypt),
-        ("testStringDecryptBase64", testStringDecryptBase64),
-        ("testArrayInitHex", testArrayInitHex)
-    ]
+#if !CI
+extension ExtensionsTest {
+    func testArrayChunksPerformance() {
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
+            self.startMeasuring()
+            _ = message.chunks(size: AES.blockSize)
+            self.stopMeasuring()
+        })
+    }
+}
+#endif
+
+extension ExtensionsTest {
+    static func allTests() -> [(String, (ExtensionsTest) -> () -> Void)] {
+        var tests = [
+            ("testBytes", testBytes),
+            ("testToUInt32Array", testToUInt32Array),
+            ("testDataInit", testDataInit),
+            ("testStringEncrypt", testStringEncrypt),
+            ("testStringDecryptBase64", testStringDecryptBase64),
+            ("testArrayInitHex", testArrayInitHex)
+        ]
+
+        #if !CI
+            tests += [
+                ("testArrayChunksPerformance", testArrayChunksPerformance)
+            ]
+        #endif
+        return tests
+    }
 }

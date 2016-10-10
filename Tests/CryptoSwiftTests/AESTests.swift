@@ -294,30 +294,6 @@ final class AESTests: XCTestCase {
         }
     }
 
-    func testAES_encrypt_performance() {
-        #if !CI
-        let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
-        let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
-        let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
-        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
-            _ = try! aes.encrypt(message)
-        })
-        #endif
-    }
-
-    func testAES_decrypt_performance() {
-        #if !CI
-        let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
-        let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
-        let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
-        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
-            _ = try! aes.decrypt(message)
-        })
-        #endif
-    }
-
     func testAESWithWrongKey() {
         let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
         let key2:Array<UInt8> = [0x22,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x33];
@@ -330,26 +306,63 @@ final class AESTests: XCTestCase {
         let decrypted = try? aes2.decrypt(encrypted)
         XCTAssertTrue(decrypted! != plaintext, "failed")
     }
+}
 
-    static let allTests =  [
-        ("testAESEncrypt2", testAESEncrypt2),
-        ("testAESEncrypt3", testAESEncrypt3),
-        ("testAESEncrypt", testAESEncrypt),
-        ("testAESEncryptCBCNoPadding", testAESEncryptCBCNoPadding),
-        ("testAESEncryptCBCWithPadding", testAESEncryptCBCWithPadding),
-        ("testAESEncryptCBCWithPaddingPartial", testAESEncryptCBCWithPaddingPartial),
-        ("testAESEncryptIncremental", testAESEncryptIncremental),
-        ("testAESDecryptCBCWithPaddingPartial", testAESDecryptCBCWithPaddingPartial),
-        ("testAESEncryptCFB", testAESEncryptCFB),
-        ("testAESEncryptCFBLong", testAESEncryptCFBLong),
-        ("testAESEncryptOFB128", testAESEncryptOFB128),
-        ("testAESEncryptOFB256", testAESEncryptOFB256),
-        ("testAESEncryptPCBC256", testAESEncryptPCBC256),
-        ("testAESEncryptCTR", testAESEncryptCTR),
-        ("testAESEncryptCTRIrregularLength", testAESEncryptCTRIrregularLength),
-        ("testAESDecryptCTRSeek", testAESDecryptCTRSeek),
-        ("testAESEncryptCTRIrregularLengthIncrementalUpdate", testAESEncryptCTRIrregularLengthIncrementalUpdate),
-        ("testIssue298", testIssue298),
-        ("testAESWithWrongKey", testAESWithWrongKey)
-    ]
+#if !CI
+extension AESTests {
+    func testAESEncryptPerformance() {
+        let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+            _ = try! aes.encrypt(message)
+        })
+    }
+
+    func testAESDecryptPerformance() {
+        let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
+        let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+            _ = try! aes.decrypt(message)
+        })
+    }
+}
+#endif
+
+
+extension AESTests {
+    static func allTests() -> [(String, (AESTests) -> () -> Void)] {
+        var tests = [
+            ("testAESEncrypt2", testAESEncrypt2),
+            ("testAESEncrypt3", testAESEncrypt3),
+            ("testAESEncrypt", testAESEncrypt),
+            ("testAESEncryptCBCNoPadding", testAESEncryptCBCNoPadding),
+            ("testAESEncryptCBCWithPadding", testAESEncryptCBCWithPadding),
+            ("testAESEncryptCBCWithPaddingPartial", testAESEncryptCBCWithPaddingPartial),
+            ("testAESEncryptIncremental", testAESEncryptIncremental),
+            ("testAESDecryptCBCWithPaddingPartial", testAESDecryptCBCWithPaddingPartial),
+            ("testAESEncryptCFB", testAESEncryptCFB),
+            ("testAESEncryptCFBLong", testAESEncryptCFBLong),
+            ("testAESEncryptOFB128", testAESEncryptOFB128),
+            ("testAESEncryptOFB256", testAESEncryptOFB256),
+            ("testAESEncryptPCBC256", testAESEncryptPCBC256),
+            ("testAESEncryptCTR", testAESEncryptCTR),
+            ("testAESEncryptCTRIrregularLength", testAESEncryptCTRIrregularLength),
+            ("testAESDecryptCTRSeek", testAESDecryptCTRSeek),
+            ("testAESEncryptCTRIrregularLengthIncrementalUpdate", testAESEncryptCTRIrregularLengthIncrementalUpdate),
+            ("testIssue298", testIssue298),
+            ("testAESWithWrongKey", testAESWithWrongKey)
+        ]
+
+        #if !CI
+            tests += [
+                ("testAESEncryptPerformance", testAESEncryptPerformance),
+                ("testAESDecryptPerformance", testAESDecryptPerformance)
+            ]
+        #endif
+        return tests
+    }
 }

@@ -110,6 +110,7 @@ class RabbitTests: XCTestCase {
     }
     
     func testRabbitPerformance() {
+        #if !CI
         let key: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.keySize)
         let iv: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.ivSize)
         let message = Array<UInt8>(repeating: 7, count: (1024 * 1024) * 1)
@@ -118,6 +119,7 @@ class RabbitTests: XCTestCase {
             self.stopMeasuring()
             XCTAssert(!encrypted.isEmpty, "not encrypted")
         })
+        #endif
     }
     
     static let allTests =  [

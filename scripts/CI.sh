@@ -38,5 +38,5 @@ if [ -e "Tools/testprep.sh" ]; then
 fi
 
 if [ -d "Tests" ]; then
-	swift test
+	swift test -Xswiftc -DCI
 fi

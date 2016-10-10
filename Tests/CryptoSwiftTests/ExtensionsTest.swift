@@ -12,12 +12,14 @@ import Foundation
 final class ExtensionsTest: XCTestCase {
 
     func testArrayChunksPerformance() {
+        #if !CI
         measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
             let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
             self.startMeasuring()
             _ = message.chunks(size: AES.blockSize)
             self.stopMeasuring()
         })
+        #endif
     }
     
     func testBytes() {

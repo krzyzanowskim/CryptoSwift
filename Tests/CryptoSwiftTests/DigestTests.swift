@@ -43,14 +43,26 @@ final class DigestTests: XCTestCase {
     }
 
     func testMD5PerformanceSwift() {
+        #if !CI
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
             let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
             self.startMeasuring()
             _ = Digest.md5(arr)
             self.stopMeasuring()
         })
+        #endif
     }
-    
+
+    func testSHA1Performance() {
+        #if !CI
+        self.measure {
+            for _ in 0..<10_000 {
+                let _ = "".sha1()
+            }
+        }
+        #endif
+    }
+
     func testSHA1() {
         let data:Data = Data(bytes: UnsafePointer<UInt8>([0x31, 0x32, 0x33] as Array<UInt8>), count: 3)
         XCTAssertEqual(data.sha1().toHexString(), "40bd001563085fc35165329ea1ff5c5ecbdbbeef", "SHA1 calculation failed");
@@ -58,15 +70,6 @@ final class DigestTests: XCTestCase {
         XCTAssertEqual("abc".sha1(), "a9993e364706816aba3e25717850c26c9cd0d89d", "SHA1 calculation failed")
         XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha1(), "84983e441c3bd26ebaae4aa1f95129e5e54670f1", "SHA1 calculation failed")
         XCTAssertEqual("".sha1(), "da39a3ee5e6b4b0d3255bfef95601890afd80709", "SHA1 calculation failed")
-    }
-
-    func testSHA1Performance() {
-//        let _ = "".sha1()
-        self.measure {
-            for _ in 0..<10_000 {
-                let _ = "".sha1()
-            }
-        }
     }
 
     func testSHA224() {
@@ -157,8 +160,8 @@ final class DigestTests: XCTestCase {
         ("testMD5String", testMD5String),
         ("testMD5Updates", testMD5Updates),
         ("testMD5PerformanceSwift", testMD5PerformanceSwift),
-        ("testSHA1", testSHA1),
         ("testSHA1Performance", testSHA1Performance),
+        ("testSHA1", testSHA1),
         ("testSHA224", testSHA224),
         ("testSHA256", testSHA256),
         ("testSHA384", testSHA384),

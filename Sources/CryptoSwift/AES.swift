@@ -128,7 +128,12 @@ final public class AES: BlockCipher {
 
 // MARK: Private
 fileprivate extension AES {
-    func encryptBlock(_ block:Array<UInt8>) -> Array<UInt8>? {
+    func encrypt(block: Array<UInt8>) -> Array<UInt8>? {
+
+        if blockMode.options.contains(.PaddingRequired) && block.count != AES.blockSize {
+            return block
+        }
+
         let rounds = self.variant.Nr
         let rk = self.expandedKey
         var b = block[block.indices].toUInt32Array()
@@ -192,9 +197,14 @@ fileprivate extension AES {
         return out
     }
 
-    func decryptBlock(_ block:Array<UInt8>) -> Array<UInt8>? {
+    func decrypt(block: Array<UInt8>) -> Array<UInt8>? {
+
+        if blockMode.options.contains(.PaddingRequired) && block.count != AES.blockSize {
+            return block
+        }
+
         let rounds = self.variant.Nr
-        let rk = expandedKeyInv
+        let rk = self.expandedKeyInv
         var b = block[block.indices].toUInt32Array()
 
         var t = Array<UInt32>(repeating: 0, count: 4)
@@ -416,7 +426,7 @@ extension AES {
 
         init(aes: AES) {
             self.padding = aes.padding;
-            self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
+            self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encrypt)
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
         }
 
@@ -457,9 +467,9 @@ extension AES {
             switch (aes.blockMode) {
             case .CFB, .OFB, .CTR:
                 // CFB, OFB, CTR uses encryptBlock to decrypt
-                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encryptBlock)
+                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encrypt)
             default:
-                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.decryptBlock)
+                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.decrypt)
             }
 
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired);

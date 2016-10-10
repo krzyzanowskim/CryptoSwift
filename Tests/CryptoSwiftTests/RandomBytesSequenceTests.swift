@@ -17,4 +17,8 @@ class RandomBytesSequenceTests: XCTestCase {
             XCTAssertTrue(value <= UInt8.max)
         }
     }
+
+    static let allTests =  [
+        ("testSequence", testSequence)
+    ]
 }

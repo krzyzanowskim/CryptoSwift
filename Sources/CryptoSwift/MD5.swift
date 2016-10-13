@@ -130,7 +130,7 @@ extension MD5: Updatable {
 
         // output current hash
         var result = Array<UInt8>()
-        result.reserveCapacity(self.accumulatedHash.count / 4)
+        result.reserveCapacity(MD5.digestLength)
 
         for hElement in self.accumulatedHash {
             let hLE = hElement.littleEndian

@@ -286,16 +286,15 @@ extension SHA2: Updatable {
 
         // output current hash
         var result = Array<UInt8>()
+        result.reserveCapacity(self.variant.digestLength)
 
         switch self.variant {
             case .sha224, .sha256:
-                result.reserveCapacity(self.accumulatedHash32.count / 4)
                 self.variant.resultingArray(self.accumulatedHash32).forEach { //TODO: rename resultingArray -> resultSlice
                     let item = $0.bigEndian
                     result += [UInt8(item & 0xff), UInt8((item >> 8) & 0xff), UInt8((item >> 16) & 0xff), UInt8((item >> 24) & 0xff)]
             }
             case .sha384, .sha512:
-                result.reserveCapacity(self.accumulatedHash64.count / 4)
                 self.variant.resultingArray(self.accumulatedHash64).forEach {
                     let item = $0.bigEndian
                     var partialResult = Array<UInt8>()

@@ -1,9 +1,10 @@
-- Update tests
+- Update tests.
 - New: RandomBytesSequence urandom values on Linux.
 - Throw appropriate error for AES with invalid input where padding is needed.
 - Improve performance, especially to SHA-1, SHA-2 and related.
 - Set deployment targets for all platform. Fixes Carthage builds.
 - New: SHA-3 implementation (request #291)
+- SHA-1 conforms to Updatable protocol and may be calculated incrementally.
 - SHA-2 conforms to Updatable protocol and may be calculated incrementally. 
 
 0.6.0

@@ -23,7 +23,7 @@ public struct Digest {
     /// - parameter bytes: input message
     /// - returns: Digest bytes
     public static func sha1(_ bytes: Array<UInt8>) -> Array<UInt8> {
-        return SHA1(bytes).calculate()
+        return SHA1().calculate(for: bytes)
     }
 
     /// Calculate SHA2-224 Digest

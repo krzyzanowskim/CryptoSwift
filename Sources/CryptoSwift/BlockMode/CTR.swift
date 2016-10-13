@@ -41,5 +41,5 @@ private func buildNonce(_ iv: Array<UInt8>, counter: UInt64) -> Array<UInt8> {
     let noncePrefix = Array(iv[0..<noncePartLen])
     let nonceSuffix = Array(iv[noncePartLen..<iv.count])
     let c = UInt64(bytes: nonceSuffix) + counter
-    return noncePrefix + arrayOfBytes(value: c)
+    return noncePrefix + c.bytes()
 }

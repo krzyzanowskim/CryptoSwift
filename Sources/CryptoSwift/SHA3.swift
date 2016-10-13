@@ -263,7 +263,7 @@ extension SHA3: Updatable {
 
         //TODO: verify performance, reduce vs for..in
         let result = self.accumulatedHash.reduce(Array<UInt8>()) { (result, value) -> Array<UInt8> in
-            return result + arrayOfBytes(value: value.bigEndian)
+            return result + value.bigEndian.bytes()
         }
 
         // reset hash value for instance

@@ -33,11 +33,13 @@ func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T
     return bitPattern
 }
 
-/// Array of bytes, little-endian representation. Don't use if not necessary.
-/// I found this method slow
-func arrayOfBytes<T>(value:T, length:Int? = nil) -> Array<UInt8> {
-    let totalBytes = length ?? MemoryLayout<T>.size
-
+/// Array of bytes. Caution: don't use directly because generic is slow.
+///
+/// - parameter value: integer value
+/// - parameter length: length of output array. By default size of value type
+///
+/// - returns: Array of bytes
+func arrayOfBytes<T: Integer>(value:T, length totalBytes: Int = MemoryLayout<T>.size) -> Array<UInt8> {
     let valuePointer = UnsafeMutablePointer<T>.allocate(capacity: 1)
     valuePointer.pointee = value
 

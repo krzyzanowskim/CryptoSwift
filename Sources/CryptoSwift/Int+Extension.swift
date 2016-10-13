@@ -35,8 +35,8 @@ extension Int {
     //    self = bytes.toInteger()
     //}
 
-    /** Array of bytes with optional padding (little-endian) */
+    /** Array of bytes with optional padding */
     func bytes(totalBytes: Int = MemoryLayout<Int>.size) -> Array<UInt8> {
-        return arrayOfBytes(value: self, length: totalBytes)
+         return arrayOfBytes(value: self, length: totalBytes)
     }
 }

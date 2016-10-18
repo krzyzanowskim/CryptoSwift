@@ -60,12 +60,12 @@ public extension PKCS5 {
             self.numBlocks = Int(ceil(Double(keyLengthFinal) / hLen))  // l = ceil(keyLength / hLen)
         }
 
-        public func calculate() -> Array<UInt8> {
+        public func calculate() throws -> Array<UInt8> {
             var ret = Array<UInt8>()
             ret.reserveCapacity(self.numBlocks * self.prf.variant.digestLength)
             for i in 1...self.numBlocks {
                 // for each block T_i = U_1 ^ U_2 ^ ... ^ U_iter
-                if let value = calculateBlock(self.salt, blockNum: i) {
+                if let value = try calculateBlock(self.salt, blockNum: i) {
                     ret.append(contentsOf: value)
                 }
             }
@@ -86,27 +86,23 @@ fileprivate extension PKCS5.PBKDF2 {
 
     // F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
     // U_1 = PRF (P, S || INT (i))
-    func calculateBlock(_ salt: Array<UInt8>, blockNum: Int) -> Array<UInt8>? {
+    func calculateBlock(_ salt: Array<UInt8>, blockNum: Int) throws -> Array<UInt8>? {
         guard let u1 = try? prf.authenticate(salt + ARR(blockNum)) else { // blockNum.bytes() is slower
             return nil
         }
 
-        do {
-            var u = u1
-            var ret = u
-            if self.iterations > 1 {
-                // U_2 = PRF (P, U_1) ,
-                // U_c = PRF (P, U_{c-1}) .
-                for _ in 2...self.iterations {
-                    u = try prf.authenticate(u)
-                    for x in 0..<ret.count {
-                        ret[x] = ret[x] ^ u[x]
-                    }
+        var u = u1
+        var ret = u
+        if self.iterations > 1 {
+            // U_2 = PRF (P, U_1) ,
+            // U_c = PRF (P, U_{c-1}) .
+            for _ in 2...self.iterations {
+                u = try prf.authenticate(u)
+                for x in 0..<ret.count {
+                    ret[x] = ret[x] ^ u[x]
                 }
             }
-            return ret
-        } catch {
-            return nil
         }
+        return ret
     }
 }

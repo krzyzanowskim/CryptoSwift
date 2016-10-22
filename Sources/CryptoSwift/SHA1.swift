@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final class SHA1: DigestType {
+public final class SHA1: DigestType {
     static let digestLength:Int = 20 // 160 / 8
-    static var blockSize: Int = 64
+    static let blockSize: Int = 64
     fileprivate static let hashInitialValue: Array<UInt32> = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
 
     fileprivate var accumulated = Array<UInt8>()
@@ -19,8 +19,6 @@ final class SHA1: DigestType {
 
     }
 
-    private let h:Array<UInt32> = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
-
     func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
         do {
             return try self.update(withBytes: bytes, isLast: true)
@@ -29,7 +27,7 @@ final class SHA1: DigestType {
         }
     }
 
-    fileprivate func process<C: Collection>(block chunk: C, currentHash hh: inout Array<UInt32>) where C.Iterator.Element == UInt8, C.Index == Int {
+    fileprivate func process(block chunk: ArraySlice<UInt8>, currentHash hh: inout Array<UInt32>) {
         // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
         // Extend the sixteen 32-bit words into eighty 32-bit words:
         var M:Array<UInt32> = Array<UInt32>(repeating: 0, count: 80)

@@ -9,11 +9,11 @@
 public final class SHA1: DigestType {
     static let digestLength:Int = 20 // 160 / 8
     static let blockSize: Int = 64
-    fileprivate static let hashInitialValue: Array<UInt32> = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
+    fileprivate static let hashInitialValue: ContiguousArray<UInt32> = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
 
     fileprivate var accumulated = Array<UInt8>()
     fileprivate var accumulatedLength: Int = 0
-    fileprivate var accumulatedHash: Array<UInt32> = SHA1.hashInitialValue
+    fileprivate var accumulatedHash: ContiguousArray<UInt32> = SHA1.hashInitialValue
 
     public init() {
 
@@ -27,12 +27,12 @@ public final class SHA1: DigestType {
         }
     }
 
-    fileprivate func process(block chunk: ArraySlice<UInt8>, currentHash hh: inout Array<UInt32>) {
+    fileprivate func process(block chunk: ArraySlice<UInt8>, currentHash hh: inout ContiguousArray<UInt32>) {
         // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
         // Extend the sixteen 32-bit words into eighty 32-bit words:
-        var M:Array<UInt32> = Array<UInt32>(repeating: 0, count: 80)
+        var M = ContiguousArray<UInt32>(repeating: 0, count: 80)
         for x in 0..<M.count {
-            switch (x) {
+            switch x {
             case 0...15:
                 let start = chunk.startIndex.advanced(by: x * 4) // * MemoryLayout<UInt32>.size
                 M[x] = UInt32(bytes: chunk, fromIndex: start)
@@ -115,12 +115,15 @@ extension SHA1: Updatable {
         }
 
         // output current hash
-        var result = Array<UInt8>()
-        result.reserveCapacity(SHA1.digestLength)
-
-        for hElement in self.accumulatedHash {
-            let h = hElement.bigEndian
-            result += [UInt8(h & 0xff), UInt8((h >> 8) & 0xff), UInt8((h >> 16) & 0xff), UInt8((h >> 24) & 0xff)]
+        var result = Array<UInt8>(repeating: 0, count: SHA1.digestLength)
+        var pos = 0
+        for idx in 0..<self.accumulatedHash.count {
+            let h = self.accumulatedHash[idx].bigEndian
+            result[pos]     = UInt8(h & 0xff)
+            result[pos + 1] = UInt8((h >> 8) & 0xff)
+            result[pos + 2] = UInt8((h >> 16) & 0xff)
+            result[pos + 3] = UInt8((h >> 24) & 0xff)
+            pos += 4
         }
 
         // reset hash value for instance

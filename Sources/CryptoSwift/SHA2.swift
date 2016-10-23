@@ -82,14 +82,14 @@ public final class SHA2: DigestType {
             }
         }
 
-        fileprivate func resultingArray<T>(_ hh:[T]) -> ArraySlice<T> {
+        fileprivate var finalLength: Int {
             switch (self) {
             case .sha224:
-                return hh[0..<7]
+                return 7
             case .sha384:
-                return hh[0..<6]
+                return 6
             default:
-                return ArraySlice(hh)
+                return Int.max
             }
         }
     }
@@ -285,24 +285,31 @@ extension SHA2: Updatable {
         }
 
         // output current hash
-        var result = Array<UInt8>()
-        result.reserveCapacity(self.variant.digestLength)
-
+        var result = Array<UInt8>(repeating: 0, count: self.variant.digestLength)
         switch self.variant {
             case .sha224, .sha256:
-                self.variant.resultingArray(self.accumulatedHash32).forEach { //TODO: rename resultingArray -> resultSlice
-                    let item = $0.bigEndian
-                    result += [UInt8(item & 0xff), UInt8((item >> 8) & 0xff), UInt8((item >> 16) & 0xff), UInt8((item >> 24) & 0xff)]
-            }
+                var pos = 0
+                for idx in 0..<self.accumulatedHash32.count where idx < self.variant.finalLength {
+                    let h = self.accumulatedHash32[idx].bigEndian
+                    result[pos]     = UInt8(h & 0xff)
+                    result[pos + 1] = UInt8((h >> 8) & 0xff)
+                    result[pos + 2] = UInt8((h >> 16) & 0xff)
+                    result[pos + 3] = UInt8((h >> 24) & 0xff)
+                    pos += 4
+                }
             case .sha384, .sha512:
-                self.variant.resultingArray(self.accumulatedHash64).forEach {
-                    let item = $0.bigEndian
-                    var partialResult = Array<UInt8>()
-                    partialResult.reserveCapacity(8)
-                    for i in 0..<8 {
-                        partialResult.append(UInt8((item >> UInt64(8 * i)) & 0xff))
-                    }
-                    result += partialResult
+                var pos = 0
+                for idx in 0..<self.accumulatedHash64.count where idx < self.variant.finalLength {
+                    let h = self.accumulatedHash64[idx].bigEndian
+                    result[pos]     = UInt8(h & 0xff)
+                    result[pos + 1] = UInt8((h >> 8) & 0xff)
+                    result[pos + 2] = UInt8((h >> 16) & 0xff)
+                    result[pos + 3] = UInt8((h >> 24) & 0xff)
+                    result[pos + 4] = UInt8((h >> 32) & 0xff)
+                    result[pos + 5] = UInt8((h >> 40) & 0xff)
+                    result[pos + 6] = UInt8((h >> 48) & 0xff)
+                    result[pos + 7] = UInt8((h >> 56) & 0xff)
+                    pos += 8
                 }
         }
 
@@ -310,7 +317,7 @@ extension SHA2: Updatable {
         if isLast {
             switch self.variant {
             case .sha224, .sha256:
-                self.accumulatedHash32 = variant.h.map { UInt32($0) } //FIXME: UInt64 for process64
+                self.accumulatedHash32 = variant.h.lazy.map { UInt32($0) } //FIXME: UInt64 for process64
             case .sha384, .sha512:
                 self.accumulatedHash64 = variant.h
             }

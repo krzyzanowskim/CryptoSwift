@@ -1,3 +1,7 @@
+0.6.2
+- SHA performance improvements by using less Swift in Swift
+- Fix public access to all digests classes
+
 0.6.1
 - Update tests.
 - New: RandomBytesSequence urandom values on Linux.

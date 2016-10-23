@@ -72,17 +72,18 @@ func bitPadding(to data: Array<UInt8>, blockSize: Int, allowance: Int = 0) -> Ar
     var tmp = data
 
     // Step 1. Append Padding Bits
-    tmp.append(0x80) // append one bit (UInt8 with one bit) to message
+    // append one bit (UInt8 with one bit) to message
+    tmp.append(0x80)
 
-    // append "0" bit until message length in bits ≡ 448 (mod 512)
-    var msgLength = tmp.count
-    var counter = 0
+    // Step 2. append "0" bit until message length in bits ≡ 448 (mod 512)
+    let msgLength = tmp.count
 
-    while msgLength % blockSize != blockSize - allowance {
-        counter += 1
-        msgLength += 1
+    let max = blockSize - allowance // 448, 986
+    if tmp.count % blockSize < max { // 448
+        tmp += Array<UInt8>(repeating: 0, count: max - (msgLength % blockSize))
+    } else {
+        tmp += Array<UInt8>(repeating: 0, count: blockSize + max - (msgLength % blockSize))
     }
 
-    tmp += Array<UInt8>(repeating: 0, count: counter)
     return tmp
 }

@@ -265,7 +265,7 @@ extension SHA2: Updatable {
 
         if isLast {
             // Step 1. Append padding
-            self.accumulated = bitPadding(to: self.accumulated, blockSize: self.blockSize, allowance: self.blockSize / 8)
+            bitPadding(to: &self.accumulated, blockSize: self.blockSize, allowance: self.blockSize / 8)
 
             // Step 2. Append Length a 64-bit representation of lengthInBits
             let lengthInBits = self.accumulatedLength * 8

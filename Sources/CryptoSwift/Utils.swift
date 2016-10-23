@@ -68,22 +68,16 @@ func xor(_ a: Array<UInt8>, _ b:Array<UInt8>) -> Array<UInt8> {
  - blockSize: Padding size in bytes.
  - allowance: Excluded trailing number of bytes.
  */
-func bitPadding(to data: Array<UInt8>, blockSize: Int, allowance: Int = 0) -> Array<UInt8> {
-    var tmp = data
-
+@inline(__always)
+func bitPadding(to data: inout Array<UInt8>, blockSize: Int, allowance: Int = 0) {
     // Step 1. Append Padding Bits
     // append one bit (UInt8 with one bit) to message
-    tmp.append(0x80)
+    data.append(0x80)
 
     // Step 2. append "0" bit until message length in bits ≡ 448 (mod 512)
-    let msgLength = tmp.count
+    let msgLength = data.count
+    let max = blockSize &- allowance
+    let l = msgLength % blockSize
 
-    let max = blockSize - allowance // 448, 986
-    if tmp.count % blockSize < max { // 448
-        tmp += Array<UInt8>(repeating: 0, count: max - (msgLength % blockSize))
-    } else {
-        tmp += Array<UInt8>(repeating: 0, count: blockSize + max - (msgLength % blockSize))
-    }
-
-    return tmp
+    data += Array<UInt8>(repeating: 0, count: (l >= max ? blockSize : 0) &+ max &- l)
 }

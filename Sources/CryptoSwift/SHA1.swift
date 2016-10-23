@@ -99,7 +99,7 @@ extension SHA1: Updatable {
 
         if isLast {
             // Step 1. Append padding
-            self.accumulated = bitPadding(to: self.accumulated, blockSize: SHA1.blockSize, allowance: 64 / 8)
+            bitPadding(to: &self.accumulated, blockSize: SHA1.blockSize, allowance: 64 / 8)
 
             // Step 2. Append Length a 64-bit representation of lengthInBits
             let lengthInBits = self.accumulatedLength * 8

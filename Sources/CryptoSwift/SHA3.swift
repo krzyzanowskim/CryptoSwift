@@ -79,6 +79,14 @@ public final class SHA3: DigestType {
         self.accumulatedHash = Array<UInt64>(repeating: 0, count: self.variant.digestLength)
     }
 
+    public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
+        do {
+            return try self.update(withBytes: bytes, isLast: true)
+        } catch {
+            return []
+        }
+    }
+
     ///  1. For all pairs (x,z) such that 0≤x<5 and 0≤z<w, let
     ///     C[x,z]=A[x, 0,z] ⊕ A[x, 1,z] ⊕ A[x, 2,z] ⊕ A[x, 3,z] ⊕ A[x, 4,z].
     ///  2. For all pairs (x, z) such that 0≤x<5 and 0≤z<w let
@@ -227,13 +235,6 @@ public final class SHA3: DigestType {
         }
     }
 
-    func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
-        do {
-            return try self.update(withBytes: bytes, isLast: true)
-        } catch {
-            return []
-        }
-    }
 }
 
 extension SHA3: Updatable {

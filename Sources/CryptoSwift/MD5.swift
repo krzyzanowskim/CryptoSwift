@@ -43,7 +43,7 @@ public final class MD5: DigestType  {
         
     }
 
-    func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
+    public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
         do {
             return try self.update(withBytes: bytes, isLast: true)
         } catch {

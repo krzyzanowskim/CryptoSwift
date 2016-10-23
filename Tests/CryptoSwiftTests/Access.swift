@@ -34,7 +34,11 @@ class Access: XCTestCase {
         let _ = Digest.sha512([1,2,3])
         let _ = Digest.sha3([1,2,3], variant: .sha224)
 
-        let _ = MD5()
+        let _ = SHA1().calculate(for: [0])
+        let _ = SHA2(variant: .sha224).calculate(for: [0])
+        let _ = SHA3(variant: .sha256).calculate(for: [0])
+
+        let _ = MD5().calculate(for: [0])
     }
 
     func testArrayExtension() {

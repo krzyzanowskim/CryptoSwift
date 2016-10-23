@@ -95,7 +95,7 @@ extension SHA1: Updatable {
     public func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
         let prevAccumulatedLength = self.accumulated.count
         self.accumulated += bytes
-        self.accumulatedLength += self.accumulated.count - prevAccumulatedLength //avoid Array(bytes).count
+        self.accumulatedLength = self.accumulatedLength &+ self.accumulated.count &- prevAccumulatedLength //avoid Array(bytes).count
 
         if isLast {
             // Step 1. Append padding

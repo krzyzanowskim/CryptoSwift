@@ -33,8 +33,8 @@ struct BytesSequence: Sequence {
     func makeIterator() -> AnyIterator<ArraySlice<UInt8>> {
         var offset = data.startIndex
         return AnyIterator {
-            let end = Swift.min(self.chunkSize, self.data.count - offset)
-            let result = self.data[offset..<offset + end]
+            let end = Swift.min(self.chunkSize, self.data.count &- offset)
+            let result = self.data[offset..<offset &+ end]
             offset = offset.advanced(by: result.count)
             if !result.isEmpty {
                 return result

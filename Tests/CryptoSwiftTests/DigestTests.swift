@@ -43,12 +43,16 @@ final class DigestTests: XCTestCase {
     }
 
     func testSHA1() {
-        let data:Data = Data(bytes: UnsafePointer<UInt8>([0x31, 0x32, 0x33] as Array<UInt8>), count: 3)
-        XCTAssertEqual(data.sha1().toHexString(), "40bd001563085fc35165329ea1ff5c5ecbdbbeef", "SHA1 calculation failed");
+        XCTAssertEqual([0x31, 0x32, 0x33].sha1().toHexString(), "40bd001563085fc35165329ea1ff5c5ecbdbbeef", "SHA1 calculation failed");
 
         XCTAssertEqual("abc".sha1(), "a9993e364706816aba3e25717850c26c9cd0d89d", "SHA1 calculation failed")
         XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha1(), "84983e441c3bd26ebaae4aa1f95129e5e54670f1", "SHA1 calculation failed")
         XCTAssertEqual("".sha1(), "da39a3ee5e6b4b0d3255bfef95601890afd80709", "SHA1 calculation failed")
+
+        // https://github.com/krzyzanowskim/CryptoSwift/issues/363
+        XCTAssertEqual("1477304791&1XpnGSRhOlZz2etXMeOdfNaHILTjW16U&8mpBBbzwsgs".sha1(), "0809bbf8489c594131c2030a84be364a0851a635", "Failed")
+        XCTAssertEqual("1477304791&1XpnGSRhOlZz2etXMeOdfNaHILTjW16U&8mpBBbzwsgsa".sha1(), "d345b525ebada7becc8107c54e07fa88644471f5", "Failed")
+        XCTAssertEqual("1477304791&1XpnGSRhOlZz2etXMeOdfNaHILTjW16U&8mpBBbzwsg".sha1(), "c106aa0a98606294ee35fd2d937e928ebb5339e0", "Failed")
     }
 
     func testSHA224() {

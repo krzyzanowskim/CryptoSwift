@@ -13,13 +13,8 @@ import Foundation
 @testable import CryptoSwift
 
 final class DigestTests: XCTestCase {
-    
-    func testMD5Data() {
-        let data = [0x31, 0x32, 0x33] as Array<UInt8> // "1", "2", "3"
-        XCTAssertEqual(Digest.md5(data), [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70], "MD5 calculation failed");
-    }
 
-    func testMD5String() {
+    func testMD5() {
         XCTAssertEqual("123".md5(), "202cb962ac59075b964b07152d234b70", "MD5 calculation failed");
         XCTAssertEqual("".md5(), "d41d8cd98f00b204e9800998ecf8427e", "MD5 calculation failed")
         XCTAssertEqual("a".md5(), "0cc175b9c0f1b6a831c399e269772661", "MD5 calculation failed")
@@ -30,24 +25,12 @@ final class DigestTests: XCTestCase {
         XCTAssertEqual("12345678901234567890123456789012345678901234567890123456789012345678901234567890".md5(), "57edf4a22be3c955ac49da2e2107b67a", "MD5 calculation failed")
     }
 
-    func testMD5Updates() {
-        do {
-            var hash = MD5()
-            let _ = try hash.update(withBytes: [0x31, 0x32])
-            let _ = try hash.update(withBytes: [0x33])
-            let result = try hash.finish()
-            XCTAssertEqual(result, [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70])
-        } catch {
-            XCTFail()
-        }
-    }
-
     func testSHA1() {
-        XCTAssertEqual([0x31, 0x32, 0x33].sha1().toHexString(), "40bd001563085fc35165329ea1ff5c5ecbdbbeef", "SHA1 calculation failed");
-
-        XCTAssertEqual("abc".sha1(), "a9993e364706816aba3e25717850c26c9cd0d89d", "SHA1 calculation failed")
-        XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha1(), "84983e441c3bd26ebaae4aa1f95129e5e54670f1", "SHA1 calculation failed")
-        XCTAssertEqual("".sha1(), "da39a3ee5e6b4b0d3255bfef95601890afd80709", "SHA1 calculation failed")
+        XCTAssertEqual(SHA1().calculate(for: Array<UInt8>(hex: "616263")).toHexString(), "a9993e364706816aba3e25717850c26c9cd0d89d")
+        XCTAssertEqual(SHA1().calculate(for: Array<UInt8>(hex: "")).toHexString(), "da39a3ee5e6b4b0d3255bfef95601890afd80709")
+        XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha1(), "84983e441c3bd26ebaae4aa1f95129e5e54670f1")
+        XCTAssertEqual("abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu".sha1(), "a49b2446a02c645bf419f995b67091253a04a259")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha1(), Array<UInt8>(hex: "34aa973cd4c4daa4f61eeb2bdbad27316534016f"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
 
         // https://github.com/krzyzanowskim/CryptoSwift/issues/363
         XCTAssertEqual("1477304791&1XpnGSRhOlZz2etXMeOdfNaHILTjW16U&8mpBBbzwsgs".sha1(), "0809bbf8489c594131c2030a84be364a0851a635", "Failed")
@@ -55,35 +38,35 @@ final class DigestTests: XCTestCase {
         XCTAssertEqual("1477304791&1XpnGSRhOlZz2etXMeOdfNaHILTjW16U&8mpBBbzwsg".sha1(), "c106aa0a98606294ee35fd2d937e928ebb5339e0", "Failed")
     }
 
-    func testSHA224() {
-        let data:Data = Data(bytes: UnsafePointer<UInt8>([0x31, 0x32, 0x33] as Array<UInt8>), count: 3)
-        XCTAssertEqual(data.sha224().toHexString(), "78d8045d684abd2eece923758f3cd781489df3a48e1278982466017f", "SHA224 calculation failed");
-    }
 
-    func testSHA256() {
-        let data:Data = Data(bytes: UnsafePointer<UInt8>([0x31, 0x32, 0x33] as Array<UInt8>), count: 3)
-        XCTAssertEqual(data.sha256().toHexString(), "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3", "SHA256 calculation failed");
+    func testSHA2() {
+        XCTAssertEqual(SHA2(variant: .sha224).calculate(for: Array<UInt8>(hex: "616263")).toHexString(), "23097d223405d8228642a477bda255b32aadbce4bda0b3f7e36c9da7")
+        XCTAssertEqual(SHA2(variant: .sha256).calculate(for: Array<UInt8>(hex: "616263")).toHexString(), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
+        XCTAssertEqual(SHA2(variant: .sha384).calculate(for: Array<UInt8>(hex: "616263")).toHexString(), "cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7")
+        XCTAssertEqual(SHA2(variant: .sha512).calculate(for: Array<UInt8>(hex: "616263")).toHexString(), "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f")
+
+        XCTAssertEqual(SHA2(variant: .sha224).calculate(for: Array<UInt8>(hex: "")).toHexString(), "d14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f")
+        XCTAssertEqual(SHA2(variant: .sha256).calculate(for: Array<UInt8>(hex: "")).toHexString(), "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+        XCTAssertEqual(SHA2(variant: .sha384).calculate(for: Array<UInt8>(hex: "")).toHexString(), "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b")
+        XCTAssertEqual(SHA2(variant: .sha512).calculate(for: Array<UInt8>(hex: "")).toHexString(), "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e")
+
+        XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha224(), "75388b16512776cc5dba5da1fd890150b0c6455cb4f58b1952522525")
+        XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha256(), "248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1")
+        XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha384(), "3391fdddfc8dc7393707a65b1b4709397cf8b1d162af05abfe8f450de5f36bc6b0455a8520bc4e6f5fe95b1fe3c8452b")
+        XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha512(), "204a8fc6dda82f0a0ced7beb8e08a41657c16ef468b228a8279be331a703c33596fd15c13b1b07f9aa1d3bea57789ca031ad85c7a71dd70354ec631238ca3445")
+
+        XCTAssertEqual("abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu".sha224(), "c97ca9a559850ce97a04a96def6d99a9e0e0e2ab14e6b8df265fc0b3")
+        XCTAssertEqual("abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu".sha256(), "cf5b16a778af8380036ce59e7b0492370b249b11e8f07a51afac45037afee9d1")
+        XCTAssertEqual("abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu".sha384(), "09330c33f71147e83d192fc782cd1b4753111b173b3b05d22fa08086e3b0f712fcc7c71a557e2db966c3e9fa91746039")
+        XCTAssertEqual("abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu".sha512(), "8e959b75dae313da8cf4f72814fc143f8f7779c6eb9f7fa17299aeadb6889018501d289e4900f7e4331b99dec4b5433ac7d329eeb6dd26545e96e55b874be909")
+
+        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha224(), Array<UInt8>(hex: "20794655980c91d8bbb4c1ea97618a4bf03f42581948b2ee4ee7ad67"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha256(), Array<UInt8>(hex: "cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha384(), Array<UInt8>(hex: "9d0e1809716474cb086e834e310a4a1ced149e9c00f248527972cec5704c2a5b07b8b3dc38ecc4ebae97ddd87f3d8985"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha512(), Array<UInt8>(hex: "e718483d0ce769644e2e42c7bc15b4638e1f98b13b2044285632a803afa973ebde0ff244877ea60a4cb0432ce577c31beb009c5c2c49aa2e4eadb217ad8cc09b"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
 
         XCTAssertEqual("Rosetta code".sha256(), "764faf5c61ac315f1497f9dfa542713965b785e5cc2f707d6468d7d1124cdfcf", "SHA256 calculation failed")
-        XCTAssertEqual("".sha256(), "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "SHA256 calculation failed")
-    }
-
-    func testSHA384() {
-        let data:Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
-        XCTAssertEqual(data.sha384().toHexString(), "9a0a82f0c0cf31470d7affede3406cc9aa8410671520b727044eda15b4c25532a9b5cd8aaf9cec4919d76255b6bfb00f", "SHA384 calculation failed");
-
         XCTAssertEqual("The quick brown fox jumps over the lazy dog.".sha384(), "ed892481d8272ca6df370bf706e4d7bc1b5739fa2177aae6c50e946678718fc67a7af2819a021c2fc34e91bdb63409d7", "SHA384 calculation failed");
-        XCTAssertEqual("".sha384(), "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b", "SHA384 calculation failed")
-        XCTAssertEqual("abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu".sha384(), "09330c33f71147e83d192fc782cd1b4753111b173b3b05d22fa08086e3b0f712fcc7c71a557e2db966c3e9fa91746039", "SHA384 calculation failed")
-    }
-
-    func testSHA512() {
-        XCTAssertEqual("abc".sha512(), "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f", "length 24 bits");
-        XCTAssertEqual("".sha512(), "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e", "the bit string of length 0");
-        XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha512(), "204a8fc6dda82f0a0ced7beb8e08a41657c16ef468b228a8279be331a703c33596fd15c13b1b07f9aa1d3bea57789ca031ad85c7a71dd70354ec631238ca3445", "length 448 bits");
-        XCTAssertEqual("abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu".sha512(), "8e959b75dae313da8cf4f72814fc143f8f7779c6eb9f7fa17299aeadb6889018501d289e4900f7e4331b99dec4b5433ac7d329eeb6dd26545e96e55b874be909", "length 896 bits");
-
-        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1000000).sha512(), Array<UInt8>(hex: "e718483d0ce769644e2e42c7bc15b4638e1f98b13b2044285632a803afa973ebde0ff244877ea60a4cb0432ce577c31beb009c5c2c49aa2e4eadb217ad8cc09b"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
     }
 
     func testSHA3() {
@@ -107,10 +90,50 @@ final class DigestTests: XCTestCase {
         XCTAssertEqual("abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu".sha3(.sha384), "79407d3b5916b59c3e30b09822974791c313fb9ecc849e406f23592d04f625dc8c709b98b43b3852b337216179aa7fc7")
         XCTAssertEqual("abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu".sha3(.sha512), "afebb2ef542e6579c50cad06d2e578f9f8dd6881d7dc824d26360feebf18a4fa73e3261122948efcfd492e74e82e2189ed0fb440d187f382270cb455f21dd185")
 
-        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1000000).sha3(.sha224), Array<UInt8>(hex: "d69335b93325192e516a912e6d19a15cb51c6ed5c15243e7a7fd653c"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
-        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1000000).sha3(.sha256), Array<UInt8>(hex: "5c8875ae474a3634ba4fd55ec85bffd661f32aca75c6d699d0cdcb6c115891c1"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
-        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1000000).sha3(.sha384), Array<UInt8>(hex: "eee9e24d78c1855337983451df97c8ad9eedf256c6334f8e948d252d5e0e76847aa0774ddb90a842190d2c558b4b8340"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
-        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1000000).sha3(.sha512), Array<UInt8>(hex: "3c3a876da14034ab60627c077bb98f7e120a2a5370212dffb3385a18d4f38859ed311d0a9d5141ce9cc5c66ee689b266a8aa18ace8282a0e0db596c90b0a7b87"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha3(.sha224), Array<UInt8>(hex: "d69335b93325192e516a912e6d19a15cb51c6ed5c15243e7a7fd653c"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha3(.sha256), Array<UInt8>(hex: "5c8875ae474a3634ba4fd55ec85bffd661f32aca75c6d699d0cdcb6c115891c1"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha3(.sha384), Array<UInt8>(hex: "eee9e24d78c1855337983451df97c8ad9eedf256c6334f8e948d252d5e0e76847aa0774ddb90a842190d2c558b4b8340"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha3(.sha512), Array<UInt8>(hex: "3c3a876da14034ab60627c077bb98f7e120a2a5370212dffb3385a18d4f38859ed311d0a9d5141ce9cc5c66ee689b266a8aa18ace8282a0e0db596c90b0a7b87"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
+    }
+    
+    func testMD5Data() {
+        let data = [0x31, 0x32, 0x33] as Array<UInt8> // "1", "2", "3"
+        XCTAssertEqual(Digest.md5(data), [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70], "MD5 calculation failed");
+    }
+
+    func testMD5Updates() {
+        do {
+            var hash = MD5()
+            let _ = try hash.update(withBytes: [0x31, 0x32])
+            let _ = try hash.update(withBytes: [0x33])
+            let result = try hash.finish()
+            XCTAssertEqual(result, [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70])
+        } catch {
+            XCTFail()
+        }
+    }
+
+    func testSHA1Updatable1() {
+        do {
+            var hash = SHA1()
+            let _ = try hash.update(withBytes: [0x31, 0x32])
+            let _ = try hash.update(withBytes: [0x33])
+            XCTAssertEqual(try hash.finish().toHexString(), "40bd001563085fc35165329ea1ff5c5ecbdbbeef", "Failed")
+        } catch {
+            XCTFail()
+        }
+    }
+
+    func testSHA1Updatable2() {
+        do {
+            var hash = SHA1()
+            let _ = try hash.update(withBytes: [0x31, 0x32])
+            let _ = try hash.update(withBytes: [0x33])
+            let _ = try hash.update(withBytes: Array<UInt8>.init(repeating: 0x33, count: 64))
+            XCTAssertEqual(try hash.finish().toHexString(), "0e659367eff83a6b868a35b96ac305b270025e86", "Failed")
+        } catch {
+            XCTFail()
+        }
     }
 
     func testCRC32() {
@@ -163,15 +186,14 @@ extension DigestTests {
 extension DigestTests {
     static func allTests() -> [(String, (DigestTests) -> () -> Void)] {
         var tests = [
-            ("testMD5Data", testMD5Data),
-            ("testMD5String", testMD5String),
-            ("testMD5Updates", testMD5Updates),
+            ("testMD5", testMD5),
             ("testSHA1", testSHA1),
-            ("testSHA224", testSHA224),
-            ("testSHA256", testSHA256),
-            ("testSHA384", testSHA384),
-            ("testSHA512", testSHA512),
+            ("testSHA2", testSHA2),
             ("testSHA3", testSHA3),
+            ("testMD5Data", testMD5Data),
+            ("testMD5Updates", testMD5Updates),
+            ("testSHA1Updatable1", testSHA1Updatable1),
+            ("testSHA1Updatable2", testSHA1Updatable2),
             ("testCRC32", testCRC32),
             ("testCRC32NotReflected", testCRC32NotReflected),
             ("testCRC15", testCRC16),

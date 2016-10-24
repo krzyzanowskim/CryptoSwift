@@ -12,7 +12,7 @@ public final class MD5: DigestType  {
     fileprivate static let hashInitialValue:Array<UInt32> = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
 
     fileprivate var accumulated = Array<UInt8>()
-    fileprivate var accumulatedLength: Int = 0
+    fileprivate var processedBytesTotalCount: Int = 0
     fileprivate var accumulatedHash:Array<UInt32> = MD5.hashInitialValue
 
     /** specifies the per-round shift amounts */
@@ -107,26 +107,28 @@ public final class MD5: DigestType  {
 
 extension MD5: Updatable {
     public func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
-        let prevAccumulatedLength = self.accumulated.count
         self.accumulated += bytes
-        self.accumulatedLength += self.accumulated.count - prevAccumulatedLength //avoid Array(bytes).count
 
         if isLast {
+            let lengthInBits = (self.processedBytesTotalCount + self.accumulated.count) * 8
+            let lengthBytes = lengthInBits.bytes(totalBytes: 64 / 8) // A 64-bit representation of b
+
             // Step 1. Append padding
             bitPadding(to: &self.accumulated, blockSize: MD5.blockSize, allowance: 64 / 8)
 
             // Step 2. Append Length a 64-bit representation of lengthInBits
-            let lengthInBits = self.accumulatedLength * 8
-            let lengthBytes = lengthInBits.bytes(totalBytes: 64 / 8) // A 64-bit representation of b
             self.accumulated += lengthBytes.reversed()
         }
 
+        var processedBytes = 0
         for chunk in BytesSequence(chunkSize: MD5.blockSize, data: self.accumulated) {
             if (isLast || self.accumulated.count >= MD5.blockSize) {
                 self.process(block: chunk, currentHash: &self.accumulatedHash)
-                self.accumulated.removeFirst(chunk.count)
+                processedBytes += chunk.count
             }
         }
+        self.accumulated.removeFirst(processedBytes)
+        self.processedBytesTotalCount += processedBytes
 
         // output current hash
         var result = Array<UInt8>()

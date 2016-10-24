@@ -26,7 +26,7 @@ public final class SHA3: DigestType {
     let variant: Variant
 
     fileprivate var accumulated = Array<UInt8>()
-    fileprivate var accumulatedLength: Int = 0
+    fileprivate var processedBytesTotalCount: Int = 0
     fileprivate var accumulatedHash:Array<UInt64>
 
     public enum Variant: RawRepresentable {
@@ -239,28 +239,30 @@ public final class SHA3: DigestType {
 
 extension SHA3: Updatable {
     public func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
-        let prevAccumulatedLength = self.accumulated.count
         self.accumulated += bytes
-        self.accumulatedLength = self.accumulatedLength &+ self.accumulated.count &- prevAccumulatedLength //avoid Array(bytes).count
 
         if isLast {
             // Add padding
+            let markByteIndex = self.processedBytesTotalCount + self.accumulated.count
             if self.accumulated.count == 0 || self.accumulated.count % self.variant.blockSize != 0 {
                 let r = self.variant.blockSize * 8
                 let q = (r/8) - (self.accumulated.count % (r/8))
                 self.accumulated += Array<UInt8>(repeating: 0, count: q)
             }
 
-            self.accumulated[self.accumulatedLength] |= 0x06 // 0x1F for SHAKE
+            self.accumulated[markByteIndex] |= 0x06 // 0x1F for SHAKE
             self.accumulated[self.accumulated.count - 1] |= 0x80
         }
 
+        var processedBytes = 0
         for chunk in BytesSequence(chunkSize: self.variant.blockSize, data: self.accumulated) {
             if (isLast || self.accumulated.count >= self.variant.blockSize) {
                 self.process(block: chunk.toUInt64Array(), currentHash: &self.accumulatedHash)
-                self.accumulated.removeFirst(chunk.count)
+                processedBytes += chunk.count
             }
         }
+        self.accumulated.removeFirst(processedBytes)
+        self.processedBytesTotalCount += processedBytes
 
         //TODO: verify performance, reduce vs for..in
         let result = self.accumulatedHash.reduce(Array<UInt8>()) { (result, value) -> Array<UInt8> in

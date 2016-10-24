@@ -12,7 +12,7 @@ public final class SHA1: DigestType {
     fileprivate static let hashInitialValue: ContiguousArray<UInt32> = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
 
     fileprivate var accumulated = Array<UInt8>()
-    fileprivate var accumulatedLength: Int = 0
+    fileprivate var processedBytesTotalCount: Int = 0
     fileprivate var accumulatedHash: ContiguousArray<UInt32> = SHA1.hashInitialValue
 
     public init() {
@@ -93,26 +93,28 @@ public final class SHA1: DigestType {
 
 extension SHA1: Updatable {
     public func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
-        let prevAccumulatedLength = self.accumulated.count
         self.accumulated += bytes
-        self.accumulatedLength = self.accumulatedLength &+ self.accumulated.count &- prevAccumulatedLength //avoid Array(bytes).count
 
         if isLast {
+            let lengthInBits = (self.processedBytesTotalCount + self.accumulated.count) * 8
+            let lengthBytes = lengthInBits.bytes(totalBytes: 64 / 8) // A 64-bit representation of b
+
             // Step 1. Append padding
             bitPadding(to: &self.accumulated, blockSize: SHA1.blockSize, allowance: 64 / 8)
 
             // Step 2. Append Length a 64-bit representation of lengthInBits
-            let lengthInBits = self.accumulatedLength * 8
-            let lengthBytes = lengthInBits.bytes(totalBytes: 64 / 8) // A 64-bit representation of b
             self.accumulated += lengthBytes
         }
 
+        var processedBytes = 0
         for chunk in BytesSequence(chunkSize: SHA1.blockSize, data: self.accumulated) {
-            if (isLast || self.accumulated.count >= SHA1.blockSize) {
+            if (isLast || (self.accumulated.count - processedBytes) >= SHA1.blockSize) {
                 self.process(block: chunk, currentHash: &self.accumulatedHash)
-                self.accumulated.removeFirst(chunk.count)
+                processedBytes += chunk.count
             }
         }
+        self.accumulated.removeFirst(processedBytes)
+        self.processedBytesTotalCount += processedBytes
 
         // output current hash
         var result = Array<UInt8>(repeating: 0, count: SHA1.digestLength)

@@ -16,7 +16,7 @@ public final class SHA2: DigestType {
     private let k:Array<UInt64>
 
     fileprivate var accumulated = Array<UInt8>()
-    fileprivate var accumulatedLength: Int = 0
+    fileprivate var processedBytesTotalCount: Int = 0
     fileprivate var accumulatedHash32 = Array<UInt32>()
     fileprivate var accumulatedHash64 = Array<UInt64>()
 
@@ -259,19 +259,20 @@ public final class SHA2: DigestType {
 extension SHA2: Updatable {
 
     public func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
-        let prevAccumulatedLength = self.accumulated.count
         self.accumulated += bytes
-        self.accumulatedLength = self.accumulatedLength &+ self.accumulated.count &- prevAccumulatedLength //avoid Array(bytes).count
 
         if isLast {
+            let lengthInBits = (self.processedBytesTotalCount + self.accumulated.count) * 8
+            let lengthBytes = lengthInBits.bytes(totalBytes: self.blockSize / 8) // A 64-bit/128-bit representation of b. blockSize fit by accident.
+
             // Step 1. Append padding
             bitPadding(to: &self.accumulated, blockSize: self.blockSize, allowance: self.blockSize / 8)
 
             // Step 2. Append Length a 64-bit representation of lengthInBits
-            let lengthInBits = self.accumulatedLength * 8
-            self.accumulated += lengthInBits.bytes(totalBytes: self.blockSize / 8) // A 64-bit/128-bit representation of b. blockSize fit by accident.
+            self.accumulated += lengthBytes
         }
 
+        var processedBytes = 0
         for chunk in BytesSequence(chunkSize: self.blockSize, data: self.accumulated) {
             if (isLast || self.accumulated.count >= self.blockSize) {
                 switch self.variant {
@@ -280,9 +281,11 @@ extension SHA2: Updatable {
                     case .sha384, .sha512:
                         self.process64(block: chunk, currentHash: &self.accumulatedHash64)
                 }
-                self.accumulated.removeFirst(chunk.count)
+                processedBytes += chunk.count
             }
         }
+        self.accumulated.removeFirst(processedBytes)
+        self.processedBytesTotalCount += processedBytes
 
         // output current hash
         var result = Array<UInt8>(repeating: 0, count: self.variant.digestLength)

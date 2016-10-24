@@ -274,7 +274,7 @@ extension SHA2: Updatable {
 
         var processedBytes = 0
         for chunk in BytesSequence(chunkSize: self.blockSize, data: self.accumulated) {
-            if (isLast || self.accumulated.count >= self.blockSize) {
+            if (isLast || (self.accumulated.count - processedBytes) >= self.blockSize) {
                 switch self.variant {
                     case .sha224, .sha256:
                         self.process32(block: chunk, currentHash: &self.accumulatedHash32)

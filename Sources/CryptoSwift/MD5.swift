@@ -122,7 +122,7 @@ extension MD5: Updatable {
 
         var processedBytes = 0
         for chunk in BytesSequence(chunkSize: MD5.blockSize, data: self.accumulated) {
-            if (isLast || self.accumulated.count >= MD5.blockSize) {
+            if (isLast || (self.accumulated.count - processedBytes) >= MD5.blockSize) {
                 self.process(block: chunk, currentHash: &self.accumulatedHash)
                 processedBytes += chunk.count
             }

@@ -1,3 +1,7 @@
+0.6.3
+- Hotfix release
+- Fixes bitPadding() that breaks Digests calculations, introduced in 0.6.2
+
 0.6.2
 - SHA performance improvements by using less Swift in Swift
 - Fix public access to all digests classes

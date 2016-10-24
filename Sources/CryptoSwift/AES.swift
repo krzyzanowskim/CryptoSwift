@@ -422,6 +422,7 @@ extension AES {
         private var worker: BlockModeWorker
         private let padding: Padding
         private var accumulated = Array<UInt8>()
+        private var processedBytesTotalCount: Int = 0
         private let paddingRequired: Bool
 
         init(aes: AES) {
@@ -437,14 +438,17 @@ extension AES {
                 self.accumulated = padding.add(to: self.accumulated, blockSize: AES.blockSize)
             }
 
+            var processedBytes = 0
             var encrypted = Array<UInt8>()
             encrypted.reserveCapacity(self.accumulated.count)
             for chunk in self.accumulated.chunks(size: AES.blockSize) {
-                if (isLast || self.accumulated.count >= AES.blockSize) {
+                if (isLast || (self.accumulated.count - processedBytes) >= AES.blockSize) {
                     encrypted += worker.encrypt(chunk)
-                    self.accumulated.removeFirst(chunk.count)
+                    processedBytes += chunk.count
                 }
             }
+            self.accumulated.removeFirst(processedBytes)
+            self.processedBytesTotalCount += processedBytes
             return encrypted
         }
     }
@@ -456,6 +460,7 @@ extension AES {
         private var worker: BlockModeWorker
         private let padding: Padding
         private var accumulated = Array<UInt8>()
+        private var processedBytesTotalCount: Int = 0
         private let paddingRequired: Bool
 
         private var offset: Int = 0
@@ -485,10 +490,11 @@ extension AES {
                 self.accumulated += bytes
             }
 
+            var processedBytes = 0
             var plaintext = Array<UInt8>()
             plaintext.reserveCapacity(self.accumulated.count)
             for chunk in self.accumulated.chunks(size: AES.blockSize) {
-                if (isLast || self.accumulated.count >= AES.blockSize) {
+                if (isLast || (self.accumulated.count - processedBytes) >= AES.blockSize) {
                     plaintext += self.worker.decrypt(chunk)
 
                     // remove "offset" from the beginning of first chunk
@@ -497,9 +503,11 @@ extension AES {
                         self.offsetToRemove = 0
                     }
 
-                    self.accumulated.removeFirst(chunk.count)
+                    processedBytes += chunk.count
                 }
             }
+            self.accumulated.removeFirst(processedBytes)
+            self.processedBytesTotalCount += processedBytes
 
             if isLast {
                 plaintext = padding.remove(from: plaintext, blockSize: AES.blockSize)

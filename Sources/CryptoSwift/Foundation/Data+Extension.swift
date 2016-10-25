@@ -12,15 +12,15 @@ extension Data {
 
     /// Two octet checksum as defined in RFC-4880. Sum of all octets, mod 65536
     public func checksum() -> UInt16 {
-        var s:UInt32 = 0
+        var s: UInt32 = 0
         var bytesArray = self.bytes
-        for i in 0..<bytesArray.count {
+        for i in 0 ..< bytesArray.count {
             s = s + UInt32(bytesArray[i])
         }
         s = s % 65536
         return UInt16(s)
     }
-    
+
     public func md5() -> Data {
         let result = Digest.md5(self.bytes)
         return Data(bytes: result)
@@ -50,7 +50,7 @@ extension Data {
         return Data(bytes: Digest.sha3(self.bytes, variant: variant))
     }
 
-    public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> Data {
+    public func crc32(seed: UInt32? = nil, reflect: Bool = true) -> Data {
         return Data(bytes: Checksum.crc32(self.bytes, seed: seed, reflect: reflect).bytes())
     }
 
@@ -65,7 +65,7 @@ extension Data {
     public func decrypt(cipher: Cipher) throws -> Data {
         return Data(bytes: try cipher.decrypt(self.bytes))
     }
-    
+
     public func authenticate(with authenticator: Authenticator) throws -> Data {
         return Data(bytes: try authenticator.authenticate(self.bytes))
     }
@@ -76,9 +76,8 @@ extension Data {
     public var bytes: Array<UInt8> {
         return Array(self)
     }
-    
+
     public func toHexString() -> String {
         return self.bytes.toHexString()
     }
 }
-

@@ -8,11 +8,11 @@
 
 /** String extension */
 extension String {
-    
+
     public func md5() -> String {
         return self.utf8.lazy.map({ $0 as UInt8 }).md5().toHexString()
     }
-    
+
     public func sha1() -> String {
         return self.utf8.lazy.map({ $0 as UInt8 }).sha1().toHexString()
     }
@@ -37,14 +37,13 @@ extension String {
         return self.utf8.lazy.map({ $0 as UInt8 }).sha3(variant).toHexString()
     }
 
-    public func crc32(seed: UInt32? = nil, reflect : Bool = true) -> String {
+    public func crc32(seed: UInt32? = nil, reflect: Bool = true) -> String {
         return self.utf8.lazy.map({ $0 as UInt8 }).crc32(seed: seed, reflect: reflect).bytes().toHexString()
     }
 
     public func crc16(seed: UInt16? = nil) -> String {
         return self.utf8.lazy.map({ $0 as UInt8 }).crc16(seed: seed).bytes().toHexString()
     }
-
 
     /// - parameter cipher: Instance of `Cipher`
     /// - returns: hex string of bytes

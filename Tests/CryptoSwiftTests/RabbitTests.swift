@@ -18,17 +18,17 @@ class RabbitTests: XCTestCase {
 
         key = Array<UInt8>(repeating: 0, count: Rabbit.keySize + 1)
         XCTAssertThrowsError(try Rabbit(key: key, iv: iv))
-        
+
         key = Array<UInt8>(repeating: 0, count: Rabbit.keySize)
         XCTAssertNotNil(try Rabbit(key: key, iv: iv))
-        
+
         iv = Array<UInt8>(repeating: 0, count: Rabbit.ivSize - 1)
         XCTAssertThrowsError(try Rabbit(key: key, iv: iv))
-        
+
         iv = Array<UInt8>(repeating: 0, count: Rabbit.ivSize)
         XCTAssertNotNil(try Rabbit(key: key, iv: iv))
     }
-    
+
     func testRabbitWithoutIV() {
         // Examples from Appendix A: Test Vectors in http://tools.ietf.org/rfc/rfc4503.txt
         let cases: [(Array<UInt8>, Array<UInt8>)] = [
@@ -60,7 +60,7 @@ class RabbitTests: XCTestCase {
                 ]
             ),
         ]
-        
+
         let plainText = Array<UInt8>(repeating: 0, count: 48)
         for (key, expectedCipher) in cases {
             let rabbit = try! Rabbit(key: key)
@@ -69,7 +69,7 @@ class RabbitTests: XCTestCase {
             XCTAssertEqual(rabbit.decrypt(cipherText), plainText)
         }
     }
-    
+
     func testRabbitWithIV() {
         // Examples from Appendix A: Test Vectors in http://tools.ietf.org/rfc/rfc4503.txt
         let key = Array<UInt8>(repeating: 0, count: Rabbit.keySize)
@@ -99,7 +99,7 @@ class RabbitTests: XCTestCase {
                 ]
             ),
         ]
-        
+
         let plainText = Array<UInt8>(repeating: 0, count: 48)
         for (iv, expectedCipher) in cases {
             let rabbit = try! Rabbit(key: key, iv: iv)
@@ -111,31 +111,34 @@ class RabbitTests: XCTestCase {
 }
 
 #if !CI
-extension RabbitTests {
-    func testRabbitPerformance() {
-        let key: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.keySize)
-        let iv: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.ivSize)
-        let message = Array<UInt8>(repeating: 7, count: (1024 * 1024) * 1)
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
-            let encrypted = try! Rabbit(key: key, iv: iv).encrypt(message)
-            self.stopMeasuring()
-            XCTAssert(!encrypted.isEmpty, "not encrypted")
-        })
+
+    extension RabbitTests {
+
+        func testRabbitPerformance() {
+            let key: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.keySize)
+            let iv: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.ivSize)
+            let message = Array<UInt8>(repeating: 7, count: (1024 * 1024) * 1)
+            measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+                let encrypted = try! Rabbit(key: key, iv: iv).encrypt(message)
+                self.stopMeasuring()
+                XCTAssert(!encrypted.isEmpty, "not encrypted")
+            })
+        }
     }
-}
 #endif
 
 extension RabbitTests {
+
     static func allTests() -> [(String, (RabbitTests) -> () -> Void)] {
         var tests = [
             ("testInitialization", testInitialization),
             ("testRabbitWithoutIV", testRabbitWithoutIV),
-            ("testRabbitWithIV", testRabbitWithIV)
+            ("testRabbitWithIV", testRabbitWithIV),
         ]
 
         #if !CI
             tests += [
-                ("testRabbitPerformance", testRabbitPerformance)
+                ("testRabbitPerformance", testRabbitPerformance),
             ]
         #endif
         return tests

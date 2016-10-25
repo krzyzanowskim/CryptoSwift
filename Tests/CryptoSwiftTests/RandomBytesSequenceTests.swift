@@ -10,6 +10,7 @@ import XCTest
 @testable import CryptoSwift
 
 class RandomBytesSequenceTests: XCTestCase {
+
     func testSequence() {
         XCTAssertNil(RandomBytesSequence(size: 0).makeIterator().next())
 
@@ -18,7 +19,7 @@ class RandomBytesSequenceTests: XCTestCase {
         }
     }
 
-    static let allTests =  [
-        ("testSequence", testSequence)
+    static let allTests = [
+        ("testSequence", testSequence),
     ]
 }

@@ -7,7 +7,7 @@
 //
 
 public final class SHA1: DigestType {
-    static let digestLength:Int = 20 // 160 / 8
+    static let digestLength: Int = 20 // 160 / 8
     static let blockSize: Int = 64
     fileprivate static let hashInitialValue: ContiguousArray<UInt32> = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]
 
@@ -16,7 +16,6 @@ public final class SHA1: DigestType {
     fileprivate var accumulatedHash: ContiguousArray<UInt32> = SHA1.hashInitialValue
 
     public init() {
-
     }
 
     public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
@@ -31,50 +30,50 @@ public final class SHA1: DigestType {
         // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
         // Extend the sixteen 32-bit words into eighty 32-bit words:
         var M = ContiguousArray<UInt32>(repeating: 0, count: 80)
-        for x in 0..<M.count {
+        for x in 0 ..< M.count {
             switch x {
-            case 0...15:
+            case 0 ... 15:
                 let start = chunk.startIndex.advanced(by: x * 4) // * MemoryLayout<UInt32>.size
                 M[x] = UInt32(bytes: chunk, fromIndex: start)
                 break
             default:
-                M[x] = rotateLeft(M[x-3] ^ M[x-8] ^ M[x-14] ^ M[x-16], by: 1)
+                M[x] = rotateLeft(M[x - 3] ^ M[x - 8] ^ M[x - 14] ^ M[x - 16], by: 1)
                 break
             }
         }
-        
+
         var A = hh[0]
         var B = hh[1]
         var C = hh[2]
         var D = hh[3]
         var E = hh[4]
-        
+
         // Main loop
-        for j in 0...79 {
-            var f: UInt32 = 0;
+        for j in 0 ... 79 {
+            var f: UInt32 = 0
             var k: UInt32 = 0
-            
+
             switch (j) {
-            case 0...19:
+            case 0 ... 19:
                 f = (B & C) | ((~B) & D)
                 k = 0x5A827999
                 break
-            case 20...39:
+            case 20 ... 39:
                 f = B ^ C ^ D
                 k = 0x6ED9EBA1
                 break
-            case 40...59:
+            case 40 ... 59:
                 f = (B & C) | (B & D) | (C & D)
                 k = 0x8F1BBCDC
                 break
-            case 60...79:
+            case 60 ... 79:
                 f = B ^ C ^ D
                 k = 0xCA62C1D6
                 break
             default:
                 break
             }
-            
+
             let temp = (rotateLeft(A, by: 5) &+ f &+ E &+ M[j] &+ k) & 0xffffffff
             E = D
             D = C
@@ -82,7 +81,7 @@ public final class SHA1: DigestType {
             B = A
             A = temp
         }
-        
+
         hh[0] = (hh[0] &+ A) & 0xffffffff
         hh[1] = (hh[1] &+ B) & 0xffffffff
         hh[2] = (hh[2] &+ C) & 0xffffffff
@@ -92,6 +91,7 @@ public final class SHA1: DigestType {
 }
 
 extension SHA1: Updatable {
+
     public func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
         self.accumulated += bytes
 
@@ -119,9 +119,9 @@ extension SHA1: Updatable {
         // output current hash
         var result = Array<UInt8>(repeating: 0, count: SHA1.digestLength)
         var pos = 0
-        for idx in 0..<self.accumulatedHash.count {
+        for idx in 0 ..< self.accumulatedHash.count {
             let h = self.accumulatedHash[idx].bigEndian
-            result[pos]     = UInt8(h & 0xff)
+            result[pos] = UInt8(h & 0xff)
             result[pos + 1] = UInt8((h >> 8) & 0xff)
             result[pos + 2] = UInt8((h >> 16) & 0xff)
             result[pos + 3] = UInt8((h >> 24) & 0xff)
@@ -132,8 +132,7 @@ extension SHA1: Updatable {
         if isLast {
             self.accumulatedHash = SHA1.hashInitialValue
         }
-        
+
         return result
     }
 }
-

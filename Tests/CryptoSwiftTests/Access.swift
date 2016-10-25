@@ -16,8 +16,8 @@ class Access: XCTestCase {
     let authenticator = HMAC(key: Array<UInt8>(hex: "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"), variant: .sha1)
 
     func testChecksum() {
-        let _ = Checksum.crc32([1,2,3])
-        let _ = Checksum.crc16([1,2,3])
+        let _ = Checksum.crc32([1, 2, 3])
+        let _ = Checksum.crc16([1, 2, 3])
     }
 
     func testRandomIV() {
@@ -26,13 +26,13 @@ class Access: XCTestCase {
     }
 
     func testDigest() {
-        let _ = Digest.md5([1,2,3])
-        let _ = Digest.sha1([1,2,3])
-        let _ = Digest.sha224([1,2,3])
-        let _ = Digest.sha256([1,2,3])
-        let _ = Digest.sha384([1,2,3])
-        let _ = Digest.sha512([1,2,3])
-        let _ = Digest.sha3([1,2,3], variant: .sha224)
+        let _ = Digest.md5([1, 2, 3])
+        let _ = Digest.sha1([1, 2, 3])
+        let _ = Digest.sha224([1, 2, 3])
+        let _ = Digest.sha256([1, 2, 3])
+        let _ = Digest.sha384([1, 2, 3])
+        let _ = Digest.sha512([1, 2, 3])
+        let _ = Digest.sha3([1, 2, 3], variant: .sha224)
 
         let _ = SHA1().calculate(for: [0])
         let _ = SHA2(variant: .sha224).calculate(for: [0])
@@ -118,7 +118,7 @@ class Access: XCTestCase {
     }
 
     func testDataExtension() {
-        let data = Data(bytes: [1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8])
+        let data = Data(bytes: [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8])
         let _ = data.checksum()
         let _ = data.md5()
         let _ = data.sha1()
@@ -144,23 +144,23 @@ class Access: XCTestCase {
 
     func testPadding() {
         // PKCS7
-        let _ = PKCS7().add(to: [1,2,3], blockSize: 16)
-        let _ = PKCS7().remove(from: [1,2,3], blockSize: 16)
+        let _ = PKCS7().add(to: [1, 2, 3], blockSize: 16)
+        let _ = PKCS7().remove(from: [1, 2, 3], blockSize: 16)
 
         // NoPadding
-        let _ = NoPadding().add(to: [1,2,3], blockSize: 16)
-        let _ = NoPadding().remove(from: [1,2,3], blockSize: 16)
+        let _ = NoPadding().add(to: [1, 2, 3], blockSize: 16)
+        let _ = NoPadding().remove(from: [1, 2, 3], blockSize: 16)
 
         // ZeroPadding
-        let _ = ZeroPadding().add(to: [1,2,3], blockSize: 16)
-        let _ = ZeroPadding().remove(from: [1,2,3], blockSize: 16)
+        let _ = ZeroPadding().add(to: [1, 2, 3], blockSize: 16)
+        let _ = ZeroPadding().remove(from: [1, 2, 3], blockSize: 16)
     }
 
     func testPBKDF() {
         do {
             let _ = PKCS5.PBKDF1.Variant.md5
-            let _ = try PKCS5.PBKDF1(password: [1,2,3,4,5,6,7], salt: [1,2,3,4,5,6,7,8]).calculate()
-            let _ = try PKCS5.PBKDF2(password: [1,2,3,4,5,6,7], salt: [1,2,3,4]).calculate()
+            let _ = try PKCS5.PBKDF1(password: [1, 2, 3, 4, 5, 6, 7], salt: [1, 2, 3, 4, 5, 6, 7, 8]).calculate()
+            let _ = try PKCS5.PBKDF2(password: [1, 2, 3, 4, 5, 6, 7], salt: [1, 2, 3, 4]).calculate()
         } catch {
             XCTFail(error.localizedDescription)
         }
@@ -168,8 +168,8 @@ class Access: XCTestCase {
 
     func testAuthenticators() {
         do {
-            let _ = try HMAC(key: Array<UInt8>(hex: "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"), variant: .sha1).authenticate([1,2,3])
-            let _ = try Poly1305(key: [1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2]).authenticate([1,2,3])
+            let _ = try HMAC(key: Array<UInt8>(hex: "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"), variant: .sha1).authenticate([1, 2, 3])
+            let _ = try Poly1305(key: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2]).authenticate([1, 2, 3])
         } catch {
             XCTFail(error.localizedDescription)
         }
@@ -179,17 +179,17 @@ class Access: XCTestCase {
         do {
             let aes = try AES(key: "secret0key000000", iv: "0123456789012345")
             var encryptor = aes.makeEncryptor()
-            let _ = try encryptor.update(withBytes: [1,2,3])
+            let _ = try encryptor.update(withBytes: [1, 2, 3])
             let _ = try encryptor.finish()
 
             var decryptor = aes.makeDecryptor()
-            let _ = try decryptor.update(withBytes: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])
+            let _ = try decryptor.update(withBytes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
             let _ = try decryptor.finish()
 
-            let enc = try aes.encrypt([1,2,3])
+            let enc = try aes.encrypt([1, 2, 3])
             let _ = try aes.decrypt(enc)
 
-            let _ = try AES(key: [1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6], iv: [1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6], blockMode: .CBC, padding: NoPadding())
+            let _ = try AES(key: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], iv: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], blockMode: .CBC, padding: NoPadding())
 
             let _ = AES.Variant.aes128
             let _ = AES.blockSize
@@ -201,8 +201,8 @@ class Access: XCTestCase {
     func testRabbit() {
         do {
             let rabbit = try Rabbit(key: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
-            let enc = rabbit.encrypt([1,2,3])
-            let _   = rabbit.decrypt(enc)
+            let enc = rabbit.encrypt([1, 2, 3])
+            let _ = rabbit.decrypt(enc)
 
             XCTAssertThrowsError(try Rabbit(key: "123"))
 
@@ -215,13 +215,13 @@ class Access: XCTestCase {
     }
 
     func testChaCha20() {
-        let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
-        let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+        let key: Array<UInt8> = [0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c]
+        let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F]
 
         do {
             let _ = ChaCha20.blockSize
             let chacha20 = try ChaCha20(key: key, iv: iv)
-            let enc = try chacha20.encrypt([1,3,4])
+            let enc = try chacha20.encrypt([1, 3, 4])
             let _ = try chacha20.decrypt(enc)
 
             XCTAssertThrowsError(try ChaCha20(key: "123", iv: "12345678"))
@@ -235,10 +235,10 @@ class Access: XCTestCase {
     }
 
     func testUpdatable() {
-        // TODO
+        // TODO: 
     }
-    
-    static let allTests =  [
+
+    static let allTests = [
         ("testChecksum", testChecksum),
         ("testDigest", testDigest),
         ("testArrayExtension", testArrayExtension),
@@ -258,6 +258,6 @@ class Access: XCTestCase {
         ("testRabbit", testRabbit),
         ("testChaCha20", testChaCha20),
         ("testUpdatable", testUpdatable),
-        ("testRandomIV", testRandomIV)
+        ("testRandomIV", testRandomIV),
     ]
 }

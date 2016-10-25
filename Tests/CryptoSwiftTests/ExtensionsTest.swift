@@ -13,21 +13,21 @@ final class ExtensionsTest: XCTestCase {
 
     func testBytes() {
         let size = MemoryLayout<UInt32>.size // 32 or 64  bit
-        
-        let i:UInt32 = 1024
+
+        let i: UInt32 = 1024
         var bytes = i.bytes()
         XCTAssertTrue(bytes.count == size, "Invalid bytes length =  \(bytes.count)")
-        
+
         // test padding
         bytes = i.bytes(totalBytes: 16)
         XCTAssertTrue(bytes.count == 16, "Invalid return type \(bytes.count)")
         XCTAssertTrue(bytes[14] == 4, "Invalid return type \(bytes.count)")
     }
-    
+
     func testToUInt32Array() {
-        let chunk:ArraySlice<UInt8> = [1,1,1,7,2,3,4,5]
+        let chunk: ArraySlice<UInt8> = [1, 1, 1, 7, 2, 3, 4, 5]
         let result = chunk.toUInt32Array()
-        
+
         XCTAssert(result.count == 2, "Invalid conversion")
         XCTAssert(result[0] == 117506305, "Invalid conversion")
         XCTAssert(result[1] == 84148994, "Invalid conversion")
@@ -55,7 +55,7 @@ final class ExtensionsTest: XCTestCase {
 
     func testArrayInitHex() {
         let bytes = Array<UInt8>(hex: "0xb1b1b2b2")
-        XCTAssertEqual(bytes, [177,177,178,178])
+        XCTAssertEqual(bytes, [177, 177, 178, 178])
 
         let str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
         let array = Array<UInt8>(hex: str)
@@ -65,19 +65,22 @@ final class ExtensionsTest: XCTestCase {
 }
 
 #if !CI
-extension ExtensionsTest {
-    func testArrayChunksPerformance() {
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
-            self.startMeasuring()
-            _ = message.chunks(size: AES.blockSize)
-            self.stopMeasuring()
-        })
+
+    extension ExtensionsTest {
+
+        func testArrayChunksPerformance() {
+            measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+                let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
+                self.startMeasuring()
+                _ = message.chunks(size: AES.blockSize)
+                self.stopMeasuring()
+            })
+        }
     }
-}
 #endif
 
 extension ExtensionsTest {
+
     static func allTests() -> [(String, (ExtensionsTest) -> () -> Void)] {
         var tests = [
             ("testBytes", testBytes),
@@ -85,12 +88,12 @@ extension ExtensionsTest {
             ("testDataInit", testDataInit),
             ("testStringEncrypt", testStringEncrypt),
             ("testStringDecryptBase64", testStringDecryptBase64),
-            ("testArrayInitHex", testArrayInitHex)
+            ("testArrayInitHex", testArrayInitHex),
         ]
 
         #if !CI
             tests += [
-                ("testArrayChunksPerformance", testArrayChunksPerformance)
+                ("testArrayChunksPerformance", testArrayChunksPerformance),
             ]
         #endif
         return tests

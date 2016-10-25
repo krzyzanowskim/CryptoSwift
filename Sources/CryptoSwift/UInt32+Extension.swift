@@ -12,12 +12,12 @@
     import Darwin
 #endif
 
-
-protocol _UInt32Type { }
+protocol _UInt32Type {}
 extension UInt32: _UInt32Type {}
 
 /** array of bytes */
 extension UInt32 {
+
     @_specialize(ArraySlice<UInt8>)
     init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.Index == Int {
         self = UInt32(bytes: bytes, fromIndex: bytes.startIndex)

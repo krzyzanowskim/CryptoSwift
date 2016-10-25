@@ -15,6 +15,7 @@
 #endif
 
 public extension PKCS5 {
+
     /// A key derivation function.
     ///
     /// PBKDF2 - Password-Based Key Derivation Function 2. Key stretching technique.
@@ -26,10 +27,10 @@ public extension PKCS5 {
             case derivedKeyTooLong
         }
 
-        private let salt: Array<UInt8>   // S
+        private let salt: Array<UInt8> // S
         fileprivate let iterations: Int // c
         private let numBlocks: Int // l
-        private let dkLen: Int;
+        private let dkLen: Int
         fileprivate let prf: HMAC
 
         /// - parameters:
@@ -37,11 +38,11 @@ public extension PKCS5 {
         ///   - variant: hash variant
         ///   - iterations: iteration count, a positive integer
         ///   - keyLength: intended length of derived key
-        public init(password: Array<UInt8>, salt: Array<UInt8>, iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */, variant: HMAC.Variant = .sha256) throws {
+        public init(password: Array<UInt8>, salt: Array<UInt8>, iterations: Int = 4096 /* c */ , keyLength: Int? = nil /* dkLen */ , variant: HMAC.Variant = .sha256) throws {
             precondition(iterations > 0)
 
             let prf = HMAC(key: password, variant: variant)
-            
+
             guard iterations > 0 && !password.isEmpty && !salt.isEmpty else {
                 throw Error.invalidInput
             }
@@ -49,7 +50,7 @@ public extension PKCS5 {
             self.dkLen = keyLength ?? variant.digestLength
             let keyLengthFinal = Double(self.dkLen)
             let hLen = Double(prf.variant.digestLength)
-            if keyLengthFinal > (pow(2,32) - 1) * hLen {
+            if keyLengthFinal > (pow(2, 32) - 1) * hLen {
                 throw Error.derivedKeyTooLong
             }
 
@@ -57,13 +58,13 @@ public extension PKCS5 {
             self.iterations = iterations
             self.prf = prf
 
-            self.numBlocks = Int(ceil(Double(keyLengthFinal) / hLen))  // l = ceil(keyLength / hLen)
+            self.numBlocks = Int(ceil(Double(keyLengthFinal) / hLen)) // l = ceil(keyLength / hLen)
         }
 
         public func calculate() throws -> Array<UInt8> {
             var ret = Array<UInt8>()
             ret.reserveCapacity(self.numBlocks * self.prf.variant.digestLength)
-            for i in 1...self.numBlocks {
+            for i in 1 ... self.numBlocks {
                 // for each block T_i = U_1 ^ U_2 ^ ... ^ U_iter
                 if let value = try calculateBlock(self.salt, blockNum: i) {
                     ret.append(contentsOf: value)
@@ -75,6 +76,7 @@ public extension PKCS5 {
 }
 
 fileprivate extension PKCS5.PBKDF2 {
+
     func ARR(_ i: Int) -> Array<UInt8> {
         var inti = Array<UInt8>(repeating: 0, count: 4)
         inti[0] = UInt8((i >> 24) & 0xFF)
@@ -96,9 +98,9 @@ fileprivate extension PKCS5.PBKDF2 {
         if self.iterations > 1 {
             // U_2 = PRF (P, U_1) ,
             // U_c = PRF (P, U_{c-1}) .
-            for _ in 2...self.iterations {
+            for _ in 2 ... self.iterations {
                 u = try prf.authenticate(u)
-                for x in 0..<ret.count {
+                for x in 0 ..< ret.count {
                     ret[x] = ret[x] ^ u[x]
                 }
             }

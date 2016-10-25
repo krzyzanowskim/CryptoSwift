@@ -9,9 +9,10 @@
 import Foundation
 
 #if !_runtime(_ObjC)
-extension Error {
-    var localizedDescription: String {
-        return "\(self)"
+
+    extension Error {
+        var localizedDescription: String {
+            return "\(self)"
+        }
     }
-}
 #endif

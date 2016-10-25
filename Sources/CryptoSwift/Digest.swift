@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-@available(*, deprecated:0.6.0, renamed: "Digest")
+@available(*, deprecated: 0.6.0, renamed: "Digest")
 public typealias Hash = Digest
 
 /// Hash functions to calculate Digest.
@@ -61,5 +61,4 @@ public struct Digest {
     public static func sha3(_ bytes: Array<UInt8>, variant: SHA3.Variant) -> Array<UInt8> {
         return SHA3(variant: variant).calculate(for: bytes)
     }
-
 }

@@ -15,7 +15,7 @@ import Foundation
 final class DigestTests: XCTestCase {
 
     func testMD5() {
-        XCTAssertEqual("123".md5(), "202cb962ac59075b964b07152d234b70", "MD5 calculation failed");
+        XCTAssertEqual("123".md5(), "202cb962ac59075b964b07152d234b70", "MD5 calculation failed")
         XCTAssertEqual("".md5(), "d41d8cd98f00b204e9800998ecf8427e", "MD5 calculation failed")
         XCTAssertEqual("a".md5(), "0cc175b9c0f1b6a831c399e269772661", "MD5 calculation failed")
         XCTAssertEqual("abc".md5(), "900150983cd24fb0d6963f7d28e17f72", "MD5 calculation failed")
@@ -37,7 +37,6 @@ final class DigestTests: XCTestCase {
         XCTAssertEqual("1477304791&1XpnGSRhOlZz2etXMeOdfNaHILTjW16U&8mpBBbzwsgsa".sha1(), "d345b525ebada7becc8107c54e07fa88644471f5", "Failed")
         XCTAssertEqual("1477304791&1XpnGSRhOlZz2etXMeOdfNaHILTjW16U&8mpBBbzwsg".sha1(), "c106aa0a98606294ee35fd2d937e928ebb5339e0", "Failed")
     }
-
 
     func testSHA2() {
         XCTAssertEqual(SHA2(variant: .sha224).calculate(for: Array<UInt8>(hex: "616263")).toHexString(), "23097d223405d8228642a477bda255b32aadbce4bda0b3f7e36c9da7")
@@ -66,7 +65,7 @@ final class DigestTests: XCTestCase {
         XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha512(), Array<UInt8>(hex: "e718483d0ce769644e2e42c7bc15b4638e1f98b13b2044285632a803afa973ebde0ff244877ea60a4cb0432ce577c31beb009c5c2c49aa2e4eadb217ad8cc09b"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
 
         XCTAssertEqual("Rosetta code".sha256(), "764faf5c61ac315f1497f9dfa542713965b785e5cc2f707d6468d7d1124cdfcf", "SHA256 calculation failed")
-        XCTAssertEqual("The quick brown fox jumps over the lazy dog.".sha384(), "ed892481d8272ca6df370bf706e4d7bc1b5739fa2177aae6c50e946678718fc67a7af2819a021c2fc34e91bdb63409d7", "SHA384 calculation failed");
+        XCTAssertEqual("The quick brown fox jumps over the lazy dog.".sha384(), "ed892481d8272ca6df370bf706e4d7bc1b5739fa2177aae6c50e946678718fc67a7af2819a021c2fc34e91bdb63409d7", "SHA384 calculation failed")
     }
 
     func testSHA3() {
@@ -95,10 +94,10 @@ final class DigestTests: XCTestCase {
         XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha3(.sha384), Array<UInt8>(hex: "eee9e24d78c1855337983451df97c8ad9eedf256c6334f8e948d252d5e0e76847aa0774ddb90a842190d2c558b4b8340"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
         XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha3(.sha512), Array<UInt8>(hex: "3c3a876da14034ab60627c077bb98f7e120a2a5370212dffb3385a18d4f38859ed311d0a9d5141ce9cc5c66ee689b266a8aa18ace8282a0e0db596c90b0a7b87"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
     }
-    
+
     func testMD5Data() {
         let data = [0x31, 0x32, 0x33] as Array<UInt8> // "1", "2", "3"
-        XCTAssertEqual(Digest.md5(data), [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70], "MD5 calculation failed");
+        XCTAssertEqual(Digest.md5(data), [0x20, 0x2c, 0xb9, 0x62, 0xac, 0x59, 0x07, 0x5b, 0x96, 0x4b, 0x07, 0x15, 0x2d, 0x23, 0x4b, 0x70], "MD5 calculation failed")
     }
 
     func testMD5Updates() {
@@ -107,7 +106,7 @@ final class DigestTests: XCTestCase {
             let _ = try hash.update(withBytes: [0x31, 0x32])
             let _ = try hash.update(withBytes: [0x33])
             let result = try hash.finish()
-            XCTAssertEqual(result, [0x20,0x2c,0xb9,0x62,0xac,0x59,0x07,0x5b,0x96,0x4b,0x07,0x15,0x2d,0x23,0x4b,0x70])
+            XCTAssertEqual(result, [0x20, 0x2c, 0xb9, 0x62, 0xac, 0x59, 0x07, 0x5b, 0x96, 0x4b, 0x07, 0x15, 0x2d, 0x23, 0x4b, 0x70])
         } catch {
             XCTFail()
         }
@@ -137,53 +136,56 @@ final class DigestTests: XCTestCase {
     }
 
     func testCRC32() {
-        let data:Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
-        XCTAssertEqual(data.crc32(seed: nil).toHexString(), "884863d2", "CRC32 calculation failed");
+        let data: Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
+        XCTAssertEqual(data.crc32(seed: nil).toHexString(), "884863d2", "CRC32 calculation failed")
 
-        XCTAssertEqual("".crc32(seed: nil), "00000000", "CRC32 calculation failed");
+        XCTAssertEqual("".crc32(seed: nil), "00000000", "CRC32 calculation failed")
     }
-    
+
     func testCRC32NotReflected() {
-        let bytes : Array<UInt8> = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39]
-        let data:Data = Data(bytes: UnsafePointer<UInt8>(bytes), count: bytes.count)
-        XCTAssertEqual(data.crc32(seed: nil, reflect: false).toHexString(), "fc891918", "CRC32 (with reflection) calculation failed");
+        let bytes: Array<UInt8> = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39]
+        let data: Data = Data(bytes: UnsafePointer<UInt8>(bytes), count: bytes.count)
+        XCTAssertEqual(data.crc32(seed: nil, reflect: false).toHexString(), "fc891918", "CRC32 (with reflection) calculation failed")
 
-        XCTAssertEqual("".crc32(seed: nil, reflect: false), "00000000", "CRC32 (with reflection) calculation failed");
+        XCTAssertEqual("".crc32(seed: nil, reflect: false), "00000000", "CRC32 (with reflection) calculation failed")
     }
-    
+
     func testCRC16() {
-        let result = Checksum.crc16([49,50,51,52,53,54,55,56,57] as Array<UInt8>)
+        let result = Checksum.crc16([49, 50, 51, 52, 53, 54, 55, 56, 57] as Array<UInt8>)
         XCTAssert(result == 0xBB3D, "CRC16 failed")
     }
-    
+
     func testChecksum() {
-        let data:Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
+        let data: Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
         XCTAssert(data.checksum() == 0x96, "Invalid checksum")
     }
 }
 
 #if !CI
-extension DigestTests {
-    func testMD5Performance() {
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-            let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
-            self.startMeasuring()
-            _ = Digest.md5(arr)
-            self.stopMeasuring()
-        })
-    }
 
-    func testSHA1Performance() {
-        self.measure {
-            for _ in 0..<10_000 {
-                let _ = "".sha1()
+    extension DigestTests {
+
+        func testMD5Performance() {
+            self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+                let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
+                self.startMeasuring()
+                _ = Digest.md5(arr)
+                self.stopMeasuring()
+            })
+        }
+
+        func testSHA1Performance() {
+            self.measure {
+                for _ in 0 ..< 10_000 {
+                    let _ = "".sha1()
+                }
             }
         }
     }
-}
 #endif
 
 extension DigestTests {
+
     static func allTests() -> [(String, (DigestTests) -> () -> Void)] {
         var tests = [
             ("testMD5", testMD5),
@@ -197,13 +199,13 @@ extension DigestTests {
             ("testCRC32", testCRC32),
             ("testCRC32NotReflected", testCRC32NotReflected),
             ("testCRC15", testCRC16),
-            ("testChecksum", testChecksum)
+            ("testChecksum", testChecksum),
         ]
 
         #if !CI
             tests += [
                 ("testMD5Performance", testMD5Performance),
-                ("testSHA1Performance", testSHA1Performance)
+                ("testSHA1Performance", testSHA1Performance),
             ]
         #endif
 

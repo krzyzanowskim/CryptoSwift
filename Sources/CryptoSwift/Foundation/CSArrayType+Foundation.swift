@@ -9,6 +9,7 @@
 import Foundation
 
 public extension CSArrayType where Iterator.Element == UInt8 {
+
     public func toBase64() -> String? {
         guard let bytesArray = self as? Array<UInt8> else {
             return nil

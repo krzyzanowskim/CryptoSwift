@@ -6,17 +6,17 @@
 //  Copyright (c) 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-final public class HMAC: Authenticator {
+public final class HMAC: Authenticator {
 
     public enum Error: Swift.Error {
         case authenticateError
         case invalidInput
     }
-    
+
     public enum Variant {
         case sha1, sha256, sha384, sha512, md5
-        
-        var digestLength:Int {
+
+        var digestLength: Int {
             switch (self) {
             case .sha1:
                 return SHA1.digestLength
@@ -31,7 +31,7 @@ final public class HMAC: Authenticator {
             }
         }
 
-        func calculateHash(_ bytes:Array<UInt8>) -> Array<UInt8>? {
+        func calculateHash(_ bytes: Array<UInt8>) -> Array<UInt8>? {
             switch (self) {
             case .sha1:
                 return Digest.sha1(bytes)
@@ -45,7 +45,7 @@ final public class HMAC: Authenticator {
                 return Digest.md5(bytes)
             }
         }
-        
+
         func blockSize() -> Int {
             switch self {
             case .md5:
@@ -57,11 +57,11 @@ final public class HMAC: Authenticator {
             }
         }
     }
-    
-    var key:Array<UInt8>
-    let variant:Variant
 
-    public init (key: Array<UInt8>, variant:HMAC.Variant = .md5) {
+    var key: Array<UInt8>
+    let variant: Variant
+
+    public init(key: Array<UInt8>, variant: HMAC.Variant = .md5) {
         self.variant = variant
         self.key = key
 
@@ -76,9 +76,9 @@ final public class HMAC: Authenticator {
         }
     }
 
-    //MARK: Authenticator
+    // MARK: Authenticator
 
-    public func authenticate(_ bytes:Array<UInt8>) throws -> Array<UInt8> {
+    public func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
         var opad = Array<UInt8>(repeating: 0x5c, count: variant.blockSize())
         for idx in key.indices {
             opad[idx] = key[idx] ^ opad[idx]
@@ -89,8 +89,7 @@ final public class HMAC: Authenticator {
         }
 
         guard let ipadAndMessageHash = variant.calculateHash(ipad + bytes),
-              let result = variant.calculateHash(opad + ipadAndMessageHash) else
-        {
+            let result = variant.calculateHash(opad + ipadAndMessageHash) else {
             throw Error.authenticateError
         }
 

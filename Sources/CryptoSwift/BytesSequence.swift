@@ -8,7 +8,7 @@
 
 /// Generic version of BytesSequence is slower, therefore specialized version is in use
 ///
-//struct BytesSequence<D: RandomAccessCollection>: Sequence where D.Iterator.Element == UInt8, D.IndexDistance == Int, D.SubSequence.IndexDistance == Int, D.Index == Int {
+// struct BytesSequence<D: RandomAccessCollection>: Sequence where D.Iterator.Element == UInt8, D.IndexDistance == Int, D.SubSequence.IndexDistance == Int, D.Index == Int {
 //    let chunkSize: D.IndexDistance
 //    let data: D
 //
@@ -24,7 +24,7 @@
 //            return nil
 //        }
 //    }
-//}
+// }
 
 struct BytesSequence: Sequence {
     let chunkSize: Array<UInt8>.IndexDistance
@@ -34,7 +34,7 @@ struct BytesSequence: Sequence {
         var offset = data.startIndex
         return AnyIterator {
             let end = Swift.min(self.chunkSize, self.data.count &- offset)
-            let result = self.data[offset..<offset &+ end]
+            let result = self.data[offset ..< offset &+ end]
             offset = offset.advanced(by: result.count)
             if !result.isEmpty {
                 return result

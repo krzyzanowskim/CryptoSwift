@@ -6,35 +6,35 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-func rotateLeft(_ value:UInt8, by:UInt8) -> UInt8 {
+func rotateLeft(_ value: UInt8, by: UInt8) -> UInt8 {
     return ((value << by) & 0xFF) | (value >> (8 - by))
 }
 
-func rotateLeft(_ value:UInt16, by:UInt16) -> UInt16 {
+func rotateLeft(_ value: UInt16, by: UInt16) -> UInt16 {
     return ((value << by) & 0xFFFF) | (value >> (16 - by))
 }
 
-func rotateLeft(_ value:UInt32, by:UInt32) -> UInt32 {
+func rotateLeft(_ value: UInt32, by: UInt32) -> UInt32 {
     return ((value << by) & 0xFFFFFFFF) | (value >> (32 - by))
 }
 
-func rotateLeft(_ value:UInt64, by:UInt64) -> UInt64 {
+func rotateLeft(_ value: UInt64, by: UInt64) -> UInt64 {
     return (value << by) | (value >> (64 - by))
 }
 
-func rotateRight(_ value:UInt16, by:UInt16) -> UInt16 {
+func rotateRight(_ value: UInt16, by: UInt16) -> UInt16 {
     return (value >> by) | (value << (16 - by))
 }
 
-func rotateRight(_ value:UInt32, by:UInt32) -> UInt32 {
+func rotateRight(_ value: UInt32, by: UInt32) -> UInt32 {
     return (value >> by) | (value << (32 - by))
 }
 
-func rotateRight(_ value:UInt64, by:UInt64) -> UInt64 {
+func rotateRight(_ value: UInt64, by: UInt64) -> UInt64 {
     return ((value >> by) | (value << (64 - by)))
 }
 
-func reversed(_ uint8 : UInt8) -> UInt8 {
+func reversed(_ uint8: UInt8) -> UInt8 {
     var v = uint8
     v = (v & 0xF0) >> 4 | (v & 0x0F) << 4
     v = (v & 0xCC) >> 2 | (v & 0x33) << 2
@@ -42,7 +42,7 @@ func reversed(_ uint8 : UInt8) -> UInt8 {
     return v
 }
 
-func reversed(_ uint32 : UInt32) -> UInt32 {
+func reversed(_ uint32: UInt32) -> UInt32 {
     var v = uint32
     v = ((v >> 1) & 0x55555555) | ((v & 0x55555555) << 1)
     v = ((v >> 2) & 0x33333333) | ((v & 0x33333333) << 2)
@@ -52,9 +52,9 @@ func reversed(_ uint32 : UInt32) -> UInt32 {
     return v
 }
 
-func xor(_ a: Array<UInt8>, _ b:Array<UInt8>) -> Array<UInt8> {
+func xor(_ a: Array<UInt8>, _ b: Array<UInt8>) -> Array<UInt8> {
     var xored = Array<UInt8>(repeating: 0, count: min(a.count, b.count))
-    for i in 0..<xored.count {
+    for i in 0 ..< xored.count {
         xored[i] = a[i] ^ b[i]
     }
     return xored
@@ -82,5 +82,4 @@ func bitPadding(to data: inout Array<UInt8>, blockSize: Int, allowance: Int = 0)
     } else {
         data += Array<UInt8>(repeating: 0, count: blockSize + max - 1 - (msgLength % blockSize))
     }
-
 }

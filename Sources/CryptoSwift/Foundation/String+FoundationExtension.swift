@@ -32,5 +32,4 @@ extension String {
 
         return try decodedData.decrypt(cipher: cipher).bytes
     }
-
 }

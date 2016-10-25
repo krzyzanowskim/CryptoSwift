@@ -56,6 +56,10 @@ public extension CSArrayType where Iterator.Element == UInt8 {
         return Digest.sha512(cs_arrayValue())
     }
 
+    public func sha2(_ variant: SHA2.Variant) -> [Iterator.Element] {
+        return Digest.sha2(cs_arrayValue(), variant: variant)
+    }
+
     public func sha3(_ variant: SHA3.Variant) -> [Iterator.Element] {
         return Digest.sha3(cs_arrayValue(), variant: variant)
     }

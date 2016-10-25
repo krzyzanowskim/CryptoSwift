@@ -286,6 +286,17 @@ let decrypted = try Rabbit(key: key, iv: iv).decrypt(encrypted)
 
 Notice regarding padding: *Manual padding of data is optional, and CryptoSwift is using PKCS7 padding by default. If you need manually disable/enable padding, you can do this by setting parameter for __AES__ class*
 
+Variant of AES encryption (AES-128, AES-192, AES-256) depends on given key length:
+
+- AES-128 = 16 bytes
+- AES-192 = 24 bytes
+- AES-256 = 32 bytes
+
+AES-256 example
+```swift
+try AES(key: [1,2,3,...,32], iv: [1,2,3,...,16], blockMode: .CBC, padding: PKCS7())
+```
+ 
 ######All at once
 ```swift
 do {

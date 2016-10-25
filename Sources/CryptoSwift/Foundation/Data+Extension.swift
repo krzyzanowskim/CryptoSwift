@@ -22,8 +22,7 @@ extension Data {
     }
 
     public func md5() -> Data {
-        let result = Digest.md5(self.bytes)
-        return Data(bytes: result)
+        return Data(bytes: Digest.md5(self.bytes))
     }
 
     public func sha1() -> Data {

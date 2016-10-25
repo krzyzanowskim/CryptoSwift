@@ -50,6 +50,7 @@ class Access: XCTestCase {
         let _ = array.sha256()
         let _ = array.sha384()
         let _ = array.sha512()
+        let _ = array.sha2(.sha224)
         let _ = array.sha3(.sha224)
         let _ = array.crc32()
         let _ = array.crc16()

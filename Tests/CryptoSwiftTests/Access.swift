@@ -178,17 +178,17 @@ class Access: XCTestCase {
 
     func testAES() {
         do {
-            let aes = try AES(key: "secret0key000000", iv: "0123456789012345")
-            var encryptor = aes.makeEncryptor()
+            let cipher = try AES(key: "secret0key000000", iv: "0123456789012345")
+            var encryptor = cipher.makeEncryptor()
             let _ = try encryptor.update(withBytes: [1, 2, 3])
             let _ = try encryptor.finish()
 
-            var decryptor = aes.makeDecryptor()
+            var decryptor = cipher.makeDecryptor()
             let _ = try decryptor.update(withBytes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
             let _ = try decryptor.finish()
 
-            let enc = try aes.encrypt([1, 2, 3])
-            let _ = try aes.decrypt(enc)
+            let enc = try cipher.encrypt([1, 2, 3])
+            let _ = try cipher.decrypt(enc)
 
             let _ = try AES(key: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], iv: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], blockMode: .CBC, padding: NoPadding())
 
@@ -197,6 +197,21 @@ class Access: XCTestCase {
         } catch {
             XCTFail(error.localizedDescription)
         }
+    }
+
+    func testBlowfish() {
+        do {
+            let cipher = try Blowfish(key: "secret0key000000", iv: "01234567")
+            let enc = try cipher.encrypt([1, 2, 3])
+            let _ = try cipher.decrypt(enc)
+
+            let _ = try Blowfish(key: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], iv: [1, 2, 3, 4, 5, 6, 7, 8], blockMode: .CBC, padding: NoPadding())
+
+            let _ = Blowfish.blockSize
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+
     }
 
     func testRabbit() {
@@ -256,6 +271,7 @@ class Access: XCTestCase {
         ("testPBKDF", testPBKDF),
         ("testAuthenticators", testAuthenticators),
         ("testAES", testAES),
+        ("testBlowfish", testBlowfish),
         ("testRabbit", testRabbit),
         ("testChaCha20", testChaCha20),
         ("testUpdatable", testUpdatable),

@@ -1,3 +1,8 @@
+0.6.4
+- More performance improvements
+- Add convenient Digest.sha2(bytes:variant)
+- New: Blowfish cipher
+
 0.6.3
 - Hotfix release
 - Fixes bitPadding() that breaks Digests calculations, introduced in 0.6.2

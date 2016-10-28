@@ -51,7 +51,7 @@ public final class MD5: DigestType {
     }
 
     // mutating currentHash in place is way faster than returning new result
-    fileprivate func process<C: Collection>(block chunk: C, currentHash: inout Array<UInt32>) where C.Iterator.Element == UInt8, C.Index == Int {
+    fileprivate func process(block chunk: ArraySlice<UInt8>, currentHash: inout Array<UInt32>) {
 
         // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15
         var M = chunk.toUInt32Array()

@@ -7,6 +7,13 @@
 //
 
 extension Array {
+    init(reserveCapacity: Int) {
+        self = Array<Element>()
+        self.reserveCapacity(reserveCapacity)
+    }
+}
+
+extension Array {
 
     /** split in chunks with given chunk size */
     func chunks(size chunksize: Int) -> Array<Array<Element>> {

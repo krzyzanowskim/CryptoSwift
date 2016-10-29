@@ -41,8 +41,8 @@ public final class SHA3: DigestType {
             return (1600 - self.rawValue * 2) / 8
         }
 
-        typealias RawValue = Int
-        var rawValue: RawValue {
+        public typealias RawValue = Int
+        public var rawValue: RawValue {
             switch self {
             case .sha224:
                 return 224
@@ -55,7 +55,7 @@ public final class SHA3: DigestType {
             }
         }
 
-        init?(rawValue: RawValue) {
+        public init?(rawValue: RawValue) {
             switch (rawValue) {
             case 224:
                 self = .sha224

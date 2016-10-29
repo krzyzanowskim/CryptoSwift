@@ -23,7 +23,8 @@ public final class SHA3: DigestType {
                                           0x8000000000008002, 0x8000000000000080, 0x000000000000800A, 0x800000008000000A,
                                           0x8000000080008081, 0x8000000000008080, 0x0000000080000001, 0x8000000080008008]
 
-    let variant: Variant
+    public let blockSize: Int
+    public let digestLength: Int
 
     fileprivate var accumulated = Array<UInt8>()
     fileprivate var processedBytesTotalCount: Int = 0
@@ -32,16 +33,16 @@ public final class SHA3: DigestType {
     public enum Variant: RawRepresentable {
         case sha224, sha256, sha384, sha512
 
-        public var digestLength: Int {
+        var digestLength: Int {
             return 100 - (self.blockSize / 2)
         }
 
-        public var blockSize: Int {
+        var blockSize: Int {
             return (1600 - self.rawValue * 2) / 8
         }
 
-        public typealias RawValue = Int
-        public var rawValue: RawValue {
+        typealias RawValue = Int
+        var rawValue: RawValue {
             switch self {
             case .sha224:
                 return 224
@@ -54,7 +55,7 @@ public final class SHA3: DigestType {
             }
         }
 
-        public init?(rawValue: RawValue) {
+        init?(rawValue: RawValue) {
             switch (rawValue) {
             case 224:
                 self = .sha224
@@ -75,8 +76,9 @@ public final class SHA3: DigestType {
     }
 
     public init(variant: SHA3.Variant) {
-        self.variant = variant
-        self.accumulatedHash = Array<UInt64>(repeating: 0, count: self.variant.digestLength)
+        self.blockSize = variant.blockSize
+        self.digestLength = variant.digestLength
+        self.accumulatedHash = Array<UInt64>(repeating: 0, count: self.digestLength)
     }
 
     public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
@@ -98,7 +100,7 @@ public final class SHA3: DigestType {
         var d = Array<UInt64>(repeating: 0, count: 5)
 
         for i in 0 ..< 5 {
-            c[i] = a[i] ^ a[i + 5] ^ a[i + 10] ^ a[i + 15] ^ a[i + 20]
+            c[i] = a[i] ^ a[i &+ 5] ^ a[i &+ 10] ^ a[i &+ 15] ^ a[i &+ 20]
         }
 
         d[0] = rotateLeft(c[1], by: 1) ^ c[4]
@@ -109,14 +111,14 @@ public final class SHA3: DigestType {
 
         for i in 0 ..< 5 {
             a[i] ^= d[i]
-            a[i + 5] ^= d[i]
-            a[i + 10] ^= d[i]
-            a[i + 15] ^= d[i]
-            a[i + 20] ^= d[i]
+            a[i &+ 5] ^= d[i]
+            a[i &+ 10] ^= d[i]
+            a[i &+ 15] ^= d[i]
+            a[i &+ 20] ^= d[i]
         }
     }
 
-    /// A′[x, y, z]=A[(x + 3y) mod 5, x, z]
+    /// A′[x, y, z]=A[(x &+ 3y) mod 5, x, z]
     private func π(_ a: inout Array<UInt64>) {
         let a1 = a[1]
         a[1] = a[6]
@@ -149,13 +151,13 @@ public final class SHA3: DigestType {
     /// A′[x, y,z] = A[x, y,z] ⊕ ((A[(x+1) mod 5, y, z] ⊕ 1) ⋅ A[(x+2) mod 5, y, z])
     private func χ(_ a: inout Array<UInt64>) {
         for i in stride(from: 0, to: 25, by: 5) {
-            let a0 = a[0 + i]
-            let a1 = a[1 + i]
-            a[0 + i] ^= ~a1 & a[2 + i]
-            a[1 + i] ^= ~a[2 + i] & a[3 + i]
-            a[2 + i] ^= ~a[3 + i] & a[4 + i]
-            a[3 + i] ^= ~a[4 + i] & a0
-            a[4 + i] ^= ~a0 & a1
+            let a0 = a[0 &+ i]
+            let a1 = a[1 &+ i]
+            a[0 &+ i] ^= ~a1 & a[2 &+ i]
+            a[1 &+ i] ^= ~a[2 &+ i] & a[3 &+ i]
+            a[2 &+ i] ^= ~a[3 &+ i] & a[4 &+ i]
+            a[3 &+ i] ^= ~a[4 &+ i] & a0
+            a[4 &+ i] ^= ~a0 & a1
         }
     }
 
@@ -174,20 +176,20 @@ public final class SHA3: DigestType {
         hh[6] ^= chunk[6].littleEndian
         hh[7] ^= chunk[7].littleEndian
         hh[8] ^= chunk[8].littleEndian
-        if self.variant.blockSize > 72 { // 72 / 8, sha-512
+        if self.blockSize > 72 { // 72 / 8, sha-512
             hh[9] ^= chunk[9].littleEndian
             hh[10] ^= chunk[10].littleEndian
             hh[11] ^= chunk[11].littleEndian
             hh[12] ^= chunk[12].littleEndian
-            if self.variant.blockSize > 104 { // 104 / 8, sha-384
+            if self.blockSize > 104 { // 104 / 8, sha-384
                 hh[13] ^= chunk[13].littleEndian
                 hh[14] ^= chunk[14].littleEndian
                 hh[15] ^= chunk[15].littleEndian
                 hh[16] ^= chunk[16].littleEndian
-                if self.variant.blockSize > 136 { // 136 / 8, sha-256
+                if self.blockSize > 136 { // 136 / 8, sha-256
                     hh[17] ^= chunk[17].littleEndian
                     // FULL_SHA3_FAMILY_SUPPORT
-                    if self.variant.blockSize > 144 { // 144 / 8, sha-224
+                    if self.blockSize > 144 { // 144 / 8, sha-224
                         hh[18] ^= chunk[18].littleEndian
                         hh[19] ^= chunk[19].littleEndian
                         hh[20] ^= chunk[20].littleEndian
@@ -243,9 +245,9 @@ extension SHA3: Updatable {
 
         if isLast {
             // Add padding
-            let markByteIndex = self.processedBytesTotalCount + self.accumulated.count
-            if self.accumulated.count == 0 || self.accumulated.count % self.variant.blockSize != 0 {
-                let r = self.variant.blockSize * 8
+            let markByteIndex = self.processedBytesTotalCount &+ self.accumulated.count
+            if self.accumulated.count == 0 || self.accumulated.count % self.blockSize != 0 {
+                let r = self.blockSize * 8
                 let q = (r / 8) - (self.accumulated.count % (r / 8))
                 self.accumulated += Array<UInt8>(repeating: 0, count: q)
             }
@@ -255,8 +257,8 @@ extension SHA3: Updatable {
         }
 
         var processedBytes = 0
-        for chunk in BytesSequence(chunkSize: self.variant.blockSize, data: self.accumulated) {
-            if (isLast || (self.accumulated.count - processedBytes) >= self.variant.blockSize) {
+        for chunk in BytesSequence(chunkSize: self.blockSize, data: self.accumulated) {
+            if (isLast || (self.accumulated.count - processedBytes) >= self.blockSize) {
                 self.process(block: chunk.toUInt64Array(), currentHash: &self.accumulatedHash)
                 processedBytes += chunk.count
             }
@@ -271,9 +273,9 @@ extension SHA3: Updatable {
 
         // reset hash value for instance
         if isLast {
-            self.accumulatedHash = Array<UInt64>(repeating: 0, count: self.variant.digestLength)
+            self.accumulatedHash = Array<UInt64>(repeating: 0, count: self.digestLength)
         }
 
-        return Array(result[0 ..< self.variant.digestLength])
+        return Array(result[0 ..< self.digestLength])
     }
 }

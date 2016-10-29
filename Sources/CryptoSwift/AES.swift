@@ -434,7 +434,7 @@ extension AES {
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
         }
 
-        mutating public func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+        mutating public func update<T: Collection>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
             self.accumulated += bytes
 
             if isLast {
@@ -484,7 +484,7 @@ extension AES {
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
         }
 
-        mutating public func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+        mutating public func update<T: Collection>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
             // prepend "offset" number of bytes at the begining
             if self.offset > 0 {
                 self.accumulated += Array<UInt8>(repeating: 0, count: offset) + bytes

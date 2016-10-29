@@ -92,7 +92,7 @@ public final class SHA1: DigestType {
 
 extension SHA1: Updatable {
 
-    public func update<T: Sequence>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+    public func update<T: Collection>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
         self.accumulated += bytes
 
         if isLast {

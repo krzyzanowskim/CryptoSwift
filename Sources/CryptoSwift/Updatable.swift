@@ -5,8 +5,6 @@
 //  Created by Marcin Krzyzanowski on 06/05/16.
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
-//  TODO: Consider if Updatable shoud use Collection rather than Sequence
-//
 
 /// A type that supports incremental updates. For example Digest or Cipher may be updatable
 /// and calculate result incerementally.

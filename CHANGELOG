@@ -1,3 +1,7 @@
+0.6.5
+- Significant performance improvement when processing lange amount of data.
+- Degeneric functions and change Sequence -> Collection in generic constraints.
+
 0.6.4
 - More performance improvements
 - Add convenient Digest.sha2(bytes:variant)

@@ -57,11 +57,11 @@ final class ChaCha20Tests: XCTestCase {
 
     func testCore() {
         let key: Array<UInt8> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
-        let counter: Array<UInt8> = [1,0,0,0,0,0,0,9,0,0,0,74,0,0,0,0]
+        var counter: Array<UInt8> = [1,0,0,0,0,0,0,9,0,0,0,74,0,0,0,0]
         let input = Array<UInt8>.init(repeating: 0, count: 129)
         let chacha = try! ChaCha20(key: key, iv: Array(key[4..<16]))
-        let result = chacha.process(bytes: input, counter: counter, key: key)
-        XCTAssertEqual(result.0.toHexString(), "10f1e7e4d13b5915500fdd1fa32071c4c7d1f4c733c068030422aa9ac3d46c4ed2826446079faa0914c2d705d98b02a2b5129cd1de164eb9cbd083e8a2503c4e0a88837739d7bf4ef8ccacb0ea2bb9d69d56c394aa351dfda5bf459f0a2e9fe8e721f89255f9c486bf21679c683d4f9c5cf2fa27865526005b06ca374c86af3bdc")
+        let result = chacha.process(bytes: input, counter: &counter, key: key)
+        XCTAssertEqual(result.toHexString(), "10f1e7e4d13b5915500fdd1fa32071c4c7d1f4c733c068030422aa9ac3d46c4ed2826446079faa0914c2d705d98b02a2b5129cd1de164eb9cbd083e8a2503c4e0a88837739d7bf4ef8ccacb0ea2bb9d69d56c394aa351dfda5bf459f0a2e9fe8e721f89255f9c486bf21679c683d4f9c5cf2fa27865526005b06ca374c86af3bdc")
     }
 
     func testVector1Py() {
@@ -106,9 +106,9 @@ final class ChaCha20Tests: XCTestCase {
     extension ChaCha20Tests {
 
         func testChaCha20Performance() {
-            let key: Array<UInt8> = [0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c]
-            let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F]
-            let message = Array<UInt8>(repeating: 7, count: (1024 * 1024) * 1)
+            let key: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F]
+            let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07]
+            let message = Array<UInt8>(repeating: 7, count: 1024)
             measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
                 do {
                     let _ = try ChaCha20(key: key, iv: iv).encrypt(message)
@@ -126,8 +126,9 @@ extension ChaCha20Tests {
     static func allTests() -> [(String, (ChaCha20Tests) -> () -> Void)] {
         var tests = [
             ("testChaCha20", testChaCha20),
+            ("testCore", testCore),
             ("testVector1Py", testVector1Py),
-//            ("testChaCha20EncryptPartial", testChaCha20EncryptPartial),
+            ("testChaCha20EncryptPartial", testChaCha20EncryptPartial),
         ]
 
         #if !CI

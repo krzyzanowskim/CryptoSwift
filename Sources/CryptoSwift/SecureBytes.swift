@@ -60,3 +60,9 @@ extension SecureBytes: Collection {
         return self.bytes.index(after: i)
     }
 }
+
+extension SecureBytes: ExpressibleByArrayLiteral {
+    public convenience init(arrayLiteral elements: UInt8...) {
+        self.init(bytes: elements)
+    }
+}

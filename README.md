@@ -78,6 +78,8 @@ For the latest version, please check [develop](https://github.com/krzyzanowskim/
 To install CryptoSwift, add it as a submodule to your project (on the top level project directory):
 
     git submodule add https://github.com/krzyzanowskim/CryptoSwift.git
+    
+It is recommended to enable [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) to gain better performance. Non-optimized build results in significantly worse performance.
 
 ####Embedded Framework
 
@@ -117,6 +119,8 @@ or for newest version from specified branch of code:
 ```ruby
 pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"
 ```
+
+Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that my impact performance. You can change it manually after installation.
 
 ####Carthage 
 You can use [Carthage](https://github.com/Carthage/Carthage). 

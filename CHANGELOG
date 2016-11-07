@@ -1,3 +1,7 @@
+0.6.6
+- Rework ChaCha20
+- Fix Poly1305
+
 0.6.5
 - Significant performance improvement when processing lange amount of data.
 - Degeneric functions and change Sequence -> Collection in generic constraints.

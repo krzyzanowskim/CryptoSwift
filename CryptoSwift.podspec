@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "CryptoSwift"
-  s.version      = "0.6.5"
+  s.version      = "0.6.6"
   s.summary      = "Cryptography in Swift. SHA, MD5, CRC, PBKDF, Poly1305, HMAC, ChaCha20, Rabbit, Blowfish, AES."
   s.description  = "Cryptography functions and helpers for Swift implemented in Swift. SHA, MD5, PBKDF1, PBKDF2, CRC, Poly1305, HMAC, ChaCha20, Rabbit, AES."
   s.homepage     = "https://github.com/krzyzanowskim/CryptoSwift"

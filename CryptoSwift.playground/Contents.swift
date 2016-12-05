@@ -57,8 +57,8 @@ do {
  */
 
 do {
-    let password: Array<UInt8> = "s33krit".utf8.map {$0}
-    let salt: Array<UInt8> = "nacllcan".utf8.map {$0}
+    let password: Array<UInt8> = Array("s33krit".utf8)
+    let salt: Array<UInt8> = Array("nacllcan".utf8)
 
     try PKCS5.PBKDF1(password: password, salt: salt, variant: .sha1, iterations: 4096).calculate()
 
@@ -75,13 +75,15 @@ PKCS7().add(to: bytes, blockSize: AES.blockSize)
  */
 
 do {
-    let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c];
-    let iv:Array<UInt8> = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F]
+    let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88];
+    let iv:Array<UInt8> =  [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07]
     let message = Array<UInt8>(repeating: 7, count: 10)
 
     let encrypted = try ChaCha20(key: key, iv: iv).encrypt(message)
     let decrypted = try ChaCha20(key: key, iv: iv).decrypt(encrypted)
-} catch {}
+} catch {
+    print(error)
+}
 
 /*:
  # AES
@@ -90,7 +92,7 @@ do {
  */
 do {
     let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap") // aes128
-    let ciphertext = try aes.encrypt("Nullam quis risus eget urna mollis ornare vel eu leo.".utf8.map({$0}))
+    let ciphertext = try aes.encrypt(Array("Nullam quis risus eget urna mollis ornare vel eu leo.".utf8))
     print(ciphertext.toHexString())
 } catch {
     print(error)
@@ -106,9 +108,9 @@ do {
 
     var ciphertext = Array<UInt8>()
     // aggregate partial results
-    ciphertext += try encryptor.update(withBytes: "Nullam quis risus ".utf8.map({$0}))
-    ciphertext += try encryptor.update(withBytes: "eget urna mollis ".utf8.map({$0}))
-    ciphertext += try encryptor.update(withBytes: "ornare vel eu leo.".utf8.map({$0}))
+    ciphertext += try encryptor.update(withBytes: Array("Nullam quis risus ".utf8))
+    ciphertext += try encryptor.update(withBytes: Array("eget urna mollis ".utf8))
+    ciphertext += try encryptor.update(withBytes: Array("ornare vel eu leo.".utf8))
     // finish at the end
     ciphertext += try encryptor.finish()
 
@@ -125,11 +127,6 @@ do {
     func writeTo(stream: OutputStream, bytes: Array<UInt8>) {
         var writtenCount = 0
         while stream.hasSpaceAvailable && writtenCount < bytes.count {
-            let c = stream.write(bytes, maxLength: bytes.count)
-            if c <= 0 {
-                break;
-            }
-
             writtenCount += stream.write(bytes, maxLength: bytes.count)
         }
     }

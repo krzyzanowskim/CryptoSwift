@@ -6,89 +6,94 @@
 //  Copyright (c) 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-final public class HMAC {
-    
+public final class HMAC: Authenticator {
+
+    public enum Error: Swift.Error {
+        case authenticateError
+        case invalidInput
+    }
+
     public enum Variant {
         case sha1, sha256, sha384, sha512, md5
-        
-        var size:Int {
+
+        var digestLength: Int {
             switch (self) {
             case .sha1:
-                return SHA1.size
+                return SHA1.digestLength
             case .sha256:
-                return SHA2.Variant.sha256.size
+                return SHA2.Variant.sha256.digestLength
             case .sha384:
-                return SHA2.Variant.sha384.size
+                return SHA2.Variant.sha384.digestLength
             case .sha512:
-                return SHA2.Variant.sha512.size
+                return SHA2.Variant.sha512.digestLength
             case .md5:
-                return MD5.size
+                return MD5.digestLength
             }
         }
-        
-        func calculateHash(bytes bytes:[UInt8]) -> [UInt8]? {
+
+        func calculateHash(_ bytes: Array<UInt8>) -> Array<UInt8>? {
             switch (self) {
             case .sha1:
-                return Hash.sha1(bytes).calculate()
+                return Digest.sha1(bytes)
             case .sha256:
-                return Hash.sha256(bytes).calculate()
+                return Digest.sha256(bytes)
             case .sha384:
-                return Hash.sha384(bytes).calculate()
+                return Digest.sha384(bytes)
             case .sha512:
-                return Hash.sha512(bytes).calculate()
+                return Digest.sha512(bytes)
             case .md5:
-                return Hash.md5(bytes).calculate()
+                return Digest.md5(bytes)
             }
         }
-        
+
         func blockSize() -> Int {
             switch self {
-            case .md5, .sha1, .sha256:
+            case .md5:
+                return MD5.blockSize
+            case .sha1, .sha256:
                 return 64
             case .sha384, .sha512:
                 return 128
             }
         }
     }
-    
-    var key:[UInt8]
-    let variant:Variant
-    
-    class internal func authenticate(key  key: [UInt8], message: [UInt8], variant:HMAC.Variant = .md5) -> [UInt8]? {
-        return HMAC(key, variant: variant)?.authenticate(message: message)
-    }
 
-    // MARK: - Private
-    
-    internal init? (_ key: [UInt8], variant:HMAC.Variant = .md5) {
+    var key: Array<UInt8>
+    let variant: Variant
+
+    public init(key: Array<UInt8>, variant: HMAC.Variant = .md5) {
         self.variant = variant
         self.key = key
 
-        if (key.count > variant.blockSize()) {
-            if let hash = variant.calculateHash(bytes: key) {
+        if key.count > variant.blockSize() {
+            if let hash = variant.calculateHash(key) {
                 self.key = hash
             }
         }
-        
-        if (key.count < variant.blockSize()) { // keys shorter than blocksize are zero-padded
-            self.key = key + [UInt8](count: variant.blockSize() - key.count, repeatedValue: 0)
+
+        if key.count < variant.blockSize() {
+            self.key = ZeroPadding().add(to: key, blockSize: variant.blockSize())
         }
     }
-    
-    internal func authenticate(message  message:[UInt8]) -> [UInt8]? {
-        var opad = [UInt8](count: variant.blockSize(), repeatedValue: 0x5c)
-        for (idx, _) in key.enumerate() {
+
+    // MARK: Authenticator
+
+    public func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
+        var opad = Array<UInt8>(repeating: 0x5c, count: variant.blockSize())
+        for idx in key.indices {
             opad[idx] = key[idx] ^ opad[idx]
         }
-        var ipad = [UInt8](count: variant.blockSize(), repeatedValue: 0x36)
-        for (idx, _) in key.enumerate() {
+        var ipad = Array<UInt8>(repeating: 0x36, count: variant.blockSize())
+        for idx in key.indices {
             ipad[idx] = key[idx] ^ ipad[idx]
         }
 
-        var finalHash:[UInt8]? = nil;
-        if let ipadAndMessageHash = variant.calculateHash(bytes: ipad + message) {
-            finalHash = variant.calculateHash(bytes: opad + ipadAndMessageHash);
+        guard let ipadAndMessageHash = variant.calculateHash(ipad + bytes),
+            let result = variant.calculateHash(opad + ipadAndMessageHash) else {
+            throw Error.authenticateError
         }
-        return finalHash
+
+        // return Array(result[0..<10]) // 80 bits
+        return result
     }
 }

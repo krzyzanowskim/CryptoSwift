@@ -9,10 +9,11 @@
 import Foundation
 
 extension ChaCha20 {
-    convenience public init?(key:String, iv:String) {
-        guard let kkey = key.bridge().dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes(), let iiv = iv.bridge().dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)?.arrayOfBytes() else {
-            return nil
+
+    public convenience init(key: String, iv: String) throws {
+        guard let kkey = key.data(using: String.Encoding.utf8, allowLossyConversion: false)?.bytes, let iiv = iv.data(using: String.Encoding.utf8, allowLossyConversion: false)?.bytes else {
+            throw Error.invalidKeyOrInitializationVector
         }
-        self.init(key: kkey, iv: iiv)
+        try self.init(key: kkey, iv: iiv)
     }
 }

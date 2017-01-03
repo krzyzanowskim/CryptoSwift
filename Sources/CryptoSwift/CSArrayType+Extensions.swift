@@ -6,63 +6,81 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-public protocol CSArrayType: _ArrayType {
-    func cs_arrayValue() -> [Generator.Element]
+public protocol CSArrayType: Collection, RangeReplaceableCollection {
+    func cs_arrayValue() -> [Iterator.Element]
 }
 
 extension Array: CSArrayType {
-    public func cs_arrayValue() -> [Generator.Element] {
+
+    public func cs_arrayValue() -> [Iterator.Element] {
         return self
     }
 }
 
-public extension CSArrayType where Generator.Element == UInt8 {
-    
+public extension CSArrayType where Iterator.Element == UInt8 {
+
     public func toHexString() -> String {
-        return self.lazy.reduce("") { $0 + String(format:"%02x", $1) }
+        return self.lazy.reduce("") {
+            var s = String($1, radix: 16)
+            if s.characters.count == 1 {
+                s = "0" + s
+            }
+            return $0 + s
+        }
     }
-    
-    public func md5() -> [Generator.Element] {
-        return Hash.md5(cs_arrayValue()).calculate()
-    }
-    
-    public func sha1() -> [Generator.Element] {
-        return Hash.sha1(cs_arrayValue()).calculate()
-    }
-    
-    public func sha224() -> [Generator.Element] {
-        return Hash.sha224(cs_arrayValue()).calculate()
-    }
-    
-    public func sha256() -> [Generator.Element] {
-        return Hash.sha256(cs_arrayValue()).calculate()
-    }
-    
-    public func sha384() -> [Generator.Element] {
-        return Hash.sha384(cs_arrayValue()).calculate()
-    }
-    
-    public func sha512() -> [Generator.Element] {
-        return Hash.sha512(cs_arrayValue()).calculate()
-    }
-    
-    public func crc32(seed: UInt32? = nil) -> [Generator.Element] {
-        return Hash.crc32(cs_arrayValue(), seed: seed).calculate()
-    }
-    
-    public func crc16(seed: UInt16? = nil) -> [Generator.Element] {
-        return Hash.crc16(cs_arrayValue(), seed: seed).calculate()
-    }
-    
-    public func encrypt(cipher: Cipher) throws -> [Generator.Element] {
-        return try cipher.cipherEncrypt(cs_arrayValue())
+}
+
+public extension CSArrayType where Iterator.Element == UInt8 {
+
+    public func md5() -> [Iterator.Element] {
+        return Digest.md5(cs_arrayValue())
     }
 
-    public func decrypt(cipher: Cipher) throws -> [Generator.Element] {
-        return try cipher.cipherDecrypt(cs_arrayValue())
+    public func sha1() -> [Iterator.Element] {
+        return Digest.sha1(cs_arrayValue())
     }
-    
-    public func authenticate(authenticator: Authenticator) throws -> [Generator.Element] {
+
+    public func sha224() -> [Iterator.Element] {
+        return Digest.sha224(cs_arrayValue())
+    }
+
+    public func sha256() -> [Iterator.Element] {
+        return Digest.sha256(cs_arrayValue())
+    }
+
+    public func sha384() -> [Iterator.Element] {
+        return Digest.sha384(cs_arrayValue())
+    }
+
+    public func sha512() -> [Iterator.Element] {
+        return Digest.sha512(cs_arrayValue())
+    }
+
+    public func sha2(_ variant: SHA2.Variant) -> [Iterator.Element] {
+        return Digest.sha2(cs_arrayValue(), variant: variant)
+    }
+
+    public func sha3(_ variant: SHA3.Variant) -> [Iterator.Element] {
+        return Digest.sha3(cs_arrayValue(), variant: variant)
+    }
+
+    public func crc32(seed: UInt32? = nil, reflect: Bool = true) -> UInt32 {
+        return Checksum.crc32(cs_arrayValue(), seed: seed, reflect: reflect)
+    }
+
+    public func crc16(seed: UInt16? = nil) -> UInt16 {
+        return Checksum.crc16(cs_arrayValue(), seed: seed)
+    }
+
+    public func encrypt(cipher: Cipher) throws -> [Iterator.Element] {
+        return try cipher.encrypt(cs_arrayValue())
+    }
+
+    public func decrypt(cipher: Cipher) throws -> [Iterator.Element] {
+        return try cipher.decrypt(cs_arrayValue())
+    }
+
+    public func authenticate<A: Authenticator>(with authenticator: A) throws -> [Iterator.Element] {
         return try authenticator.authenticate(cs_arrayValue())
     }
 }

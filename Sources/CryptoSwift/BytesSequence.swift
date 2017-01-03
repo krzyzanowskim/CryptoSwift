@@ -6,28 +6,40 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-//TODO: func anyGenerator is renamed to AnyGenerator in Swift 2.2, until then it's just dirty hack for linux (because swift >= 2.2 is available for Linux)
-private func CS_AnyGenerator<Element>(body: () -> Element?) -> AnyGenerator<Element> {
- #if os(Linux)
-    return AnyGenerator(body: body)
- #else
-     return anyGenerator(body)
- #endif
-}
+/// Generic version of BytesSequence is slower, therefore specialized version is in use
+///
+// struct BytesSequence<D: RandomAccessCollection>: Sequence where D.Iterator.Element == UInt8, D.IndexDistance == Int, D.SubSequence.IndexDistance == Int, D.Index == Int {
+//    let chunkSize: D.IndexDistance
+//    let data: D
+//
+//    func makeIterator() -> AnyIterator<D.SubSequence> {
+//        var offset = data.startIndex
+//        return AnyIterator {
+//            let end = Swift.min(self.chunkSize, self.data.count - offset)
+//            let result = self.data[offset..<offset + end]
+//            offset = offset.advanced(by: result.count)
+//            if !result.isEmpty {
+//                return result
+//            }
+//            return nil
+//        }
+//    }
+// }
 
-struct BytesSequence: SequenceType {
-    let chunkSize: Int
-    let data: [UInt8]
-    
-    func generate() -> AnyGenerator<ArraySlice<UInt8>> {
-        
-        var offset:Int = 0
-        
-        return CS_AnyGenerator {
-            let end = min(self.chunkSize, self.data.count - offset)
-            let result = self.data[offset..<offset + end]
-            offset += result.count
-            return result.count > 0 ? result : nil
+struct BytesSequence: Sequence {
+    let chunkSize: Array<UInt8>.IndexDistance
+    let data: Array<UInt8>
+
+    func makeIterator() -> AnyIterator<ArraySlice<UInt8>> {
+        var offset = data.startIndex
+        return AnyIterator {
+            let end = Swift.min(self.chunkSize, self.data.count &- offset)
+            let result = self.data[offset ..< offset &+ end]
+            offset = offset.advanced(by: result.count)
+            if !result.isEmpty {
+                return result
+            }
+            return nil
         }
     }
 }

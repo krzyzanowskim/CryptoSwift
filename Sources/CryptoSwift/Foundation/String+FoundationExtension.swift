@@ -10,14 +10,26 @@ import Foundation
 
 extension String {
 
-    /// Return Base64 representation
-    public func encrypt(cipher: Cipher) throws -> String {
-        let encrypted = try self.utf8.lazy.map({ $0 as UInt8 }).encrypt(cipher)
-        return NSData(bytes: encrypted).base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength)
+    /// Return Base64 back to String
+    public func decryptBase64ToString(cipher: Cipher) throws -> String {
+        guard let decodedData = Data(base64Encoded: self, options: []) else {
+            throw CipherError.decrypt
+        }
+
+        let decrypted = try decodedData.decrypt(cipher: cipher)
+
+        if let decryptedString = String(data: decrypted, encoding: String.Encoding.utf8) {
+            return decryptedString
+        }
+
+        throw CipherError.decrypt
     }
 
-    public func decrypt(cipher: Cipher) throws -> String {
-        let decrypted = try self.utf8.lazy.map({ $0 as UInt8 }).decrypt(cipher)
-        return NSData(bytes: decrypted).base64EncodedStringWithOptions(NSDataBase64EncodingOptions.Encoding64CharacterLineLength)
+    public func decryptBase64(cipher: Cipher) throws -> Array<UInt8> {
+        guard let decodedData = Data(base64Encoded: self, options: []) else {
+            throw CipherError.decrypt
+        }
+
+        return try decodedData.decrypt(cipher: cipher).bytes
     }
 }

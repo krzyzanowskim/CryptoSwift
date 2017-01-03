@@ -6,195 +6,338 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 
-final public class ChaCha20 {
-    
-    public enum Error: ErrorType {
-        case MissingContext
-    }
-    
-    static let blockSize = 64 // 512 / 8
-    private let stateSize = 16
-    private var context:Context?
-    
-    final private class Context {
-        var input:[UInt32] = [UInt32](count: 16, repeatedValue: 0)
-        
-        deinit {
-            for i in 0..<input.count {
-                input[i] = 0x00;
-            }
-        }
-    }
-    
-    public init?(key:[UInt8], iv:[UInt8]) {
-        if let c = contextSetup(iv: iv, key: key) {
-            context = c
-        } else {
-            return nil
-        }
-    }
-    
-    public func encrypt(bytes:[UInt8]) throws -> [UInt8] {
-        guard context != nil else {
-            throw Error.MissingContext
-        }
-        
-        return try encryptBytes(bytes)
-    }
-    
-    public func decrypt(bytes:[UInt8]) throws -> [UInt8] {
-        return try encrypt(bytes)
-    }
-    
-    private final func wordToByte(input:[UInt32] /* 64 */) -> [UInt8]? /* 16 */ {
-        if (input.count != stateSize) {
-            return nil;
-        }
-        
-        var x = input
+private typealias Key = SecureBytes
 
-        for _ in 0..<10 {
-            quarterround(&x[0], &x[4], &x[8], &x[12])
-            quarterround(&x[1], &x[5], &x[9],  &x[13])
-            quarterround(&x[2], &x[6], &x[10], &x[14])
-            quarterround(&x[3], &x[7], &x[11], &x[15])
-            quarterround(&x[0], &x[5], &x[10], &x[15])
-            quarterround(&x[1], &x[6], &x[11], &x[12])
-            quarterround(&x[2], &x[7], &x[8],  &x[13])
-            quarterround(&x[3], &x[4], &x[9],  &x[14])
-        }
+public final class ChaCha20: BlockCipher {
 
-        var output = [UInt8]()
-        output.reserveCapacity(16)
-
-        for i in 0..<16 {
-            x[i] = x[i] &+ input[i]
-            output.appendContentsOf(x[i].bytes().reverse())
-        }
-
-        return output;
+    public enum Error: Swift.Error {
+        case invalidKeyOrInitializationVector
     }
-        
-    private func contextSetup(iv  iv:[UInt8], key:[UInt8]) -> Context? {
-        let ctx = Context()
+
+    public static let blockSize = 64 // 512 / 8
+
+    fileprivate let key: Key
+    fileprivate var counter: Array<UInt8>
+
+    public init(key: Array<UInt8>, iv nonce: Array<UInt8>) throws {
+        precondition(nonce.count == 12 || nonce.count == 8)
+
         let kbits = key.count * 8
-        
+
         if (kbits != 128 && kbits != 256) {
-            return nil
-        }
-        
-        // 4 - 8
-        for i in 0..<4 {
-            let start = i * 4
-            ctx.input[i + 4] = wordNumber(key[start..<(start + 4)])
-        }
-        
-        var addPos = 0;
-        switch (kbits) {
-        case 256:
-            addPos += 16
-            // sigma
-            ctx.input[0] = 0x61707865 //apxe
-            ctx.input[1] = 0x3320646e //3 dn
-            ctx.input[2] = 0x79622d32 //yb-2
-            ctx.input[3] = 0x6b206574 //k et
-        default:
-            // tau
-            ctx.input[0] = 0x61707865 //apxe
-            ctx.input[1] = 0x3620646e //6 dn
-            ctx.input[2] = 0x79622d31 //yb-1
-            ctx.input[3] = 0x6b206574 //k et
-        break;
-        }
-        
-        // 8 - 11
-        for i in 0..<4 {
-            let start = addPos + (i*4)
-            
-            let bytes = key[start..<(start + 4)]
-            ctx.input[i + 8] = wordNumber(bytes)
+            throw Error.invalidKeyOrInitializationVector
         }
 
-        // iv
-        ctx.input[12] = 0
-        ctx.input[13] = 0
-        ctx.input[14] = wordNumber(iv[0..<4])
-        ctx.input[15] = wordNumber(iv[4..<8])
-        
-        return ctx
-    }
-    
-    private final func encryptBytes(message:[UInt8]) throws -> [UInt8] {
-        
-        guard let ctx = context else {
-            throw Error.MissingContext
+        self.key = Key(bytes: key)
+
+        if nonce.count == 8 {
+            self.counter = [0,0,0,0,0,0,0,0] + nonce
+        } else {
+            self.counter = [0,0,0,0] + nonce
         }
-        
-        var c:[UInt8] = [UInt8](count: message.count, repeatedValue: 0)
-        
-        var cPos:Int = 0
-        var mPos:Int = 0
-        var bytes = message.count
-        
-        while (true) {
-            if let output = wordToByte(ctx.input) {
-                ctx.input[12] = ctx.input[12] &+ 1
-                if (ctx.input[12] == 0) {
-                    ctx.input[13] = ctx.input[13] &+ 1
-                    /* stopping at 2^70 bytes per nonce is user's responsibility */
-                }
-                if (bytes <= ChaCha20.blockSize) {
-                    for i in 0..<bytes {
-                        c[i + cPos] = message[i + mPos] ^ output[i]
-                    }
-                    return c
-                }
-                for i in 0..<ChaCha20.blockSize {
-                    c[i + cPos] = message[i + mPos] ^ output[i]
-                }
-                bytes -= ChaCha20.blockSize
-                cPos += ChaCha20.blockSize
-                mPos += ChaCha20.blockSize
+
+        assert(self.counter.count == 16)
+    }
+
+    /// https://tools.ietf.org/html/rfc7539#section-2.3.
+    fileprivate func core(block: inout Array<UInt8>, counter: Array<UInt8>, key: Array<UInt8>) {
+        precondition(block.count == ChaCha20.blockSize)
+        precondition(counter.count == 16)
+        precondition(key.count == 32)
+
+        let j0: UInt32 = 0x61707865
+        let j1: UInt32 = 0x3320646e // 0x3620646e sigma/tau
+        let j2: UInt32 = 0x79622d32
+        let j3: UInt32 = 0x6b206574
+        let j4: UInt32 = UInt32(bytes: key[0..<4]).bigEndian
+        let j5: UInt32 = UInt32(bytes: key[4..<8]).bigEndian
+        let j6: UInt32 = UInt32(bytes: key[8..<12]).bigEndian
+        let j7: UInt32 = UInt32(bytes: key[12..<16]).bigEndian
+        let j8: UInt32 = UInt32(bytes: key[16..<20]).bigEndian
+        let j9: UInt32 = UInt32(bytes: key[20..<24]).bigEndian
+        let j10: UInt32 = UInt32(bytes: key[24..<28]).bigEndian
+        let j11: UInt32 = UInt32(bytes: key[28..<32]).bigEndian
+        let j12: UInt32 = UInt32(bytes: counter[0..<4]).bigEndian
+        let j13: UInt32 = UInt32(bytes: counter[4..<8]).bigEndian
+        let j14: UInt32 = UInt32(bytes: counter[8..<12]).bigEndian
+        let j15: UInt32 = UInt32(bytes: counter[12..<16]).bigEndian
+
+        var (x0, x1, x2, x3, x4, x5, x6, x7) = (j0, j1, j2, j3, j4, j5, j6, j7)
+        var (x8, x9, x10, x11, x12, x13, x14, x15) = (j8, j9, j10, j11, j12, j13, j14, j15)
+
+        for _ in 0..<10 { // 20 rounds
+            x0 = x0 &+ x4
+            x12 ^= x0
+            x12 = (x12 << 16) | (x12 >> (16))
+            x8 = x8 &+ x12
+            x4 ^= x8
+            x4 = (x4 << 12) | (x4 >> (20))
+            x0 = x0 &+ x4
+            x12 ^= x0
+            x12 = (x12 << 8) | (x12 >> (24))
+            x8 = x8 &+ x12
+            x4 ^= x8
+            x4 = (x4 << 7) | (x4 >> (25))
+            x1 = x1 &+ x5
+            x13 ^= x1
+            x13 = (x13 << 16) | (x13 >> 16)
+            x9 = x9 &+ x13
+            x5 ^= x9
+            x5 = (x5 << 12) | (x5 >> 20)
+            x1 = x1 &+ x5
+            x13 ^= x1
+            x13 = (x13 << 8) | (x13 >> 24)
+            x9 = x9 &+ x13
+            x5 ^= x9
+            x5 = (x5 << 7) | (x5 >> 25)
+            x2 = x2 &+ x6
+            x14 ^= x2
+            x14 = (x14 << 16) | (x14 >> 16)
+            x10 = x10 &+ x14
+            x6 ^= x10
+            x6 = (x6 << 12) | (x6 >> 20)
+            x2 = x2 &+ x6
+            x14 ^= x2
+            x14 = (x14 << 8) | (x14 >> 24)
+            x10 = x10 &+ x14
+            x6 ^= x10
+            x6 = (x6 << 7) | (x6 >> 25)
+            x3 = x3 &+ x7
+            x15 ^= x3
+            x15 = (x15 << 16) | (x15 >> 16)
+            x11 = x11 &+ x15
+            x7 ^= x11
+            x7 = (x7 << 12) | (x7 >> 20)
+            x3 = x3 &+ x7
+            x15 ^= x3
+            x15 = (x15 << 8) | (x15 >> 24)
+            x11 = x11 &+ x15
+            x7 ^= x11
+            x7 = (x7 << 7) | (x7 >> 25)
+            x0 = x0 &+ x5
+            x15 ^= x0
+            x15 = (x15 << 16) | (x15 >> 16)
+            x10 = x10 &+ x15
+            x5 ^= x10
+            x5 = (x5 << 12) | (x5 >> 20)
+            x0 = x0 &+ x5
+            x15 ^= x0
+            x15 = (x15 << 8) | (x15 >> 24)
+            x10 = x10 &+ x15
+            x5 ^= x10
+            x5 = (x5 << 7) | (x5 >> 25)
+            x1 = x1 &+ x6
+            x12 ^= x1
+            x12 = (x12 << 16) | (x12 >> 16)
+            x11 = x11 &+ x12
+            x6 ^= x11
+            x6 = (x6 << 12) | (x6 >> 20)
+            x1 = x1 &+ x6
+            x12 ^= x1
+            x12 = (x12 << 8) | (x12 >> 24)
+            x11 = x11 &+ x12
+            x6 ^= x11
+            x6 = (x6 << 7) | (x6 >> 25)
+            x2 = x2 &+ x7
+            x13 ^= x2
+            x13 = (x13 << 16) | (x13 >> 16)
+            x8 = x8 &+ x13
+            x7 ^= x8
+            x7 = (x7 << 12) | (x7 >> 20)
+            x2 = x2 &+ x7
+            x13 ^= x2
+            x13 = (x13 << 8) | (x13 >> 24)
+            x8 = x8 &+ x13
+            x7 ^= x8
+            x7 = (x7 << 7) | (x7 >> 25)
+            x3 = x3 &+ x4
+            x14 ^= x3
+            x14 = (x14 << 16) | (x14 >> 16)
+            x9 = x9 &+ x14
+            x4 ^= x9
+            x4 = (x4 << 12) | (x4 >> 20)
+            x3 = x3 &+ x4
+            x14 ^= x3
+            x14 = (x14 << 8) | (x14 >> 24)
+            x9 = x9 &+ x14
+            x4 ^= x9
+            x4 = (x4 << 7) | (x4 >> 25)
+        }
+
+        x0 = x0 &+ j0
+        x1 = x1 &+ j1
+        x2 = x2 &+ j2
+        x3 = x3 &+ j3
+        x4 = x4 &+ j4
+        x5 = x5 &+ j5
+        x6 = x6 &+ j6
+        x7 = x7 &+ j7
+        x8 = x8 &+ j8
+        x9 = x9 &+ j9
+        x10 = x10 &+ j10
+        x11 = x11 &+ j11
+        x12 = x12 &+ j12
+        x13 = x13 &+ j13
+        x14 = x14 &+ j14
+        x15 = x15 &+ j15
+
+        block.replaceSubrange(0..<4,   with: x0.bigEndian.bytes())
+        block.replaceSubrange(4..<8,   with: x1.bigEndian.bytes())
+        block.replaceSubrange(8..<12,  with: x2.bigEndian.bytes())
+        block.replaceSubrange(12..<16, with: x3.bigEndian.bytes())
+        block.replaceSubrange(16..<20, with: x4.bigEndian.bytes())
+        block.replaceSubrange(20..<24, with: x5.bigEndian.bytes())
+        block.replaceSubrange(24..<28, with: x6.bigEndian.bytes())
+        block.replaceSubrange(28..<32, with: x7.bigEndian.bytes())
+        block.replaceSubrange(32..<36, with: x8.bigEndian.bytes())
+        block.replaceSubrange(36..<40, with: x9.bigEndian.bytes())
+        block.replaceSubrange(40..<44, with: x10.bigEndian.bytes())
+        block.replaceSubrange(44..<48, with: x11.bigEndian.bytes())
+        block.replaceSubrange(48..<52, with: x12.bigEndian.bytes())
+        block.replaceSubrange(52..<56, with: x13.bigEndian.bytes())
+        block.replaceSubrange(56..<60, with: x14.bigEndian.bytes())
+        block.replaceSubrange(60..<64, with: x15.bigEndian.bytes())
+    }
+
+    // XORKeyStream
+    func process(bytes: Array<UInt8>, counter: inout Array<UInt8>, key: Array<UInt8>) -> Array<UInt8> {
+        precondition(counter.count == 16)
+        precondition(key.count == 32)
+
+        var block = Array<UInt8>(repeating: 0, count: ChaCha20.blockSize)
+        var bytes = bytes //TODO: check bytes[bytes.indices]
+        var out = Array<UInt8>.init(reserveCapacity: bytes.count)
+
+        while bytes.count >= ChaCha20.blockSize {
+            self.core(block: &block, counter: counter, key: key)
+            for (i,x) in block.enumerated() {
+                out.append(bytes[i] ^ x)
+            }
+            var u: UInt32 = 1
+            for i in 0..<4 {
+                u += UInt32(counter[i])
+                counter[i] = UInt8(u)
+                u >>= 8
+            }
+            bytes = Array(bytes[ChaCha20.blockSize..<bytes.endIndex])
+        }
+
+        if bytes.count > 0 {
+            self.core(block: &block, counter: counter, key: key)
+            for (i, v) in bytes.enumerated() {
+                out.append(v ^ block[i])
             }
         }
-    }
-    
-    private final func quarterround(inout a:UInt32, inout _ b:UInt32, inout _ c:UInt32, inout _ d:UInt32) {
-        a = a &+ b
-        d = rotateLeft((d ^ a), 16) //FIXME: WAT? n:
-        
-        c = c &+ d
-        b = rotateLeft((b ^ c), 12);
-        
-        a = a &+ b
-        d = rotateLeft((d ^ a), 8);
-
-        c = c &+ d
-        b = rotateLeft((b ^ c), 7);
+        return out
     }
 }
 
-// MARK: - Cipher
-
+// MARK: Cipher
 extension ChaCha20: Cipher {
-    public func cipherEncrypt(bytes:[UInt8]) throws -> [UInt8] {
-        return try self.encrypt(bytes)
+
+    public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
+        return process(bytes: Array(bytes), counter: &self.counter, key: Array(self.key))
     }
-    
-    public func cipherDecrypt(bytes: [UInt8]) throws -> [UInt8] {
-        return try self.decrypt(bytes)
+
+    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
+        return try encrypt(bytes)
+    }
+}
+
+// MARK: Encryptor
+extension ChaCha20 {
+
+    public struct Encryptor: Updatable {
+        private var accumulated = Array<UInt8>()
+        private let chacha: ChaCha20
+
+        init(chacha: ChaCha20) {
+            self.chacha = chacha
+        }
+
+        mutating public func update<T: Collection>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+            self.accumulated += bytes
+
+            var encrypted = Array<UInt8>()
+            encrypted.reserveCapacity(self.accumulated.count)
+            for chunk in BytesSequence(chunkSize: ChaCha20.blockSize, data: self.accumulated) {
+                if (isLast || self.accumulated.count >= ChaCha20.blockSize) {
+                    encrypted += try chacha.encrypt(chunk)
+                    self.accumulated.removeFirst(chunk.count) //TODO: improve performance
+                }
+            }
+            return encrypted
+        }
+    }
+}
+
+// MARK: Decryptor
+extension ChaCha20 {
+
+    public struct Decryptor: Updatable {
+        private var accumulated = Array<UInt8>()
+
+        private var offset: Int = 0
+        private var offsetToRemove: Int = 0
+        private let chacha: ChaCha20
+
+        init(chacha: ChaCha20) {
+            self.chacha = chacha
+        }
+
+        mutating public func update<T: Collection>(withBytes bytes: T, isLast: Bool = true) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+            // prepend "offset" number of bytes at the begining
+            if self.offset > 0 {
+                self.accumulated += Array<UInt8>(repeating: 0, count: offset) + bytes
+                self.offsetToRemove = offset
+                self.offset = 0
+            } else {
+                self.accumulated += bytes
+            }
+
+            var plaintext = Array<UInt8>()
+            plaintext.reserveCapacity(self.accumulated.count)
+            for chunk in BytesSequence(chunkSize: ChaCha20.blockSize, data: self.accumulated) {
+                if (isLast || self.accumulated.count >= ChaCha20.blockSize) {
+                    plaintext += try chacha.decrypt(chunk)
+
+                    // remove "offset" from the beginning of first chunk
+                    if self.offsetToRemove > 0 {
+                        plaintext.removeFirst(self.offsetToRemove) //TODO: improve performance
+                        self.offsetToRemove = 0
+                    }
+
+                    self.accumulated.removeFirst(chunk.count)
+                }
+            }
+
+            return plaintext
+        }
+    }
+}
+
+// MARK: Cryptors
+extension ChaCha20: Cryptors {
+
+    public func makeEncryptor() -> ChaCha20.Encryptor {
+        return Encryptor(chacha: self)
+    }
+
+    public func makeDecryptor() -> ChaCha20.Decryptor {
+        return Decryptor(chacha: self)
     }
 }
 
 // MARK: Helpers
 
 /// Change array to number. It's here because arrayOfBytes is too slow
-private func wordNumber(bytes:ArraySlice<UInt8>) -> UInt32 {
-    var value:UInt32 = 0
-    for i:UInt32 in 0..<4 {
-        let j = bytes.startIndex + Int(i)
-        value = value | UInt32(bytes[j]) << (8 * i)
-    }
-
-    return value}
-
+//TODO: check if it should replace arrayOfBytes
+//private func wordNumber<T: Collection>(_ bytes: T) -> UInt32 where T.Iterator.Element == UInt8, T.IndexDistance == Int {
+//    var value: UInt32 = 0
+//    for i: UInt32 in 0 ..< 4 {
+//        let j = bytes.index(bytes.startIndex, offsetBy: Int(i))
+//        value = value | UInt32(bytes[j]) << (8 * i)
+//    }
+//
+//    return value
+//}

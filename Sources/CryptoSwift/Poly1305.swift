@@ -6,297 +6,154 @@
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
 //  http://tools.ietf.org/html/draft-agl-tls-chacha20poly1305-04#section-4
+//  nacl/crypto_onetimeauth/poly1305/ref/auth.c
 //
-//  Poly1305 takes a 32-byte, one-time key and a message and produces a 16-byte tag that authenticates the
-//  message such that an attacker has a negligible chance of producing a valid tag for an inauthentic message.
+///  Poly1305 takes a 32-byte, one-time key and a message and produces a 16-byte tag that authenticates the
+///  message such that an attacker has a negligible chance of producing a valid tag for an inauthentic message.
 
-final public class Poly1305 {
-    let blockSize = 16
-    private var ctx:Context?
-    
-    private class Context {
-        var r            = [UInt8](count: 17, repeatedValue: 0)
-        var h            = [UInt8](count: 17, repeatedValue: 0)
-        var pad          = [UInt8](count: 17, repeatedValue: 0)
-        var buffer       = [UInt8](count: 16, repeatedValue: 0)
-        
-        var final:UInt8   = 0
-        var leftover:Int = 0
-        
-        init?(_ key: [UInt8]) {
-            assert(key.count == 32,"Invalid key length");
-            if (key.count != 32) {
-                return nil;
-            }
-            
-            for i in 0..<17 {
-                h[i] = 0
-            }
-            
-            r[0] = key[0] & 0xff;
-            r[1] = key[1] & 0xff;
-            r[2] = key[2] & 0xff;
-            r[3] = key[3] & 0x0f;
-            r[4] = key[4] & 0xfc;
-            r[5] = key[5] & 0xff;
-            r[6] = key[6] & 0xff;
-            r[7] = key[7] & 0x0f;
-            r[8] = key[8] & 0xfc;
-            r[9] = key[9] & 0xff;
-            r[10] = key[10] & 0xff;
-            r[11] = key[11] & 0x0f;
-            r[12] = key[12] & 0xfc;
-            r[13] = key[13] & 0xff;
-            r[14] = key[14] & 0xff;
-            r[15] = key[15] & 0x0f;
-            r[16] = 0
-            
-            for i in 0..<16 {
-                pad[i] = key[i + 16]
-            }
-            pad[16] = 0
-            
-            leftover = 0
-            final = 0
-        }
-        
-        deinit {
-            for i in 0..<buffer.count {
-                buffer[i] = 0
-            }
-            
-            for i in 0..<r.count {
-                r[i] = 0
-                h[i] = 0
-                pad[i] = 0
-                final = 0
-                leftover = 0
-            }
-        }
-    }
-    
-    // MARK: - Internal
-    
-    /**
-    Calculate Message Authentication Code (MAC) for message.
-    Calculation context is discarder on instance deallocation.
-    
-    - parameter key:     256-bit key
-    - parameter message: Message
-    
-    - returns: Message Authentication Code
-    */
-    class internal func authenticate(key  key: [UInt8], message: [UInt8]) -> [UInt8]? {
-        return Poly1305(key)?.authenticate(message: message)
-    }
-    
-    // MARK: - Private
-    
-    private init? (_ key: [UInt8]) {
-        ctx = Context(key)
-        if (ctx == nil) {
-            return nil
-        }
-    }
-    
-    private func authenticate(message  message:[UInt8]) -> [UInt8]? {
-        if let ctx = self.ctx {
-            update(ctx, message: message)
-            return finish(ctx)
-        }
-        return nil
-    }
-    
-    /**
-    Add message to be processed
-    
-    - parameter context: Context
-    - parameter message: message
-    - parameter bytes:   length of the message fragment to be processed
-    */
-    private func update(context:Context, message:[UInt8], bytes:Int? = nil) {
-        var bytes = bytes ?? message.count
-        var mPos = 0
-        
-        /* handle leftover */
-        if (context.leftover > 0) {
-            var want = blockSize - context.leftover
-            if (want > bytes) {
-                want = bytes
-            }
-            
-            for i in 0..<want {
-                context.buffer[context.leftover + i] = message[mPos + i]
-            }
-            
-            bytes -= want
-            mPos += want
-            context.leftover += want
-            
-            if (context.leftover < blockSize) {
-                return
-            }
-            
-            blocks(context, m: context.buffer)
-            context.leftover = 0
-        }
-        
-        /* process full blocks */
-        if (bytes >= blockSize) {
-            let want = bytes & ~(blockSize - 1)
-            blocks(context, m: message, startPos: mPos)
-            mPos += want
-            bytes -= want;
-        }
-        
-        /* store leftover */
-        if (bytes > 0) {
-            for i in 0..<bytes {
-                context.buffer[context.leftover + i] = message[mPos + i]
-            }
-            
-            context.leftover += bytes
-        }
-    }
-    
-    private func finish(context:Context) -> [UInt8]? {
-        var mac = [UInt8](count: 16, repeatedValue: 0);
-        
-        /* process the remaining block */
-        if (context.leftover > 0) {
+public final class Poly1305: Authenticator {
 
-            context.buffer[context.leftover] = 1
-            for i in (context.leftover + 1)..<blockSize {
-                context.buffer[i] = 0
-            }
-            context.final = 1
-            
-            blocks(context, m: context.buffer)
-        }
-        
-        
-        /* fully reduce h */
-        freeze(context)
-        
-        /* h = (h + pad) % (1 << 128) */
-        add(context, c: context.pad)
-        for i in 0..<mac.count {
-            mac[i] = context.h[i]
-        }
-        
-        return mac
+    public enum Error: Swift.Error {
+        case authenticateError
     }
-    
-    // MARK: - Utils
-    
-    private func add(context:Context, c:[UInt8]) -> Bool {
-        if (context.h.count != 17 && c.count != 17) {
-            return false
-        }
-        
-        var u:UInt16 = 0
-        for i in 0..<17 {
-            u += UInt16(context.h[i]) + UInt16(c[i])
-            context.h[i] = UInt8.withValue(u)
+
+    public static let blockSize: Int = 16
+
+    private let key: SecureBytes
+
+    /// - parameter key: 32-byte key
+    public init(key: Array<UInt8>) {
+        self.key = SecureBytes(bytes: key)
+    }
+
+    private func squeeze(h: inout Array<UInt32>) {
+        assert(h.count == 17)
+        var u: UInt32 = 0
+        for j in 0..<16 {
+            u = u &+ h[j]
+            h[j] = u & 255
             u = u >> 8
         }
-        return true
+
+        u = u &+ h[16]
+        h[16] = u & 3
+        u = 5 * (u >> 2)
+
+        for j in 0..<16 {
+            u = u &+ h[j]
+            h[j] = u & 255
+            u = u >> 8
+        }
+
+        u = u &+ h[16]
+        h[16] = u
     }
-    
-    private func squeeze(context:Context, hr:[UInt32]) -> Bool {
-        if (context.h.count != 17 && hr.count != 17) {
-            return false
+
+    private func add(h: inout Array<UInt32>, c: Array<UInt32>) {
+        assert(h.count == 17 && c.count == 17)
+
+        var u: UInt32 = 0
+        for j in 0..<17 {
+            u = u &+ (h[j] &+ c[j])
+            h[j] = u & 255
+            u = u >> 8
         }
-        
-        var u:UInt32 = 0
-        
-        for i in 0..<16 {
-            u += hr[i];
-            context.h[i] = UInt8.withValue(u) // crash! h[i] = UInt8(u) & 0xff
-            u >>= 8;
-        }
-        
-        u += hr[16]
-        context.h[16] = UInt8.withValue(u) & 0x03
-        u >>= 2
-        u += (u << 2); /* u *= 5; */
-        for i in 0..<16 {
-            u += UInt32(context.h[i])
-            context.h[i] = UInt8.withValue(u) // crash! h[i] = UInt8(u) & 0xff
-            u >>= 8
-        }
-        context.h[16] += UInt8.withValue(u);
-        
-        return true
     }
-    
-    private func freeze(context:Context) -> Bool {
-        assert(context.h.count == 17,"Invalid length")
-        if (context.h.count != 17) {
-            return false
-        }
-        
-        let minusp:[UInt8] = [0x05,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xfc]
-        var horig:[UInt8] = [UInt8](count: 17, repeatedValue: 0)
-        
-        /* compute h + -p */
+
+    private func mulmod(h: inout Array<UInt32>, r: Array<UInt32>) {
+        var hr = Array<UInt32>(repeating: 0, count: 17)
+        var u: UInt32 = 0
         for i in 0..<17 {
-            horig[i] = context.h[i]
+            u = 0
+            for j in 0...i {
+                u = u &+ (h[j] * r[i &- j])
+            }
+            for j in (i + 1)..<17 {
+                u = u &+ (320 * h[j] * r[i &+ 17 &- j])
+            }
+            hr[i] = u
         }
-        
-        add(context, c: minusp)
-        
-        /* select h if h < p, or h + -p if h >= p */
-        let bits:[Bit] = (context.h[16] >> 7).bits()
-        let invertedBits = bits.map({ (bit) -> Bit in
-            return bit.inverted()
-        })
-        
-        let negative = UInt8(bits: invertedBits)
-        for i in 0..<17 {
-            context.h[i] ^= negative & (horig[i] ^ context.h[i]);
-        }
-        
-        return true;
+        h = hr
+        self.squeeze(h: &h)
     }
-    
-    private func blocks(context:Context, m:[UInt8], startPos:Int = 0) -> Int {
-        var bytes = m.count
-        let hibit = context.final ^ 1 // 1 <<128
-        var mPos = startPos
-        
-        while (bytes >= Int(blockSize)) {
-            var hr:[UInt32] = [UInt32](count: 17, repeatedValue: 0)
-            var u:UInt32 = 0
-            var c:[UInt8] = [UInt8](count: 17, repeatedValue: 0)
-            
-            /* h += m */
-            for i in 0..<16 {
-                c[i] = m[mPos + i]
-            }
-            c[16] = hibit
-            
-            add(context, c: c)
-            
-            /* h *= r */
-            for i in 0..<17 {
-                u = 0
-                for j in 0...i {
-                    u = u + UInt32(UInt16(context.h[j])) * UInt32(context.r[i - j]) // u += (unsigned short)st->h[j] * st->r[i - j];
-                }
-                for j in (i+1)..<17 {
-                    var v:UInt32 = UInt32(UInt16(context.h[j])) * UInt32(context.r[i + 17 - j])  // unsigned long v = (unsigned short)st->h[j] * st->r[i + 17 - j];
-                    v = ((v << 8) &+ (v << 6))
-                    u = u &+ v
-                }
-                hr[i] = u
-            }
-            
-            squeeze(context, hr: hr)
-            
-            mPos += blockSize
-            bytes -= blockSize
+
+    private func freeze(h: inout Array<UInt32>) {
+        let horig = h
+        add(h: &h, c: [5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 252])
+        let negative = UInt32(bitPattern: -Int32(h[16] >> 7))
+        for j in 0..<17 {
+            h[j] ^= negative & (horig[j] ^ h[j])
         }
-        return mPos
+    }
+
+    /// the key is partitioned into two parts, called "r" and "s"
+    fileprivate func onetimeauth(message input: Array<UInt8>, key k: Array<UInt8>) -> Array<UInt8> {
+        // clamp
+        var r = Array<UInt32>(repeating: 0, count: 17)
+        var h = Array<UInt32>(repeating: 0, count: 17)
+        var c = Array<UInt32>(repeating: 0, count: 17)
+
+        r[0] = UInt32(k[0])
+        r[1] = UInt32(k[1])
+        r[2] = UInt32(k[2])
+        r[3] = UInt32(k[3] & 15)
+        r[4] = UInt32(k[4] & 252)
+        r[5] = UInt32(k[5])
+        r[6] = UInt32(k[6])
+        r[7] = UInt32(k[7] & 15)
+        r[8] = UInt32(k[8] & 252)
+        r[9] = UInt32(k[9])
+        r[10] = UInt32(k[10])
+        r[11] = UInt32(k[11] & 15)
+        r[12] = UInt32(k[12] & 252)
+        r[13] = UInt32(k[13])
+        r[14] = UInt32(k[14])
+        r[15] = UInt32(k[15] & 15)
+        r[16] = 0
+
+
+        var inlen = input.count
+        var inpos = 0
+        while inlen > 0 {
+            for j in 0..<c.count {
+                c[j] = 0
+            }
+
+            let maxj = min(inlen, 16)
+            for j in 0..<maxj {
+                c[j] = UInt32(input[inpos + j])
+            }
+            c[maxj] = 1
+            inpos = inpos + maxj
+            inlen = inlen - maxj
+            self.add(h: &h, c: c)
+            self.mulmod(h: &h, r: r)
+        }
+
+        self.freeze(h: &h)
+
+        for j in 0..<16 {
+            c[j] = UInt32(k[j + 16])
+        }
+        c[16] = 0
+        add(h: &h, c: c)
+
+        return h[0..<16].map {
+            UInt8($0 & 0xFF)
+        }
+    }
+
+    // MARK: - Authenticator
+
+    /**
+     Calculate Message Authentication Code (MAC) for message.
+     Calculation context is discarder on instance deallocation.
+
+     - parameter bytes: Message
+
+     - returns: 16-byte tag that authenticates the message
+     */
+    public func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
+        return onetimeauth(message: bytes, key: Array(self.key))
     }
 }

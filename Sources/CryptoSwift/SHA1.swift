@@ -53,7 +53,7 @@ public final class SHA1: DigestType {
             var f: UInt32 = 0
             var k: UInt32 = 0
 
-            switch (j) {
+            switch j {
             case 0 ... 19:
                 f = (B & C) | ((~B) & D)
                 k = 0x5A827999
@@ -74,7 +74,7 @@ public final class SHA1: DigestType {
                 break
             }
 
-            let temp = (rotateLeft(A, by: 5) &+ f &+ E &+ M[j] &+ k) & 0xffffffff
+            let temp = rotateLeft(A, by: 5) &+ f &+ E &+ M[j] &+ k
             E = D
             D = C
             C = rotateLeft(B, by: 30)
@@ -82,11 +82,11 @@ public final class SHA1: DigestType {
             A = temp
         }
 
-        hh[0] = (hh[0] &+ A) & 0xffffffff
-        hh[1] = (hh[1] &+ B) & 0xffffffff
-        hh[2] = (hh[2] &+ C) & 0xffffffff
-        hh[3] = (hh[3] &+ D) & 0xffffffff
-        hh[4] = (hh[4] &+ E) & 0xffffffff
+        hh[0] = hh[0] &+ A
+        hh[1] = hh[1] &+ B
+        hh[2] = hh[2] &+ C
+        hh[3] = hh[3] &+ D
+        hh[4] = hh[4] &+ E
     }
 }
 

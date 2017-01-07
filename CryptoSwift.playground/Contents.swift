@@ -75,8 +75,8 @@ PKCS7().add(to: bytes, blockSize: AES.blockSize)
  */
 
 do {
-    let key:Array<UInt8> = [0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88];
-    let iv:Array<UInt8> =  [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07]
+    let key:Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
+    let iv:Array<UInt8> =  [1, 2, 3, 4, 5, 6, 7, 8]
     let message = Array<UInt8>(repeating: 7, count: 10)
 
     let encrypted = try ChaCha20(key: key, iv: iv).encrypt(message)

@@ -5,6 +5,8 @@
 //  Created by Marcin Krzyzanowski on 25/08/14.
 //  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
 //
+//  https://tools.ietf.org/html/rfc7539
+//
 
 private typealias Key = SecureBytes
 
@@ -22,9 +24,7 @@ public final class ChaCha20: BlockCipher {
     public init(key: Array<UInt8>, iv nonce: Array<UInt8>) throws {
         precondition(nonce.count == 12 || nonce.count == 8)
 
-        let kbits = key.count * 8
-
-        if (kbits != 128 && kbits != 256) {
+        if (key.count != 32) {
             throw Error.invalidKeyOrInitializationVector
         }
 

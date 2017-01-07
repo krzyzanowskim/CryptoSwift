@@ -206,7 +206,7 @@ public final class ChaCha20: BlockCipher {
 
         var block = Array<UInt8>(repeating: 0, count: ChaCha20.blockSize)
         var bytes = bytes //TODO: check bytes[bytes.indices]
-        var out = Array<UInt8>.init(reserveCapacity: bytes.count)
+        var out = Array<UInt8>(reserveCapacity: bytes.count)
 
         while bytes.count >= ChaCha20.blockSize {
             self.core(block: &block, counter: counter, key: key)
@@ -327,17 +327,3 @@ extension ChaCha20: Cryptors {
         return Decryptor(chacha: self)
     }
 }
-
-// MARK: Helpers
-
-/// Change array to number. It's here because arrayOfBytes is too slow
-//TODO: check if it should replace arrayOfBytes
-//private func wordNumber<T: Collection>(_ bytes: T) -> UInt32 where T.Iterator.Element == UInt8, T.IndexDistance == Int {
-//    var value: UInt32 = 0
-//    for i: UInt32 in 0 ..< 4 {
-//        let j = bytes.index(bytes.startIndex, offsetBy: Int(i))
-//        value = value | UInt32(bytes[j]) << (8 * i)
-//    }
-//
-//    return value
-//}

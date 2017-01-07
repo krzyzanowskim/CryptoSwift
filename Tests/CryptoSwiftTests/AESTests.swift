@@ -97,12 +97,12 @@ final class AESTests: XCTestCase {
         do {
             var ciphertext = Array<UInt8>()
             let plaintext = "Today Apple launched the open source Swift community, as well as amazing new tools and resources."
-            let aes = try AES(key: "passwordpassword".utf8.map({ $0 }), iv: "drowssapdrowssap".utf8.map({ $0 }))
+            let aes = try AES(key: Array("passwordpassword".utf8), iv: Array("drowssapdrowssap".utf8))
             var encryptor = aes.makeEncryptor()
 
-            ciphertext += try encryptor.update(withBytes: plaintext.utf8.map({ $0 }))
+            ciphertext += try encryptor.update(withBytes: Array(plaintext.utf8))
             ciphertext += try encryptor.finish()
-            XCTAssertEqual(try aes.encrypt(plaintext.utf8.map({ $0 })), ciphertext, "encryption failed")
+            XCTAssertEqual(try aes.encrypt(Array(plaintext.utf8)), ciphertext, "encryption failed")
         } catch {
             XCTAssert(false, "\(error)")
         }
@@ -219,7 +219,7 @@ final class AESTests: XCTestCase {
         var plaintext: Array<UInt8> = Array<UInt8>(repeating: 0, count: 6000)
 
         for i in 0 ..< plaintext.count / 6 {
-            let s = String(format: "%05d", i).utf8.map { $0 }
+            let s = Array(String(format: "%05d", i).utf8)
             plaintext[i * 6 + 0] = s[0]
             plaintext[i * 6 + 1] = s[1]
             plaintext[i * 6 + 2] = s[2]

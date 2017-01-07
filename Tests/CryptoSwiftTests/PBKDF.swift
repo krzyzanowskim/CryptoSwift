@@ -46,8 +46,8 @@ class PBKDF: XCTestCase {
     }
 
     func testPBKDF2Length() {
-        let password: Array<UInt8> = "s33krit".utf8.map { $0 }
-        let salt: Array<UInt8> = "nacl".utf8.map { $0 }
+        let password: Array<UInt8> = Array("s33krit".utf8)
+        let salt: Array<UInt8> = Array("nacl".utf8)
         let value = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 2, keyLength: 8, variant: .sha1).calculate()
         XCTAssert(value.toHexString() == "a53cf3df485e5cd9", "PBKDF2 fail")
     }

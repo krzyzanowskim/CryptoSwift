@@ -1,5 +1,7 @@
 #CryptoSwift
 
+[![Join the chat at https://gitter.im/krzyzanowskim/CryptoSwift](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/krzyzanowskim/CryptoSwift?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Crypto related functions and helpers for [Swift](https://developer.apple.com/swift/) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
 #Table of Contents

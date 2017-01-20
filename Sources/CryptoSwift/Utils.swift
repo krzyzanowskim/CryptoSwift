@@ -53,12 +53,25 @@ func reversed(_ uint32: UInt32) -> UInt32 {
 }
 
 func xor(_ a: Array<UInt8>, _ b: Array<UInt8>) -> Array<UInt8> {
+    return xor(a.suffix(from: a.startIndex), b.suffix(from: b.startIndex))
+}
+
+func xor(_ a: Array<UInt8>, _ b: ArraySlice<UInt8>) -> Array<UInt8> {
+    return xor(a.suffix(from: a.startIndex), b.suffix(from: b.startIndex))
+}
+
+func xor(_ a: ArraySlice<UInt8>, _ b: Array<UInt8>) -> Array<UInt8> {
+    return xor(a.suffix(from: a.startIndex), b.suffix(from: b.startIndex))
+}
+
+func xor(_ a: ArraySlice<UInt8>, _ b: ArraySlice<UInt8>) -> Array<UInt8> {
     var xored = Array<UInt8>(repeating: 0, count: min(a.count, b.count))
     for i in 0 ..< xored.count {
-        xored[i] = a[i] ^ b[i]
+        xored[xored.startIndex.advanced(by: i)] = a[a.startIndex.advanced(by: i)] ^ b[b.startIndex.advanced(by: i)]
     }
     return xored
 }
+
 
 /**
  ISO/IEC 9797-1 Padding method 2.

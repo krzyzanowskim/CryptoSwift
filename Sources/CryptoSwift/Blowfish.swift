@@ -468,7 +468,7 @@ extension Blowfish: Cipher {
         out.reserveCapacity(bytes.count)
 
         for chunk in bytes.batched(by: Blowfish.blockSize) {
-            out += self.encryptWorker.encrypt(Array(chunk))
+            out += self.encryptWorker.encrypt(chunk)
         }
 
         if blockMode.options.contains(.PaddingRequired) && (out.count % Blowfish.blockSize != 0) {
@@ -493,7 +493,7 @@ extension Blowfish: Cipher {
         out.reserveCapacity(bytes.count)
 
         for chunk in Array(bytes).batched(by: Blowfish.blockSize) {
-            out += self.decryptWorker.decrypt(Array(chunk)) //FIXME: copying here is innefective
+            out += self.decryptWorker.decrypt(chunk) //FIXME: copying here is innefective
         }
 
         out = padding.remove(from: out, blockSize: Blowfish.blockSize)

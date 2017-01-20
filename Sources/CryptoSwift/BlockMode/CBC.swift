@@ -20,20 +20,20 @@ struct CBCModeWorker: BlockModeWorker {
         self.cipherOperation = cipherOperation
     }
 
-    mutating func encrypt(_ plaintext: Array<UInt8>) -> Array<UInt8> {
+    mutating func encrypt(_ plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
         guard let ciphertext = cipherOperation(xor(prev ?? iv, plaintext)) else {
-            return plaintext
+            return Array(plaintext)
         }
         prev = ciphertext
         return ciphertext
     }
 
-    mutating func decrypt(_ ciphertext: Array<UInt8>) -> Array<UInt8> {
-        guard let plaintext = cipherOperation(ciphertext) else {
-            return ciphertext
+    mutating func decrypt(_ ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+        guard let plaintext = cipherOperation(Array(ciphertext)) else {
+            return Array(ciphertext)
         }
         let result = xor(prev ?? iv, plaintext)
-        self.prev = ciphertext
+        self.prev = Array(ciphertext)
         return result
     }
 }

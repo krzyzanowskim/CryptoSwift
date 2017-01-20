@@ -312,18 +312,7 @@ fileprivate extension AES {
     func expandKey(_ key: Key, variant: Variant) -> Array<Array<UInt32>> {
 
         func convertExpandedKey(_ expanded: Array<UInt8>) -> Array<Array<UInt32>> {
-            var arr = Array<UInt32>()
-            for idx in stride(from: expanded.startIndex, to: expanded.endIndex, by: 4) {
-                let four = Array(expanded[idx ..< idx.advanced(by: 4)].reversed())
-                let num = UInt32(bytes: four)
-                arr.append(num)
-            }
-
-            var allarr = Array<Array<UInt32>>()
-            for idx in stride(from: arr.startIndex, to: arr.endIndex, by: 4) {
-                allarr.append(Array(arr[idx ..< idx.advanced(by: 4)]))
-            }
-            return allarr
+            return expanded.batched(by: 4).map({ UInt32(bytes: $0.reversed()) }).batched(by: 4).map({ Array($0) })
         }
 
         /*
@@ -444,12 +433,6 @@ extension AES {
             var processedBytes = 0
             var encrypted = Array<UInt8>()
             encrypted.reserveCapacity(self.accumulated.count)
-//            for chunk in self.accumulated.batched(by: AES.blockSize) {
-//                if (isLast || (self.accumulated.count - processedBytes) >= AES.blockSize) {
-//                    encrypted += worker.encrypt(Array(chunk))
-//                    processedBytes += chunk.count
-//                }
-//            }
             for chunk in self.accumulated.chunks(size: AES.blockSize) {
                 if (isLast || (self.accumulated.count - processedBytes) >= AES.blockSize) {
                     encrypted += worker.encrypt(chunk)

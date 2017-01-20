@@ -444,6 +444,12 @@ extension AES {
             var processedBytes = 0
             var encrypted = Array<UInt8>()
             encrypted.reserveCapacity(self.accumulated.count)
+//            for chunk in self.accumulated.batched(by: AES.blockSize) {
+//                if (isLast || (self.accumulated.count - processedBytes) >= AES.blockSize) {
+//                    encrypted += worker.encrypt(Array(chunk))
+//                    processedBytes += chunk.count
+//                }
+//            }
             for chunk in self.accumulated.chunks(size: AES.blockSize) {
                 if (isLast || (self.accumulated.count - processedBytes) >= AES.blockSize) {
                     encrypted += worker.encrypt(chunk)
@@ -497,9 +503,9 @@ extension AES {
             var processedBytes = 0
             var plaintext = Array<UInt8>()
             plaintext.reserveCapacity(self.accumulated.count)
-            for chunk in self.accumulated.chunks(size: AES.blockSize) {
+            for chunk in self.accumulated.batched(by: AES.blockSize) {
                 if (isLast || (self.accumulated.count - processedBytes) >= AES.blockSize) {
-                    plaintext += self.worker.decrypt(chunk)
+                    plaintext += self.worker.decrypt(Array(chunk))
 
                     // remove "offset" from the beginning of first chunk
                     if self.offsetToRemove > 0 {

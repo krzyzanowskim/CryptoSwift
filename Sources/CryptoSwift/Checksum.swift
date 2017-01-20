@@ -76,7 +76,7 @@ public final class Checksum {
 
     func crc32(_ message: Array<UInt8>, seed: UInt32? = nil, reflect: Bool = true) -> UInt32 {
         var crc: UInt32 = seed != nil ? seed! : 0xffffffff
-        for chunk in BytesSequence(chunkSize: 256, data: message) {
+        for chunk in message.batched(by: 256) {
             for b in chunk {
                 let idx = Int((crc ^ UInt32(reflect ? b : reversed(b))) & 0xff)
                 crc = (crc >> 8) ^ Checksum.table32[idx]
@@ -87,7 +87,7 @@ public final class Checksum {
 
     func crc16(_ message: Array<UInt8>, seed: UInt16? = nil) -> UInt16 {
         var crc: UInt16 = seed != nil ? seed! : 0x0000
-        for chunk in BytesSequence(chunkSize: 256, data: message) {
+        for chunk in message.batched(by: 256) {
             for b in chunk {
                 crc = (crc >> 8) ^ Checksum.table16[Int((crc ^ UInt16(b)) & 0xFF)]
             }

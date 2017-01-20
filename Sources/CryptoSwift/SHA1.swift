@@ -107,7 +107,7 @@ extension SHA1: Updatable {
         }
 
         var processedBytes = 0
-        for chunk in BytesSequence(chunkSize: SHA1.blockSize, data: self.accumulated) {
+        for chunk in self.accumulated.batched(by: SHA1.blockSize) {
             if (isLast || (self.accumulated.count - processedBytes) >= SHA1.blockSize) {
                 self.process(block: chunk, currentHash: &self.accumulatedHash)
                 processedBytes += chunk.count

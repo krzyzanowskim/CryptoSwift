@@ -426,7 +426,7 @@ extension AES {
         mutating public func update<T: Collection>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
             self.accumulated += bytes
 
-            if isLast {
+            if isLast && self.paddingRequired {
                 self.accumulated = padding.add(to: self.accumulated, blockSize: AES.blockSize)
             }
 
@@ -542,14 +542,16 @@ extension AES: Cryptors {
 extension AES: Cipher {
 
     public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
-        let chunks = Array(bytes).chunks(size: AES.blockSize)
+        let chunks = bytes.batched(by: AES.blockSize)
 
         var oneTimeCryptor = self.makeEncryptor()
         var out = Array<UInt8>()
         out.reserveCapacity(bytes.count)
         for idx in chunks.indices {
-            out += try oneTimeCryptor.update(withBytes: chunks[idx], isLast: idx == chunks.endIndex.advanced(by: -1))
+            out += try oneTimeCryptor.update(withBytes: chunks[idx] as! ArraySlice<UInt8>, isLast: false)
         }
+        // Padding may be added at the very end
+        out += try oneTimeCryptor.finish()
 
         if blockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
             throw Error.dataPaddingRequired
@@ -564,11 +566,17 @@ extension AES: Cipher {
         }
 
         var oneTimeCryptor = self.makeDecryptor()
-        let chunks = Array(bytes).chunks(size: AES.blockSize)
+        let chunks = bytes.batched(by: AES.blockSize)
         var out = Array<UInt8>()
         out.reserveCapacity(bytes.count)
+
+        var lastIdx = chunks.startIndex
+        chunks.indices.formIndex(&lastIdx, offsetBy: chunks.count - 1)
+
+        // To properly remove padding, `isLast` has to be known when called with the last chunk of ciphertext
+        // Last chunk of ciphertext may contains padded data so next call to update(..) won't be able to remove it
         for idx in chunks.indices {
-            out += try oneTimeCryptor.update(withBytes: chunks[idx], isLast: idx == chunks.endIndex.advanced(by: -1))
+            out += try oneTimeCryptor.update(withBytes: chunks[idx] as! ArraySlice<UInt8>, isLast: idx == lastIdx)
         }
         return out
     }

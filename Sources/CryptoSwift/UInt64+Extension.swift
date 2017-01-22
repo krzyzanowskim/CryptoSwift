@@ -10,7 +10,7 @@
 extension UInt64 {
 
     @_specialize(ArraySlice<UInt8>)
-    init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.IndexDistance == Int , T.Index == Int, T.SubSequence: Collection {
+    init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.IndexDistance == Int, T.Index == Int, T.SubSequence: Collection {
         self = UInt64(bytes: bytes, fromIndex: bytes.startIndex)
     }
 

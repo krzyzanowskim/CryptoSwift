@@ -541,14 +541,14 @@ extension AES: Cryptors {
 // MARK: Cipher
 extension AES: Cipher {
 
-    public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
+    public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.Iterator.Element == C.Iterator.Element {
         let chunks = bytes.batched(by: AES.blockSize)
 
         var oneTimeCryptor = self.makeEncryptor()
         var out = Array<UInt8>()
         out.reserveCapacity(bytes.count)
-        for idx in chunks.indices {
-            out += try oneTimeCryptor.update(withBytes: chunks[idx] as! ArraySlice<UInt8>, isLast: false)
+        for chunk in chunks {
+            out += try oneTimeCryptor.update(withBytes: chunk, isLast: false)
         }
         // Padding may be added at the very end
         out += try oneTimeCryptor.finish()
@@ -560,7 +560,7 @@ extension AES: Cipher {
         return out
     }
 
-    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
+    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.Iterator.Element == C.Iterator.Element {
         if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
             throw Error.dataPaddingRequired
         }
@@ -576,7 +576,7 @@ extension AES: Cipher {
         // To properly remove padding, `isLast` has to be known when called with the last chunk of ciphertext
         // Last chunk of ciphertext may contains padded data so next call to update(..) won't be able to remove it
         for idx in chunks.indices {
-            out += try oneTimeCryptor.update(withBytes: chunks[idx] as! ArraySlice<UInt8>, isLast: idx == lastIdx)
+            out += try oneTimeCryptor.update(withBytes: chunks[idx], isLast: idx == lastIdx)
         }
         return out
     }

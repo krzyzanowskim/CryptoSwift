@@ -457,6 +457,97 @@ extension AES {
     }
 }
 
+extension AES {
+    public struct StreamEncryptor {
+        private let aes: AES
+        private var worker: BlockModeWorker
+        private var next: [UInt8]
+        private var out: [UInt8]
+        private var outUsed = 0
+        public init(aes: AES){
+            self.aes = aes
+            switch (aes.blockMode) {
+            case .CFB, .OFB, .CTR:
+                // CFB, OFB, CTR uses encryptBlock to decrypt
+                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encrypt)
+            default:
+                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.decrypt)
+            }
+            next = aes.iv
+
+            out = [UInt8]()
+        }
+        
+        mutating public func process(withBytes bytes: [UInt8]) throws  -> Array<UInt8> {
+            var src = Array<UInt8>()
+            src.append(contentsOf: bytes)
+            var dst = Array<UInt8>()
+            while src.count > 0 {
+                if outUsed == AES.blockSize || outUsed == 0 {
+                    out = aes.encrypt(block: next)!
+                    outUsed = 0
+                }
+                out.removeFirst(outUsed)
+                let xorResult = xor(src, out)
+                next.replaceSubrange(outUsed..<xorResult.count+outUsed, with: xorResult)
+                dst.append(contentsOf: xorResult)
+                src.removeFirst(xorResult.count)
+                outUsed += xorResult.count
+            }
+            return dst
+        }
+    }
+}
+
+
+extension AES {
+    public struct StreamDecryptor {
+        private let aes: AES
+        private var worker: BlockModeWorker
+        private var next: [UInt8]
+        private var out: [UInt8]
+        private var outUsed = 0
+        public init(aes: AES){
+            self.aes = aes
+            switch (aes.blockMode) {
+            case .CFB, .OFB, .CTR:
+                // CFB, OFB, CTR uses encryptBlock to decrypt
+                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encrypt)
+            default:
+                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.decrypt)
+            }
+            next = aes.iv
+
+            out = [UInt8]()
+        }
+
+        mutating public func process(withBytes bytes: [UInt8]) throws  -> Array<UInt8> {
+            var src = Array<UInt8>()
+            src.append(contentsOf: bytes)
+            var dst = Array<UInt8>()
+            while src.count > 0 {
+                if outUsed == AES.blockSize || outUsed == 0 {
+                    out = aes.encrypt(block: next)!
+                    outUsed = 0
+                }
+                out.removeFirst(outUsed)
+                var left = 0
+                if src.count>(AES.blockSize-outUsed){
+                    left = AES.blockSize-outUsed
+                }else{
+                    left = src.count
+                }
+                next.replaceSubrange(outUsed..<left+outUsed, with: src[0..<left])
+                let xorResult = xor(src, out)
+                dst.append(contentsOf: xorResult)
+                src.removeFirst(xorResult.count)
+                outUsed += xorResult.count
+            }
+            return dst
+        }
+    }
+}
+
 // MARK: Decryptor
 extension AES {
 

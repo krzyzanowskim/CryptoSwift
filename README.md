@@ -107,11 +107,12 @@ In the project, you'll find [single scheme](http://promisekit.org/news/2016/08/M
 You can use [CocoaPods](http://cocoapods.org/?q=cryptoSwift).
 
 ```ruby
-source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'CryptoSwift'
+target 'MyApp' do
+  pod 'CryptoSwift'
+end
 ```
 
 or for newest version from specified branch of code:

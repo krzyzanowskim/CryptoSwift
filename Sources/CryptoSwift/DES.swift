@@ -12,13 +12,29 @@
 public final class DES: BlockCipher {
     public static let blockSize: Int = 8
 
-    let permutedChoice1:Array<UInt8> = [7, 15, 23, 31, 39, 47, 55, 63,
-                                        6, 14, 22, 30, 38, 46, 54, 62,
-                                        5, 13, 21, 29, 37, 45, 53, 61,
-                                        4, 12, 20, 28, 1, 9, 17, 25,
-                                        33, 41, 49, 57, 2, 10, 18, 26,
-                                        34, 42, 50, 58, 3, 11, 19, 27,
-                                        35, 43, 51, 59, 36, 44, 52, 60]
+    private let permutedChoice1: Array<UInt8> = [7, 15, 23, 31, 39, 47, 55, 63,
+                                                 6, 14, 22, 30, 38, 46, 54, 62,
+                                                 5, 13, 21, 29, 37, 45, 53, 61,
+                                                 4, 12, 20, 28, 1, 9, 17, 25,
+                                                 33, 41, 49, 57, 2, 10, 18, 26,
+                                                 34, 42, 50, 58, 3, 11, 19, 27,
+                                                 35, 43, 51, 59, 36, 44, 52, 60]
+
+    private let permutedChoice2: Array<UInt8> = [42, 39, 45, 32, 55, 51, 53, 28,
+                                                 41, 50, 35, 46, 33, 37, 44, 52,
+                                                 30, 48, 40, 49, 29, 36, 43, 54,
+                                                 15, 4, 25, 19, 9, 1, 26, 16,
+                                                 5, 11, 23, 8, 12, 7, 17, 0,
+                                                 22, 3, 10, 14, 6, 20, 27, 24]
+
+
+    private let ksRotations: Array<UInt8> = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
+
+    private var subkeys = Array<UInt64>()
+
+    public init(key: Array<UInt8>) throws {
+        self.subkeys = self.generateSubkeys(key: key)
+    }
 
     /// The 64 bits of the input block to be enciphered are first subjected to the following permutation, called the initial permutation.
     ///
@@ -73,9 +89,35 @@ public final class DES: BlockCipher {
         return result
     }
 
-    fileprivate func generateSubkeys(key: Array<UInt8>) {
+    // 16 28-bit blocks rotated according to the rotation ksRotations schedule
+    fileprivate func ksRotate(_ value: UInt32) -> Array<UInt32> {
+        var result = Array<UInt32>(repeating: 0, count: 16)
+        var last = value
+        for i in 0 ..< 16 {
+            let left = (last << UInt32(4 + ksRotations[i])) >> 4
+            let right = (last << 4) >> 32 - UInt32(ksRotations[i])
+            result[i] = left | right
+            last = result[i]
+        }
+        return result
+    }
+
+    fileprivate func generateSubkeys(key: Array<UInt8>) -> Array<UInt64> {
         //TODO: check endianess of UInt64
+        var subkeys = Array<UInt64>(repeating: 0, count: 16)
+
         let permutedKey = self.permute(block: UInt64(bytes: key), permutation: permutedChoice1)
+
+        // rotate halves of permuted key
+        let leftRotations = ksRotate(UInt32(permutedKey >> 28))
+        let rightRotations = ksRotate(UInt32(permutedKey << 4) >> 4)
+
+        for i in 0 ..< 16 {
+            let pc2Input = UInt64(leftRotations[i])<<28 | uint64(rightRotations[i])
+            // apply PC2 permutation to 7 byte input
+            subkeys[i] = self.permute(block: pc2Input, permutation: permutedChoice2)
+        }
+        return subkeys
     }
 }
 
@@ -88,10 +130,7 @@ extension DES: Cipher {
             let left = UInt32(b >> 32)
             let right = UInt32(truncatingBitPattern: b)
 
-            let subKey: UInt64
-            for i in 0..<16 {
-                // need generateSubkeys
-            }
+            //TODO: more to do
         }
         return []
     }

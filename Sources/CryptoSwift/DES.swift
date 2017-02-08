@@ -6,13 +6,14 @@
 //  Copyright © 2017 Marcin Krzyzanowski. All rights reserved.
 //
 //  http://csrc.nist.gov/publications/fips/fips46-3/fips46-3.pdf
-//
+//  Eric Young's http://ftp.nluug.nl/security/coast/libs/libdes/ALGORITHM
 
-///  Data Encryption Standard (DES)
+///  Data Encryption Standard (DES).
 public final class DES: BlockCipher {
     public static let blockSize: Int = 8
 
-    private let permutedChoice1: Array<UInt8> = [7, 15, 23, 31, 39, 47, 55, 63,
+    // PC-1
+    fileprivate let permutedChoice1: Array<UInt8> = [7, 15, 23, 31, 39, 47, 55, 63,
                                                  6, 14, 22, 30, 38, 46, 54, 62,
                                                  5, 13, 21, 29, 37, 45, 53, 61,
                                                  4, 12, 20, 28, 1, 9, 17, 25,
@@ -20,7 +21,8 @@ public final class DES: BlockCipher {
                                                  34, 42, 50, 58, 3, 11, 19, 27,
                                                  35, 43, 51, 59, 36, 44, 52, 60]
 
-    private let permutedChoice2: Array<UInt8> = [42, 39, 45, 32, 55, 51, 53, 28,
+    // PC-2
+    fileprivate let permutedChoice2: Array<UInt8> = [42, 39, 45, 32, 55, 51, 53, 28,
                                                  41, 50, 35, 46, 33, 37, 44, 52,
                                                  30, 48, 40, 49, 29, 36, 43, 54,
                                                  15, 4, 25, 19, 9, 1, 26, 16,
@@ -28,9 +30,12 @@ public final class DES: BlockCipher {
                                                  22, 3, 10, 14, 6, 20, 27, 24]
 
 
-    private let ksRotations: Array<UInt8> = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
+    // Key schedule number of Left Shifts
+    fileprivate let ksRotations: Array<UInt8> = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
 
-    private var subkeys = Array<UInt64>()
+    fileprivate var feistelBox = Array<Array<UInt32>>(repeating: Array<UInt32>(repeating: 0, count: 8), count: 64)
+
+    fileprivate var subkeys = Array<UInt64>()
 
     public init(key: Array<UInt8>) throws {
         self.subkeys = self.generateSubkeys(key: key)
@@ -49,22 +54,44 @@ public final class DES: BlockCipher {
         // block = b1 b0 b5 b4 b3 b2 b7 b6
         b1 = block >> 32 & 0xff00ff
         b2 = (block & 0xff00ff00)
-        block ^= b1 << 32 ^ b2 ^ b1 << 8 ^ b2 << 24 // exchange b0 b4 with b3 b7
+        block ^= (b1 << 32) ^ b2 ^ (b1 << 8) ^ (b2 << 24) // exchange b0 b4 with b3 b7
 
 
         // exchange 4,5,6,7 with 32,33,34,35 etc.
         b1 = block & 0x0f0f00000f0f0000
         b2 = block & 0x0000f0f00000f0f0
-        block ^= b1 ^ b2 ^ b1 >> 12 ^ b2 << 12
+        block ^= b1 ^ b2 ^ (b1 >> 12) ^ (b2 << 12)
 
         // exchange 0,1,4,5 with 18,19,22,23
         b1 = block & 0x3300330033003300
         b2 = block & 0x00cc00cc00cc00cc
-        block ^= b1 ^ b2 ^ b1 >> 6 ^ b2 << 6
+        block ^= b1 ^ b2 ^ (b1 >> 6) ^ (b2 << 6)
 
         // exchange 0,2,4,6 with 9,11,13,15
         b1 = block & 0xaaaaaaaa55555555
-        block ^= b1 ^ b1 >> 33 ^ b1 << 33
+        block ^= b1 ^ (b1 >> 33) ^ (b1 << 33)
+    }
+
+    fileprivate func finalPermutaion(block: inout UInt64) {
+        var b1 = block & 0xaaaaaaaa55555555
+        block ^= b1 ^ (b1 >> 33) ^ (b1 << 33)
+
+        b1 = block & 0x3300330033003300
+        var b2 = block & 0x00cc00cc00cc00cc
+        block ^= b1 ^ b2 ^ (b1 >> 6) ^ (b2 << 6)
+
+
+        b1 = block & 0x0f0f00000f0f0000
+        b2 = block & 0x0000f0f00000f0f0
+        block ^= b1 ^ b2 ^ (b1 >> 12) ^ (b2 << 12)
+
+        b1 = block >> 32 & 0xff00ff
+        b2 = block & 0xff00ff00
+        block ^= (b1 << 32) ^ b2 ^ (b1 << 8) ^ (b2 << 24)
+
+        b1 = block >> 48
+        b2 = block << 48
+        block ^= b1 ^ b2 ^ (b1 << 48) ^ (b2 >> 48)
     }
 
     /// Expands an input block of 32 bits, producing an output block of 48 bits.
@@ -102,6 +129,26 @@ public final class DES: BlockCipher {
         return result
     }
 
+    fileprivate func feistel(l: UInt32, r: UInt32, k0: UInt64, k1: UInt64) -> (UInt32, UInt32) {
+        var t:UInt32 = 0
+        var l = l
+        var r = r
+
+        t = r ^ UInt32(k0 >> 32)
+        l ^= feistelBox[7][Int(t) & 0x3f] ^ feistelBox[5][Int(t >> 8) & 0x3f] ^ feistelBox[3][Int(t >> 16) & 0x3f] ^ feistelBox[1][Int(t >> 24) & 0x3f]
+
+        t = ((r << 28) | (r >> 4)) ^ UInt32(truncatingBitPattern: k0)
+        l ^= feistelBox[6][Int(t) & 0x3f] ^ feistelBox[4][Int(t >> 8) & 0x3f] ^ feistelBox[2][Int(t >> 16) & 0x3f] ^ feistelBox[0][Int(t >> 24) & 0x3f]
+
+        t = l ^ UInt32(truncatingBitPattern: k1 >> 32)
+        r ^= feistelBox[7][Int(t) & 0x3f] ^ feistelBox[5][Int(t >> 8) & 0x3f] ^ feistelBox[3][Int(t >> 16) & 0x3f] ^ feistelBox[1][Int(t >> 24) & 0x3f]
+
+        t = ((l << 28) | (l >> 4)) ^ UInt32(truncatingBitPattern: k1)
+        r ^= feistelBox[6][Int(t) & 0x3f] ^ feistelBox[4][Int(t >> 8) & 0x3f] ^ feistelBox[2][Int(t >> 16) & 0x3f] ^ feistelBox[0][Int(t >> 24) & 0x3f]
+
+        return (l, r)
+    }
+
     fileprivate func generateSubkeys(key: Array<UInt8>) -> Array<UInt64> {
         //TODO: check endianess of UInt64
         var subkeys = Array<UInt64>(repeating: 0, count: 16)
@@ -127,10 +174,22 @@ extension DES: Cipher {
         for chunk in bytes.batched(by: DES.blockSize) {
             var b = UInt64(bytes: chunk) //TODO: check endianess
             self.initialPermuation(block: &b)
-            let left = UInt32(b >> 32)
-            let right = UInt32(truncatingBitPattern: b)
 
-            //TODO: more to do
+            var left = UInt32(b >> 32)
+            left = (left << 1) | (left >> 31)
+
+            var right = UInt32(truncatingBitPattern: b)
+            right = (right << 1) | (right >> 31)
+
+            for i in 0 ..< 8 {
+                (left, right) = feistel(l: left, r: right, k0: self.subkeys[2 * i], k1: self.subkeys[2 * i + 1])
+            }
+
+            left = (left << 31) | (left >> 1)
+            right = (right << 31) | (right >> 1)
+
+            var preOutput = UInt64(right) << 32 | UInt64(left)
+            finalPermutaion(block: &preOutput)
         }
         return []
     }

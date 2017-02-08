@@ -133,70 +133,70 @@ fileprivate extension AES {
     func encrypt(block: Array<UInt8>) -> Array<UInt8>? {
 
         if blockMode.options.contains(.PaddingRequired) && block.count != AES.blockSize {
-            return block
+            return Array(block)
         }
 
         let rounds = self.variant.Nr
         let rk = self.expandedKey
-        var b = block[block.indices].toUInt32Array()
+
+        var b0 = UInt32(block[block.startIndex + 0 + (0 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (0 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (0 << 2)]) << 16 | UInt32(block[block.startIndex + 3 + (0 << 2)]) << 24
+        var b1 = UInt32(block[block.startIndex + 0 + (1 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (1 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (1 << 2)]) << 16 | UInt32(block[block.startIndex + 3 + (1 << 2)]) << 24
+        var b2 = UInt32(block[block.startIndex + 0 + (2 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (2 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (2 << 2)]) << 16 | UInt32(block[block.startIndex + 3 + (2 << 2)]) << 24
+        var b3 = UInt32(block[block.startIndex + 0 + (3 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (3 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (3 << 2)]) << 16 | UInt32(block[block.startIndex + 3 + (3 << 2)]) << 24
 
         var t = Array<UInt32>(repeating: 0, count: 4)
 
         for r in 0 ..< rounds - 1 {
-            t[0] = b[0] ^ rk[r][0]
-            t[1] = b[1] ^ rk[r][1]
-            t[2] = b[2] ^ rk[r][2]
-            t[3] = b[3] ^ rk[r][3]
+            t[0] = b0 ^ rk[r][0]
+            t[1] = b1 ^ rk[r][1]
+            t[2] = b2 ^ rk[r][2]
+            t[3] = b3 ^ rk[r][3]
 
             let lb00 = T0[Int(t[0] & 0xFF)]
             let lb01 = T1[Int((t[1] >> 8) & 0xFF)]
             let lb02 = T2[Int((t[2] >> 16) & 0xFF)]
             let lb03 = T3[Int(t[3] >> 24)]
-            b[0] = lb00 ^ lb01 ^ lb02 ^ lb03
+            b0 = lb00 ^ lb01 ^ lb02 ^ lb03
 
             let lb10 = T0[Int(t[1] & 0xFF)]
             let lb11 = T1[Int((t[2] >> 8) & 0xFF)]
             let lb12 = T2[Int((t[3] >> 16) & 0xFF)]
             let lb13 = T3[Int(t[0] >> 24)]
-            b[1] = lb10 ^ lb11 ^ lb12 ^ lb13
+            b1 = lb10 ^ lb11 ^ lb12 ^ lb13
 
             let lb20 = T0[Int(t[2] & 0xFF)]
             let lb21 = T1[Int((t[3] >> 8) & 0xFF)]
             let lb22 = T2[Int((t[0] >> 16) & 0xFF)]
             let lb23 = T3[Int(t[1] >> 24)]
-            b[2] = lb20 ^ lb21 ^ lb22 ^ lb23
+            b2 = lb20 ^ lb21 ^ lb22 ^ lb23
 
             let lb30 = T0[Int(t[3] & 0xFF)]
             let lb31 = T1[Int((t[0] >> 8) & 0xFF)]
             let lb32 = T2[Int((t[1] >> 16) & 0xFF)]
             let lb33 = T3[Int(t[2] >> 24)]
-            b[3] = lb30 ^ lb31 ^ lb32 ^ lb33
+            b3 = lb30 ^ lb31 ^ lb32 ^ lb33
         }
 
         // last round
         let r = rounds - 1
 
-        t[0] = b[0] ^ rk[r][0]
-        t[1] = b[1] ^ rk[r][1]
-        t[2] = b[2] ^ rk[r][2]
-        t[3] = b[3] ^ rk[r][3]
+        t[0] = b0 ^ rk[r][0]
+        t[1] = b1 ^ rk[r][1]
+        t[2] = b2 ^ rk[r][2]
+        t[3] = b3 ^ rk[r][3]
 
         // rounds
-        b[0] = F1(t[0], t[1], t[2], t[3]) ^ rk[rounds][0]
-        b[1] = F1(t[1], t[2], t[3], t[0]) ^ rk[rounds][1]
-        b[2] = F1(t[2], t[3], t[0], t[1]) ^ rk[rounds][2]
-        b[3] = F1(t[3], t[0], t[1], t[2]) ^ rk[rounds][3]
+        b0 = F1(t[0], t[1], t[2], t[3]) ^ rk[rounds][0]
+        b1 = F1(t[1], t[2], t[3], t[0]) ^ rk[rounds][1]
+        b2 = F1(t[2], t[3], t[0], t[1]) ^ rk[rounds][2]
+        b3 = F1(t[3], t[0], t[1], t[2]) ^ rk[rounds][3]
 
-        var out = Array<UInt8>()
-        out.reserveCapacity(b.count * 4)
-        for num in b {
-            out.append(UInt8(num & 0xFF))
-            out.append(UInt8((num >> 8) & 0xFF))
-            out.append(UInt8((num >> 16) & 0xFF))
-            out.append(UInt8((num >> 24) & 0xFF))
-        }
-
-        return out
+        return [
+            UInt8(b0 & 0xFF),UInt8((b0 >> 8) & 0xFF),UInt8((b0 >> 16) & 0xFF),UInt8((b0 >> 24) & 0xFF),
+            UInt8(b1 & 0xFF),UInt8((b1 >> 8) & 0xFF),UInt8((b1 >> 16) & 0xFF),UInt8((b1 >> 24) & 0xFF),
+            UInt8(b2 & 0xFF),UInt8((b2 >> 8) & 0xFF),UInt8((b2 >> 16) & 0xFF),UInt8((b2 >> 24) & 0xFF),
+            UInt8(b3 & 0xFF),UInt8((b3 >> 8) & 0xFF),UInt8((b3 >> 16) & 0xFF),UInt8((b3 >> 24) & 0xFF)
+        ] as Array<UInt8>
     }
 
     func decrypt(block: Array<UInt8>) -> Array<UInt8>? {

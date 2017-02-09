@@ -23,7 +23,7 @@ extension Array {
             words.append(Array(self[idx - chunksize ..< idx])) // slow for large table
         }
         let remainder = self.suffix(self.count % chunksize)
-        if !reminder.isEmpty {
+        if !remainder.isEmpty {
             words.append(Array(remainder))
         }
         return words

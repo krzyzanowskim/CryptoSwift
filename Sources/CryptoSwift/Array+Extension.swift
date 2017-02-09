@@ -22,9 +22,9 @@ extension Array {
         for idx in stride(from: chunksize, through: self.count, by: chunksize) {
             words.append(Array(self[idx - chunksize ..< idx])) // slow for large table
         }
-        let reminder = self.suffix(self.count % chunksize)
-        if !reminder.isEmpty {
-            words.append(Array(reminder))
+        let remainder = self.suffix(self.count % chunksize)
+        if !remainder.isEmpty {
+            words.append(Array(remainder))
         }
         return words
     }

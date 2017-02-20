@@ -84,7 +84,7 @@ extension String {
     
     // Allows str.hexToBytes() and Array<UInt8>(hex: str) to share the same code
     // Old functionality returns a blank array upon encountering a non hex character so this method must throw in order to replicate that in methods relying on this method. (ex. "ffn" should return [] instead of [255])
-    // Consider switching NSError to custom Error enum
+    // Changed NSError to custom Error enum
     public func streamHexBytes(_ block:(UInt8)->Void) throws{
         var buffer:UInt8?
         var skip = hasPrefix("0x") ? 2 : 0
@@ -94,7 +94,7 @@ extension String {
                 continue
             }
             guard let value = String.unicodeHexMap[char] else {
-                throw NSError(domain: "com.krzyzanowskim.CryptoSwift.hexParseError", code: 0, userInfo: nil)
+                throw HexError.invalidCharacter
             }
             if let b = buffer {
                 block(b << 4 | value)
@@ -106,4 +106,7 @@ extension String {
         if let b = buffer{block(b)}
     }
     
+    private enum HexError:Error {
+        case invalidCharacter
+    }
 }

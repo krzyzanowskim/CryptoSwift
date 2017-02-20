@@ -75,7 +75,7 @@ extension String {
             try self.streamHexBytes { (byte) in
                 bytes.append(byte)
             }
-        }catch _ as NSError{
+        }catch _{
             return []
         }
         

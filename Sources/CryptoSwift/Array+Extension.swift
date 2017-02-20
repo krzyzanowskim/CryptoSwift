@@ -39,7 +39,7 @@ extension Array where Element: Integer, Element.IntegerLiteralType == UInt8 {
             try hex.streamHexBytes { (byte) in
                 self.append(byte as! Element)
             }
-        } catch _ as NSError{
+        } catch _{
             self.removeAll()
         }
     }

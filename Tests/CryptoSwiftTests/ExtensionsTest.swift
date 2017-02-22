@@ -73,16 +73,6 @@ final class ExtensionsTest: XCTestCase {
         }
     }
     
-    func testhexToBytesPerformance(){
-        var str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
-        for _ in 0...9{
-            str += str
-        }
-        measure {
-            let _ = str.hexToBytes()
-        }
-        
-    }
 }
 
 #if !CI

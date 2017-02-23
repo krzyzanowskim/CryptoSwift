@@ -260,7 +260,7 @@ extension ChaCha20 {
 
             var encrypted = Array<UInt8>()
             encrypted.reserveCapacity(self.accumulated.count)
-            for chunk in BytesSequence(chunkSize: ChaCha20.blockSize, data: self.accumulated) {
+            for chunk in self.accumulated.batched(by: ChaCha20.blockSize) {
                 if (isLast || self.accumulated.count >= ChaCha20.blockSize) {
                     encrypted += try chacha.encrypt(chunk)
                     self.accumulated.removeFirst(chunk.count) //TODO: improve performance
@@ -297,7 +297,7 @@ extension ChaCha20 {
 
             var plaintext = Array<UInt8>()
             plaintext.reserveCapacity(self.accumulated.count)
-            for chunk in BytesSequence(chunkSize: ChaCha20.blockSize, data: self.accumulated) {
+            for chunk in self.accumulated.batched(by: ChaCha20.blockSize) {
                 if (isLast || self.accumulated.count >= ChaCha20.blockSize) {
                     plaintext += try chacha.decrypt(chunk)
 

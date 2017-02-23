@@ -306,6 +306,20 @@ final class AESTests: XCTestCase {
         let decrypted = try? aes2.decrypt(encrypted)
         XCTAssertTrue(decrypted! != plaintext, "failed")
     }
+
+    // https://github.com/krzyzanowskim/CryptoSwift/issues/394
+    func testOpenSSL_394() {
+        let plaintext = Array("Nullam quis risus eget urna mollis ornare vel eu leo.".utf8)
+        let key = Array("passwordpassword".utf8).md5() // -md md5
+        let iv  = Array("drowssapdrowssap".utf8) // -iv 64726f777373617064726f7773736170
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()) // -aes-128-cbc
+        let ciphertext = try! aes.encrypt(plaintext) // enc
+
+        // $ echo -n "Nullam quis risus eget urna mollis ornare vel eu leo." | openssl enc -aes-128-cbc -md md5 -nosalt -iv 64726f777373617064726f7773736170 -pass pass:passwordpassword -base64
+        // cij+965z2Xqoj9tIHgtA72ZPfv5sxnt76vwkIt1CodYY313oa7mr0pSc5o++g0CX
+        // YczxK2fGIa84xtwDtRMwBQ==
+        XCTAssertEqual(ciphertext.toBase64(), "cij+965z2Xqoj9tIHgtA72ZPfv5sxnt76vwkIt1CodYY313oa7mr0pSc5o++g0CXYczxK2fGIa84xtwDtRMwBQ==")
+    }
 }
 
 #if !CI

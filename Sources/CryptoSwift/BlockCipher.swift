@@ -6,6 +6,6 @@
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
 
-protocol BlockCipher: class {
+protocol BlockCipher: Cipher {
     static var blockSize: Int { get }
 }

@@ -257,7 +257,7 @@ extension SHA3: Updatable {
         }
 
         var processedBytes = 0
-        for chunk in BytesSequence(chunkSize: self.blockSize, data: self.accumulated) {
+        for chunk in self.accumulated.batched(by: self.blockSize) {
             if (isLast || (self.accumulated.count - processedBytes) >= self.blockSize) {
                 self.process(block: chunk.toUInt64Array(), currentHash: &self.accumulatedHash)
                 processedBytes += chunk.count

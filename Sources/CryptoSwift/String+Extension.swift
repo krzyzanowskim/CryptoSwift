@@ -58,4 +58,5 @@ extension String {
     public func authenticate<A: Authenticator>(with authenticator: A) throws -> String {
         return try self.utf8.lazy.map({ $0 as UInt8 }).authenticate(with: authenticator).toHexString()
     }
+    
 }

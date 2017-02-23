@@ -22,26 +22,52 @@ extension Array {
         for idx in stride(from: chunksize, through: self.count, by: chunksize) {
             words.append(Array(self[idx - chunksize ..< idx])) // slow for large table
         }
-        let reminder = self.suffix(self.count % chunksize)
-        if !reminder.isEmpty {
-            words.append(Array(reminder))
+        let remainder = self.suffix(self.count % chunksize)
+        if !remainder.isEmpty {
+            words.append(Array(remainder))
         }
         return words
     }
 }
 
 extension Array where Element: Integer, Element.IntegerLiteralType == UInt8 {
-
+    
     public init(hex: String) {
-        self.init()
-
-        let utf8 = Array<Element.IntegerLiteralType>(hex.utf8)
-        let skip0x = hex.hasPrefix("0x") ? 2 : 0
-        for idx in stride(from: utf8.startIndex.advanced(by: skip0x), to: utf8.endIndex, by: utf8.startIndex.advanced(by: 2)) {
-            let byteHex = "\(UnicodeScalar(utf8[idx]))\(UnicodeScalar(utf8[idx.advanced(by: 1)]))"
-            if let byte = UInt8(byteHex, radix: 16) {
-                self.append(byte as! Element)
+        self.init(reserveCapacity: hex.unicodeScalars.lazy.underestimatedCount)
+        var buffer:UInt8?
+        var skip = hex.hasPrefix("0x") ? 2 : 0
+        for char in hex.unicodeScalars.lazy {
+            guard skip == 0 else {
+                skip -= 1
+                continue
+            }
+            guard char.value >= 48 && char.value <= 102 else {
+                self.removeAll()
+                return
+            }
+            let v:UInt8
+            let c:UInt8 = UInt8(char.value)
+            switch c{
+            case let c where c <= 57:
+                v = c - 48
+            case let c where c >= 65 && c <= 70:
+                v = c - 55
+            case let c where c >= 97:
+                v = c - 87
+            default:
+                self.removeAll()
+                return
+            }
+            if let b = buffer {
+                self.append(b << 4 | v as! Element)
+                buffer = nil
+            } else {
+                buffer = v
             }
         }
+        if let b = buffer{
+            self.append(b as! Element)
+        }
     }
+    
 }

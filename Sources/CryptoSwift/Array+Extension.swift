@@ -31,10 +31,9 @@ extension Array {
 }
 
 extension Array where Element: Integer, Element.IntegerLiteralType == UInt8 {
-
+    
     public init(hex: String) {
         self.init(reserveCapacity: hex.unicodeScalars.lazy.underestimatedCount)
-        let unicodeHexMap:Dictionary<UnicodeScalar,UInt8> = ["0":0,"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"a":10,"b":11,"c":12,"d":13,"e":14,"f":15,"A":10,"B":11,"C":12,"D":13,"E":14,"F":15]
         var buffer:UInt8?
         var skip = hex.hasPrefix("0x") ? 2 : 0
         for char in hex.unicodeScalars.lazy {
@@ -42,19 +41,33 @@ extension Array where Element: Integer, Element.IntegerLiteralType == UInt8 {
                 skip -= 1
                 continue
             }
-            guard let value = unicodeHexMap[char] else {
+            guard char.value >= 48 && char.value <= 102 else {
+                self.removeAll()
+                return
+            }
+            let v:UInt8
+            let c:UInt8 = UInt8(char.value)
+            switch c{
+            case let c where c <= 57:
+                v = c - 48
+            case let c where c >= 65 && c <= 70:
+                v = c - 55
+            case let c where c >= 97:
+                v = c - 87
+            default:
                 self.removeAll()
                 return
             }
             if let b = buffer {
-                self.append(b << 4 | value as! Element)
+                self.append(b << 4 | v as! Element)
                 buffer = nil
             } else {
-                buffer = value
+                buffer = v
             }
         }
         if let b = buffer{
             self.append(b as! Element)
         }
     }
+    
 }

@@ -65,7 +65,7 @@ final class ExtensionsTest: XCTestCase {
     
     func testArrayInitHexPerformance(){
         var str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
-        for _ in 0...9{
+        for _ in 0...12{
             str += str
         }
         measure {

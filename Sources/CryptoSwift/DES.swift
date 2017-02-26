@@ -29,16 +29,100 @@ public final class DES: BlockCipher {
                                                  5, 11, 23, 8, 12, 7, 17, 0,
                                                  22, 3, 10, 14, 6, 20, 27, 24]
 
+    fileprivate var permutationFunction: Array<UInt8> = [
+        16, 25, 12, 11, 3, 20, 4, 15,
+        31, 17, 9, 6, 27, 14, 1, 22,
+        30, 24, 8, 18, 0, 5, 29, 23,
+        13, 19, 2, 26, 10, 21, 28, 7
+    ]
+
+    fileprivate var sBoxes: Array<Array<Array<UInt8>>> = [
+        // S-box 1
+        [
+            [14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7],
+            [0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8],
+            [4, 1, 14, 8, 13, 6, 2, 11, 15, 12, 9, 7, 3, 10, 5, 0],
+            [15, 12, 8, 2, 4, 9, 1, 7, 5, 11, 3, 14, 10, 0, 6, 13],
+        ],
+        // S-box 2
+        [
+            [15, 1, 8, 14, 6, 11, 3, 4, 9, 7, 2, 13, 12, 0, 5, 10],
+            [3, 13, 4, 7, 15, 2, 8, 14, 12, 0, 1, 10, 6, 9, 11, 5],
+            [0, 14, 7, 11, 10, 4, 13, 1, 5, 8, 12, 6, 9, 3, 2, 15],
+            [13, 8, 10, 1, 3, 15, 4, 2, 11, 6, 7, 12, 0, 5, 14, 9],
+        ],
+        // S-box 3
+        [
+            [10, 0, 9, 14, 6, 3, 15, 5, 1, 13, 12, 7, 11, 4, 2, 8],
+            [13, 7, 0, 9, 3, 4, 6, 10, 2, 8, 5, 14, 12, 11, 15, 1],
+            [13, 6, 4, 9, 8, 15, 3, 0, 11, 1, 2, 12, 5, 10, 14, 7],
+            [1, 10, 13, 0, 6, 9, 8, 7, 4, 15, 14, 3, 11, 5, 2, 12],
+        ],
+        // S-box 4
+        [
+            [7, 13, 14, 3, 0, 6, 9, 10, 1, 2, 8, 5, 11, 12, 4, 15],
+            [13, 8, 11, 5, 6, 15, 0, 3, 4, 7, 2, 12, 1, 10, 14, 9],
+            [10, 6, 9, 0, 12, 11, 7, 13, 15, 1, 3, 14, 5, 2, 8, 4],
+            [3, 15, 0, 6, 10, 1, 13, 8, 9, 4, 5, 11, 12, 7, 2, 14],
+        ],
+        // S-box 5
+        [
+            [2, 12, 4, 1, 7, 10, 11, 6, 8, 5, 3, 15, 13, 0, 14, 9],
+            [14, 11, 2, 12, 4, 7, 13, 1, 5, 0, 15, 10, 3, 9, 8, 6],
+            [4, 2, 1, 11, 10, 13, 7, 8, 15, 9, 12, 5, 6, 3, 0, 14],
+            [11, 8, 12, 7, 1, 14, 2, 13, 6, 15, 0, 9, 10, 4, 5, 3],
+        ],
+        // S-box 6
+        [
+            [12, 1, 10, 15, 9, 2, 6, 8, 0, 13, 3, 4, 14, 7, 5, 11],
+            [10, 15, 4, 2, 7, 12, 9, 5, 6, 1, 13, 14, 0, 11, 3, 8],
+            [9, 14, 15, 5, 2, 8, 12, 3, 7, 0, 4, 10, 1, 13, 11, 6],
+            [4, 3, 2, 12, 9, 5, 15, 10, 11, 14, 1, 7, 6, 0, 8, 13],
+        ],
+        // S-box 7
+        [
+            [4, 11, 2, 14, 15, 0, 8, 13, 3, 12, 9, 7, 5, 10, 6, 1],
+            [13, 0, 11, 7, 4, 9, 1, 10, 14, 3, 5, 12, 2, 15, 8, 6],
+            [1, 4, 11, 13, 12, 3, 7, 14, 10, 15, 6, 8, 0, 5, 9, 2],
+            [6, 11, 13, 8, 1, 4, 10, 7, 9, 5, 0, 15, 14, 2, 3, 12],
+        ],
+        // S-box 8
+        [
+            [13, 2, 8, 4, 6, 15, 11, 1, 10, 9, 3, 14, 5, 0, 12, 7],
+            [1, 15, 13, 8, 10, 3, 7, 4, 12, 5, 6, 11, 0, 14, 9, 2],
+            [7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10, 13, 15, 3, 5, 8],
+            [2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11],
+        ],
+    ]
 
     // Key schedule number of Left Shifts
     fileprivate let ksRotations: Array<UInt8> = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
-
-    fileprivate var feistelBox = Array<Array<UInt32>>(repeating: Array<UInt32>(repeating: 0, count: 8), count: 64)
-
+    fileprivate var feistelBox = Array<Array<UInt32>>(repeating: Array<UInt32>(repeating: 0, count: 64), count: 8)
     fileprivate var subkeys = Array<UInt64>()
 
     public init(key: Array<UInt8>) throws {
         self.subkeys = self.generateSubkeys(key: key)
+        self.generateFeistelBox()
+    }
+
+    fileprivate func generateFeistelBox() {
+        for s in 0 ..< 8 {
+            for i in 0 ..< 4 {
+                for j in 0 ..< 16 {
+                    var f = UInt64(sBoxes[s][i][j]) << UInt64(4 * (7 - s))
+                    f = permute(block: f, permutation: permutationFunction)
+
+                    // Row is determined by the 1st and 6th bit.
+                    // Column is the middle four bits.
+                    let row = ((i & 2) << 4) | (i & 1)
+                    let col = j << 1
+                    let t = row | col
+
+                    f = (f << 1) | (f >> 31)
+                    feistelBox[s][t] = UInt32(truncatingBitPattern: f)
+                }
+            }
+        }
     }
 
     /// The 64 bits of the input block to be enciphered are first subjected to the following permutation, called the initial permutation.
@@ -72,7 +156,7 @@ public final class DES: BlockCipher {
         block ^= b1 ^ (b1 >> 33) ^ (b1 << 33)
     }
 
-    fileprivate func finalPermutaion(block: inout UInt64) {
+    fileprivate func finalPermutation(block: inout UInt64) {
         var b1 = block & 0xaaaaaaaa55555555
         block ^= b1 ^ (b1 >> 33) ^ (b1 << 33)
 
@@ -111,21 +195,29 @@ public final class DES: BlockCipher {
         var result: UInt64 = 0
         for (idx,value) in permutation.enumerated() {
             let bit = (block >> UInt64(value)) & 1
-            result |= bit << UInt64(permutation.count - 1 - idx)
+            result |= bit << (UInt64(permutation.count - 1 - idx))
         }
         return result
     }
 
     // 16 28-bit blocks rotated according to the rotation ksRotations schedule
     fileprivate func ksRotate(_ value: UInt32) -> Array<UInt32> {
-        var result = Array<UInt32>(repeating: 0, count: 16)
         var last = value
-        for i in 0 ..< 16 {
-            let left = (last << UInt32(4 + ksRotations[i])) >> 4
-            let right = (last << 4) >> 32 - UInt32(ksRotations[i])
-            result[i] = left | right
-            last = result[i]
+        let result = ksRotations.map { (rotation) -> UInt32 in
+            let left = (last << UInt32(4 + rotation)) >> 4
+            let right = (last << 4) >> (32 - UInt32(rotation))
+            last = left | right
+            return last
         }
+
+//        var result = Array<UInt32>(repeating: 0, count: 16)
+//        var last = value
+//        for i in 0 ..< 16 {
+//            let left = (last << UInt32(4 + ksRotations[i])) >> 4
+//            let right = (last << 4) >> 32 - UInt32(ksRotations[i])
+//            result[i] = left | right
+//            last = result[i]
+//        }
         return result
     }
 
@@ -150,6 +242,19 @@ public final class DES: BlockCipher {
     }
 
     fileprivate func generateSubkeys(key: Array<UInt8>) -> Array<UInt64> {
+        typealias UInt48 = UInt64
+        // Expand 48-bit input to 64-bit, with each 6-bit block padded by extra two bits at the top.
+        func expand(_ x: UInt48) -> UInt64 {
+            return ((x>>(6*1)) & 0xff)<<(8*0) |
+                   ((x>>(6*3)) & 0xff)<<(8*1) |
+                   ((x>>(6*5)) & 0xff)<<(8*2) |
+                   ((x>>(6*7)) & 0xff)<<(8*3) |
+                   ((x>>(6*0)) & 0xff)<<(8*4) |
+                   ((x>>(6*2)) & 0xff)<<(8*5) |
+                   ((x>>(6*4)) & 0xff)<<(8*6) |
+                   ((x>>(6*6)) & 0xff)<<(8*7)
+        }
+
         //TODO: check endianess of UInt64
         var subkeys = Array<UInt64>(repeating: 0, count: 16)
 
@@ -157,12 +262,13 @@ public final class DES: BlockCipher {
 
         // rotate halves of permuted key
         let leftRotations = ksRotate(UInt32(permutedKey >> 28))
-        let rightRotations = ksRotate(UInt32(permutedKey << 4) >> 4)
+        let rightRotations = ksRotate(UInt32(truncatingBitPattern: permutedKey << 4) >> 4)
 
         for i in 0 ..< 16 {
-            let pc2Input = UInt64(leftRotations[i])<<28 | uint64(rightRotations[i])
+            let pc2Input = (UInt64(leftRotations[i]) << 28) | UInt64(rightRotations[i])
             // apply PC2 permutation to 7 byte input
-            subkeys[i] = self.permute(block: pc2Input, permutation: permutedChoice2)
+            print(pc2Input)
+            subkeys[i] = expand(self.permute(block: pc2Input, permutation: permutedChoice2))
         }
         return subkeys
     }
@@ -189,7 +295,9 @@ extension DES: Cipher {
             right = (right << 31) | (right >> 1)
 
             var preOutput = UInt64(right) << 32 | UInt64(left)
-            finalPermutaion(block: &preOutput)
+            finalPermutation(block: &preOutput)
+            preOutput.bytes(totalBytes: 16)
+            print(preOutput)
         }
         return []
     }

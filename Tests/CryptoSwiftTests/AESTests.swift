@@ -303,8 +303,8 @@ final class AESTests: XCTestCase {
         let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
         let aes2 = try! AES(key: key2, iv: iv, blockMode: .CBC, padding: PKCS7())
         let encrypted = try! aes.encrypt(plaintext)
-        let decrypted = try? aes2.decrypt(encrypted)
-        XCTAssertTrue(decrypted! != plaintext, "failed")
+        let decrypted = try! aes2.decrypt(encrypted)
+        XCTAssertTrue(decrypted != plaintext, "failed")
     }
 }
 

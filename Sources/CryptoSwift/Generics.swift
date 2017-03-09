@@ -20,7 +20,11 @@ extension UInt32: Initiable {}
 extension UInt64: Initiable {}
 
 /** build bit pattern from array of bits */
+@_specialize(UInt)
 @_specialize(UInt8)
+//@_specialize(UInt16)
+//@_specialize(UInt32)
+//@_specialize(UInt64)
 func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T {
     var bitPattern: T = 0
     for idx in bits.indices {
@@ -38,6 +42,12 @@ func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T {
 /// - parameter length: length of output array. By default size of value type
 ///
 /// - returns: Array of bytes
+//@_specialize(Int)
+//@_specialize(UInt)
+//@_specialize(UInt8)
+//@_specialize(UInt16)
+//@_specialize(UInt64)
+@_specialize(UInt32)
 func arrayOfBytes<T: Integer>(value: T, length totalBytes: Int = MemoryLayout<T>.size) -> Array<UInt8> {
     let valuePointer = UnsafeMutablePointer<T>.allocate(capacity: 1)
     valuePointer.pointee = value

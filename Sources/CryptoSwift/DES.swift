@@ -13,27 +13,31 @@ public final class DES: BlockCipher {
     public static let blockSize: Int = 8
 
     // PC-1
-    fileprivate let permutedChoice1: Array<UInt8> = [7, 15, 23, 31, 39, 47, 55, 63,
-                                                 6, 14, 22, 30, 38, 46, 54, 62,
-                                                 5, 13, 21, 29, 37, 45, 53, 61,
-                                                 4, 12, 20, 28, 1, 9, 17, 25,
-                                                 33, 41, 49, 57, 2, 10, 18, 26,
-                                                 34, 42, 50, 58, 3, 11, 19, 27,
-                                                 35, 43, 51, 59, 36, 44, 52, 60]
+    fileprivate let permutedChoice1: Array<UInt8> = [
+        7, 15, 23, 31, 39, 47, 55, 63,
+        6, 14, 22, 30, 38, 46, 54, 62,
+        5, 13, 21, 29, 37, 45, 53, 61,
+        4, 12, 20, 28, 1, 9, 17, 25,
+        33, 41, 49, 57, 2, 10, 18, 26,
+        34, 42, 50, 58, 3, 11, 19, 27,
+        35, 43, 51, 59, 36, 44, 52, 60,
+    ]
 
     // PC-2
-    fileprivate let permutedChoice2: Array<UInt8> = [42, 39, 45, 32, 55, 51, 53, 28,
-                                                 41, 50, 35, 46, 33, 37, 44, 52,
-                                                 30, 48, 40, 49, 29, 36, 43, 54,
-                                                 15, 4, 25, 19, 9, 1, 26, 16,
-                                                 5, 11, 23, 8, 12, 7, 17, 0,
-                                                 22, 3, 10, 14, 6, 20, 27, 24]
+    fileprivate let permutedChoice2: Array<UInt8> = [
+        42, 39, 45, 32, 55, 51, 53, 28,
+        41, 50, 35, 46, 33, 37, 44, 52,
+        30, 48, 40, 49, 29, 36, 43, 54,
+        15, 4, 25, 19, 9, 1, 26, 16,
+        5, 11, 23, 8, 12, 7, 17, 0,
+        22, 3, 10, 14, 6, 20, 27, 24,
+    ]
 
     fileprivate var permutationFunction: Array<UInt8> = [
         16, 25, 12, 11, 3, 20, 4, 15,
         31, 17, 9, 6, 27, 14, 1, 22,
         30, 24, 8, 18, 0, 5, 29, 23,
-        13, 19, 2, 26, 10, 21, 28, 7
+        13, 19, 2, 26, 10, 21, 28, 7,
     ]
 
     fileprivate var sBoxes: Array<Array<Array<UInt8>>> = [
@@ -136,41 +140,39 @@ public final class DES: BlockCipher {
         block ^= b1 ^ b2 ^ b1 << 48 ^ b2 >> 48
 
         // block = b1 b0 b5 b4 b3 b2 b7 b6
-        b1 = block >> 32 & 0xff00ff
-        b2 = (block & 0xff00ff00)
+        b1 = block >> 32 & 0xFF00FF
+        b2 = (block & 0xFF00_FF00)
         block ^= (b1 << 32) ^ b2 ^ (b1 << 8) ^ (b2 << 24) // exchange b0 b4 with b3 b7
 
-
         // exchange 4,5,6,7 with 32,33,34,35 etc.
-        b1 = block & 0x0f0f00000f0f0000
-        b2 = block & 0x0000f0f00000f0f0
+        b1 = block & 0x0F0F_0000_0F0F_0000
+        b2 = block & 0x0000_F0F0_0000_F0F0
         block ^= b1 ^ b2 ^ (b1 >> 12) ^ (b2 << 12)
 
         // exchange 0,1,4,5 with 18,19,22,23
-        b1 = block & 0x3300330033003300
-        b2 = block & 0x00cc00cc00cc00cc
+        b1 = block & 0x3300_3300_3300_3300
+        b2 = block & 0x00CC_00CC_00CC_00CC
         block ^= b1 ^ b2 ^ (b1 >> 6) ^ (b2 << 6)
 
         // exchange 0,2,4,6 with 9,11,13,15
-        b1 = block & 0xaaaaaaaa55555555
+        b1 = block & 0xAAAA_AAAA_5555_5555
         block ^= b1 ^ (b1 >> 33) ^ (b1 << 33)
     }
 
     fileprivate func finalPermutation(block: inout UInt64) {
-        var b1 = block & 0xaaaaaaaa55555555
+        var b1 = block & 0xAAAA_AAAA_5555_5555
         block ^= b1 ^ (b1 >> 33) ^ (b1 << 33)
 
-        b1 = block & 0x3300330033003300
-        var b2 = block & 0x00cc00cc00cc00cc
+        b1 = block & 0x3300_3300_3300_3300
+        var b2 = block & 0x00CC_00CC_00CC_00CC
         block ^= b1 ^ b2 ^ (b1 >> 6) ^ (b2 << 6)
 
-
-        b1 = block & 0x0f0f00000f0f0000
-        b2 = block & 0x0000f0f00000f0f0
+        b1 = block & 0x0F0F_0000_0F0F_0000
+        b2 = block & 0x0000_F0F0_0000_F0F0
         block ^= b1 ^ b2 ^ (b1 >> 12) ^ (b2 << 12)
 
-        b1 = block >> 32 & 0xff00ff
-        b2 = block & 0xff00ff00
+        b1 = block >> 32 & 0xFF00FF
+        b2 = block & 0xFF00_FF00
         block ^= (b1 << 32) ^ b2 ^ (b1 << 8) ^ (b2 << 24)
 
         b1 = block >> 48
@@ -193,7 +195,7 @@ public final class DES: BlockCipher {
     /// General purpose function to perform block permutations
     fileprivate func permute(block: UInt64, permutation: Array<UInt8>) -> UInt64 {
         var result: UInt64 = 0
-        for (idx,value) in permutation.enumerated() {
+        for (idx, value) in permutation.enumerated() {
             let bit = (block >> UInt64(value)) & 1
             result |= bit << (UInt64(permutation.count - 1 - idx))
         }
@@ -210,33 +212,33 @@ public final class DES: BlockCipher {
             return last
         }
 
-//        var result = Array<UInt32>(repeating: 0, count: 16)
-//        var last = value
-//        for i in 0 ..< 16 {
-//            let left = (last << UInt32(4 + ksRotations[i])) >> 4
-//            let right = (last << 4) >> 32 - UInt32(ksRotations[i])
-//            result[i] = left | right
-//            last = result[i]
-//        }
+        //        var result = Array<UInt32>(repeating: 0, count: 16)
+        //        var last = value
+        //        for i in 0 ..< 16 {
+        //            let left = (last << UInt32(4 + ksRotations[i])) >> 4
+        //            let right = (last << 4) >> 32 - UInt32(ksRotations[i])
+        //            result[i] = left | right
+        //            last = result[i]
+        //        }
         return result
     }
 
     fileprivate func feistel(l: UInt32, r: UInt32, k0: UInt64, k1: UInt64) -> (UInt32, UInt32) {
-        var t:UInt32 = 0
+        var t: UInt32 = 0
         var l = l
         var r = r
 
         t = r ^ UInt32(k0 >> 32)
-        l ^= feistelBox[7][Int(t) & 0x3f] ^ feistelBox[5][Int(t >> 8) & 0x3f] ^ feistelBox[3][Int(t >> 16) & 0x3f] ^ feistelBox[1][Int(t >> 24) & 0x3f]
+        l ^= feistelBox[7][Int(t) & 0x3F] ^ feistelBox[5][Int(t >> 8) & 0x3F] ^ feistelBox[3][Int(t >> 16) & 0x3F] ^ feistelBox[1][Int(t >> 24) & 0x3F]
 
         t = ((r << 28) | (r >> 4)) ^ UInt32(truncatingBitPattern: k0)
-        l ^= feistelBox[6][Int(t) & 0x3f] ^ feistelBox[4][Int(t >> 8) & 0x3f] ^ feistelBox[2][Int(t >> 16) & 0x3f] ^ feistelBox[0][Int(t >> 24) & 0x3f]
+        l ^= feistelBox[6][Int(t) & 0x3F] ^ feistelBox[4][Int(t >> 8) & 0x3F] ^ feistelBox[2][Int(t >> 16) & 0x3F] ^ feistelBox[0][Int(t >> 24) & 0x3F]
 
         t = l ^ UInt32(truncatingBitPattern: k1 >> 32)
-        r ^= feistelBox[7][Int(t) & 0x3f] ^ feistelBox[5][Int(t >> 8) & 0x3f] ^ feistelBox[3][Int(t >> 16) & 0x3f] ^ feistelBox[1][Int(t >> 24) & 0x3f]
+        r ^= feistelBox[7][Int(t) & 0x3F] ^ feistelBox[5][Int(t >> 8) & 0x3F] ^ feistelBox[3][Int(t >> 16) & 0x3F] ^ feistelBox[1][Int(t >> 24) & 0x3F]
 
         t = ((l << 28) | (l >> 4)) ^ UInt32(truncatingBitPattern: k1)
-        r ^= feistelBox[6][Int(t) & 0x3f] ^ feistelBox[4][Int(t >> 8) & 0x3f] ^ feistelBox[2][Int(t >> 16) & 0x3f] ^ feistelBox[0][Int(t >> 24) & 0x3f]
+        r ^= feistelBox[6][Int(t) & 0x3F] ^ feistelBox[4][Int(t >> 8) & 0x3F] ^ feistelBox[2][Int(t >> 16) & 0x3F] ^ feistelBox[0][Int(t >> 24) & 0x3F]
 
         return (l, r)
     }
@@ -245,17 +247,17 @@ public final class DES: BlockCipher {
         typealias UInt48 = UInt64
         // Expand 48-bit input to 64-bit, with each 6-bit block padded by extra two bits at the top.
         func expand(_ x: UInt48) -> UInt64 {
-            return ((x>>(6*1)) & 0xff)<<(8*0) |
-                   ((x>>(6*3)) & 0xff)<<(8*1) |
-                   ((x>>(6*5)) & 0xff)<<(8*2) |
-                   ((x>>(6*7)) & 0xff)<<(8*3) |
-                   ((x>>(6*0)) & 0xff)<<(8*4) |
-                   ((x>>(6*2)) & 0xff)<<(8*5) |
-                   ((x>>(6*4)) & 0xff)<<(8*6) |
-                   ((x>>(6*6)) & 0xff)<<(8*7)
+            return ((x >> (6 * 1)) & 0xFF) << (8 * 0) |
+                ((x >> (6 * 3)) & 0xFF) << (8 * 1) |
+                ((x >> (6 * 5)) & 0xFF) << (8 * 2) |
+                ((x >> (6 * 7)) & 0xFF) << (8 * 3) |
+                ((x >> (6 * 0)) & 0xFF) << (8 * 4) |
+                ((x >> (6 * 2)) & 0xFF) << (8 * 5) |
+                ((x >> (6 * 4)) & 0xFF) << (8 * 6) |
+                ((x >> (6 * 6)) & 0xFF) << (8 * 7)
         }
 
-        //TODO: check endianess of UInt64
+        // TODO: check endianess of UInt64
         var subkeys = Array<UInt64>(repeating: 0, count: 16)
 
         let permutedKey = self.permute(block: UInt64(bytes: key), permutation: permutedChoice1)
@@ -274,11 +276,10 @@ public final class DES: BlockCipher {
     }
 }
 
-
 extension DES: Cipher {
     public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.Iterator.Element == C.Iterator.Element, C.SubSequence.Index == C.Index, C.SubSequence.IndexDistance == C.IndexDistance {
         for chunk in bytes.batched(by: DES.blockSize) {
-            var b = UInt64(bytes: chunk) //TODO: check endianess
+            var b = UInt64(bytes: chunk)
             self.initialPermuation(block: &b)
 
             var left = UInt32(b >> 32)
@@ -295,9 +296,7 @@ extension DES: Cipher {
             right = (right << 31) | (right >> 1)
 
             var preOutput = UInt64(right) << 32 | UInt64(left)
-            finalPermutation(block: &preOutput)
-            preOutput.bytes(totalBytes: 16)
-            print(preOutput)
+            self.finalPermutation(block: &preOutput)
         }
         return []
     }

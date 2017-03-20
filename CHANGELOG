@@ -1,3 +1,15 @@
+0.6.x
+- Speed up MD5()
+- Faster Array(hex:)
+- Improve AES performance
+- Fix Blowfish CFB, OFB, CTR block modes.
+- Fix Blowfish for 32-bit arch.
+- Fix ChaCha20 preconditions
+
+0.6.7
+- Release for Xcode 8.2
+- Fix playground example
+
 0.6.6
 - Rework ChaCha20
 - Fix Poly1305

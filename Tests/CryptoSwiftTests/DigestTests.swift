@@ -198,7 +198,7 @@ extension DigestTests {
             ("testSHA1Updatable2", testSHA1Updatable2),
             ("testCRC32", testCRC32),
             ("testCRC32NotReflected", testCRC32NotReflected),
-            ("testCRC15", testCRC16),
+            ("testCRC16", testCRC16),
             ("testChecksum", testChecksum),
         ]
 

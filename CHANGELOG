@@ -1,7 +1,8 @@
-0.6.x
+0.6.8
 - Speed up MD5()
 - Faster Array(hex:)
 - Improve AES performance
+- Fix tvOS bitcode
 - Fix Blowfish CFB, OFB, CTR block modes.
 - Fix Blowfish for 32-bit arch.
 - Fix ChaCha20 preconditions

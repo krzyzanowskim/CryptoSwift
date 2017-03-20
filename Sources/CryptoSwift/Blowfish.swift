@@ -25,7 +25,12 @@ public final class Blowfish {
     fileprivate let blockMode: BlockMode
     fileprivate let padding: Padding
     fileprivate lazy var decryptWorker: BlockModeWorker = {
-        return self.blockMode.worker(self.iv, cipherOperation: self.decrypt)
+        switch (self.blockMode) {
+            case .CFB, .OFB, .CTR:
+                return self.blockMode.worker(self.iv, cipherOperation: self.encrypt)
+            default:
+                return self.blockMode.worker(self.iv, cipherOperation: self.decrypt)
+        }
     }()
     fileprivate lazy var encryptWorker: BlockModeWorker = {
         return self.blockMode.worker(self.iv, cipherOperation: self.encrypt)

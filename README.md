@@ -1,8 +1,8 @@
-#CryptoSwift
+# CryptoSwift
 
 Crypto related functions and helpers for [Swift](https://developer.apple.com/swift/) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
-#Table of Contents
+# Table of Contents
 - [Requirements](#requirements)
 - [Features](#features)
 - [Contribution](#contribution)
@@ -12,10 +12,10 @@ Crypto related functions and helpers for [Swift](https://developer.apple.com/swi
 - [License](#license)
 - [Changelog](#changelog)
 
-##Requirements
+## Requirements
 Good mood
 
-##Features
+## Features
 
 - Easy to use
 - Convenient extensions for String and Data
@@ -62,10 +62,10 @@ Good mood
 - [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
 - NoPadding
 
-##Why
+## Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
 
-##Contribution
+## Contribution
 
 For the latest version, please check [develop](https://github.com/krzyzanowskim/CryptoSwift/tree/develop) branch. Changes from this branch will be merged into the [master](https://github.com/krzyzanowskim/CryptoSwift/tree/master) branch at some point.
 
@@ -73,7 +73,7 @@ For the latest version, please check [develop](https://github.com/krzyzanowskim/
 - If you found a bug, [open an issue](https://github.com/krzyzanowskim/CryptoSwift/issues).
 - If you have a feature request, [open an issue](https://github.com/krzyzanowskim/CryptoSwift/issues).
 
-##Installation
+## Installation
 
 To install CryptoSwift, add it as a submodule to your project (on the top level project directory):
 
@@ -81,7 +81,7 @@ To install CryptoSwift, add it as a submodule to your project (on the top level 
     
 It is recommended to enable [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) to gain better performance. Non-optimized build results in significantly worse performance.
 
-####Embedded Framework
+#### Embedded Framework
 
 Embedded frameworks require a minimum deployment target of iOS 8 or OS X Mavericks (10.9). Drag the `CryptoSwift.xcodeproj` file into your Xcode project, and add appropriate framework as a dependency to your target. Now select your App and choose the General tab for the app target. Find *Embedded Binaries* and press "+", then select `CryptoSwift.framework` (iOS, OS X, watchOS or tvOS)
 
@@ -91,18 +91,18 @@ Sometimes "embedded framework" option is not available. In that case, you have t
 
 ![](https://cloud.githubusercontent.com/assets/758033/18415615/d5edabb0-77f8-11e6-8c94-f41d9fc2b8cb.png)
 
-#####iOS, macOS, watchOS, tvOS
+##### iOS, macOS, watchOS, tvOS
 
 In the project, you'll find [single scheme](http://promisekit.org/news/2016/08/Multiplatform-Single-Scheme-Xcode-Projects/) for all platforms:
 - CryptoSwift
 
-####Older Swift versions
+#### Older Swift versions
 
 - Swift 1.2: branch [swift12](https://github.com/krzyzanowskim/CryptoSwift/tree/swift12) version <= 0.0.13
 - Swift 2.1: branch [swift21](https://github.com/krzyzanowskim/CryptoSwift/tree/swift21) version <= 0.2.3
 - Swift 2.2, 2.3: branch [swift2](https://github.com/krzyzanowskim/CryptoSwift/tree/swift2) version <= 0.5.2
 
-####CocoaPods
+#### CocoaPods
 
 You can use [CocoaPods](http://cocoapods.org/?q=cryptoSwift).
 
@@ -123,7 +123,7 @@ pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :bran
 
 Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that my impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
 
-####Carthage 
+#### Carthage 
 You can use [Carthage](https://github.com/Carthage/Carthage). 
 Specify in Cartfile:
 
@@ -133,7 +133,7 @@ github "krzyzanowskim/CryptoSwift"
 
 Run `carthage` to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started)
 
-####Swift Package Manager
+#### Swift Package Manager
 
 You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding this:
 ```
@@ -142,7 +142,7 @@ You can use [Swift Package Manager](https://swift.org/package-manager/) and spec
 
 See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
  
-##Usage
+## Usage
 
 * [Basics (data types, conversion, ...)](#basics)
 * [Digest (MD5, SHA...)](#calculate-digest)
@@ -157,7 +157,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 
 also check [Playground](/CryptoSwift.playground/Contents.swift)
 
-#####Basics
+##### Basics
 
 ```swift
 import CryptoSwift
@@ -165,7 +165,7 @@ import CryptoSwift
 
 CryptoSwift uses array of bytes aka `Array<UInt8>` as a base type for all operations. Every data may be converted to a stream of bytes. You will find convenience functions that accept String or NSData, and it will be internally converted to the array of bytes.
 
-#####Data types conversion
+##### Data types conversion
 
 For you convenience **CryptoSwift** provides two functions to easily convert array of bytes to NSData and another way around:
 
@@ -200,7 +200,7 @@ Also... check out helpers that work with **Base64** encoded data:
 bytes.toBase64()
 ```
 
-#####Calculate Digest
+##### Calculate Digest
 
 Hashing a data or array of bytes (aka `Array<UInt8>`)
 ```swift
@@ -235,7 +235,7 @@ Hashing a String and printing result
 let hash = "123".md5()
 ```
 
-#####Calculate CRC
+##### Calculate CRC
 
 ```swift
 bytes.crc16()
@@ -245,7 +245,7 @@ bytes.crc32()
 data.crc32()
 ```
 
-#####Message authenticators
+##### Message authenticators
 
 ```swift
 // Calculate Message Authentication Code (MAC) for message
@@ -255,7 +255,7 @@ try Poly1305(key: key).authenticate(bytes)
 try HMAC(key: key, variant: .sha256).authenticate(bytes)
 ```
 
-#####Password-Based Key Derivation Functions
+##### Password-Based Key Derivation Functions
 
 ```swift
 let password: Array<UInt8> = Array("s33krit".utf8)
@@ -264,7 +264,7 @@ let salt: Array<UInt8> = Array("nacllcan".utf8)
 try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha256).calculate()
 ```
 
-#####Data Padding
+##### Data Padding
     
 Some content-encryption algorithms assume the input length is a multiple of k octets, where k is greater than one. For such algorithms, the input shall be padded.
 
@@ -272,28 +272,28 @@ Some content-encryption algorithms assume the input length is a multiple of k oc
 PKCS7().add(to: bytes, blockSize: AES.blockSize)
 ```
 
-####Working with Ciphers
-#####ChaCha20
+#### Working with Ciphers
+##### ChaCha20
 
 ```swift
 let encrypted = try ChaCha20(key: key, iv: iv).encrypt(message)
 let decrypted = try ChaCha20(key: key, iv: iv).decrypt(encrypted)
 ```
 
-#####Rabbit
+##### Rabbit
 
 ```swift
 let encrypted = try Rabbit(key: key, iv: iv).encrypt(message)
 let decrypted = try Rabbit(key: key, iv: iv).decrypt(encrypted)
 ```
-#####Blowfish
+##### Blowfish
 
 ```swift
 let encrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).encrypt(message)
 let decrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).decrypt(encrypted)
 ```
 
-#####AES
+##### AES
 
 Notice regarding padding: *Manual padding of data is optional, and CryptoSwift is using PKCS7 padding by default. If you need manually disable/enable padding, you can do this by setting parameter for __AES__ class*
 
@@ -308,7 +308,7 @@ AES-256 example
 try AES(key: [1,2,3,...,32], iv: [1,2,3,...,16], blockMode: .CBC, padding: PKCS7())
 ```
  
-######All at once
+###### All at once
 ```swift
 do {
     let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap") // aes128
@@ -316,7 +316,7 @@ do {
 } catch { }
 ```
 
-######Incremental updates
+###### Incremental updates
 
 Incremental operations use instance of Cryptor and encrypt/decrypt one part at a time, this way you can save on memory for large files. 
 
@@ -340,7 +340,7 @@ do {
 
 See [Playground](/CryptoSwift.playground/Contents.swift) for sample code that work with stream.
 
-######AES Advanced usage
+###### AES Advanced usage
 ```swift
 let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]
 
@@ -370,13 +370,13 @@ let encrypted = try! plain.encrypt(ChaCha20(key: key, iv: iv))
 let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
 ```
 
-##Author
+## Author
 
 CryptoSwift is owned and maintained by [Marcin Krzyżanowski](http://www.krzyzanowskim.com)
 
 You can follow me on Twitter at [@krzyzanowskim](http://twitter.com/krzyzanowskim) for project updates and releases.
 
-##License
+## License
 
 Copyright (C) 2014-2016 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 This software is provided 'as-is', without any express or implied warranty. 
@@ -389,6 +389,6 @@ Permission is granted to anyone to use this software for any purpose, including 
 - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 - This notice may not be removed or altered from any source or binary distribution.
 
-##Changelog
+## Changelog
 
 See [CHANGELOG](./CHANGELOG) file.

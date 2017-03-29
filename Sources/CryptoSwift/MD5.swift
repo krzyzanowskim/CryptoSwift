@@ -93,7 +93,8 @@ public final class MD5: DigestType {
 
             // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15 and get M[g] value
             let gAdvanced = g << 2
-            let Mg = UInt32(chunk[chunk.startIndex + gAdvanced]) | UInt32(chunk[chunk.startIndex + gAdvanced &+ 1]) << 8 | UInt32(chunk[chunk.startIndex + gAdvanced &+ 2]) << 16 | UInt32(chunk[chunk.startIndex + gAdvanced &+ 3]) << 24
+            var Mg = UInt32(chunk[chunk.startIndex &+ gAdvanced]) | UInt32(chunk[chunk.startIndex &+ gAdvanced &+ 1]) << 8 | UInt32(chunk[chunk.startIndex &+ gAdvanced &+ 2]) << 16
+                Mg = Mg | UInt32(chunk[chunk.startIndex &+ gAdvanced &+ 3]) << 24
 
             B = B &+ rotateLeft(A &+ F &+ k[j] &+ Mg, by: s[j])
             A = dTemp

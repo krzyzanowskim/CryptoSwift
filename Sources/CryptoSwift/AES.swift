@@ -20,6 +20,8 @@ public final class AES: BlockCipher {
         case invalidKeyOrInitializationVector
         /// Invalid IV
         case invalidInitializationVector
+        /// Invalid Data
+        case invalidData
     }
 
     public enum Variant: Int {
@@ -571,6 +573,10 @@ extension AES: Cipher {
 
         var oneTimeCryptor = self.makeDecryptor()
         let chunks = bytes.batched(by: AES.blockSize)
+        if chunks.count == 0 {
+            throw Error.invalidData
+        }
+
         var out = Array<UInt8>()
         out.reserveCapacity(bytes.count)
 

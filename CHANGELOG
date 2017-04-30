@@ -1,3 +1,9 @@
+0.6.9
+- Fixed padding issue where padding was not properly added in CTR mode.
+- Fixed thrown error on decrypting empty string,
+- Fixed CI build script.
+- Added String.encryptToBase64()
+
 0.6.8
 - Speed up MD5()
 - Faster Array(hex:)

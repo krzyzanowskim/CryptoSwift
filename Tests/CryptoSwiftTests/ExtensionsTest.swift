@@ -47,6 +47,19 @@ final class ExtensionsTest: XCTestCase {
         }
     }
 
+    func testEmptyStringEncrypt() {
+        do {
+            let cipher = try AES(key: Array("secret0key000000".utf8).md5(), iv: Array("secret0key000000".utf8).md5(), blockMode: .ECB)
+            let encrypted = try "".encryptToBase64(cipher: cipher)
+            let decrypted = try encrypted?.decryptBase64ToString(cipher: cipher)
+            XCTAssertEqual("", decrypted)
+
+            XCTAssertThrowsError(try "".decryptBase64(cipher: cipher))
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
     func testStringDecryptBase64() {
         let encryptedBase64 = "aPf/i9th9iX+vf49eR7PYk2q7S5xmm3jkRLejgzHNJs="
         let decrypted = try! encryptedBase64.decryptBase64ToString(cipher: AES(key: "secret0key000000", iv: "0123456789012345"))
@@ -99,6 +112,7 @@ extension ExtensionsTest {
             ("testDataInit", testDataInit),
             ("testStringEncrypt", testStringEncrypt),
             ("testStringDecryptBase64", testStringDecryptBase64),
+            ("testEmptyStringEncrypt", testEmptyStringEncrypt),
             ("testArrayInitHex", testArrayInitHex),
         ]
 

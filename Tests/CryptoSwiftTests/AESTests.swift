@@ -13,6 +13,17 @@ final class AESTests: XCTestCase {
     // 128 bit key
     let aesKey: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
 
+    func testAESEncrypt() {
+        let input: Array<UInt8> = [0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff]
+        let expected: Array<UInt8> = [0x69, 0xc4, 0xe0, 0xd8, 0x6a, 0x7b, 0x4, 0x30, 0xd8, 0xcd, 0xb7, 0x80, 0x70, 0xb4, 0xc5, 0x5a]
+
+        let aes = try! AES(key: aesKey, blockMode: .ECB, padding: NoPadding())
+        let encrypted = try! aes.encrypt(input)
+        XCTAssertEqual(encrypted, expected, "encryption failed")
+        let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted, input, "decryption failed")
+    }
+
     func testAESEncrypt2() {
         let key: Array<UInt8> = [0x36, 0x37, 0x39, 0x66, 0x62, 0x31, 0x64, 0x64, 0x66, 0x37, 0x64, 0x38, 0x31, 0x62, 0x65, 0x65]
         let iv: Array<UInt8> = [0x6b, 0x64, 0x66, 0x36, 0x37, 0x33, 0x39, 0x38, 0x44, 0x46, 0x37, 0x33, 0x38, 0x33, 0x66, 0x64]
@@ -34,17 +45,6 @@ final class AESTests: XCTestCase {
         let expected: Array<UInt8> = [0xae, 0x8c, 0x59, 0x95, 0xb2, 0x6f, 0x8e, 0x3d, 0xb0, 0x6f, 0x0a, 0xa5, 0xfe, 0xc4, 0xf0, 0xc2]
 
         let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: NoPadding())
-        let encrypted = try! aes.encrypt(input)
-        XCTAssertEqual(encrypted, expected, "encryption failed")
-        let decrypted = try! aes.decrypt(encrypted)
-        XCTAssertEqual(decrypted, input, "decryption failed")
-    }
-
-    func testAESEncrypt() {
-        let input: Array<UInt8> = [0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff]
-        let expected: Array<UInt8> = [0x69, 0xc4, 0xe0, 0xd8, 0x6a, 0x7b, 0x4, 0x30, 0xd8, 0xcd, 0xb7, 0x80, 0x70, 0xb4, 0xc5, 0x5a]
-
-        let aes = try! AES(key: aesKey, blockMode: .ECB, padding: NoPadding())
         let encrypted = try! aes.encrypt(input)
         XCTAssertEqual(encrypted, expected, "encryption failed")
         let decrypted = try! aes.decrypt(encrypted)
@@ -367,9 +367,9 @@ extension AESTests {
 
     static func allTests() -> [(String, (AESTests) -> () -> Void)] {
         var tests = [
+            ("testAESEncrypt", testAESEncrypt),
             ("testAESEncrypt2", testAESEncrypt2),
             ("testAESEncrypt3", testAESEncrypt3),
-            ("testAESEncrypt", testAESEncrypt),
             ("testAESEncryptCBCNoPadding", testAESEncryptCBCNoPadding),
             ("testAESEncryptCBCWithPadding", testAESEncryptCBCWithPadding),
             ("testAESEncryptCBCWithPaddingPartial", testAESEncryptCBCWithPaddingPartial),

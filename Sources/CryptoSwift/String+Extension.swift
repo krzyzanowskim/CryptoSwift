@@ -62,7 +62,7 @@ extension String {
     /// - parameter authenticator: Instance of `Authenticator`
     /// - returns: hex string of string
     public func authenticate<A: Authenticator>(with authenticator: A) throws -> String {
-        return try self.utf8.lazy.map({ $0 as UInt8 }).authenticate(with: authenticator).toHexString()
+        return try Array(self.utf8).authenticate(with: authenticator).toHexString()
     }
     
 }

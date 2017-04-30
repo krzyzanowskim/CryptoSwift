@@ -293,6 +293,19 @@ final class AESTests: XCTestCase {
         XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
 
+    func testAESWithWrongKey() {
+        let key: Array<UInt8> = [0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c]
+        let key2: Array<UInt8> = [0x22, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x33]
+        let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F]
+        let plaintext: Array<UInt8> = [49, 46, 50, 50, 50, 51, 51, 51, 51]
+
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
+        let aes2 = try! AES(key: key2, iv: iv, blockMode: .CBC, padding: PKCS7())
+        let encrypted = try! aes.encrypt(plaintext)
+        let decrypted = try? aes2.decrypt(encrypted)
+        XCTAssertTrue(decrypted! != plaintext, "failed")
+    }
+
     // https://github.com/krzyzanowskim/CryptoSwift/issues/298
     func testIssue298() {
         let encryptedValue = "47595cfa90f7b0b0e0d9d7240a2e035f7f4acde27d7ca778a7d8b05add32a0a92d945c0a59f7f0e029d7f2fbb258b2f0"
@@ -309,21 +322,8 @@ final class AESTests: XCTestCase {
         }
     }
 
-    func testAESWithWrongKey() {
-        let key: Array<UInt8> = [0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c]
-        let key2: Array<UInt8> = [0x22, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x33]
-        let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F]
-        let plaintext: Array<UInt8> = [49, 46, 50, 50, 50, 51, 51, 51, 51]
-
-        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
-        let aes2 = try! AES(key: key2, iv: iv, blockMode: .CBC, padding: PKCS7())
-        let encrypted = try! aes.encrypt(plaintext)
-        let decrypted = try? aes2.decrypt(encrypted)
-        XCTAssertTrue(decrypted! != plaintext, "failed")
-    }
-
     // https://github.com/krzyzanowskim/CryptoSwift/issues/394
-    func testOpenSSL_394() {
+    func testIssue394() {
         let plaintext = Array("Nullam quis risus eget urna mollis ornare vel eu leo.".utf8)
         let key = Array("passwordpassword".utf8).md5() // -md md5
         let iv  = Array("drowssapdrowssap".utf8) // -iv 64726f777373617064726f7773736170
@@ -334,6 +334,16 @@ final class AESTests: XCTestCase {
         // cij+965z2Xqoj9tIHgtA72ZPfv5sxnt76vwkIt1CodYY313oa7mr0pSc5o++g0CX
         // YczxK2fGIa84xtwDtRMwBQ==
         XCTAssertEqual(ciphertext.toBase64(), "cij+965z2Xqoj9tIHgtA72ZPfv5sxnt76vwkIt1CodYY313oa7mr0pSc5o++g0CXYczxK2fGIa84xtwDtRMwBQ==")
+    }
+
+    // https://github.com/krzyzanowskim/CryptoSwift/issues/411
+    func testIssue411() {
+        let ciphertext: Array<UInt8> = [0x2A,0x3A,0x80,0x05,0xAF,0x46,0x58,0x2D,0x66,0x52,0x10,0xAE,0x86,0xD3,0x8E,0x8F] // test
+        let key = Array("passwordpassword".utf8).md5() // -md md5
+        let iv  = Array("drowssapdrowssap".utf8) // -iv 64726f777373617064726f7773736170
+        let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()) // -aes-128-cbc
+        let plaintext = try! ciphertext.decrypt(cipher: aes)
+        XCTAssertEqual("74657374", plaintext.toHexString())
     }
 }
 
@@ -386,6 +396,8 @@ extension AESTests {
             ("testAESDecryptCTRSeek", testAESDecryptCTRSeek),
             ("testAESEncryptCTRIrregularLengthIncrementalUpdate", testAESEncryptCTRIrregularLengthIncrementalUpdate),
             ("testIssue298", testIssue298),
+            ("testIssue394", testIssue394),
+            ("testIssue411", testIssue411),
             ("testAESWithWrongKey", testAESWithWrongKey),
         ]
 

@@ -39,5 +39,5 @@ if [ -e "Tools/testprep.sh" ]; then
 fi
 
 if [ -d "Tests" ]; then
-	swift test -Xswiftc -DCI
+	swift test -Xswiftc -DCI -Xswiftc -Xfrontend -Xswiftc -solver-memory-threshold -Xswiftc -Xfrontend -Xswiftc 999999999
 fi

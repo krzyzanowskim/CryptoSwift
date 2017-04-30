@@ -12,7 +12,7 @@ eval "$(swiftenv init -)"
 
 swiftenv version
 
-swift build --clean dist
+swift package clean
 swift package fetch
 
 if [ -d Packages ]; then

@@ -22,7 +22,8 @@ if [ -d Packages ]; then
 	fi
 fi
 
-swift build
+# https://github.com/krzyzanowskim/CryptoSwift/issues/418
+swift build -Xswiftc -Xfrontend -Xswiftc -solver-memory-threshold -Xswiftc -Xfrontend -Xswiftc 999999999
 sbexit=$?
 
 echo "Swift build exited with code $sbexit"

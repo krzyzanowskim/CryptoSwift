@@ -48,7 +48,13 @@ extension String {
     /// - parameter cipher: Instance of `Cipher`
     /// - returns: hex string of bytes
     public func encrypt(cipher: Cipher) throws -> String {
-        return try self.utf8.lazy.map({ $0 as UInt8 }).encrypt(cipher: cipher).toHexString()
+        return try Array(self.utf8).encrypt(cipher: cipher).toHexString()
+    }
+
+    /// - parameter cipher: Instance of `Cipher`
+    /// - returns: base64 encoded string of encrypted bytes
+    public func encryptToBase64(cipher: Cipher) throws -> String? {
+        return try Array(self.utf8).encrypt(cipher: cipher).toBase64()
     }
 
     // decrypt() does not make sense for String

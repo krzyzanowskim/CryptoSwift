@@ -194,9 +194,24 @@ final class AESTests: XCTestCase {
 
         let aes = try! AES(key: key, iv: iv, blockMode: .CTR, padding: NoPadding())
         let encrypted = try! aes.encrypt(plaintext)
+        XCTAssertEqual(encrypted.count, plaintext.count);
         XCTAssertEqual(encrypted, expected, "encryption failed")
         let decrypted = try! aes.decrypt(encrypted)
+        XCTAssertEqual(decrypted.count, plaintext.count);
         XCTAssertEqual(decrypted, plaintext, "decryption failed")
+    }
+
+    // https://github.com/krzyzanowskim/CryptoSwift/issues/424
+    func testAESEncryptCTRZeroPadding() {
+        let key: Array<UInt8> = [0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c]
+        let iv: Array<UInt8> = [0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff]
+        let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a, 0xfd]
+
+        let aes = try! AES(key: key, iv: iv, blockMode: .CTR, padding: ZeroPadding())
+        let encrypted = try! aes.encrypt(plaintext)
+
+        XCTAssertEqual(plaintext.count, 17)
+        XCTAssertEqual(encrypted.count, 32, "padding failed")
     }
 
     func testAESEncryptCTRIrregularLength() {
@@ -366,6 +381,7 @@ extension AESTests {
             ("testAESEncryptOFB256", testAESEncryptOFB256),
             ("testAESEncryptPCBC256", testAESEncryptPCBC256),
             ("testAESEncryptCTR", testAESEncryptCTR),
+            ("testAESEncryptCTRZeroPadding", testAESEncryptCTRZeroPadding),
             ("testAESEncryptCTRIrregularLength", testAESEncryptCTRIrregularLength),
             ("testAESDecryptCTRSeek", testAESDecryptCTRSeek),
             ("testAESEncryptCTRIrregularLengthIncrementalUpdate", testAESEncryptCTRIrregularLengthIncrementalUpdate),

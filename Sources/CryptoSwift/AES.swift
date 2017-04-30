@@ -430,7 +430,7 @@ extension AES {
         mutating public func update<T: Collection>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
             self.accumulated += bytes
 
-            if isLast && self.paddingRequired {
+            if isLast {
                 self.accumulated = padding.add(to: self.accumulated, blockSize: AES.blockSize)
             }
 

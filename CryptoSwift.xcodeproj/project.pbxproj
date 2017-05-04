@@ -726,7 +726,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = CryptoSwift;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx appletvos watchos appletvsimulator watchsimulator";
 				SWIFT_INSTALL_OBJC_HEADER = NO;

@@ -18,6 +18,8 @@ protocol ByteConvertible {
     init(truncatingBitPattern: UInt64)
 }
 
+#if swift(>=4.0)
+#else
 extension Int: BitshiftOperationsType, ByteConvertible {}
 extension Int8: BitshiftOperationsType, ByteConvertible {}
 extension Int16: BitshiftOperationsType, ByteConvertible {}
@@ -41,3 +43,4 @@ extension UInt64: BitshiftOperationsType, ByteConvertible {
         self = value
     }
 }
+#endif

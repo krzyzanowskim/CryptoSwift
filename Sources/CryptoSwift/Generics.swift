@@ -20,6 +20,19 @@ extension UInt32: Initiable {}
 extension UInt64: Initiable {}
 
 /** build bit pattern from array of bits */
+#if swift(>=4.0)
+@_specialize(where T == UInt8)
+func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T {
+    var bitPattern: T = 0
+    for idx in bits.indices {
+        if bits[idx] == Bit.one {
+            let bit = T(UIntMax(1) << UIntMax(idx))
+            bitPattern = bitPattern | bit
+        }
+    }
+    return bitPattern
+}
+#else
 @_specialize(UInt8)
 func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T {
     var bitPattern: T = 0
@@ -31,6 +44,7 @@ func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T {
     }
     return bitPattern
 }
+#endif
 
 /// Array of bytes. Caution: don't use directly because generic is slow.
 ///

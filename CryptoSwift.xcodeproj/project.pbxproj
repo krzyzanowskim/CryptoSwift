@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		54EE1C631C2199B2008DD2E5 /* CryptoSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 54EE1C621C2199B2008DD2E5 /* CryptoSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		60D131291EE3D62900E43CA2 /* SwiftSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D131281EE3D62900E43CA2 /* SwiftSupport.swift */; };
 		674A736F1BF5D85B00866C5B /* RabbitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674A736E1BF5D85B00866C5B /* RabbitTests.swift */; };
 		750CC3E91DC014AF0096BE6E /* Blowfish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750CC3E81DC014AF0096BE6E /* Blowfish.swift */; };
 		750CC3EB1DC0CACE0096BE6E /* BlowfishTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */; };
@@ -153,6 +154,7 @@
 
 /* Begin PBXFileReference section */
 		54EE1C621C2199B2008DD2E5 /* CryptoSwift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CryptoSwift.h; path = Sources/CryptoSwift.h; sourceTree = SOURCE_ROOT; };
+		60D131281EE3D62900E43CA2 /* SwiftSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftSupport.swift; sourceTree = "<group>"; };
 		674A736E1BF5D85B00866C5B /* RabbitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RabbitTests.swift; sourceTree = "<group>"; };
 		750CC3E81DC014AF0096BE6E /* Blowfish.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Blowfish.swift; path = Sources/CryptoSwift/Blowfish.swift; sourceTree = SOURCE_ROOT; };
 		750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlowfishTests.swift; sourceTree = "<group>"; };
@@ -264,6 +266,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		60D131271EE3D62900E43CA2 /* SwiftSupport */ = {
+			isa = PBXGroup;
+			children = (
+				60D131281EE3D62900E43CA2 /* SwiftSupport.swift */,
+			);
+			name = SwiftSupport;
+			path = Sources/CryptoSwift/SwiftSupport;
+			sourceTree = SOURCE_ROOT;
+		};
 		75482EA51CB3299E001F66A5 /* PKCS5 */ = {
 			isa = PBXGroup;
 			children = (
@@ -297,6 +308,7 @@
 		754BE45719693E190098E6F3 /* CryptoSwift */ = {
 			isa = PBXGroup;
 			children = (
+				60D131271EE3D62900E43CA2 /* SwiftSupport */,
 				75DB81B11CDC0E4100ED181A /* Ciphers */,
 				757BC91D1C1CA5790093AAA9 /* Authenticator.swift */,
 				80545D121CA9FECD00474A99 /* Bit.swift */,
@@ -589,6 +601,7 @@
 				757BC9061C1CA56A0093AAA9 /* ChaCha20+Foundation.swift in Sources */,
 				75482EA71CB329C1001F66A5 /* PBKDF2.swift in Sources */,
 				757BC9681C1CA5790093AAA9 /* CSArrayType+Extensions.swift in Sources */,
+				60D131291EE3D62900E43CA2 /* SwiftSupport.swift in Sources */,
 				757BC9601C1CA5790093AAA9 /* Checksum.swift in Sources */,
 				757BC9A01C1CA5790093AAA9 /* Poly1305.swift in Sources */,
 				75790ABD1DC178DA00606105 /* Blowfish+Foundation.swift in Sources */,

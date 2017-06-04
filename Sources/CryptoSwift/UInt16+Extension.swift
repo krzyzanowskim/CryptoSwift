@@ -9,6 +9,20 @@
 /** array of bytes */
 extension UInt16 {
 
+  #if swift(>=4.0)
+    @_specialize(where T == ArraySlice<UInt8>)
+    init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.Index == Int {
+        self = UInt16(bytes: bytes, fromIndex: bytes.startIndex)
+    }
+
+    @_specialize(where T == ArraySlice<UInt8>)
+    init<T: Collection>(bytes: T, fromIndex index: T.Index) where T.Iterator.Element == UInt8, T.Index == Int {
+        let val0 = UInt16(bytes[index.advanced(by: 0)]) << 8
+        let val1 = UInt16(bytes[index.advanced(by: 1)])
+
+        self = val0 | val1
+    }
+  #else
     @_specialize(ArraySlice<UInt8>)
     init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.Index == Int {
         self = UInt16(bytes: bytes, fromIndex: bytes.startIndex)
@@ -21,6 +35,7 @@ extension UInt16 {
 
         self = val0 | val1
     }
+  #endif
 
     func bytes(totalBytes: Int = MemoryLayout<UInt16>.size) -> Array<UInt8> {
         return arrayOfBytes(value: self, length: totalBytes)

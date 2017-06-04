@@ -456,7 +456,11 @@ public final class Blowfish {
     }
 
     private func F(x: UInt32) -> UInt32 {
-        return ((self.S[0][Int(x >> 24) & 0xFF] &+ self.S[1][Int(x >> 16) & 0xFF]) ^ self.S[2][Int(x >> 8) & 0xFF]) &+ self.S[3][Int(x & 0xFF)]
+        let a = self.S[0][Int(x >> 24) & 0xFF]
+        let b = self.S[1][Int(x >> 16) & 0xFF]
+        let c = self.S[2][Int(x >> 8 ) & 0xFF]
+        let d = self.S[3][Int(x & 0xFF)]
+        return ((a &+ b) ^ c) &+ d
     }
 }
 

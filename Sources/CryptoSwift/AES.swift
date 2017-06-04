@@ -141,13 +141,21 @@ fileprivate extension AES {
         let rounds = self.variant.Nr
         let rk = self.expandedKey
 
-        var b0 = UInt32(block[block.startIndex + 0 + (0 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (0 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (0 << 2)]) << 16
+        let b0a = UInt32(block[block.startIndex + 0 + (0 << 2)]) << 0
+        let b0b = UInt32(block[block.startIndex + 1 + (0 << 2)]) << 8
+        var b0 = b0a | b0b | UInt32(block[block.startIndex + 2 + (0 << 2)]) << 16
             b0 = b0 | UInt32(block[block.startIndex + 3 + (0 << 2)]) << 24
-        var b1 = UInt32(block[block.startIndex + 0 + (1 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (1 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (1 << 2)]) << 16
+        let b1a = UInt32(block[block.startIndex + 0 + (1 << 2)]) << 0
+        let b1b = UInt32(block[block.startIndex + 1 + (1 << 2)]) << 8
+        var b1 = b1a | b1b | UInt32(block[block.startIndex + 2 + (1 << 2)]) << 16
             b1 = b1 | UInt32(block[block.startIndex + 3 + (1 << 2)]) << 24
-        var b2 = UInt32(block[block.startIndex + 0 + (2 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (2 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (2 << 2)]) << 16
+        let b2a = UInt32(block[block.startIndex + 0 + (2 << 2)]) << 0
+        let b2b = UInt32(block[block.startIndex + 1 + (2 << 2)]) << 8
+        var b2 = b2a | b2b | UInt32(block[block.startIndex + 2 + (2 << 2)]) << 16
             b2 = b2 | UInt32(block[block.startIndex + 3 + (2 << 2)]) << 24
-        var b3 = UInt32(block[block.startIndex + 0 + (3 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (3 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (3 << 2)]) << 16
+        let b3a = UInt32(block[block.startIndex + 0 + (3 << 2)]) << 0
+        let b3b = UInt32(block[block.startIndex + 1 + (3 << 2)]) << 8
+        var b3 = b3a | b3b | UInt32(block[block.startIndex + 2 + (3 << 2)]) << 16
             b3 = b3 | UInt32(block[block.startIndex + 3 + (3 << 2)]) << 24
 
         var t = Array<UInt32>(repeating: 0, count: 4)
@@ -197,11 +205,27 @@ fileprivate extension AES {
         b2 = F1(t[2], t[3], t[0], t[1]) ^ rk[rounds][2]
         b3 = F1(t[3], t[0], t[1], t[2]) ^ rk[rounds][3]
 
+        let r0 = UInt8(b0 & 0xFF)
+        let r1 = UInt8((b0 >> 8) & 0xFF)
+        let r2 = UInt8((b0 >> 16) & 0xFF)
+        let r3 = UInt8((b0 >> 24) & 0xFF)
+        let r4 = UInt8(b1 & 0xFF)
+        let r5 = UInt8((b1 >> 8) & 0xFF)
+        let r6 = UInt8((b1 >> 16) & 0xFF)
+        let r7 = UInt8((b1 >> 24) & 0xFF)
+        let r8 = UInt8(b2 & 0xFF)
+        let r9 = UInt8((b2 >> 8) & 0xFF)
+        let r10 = UInt8((b2 >> 16) & 0xFF)
+        let r11 = UInt8((b2 >> 24) & 0xFF)
+        let r12 = UInt8(b3 & 0xFF)
+        let r13 = UInt8((b3 >> 8) & 0xFF)
+        let r14 = UInt8((b3 >> 16) & 0xFF)
+        let r15 = UInt8((b3 >> 24) & 0xFF)
         return [
-            UInt8(b0 & 0xFF),UInt8((b0 >> 8) & 0xFF),UInt8((b0 >> 16) & 0xFF),UInt8((b0 >> 24) & 0xFF),
-            UInt8(b1 & 0xFF),UInt8((b1 >> 8) & 0xFF),UInt8((b1 >> 16) & 0xFF),UInt8((b1 >> 24) & 0xFF),
-            UInt8(b2 & 0xFF),UInt8((b2 >> 8) & 0xFF),UInt8((b2 >> 16) & 0xFF),UInt8((b2 >> 24) & 0xFF),
-            UInt8(b3 & 0xFF),UInt8((b3 >> 8) & 0xFF),UInt8((b3 >> 16) & 0xFF),UInt8((b3 >> 24) & 0xFF)
+            r0,r1,r2,r3,
+            r4,r5,r6,r7,
+            r8,r9,r10,r11,
+            r12,r13,r14,r15
         ] as Array<UInt8>
     }
 
@@ -397,7 +421,7 @@ fileprivate extension AES {
         var p: UInt8 = 1, q: UInt8 = 1
 
         repeat {
-            p = p ^ (UInt8(truncatingBitPattern: Int(p) << 1) ^ ((p & 0x80) == 0x80 ? 0x1B : 0))
+            p = p ^ (UInt8(extendingOrTruncating: Int(p) << 1) ^ ((p & 0x80) == 0x80 ? 0x1B : 0))
             q ^= q << 1
             q ^= q << 2
             q ^= q << 4

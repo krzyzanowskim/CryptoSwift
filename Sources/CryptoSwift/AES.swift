@@ -197,12 +197,27 @@ fileprivate extension AES {
         b2 = F1(t[2], t[3], t[0], t[1]) ^ rk[rounds][2]
         b3 = F1(t[3], t[0], t[1], t[2]) ^ rk[rounds][3]
 
+        let r0 = UInt8(b0 & 0xFF)
+        let r1 = UInt8((b0 >> 8) & 0xFF)
+        let r2 = UInt8((b0 >> 16) & 0xFF)
+        let r3 = UInt8((b0 >> 24) & 0xFF)
+        let r4 = UInt8(b1 & 0xFF)
+        let r5 = UInt8((b1 >> 8) & 0xFF)
+        let r6 = UInt8((b1 >> 16) & 0xFF)
+        let r7 = UInt8((b1 >> 24) & 0xFF)
+        let r8 = UInt8(b2 & 0xFF)
+        let r9 = UInt8((b2 >> 8) & 0xFF)
+        let r10 = UInt8((b2 >> 16) & 0xFF)
+        let r11 = UInt8((b2 >> 24) & 0xFF)
+        let r12 = UInt8(b3 & 0xFF)
+        let r13 = UInt8((b3 >> 8) & 0xFF)
+        let r14 = UInt8((b3 >> 16) & 0xFF)
+        let r15 = UInt8((b3 >> 24) & 0xFF)
         return [
-            UInt8(b0 & 0xFF),UInt8((b0 >> 8) & 0xFF),UInt8((b0 >> 16) & 0xFF),UInt8((b0 >> 24) & 0xFF),
-            UInt8(b1 & 0xFF),UInt8((b1 >> 8) & 0xFF),UInt8((b1 >> 16) & 0xFF),UInt8((b1 >> 24) & 0xFF),
-            UInt8(b2 & 0xFF),UInt8((b2 >> 8) & 0xFF),UInt8((b2 >> 16) & 0xFF),UInt8((b2 >> 24) & 0xFF),
-            UInt8(b3 & 0xFF),UInt8((b3 >> 8) & 0xFF),UInt8((b3 >> 16) & 0xFF),UInt8((b3 >> 24) & 0xFF)
-        ] as Array<UInt8>
+            r0,r1,r2,r3,
+            r4,r5,r6,r7,
+            r8,r9,r10,r11,
+            r12,r13,r14,r15] as Array<UInt8>
     }
 
     func decrypt(block: Array<UInt8>) -> Array<UInt8>? {

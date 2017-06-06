@@ -20,7 +20,7 @@ extension UInt32: Initiable {}
 extension UInt64: Initiable {}
 
 /** build bit pattern from array of bits */
-@_specialize(UInt8)
+@_specialize(where T == UInt8)
 func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T {
     var bitPattern: T = 0
     for idx in bits.indices {

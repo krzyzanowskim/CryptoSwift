@@ -13,12 +13,12 @@ extension UInt64 {
 //        self = 0
 //    }
 
-    @_specialize(ArraySlice<UInt8>)
+    @_specialize(where T == ArraySlice<UInt8>)
     init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.IndexDistance == Int, T.Index == Int {
         self = UInt64(bytes: bytes, fromIndex: bytes.startIndex)
     }
 
-    @_specialize(ArraySlice<UInt8>)
+    @_specialize(where T == ArraySlice<UInt8>)
     init<T: Collection>(bytes: T, fromIndex index: T.Index) where T.Iterator.Element == UInt8, T.IndexDistance == Int, T.Index == Int {
         let val0 = UInt64(bytes[index.advanced(by: 0)]) << 56
         let val1 = UInt64(bytes[index.advanced(by: 1)]) << 48

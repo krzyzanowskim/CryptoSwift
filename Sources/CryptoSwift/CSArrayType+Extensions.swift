@@ -6,7 +6,7 @@
 //  Copyright © 2015 Marcin Krzyzanowski. All rights reserved.
 //
 
-public protocol CSArrayType: Collection, RangeReplaceableCollection {
+public protocol CSArrayType: RangeReplaceableCollection {
     func cs_arrayValue() -> [Iterator.Element]
 }
 

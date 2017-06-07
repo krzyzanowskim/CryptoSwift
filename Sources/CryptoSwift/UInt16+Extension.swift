@@ -9,12 +9,12 @@
 /** array of bytes */
 extension UInt16 {
 
-    @_specialize(ArraySlice<UInt8>)
+    @_specialize(where T == ArraySlice<UInt8>)
     init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.Index == Int {
         self = UInt16(bytes: bytes, fromIndex: bytes.startIndex)
     }
 
-    @_specialize(ArraySlice<UInt8>)
+    @_specialize(where T == ArraySlice<UInt8>)
     init<T: Collection>(bytes: T, fromIndex index: T.Index) where T.Iterator.Element == UInt8, T.Index == Int {
         let val0 = UInt16(bytes[index.advanced(by: 0)]) << 8
         let val1 = UInt16(bytes[index.advanced(by: 1)])

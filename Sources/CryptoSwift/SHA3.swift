@@ -165,7 +165,7 @@ public final class SHA3: DigestType {
         a[0] ^= round_constants[round]
     }
 
-    fileprivate func process<C: Collection>(block chunk: C, currentHash hh: inout Array<UInt64>) where C.Iterator.Element == UInt64, C.Index == Int {
+    fileprivate func process<C: Collection>(block chunk: C, currentHash hh: inout Array<UInt64>) where C.Element == UInt64, C.Index == Int {
         // expand
         hh[0] ^= chunk[0].littleEndian
         hh[1] ^= chunk[1].littleEndian

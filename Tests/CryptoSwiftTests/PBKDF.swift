@@ -56,7 +56,7 @@ class PBKDF: XCTestCase {
     func testPerformance() {
         let password: Array<UInt8> = Array("s33krit".utf8)
         let salt: Array<UInt8> = Array("nacl".utf8)
-        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+        measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
             let _ = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 65536, keyLength: 32, variant: .sha1).calculate()
         })
     }

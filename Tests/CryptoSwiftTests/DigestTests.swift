@@ -166,7 +166,7 @@ final class DigestTests: XCTestCase {
     extension DigestTests {
 
         func testMD5Performance() {
-            self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
                 let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
                 self.startMeasuring()
                 _ = Digest.md5(arr)

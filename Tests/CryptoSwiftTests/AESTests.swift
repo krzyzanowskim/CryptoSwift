@@ -356,7 +356,7 @@ final class AESTests: XCTestCase {
             let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F]
             let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
             let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
-            measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
                 _ = try! aes.encrypt(message)
             })
         }
@@ -366,7 +366,7 @@ final class AESTests: XCTestCase {
             let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F]
             let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
             let aes = try! AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
-            measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
                 _ = try! aes.decrypt(message)
             })
         }

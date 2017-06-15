@@ -2,9 +2,18 @@
 //  AES.swift
 //  CryptoSwift
 //
-//  Created by Marcin Krzyzanowski on 21/11/14.
-//  Copyright (c) 2014 Marcin Krzyzanowski. All rights reserved.
+//  Copyright (C) 2014-2017 Krzyżanowski <marcin@krzyzanowskim.com>
+//  This software is provided 'as-is', without any express or implied warranty.
 //
+//  In no event will the authors be held liable for any damages arising from the use of this software.
+//
+//  Permission is granted to anyone to use this software for any purpose,including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+//
+//  - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
+//  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+//  - This notice may not be removed or altered from any source or binary distribution.
+//
+
 //  Implementation of Gladman algorithm http://www.gladman.me.uk/AES
 //
 
@@ -205,28 +214,13 @@ fileprivate extension AES {
         b2 = F1(t[2], t[3], t[0], t[1]) ^ rk[rounds][2]
         b3 = F1(t[3], t[0], t[1], t[2]) ^ rk[rounds][3]
 
-        let r0 = UInt8(b0 & 0xFF)
-        let r1 = UInt8((b0 >> 8) & 0xFF)
-        let r2 = UInt8((b0 >> 16) & 0xFF)
-        let r3 = UInt8((b0 >> 24) & 0xFF)
-        let r4 = UInt8(b1 & 0xFF)
-        let r5 = UInt8((b1 >> 8) & 0xFF)
-        let r6 = UInt8((b1 >> 16) & 0xFF)
-        let r7 = UInt8((b1 >> 24) & 0xFF)
-        let r8 = UInt8(b2 & 0xFF)
-        let r9 = UInt8((b2 >> 8) & 0xFF)
-        let r10 = UInt8((b2 >> 16) & 0xFF)
-        let r11 = UInt8((b2 >> 24) & 0xFF)
-        let r12 = UInt8(b3 & 0xFF)
-        let r13 = UInt8((b3 >> 8) & 0xFF)
-        let r14 = UInt8((b3 >> 16) & 0xFF)
-        let r15 = UInt8((b3 >> 24) & 0xFF)
-        return [
-            r0,r1,r2,r3,
-            r4,r5,r6,r7,
-            r8,r9,r10,r11,
-            r12,r13,r14,r15
-        ] as Array<UInt8>
+        let encrypted: Array<UInt8> = [
+            UInt8(b0 & 0xFF),UInt8((b0 >> 8) & 0xFF),UInt8((b0 >> 16) & 0xFF),UInt8((b0 >> 24) & 0xFF),
+            UInt8(b1 & 0xFF),UInt8((b1 >> 8) & 0xFF),UInt8((b1 >> 16) & 0xFF),UInt8((b1 >> 24) & 0xFF),
+            UInt8(b2 & 0xFF),UInt8((b2 >> 8) & 0xFF),UInt8((b2 >> 16) & 0xFF),UInt8((b2 >> 24) & 0xFF),
+            UInt8(b3 & 0xFF),UInt8((b3 >> 8) & 0xFF),UInt8((b3 >> 16) & 0xFF),UInt8((b3 >> 24) & 0xFF)
+        ]
+        return encrypted
     }
 
     func decrypt(block: Array<UInt8>) -> Array<UInt8>? {
@@ -571,6 +565,51 @@ extension AES: Cryptors {
 // MARK: Cipher
 extension AES: Cipher {
 
+  #if swift(>=4.0)
+    public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection {
+        let chunks = bytes.batched(by: AES.blockSize)
+
+        var oneTimeCryptor = self.makeEncryptor()
+        var out = Array<UInt8>()
+        out.reserveCapacity(bytes.count)
+        for chunk in chunks {
+            out += try oneTimeCryptor.update(withBytes: chunk, isLast: false)
+        }
+        // Padding may be added at the very end
+        out += try oneTimeCryptor.finish()
+
+        if blockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
+            throw Error.dataPaddingRequired
+        }
+
+        return out
+    }
+
+    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection {
+        if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
+            throw Error.dataPaddingRequired
+        }
+
+        var oneTimeCryptor = self.makeDecryptor()
+        let chunks = bytes.batched(by: AES.blockSize)
+        if chunks.count == 0 {
+            throw Error.invalidData
+        }
+
+        var out = Array<UInt8>()
+        out.reserveCapacity(bytes.count)
+
+        var lastIdx = chunks.startIndex
+        chunks.indices.formIndex(&lastIdx, offsetBy: chunks.count - 1)
+
+        // To properly remove padding, `isLast` has to be known when called with the last chunk of ciphertext
+        // Last chunk of ciphertext may contains padded data so next call to update(..) won't be able to remove it
+        for idx in chunks.indices {
+            out += try oneTimeCryptor.update(withBytes: chunks[idx], isLast: idx == lastIdx)
+        }
+        return out
+    }
+  #else
     public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.Iterator.Element == C.Iterator.Element {
         let chunks = bytes.batched(by: AES.blockSize)
 
@@ -614,4 +653,6 @@ extension AES: Cipher {
         }
         return out
     }
+  #endif
+
 }

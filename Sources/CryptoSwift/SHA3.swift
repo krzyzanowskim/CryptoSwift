@@ -2,9 +2,18 @@
 //  SHA3.swift
 //  CryptoSwift
 //
-//  Created by Marcin Krzyzanowski on 23/09/16.
-//  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
+//  Copyright (C) 2014-2017 Krzyżanowski <marcin@krzyzanowskim.com>
+//  This software is provided 'as-is', without any express or implied warranty.
 //
+//  In no event will the authors be held liable for any damages arising from the use of this software.
+//
+//  Permission is granted to anyone to use this software for any purpose,including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+//
+//  - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
+//  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+//  - This notice may not be removed or altered from any source or binary distribution.
+//
+
 //  http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
 //  http://keccak.noekeon.org/specs_summary.html
 //
@@ -165,7 +174,7 @@ public final class SHA3: DigestType {
         a[0] ^= round_constants[round]
     }
 
-    fileprivate func process<C: Collection>(block chunk: C, currentHash hh: inout Array<UInt64>) where C.Iterator.Element == UInt64, C.Index == Int {
+    fileprivate func process<C: Collection>(block chunk: C, currentHash hh: inout Array<UInt64>) where C.Element == UInt64, C.Index == Int {
         // expand
         hh[0] ^= chunk[0].littleEndian
         hh[1] ^= chunk[1].littleEndian

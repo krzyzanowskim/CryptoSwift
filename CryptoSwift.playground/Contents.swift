@@ -5,7 +5,6 @@
 */
 import CryptoSwift
 import Foundation
-
 /*:
  # Data types conversinn
  */

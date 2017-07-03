@@ -93,7 +93,7 @@ final class ExtensionsTest: XCTestCase {
     extension ExtensionsTest {
 
         func testArrayChunksPerformance() {
-            measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
                 let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
                 self.startMeasuring()
                 _ = message.chunks(size: AES.blockSize)

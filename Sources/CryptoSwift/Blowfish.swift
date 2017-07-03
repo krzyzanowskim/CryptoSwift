@@ -465,7 +465,11 @@ public final class Blowfish {
     }
 
     private func F(x: UInt32) -> UInt32 {
-        return ((self.S[0][Int(x >> 24) & 0xFF] &+ self.S[1][Int(x >> 16) & 0xFF]) ^ self.S[2][Int(x >> 8) & 0xFF]) &+ self.S[3][Int(x & 0xFF)]
+        let a = self.S[0][Int(x >> 24) & 0xFF]
+        let b = self.S[1][Int(x >> 16) & 0xFF]
+        let c = self.S[2][Int(x >> 8 ) & 0xFF]
+        let d = self.S[3][Int(x & 0xFF)]
+        return ((a &+ b) ^ c) &+ d
     }
 }
 
@@ -474,6 +478,7 @@ extension Blowfish: Cipher {
     ///
     /// - Parameter bytes: Plaintext data
     /// - Returns: Encrypted data
+    #if swift(>=4.0)
     public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
 
         let bytes = padding.add(to: Array(bytes), blockSize: Blowfish.blockSize) //FIXME: Array(bytes) copies
@@ -514,6 +519,48 @@ extension Blowfish: Cipher {
 
         return out
     }
+    #else
+    public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
+
+        let bytes = padding.add(to: Array(bytes), blockSize: Blowfish.blockSize) //FIXME: Array(bytes) copies
+
+        var out = Array<UInt8>()
+        out.reserveCapacity(bytes.count)
+
+        for chunk in bytes.batched(by: Blowfish.blockSize) {
+            out += self.encryptWorker.encrypt(chunk)
+        }
+
+        if blockMode.options.contains(.PaddingRequired) && (out.count % Blowfish.blockSize != 0) {
+            throw Error.dataPaddingRequired
+        }
+
+        return out
+    }
+
+
+    /// Decrypt the 8-byte padded buffer
+    ///
+    /// - Parameter bytes: Ciphertext data
+    /// - Returns: Plaintext data
+    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
+
+        if blockMode.options.contains(.PaddingRequired) && (bytes.count % Blowfish.blockSize != 0) {
+            throw Error.dataPaddingRequired
+        }
+
+        var out = Array<UInt8>()
+        out.reserveCapacity(bytes.count)
+
+        for chunk in Array(bytes).batched(by: Blowfish.blockSize) {
+            out += self.decryptWorker.decrypt(chunk) //FIXME: copying here is innefective
+        }
+
+        out = padding.remove(from: out, blockSize: Blowfish.blockSize)
+
+        return out
+    }
+    #endif
 }
 
 

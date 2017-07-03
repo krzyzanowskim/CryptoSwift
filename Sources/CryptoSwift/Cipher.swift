@@ -24,6 +24,7 @@ public protocol Cipher: class {
     ///
     /// - parameter bytes: Plaintext data
     /// - returns: Encrypted data
+    #if swift(>=4.0)
     func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.IndexDistance == C.IndexDistance
 
     /// Decrypt given bytes at once
@@ -31,4 +32,13 @@ public protocol Cipher: class {
     /// - parameter bytes: Ciphertext data
     /// - returns: Plaintext data
     func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.IndexDistance == C.IndexDistance
+    #else
+    func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.IndexDistance == C.IndexDistance, C.SubSequence.Iterator.Element == C.Iterator.Element
+
+    /// Decrypt given bytes at once
+    ///
+    /// - parameter bytes: Ciphertext data
+    /// - returns: Plaintext data
+    func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.IndexDistance == C.IndexDistance, C.SubSequence.Iterator.Element == C.Iterator.Element
+    #endif
 }

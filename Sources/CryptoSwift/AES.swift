@@ -150,13 +150,21 @@ fileprivate extension AES {
         let rounds = self.variant.Nr
         let rk = self.expandedKey
 
-        var b0 = UInt32(block[block.startIndex + 0 + (0 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (0 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (0 << 2)]) << 16
+        let b0a = UInt32(block[block.startIndex + 0 + (0 << 2)]) << 0
+        let b0b = UInt32(block[block.startIndex + 1 + (0 << 2)]) << 8
+        var b0 = b0a | b0b | UInt32(block[block.startIndex + 2 + (0 << 2)]) << 16
             b0 = b0 | UInt32(block[block.startIndex + 3 + (0 << 2)]) << 24
-        var b1 = UInt32(block[block.startIndex + 0 + (1 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (1 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (1 << 2)]) << 16
+        let b1a = UInt32(block[block.startIndex + 0 + (1 << 2)]) << 0
+        let b1b = UInt32(block[block.startIndex + 1 + (1 << 2)]) << 8
+        var b1 = b1a | b1b | UInt32(block[block.startIndex + 2 + (1 << 2)]) << 16
             b1 = b1 | UInt32(block[block.startIndex + 3 + (1 << 2)]) << 24
-        var b2 = UInt32(block[block.startIndex + 0 + (2 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (2 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (2 << 2)]) << 16
+        let b2a = UInt32(block[block.startIndex + 0 + (2 << 2)]) << 0
+        let b2b = UInt32(block[block.startIndex + 1 + (2 << 2)]) << 8
+        var b2 = b2a | b2b | UInt32(block[block.startIndex + 2 + (2 << 2)]) << 16
             b2 = b2 | UInt32(block[block.startIndex + 3 + (2 << 2)]) << 24
-        var b3 = UInt32(block[block.startIndex + 0 + (3 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (3 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (3 << 2)]) << 16
+        let b3a = UInt32(block[block.startIndex + 0 + (3 << 2)]) << 0
+        let b3b = UInt32(block[block.startIndex + 1 + (3 << 2)]) << 8
+        var b3 = b3a | b3b | UInt32(block[block.startIndex + 2 + (3 << 2)]) << 16
             b3 = b3 | UInt32(block[block.startIndex + 3 + (3 << 2)]) << 24
 
         var t = Array<UInt32>(repeating: 0, count: 4)
@@ -407,7 +415,7 @@ fileprivate extension AES {
         var p: UInt8 = 1, q: UInt8 = 1
 
         repeat {
-            p = p ^ (UInt8(truncatingBitPattern: Int(p) << 1) ^ ((p & 0x80) == 0x80 ? 0x1B : 0))
+            p = p ^ (UInt8(extendingOrTruncating: Int(p) << 1) ^ ((p & 0x80) == 0x80 ? 0x1B : 0))
             q ^= q << 1
             q ^= q << 2
             q ^= q << 4
@@ -557,6 +565,7 @@ extension AES: Cryptors {
 // MARK: Cipher
 extension AES: Cipher {
 
+  #if swift(>=4.0)
     public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection {
         let chunks = bytes.batched(by: AES.blockSize)
 
@@ -600,4 +609,50 @@ extension AES: Cipher {
         }
         return out
     }
+  #else
+    public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.Iterator.Element == C.Iterator.Element {
+        let chunks = bytes.batched(by: AES.blockSize)
+
+        var oneTimeCryptor = self.makeEncryptor()
+        var out = Array<UInt8>()
+        out.reserveCapacity(bytes.count)
+        for chunk in chunks {
+            out += try oneTimeCryptor.update(withBytes: chunk, isLast: false)
+        }
+        // Padding may be added at the very end
+        out += try oneTimeCryptor.finish()
+
+        if blockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
+            throw Error.dataPaddingRequired
+        }
+
+        return out
+    }
+
+    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.Iterator.Element == C.Iterator.Element {
+        if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
+            throw Error.dataPaddingRequired
+        }
+
+        var oneTimeCryptor = self.makeDecryptor()
+        let chunks = bytes.batched(by: AES.blockSize)
+        if chunks.count == 0 {
+            throw Error.invalidData
+        }
+
+        var out = Array<UInt8>()
+        out.reserveCapacity(bytes.count)
+
+        var lastIdx = chunks.startIndex
+        chunks.indices.formIndex(&lastIdx, offsetBy: chunks.count - 1)
+
+        // To properly remove padding, `isLast` has to be known when called with the last chunk of ciphertext
+        // Last chunk of ciphertext may contains padded data so next call to update(..) won't be able to remove it
+        for idx in chunks.indices {
+            out += try oneTimeCryptor.update(withBytes: chunks[idx], isLast: idx == lastIdx)
+        }
+        return out
+    }
+  #endif
+
 }

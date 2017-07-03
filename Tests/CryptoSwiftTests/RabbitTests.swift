@@ -118,7 +118,7 @@ class RabbitTests: XCTestCase {
             let key: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.keySize)
             let iv: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.ivSize)
             let message = Array<UInt8>(repeating: 7, count: (1024 * 1024) * 1)
-            measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
                 let encrypted = try! Rabbit(key: key, iv: iv).encrypt(message)
                 self.stopMeasuring()
                 XCTAssert(!encrypted.isEmpty, "not encrypted")

@@ -150,14 +150,29 @@ fileprivate extension AES {
         let rounds = self.variant.Nr
         let rk = self.expandedKey
 
-        var b0 = UInt32(block[block.startIndex + 0 + (0 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (0 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (0 << 2)]) << 16
-            b0 = b0 | UInt32(block[block.startIndex + 3 + (0 << 2)]) << 24
-        var b1 = UInt32(block[block.startIndex + 0 + (1 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (1 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (1 << 2)]) << 16
-            b1 = b1 | UInt32(block[block.startIndex + 3 + (1 << 2)]) << 24
-        var b2 = UInt32(block[block.startIndex + 0 + (2 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (2 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (2 << 2)]) << 16
-            b2 = b2 | UInt32(block[block.startIndex + 3 + (2 << 2)]) << 24
-        var b3 = UInt32(block[block.startIndex + 0 + (3 << 2)]) << 0 | UInt32(block[block.startIndex + 1 + (3 << 2)]) << 8 | UInt32(block[block.startIndex + 2 + (3 << 2)]) << 16
-            b3 = b3 | UInt32(block[block.startIndex + 3 + (3 << 2)]) << 24
+        let b00 = UInt32(block[block.startIndex + 0 + (0 << 2)]) << 0
+        let b01 = UInt32(block[block.startIndex + 1 + (0 << 2)]) << 8
+        let b02 = UInt32(block[block.startIndex + 2 + (0 << 2)]) << 16
+        let b03 = UInt32(block[block.startIndex + 3 + (0 << 2)]) << 24
+        var b0 = b00 | b01 | b02 | b03
+
+        let b10 = UInt32(block[block.startIndex + 0 + (1 << 2)]) << 0
+        let b11 = UInt32(block[block.startIndex + 1 + (1 << 2)]) << 8
+        let b12 = UInt32(block[block.startIndex + 2 + (1 << 2)]) << 16
+        let b13 = UInt32(block[block.startIndex + 3 + (1 << 2)]) << 24
+        var b1 = b10 | b11 | b12 | b13
+
+        let b20 = UInt32(block[block.startIndex + 0 + (2 << 2)]) << 0
+        let b21 = UInt32(block[block.startIndex + 1 + (2 << 2)]) << 8
+        let b22 = UInt32(block[block.startIndex + 2 + (2 << 2)]) << 16
+        let b23 = UInt32(block[block.startIndex + 3 + (2 << 2)]) << 24
+        var b2 = b20 | b21 | b22 | b23
+
+        let b30 = UInt32(block[block.startIndex + 0 + (3 << 2)]) << 0
+        let b31 = UInt32(block[block.startIndex + 1 + (3 << 2)]) << 8
+        let b32 = UInt32(block[block.startIndex + 2 + (3 << 2)]) << 16
+        let b33 = UInt32(block[block.startIndex + 3 + (3 << 2)]) << 24
+        var b3 = b30 | b31 | b32 | b33
 
         var t = Array<UInt32>(repeating: 0, count: 4)
 

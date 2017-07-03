@@ -14,26 +14,13 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-/// Protocol and extensions for integerFrom(bits:). Bit hakish for me, but I can't do it in any other way */
-protocol Initiable {
-    init(_ v: Int)
-    init(_ v: UInt)
-}
-
-extension Int: Initiable {}
-extension UInt: Initiable {}
-extension UInt8: Initiable {}
-extension UInt16: Initiable {}
-extension UInt32: Initiable {}
-extension UInt64: Initiable {}
-
 /** build bit pattern from array of bits */
 @_specialize(where T == UInt8)
-func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T {
+func integerFrom<T: FixedWidthInteger>(_ bits: Array<Bit>) -> T {
     var bitPattern: T = 0
     for idx in bits.indices {
         if bits[idx] == Bit.one {
-            let bit = T(UIntMax(1) << UIntMax(idx))
+            let bit = T(UInt64(1) << UInt64(idx))
             bitPattern = bitPattern | bit
         }
     }
@@ -46,7 +33,11 @@ func integerFrom<T: UnsignedInteger>(_ bits: Array<Bit>) -> T {
 /// - parameter length: length of output array. By default size of value type
 ///
 /// - returns: Array of bytes
-func arrayOfBytes<T: Integer>(value: T, length totalBytes: Int = MemoryLayout<T>.size) -> Array<UInt8> {
+@_specialize(where T == Int)
+@_specialize(where T == UInt16)
+@_specialize(where T == UInt32)
+@_specialize(where T == UInt64)
+func arrayOfBytes<T: FixedWidthInteger>(value: T, length totalBytes: Int = MemoryLayout<T>.size) -> Array<UInt8> {
     let valuePointer = UnsafeMutablePointer<T>.allocate(capacity: 1)
     valuePointer.pointee = value
 

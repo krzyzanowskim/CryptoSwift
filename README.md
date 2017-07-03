@@ -1,6 +1,12 @@
 # CryptoSwift
 
-Crypto related functions and helpers for [Swift](https://developer.apple.com/swift/) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat)](https://cocoapods.org/pods/CryptoSwift)
+[![Platform](https://img.shields.io/cocoapods/p/CryptoSwift.svg?style=flat)](http://cocoadocs.org/docsets/CryptoSwift)
+[![Swift 3.1 Compatible](https://img.shields.io/badge/swift-3.1-green.svg?style=flat)](#swift-versions-support)
+[![Swift 3.2 Compatible](https://img.shields.io/badge/swift-3.2-green.svg?style=flat)](#swift-versions-support)
+[![Swifr 4.0 Compatible](https://img.shields.io/badge/swift-4.0-green.svg?style=flat)](#swift-versions-support)
+
+Crypto related functions and helpers for [Swift](https://swift.org) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
 # Table of Contents
 - [Requirements](#requirements)

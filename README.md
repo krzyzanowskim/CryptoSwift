@@ -7,6 +7,7 @@ Crypto related functions and helpers for [Swift](https://developer.apple.com/swi
 - [Features](#features)
 - [Contribution](#contribution)
 - [Installation](#installation)
+- [Swift versions](#swift-versions-support)
 - [Usage](#usage)
 - [Author](#author)
 - [License](#license)

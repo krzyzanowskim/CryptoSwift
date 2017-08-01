@@ -157,7 +157,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 
 * [Basics (data types, conversion, ...)](#basics)
 * [Digest (MD5, SHA...)](#calculate-digest)
-* [Message authenticators (HMAC...)](#message-authenticators)
+* [Message authenticators (HMAC...)](#message-authenticators-1)
 * [Password-Based Key Derivation Function (PBKDF2, ...)](#password-based-key-derivation-functions)
 * [Data Padding](#data-padding)
 * [ChaCha20](#chacha20)

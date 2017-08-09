@@ -308,18 +308,38 @@ fileprivate extension AES {
 
         for r in 1 ..< rounds {
             var w: UInt32
-
+            var b0: Int
+            var b1: Int
+            var b2: Int
+            var b3: Int
+            
             w = rk2[r][0]
-            rk2[r][0] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            b0 = Int(B0(w))
+            b1 = Int(B1(w))
+            b2 = Int(B2(w))
+            b3 = Int(B3(w))
+            rk2[r][0] = U1[b0] ^ U2[b1] ^ U3[b2] ^ U4[b3]
 
             w = rk2[r][1]
-            rk2[r][1] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            b0 = Int(B0(w))
+            b1 = Int(B1(w))
+            b2 = Int(B2(w))
+            b3 = Int(B3(w))
+            rk2[r][1] = U1[b0] ^ U2[b1] ^ U3[b2] ^ U4[b3]
 
             w = rk2[r][2]
-            rk2[r][2] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            b0 = Int(B0(w))
+            b1 = Int(B1(w))
+            b2 = Int(B2(w))
+            b3 = Int(B3(w))
+            rk2[r][2] = U1[b0] ^ U2[b1] ^ U3[b2] ^ U4[b3]
 
             w = rk2[r][3]
-            rk2[r][3] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            b0 = Int(B0(w))
+            b1 = Int(B1(w))
+            b2 = Int(B2(w))
+            b3 = Int(B3(w))
+            rk2[r][3] = U1[b0] ^ U2[b1] ^ U3[b2] ^ U4[b3]
         }
 
         return rk2

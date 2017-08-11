@@ -320,21 +320,20 @@ fileprivate extension AES {
     func expandKeyInv(_ key: Key, variant: Variant) -> Array<Array<UInt32>> {
         let rounds = variant.Nr
         var rk2: Array<Array<UInt32>> = expandKey(key, variant: variant)
-
+        
+        func bitwiseXOR(_ w: UInt32) -> UInt32 {
+            let p1 = U1[Int(B0(w))]
+            let p2 = U2[Int(B1(w))]
+            let p3 = U3[Int(B2(w))]
+            let p4 = U4[Int(B3(w))]
+            return p1 ^ p2 ^ p3 ^ p4
+        }
+        
         for r in 1 ..< rounds {
-            var w: UInt32
-
-            w = rk2[r][0]
-            rk2[r][0] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
-
-            w = rk2[r][1]
-            rk2[r][1] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
-
-            w = rk2[r][2]
-            rk2[r][2] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
-
-            w = rk2[r][3]
-            rk2[r][3] = U1[Int(B0(w))] ^ U2[Int(B1(w))] ^ U3[Int(B2(w))] ^ U4[Int(B3(w))]
+            rk2[r][0] = bitwiseXOR(rk2[r][0])
+            rk2[r][1] = bitwiseXOR(rk2[r][1])
+            rk2[r][2] = bitwiseXOR(rk2[r][2])
+            rk2[r][3] = bitwiseXOR(rk2[r][3])
         }
 
         return rk2

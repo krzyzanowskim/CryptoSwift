@@ -51,7 +51,7 @@ extension UInt8 {
     }
 
     /** array of bits */
-    func bits() -> [Bit] {
+    public func bits() -> [Bit] {
         let totalBitsCount = MemoryLayout<UInt8>.size * 8
 
         var bitsArray = [Bit](repeating: Bit.zero, count: totalBitsCount)
@@ -67,7 +67,7 @@ extension UInt8 {
         return bitsArray
     }
 
-    func bits() -> String {
+    public func bits() -> String {
         var s = String()
         let arr: [Bit] = self.bits()
         for idx in arr.indices {

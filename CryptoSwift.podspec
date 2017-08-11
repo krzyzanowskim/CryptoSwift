@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
   s.name         = "CryptoSwift"
-  s.version      = "0.6.7"
+  s.version      = "0.6.9"
   s.summary      = "Cryptography in Swift. SHA, MD5, CRC, PBKDF, Poly1305, HMAC, ChaCha20, Rabbit, Blowfish, AES."
-  s.description  = "Cryptography functions and helpers for Swift implemented in Swift. SHA, MD5, PBKDF1, PBKDF2, CRC, Poly1305, HMAC, ChaCha20, Rabbit, AES."
+  s.description  = "Cryptography functions and helpers for Swift implemented in Swift. SHA, MD5, PBKDF1, PBKDF2, CRC, Poly1305, HMAC, ChaCha20, Rabbit, Blowfish, AES."
   s.homepage     = "https://github.com/krzyzanowskim/CryptoSwift"
   s.license      = {:type => "Attribution License", :file => "LICENSE"}
   s.source       = { :git => "https://github.com/krzyzanowskim/CryptoSwift.git", :tag => "#{s.version}" }
@@ -13,5 +13,6 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = "2.0"
   s.tvos.deployment_target = "9.0"
   s.source_files  = "Sources/CryptoSwift/**/*.swift"
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.0', 'SWIFT_OPTIMIZATION_LEVEL' => '-Owholemodule' }
   s.requires_arc = true
 end

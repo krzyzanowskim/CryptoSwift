@@ -52,10 +52,7 @@ public final class MD5: DigestType {
 
     // mutating currentHash in place is way faster than returning new result
     fileprivate func process(block chunk: ArraySlice<UInt8>, currentHash: inout Array<UInt32>) {
-
-        // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15
-        var M = chunk.toUInt32Array()
-        assert(M.count == 16, "Invalid array")
+        assert(chunk.count == 16 * 4)
 
         // Initialize hash value for this chunk:
         var A: UInt32 = currentHash[0]
@@ -93,7 +90,13 @@ public final class MD5: DigestType {
             dTemp = D
             D = C
             C = B
-            B = B &+ rotateLeft(A &+ F &+ k[j] &+ M[g], by: s[j])
+
+            // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15 and get M[g] value
+            let gAdvanced = g << 2
+            var Mg = UInt32(chunk[chunk.startIndex &+ gAdvanced]) | UInt32(chunk[chunk.startIndex &+ gAdvanced &+ 1]) << 8 | UInt32(chunk[chunk.startIndex &+ gAdvanced &+ 2]) << 16
+                Mg = Mg | UInt32(chunk[chunk.startIndex &+ gAdvanced &+ 3]) << 24
+
+            B = B &+ rotateLeft(A &+ F &+ k[j] &+ Mg, by: s[j])
             A = dTemp
         }
 
@@ -121,7 +124,7 @@ extension MD5: Updatable {
         }
 
         var processedBytes = 0
-        for chunk in BytesSequence(chunkSize: MD5.blockSize, data: self.accumulated) {
+        for chunk in self.accumulated.batched(by: MD5.blockSize) {
             if (isLast || (self.accumulated.count - processedBytes) >= MD5.blockSize) {
                 self.process(block: chunk, currentHash: &self.accumulatedHash)
                 processedBytes += chunk.count

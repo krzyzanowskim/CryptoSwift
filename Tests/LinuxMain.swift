@@ -11,7 +11,7 @@ XCTMain([
     testCase(RabbitTests.allTests()),
     testCase(ExtensionsTest.allTests()),
     testCase(PaddingTests.allTests),
-    testCase(PBKDF.allTests),
+    testCase(PBKDF.allTests()),
     testCase(RandomBytesSequenceTests.allTests),
     testCase(Access.allTests),
 ])

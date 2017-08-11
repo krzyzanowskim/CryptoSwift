@@ -25,7 +25,12 @@ public final class Blowfish {
     fileprivate let blockMode: BlockMode
     fileprivate let padding: Padding
     fileprivate lazy var decryptWorker: BlockModeWorker = {
-        return self.blockMode.worker(self.iv, cipherOperation: self.decrypt)
+        switch (self.blockMode) {
+            case .CFB, .OFB, .CTR:
+                return self.blockMode.worker(self.iv, cipherOperation: self.encrypt)
+            default:
+                return self.blockMode.worker(self.iv, cipherOperation: self.decrypt)
+        }
     }()
     fileprivate lazy var encryptWorker: BlockModeWorker = {
         return self.blockMode.worker(self.iv, cipherOperation: self.encrypt)
@@ -467,8 +472,8 @@ extension Blowfish: Cipher {
         var out = Array<UInt8>()
         out.reserveCapacity(bytes.count)
 
-        for chunk in BytesSequence(chunkSize: Blowfish.blockSize, data: bytes) {
-            out += self.encryptWorker.encrypt(Array(chunk)) //FIXME: copying here is innefective
+        for chunk in bytes.batched(by: Blowfish.blockSize) {
+            out += self.encryptWorker.encrypt(chunk)
         }
 
         if blockMode.options.contains(.PaddingRequired) && (out.count % Blowfish.blockSize != 0) {
@@ -492,8 +497,8 @@ extension Blowfish: Cipher {
         var out = Array<UInt8>()
         out.reserveCapacity(bytes.count)
 
-        for chunk in BytesSequence(chunkSize: Blowfish.blockSize, data: Array(bytes)) {
-            out += self.decryptWorker.decrypt(Array(chunk)) //FIXME: copying here is innefective
+        for chunk in Array(bytes).batched(by: Blowfish.blockSize) {
+            out += self.decryptWorker.decrypt(chunk) //FIXME: copying here is innefective
         }
 
         out = padding.remove(from: out, blockSize: Blowfish.blockSize)

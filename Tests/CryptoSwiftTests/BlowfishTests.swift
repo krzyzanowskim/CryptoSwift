@@ -187,6 +187,18 @@ class BlowfishTests: XCTestCase {
             XCTFail(error.localizedDescription)
         }
     }
+
+    // https://github.com/krzyzanowskim/CryptoSwift/issues/415
+    func testDecryptCFB415() {
+        do {
+            let plaintext = Array("secret12".utf8)
+            let encrypted = try Blowfish(key: "passwordpassword", iv: "12345678", blockMode: .CFB, padding: NoPadding()).encrypt(plaintext)
+            let decrypted = try Blowfish(key: "passwordpassword", iv: "12345678", blockMode: .CFB, padding: NoPadding()).decrypt(encrypted)
+            XCTAssertEqual(plaintext, decrypted)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
 }
 
 extension BlowfishTests {
@@ -196,7 +208,8 @@ extension BlowfishTests {
             ("testEncrypt", testEncrypt),
             ("testDecrypt", testDecrypt),
             ("testCBCZeroPadding", testCBCZeroPadding),
-            ("testEncryptDecrypt", testEncryptDecrypt)
+            ("testEncryptDecrypt", testEncryptDecrypt),
+            ("testDecryptCFB415",testDecryptCFB415),
         ]
         return tests
     }

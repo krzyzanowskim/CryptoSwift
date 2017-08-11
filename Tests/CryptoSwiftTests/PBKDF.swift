@@ -52,9 +52,30 @@ class PBKDF: XCTestCase {
         XCTAssert(value.toHexString() == "a53cf3df485e5cd9", "PBKDF2 fail")
     }
 
-    static let allTests = [
-        ("testPBKDF1", testPBKDF1),
-        ("testPBKDF2", testPBKDF2),
-        ("testPBKDF2Length", testPBKDF2Length),
-    ]
+    #if !CI
+    func testPerformance() {
+        let password: Array<UInt8> = Array("s33krit".utf8)
+        let salt: Array<UInt8> = Array("nacl".utf8)
+        measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+            let _ = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 65536, keyLength: 32, variant: .sha1).calculate()
+        })
+    }
+    #endif
+
+    static func allTests() -> [(String, (PBKDF) -> () -> Void)] {
+        var tests = [
+            ("testPBKDF1", testPBKDF1),
+            ("testPBKDF2", testPBKDF2),
+            ("testPBKDF2Length", testPBKDF2Length)
+        ]
+
+        #if !CI
+            tests += [
+                ("testPerformance", testPerformance)
+            ]
+        #endif
+
+        return tests
+    }
+
 }

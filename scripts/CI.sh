@@ -12,7 +12,7 @@ eval "$(swiftenv init -)"
 
 swiftenv version
 
-swift build --clean dist
+swift package clean
 swift package fetch
 
 if [ -d Packages ]; then
@@ -22,7 +22,8 @@ if [ -d Packages ]; then
 	fi
 fi
 
-swift build
+# https://github.com/krzyzanowskim/CryptoSwift/issues/418
+swift build -Xswiftc -Xfrontend -Xswiftc -solver-memory-threshold -Xswiftc -Xfrontend -Xswiftc 999999999
 sbexit=$?
 
 echo "Swift build exited with code $sbexit"
@@ -38,5 +39,5 @@ if [ -e "Tools/testprep.sh" ]; then
 fi
 
 if [ -d "Tests" ]; then
-	swift test -Xswiftc -DCI
+	swift test -Xswiftc -DCI -Xswiftc -Xfrontend -Xswiftc -solver-memory-threshold -Xswiftc -Xfrontend -Xswiftc 999999999
 fi

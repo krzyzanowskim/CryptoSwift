@@ -1,3 +1,22 @@
+0.6.9
+- Fixed padding issue where padding was not properly added in CTR mode.
+- Fixed thrown error on decrypting empty string,
+- Fixed CI build script.
+- Added String.encryptToBase64()
+
+0.6.8
+- Speed up MD5()
+- Faster Array(hex:)
+- Improve AES performance
+- Fix tvOS bitcode
+- Fix Blowfish CFB, OFB, CTR block modes.
+- Fix Blowfish for 32-bit arch.
+- Fix ChaCha20 preconditions
+
+0.6.7
+- Release for Xcode 8.2
+- Fix playground example
+
 0.6.6
 - Rework ChaCha20
 - Fix Poly1305

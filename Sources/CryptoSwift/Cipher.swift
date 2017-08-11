@@ -16,11 +16,11 @@ public protocol Cipher: class {
     ///
     /// - parameter bytes: Plaintext data
     /// - returns: Encrypted data
-    func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int
+    func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.Iterator.Element == C.Iterator.Element, C.SubSequence.Index == C.Index, C.SubSequence.IndexDistance == C.IndexDistance
 
     /// Decrypt given bytes at once
     ///
     /// - parameter bytes: Ciphertext data
     /// - returns: Plaintext data
-    func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int
+    func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Iterator.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.Iterator.Element == C.Iterator.Element, C.SubSequence.Index == C.Index, C.SubSequence.IndexDistance == C.IndexDistance
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Marcin Krzyzanowski. All rights reserved.
 //
 
-enum Bit: Int {
+public enum Bit: Int {
     case zero
     case one
 }

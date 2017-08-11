@@ -68,7 +68,7 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
         }
 
         if size == 1 {
-            return T(extendingOrTruncating: UInt64(bytes[0]))
+            return T(truncatingIfNeeded: UInt64(bytes[0]))
         }
 
         var result: T = 0

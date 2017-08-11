@@ -160,26 +160,26 @@ public final class Rabbit: BlockCipher {
     private func g(_ j: Int) -> UInt32 {
         let sum = x[j] &+ c[j]
         let square = UInt64(sum) * UInt64(sum)
-        return UInt32.init(extendingOrTruncating: square ^ (square >> 32))
+        return UInt32.init(truncatingIfNeeded: square ^ (square >> 32))
     }
 
     fileprivate func nextOutput() -> Array<UInt8> {
         nextState()
 
         var output16 = [UInt16](repeating: 0, count: Rabbit.blockSize / 2)
-        output16[7] = UInt16(extendingOrTruncating: x[0]) ^ UInt16(extendingOrTruncating: x[5] >> 16)
-        output16[6] = UInt16(extendingOrTruncating: x[0] >> 16) ^ UInt16(extendingOrTruncating: x[3])
-        output16[5] = UInt16(extendingOrTruncating: x[2]) ^ UInt16(extendingOrTruncating: x[7] >> 16)
-        output16[4] = UInt16(extendingOrTruncating: x[2] >> 16) ^ UInt16(extendingOrTruncating: x[5])
-        output16[3] = UInt16(extendingOrTruncating: x[4]) ^ UInt16(extendingOrTruncating: x[1] >> 16)
-        output16[2] = UInt16(extendingOrTruncating: x[4] >> 16) ^ UInt16(extendingOrTruncating: x[7])
-        output16[1] = UInt16(extendingOrTruncating: x[6]) ^ UInt16(extendingOrTruncating: x[3] >> 16)
-        output16[0] = UInt16(extendingOrTruncating: x[6] >> 16) ^ UInt16(extendingOrTruncating: x[1])
+        output16[7] = UInt16(truncatingIfNeeded: x[0]) ^ UInt16(truncatingIfNeeded: x[5] >> 16)
+        output16[6] = UInt16(truncatingIfNeeded: x[0] >> 16) ^ UInt16(truncatingIfNeeded: x[3])
+        output16[5] = UInt16(truncatingIfNeeded: x[2]) ^ UInt16(truncatingIfNeeded: x[7] >> 16)
+        output16[4] = UInt16(truncatingIfNeeded: x[2] >> 16) ^ UInt16(truncatingIfNeeded: x[5])
+        output16[3] = UInt16(truncatingIfNeeded: x[4]) ^ UInt16(truncatingIfNeeded: x[1] >> 16)
+        output16[2] = UInt16(truncatingIfNeeded: x[4] >> 16) ^ UInt16(truncatingIfNeeded: x[7])
+        output16[1] = UInt16(truncatingIfNeeded: x[6]) ^ UInt16(truncatingIfNeeded: x[3] >> 16)
+        output16[0] = UInt16(truncatingIfNeeded: x[6] >> 16) ^ UInt16(truncatingIfNeeded: x[1])
 
         var output8 = Array<UInt8>(repeating: 0, count: Rabbit.blockSize)
         for j in 0 ..< output16.count {
-            output8[j * 2] = UInt8(extendingOrTruncating: output16[j] >> 8)
-            output8[j * 2 + 1] = UInt8(extendingOrTruncating: output16[j])
+            output8[j * 2] = UInt8(truncatingIfNeeded: output16[j] >> 8)
+            output8[j * 2 + 1] = UInt8(truncatingIfNeeded: output16[j])
         }
         return output8
     }

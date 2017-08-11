@@ -14,7 +14,7 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-enum Bit: Int {
+public enum Bit: Int {
     case zero
     case one
 }

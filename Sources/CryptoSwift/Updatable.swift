@@ -73,3 +73,23 @@ extension Updatable {
         try self.finish(withBytes: [], output: output)
     }
 }
+
+extension Updatable {
+
+    mutating public func update(withBytes bytes: Array<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
+        return try update(withBytes: bytes.slice, isLast: isLast)
+    }
+
+    mutating public func update(withBytes bytes: Array<UInt8>, isLast: Bool = false, output: (_ bytes: Array<UInt8>) -> Void) throws {
+        return try update(withBytes: bytes.slice, isLast: isLast, output: output)
+    }
+
+    mutating public func finish(withBytes bytes: Array<UInt8>) throws -> Array<UInt8> {
+        return try finish(withBytes: bytes.slice)
+    }
+
+    mutating public func finish(withBytes bytes: Array<UInt8>, output: (_ bytes: Array<UInt8>) -> Void) throws {
+        return try finish(withBytes: bytes.slice, output: output)
+    }
+
+}

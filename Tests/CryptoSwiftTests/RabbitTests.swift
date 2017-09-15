@@ -64,9 +64,9 @@ class RabbitTests: XCTestCase {
         let plainText = Array<UInt8>(repeating: 0, count: 48)
         for (key, expectedCipher) in cases {
             let rabbit = try! Rabbit(key: key)
-            let cipherText = rabbit.encrypt(plainText)
+            let cipherText = try! rabbit.encrypt(plainText)
             XCTAssertEqual(cipherText, expectedCipher)
-            XCTAssertEqual(rabbit.decrypt(cipherText), plainText)
+            XCTAssertEqual(try! rabbit.decrypt(cipherText), plainText)
         }
     }
 
@@ -103,9 +103,9 @@ class RabbitTests: XCTestCase {
         let plainText = Array<UInt8>(repeating: 0, count: 48)
         for (iv, expectedCipher) in cases {
             let rabbit = try! Rabbit(key: key, iv: iv)
-            let cipherText = rabbit.encrypt(plainText)
+            let cipherText = try! rabbit.encrypt(plainText)
             XCTAssertEqual(cipherText, expectedCipher)
-            XCTAssertEqual(rabbit.decrypt(cipherText), plainText)
+            XCTAssertEqual(try! rabbit.decrypt(cipherText), plainText)
         }
     }
 }

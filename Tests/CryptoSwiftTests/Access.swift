@@ -217,8 +217,8 @@ class Access: XCTestCase {
     func testRabbit() {
         do {
             let rabbit = try Rabbit(key: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
-            let enc = rabbit.encrypt([1, 2, 3])
-            let _ = rabbit.decrypt(enc)
+            let enc = try rabbit.encrypt([1, 2, 3])
+            let _ = try rabbit.decrypt(enc)
 
             XCTAssertThrowsError(try Rabbit(key: "123"))
 

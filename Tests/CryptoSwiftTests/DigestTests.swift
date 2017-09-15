@@ -128,7 +128,7 @@ final class DigestTests: XCTestCase {
             var hash = SHA1()
             let _ = try hash.update(withBytes: [0x31, 0x32])
             let _ = try hash.update(withBytes: [0x33])
-            let _ = try hash.update(withBytes: Array<UInt8>.init(repeating: 0x33, count: 64))
+            let _ = try hash.update(withBytes: Array<UInt8>(repeating: 0x33, count: 64))
             XCTAssertEqual(try hash.finish().toHexString(), "0e659367eff83a6b868a35b96ac305b270025e86", "Failed")
         } catch {
             XCTFail()

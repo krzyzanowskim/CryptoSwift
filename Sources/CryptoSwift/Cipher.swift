@@ -24,11 +24,11 @@ public protocol Cipher: class {
     ///
     /// - parameter bytes: Plaintext data
     /// - returns: Encrypted data
-    func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.IndexDistance == C.IndexDistance
+    func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8>
 
     /// Decrypt given bytes at once
     ///
     /// - parameter bytes: Ciphertext data
     /// - returns: Plaintext data
-    func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection, C.SubSequence.IndexDistance == C.IndexDistance
+    func decrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8>
 }

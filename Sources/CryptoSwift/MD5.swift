@@ -52,7 +52,7 @@ public final class MD5: DigestType {
 
     public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
         do {
-            return try self.update(withBytes: bytes, isLast: true)
+            return try self.update(withBytes: bytes.slice, isLast: true)
         } catch {
             fatalError()
         }
@@ -120,7 +120,7 @@ public final class MD5: DigestType {
 
 extension MD5: Updatable {
 
-    public func update<T: Collection>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+    public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
         self.accumulated += bytes
 
         if isLast {

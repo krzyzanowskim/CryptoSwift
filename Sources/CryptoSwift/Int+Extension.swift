@@ -32,11 +32,6 @@ extension Int {
 /* array of bytes */
 extension Int {
 
-    /** Int with collection of bytes (little-endian) */
-    // init<T: Collection>(bytes: T) where T.Iterator.Element == UInt8, T.Index == Int {
-    //    self = bytes.toInteger()
-    // }
-
     /** Array of bytes with optional padding */
     func bytes(totalBytes: Int = MemoryLayout<Int>.size) -> Array<UInt8> {
         return arrayOfBytes(value: self, length: totalBytes)

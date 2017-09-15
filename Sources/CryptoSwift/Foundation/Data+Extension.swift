@@ -66,11 +66,11 @@ extension Data {
     }
 
     public func encrypt(cipher: Cipher) throws -> Data {
-        return Data(bytes: try cipher.encrypt(self.bytes))
+        return Data(bytes: try cipher.encrypt(self.bytes.slice))
     }
 
     public func decrypt(cipher: Cipher) throws -> Data {
-        return Data(bytes: try cipher.decrypt(self.bytes))
+        return Data(bytes: try cipher.decrypt(self.bytes.slice))
     }
 
     public func authenticate(with authenticator: Authenticator) throws -> Data {

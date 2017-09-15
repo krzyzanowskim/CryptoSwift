@@ -449,7 +449,7 @@ extension AES {
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
         }
 
-        mutating public func update<T: Collection>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+        mutating public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
             self.accumulated += bytes
 
             if isLast {
@@ -499,7 +499,7 @@ extension AES {
             self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
         }
 
-        mutating public func update<T: Collection>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+        mutating public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
             // prepend "offset" number of bytes at the begining
             if self.offset > 0 {
                 self.accumulated += Array<UInt8>(repeating: 0, count: offset) + bytes
@@ -567,7 +567,7 @@ extension AES: Cryptors {
 // MARK: Cipher
 extension AES: Cipher {
 
-    public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection {
+    public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
         let chunks = bytes.batched(by: AES.blockSize)
 
         var oneTimeCryptor = self.makeEncryptor()
@@ -586,7 +586,7 @@ extension AES: Cipher {
         return out
     }
 
-    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int, C.SubSequence: Collection {
+    public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
         if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
             throw Error.dataPaddingRequired
         }

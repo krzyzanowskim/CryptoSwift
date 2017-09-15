@@ -92,7 +92,7 @@ public final class SHA3: DigestType {
 
     public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
         do {
-            return try self.update(withBytes: bytes, isLast: true)
+            return try self.update(withBytes: bytes.slice, isLast: true)
         } catch {
             return []
         }
@@ -174,7 +174,7 @@ public final class SHA3: DigestType {
         a[0] ^= round_constants[round]
     }
 
-    fileprivate func process<C: Collection>(block chunk: C, currentHash hh: inout Array<UInt64>) where C.Element == UInt64, C.Index == Int {
+    fileprivate func process(block chunk: ArraySlice<UInt64>, currentHash hh: inout Array<UInt64>) {
         // expand
         hh[0] ^= chunk[0].littleEndian
         hh[1] ^= chunk[1].littleEndian
@@ -249,7 +249,7 @@ public final class SHA3: DigestType {
 
 extension SHA3: Updatable {
 
-    public func update<T: Collection>(withBytes bytes: T, isLast: Bool = false) throws -> Array<UInt8> where T.Iterator.Element == UInt8 {
+    public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
         self.accumulated += bytes
 
         if isLast {
@@ -268,7 +268,7 @@ extension SHA3: Updatable {
         var processedBytes = 0
         for chunk in self.accumulated.batched(by: self.blockSize) {
             if (isLast || (self.accumulated.count - processedBytes) >= self.blockSize) {
-                self.process(block: chunk.toUInt64Array(), currentHash: &self.accumulatedHash)
+                self.process(block: chunk.toUInt64Array().slice, currentHash: &self.accumulatedHash)
                 processedBytes += chunk.count
             }
         }

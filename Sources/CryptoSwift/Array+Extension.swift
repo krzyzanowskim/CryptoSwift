@@ -30,11 +30,11 @@ extension Array {
     /** split in chunks with given chunk size */
     public func chunks(size chunksize: Int) -> Array<Array<Element>> {
         var words = Array<Array<Element>>()
-        words.reserveCapacity(self.count / chunksize)
-        for idx in stride(from: chunksize, through: self.count, by: chunksize) {
-            words.append(Array(self[idx - chunksize ..< idx])) // slow for large table
+        words.reserveCapacity(count / chunksize)
+        for idx in stride(from: chunksize, through: count, by: chunksize) {
+            words.append(Array(self[idx - chunksize..<idx])) // slow for large table
         }
-        let remainder = self.suffix(self.count % chunksize)
+        let remainder = suffix(count % chunksize)
         if !remainder.isEmpty {
             words.append(Array(remainder))
         }
@@ -43,10 +43,10 @@ extension Array {
 }
 
 extension Array where Element == UInt8 {
-    
+
     public init(hex: String) {
         self.init(reserveCapacity: hex.unicodeScalars.lazy.underestimatedCount)
-        var buffer:UInt8?
+        var buffer: UInt8?
         var skip = hex.hasPrefix("0x") ? 2 : 0
         for char in hex.unicodeScalars.lazy {
             guard skip == 0 else {
@@ -54,12 +54,12 @@ extension Array where Element == UInt8 {
                 continue
             }
             guard char.value >= 48 && char.value <= 102 else {
-                self.removeAll()
+                removeAll()
                 return
             }
-            let v:UInt8
-            let c:UInt8 = UInt8(char.value)
-            switch c{
+            let v: UInt8
+            let c: UInt8 = UInt8(char.value)
+            switch c {
             case let c where c <= 57:
                 v = c - 48
             case let c where c >= 65 && c <= 70:
@@ -67,19 +67,18 @@ extension Array where Element == UInt8 {
             case let c where c >= 97:
                 v = c - 87
             default:
-                self.removeAll()
+                removeAll()
                 return
             }
             if let b = buffer {
-                self.append(b << 4 | v)
+                append(b << 4 | v)
                 buffer = nil
             } else {
                 buffer = v
             }
         }
         if let b = buffer {
-            self.append(b)
+            append(b)
         }
     }
-    
 }

@@ -15,15 +15,15 @@
 //
 
 func rotateLeft(_ value: UInt8, by: UInt8) -> UInt8 {
-    return ((value << by) & 0xFF) | (value >> (8 - by))
+    return ((value << by) & 0xff) | (value >> (8 - by))
 }
 
 func rotateLeft(_ value: UInt16, by: UInt16) -> UInt16 {
-    return ((value << by) & 0xFFFF) | (value >> (16 - by))
+    return ((value << by) & 0xffff) | (value >> (16 - by))
 }
 
 func rotateLeft(_ value: UInt32, by: UInt32) -> UInt32 {
-    return ((value << by) & 0xFFFFFFFF) | (value >> (32 - by))
+    return ((value << by) & 0xffffffff) | (value >> (32 - by))
 }
 
 func rotateLeft(_ value: UInt64, by: UInt64) -> UInt64 {
@@ -44,9 +44,9 @@ func rotateRight(_ value: UInt64, by: UInt64) -> UInt64 {
 
 func reversed(_ uint8: UInt8) -> UInt8 {
     var v = uint8
-    v = (v & 0xF0) >> 4 | (v & 0x0F) << 4
-    v = (v & 0xCC) >> 2 | (v & 0x33) << 2
-    v = (v & 0xAA) >> 1 | (v & 0x55) << 1
+    v = (v & 0xf0) >> 4 | (v & 0x0f) << 4
+    v = (v & 0xcc) >> 2 | (v & 0x33) << 2
+    v = (v & 0xaa) >> 1 | (v & 0x55) << 1
     return v
 }
 
@@ -74,12 +74,11 @@ func xor(_ a: ArraySlice<UInt8>, _ b: Array<UInt8>) -> Array<UInt8> {
 
 func xor(_ a: ArraySlice<UInt8>, _ b: ArraySlice<UInt8>) -> Array<UInt8> {
     var xored = Array<UInt8>(repeating: 0, count: min(a.count, b.count))
-    for i in 0 ..< xored.count {
+    for i in 0..<xored.count {
         xored[xored.startIndex.advanced(by: i)] = a[a.startIndex.advanced(by: i)] ^ b[b.startIndex.advanced(by: i)]
     }
     return xored
 }
-
 
 /**
  ISO/IEC 9797-1 Padding method 2.

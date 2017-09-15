@@ -19,7 +19,5 @@ class RandomBytesSequenceTests: XCTestCase {
         }
     }
 
-    static let allTests = [
-        ("testSequence", testSequence),
-    ]
+    static let allTests = [("testSequence", testSequence)]
 }

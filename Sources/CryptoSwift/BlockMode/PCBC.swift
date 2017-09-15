@@ -42,7 +42,7 @@ struct PCBCModeWorker: BlockModeWorker {
             return Array(ciphertext)
         }
         let result = xor(prev ?? iv, plaintext)
-        self.prev = xor(plaintext, ciphertext)
+        prev = xor(plaintext, ciphertext)
         return result
     }
 }

@@ -21,7 +21,7 @@ struct ECBModeWorker: BlockModeWorker {
     typealias Element = Array<UInt8>
     let cipherOperation: CipherOperationOnBlock
 
-    init(iv: Array<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(iv _: Array<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
         self.cipherOperation = cipherOperation
     }
 

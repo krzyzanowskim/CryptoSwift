@@ -47,49 +47,48 @@ public protocol Updatable {
 
 extension Updatable {
 
-    mutating public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false, output: (_ bytes: Array<UInt8>) -> Void) throws {
-        let processed = try self.update(withBytes: bytes, isLast: isLast)
-        if (!processed.isEmpty) {
+    public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false, output: (_ bytes: Array<UInt8>) -> Void) throws {
+        let processed = try update(withBytes: bytes, isLast: isLast)
+        if !processed.isEmpty {
             output(processed)
         }
     }
 
-    mutating public func finish(withBytes bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
-        return try self.update(withBytes: bytes, isLast: true)
+    public mutating func finish(withBytes bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
+        return try update(withBytes: bytes, isLast: true)
     }
 
-    mutating public func finish() throws -> Array<UInt8> {
-        return try self.update(withBytes: [], isLast: true)
+    public mutating func finish() throws -> Array<UInt8> {
+        return try update(withBytes: [], isLast: true)
     }
 
-    mutating public func finish(withBytes bytes: ArraySlice<UInt8>, output: (_ bytes: Array<UInt8>) -> Void) throws {
-        let processed = try self.update(withBytes: bytes, isLast: true)
-        if (!processed.isEmpty) {
+    public mutating func finish(withBytes bytes: ArraySlice<UInt8>, output: (_ bytes: Array<UInt8>) -> Void) throws {
+        let processed = try update(withBytes: bytes, isLast: true)
+        if !processed.isEmpty {
             output(processed)
         }
     }
 
-    mutating public func finish(output: (Array<UInt8>) -> Void) throws {
-        try self.finish(withBytes: [], output: output)
+    public mutating func finish(output: (Array<UInt8>) -> Void) throws {
+        try finish(withBytes: [], output: output)
     }
 }
 
 extension Updatable {
 
-    mutating public func update(withBytes bytes: Array<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
+    public mutating func update(withBytes bytes: Array<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
         return try update(withBytes: bytes.slice, isLast: isLast)
     }
 
-    mutating public func update(withBytes bytes: Array<UInt8>, isLast: Bool = false, output: (_ bytes: Array<UInt8>) -> Void) throws {
+    public mutating func update(withBytes bytes: Array<UInt8>, isLast: Bool = false, output: (_ bytes: Array<UInt8>) -> Void) throws {
         return try update(withBytes: bytes.slice, isLast: isLast, output: output)
     }
 
-    mutating public func finish(withBytes bytes: Array<UInt8>) throws -> Array<UInt8> {
+    public mutating func finish(withBytes bytes: Array<UInt8>) throws -> Array<UInt8> {
         return try finish(withBytes: bytes.slice)
     }
 
-    mutating public func finish(withBytes bytes: Array<UInt8>, output: (_ bytes: Array<UInt8>) -> Void) throws {
+    public mutating func finish(withBytes bytes: Array<UInt8>, output: (_ bytes: Array<UInt8>) -> Void) throws {
         return try finish(withBytes: bytes.slice, output: output)
     }
-
 }

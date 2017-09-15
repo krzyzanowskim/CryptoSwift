@@ -70,7 +70,6 @@ public struct Digest {
         return SHA2(variant: variant).calculate(for: bytes)
     }
 
-
     /// Calculate SHA3 Digest
     /// - parameter bytes: input message
     /// - parameter variant: SHA-3 variant

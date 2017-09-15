@@ -25,12 +25,14 @@
 #endif
 
 public final class SHA3: DigestType {
-    let round_constants: Array<UInt64> = [0x0000000000000001, 0x0000000000008082, 0x800000000000808A, 0x8000000080008000,
-                                          0x000000000000808B, 0x0000000080000001, 0x8000000080008081, 0x8000000000008009,
-                                          0x000000000000008A, 0x0000000000000088, 0x0000000080008009, 0x000000008000000A,
-                                          0x000000008000808B, 0x800000000000008B, 0x8000000000008089, 0x8000000000008003,
-                                          0x8000000000008002, 0x8000000000000080, 0x000000000000800A, 0x800000008000000A,
-                                          0x8000000080008081, 0x8000000000008080, 0x0000000080000001, 0x8000000080008008]
+    let round_constants: Array<UInt64> = [
+        0x0000000000000001, 0x0000000000008082, 0x800000000000808a, 0x8000000080008000,
+        0x000000000000808b, 0x0000000080000001, 0x8000000080008081, 0x8000000000008009,
+        0x000000000000008a, 0x0000000000000088, 0x0000000080008009, 0x000000008000000a,
+        0x000000008000808b, 0x800000000000008b, 0x8000000000008089, 0x8000000000008003,
+        0x8000000000008002, 0x8000000000000080, 0x000000000000800a, 0x800000008000000a,
+        0x8000000080008081, 0x8000000000008080, 0x0000000080000001, 0x8000000080008008,
+    ]
 
     public let blockSize: Int
     public let digestLength: Int
@@ -43,11 +45,11 @@ public final class SHA3: DigestType {
         case sha224, sha256, sha384, sha512
 
         var digestLength: Int {
-            return 100 - (self.blockSize / 2)
+            return 100 - (blockSize / 2)
         }
 
         var blockSize: Int {
-            return (1600 - self.rawValue * 2) / 8
+            return (1600 - rawValue * 2) / 8
         }
 
         public typealias RawValue = Int
@@ -65,7 +67,7 @@ public final class SHA3: DigestType {
         }
 
         public init?(rawValue: RawValue) {
-            switch (rawValue) {
+            switch rawValue {
             case 224:
                 self = .sha224
                 break
@@ -85,14 +87,14 @@ public final class SHA3: DigestType {
     }
 
     public init(variant: SHA3.Variant) {
-        self.blockSize = variant.blockSize
-        self.digestLength = variant.digestLength
-        self.accumulatedHash = Array<UInt64>(repeating: 0, count: self.digestLength)
+        blockSize = variant.blockSize
+        digestLength = variant.digestLength
+        accumulatedHash = Array<UInt64>(repeating: 0, count: digestLength)
     }
 
     public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
         do {
-            return try self.update(withBytes: bytes.slice, isLast: true)
+            return try update(withBytes: bytes.slice, isLast: true)
         } catch {
             return []
         }
@@ -118,7 +120,7 @@ public final class SHA3: DigestType {
             d.deallocate(capacity: 5)
         }
 
-        for i in 0 ..< 5 {
+        for i in 0..<5 {
             c[i] = a[i] ^ a[i &+ 5] ^ a[i &+ 10] ^ a[i &+ 15] ^ a[i &+ 20]
         }
 
@@ -128,7 +130,7 @@ public final class SHA3: DigestType {
         d[3] = rotateLeft(c[4], by: 1) ^ c[2]
         d[4] = rotateLeft(c[0], by: 1) ^ c[3]
 
-        for i in 0 ..< 5 {
+        for i in 0..<5 {
             a[i] ^= d[i]
             a[i &+ 5] ^= d[i]
             a[i &+ 10] ^= d[i]
@@ -195,20 +197,20 @@ public final class SHA3: DigestType {
         hh[6] ^= chunk[6].littleEndian
         hh[7] ^= chunk[7].littleEndian
         hh[8] ^= chunk[8].littleEndian
-        if self.blockSize > 72 { // 72 / 8, sha-512
+        if blockSize > 72 { // 72 / 8, sha-512
             hh[9] ^= chunk[9].littleEndian
             hh[10] ^= chunk[10].littleEndian
             hh[11] ^= chunk[11].littleEndian
             hh[12] ^= chunk[12].littleEndian
-            if self.blockSize > 104 { // 104 / 8, sha-384
+            if blockSize > 104 { // 104 / 8, sha-384
                 hh[13] ^= chunk[13].littleEndian
                 hh[14] ^= chunk[14].littleEndian
                 hh[15] ^= chunk[15].littleEndian
                 hh[16] ^= chunk[16].littleEndian
-                if self.blockSize > 136 { // 136 / 8, sha-256
+                if blockSize > 136 { // 136 / 8, sha-256
                     hh[17] ^= chunk[17].littleEndian
                     // FULL_SHA3_FAMILY_SUPPORT
-                    if self.blockSize > 144 { // 144 / 8, sha-224
+                    if blockSize > 144 { // 144 / 8, sha-224
                         hh[18] ^= chunk[18].littleEndian
                         hh[19] ^= chunk[19].littleEndian
                         hh[20] ^= chunk[20].littleEndian
@@ -222,7 +224,7 @@ public final class SHA3: DigestType {
         }
 
         // Keccak-f
-        for round in 0 ..< 24 {
+        for round in 0..<24 {
             θ(&hh)
 
             hh[1] = rotateLeft(hh[1], by: 1)
@@ -260,41 +262,41 @@ public final class SHA3: DigestType {
 extension SHA3: Updatable {
 
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
-        self.accumulated += bytes
+        accumulated += bytes
 
         if isLast {
             // Add padding
-            let markByteIndex = self.processedBytesTotalCount &+ self.accumulated.count
-            if self.accumulated.count == 0 || self.accumulated.count % self.blockSize != 0 {
-                let r = self.blockSize * 8
-                let q = (r / 8) - (self.accumulated.count % (r / 8))
-                self.accumulated += Array<UInt8>(repeating: 0, count: q)
+            let markByteIndex = processedBytesTotalCount &+ accumulated.count
+            if accumulated.count == 0 || accumulated.count % blockSize != 0 {
+                let r = blockSize * 8
+                let q = (r / 8) - (accumulated.count % (r / 8))
+                accumulated += Array<UInt8>(repeating: 0, count: q)
             }
 
-            self.accumulated[markByteIndex] |= 0x06 // 0x1F for SHAKE
-            self.accumulated[self.accumulated.count - 1] |= 0x80
+            accumulated[markByteIndex] |= 0x06 // 0x1F for SHAKE
+            accumulated[self.accumulated.count - 1] |= 0x80
         }
 
         var processedBytes = 0
-        for chunk in self.accumulated.batched(by: self.blockSize) {
-            if (isLast || (self.accumulated.count - processedBytes) >= self.blockSize) {
-                self.process(block: chunk.toUInt64Array().slice, currentHash: &self.accumulatedHash)
+        for chunk in accumulated.batched(by: blockSize) {
+            if isLast || (accumulated.count - processedBytes) >= blockSize {
+                process(block: chunk.toUInt64Array().slice, currentHash: &accumulatedHash)
                 processedBytes += chunk.count
             }
         }
-        self.accumulated.removeFirst(processedBytes)
-        self.processedBytesTotalCount += processedBytes
+        accumulated.removeFirst(processedBytes)
+        processedBytesTotalCount += processedBytes
 
         // TODO: verify performance, reduce vs for..in
-        let result = self.accumulatedHash.reduce(Array<UInt8>()) { (result, value) -> Array<UInt8> in
+        let result = accumulatedHash.reduce(Array<UInt8>()) { (result, value) -> Array<UInt8> in
             return result + value.bigEndian.bytes()
         }
 
         // reset hash value for instance
         if isLast {
-            self.accumulatedHash = Array<UInt64>(repeating: 0, count: self.digestLength)
+            accumulatedHash = Array<UInt64>(repeating: 0, count: digestLength)
         }
 
-        return Array(result[0 ..< self.digestLength])
+        return Array(result[0..<self.digestLength])
     }
 }

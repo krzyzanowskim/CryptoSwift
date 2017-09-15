@@ -22,6 +22,7 @@ extension BatchedCollectionIndex: Comparable {
     static func ==<Base>(lhs: BatchedCollectionIndex<Base>, rhs: BatchedCollectionIndex<Base>) -> Bool {
         return lhs.range.lowerBound == rhs.range.lowerBound
     }
+
     static func < <Base>(lhs: BatchedCollectionIndex<Base>, rhs: BatchedCollectionIndex<Base>) -> Bool {
         return lhs.range.lowerBound < rhs.range.lowerBound
     }
@@ -39,15 +40,19 @@ struct BatchedCollection<Base: Collection>: Collection {
         return base.index(idx, offsetBy: size, limitedBy: base.endIndex)
             ?? base.endIndex
     }
+
     var startIndex: Index {
         return Index(range: base.startIndex..<nextBreak(after: base.startIndex))
     }
+
     var endIndex: Index {
         return Index(range: base.endIndex..<base.endIndex)
     }
+
     func index(after idx: Index) -> Index {
         return Index(range: idx.range.upperBound..<nextBreak(after: idx.range.upperBound))
     }
+
     subscript(idx: Index) -> Base.SubSequence {
         return base[idx.range]
     }

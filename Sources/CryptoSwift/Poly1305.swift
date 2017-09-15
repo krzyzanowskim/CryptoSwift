@@ -83,7 +83,7 @@ public final class Poly1305: Authenticator {
             hr[i] = u
         }
         h = hr
-        self.squeeze(h: &h)
+        squeeze(h: &h)
     }
 
     private func freeze(h: inout Array<UInt32>) {
@@ -120,7 +120,6 @@ public final class Poly1305: Authenticator {
         r[15] = UInt32(k[15] & 15)
         r[16] = 0
 
-
         var inlen = input.count
         var inpos = 0
         while inlen > 0 {
@@ -135,11 +134,11 @@ public final class Poly1305: Authenticator {
             c[maxj] = 1
             inpos = inpos + maxj
             inlen = inlen - maxj
-            self.add(h: &h, c: c)
-            self.mulmod(h: &h, r: r)
+            add(h: &h, c: c)
+            mulmod(h: &h, r: r)
         }
 
-        self.freeze(h: &h)
+        freeze(h: &h)
 
         for j in 0..<16 {
             c[j] = UInt32(k[j + 16])
@@ -148,7 +147,7 @@ public final class Poly1305: Authenticator {
         add(h: &h, c: c)
 
         return h[0..<16].map {
-            UInt8($0 & 0xFF)
+            UInt8($0 & 0xff)
         }
     }
 
@@ -163,6 +162,6 @@ public final class Poly1305: Authenticator {
      - returns: 16-byte tag that authenticates the message
      */
     public func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
-        return onetimeauth(message: bytes, key: Array(self.key))
+        return onetimeauth(message: bytes, key: Array(key))
     }
 }

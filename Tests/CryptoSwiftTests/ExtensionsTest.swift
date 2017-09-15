@@ -29,8 +29,8 @@ final class ExtensionsTest: XCTestCase {
         let result = chunk.toUInt32Array()
 
         XCTAssert(result.count == 2, "Invalid conversion")
-        XCTAssert(result[0] == 117506305, "Invalid conversion")
-        XCTAssert(result[1] == 84148994, "Invalid conversion")
+        XCTAssert(result[0] == 117_506_305, "Invalid conversion")
+        XCTAssert(result[1] == 84_148_994, "Invalid conversion")
     }
 
     func testDataInit() {
@@ -75,17 +75,16 @@ final class ExtensionsTest: XCTestCase {
         let hex = array.toHexString()
         XCTAssertEqual(str, hex)
     }
-    
-    func testArrayInitHexPerformance(){
+
+    func testArrayInitHexPerformance() {
         var str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
-        for _ in 0...12{
+        for _ in 0...12 {
             str += str
         }
         measure {
-            let _ = Array<UInt8>(hex: str)
+            _ = Array<UInt8>(hex: str)
         }
     }
-    
 }
 
 #if !CI
@@ -117,9 +116,7 @@ extension ExtensionsTest {
         ]
 
         #if !CI
-            tests += [
-                ("testArrayChunksPerformance", testArrayChunksPerformance),
-            ]
+            tests += [("testArrayChunksPerformance", testArrayChunksPerformance)]
         #endif
         return tests
     }

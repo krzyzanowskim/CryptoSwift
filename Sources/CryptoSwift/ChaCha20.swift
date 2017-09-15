@@ -33,19 +33,19 @@ public final class ChaCha20: BlockCipher {
     public init(key: Array<UInt8>, iv nonce: Array<UInt8>) throws {
         precondition(nonce.count == 12 || nonce.count == 8)
 
-        if (key.count != 32) {
+        if key.count != 32 {
             throw Error.invalidKeyOrInitializationVector
         }
 
         self.key = Key(bytes: key)
 
         if nonce.count == 8 {
-            self.counter = [0,0,0,0,0,0,0,0] + nonce
+            counter = [0, 0, 0, 0, 0, 0, 0, 0] + nonce
         } else {
-            self.counter = [0,0,0,0] + nonce
+            counter = [0, 0, 0, 0] + nonce
         }
 
-        assert(self.counter.count == 16)
+        assert(counter.count == 16)
     }
 
     /// https://tools.ietf.org/html/rfc7539#section-2.3.
@@ -77,16 +77,16 @@ public final class ChaCha20: BlockCipher {
         for _ in 0..<10 { // 20 rounds
             x0 = x0 &+ x4
             x12 ^= x0
-            x12 = (x12 << 16) | (x12 >> (16))
+            x12 = (x12 << 16) | (x12 >> 16)
             x8 = x8 &+ x12
             x4 ^= x8
-            x4 = (x4 << 12) | (x4 >> (20))
+            x4 = (x4 << 12) | (x4 >> 20)
             x0 = x0 &+ x4
             x12 ^= x0
-            x12 = (x12 << 8) | (x12 >> (24))
+            x12 = (x12 << 8) | (x12 >> 24)
             x8 = x8 &+ x12
             x4 ^= x8
-            x4 = (x4 << 7) | (x4 >> (25))
+            x4 = (x4 << 7) | (x4 >> 25)
             x1 = x1 &+ x5
             x13 ^= x1
             x13 = (x13 << 16) | (x13 >> 16)
@@ -190,9 +190,9 @@ public final class ChaCha20: BlockCipher {
         x14 = x14 &+ j14
         x15 = x15 &+ j15
 
-        block.replaceSubrange(0..<4,   with: x0.bigEndian.bytes())
-        block.replaceSubrange(4..<8,   with: x1.bigEndian.bytes())
-        block.replaceSubrange(8..<12,  with: x2.bigEndian.bytes())
+        block.replaceSubrange(0..<4, with: x0.bigEndian.bytes())
+        block.replaceSubrange(4..<8, with: x1.bigEndian.bytes())
+        block.replaceSubrange(8..<12, with: x2.bigEndian.bytes())
         block.replaceSubrange(12..<16, with: x3.bigEndian.bytes())
         block.replaceSubrange(16..<20, with: x4.bigEndian.bytes())
         block.replaceSubrange(20..<24, with: x5.bigEndian.bytes())
@@ -214,12 +214,12 @@ public final class ChaCha20: BlockCipher {
         precondition(key.count == 32)
 
         var block = Array<UInt8>(repeating: 0, count: ChaCha20.blockSize)
-        var bytes = bytes //TODO: check bytes[bytes.indices]
+        var bytes = bytes // TODO: check bytes[bytes.indices]
         var out = Array<UInt8>(reserveCapacity: bytes.count)
 
         while bytes.count >= ChaCha20.blockSize {
-            self.core(block: &block, counter: counter, key: key)
-            for (i,x) in block.enumerated() {
+            core(block: &block, counter: counter, key: key)
+            for (i, x) in block.enumerated() {
                 out.append(bytes[i] ^ x)
             }
             var u: UInt32 = 1
@@ -232,7 +232,7 @@ public final class ChaCha20: BlockCipher {
         }
 
         if bytes.count > 0 {
-            self.core(block: &block, counter: counter, key: key)
+            core(block: &block, counter: counter, key: key)
             for (i, v) in bytes.enumerated() {
                 out.append(v ^ block[i])
             }
@@ -245,7 +245,7 @@ public final class ChaCha20: BlockCipher {
 extension ChaCha20: Cipher {
 
     public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
-        return process(bytes: Array(bytes), counter: &self.counter, key: Array(self.key))
+        return process(bytes: Array(bytes), counter: &counter, key: Array(key))
     }
 
     public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
@@ -264,15 +264,15 @@ extension ChaCha20 {
             self.chacha = chacha
         }
 
-        mutating public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
-            self.accumulated += bytes
+        public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
+            accumulated += bytes
 
             var encrypted = Array<UInt8>()
-            encrypted.reserveCapacity(self.accumulated.count)
-            for chunk in self.accumulated.batched(by: ChaCha20.blockSize) {
-                if (isLast || self.accumulated.count >= ChaCha20.blockSize) {
+            encrypted.reserveCapacity(accumulated.count)
+            for chunk in accumulated.batched(by: ChaCha20.blockSize) {
+                if isLast || accumulated.count >= ChaCha20.blockSize {
                     encrypted += try chacha.encrypt(chunk)
-                    self.accumulated.removeFirst(chunk.count) //TODO: improve performance
+                    accumulated.removeFirst(chunk.count) // TODO: improve performance
                 }
             }
             return encrypted
@@ -294,29 +294,29 @@ extension ChaCha20 {
             self.chacha = chacha
         }
 
-        mutating public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = true) throws -> Array<UInt8> {
+        public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = true) throws -> Array<UInt8> {
             // prepend "offset" number of bytes at the begining
-            if self.offset > 0 {
-                self.accumulated += Array<UInt8>(repeating: 0, count: offset) + bytes
-                self.offsetToRemove = offset
-                self.offset = 0
+            if offset > 0 {
+                accumulated += Array<UInt8>(repeating: 0, count: offset) + bytes
+                offsetToRemove = offset
+                offset = 0
             } else {
-                self.accumulated += bytes
+                accumulated += bytes
             }
 
             var plaintext = Array<UInt8>()
-            plaintext.reserveCapacity(self.accumulated.count)
-            for chunk in self.accumulated.batched(by: ChaCha20.blockSize) {
-                if (isLast || self.accumulated.count >= ChaCha20.blockSize) {
+            plaintext.reserveCapacity(accumulated.count)
+            for chunk in accumulated.batched(by: ChaCha20.blockSize) {
+                if isLast || accumulated.count >= ChaCha20.blockSize {
                     plaintext += try chacha.decrypt(chunk)
 
                     // remove "offset" from the beginning of first chunk
-                    if self.offsetToRemove > 0 {
-                        plaintext.removeFirst(self.offsetToRemove) //TODO: improve performance
-                        self.offsetToRemove = 0
+                    if offsetToRemove > 0 {
+                        plaintext.removeFirst(offsetToRemove) // TODO: improve performance
+                        offsetToRemove = 0
                     }
 
-                    self.accumulated.removeFirst(chunk.count)
+                    accumulated.removeFirst(chunk.count)
                 }
             }
 

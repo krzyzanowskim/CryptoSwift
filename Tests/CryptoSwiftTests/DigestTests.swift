@@ -103,8 +103,8 @@ final class DigestTests: XCTestCase {
     func testMD5Updates() {
         do {
             var hash = MD5()
-            let _ = try hash.update(withBytes: [0x31, 0x32])
-            let _ = try hash.update(withBytes: [0x33])
+            _ = try hash.update(withBytes: [0x31, 0x32])
+            _ = try hash.update(withBytes: [0x33])
             let result = try hash.finish()
             XCTAssertEqual(result, [0x20, 0x2c, 0xb9, 0x62, 0xac, 0x59, 0x07, 0x5b, 0x96, 0x4b, 0x07, 0x15, 0x2d, 0x23, 0x4b, 0x70])
         } catch {
@@ -115,8 +115,8 @@ final class DigestTests: XCTestCase {
     func testSHA1Updatable1() {
         do {
             var hash = SHA1()
-            let _ = try hash.update(withBytes: [0x31, 0x32])
-            let _ = try hash.update(withBytes: [0x33])
+            _ = try hash.update(withBytes: [0x31, 0x32])
+            _ = try hash.update(withBytes: [0x33])
             XCTAssertEqual(try hash.finish().toHexString(), "40bd001563085fc35165329ea1ff5c5ecbdbbeef", "Failed")
         } catch {
             XCTFail()
@@ -126,9 +126,9 @@ final class DigestTests: XCTestCase {
     func testSHA1Updatable2() {
         do {
             var hash = SHA1()
-            let _ = try hash.update(withBytes: [0x31, 0x32])
-            let _ = try hash.update(withBytes: [0x33])
-            let _ = try hash.update(withBytes: Array<UInt8>(repeating: 0x33, count: 64))
+            _ = try hash.update(withBytes: [0x31, 0x32])
+            _ = try hash.update(withBytes: [0x33])
+            _ = try hash.update(withBytes: Array<UInt8>(repeating: 0x33, count: 64))
             XCTAssertEqual(try hash.finish().toHexString(), "0e659367eff83a6b868a35b96ac305b270025e86", "Failed")
         } catch {
             XCTFail()
@@ -152,7 +152,7 @@ final class DigestTests: XCTestCase {
 
     func testCRC16() {
         let result = Checksum.crc16([49, 50, 51, 52, 53, 54, 55, 56, 57] as Array<UInt8>)
-        XCTAssert(result == 0xBB3D, "CRC16 failed")
+        XCTAssert(result == 0xbb3d, "CRC16 failed")
     }
 
     func testChecksum() {
@@ -166,22 +166,35 @@ final class DigestTests: XCTestCase {
     extension DigestTests {
 
         func testMD5Performance() {
-            self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
+            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
                 let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
                 self.startMeasuring()
                 _ = Digest.md5(arr)
                 self.stopMeasuring()
-            })
+            }
         }
 
         func testSHA1Performance() {
-            self.measure {
-                for _ in 0 ..< 10_000 {
-                    let _ = "".sha1()
-                }
+            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
+                let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
+                self.startMeasuring()
+                _ = Digest.sha1(arr)
+                self.stopMeasuring()
+            }
+        }
+
+        // Keep it to compare
+        func testSHA1PerformanceCC() {
+            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
+                let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
+                self.startMeasuring()
+                var digest = Array<UInt8>(repeating: 0, count: Int(CC_SHA1_DIGEST_LENGTH))
+                CC_SHA1(arr, CC_LONG(arr.count), &digest)
+                self.stopMeasuring()
             }
         }
     }
+
 #endif
 
 extension DigestTests {

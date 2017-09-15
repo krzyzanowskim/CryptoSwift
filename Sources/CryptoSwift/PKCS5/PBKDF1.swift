@@ -32,7 +32,7 @@ public extension PKCS5 {
             case md5, sha1
 
             var size: Int {
-                switch (self) {
+                switch self {
                 case .md5:
                     return MD5.digestLength
                 case .sha1:
@@ -41,7 +41,7 @@ public extension PKCS5 {
             }
 
             fileprivate func calculateHash(_ bytes: Array<UInt8>) -> Array<UInt8>? {
-                switch (self) {
+                switch self {
                 case .sha1:
                     return Digest.sha1(bytes)
                 case .md5:
@@ -60,13 +60,13 @@ public extension PKCS5 {
         ///   - variant: hash variant
         ///   - iterations: iteration count, a positive integer
         ///   - keyLength: intended length of derived key
-        public init(password: Array<UInt8>, salt: Array<UInt8>, variant: Variant = .sha1, iterations: Int = 4096 /* c */ , keyLength: Int? = nil /* dkLen */ ) throws {
+        public init(password: Array<UInt8>, salt: Array<UInt8>, variant: Variant = .sha1, iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */ ) throws {
             precondition(iterations > 0)
             precondition(salt.count == 8)
 
             let keyLength = keyLength ?? variant.size
 
-            if (keyLength > variant.size) {
+            if keyLength > variant.size {
                 throw Error.derivedKeyTooLong
             }
 
@@ -83,10 +83,10 @@ public extension PKCS5 {
         /// Apply the underlying hash function Hash for c iterations
         public func calculate() -> Array<UInt8> {
             var t = t1
-            for _ in 2 ... self.iterations {
-                t = self.variant.calculateHash(t)!
+            for _ in 2...iterations {
+                t = variant.calculateHash(t)!
             }
-            return Array(t[0 ..< self.keyLength])
+            return Array(t[0..<self.keyLength])
         }
     }
 }

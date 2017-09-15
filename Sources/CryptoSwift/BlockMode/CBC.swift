@@ -42,7 +42,7 @@ struct CBCModeWorker: BlockModeWorker {
             return Array(ciphertext)
         }
         let result = xor(prev ?? iv, plaintext)
-        self.prev = Array(ciphertext)
+        prev = Array(ciphertext)
         return result
     }
 }

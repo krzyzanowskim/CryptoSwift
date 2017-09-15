@@ -1,17 +1,17 @@
 /*:
  To whom may be concerned: I offer professional support to all my open source projects.
- 
+
  Contact: [marcin@krzyzanowskim.com](http://krzyzanowskim.com)
-*/
+ */
 import CryptoSwift
 import Foundation
 /*:
  # Data types conversinn
  */
-let data  = Data(bytes: [0x01, 0x02, 0x03])
+let data = Data(bytes: [0x01, 0x02, 0x03])
 let bytes = data.bytes
-let bytesHex    = Array<UInt8>(hex: "0x010203")
-let hexString   = bytesHex.toHexString()
+let bytesHex = Array<UInt8>(hex: "0x010203")
+let hexString = bytesHex.toHexString()
 
 /*:
  # Digest
@@ -33,7 +33,7 @@ do {
     let partial1 = try digest.update(withBytes: [0x31, 0x32])
     let partial2 = try digest.update(withBytes: [0x33])
     let result = try digest.finish()
-} catch { }
+} catch {}
 
 /*:
  # CRC
@@ -46,7 +46,7 @@ bytes.crc32()
  */
 
 do {
-    let key:Array<UInt8> = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,23,25,26,27,28,29,30,31,32]
+    let key: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 23, 25, 26, 27, 28, 29, 30, 31, 32]
     try Poly1305(key: key).authenticate(bytes)
     try HMAC(key: key, variant: .sha256).authenticate(bytes)
 } catch {}
@@ -74,8 +74,8 @@ PKCS7().add(to: bytes, blockSize: AES.blockSize)
  */
 
 do {
-    let key:Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
-    let iv:Array<UInt8> =  [1, 2, 3, 4, 5, 6, 7, 8]
+    let key: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+    let iv: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8]
     let message = Array<UInt8>(repeating: 7, count: 10)
 
     let encrypted = try ChaCha20(key: key, iv: iv).encrypt(message)
@@ -143,17 +143,17 @@ do {
     var buffer = Array<UInt8>(repeating: 0, count: 2)
 
     // encrypt input stream data and write encrypted result to output stream
-    while (inputStream.hasBytesAvailable) {
+    while inputStream.hasBytesAvailable {
         let readCount = inputStream.read(&buffer, maxLength: buffer.count)
-        if (readCount > 0) {
-            try encryptor.update(withBytes: buffer[0..<readCount]) { (bytes) in
+        if readCount > 0 {
+            try encryptor.update(withBytes: buffer[0..<readCount]) { bytes in
                 writeTo(stream: outputStream, bytes: bytes)
             }
         }
     }
 
     // finalize encryption
-    try encryptor.finish { (bytes) in
+    try encryptor.finish { bytes in
         writeTo(stream: outputStream, bytes: bytes)
     }
 

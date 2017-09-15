@@ -45,7 +45,7 @@ func arrayOfBytes<T: FixedWidthInteger>(value: T, length totalBytes: Int = Memor
 
     let bytesPointer = UnsafeMutablePointer<UInt8>(OpaquePointer(valuePointer))
     var bytes = Array<UInt8>(repeating: 0, count: totalBytes)
-    for j in 0 ..< min(MemoryLayout<T>.size, totalBytes) {
+    for j in 0..<min(MemoryLayout<T>.size, totalBytes) {
         bytes[totalBytes - 1 - j] = (bytesPointer + j).pointee
     }
 

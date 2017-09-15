@@ -48,14 +48,14 @@ public final class Rabbit: BlockCipher {
 
     /// 'a' constants
     private var a: Array<UInt32> = [
-        0x4D34D34D,
-        0xD34D34D3,
-        0x34D34D34,
-        0x4D34D34D,
-        0xD34D34D3,
-        0x34D34D34,
-        0x4D34D34D,
-        0xD34D34D3,
+        0x4d34d34d,
+        0xd34d34d3,
+        0x34d34d34,
+        0x4d34d34d,
+        0xd34d34d3,
+        0x34d34d34,
+        0x4d34d34d,
+        0xd34d34d3,
     ]
 
     // MARK: - Initializers
@@ -78,12 +78,12 @@ public final class Rabbit: BlockCipher {
 
         // Key divided into 8 subkeys
         var k = Array<UInt32>(repeating: 0, count: 8)
-        for j in 0 ..< 8 {
+        for j in 0..<8 {
             k[j] = UInt32(key[Rabbit.blockSize - (2 * j + 1)]) | (UInt32(key[Rabbit.blockSize - (2 * j + 2)]) << 8)
         }
 
         // Initialize state and counter variables from subkeys
-        for j in 0 ..< 8 {
+        for j in 0..<8 {
             if j % 2 == 0 {
                 x[j] = (k[(j + 1) % 8] << 16) | k[j]
                 c[j] = (k[(j + 4) % 8] << 16) | k[(j + 5) % 8]
@@ -100,7 +100,7 @@ public final class Rabbit: BlockCipher {
         nextState()
 
         // Reinitialize counter variables
-        for j in 0 ..< 8 {
+        for j in 0..<8 {
             c[j] = c[j] ^ x[(j + 4) % 8]
         }
 
@@ -137,7 +137,7 @@ public final class Rabbit: BlockCipher {
     private func nextState() {
         // Before an iteration the counters are incremented
         var carry = p7
-        for j in 0 ..< 8 {
+        for j in 0..<8 {
             let prev = c[j]
             c[j] = prev &+ a[j] &+ carry
             carry = prev > c[j] ? 1 : 0 // detect overflow
@@ -160,7 +160,7 @@ public final class Rabbit: BlockCipher {
     private func g(_ j: Int) -> UInt32 {
         let sum = x[j] &+ c[j]
         let square = UInt64(sum) * UInt64(sum)
-        return UInt32.init(truncatingIfNeeded: square ^ (square >> 32))
+        return UInt32(truncatingIfNeeded: square ^ (square >> 32))
     }
 
     fileprivate func nextOutput() -> Array<UInt8> {
@@ -177,7 +177,7 @@ public final class Rabbit: BlockCipher {
         output16[0] = UInt16(truncatingIfNeeded: x[6] >> 16) ^ UInt16(truncatingIfNeeded: x[1])
 
         var output8 = Array<UInt8>(repeating: 0, count: Rabbit.blockSize)
-        for j in 0 ..< output16.count {
+        for j in 0..<output16.count {
             output8[j * 2] = UInt8(truncatingIfNeeded: output16[j] >> 8)
             output8[j * 2 + 1] = UInt8(truncatingIfNeeded: output16[j])
         }
@@ -196,7 +196,7 @@ extension Rabbit: Cipher {
         var byteIdx = 0
         var outputIdx = 0
         while byteIdx < bytes.count {
-            if (outputIdx == Rabbit.blockSize) {
+            if outputIdx == Rabbit.blockSize {
                 output = nextOutput()
                 outputIdx = 0
             }

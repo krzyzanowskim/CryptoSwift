@@ -42,7 +42,7 @@ struct OFBModeWorker: BlockModeWorker {
             return Array(ciphertext)
         }
         let plaintext = xor(decrypted, ciphertext)
-        self.prev = decrypted
+        prev = decrypted
         return plaintext
     }
 }

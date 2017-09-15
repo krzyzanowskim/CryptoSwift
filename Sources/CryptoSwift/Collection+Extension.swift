@@ -19,7 +19,7 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
         let count = self.count
         var result = Array<UInt32>()
         result.reserveCapacity(16)
-        for idx in stride(from: self.startIndex, to: self.endIndex, by: 4) {
+        for idx in stride(from: startIndex, to: endIndex, by: 4) {
             var val: UInt32 = 0
             val |= count > 3 ? UInt32(self[idx.advanced(by: 3)]) << 24 : 0
             val |= count > 2 ? UInt32(self[idx.advanced(by: 2)]) << 16 : 0
@@ -35,7 +35,7 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
         let count = self.count
         var result = Array<UInt64>()
         result.reserveCapacity(32)
-        for idx in stride(from: self.startIndex, to: self.endIndex, by: 8) {
+        for idx in stride(from: startIndex, to: endIndex, by: 8) {
             var val: UInt64 = 0
             val |= count > 7 ? UInt64(self[idx.advanced(by: 7)]) << 56 : 0
             val |= count > 6 ? UInt64(self[idx.advanced(by: 6)]) << 48 : 0
@@ -54,15 +54,15 @@ extension Collection where Self.Iterator.Element == UInt8, Self.Index == Int {
     /// Initialize integer from array of bytes. Caution: may be slow!
     @available(*, deprecated: 0.6.0, message: "Dont use it. Too generic to be fast")
     func toInteger<T>() -> T where T: FixedWidthInteger {
-        if self.count == 0 {
+        if count == 0 {
             return 0
         }
 
         let size = MemoryLayout<T>.size
-        var bytes = self.reversed() // FIXME: check it this is equivalent of Array(...)
+        var bytes = reversed() // FIXME: check it this is equivalent of Array(...)
         if bytes.count < size {
             let paddingCount = size - bytes.count
-            if (paddingCount > 0) {
+            if paddingCount > 0 {
                 bytes += Array<UInt8>(repeating: 0, count: paddingCount)
             }
         }

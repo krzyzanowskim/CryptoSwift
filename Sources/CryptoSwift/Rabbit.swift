@@ -166,7 +166,7 @@ public final class Rabbit: BlockCipher {
     fileprivate func nextOutput() -> Array<UInt8> {
         nextState()
 
-        var output16 = [UInt16](repeating: 0, count: Rabbit.blockSize / 2)
+        var output16 = Array<UInt16>(repeating: 0, count: Rabbit.blockSize / 2)
         output16[7] = UInt16(truncatingIfNeeded: x[0]) ^ UInt16(truncatingIfNeeded: x[5] >> 16)
         output16[6] = UInt16(truncatingIfNeeded: x[0] >> 16) ^ UInt16(truncatingIfNeeded: x[3])
         output16[5] = UInt16(truncatingIfNeeded: x[2]) ^ UInt16(truncatingIfNeeded: x[7] >> 16)

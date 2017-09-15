@@ -474,6 +474,7 @@ public final class Blowfish {
 }
 
 extension Blowfish: Cipher {
+
     /// Encrypt the 8-byte padded buffer, block by block. Note that for amounts of data larger than a block, it is not safe to just call encrypt() on successive blocks.
     ///
     /// - Parameter bytes: Plaintext data

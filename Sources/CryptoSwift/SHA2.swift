@@ -211,8 +211,10 @@ public final class SHA2: DigestType {
     fileprivate func process32(block chunk: ArraySlice<UInt8>, currentHash hh: inout Array<UInt32>) {
         // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
         // Extend the sixteen 32-bit words into sixty-four 32-bit words:
-        var M = Array<UInt32>(repeating: 0, count: self.k.count)
-        for x in 0 ..< M.count {
+        let M = UnsafeMutablePointer<UInt32>.allocate(capacity: self.k.count)
+        M.initialize(to: 0, count: self.k.count)
+
+        for x in 0 ..< self.k.count {
             switch (x) {
             case 0 ... 15:
                 let start = chunk.startIndex.advanced(by: x * 4) // * MemoryLayout<UInt32>.size
@@ -262,6 +264,9 @@ public final class SHA2: DigestType {
         hh[5] = hh[5] &+ F
         hh[6] = hh[6] &+ G
         hh[7] = hh[7] &+ H
+
+        M.deinitialize(count: self.k.count)
+        M.deallocate(capacity: self.k.count)
     }
 }
 

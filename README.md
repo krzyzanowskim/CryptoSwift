@@ -280,7 +280,7 @@ try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha
 Some content-encryption algorithms assume the input length is a multiple of k octets, where k is greater than one. For such algorithms, the input shall be padded.
 
 ```swift
-PKCS7().add(to: bytes, blockSize: AES.blockSize)
+PKCS7.Padding().add(to: bytes, blockSize: AES.blockSize)
 ```
 
 #### Working with Ciphers
@@ -300,8 +300,8 @@ let decrypted = try Rabbit(key: key, iv: iv).decrypt(encrypted)
 ##### Blowfish
 
 ```swift
-let encrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).encrypt(message)
-let decrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).decrypt(encrypted)
+let encrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: PKCS7.Padding()).encrypt(message)
+let decrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: PKCS7.Padding()).decrypt(encrypted)
 ```
 
 ##### AES
@@ -316,7 +316,7 @@ Variant of AES encryption (AES-128, AES-192, AES-256) depends on given key lengt
 
 AES-256 example
 ```swift
-try AES(key: [1,2,3,...,32], iv: [1,2,3,...,16], blockMode: .CBC, padding: PKCS7())
+try AES(key: [1,2,3,...,32], iv: [1,2,3,...,16], blockMode: .CBC, padding: PKCS7.Padding())
 ```
  
 ###### All at once
@@ -359,8 +359,8 @@ let key: Array<UInt8> = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 let iv: Array<UInt8> = AES.randomIV(AES.blockSize)
 
 do {
-    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).encrypt(input)
-    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7()).decrypt(encrypted)
+    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7.Padding()).encrypt(input)
+    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7.Padding()).decrypt(encrypted)
 } catch {
     print(error)
 }    

@@ -14,7 +14,7 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-public struct NoPadding: Padding {
+public struct NoPadding: PaddingProtocol {
 
     public init() {
     }

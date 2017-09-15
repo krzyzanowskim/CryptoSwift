@@ -18,7 +18,7 @@
 //  and published by RSA Security Inc, starting in the early 1990s.
 //
 
-public struct PKCS7Padding: Padding {
+public struct PKCS7Padding: PaddingProtocol {
 
     public enum Error: Swift.Error {
         case invalidPaddingValue

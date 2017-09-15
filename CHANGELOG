@@ -1,6 +1,6 @@
 0.7.2
 - Adds typealias PKCS5.Padding()
-- Rename PKCS7() to PKCS7.Padding()
+- Adds Padding enum (.pkcs5, .pkcs7, .noPadding, .zeroPadding)
 - Remove Generics from the public API
 - Improve SHA1, SHA2, SHA3 performance by using unmanaged buffers.
 

@@ -67,7 +67,7 @@ do {
 /*:
  # Padding
  */
-PKCS7().add(to: bytes, blockSize: AES.blockSize)
+Padding.pkcs7.add(to: bytes, blockSize: AES.blockSize)
 
 /*:
  # ChaCha20

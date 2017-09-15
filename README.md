@@ -66,9 +66,10 @@ Good mood
 - [PBKDF2](http://tools.ietf.org/html/rfc2898#section-5.2) (Password-Based Key Derivation Function 2)
 
 #### Data padding
+- PKCS#5
 - [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
 - [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
-- NoPadding
+- No padding
 
 ## Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
@@ -277,10 +278,10 @@ try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha
 
 ##### Data Padding
     
-Some content-encryption algorithms assume the input length is a multiple of k octets, where k is greater than one. For such algorithms, the input shall be padded.
+Some content-encryption algorithms assume the input length is a multiple of `k` octets, where `k` is greater than one. For such algorithms, the input shall be padded.
 
 ```swift
-PKCS7.Padding().add(to: bytes, blockSize: AES.blockSize)
+Padding.pkcs7.add(to: bytes, blockSize: AES.blockSize)
 ```
 
 #### Working with Ciphers
@@ -300,8 +301,8 @@ let decrypted = try Rabbit(key: key, iv: iv).decrypt(encrypted)
 ##### Blowfish
 
 ```swift
-let encrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: PKCS7.Padding()).encrypt(message)
-let decrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: PKCS7.Padding()).decrypt(encrypted)
+let encrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: .pkcs7).encrypt(message)
+let decrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: .pkcs7).decrypt(encrypted)
 ```
 
 ##### AES
@@ -316,7 +317,7 @@ Variant of AES encryption (AES-128, AES-192, AES-256) depends on given key lengt
 
 AES-256 example
 ```swift
-try AES(key: [1,2,3,...,32], iv: [1,2,3,...,16], blockMode: .CBC, padding: PKCS7.Padding())
+try AES(key: [1,2,3,...,32], iv: [1,2,3,...,16], blockMode: .CBC, padding: .pkcs7)
 ```
  
 ###### All at once
@@ -359,8 +360,8 @@ let key: Array<UInt8> = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 let iv: Array<UInt8> = AES.randomIV(AES.blockSize)
 
 do {
-    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7.Padding()).encrypt(input)
-    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: PKCS7.Padding()).decrypt(encrypted)
+    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: .pkcs7).encrypt(input)
+    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: .pkcs7).decrypt(encrypted)
 } catch {
     print(error)
 }    
@@ -370,7 +371,7 @@ AES without data padding
 
 ```swift
 let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]
-let encrypted: Array<UInt8> = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC, padding: NoPadding()).encrypt(input)
+let encrypted: Array<UInt8> = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC, padding: .noPadding).encrypt(input)
 ```
 
 Using convenience extensions

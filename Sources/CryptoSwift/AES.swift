@@ -121,7 +121,7 @@ public final class AES: BlockCipher {
     /// - throws: AES.Error
     ///
     /// - returns: Instance
-    public init(key: Array<UInt8>, iv: Array<UInt8>? = nil, blockMode: BlockMode = .CBC, padding: Padding = PKCS7.Padding()) throws {
+    public init(key: Array<UInt8>, iv: Array<UInt8>? = nil, blockMode: BlockMode = .CBC, padding: Padding = .pkcs7) throws {
         self.key = Key(bytes: key)
         self.blockMode = blockMode
         self.padding = padding

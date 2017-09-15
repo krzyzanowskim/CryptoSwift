@@ -213,7 +213,11 @@ public final class SHA2: DigestType {
         // Extend the sixteen 32-bit words into sixty-four 32-bit words:
         let M = UnsafeMutablePointer<UInt32>.allocate(capacity: self.k.count)
         M.initialize(to: 0, count: self.k.count)
-
+        defer {
+            M.deinitialize(count: self.k.count)
+            M.deallocate(capacity: self.k.count)
+        }
+        
         for x in 0 ..< self.k.count {
             switch (x) {
             case 0 ... 15:
@@ -264,9 +268,6 @@ public final class SHA2: DigestType {
         hh[5] = hh[5] &+ F
         hh[6] = hh[6] &+ G
         hh[7] = hh[7] &+ H
-
-        M.deinitialize(count: self.k.count)
-        M.deallocate(capacity: self.k.count)
     }
 }
 

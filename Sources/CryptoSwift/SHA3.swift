@@ -105,8 +105,18 @@ public final class SHA3: DigestType {
     ///  3. For all triples (x, y, z) such that 0≤x<5, 0≤y<5, and 0≤z<w, let
     ///     A′[x, y,z] = A[x, y,z] ⊕ D[x,z].
     private func θ(_ a: inout Array<UInt64>) {
-        var c = Array<UInt64>(repeating: 0, count: 5)
-        var d = Array<UInt64>(repeating: 0, count: 5)
+        let c = UnsafeMutablePointer<UInt64>.allocate(capacity: 5)
+        c.initialize(to: 0, count: 5)
+        defer {
+            c.deinitialize(count: 5)
+            c.deallocate(capacity: 5)
+        }
+        let d = UnsafeMutablePointer<UInt64>.allocate(capacity: 5)
+        d.initialize(to: 0, count: 5)
+        defer {
+            d.deinitialize(count: 5)
+            d.deallocate(capacity: 5)
+        }
 
         for i in 0 ..< 5 {
             c[i] = a[i] ^ a[i &+ 5] ^ a[i &+ 10] ^ a[i &+ 15] ^ a[i &+ 20]

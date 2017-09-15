@@ -179,7 +179,7 @@ class BlowfishTests: XCTestCase {
         let input = Array<UInt8>.init(hex: "37363534333231204E6F77206973207468652074696D6520666F722000")
 
         do {
-            let cipher = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: PKCS7())
+            let cipher = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: PKCS7.Padding())
             let ciphertext = try cipher.encrypt(input)
             let plaintext = try cipher.decrypt(ciphertext)
             XCTAssertEqual(plaintext, input)

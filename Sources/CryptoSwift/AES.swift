@@ -2,7 +2,7 @@
 //  AES.swift
 //  CryptoSwift
 //
-//  Copyright (C) 2014-2017 Krzyżanowski <marcin@krzyzanowskim.com>
+//  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 //  This software is provided 'as-is', without any express or implied warranty.
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
@@ -116,12 +116,12 @@ public final class AES: BlockCipher {
     /// - parameter key:       Key. Length of the key decides on AES variant.
     /// - parameter iv:        Initialization Vector (Optional for some blockMode values)
     /// - parameter blockMode: Cipher mode of operation
-    /// - parameter padding:   Padding method. PKCS7(), NoPadding(), ZeroPadding(), ...
+    /// - parameter padding:   Padding method. PKCS7.Padding(), NoPadding(), ZeroPadding(), ...
     ///
     /// - throws: AES.Error
     ///
     /// - returns: Instance
-    public init(key: Array<UInt8>, iv: Array<UInt8>? = nil, blockMode: BlockMode = .CBC, padding: Padding = PKCS7()) throws {
+    public init(key: Array<UInt8>, iv: Array<UInt8>? = nil, blockMode: BlockMode = .CBC, padding: Padding = PKCS7.Padding()) throws {
         self.key = Key(bytes: key)
         self.blockMode = blockMode
         self.padding = padding

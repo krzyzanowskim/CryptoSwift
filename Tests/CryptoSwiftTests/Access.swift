@@ -145,8 +145,8 @@ class Access: XCTestCase {
 
     func testPadding() {
         // PKCS7
-        _ = PKCS7().add(to: [1, 2, 3], blockSize: 16)
-        _ = PKCS7().remove(from: [1, 2, 3], blockSize: 16)
+        _ = PKCS7.Padding().add(to: [1, 2, 3], blockSize: 16)
+        _ = PKCS7.Padding().remove(from: [1, 2, 3], blockSize: 16)
 
         // NoPadding
         _ = NoPadding().add(to: [1, 2, 3], blockSize: 16)

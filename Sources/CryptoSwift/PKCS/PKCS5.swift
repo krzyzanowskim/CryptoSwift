@@ -1,5 +1,5 @@
 //
-//  BlockCipher.swift
+//  PKCS.swift
 //  CryptoSwift
 //
 //  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
@@ -14,6 +14,10 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-protocol BlockCipher: Cipher {
-    static var blockSize: Int { get }
+//  PKCS is a group of public-key cryptography standards devised
+//  and published by RSA Security Inc, starting in the early 1990s.
+//
+
+public enum PKCS5 {
+    typealias Padding = PKCS7Padding
 }

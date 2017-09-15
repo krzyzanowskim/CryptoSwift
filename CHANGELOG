@@ -1,3 +1,15 @@
+0.7.2
+- Adds typealias PKCS5.Padding()
+- Rename PKCS7() to PKCS7.Padding()
+- Remove Generics from the public API
+- Improve SHA1, SHA2, SHA3 performance by using unmanaged buffers.
+
+0.7.1
+- Swift 4.0 compatibility release
+
+0.7.0
+- Swift 3.2 compatibility release
+
 0.6.9
 - Fixed padding issue where padding was not properly added in CTR mode.
 - Fixed thrown error on decrypting empty string,

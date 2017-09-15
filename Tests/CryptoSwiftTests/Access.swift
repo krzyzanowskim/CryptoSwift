@@ -148,6 +148,10 @@ class Access: XCTestCase {
         _ = PKCS7.Padding().add(to: [1, 2, 3], blockSize: 16)
         _ = PKCS7.Padding().remove(from: [1, 2, 3], blockSize: 16)
 
+        // PKCS5
+        _ = PKCS5.Padding().add(to: [1, 2, 3], blockSize: 16)
+        _ = PKCS5.Padding().remove(from: [1, 2, 3], blockSize: 16)
+
         // NoPadding
         _ = NoPadding().add(to: [1, 2, 3], blockSize: 16)
         _ = NoPadding().remove(from: [1, 2, 3], blockSize: 16)

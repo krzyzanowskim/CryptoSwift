@@ -116,7 +116,7 @@ public final class AES: BlockCipher {
     /// - parameter key:       Key. Length of the key decides on AES variant.
     /// - parameter iv:        Initialization Vector (Optional for some blockMode values)
     /// - parameter blockMode: Cipher mode of operation
-    /// - parameter padding:   Padding method. PKCS7.Padding(), NoPadding(), ZeroPadding(), ...
+    /// - parameter padding:   Padding method. .pkcs7, .noPadding, .zeroPadding, ...
     ///
     /// - throws: AES.Error
     ///

@@ -133,7 +133,7 @@ public final class AES: BlockCipher {
             self.iv = defaultIV
         }
 
-        if blockMode.options.contains(.InitializationVectorRequired) && self.iv.count != AES.blockSize {
+        if blockMode.options.contains(.initializationVectorRequired) && self.iv.count != AES.blockSize {
             assert(false, "Block size and Initialization Vector must be the same length!")
             throw Error.invalidInitializationVector
         }
@@ -145,7 +145,7 @@ fileprivate extension AES {
 
     func encrypt(block: Array<UInt8>) -> Array<UInt8>? {
 
-        if blockMode.options.contains(.PaddingRequired) && block.count != AES.blockSize {
+        if blockMode.options.contains(.paddingRequired) && block.count != AES.blockSize {
             return Array(block)
         }
 
@@ -234,7 +234,7 @@ fileprivate extension AES {
 
     func decrypt(block: Array<UInt8>) -> Array<UInt8>? {
 
-        if blockMode.options.contains(.PaddingRequired) && block.count != AES.blockSize {
+        if blockMode.options.contains(.paddingRequired) && block.count != AES.blockSize {
             return block
         }
 
@@ -448,7 +448,7 @@ extension AES {
         init(aes: AES) {
             self.padding = aes.padding
             self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encrypt)
-            self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
+            self.paddingRequired = aes.blockMode.options.contains(.paddingRequired)
         }
 
         public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
@@ -498,7 +498,7 @@ extension AES {
                 self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.decrypt)
             }
 
-            self.paddingRequired = aes.blockMode.options.contains(.PaddingRequired)
+            self.paddingRequired = aes.blockMode.options.contains(.paddingRequired)
         }
 
         public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
@@ -581,7 +581,7 @@ extension AES: Cipher {
         // Padding may be added at the very end
         out += try oneTimeCryptor.finish()
 
-        if blockMode.options.contains(.PaddingRequired) && (out.count % AES.blockSize != 0) {
+        if blockMode.options.contains(.paddingRequired) && (out.count % AES.blockSize != 0) {
             throw Error.dataPaddingRequired
         }
 
@@ -589,7 +589,7 @@ extension AES: Cipher {
     }
 
     public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
-        if blockMode.options.contains(.PaddingRequired) && (bytes.count % AES.blockSize != 0) {
+        if blockMode.options.contains(.paddingRequired) && (bytes.count % AES.blockSize != 0) {
             throw Error.dataPaddingRequired
         }
 

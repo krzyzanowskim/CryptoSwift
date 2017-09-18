@@ -39,17 +39,17 @@ public enum BlockMode {
     var options: BlockModeOptions {
         switch self {
         case .ECB:
-            return .PaddingRequired
+            return .paddingRequired
         case .CBC:
-            return [.InitializationVectorRequired, .PaddingRequired]
+            return [.initializationVectorRequired, .paddingRequired]
         case .CFB:
-            return .InitializationVectorRequired
+            return .initializationVectorRequired
         case .CTR:
-            return .InitializationVectorRequired
+            return .initializationVectorRequired
         case .OFB:
-            return .InitializationVectorRequired
+            return .initializationVectorRequired
         case .PCBC:
-            return [.InitializationVectorRequired, .PaddingRequired]
+            return [.initializationVectorRequired, .paddingRequired]
         }
     }
 }

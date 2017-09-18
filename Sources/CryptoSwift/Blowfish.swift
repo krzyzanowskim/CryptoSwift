@@ -338,7 +338,7 @@ public final class Blowfish {
             self.iv = Array<UInt8>(repeating: 0, count: Blowfish.blockSize)
         }
 
-        if blockMode.options.contains(.InitializationVectorRequired) && self.iv.count != Blowfish.blockSize {
+        if blockMode.options.contains(.initializationVectorRequired) && self.iv.count != Blowfish.blockSize {
             assert(false, "Block size and Initialization Vector must be the same length!")
             throw Error.invalidInitializationVector
         }
@@ -517,7 +517,7 @@ extension Blowfish: Cipher {
             out += encryptWorker.encrypt(chunk)
         }
 
-        if blockMode.options.contains(.PaddingRequired) && (out.count % Blowfish.blockSize != 0) {
+        if blockMode.options.contains(.paddingRequired) && (out.count % Blowfish.blockSize != 0) {
             throw Error.dataPaddingRequired
         }
 
@@ -530,7 +530,7 @@ extension Blowfish: Cipher {
     /// - Returns: Plaintext data
     public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
 
-        if blockMode.options.contains(.PaddingRequired) && (bytes.count % Blowfish.blockSize != 0) {
+        if blockMode.options.contains(.paddingRequired) && (bytes.count % Blowfish.blockSize != 0) {
             throw Error.dataPaddingRequired
         }
 

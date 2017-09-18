@@ -17,7 +17,7 @@
 struct BlockModeOptions: OptionSet {
     let rawValue: Int
 
-    static let None = BlockModeOptions(rawValue: 0)
-    static let InitializationVectorRequired = BlockModeOptions(rawValue: 1)
-    static let PaddingRequired = BlockModeOptions(rawValue: 2)
+    static let none = BlockModeOptions(rawValue: 0)
+    static let initializationVectorRequired = BlockModeOptions(rawValue: 1)
+    static let paddingRequired = BlockModeOptions(rawValue: 2)
 }

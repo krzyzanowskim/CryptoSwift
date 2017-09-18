@@ -15,5 +15,5 @@
 //
 
 public enum PKCS7 {
-    public typealias Padding = PKCS7Padding
+    typealias Padding = PKCS7Padding
 }

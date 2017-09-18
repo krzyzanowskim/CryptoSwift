@@ -14,16 +14,16 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-public struct NoPadding: PaddingProtocol {
+struct NoPadding: PaddingProtocol {
 
-    public init() {
+    init() {
     }
 
-    public func add(to data: Array<UInt8>, blockSize _: Int) -> Array<UInt8> {
+    func add(to data: Array<UInt8>, blockSize _: Int) -> Array<UInt8> {
         return data
     }
 
-    public func remove(from data: Array<UInt8>, blockSize _: Int?) -> Array<UInt8> {
+    func remove(from data: Array<UInt8>, blockSize _: Int?) -> Array<UInt8> {
         return data
     }
 }

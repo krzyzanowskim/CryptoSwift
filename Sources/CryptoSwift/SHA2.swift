@@ -158,8 +158,13 @@ public final class SHA2: DigestType {
     fileprivate func process64(block chunk: ArraySlice<UInt8>, currentHash hh: inout Array<UInt64>) {
         // break chunk into sixteen 64-bit words M[j], 0 ≤ j ≤ 15, big-endian
         // Extend the sixteen 64-bit words into eighty 64-bit words:
-        var M = Array<UInt64>(repeating: 0, count: k.count)
-        for x in 0..<M.count {
+        let M = UnsafeMutablePointer<UInt64>.allocate(capacity: k.count)
+        M.initialize(to: 0, count: k.count)
+        defer {
+            M.deinitialize(count: self.k.count)
+            M.deallocate(capacity: self.k.count)
+        }
+        for x in 0..<k.count {
             switch x {
             case 0...15:
                 let start = chunk.startIndex.advanced(by: x * 8) // * MemoryLayout<UInt64>.size

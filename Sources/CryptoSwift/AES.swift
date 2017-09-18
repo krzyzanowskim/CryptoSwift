@@ -240,9 +240,14 @@ fileprivate extension AES {
 
         let rounds = variant.Nr
         let rk = expandedKeyInv
-        var b = block[block.indices].toUInt32Array()
+        var b = block.toUInt32Array()
 
-        var t = Array<UInt32>(repeating: 0, count: 4)
+        let t = UnsafeMutablePointer<UInt32>.allocate(capacity: 4)
+        t.initialize(to: 0, count: 4)
+        defer {
+            t.deinitialize(count: 4)
+            t.deallocate(capacity: 4)
+        }
 
         for r in (2...rounds).reversed() {
             t[0] = b[0] ^ rk[r][0]

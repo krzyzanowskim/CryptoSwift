@@ -156,7 +156,7 @@ Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", majorVersion: 0
 or more strict
 
 ```
-Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", version: "0.7.2")
+Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", "0.7.2")
 ```
 
 See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)

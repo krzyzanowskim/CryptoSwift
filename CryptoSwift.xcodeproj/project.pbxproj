@@ -875,7 +875,7 @@
 			};
 			name = Release;
 		};
-		756B66AA1F6AAFDB00DEC41C /* PerformanceTest */ = {
+		756B66AA1F6AAFDB00DEC41C /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -921,6 +921,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = CryptoSwift;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx appletvos watchos appletvsimulator watchsimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -932,9 +933,9 @@
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
-			name = PerformanceTest;
+			name = Test;
 		};
-		756B66AB1F6AAFDB00DEC41C /* PerformanceTest */ = {
+		756B66AB1F6AAFDB00DEC41C /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -959,9 +960,9 @@
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
-			name = PerformanceTest;
+			name = Test;
 		};
-		756B66AC1F6AAFDB00DEC41C /* PerformanceTest */ = {
+		756B66AC1F6AAFDB00DEC41C /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -982,7 +983,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = Tests/CryptoSwiftTests/Bridging.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
-			name = PerformanceTest;
+			name = Test;
 		};
 /* End XCBuildConfiguration section */
 
@@ -992,7 +993,7 @@
 			buildConfigurations = (
 				754BE46919693E190098E6F3 /* Debug */,
 				754BE46A19693E190098E6F3 /* Release */,
-				756B66AA1F6AAFDB00DEC41C /* PerformanceTest */,
+				756B66AA1F6AAFDB00DEC41C /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1002,7 +1003,7 @@
 			buildConfigurations = (
 				754BE46C19693E190098E6F3 /* Debug */,
 				754BE46D19693E190098E6F3 /* Release */,
-				756B66AB1F6AAFDB00DEC41C /* PerformanceTest */,
+				756B66AB1F6AAFDB00DEC41C /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1012,7 +1013,7 @@
 			buildConfigurations = (
 				754BE46F19693E190098E6F3 /* Debug */,
 				754BE47019693E190098E6F3 /* Release */,
-				756B66AC1F6AAFDB00DEC41C /* PerformanceTest */,
+				756B66AC1F6AAFDB00DEC41C /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

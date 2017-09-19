@@ -30,9 +30,10 @@ Digest.sha1(bytes)
 //: Digest calculated incrementally
 do {
     var digest = MD5()
-    let partial1 = try digest.update(withBytes: [0x31, 0x32])
-    let partial2 = try digest.update(withBytes: [0x33])
+    let _ = try digest.update(withBytes: [0x31, 0x32])
+    let _ = try digest.update(withBytes: [0x33])
     let result = try digest.finish()
+    print(result)
 } catch {}
 
 /*:
@@ -62,6 +63,7 @@ do {
     try PKCS5.PBKDF1(password: password, salt: salt, variant: .sha1, iterations: 4096).calculate()
 
     let value = try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha256).calculate()
+    print(value)
 } catch {}
 
 /*:
@@ -80,6 +82,7 @@ do {
 
     let encrypted = try ChaCha20(key: key, iv: iv).encrypt(message)
     let decrypted = try ChaCha20(key: key, iv: iv).decrypt(encrypted)
+    print(decrypted)
 } catch {
     print(error)
 }

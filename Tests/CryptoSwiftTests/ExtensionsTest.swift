@@ -75,16 +75,6 @@ final class ExtensionsTest: XCTestCase {
         let hex = array.toHexString()
         XCTAssertEqual(str, hex)
     }
-
-    func testArrayInitHexPerformance() {
-        var str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
-        for _ in 0...12 {
-            str += str
-        }
-        measure {
-            _ = Array<UInt8>(hex: str)
-        }
-    }
 }
 
 #if !CI
@@ -99,6 +89,17 @@ final class ExtensionsTest: XCTestCase {
                 self.stopMeasuring()
             })
         }
+
+        func testArrayInitHexPerformance() {
+            var str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
+            for _ in 0...12 {
+                str += str
+            }
+            measure {
+                _ = Array<UInt8>(hex: str)
+            }
+        }
+
     }
 #endif
 
@@ -116,7 +117,10 @@ extension ExtensionsTest {
         ]
 
         #if !CI
-            tests += [("testArrayChunksPerformance", testArrayChunksPerformance)]
+            tests += [
+                ("testArrayChunksPerformance", testArrayChunksPerformance),
+                ("testArrayInitHexPerformance", testArrayInitHexPerformance)
+            ]
         #endif
         return tests
     }

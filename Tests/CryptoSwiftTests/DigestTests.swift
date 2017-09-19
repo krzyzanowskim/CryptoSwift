@@ -184,6 +184,7 @@ final class DigestTests: XCTestCase {
         }
 
         // Keep it to compare
+        /*
         func testSHA1PerformanceCC() {
             measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
                 let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
@@ -193,6 +194,7 @@ final class DigestTests: XCTestCase {
                 self.stopMeasuring()
             }
         }
+         */
     }
 
 #endif

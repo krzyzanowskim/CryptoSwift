@@ -2,6 +2,7 @@
 - Adds Padding enum (.pkcs5, .pkcs7, .noPadding, .zeroPadding)
 - Removes Generics from the public API.
 - Slightly improves SHA1, SHA2, SHA3 performance.
+- Update SPM configuration for Swift 4
 
 0.7.1
 - Swift 4.0 compatibility release

@@ -148,8 +148,15 @@ Run `carthage` to build the framework and drag the built CryptoSwift.framework i
 #### Swift Package Manager
 
 You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding this:
+
 ```
-.Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", majorVersion: 0)
+Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", majorVersion: 0)
+```
+
+or more strict
+
+```
+Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", version: "0.7.2")
 ```
 
 See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)

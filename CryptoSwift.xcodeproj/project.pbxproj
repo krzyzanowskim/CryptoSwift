@@ -45,13 +45,13 @@
 		75EC528F1EE8B81A0048EB3B /* Cipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC524C1EE8B6CA0048EB3B /* Cipher.swift */; };
 		75EC52901EE8B81A0048EB3B /* Collection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC524D1EE8B6CA0048EB3B /* Collection+Extension.swift */; };
 		75EC52911EE8B81A0048EB3B /* Cryptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC524E1EE8B6CA0048EB3B /* Cryptors.swift */; };
-		75EC52921EE8B81A0048EB3B /* CSArrayType+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC524F1EE8B6CA0048EB3B /* CSArrayType+Extensions.swift */; };
+		75EC52921EE8B81A0048EB3B /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC524F1EE8B6CA0048EB3B /* Array+Extensions.swift */; };
 		75EC52931EE8B81A0048EB3B /* Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52501EE8B6CA0048EB3B /* Digest.swift */; };
 		75EC52941EE8B81A0048EB3B /* DigestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52511EE8B6CA0048EB3B /* DigestType.swift */; };
 		75EC52951EE8B8200048EB3B /* AES+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52531EE8B6CA0048EB3B /* AES+Foundation.swift */; };
 		75EC52961EE8B8200048EB3B /* Blowfish+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52541EE8B6CA0048EB3B /* Blowfish+Foundation.swift */; };
 		75EC52971EE8B8200048EB3B /* ChaCha20+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52551EE8B6CA0048EB3B /* ChaCha20+Foundation.swift */; };
-		75EC52981EE8B8200048EB3B /* CSArrayType+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52561EE8B6CA0048EB3B /* CSArrayType+Foundation.swift */; };
+		75EC52981EE8B8200048EB3B /* Array+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52561EE8B6CA0048EB3B /* Array+Foundation.swift */; };
 		75EC52991EE8B8200048EB3B /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52571EE8B6CA0048EB3B /* Data+Extension.swift */; };
 		75EC529A1EE8B8200048EB3B /* HMAC+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52581EE8B6CA0048EB3B /* HMAC+Foundation.swift */; };
 		75EC529B1EE8B8200048EB3B /* Rabbit+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52591EE8B6CA0048EB3B /* Rabbit+Foundation.swift */; };
@@ -192,13 +192,13 @@
 		75EC524C1EE8B6CA0048EB3B /* Cipher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cipher.swift; sourceTree = "<group>"; };
 		75EC524D1EE8B6CA0048EB3B /* Collection+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Extension.swift"; sourceTree = "<group>"; };
 		75EC524E1EE8B6CA0048EB3B /* Cryptors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptors.swift; sourceTree = "<group>"; };
-		75EC524F1EE8B6CA0048EB3B /* CSArrayType+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CSArrayType+Extensions.swift"; sourceTree = "<group>"; };
+		75EC524F1EE8B6CA0048EB3B /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		75EC52501EE8B6CA0048EB3B /* Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Digest.swift; sourceTree = "<group>"; };
 		75EC52511EE8B6CA0048EB3B /* DigestType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigestType.swift; sourceTree = "<group>"; };
 		75EC52531EE8B6CA0048EB3B /* AES+Foundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AES+Foundation.swift"; sourceTree = "<group>"; };
 		75EC52541EE8B6CA0048EB3B /* Blowfish+Foundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Blowfish+Foundation.swift"; sourceTree = "<group>"; };
 		75EC52551EE8B6CA0048EB3B /* ChaCha20+Foundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChaCha20+Foundation.swift"; sourceTree = "<group>"; };
-		75EC52561EE8B6CA0048EB3B /* CSArrayType+Foundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CSArrayType+Foundation.swift"; sourceTree = "<group>"; };
+		75EC52561EE8B6CA0048EB3B /* Array+Foundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Foundation.swift"; sourceTree = "<group>"; };
 		75EC52571EE8B6CA0048EB3B /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		75EC52581EE8B6CA0048EB3B /* HMAC+Foundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HMAC+Foundation.swift"; sourceTree = "<group>"; };
 		75EC52591EE8B6CA0048EB3B /* Rabbit+Foundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rabbit+Foundation.swift"; sourceTree = "<group>"; };
@@ -339,7 +339,7 @@
 				75EC524C1EE8B6CA0048EB3B /* Cipher.swift */,
 				75EC524D1EE8B6CA0048EB3B /* Collection+Extension.swift */,
 				75EC524E1EE8B6CA0048EB3B /* Cryptors.swift */,
-				75EC524F1EE8B6CA0048EB3B /* CSArrayType+Extensions.swift */,
+				75EC524F1EE8B6CA0048EB3B /* Array+Extensions.swift */,
 				75EC52501EE8B6CA0048EB3B /* Digest.swift */,
 				75EC52511EE8B6CA0048EB3B /* DigestType.swift */,
 				75EC52521EE8B6CA0048EB3B /* Foundation */,
@@ -394,7 +394,7 @@
 				75EC52531EE8B6CA0048EB3B /* AES+Foundation.swift */,
 				75EC52541EE8B6CA0048EB3B /* Blowfish+Foundation.swift */,
 				75EC52551EE8B6CA0048EB3B /* ChaCha20+Foundation.swift */,
-				75EC52561EE8B6CA0048EB3B /* CSArrayType+Foundation.swift */,
+				75EC52561EE8B6CA0048EB3B /* Array+Foundation.swift */,
 				75EC52571EE8B6CA0048EB3B /* Data+Extension.swift */,
 				75EC52581EE8B6CA0048EB3B /* HMAC+Foundation.swift */,
 				75EC52591EE8B6CA0048EB3B /* Rabbit+Foundation.swift */,
@@ -572,7 +572,7 @@
 				75EC52A91EE8B83D0048EB3B /* PKCS7Padding.swift in Sources */,
 				75EC52A51EE8B8290048EB3B /* Padding.swift in Sources */,
 				75EC527F1EE8B8130048EB3B /* BatchedCollection.swift in Sources */,
-				75EC52921EE8B81A0048EB3B /* CSArrayType+Extensions.swift in Sources */,
+				75EC52921EE8B81A0048EB3B /* Array+Extensions.swift in Sources */,
 				75EC52991EE8B8200048EB3B /* Data+Extension.swift in Sources */,
 				75EC52B61EE8B83D0048EB3B /* UInt8+Extension.swift in Sources */,
 				75EC52891EE8B8170048EB3B /* OFB.swift in Sources */,
@@ -592,7 +592,7 @@
 				75EC52AB1EE8B83D0048EB3B /* Rabbit.swift in Sources */,
 				75EC529C1EE8B8200048EB3B /* String+FoundationExtension.swift in Sources */,
 				75EC52B81EE8B83D0048EB3B /* Utils.swift in Sources */,
-				75EC52981EE8B8200048EB3B /* CSArrayType+Foundation.swift in Sources */,
+				75EC52981EE8B8200048EB3B /* Array+Foundation.swift in Sources */,
 				75EC52B11EE8B83D0048EB3B /* SHA3.swift in Sources */,
 				75EC52A31EE8B8290048EB3B /* NoPadding.swift in Sources */,
 				75EC52931EE8B81A0048EB3B /* Digest.swift in Sources */,
@@ -797,6 +797,7 @@
 				PRODUCT_NAME = CryptoSwift;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -824,6 +825,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_DISABLE_SAFETY_CHECKS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -957,6 +959,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_DISABLE_SAFETY_CHECKS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};

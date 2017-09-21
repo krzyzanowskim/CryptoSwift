@@ -841,7 +841,6 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Applications/Xcode6-Beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
 					"includes/**",
 				);
 				INFOPLIST_FILE = Tests/CryptoSwiftTests/Info.plist;
@@ -862,7 +861,6 @@
 				GCC_UNROLL_LOOPS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Applications/Xcode6-Beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
 					"includes/**",
 				);
 				INFOPLIST_FILE = Tests/CryptoSwiftTests/Info.plist;
@@ -973,7 +971,6 @@
 				GCC_UNROLL_LOOPS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Applications/Xcode6-Beta3.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
 					"includes/**",
 				);
 				INFOPLIST_FILE = Tests/CryptoSwiftTests/Info.plist;

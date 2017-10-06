@@ -159,7 +159,7 @@ or more strict
 
 ```swift
 dependencies: [
-    .Package(url: "ttps://github.com/krzyzanowskim/CryptoSwift.git", "0.7.2"),
+    .Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", "0.7.2"),
 ]
 ```
 

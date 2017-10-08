@@ -285,6 +285,7 @@
 		754BE46419693E190098E6F3 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */,
 				754BE46719693E190098E6F3 /* DigestTests.swift */,
 				75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */,
 				758A94271A65C59200E46135 /* HMACTests.swift */,
@@ -299,7 +300,6 @@
 				75C2E76C1D55F097003D2BCA /* Access.swift */,
 				756BFDCA1A82B87300B9D9A4 /* Bridging.h */,
 				754BE46519693E190098E6F3 /* Supporting Files */,
-				E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */,
 			);
 			name = Tests;
 			path = Tests/CryptoSwiftTests;
@@ -835,10 +835,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"includes/**",

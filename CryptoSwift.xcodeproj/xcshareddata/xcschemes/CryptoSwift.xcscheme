@@ -29,7 +29,8 @@
       disableMainThreadChecker = "YES"
       language = ""
       systemAttachmentLifetime = "keepNever"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">

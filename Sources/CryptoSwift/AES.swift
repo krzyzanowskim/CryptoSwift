@@ -179,7 +179,12 @@ private extension AES {
         let b33 = UInt32(block[block.startIndex + 3 + (3 << 2)]) << 24
         var b3 = b30 | b31 | b32 | b33
 
-        var t = Array<UInt32>(repeating: 0, count: 4)
+        let t = UnsafeMutablePointer<UInt32>.allocate(capacity: 4)
+        t.initialize(to: 0, count: 4)
+        defer {
+            t.deinitialize(count: 4)
+            t.deallocate(capacity: 4)
+        }
 
         for r in 0..<rounds - 1 {
             t[0] = b0 ^ rk[r][0]

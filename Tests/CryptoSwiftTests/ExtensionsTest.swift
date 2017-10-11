@@ -25,12 +25,12 @@ final class ExtensionsTest: XCTestCase {
     }
 
     func testToUInt32Array() {
-        let chunk: ArraySlice<UInt8> = [1, 1, 1, 7, 2, 3, 4, 5]
+        let chunk: ArraySlice<UInt8> = [0x8, 0x7, 0x6, 0x5, 0x4, 0x3, 0x2, 0x1]
         let result = chunk.toUInt32Array()
 
         XCTAssert(result.count == 2, "Invalid conversion")
-        XCTAssert(result[0] == 117_506_305, "Invalid conversion")
-        XCTAssert(result[1] == 84_148_994, "Invalid conversion")
+        XCTAssertEqual(result[0], 0x5060708)
+        XCTAssertEqual(result[1], 0x1020304)
     }
 
     func testDataInit() {

@@ -18,14 +18,12 @@
 //
 
 struct PCBCModeWorker: BlockModeWorker {
-    typealias Element = Array<UInt8>
-
     let cipherOperation: CipherOperationOnBlock
-    private let iv: Element
-    private var prev: Element?
+    private let iv: ArraySlice<UInt8>
+    private var prev: ArraySlice<UInt8>?
 
     init(iv: Array<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
-        self.iv = iv
+        self.iv = iv.slice
         self.cipherOperation = cipherOperation
     }
 
@@ -33,16 +31,16 @@ struct PCBCModeWorker: BlockModeWorker {
         guard let ciphertext = cipherOperation(xor(prev ?? iv, plaintext)) else {
             return Array(plaintext)
         }
-        prev = xor(plaintext, ciphertext)
+        prev = xor(plaintext, ciphertext.slice)
         return ciphertext
     }
 
     mutating func decrypt(_ ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
-        guard let plaintext = cipherOperation(Array(ciphertext)) else {
+        guard let plaintext = cipherOperation(ciphertext) else {
             return Array(ciphertext)
         }
         let result = xor(prev ?? iv, plaintext)
-        prev = xor(plaintext, ciphertext)
+        prev = xor(plaintext.slice, ciphertext)
         return result
     }
 }

@@ -146,7 +146,7 @@ public final class AES: BlockCipher {
 // MARK: Private
 private extension AES {
 
-    func encrypt(block: Array<UInt8>) -> Array<UInt8>? {
+    func encrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
 
         if blockMode.options.contains(.paddingRequired) && block.count != AES.blockSize {
             return Array(block)
@@ -240,10 +240,10 @@ private extension AES {
         return encrypted
     }
 
-    func decrypt(block: Array<UInt8>) -> Array<UInt8>? {
+    func decrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
 
         if blockMode.options.contains(.paddingRequired) && block.count != AES.blockSize {
-            return block
+            return Array(block)
         }
 
         let rounds = variant.Nr

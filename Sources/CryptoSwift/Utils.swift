@@ -73,11 +73,16 @@ func xor(_ a: ArraySlice<UInt8>, _ b: Array<UInt8>) -> Array<UInt8> {
 }
 
 func xor(_ a: ArraySlice<UInt8>, _ b: ArraySlice<UInt8>) -> Array<UInt8> {
+    return Array(xor(a, b) as ArraySlice<UInt8>)
+}
+
+func xor(_ a: ArraySlice<UInt8>, _ b: ArraySlice<UInt8>) -> ArraySlice<UInt8> {
     var xored = Array<UInt8>(repeating: 0, count: min(a.count, b.count))
     for i in 0..<xored.count {
         xored[xored.startIndex.advanced(by: i)] = a[a.startIndex.advanced(by: i)] ^ b[b.startIndex.advanced(by: i)]
     }
-    return xored
+    // don't want to modify slice in place
+    return xored.slice
 }
 
 /**

@@ -384,11 +384,11 @@ public final class Blowfish {
         }
     }
 
-    fileprivate func encrypt(block: Array<UInt8>) -> Array<UInt8>? {
+    fileprivate func encrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
         var result = Array<UInt8>()
 
-        var l = UInt32(bytes: block[0..<4])
-        var r = UInt32(bytes: block[4..<8])
+        var l = UInt32(bytes: block[block.startIndex + 0..<block.startIndex.advanced(by: 4)])
+        var r = UInt32(bytes: block[block.startIndex + 4..<block.startIndex.advanced(by: 8)])
 
         encryptBlowfishBlock(l: &l, r: &r)
 
@@ -413,11 +413,11 @@ public final class Blowfish {
         return result
     }
 
-    fileprivate func decrypt(block: Array<UInt8>) -> Array<UInt8>? {
+    fileprivate func decrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
         var result = Array<UInt8>()
 
-        var l = UInt32(bytes: block[0..<4])
-        var r = UInt32(bytes: block[4..<8])
+        var l = UInt32(bytes: block[block.startIndex + 0..<block.startIndex.advanced(by: 4)])
+        var r = UInt32(bytes: block[block.startIndex + 4..<block.startIndex.advanced(by: 8)])
 
         decryptBlowfishBlock(l: &l, r: &r)
 

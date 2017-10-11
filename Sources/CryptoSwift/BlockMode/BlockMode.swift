@@ -14,7 +14,7 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-typealias CipherOperationOnBlock = (_ block: Array<UInt8>) -> Array<UInt8>?
+typealias CipherOperationOnBlock = (_ block: ArraySlice<UInt8>) -> Array<UInt8>?
 
 public enum BlockMode {
     case ECB, CBC, PCBC, CFB, OFB, CTR

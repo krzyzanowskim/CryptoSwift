@@ -81,15 +81,6 @@ final class ExtensionsTest: XCTestCase {
 
     extension ExtensionsTest {
 
-        func testArrayChunksPerformance() {
-            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-                let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
-                self.startMeasuring()
-                _ = message.chunks(size: AES.blockSize)
-                self.stopMeasuring()
-            })
-        }
-
         func testArrayInitHexPerformance() {
             var str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
             for _ in 0...12 {
@@ -118,7 +109,6 @@ extension ExtensionsTest {
 
         #if !CI
             tests += [
-                ("testArrayChunksPerformance", testArrayChunksPerformance),
                 ("testArrayInitHexPerformance", testArrayInitHexPerformance)
             ]
         #endif

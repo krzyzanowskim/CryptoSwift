@@ -39,8 +39,8 @@ struct CFBModeWorker: BlockModeWorker {
         guard let plaintext = cipherOperation(prev ?? iv) else {
             return Array(ciphertext)
         }
-        let result = xor(plaintext, ciphertext)
+        let result: Array<UInt8> = xor(plaintext, ciphertext)
         prev = ciphertext
-        return Array(result)
+        return result
     }
 }

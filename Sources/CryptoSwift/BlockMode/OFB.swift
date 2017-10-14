@@ -39,7 +39,7 @@ struct OFBModeWorker: BlockModeWorker {
         guard let decrypted = cipherOperation(prev ?? iv.slice) else {
             return Array(ciphertext)
         }
-        let plaintext = xor(decrypted, ciphertext)
+        let plaintext: Array<UInt8> = xor(decrypted, ciphertext)
         prev = decrypted.slice
         return plaintext
     }

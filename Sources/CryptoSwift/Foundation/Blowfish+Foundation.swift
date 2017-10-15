@@ -18,7 +18,8 @@ import Foundation
 
 extension Blowfish {
 
-    public convenience init(key: String, iv: String, blockMode: BlockMode = .CBC(iv: Array<UInt8>(repeating: 0, count: Blowfish.blockSize)), padding: Padding = .pkcs7) throws {
-        try self.init(key: key.bytes, iv: iv.bytes, blockMode: blockMode, padding: padding)
+    /// Initialize with CBC block mode.
+    public convenience init(key: String, iv: String, padding: Padding = .pkcs7) throws {
+        try self.init(key: key.bytes, blockMode: .CBC(iv: iv.bytes), padding: padding)
     }
 }

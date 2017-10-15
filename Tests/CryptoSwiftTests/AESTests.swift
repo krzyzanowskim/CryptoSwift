@@ -364,9 +364,9 @@ final class AESTests: XCTestCase {
             let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
             let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
             let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7)
-            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+            measure {
                 _ = try! aes.encrypt(message)
-            })
+            }
         }
 
         func testAESDecryptPerformance() {
@@ -374,9 +374,9 @@ final class AESTests: XCTestCase {
             let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
             let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
             let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7)
-            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+            measure {
                 _ = try! aes.decrypt(message)
-            })
+            }
         }
     }
 #endif

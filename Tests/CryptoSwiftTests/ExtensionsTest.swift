@@ -90,7 +90,6 @@ final class ExtensionsTest: XCTestCase {
                 _ = Array<UInt8>(hex: str)
             }
         }
-
     }
 #endif
 
@@ -109,7 +108,7 @@ extension ExtensionsTest {
 
         #if !CI
             tests += [
-                ("testArrayInitHexPerformance", testArrayInitHexPerformance)
+                ("testArrayInitHexPerformance", testArrayInitHexPerformance),
             ]
         #endif
         return tests

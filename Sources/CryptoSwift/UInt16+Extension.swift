@@ -28,11 +28,11 @@ extension UInt16 {
             self = 0
             return
         }
-        
+
         let count = bytes.count
 
         let val0 = count > 0 ? UInt16(bytes[index.advanced(by: 0)]) << 8 : 0
-        let val1 = count > 1 ? UInt16(bytes[index.advanced(by: 1)])      : 0
+        let val1 = count > 1 ? UInt16(bytes[index.advanced(by: 1)]) : 0
 
         self = val0 | val1
     }

@@ -30,28 +30,28 @@ public enum BlockMode {
         switch self {
         case .ECB:
             return ECBModeWorker(cipherOperation: cipherOperation)
-        case .CBC(let iv):
-            if (iv.count != blockSize) {
+        case let .CBC(iv):
+            if iv.count != blockSize {
                 throw Error.invalidInitializationVector
             }
             return CBCModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
-        case .PCBC(let iv):
-            if (iv.count != blockSize) {
+        case let .PCBC(iv):
+            if iv.count != blockSize {
                 throw Error.invalidInitializationVector
             }
             return PCBCModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
-        case .CFB(let iv):
-            if (iv.count != blockSize) {
+        case let .CFB(iv):
+            if iv.count != blockSize {
                 throw Error.invalidInitializationVector
             }
             return CFBModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
-        case .OFB(let iv):
-            if (iv.count != blockSize) {
+        case let .OFB(iv):
+            if iv.count != blockSize {
                 throw Error.invalidInitializationVector
             }
             return OFBModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
-        case .CTR(let iv):
-            if (iv.count != blockSize) {
+        case let .CTR(iv):
+            if iv.count != blockSize {
                 throw Error.invalidInitializationVector
             }
             return CTRModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
@@ -75,4 +75,3 @@ public enum BlockMode {
         }
     }
 }
-

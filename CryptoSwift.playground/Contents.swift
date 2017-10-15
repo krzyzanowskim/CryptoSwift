@@ -30,8 +30,8 @@ Digest.sha1(bytes)
 //: Digest calculated incrementally
 do {
     var digest = MD5()
-    let _ = try digest.update(withBytes: [0x31, 0x32])
-    let _ = try digest.update(withBytes: [0x33])
+    _ = try digest.update(withBytes: [0x31, 0x32])
+    _ = try digest.update(withBytes: [0x33])
     let result = try digest.finish()
     print(result)
 } catch {}

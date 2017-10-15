@@ -326,13 +326,13 @@ public final class Blowfish {
     }
 
     private func setupBlockModeWorkers() throws {
-        encryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: self.encrypt)
+        encryptWorker = try blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: encrypt)
 
-        switch self.blockMode {
-            case .CFB, .OFB, .CTR:
-                decryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: self.encrypt)
-            default:
-                decryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: self.decrypt)
+        switch blockMode {
+        case .CFB, .OFB, .CTR:
+            decryptWorker = try blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: encrypt)
+        default:
+            decryptWorker = try blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: decrypt)
         }
     }
 

@@ -159,7 +159,6 @@ public final class AES: BlockCipher {
         let b33 = UInt32(block[block.startIndex.advanced(by: 15)]) << 24
         var b3 = b30 | b31 | b32 | b33
 
-
         let tLength = 4
         let t = UnsafeMutablePointer<UInt32>.allocate(capacity: tLength)
         t.initialize(to: 0, count: tLength)
@@ -316,7 +315,7 @@ public final class AES: BlockCipher {
 private extension AES {
     private func expandKeyInv(_ key: Key, variant: Variant) -> Array<Array<UInt32>> {
         let rounds = variantNr
-        var rk2: Array<Array<UInt32>> = self.expandKey(key, variant: variant)
+        var rk2: Array<Array<UInt32>> = expandKey(key, variant: variant)
 
         for r in 1..<rounds {
             for i in 0..<4 {
@@ -332,7 +331,7 @@ private extension AES {
         return rk2
     }
 
-    private func expandKey(_ key: Key, variant: Variant) -> Array<Array<UInt32>> {
+    private func expandKey(_ key: Key, variant _: Variant) -> Array<Array<UInt32>> {
 
         func convertExpandedKey(_ expanded: Array<UInt8>) -> Array<Array<UInt32>> {
             return expanded.batched(by: 4).map({ UInt32(bytes: $0.reversed()) }).batched(by: 4).map({ Array($0) })

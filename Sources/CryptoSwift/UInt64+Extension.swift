@@ -30,15 +30,15 @@ extension UInt64 {
         }
 
         let count = bytes.count
-        
+
         let val0 = count > 0 ? UInt64(bytes[index.advanced(by: 0)]) << 56 : 0
         let val1 = count > 0 ? UInt64(bytes[index.advanced(by: 1)]) << 48 : 0
         let val2 = count > 0 ? UInt64(bytes[index.advanced(by: 2)]) << 40 : 0
         let val3 = count > 0 ? UInt64(bytes[index.advanced(by: 3)]) << 32 : 0
         let val4 = count > 0 ? UInt64(bytes[index.advanced(by: 4)]) << 24 : 0
         let val5 = count > 0 ? UInt64(bytes[index.advanced(by: 5)]) << 16 : 0
-        let val6 = count > 0 ? UInt64(bytes[index.advanced(by: 6)]) << 8  : 0
-        let val7 = count > 0 ? UInt64(bytes[index.advanced(by: 7)])       : 0
+        let val6 = count > 0 ? UInt64(bytes[index.advanced(by: 6)]) << 8 : 0
+        let val7 = count > 0 ? UInt64(bytes[index.advanced(by: 7)]) : 0
 
         self = val0 | val1 | val2 | val3 | val4 | val5 | val6 | val7
     }

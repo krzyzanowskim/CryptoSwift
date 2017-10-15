@@ -70,11 +70,11 @@ public extension Array where Element == UInt8 {
     }
 
     public func encrypt(cipher: Cipher) throws -> [Element] {
-        return try cipher.encrypt(self.slice)
+        return try cipher.encrypt(slice)
     }
 
     public func decrypt(cipher: Cipher) throws -> [Element] {
-        return try cipher.decrypt(self.slice)
+        return try cipher.decrypt(slice)
     }
 
     public func authenticate<A: Authenticator>(with authenticator: A) throws -> [Element] {

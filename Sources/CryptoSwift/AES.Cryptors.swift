@@ -87,7 +87,7 @@ extension AES {
                 self.worker = try aes.blockMode.worker(blockSize: AES.blockSize, cipherOperation: aes.decrypt)
             }
 
-            self.paddingRequired = try aes.blockMode.options.contains(.paddingRequired)
+            self.paddingRequired = aes.blockMode.options.contains(.paddingRequired)
         }
 
         public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {

@@ -313,7 +313,7 @@ public final class Blowfish {
     ]
 
     public init(key: Array<UInt8>, iv: Array<UInt8>? = nil, blockMode: BlockMode = .CBC(iv: Array<UInt8>(repeating: 0, count: Blowfish.blockSize)), padding: Padding) throws {
-        precondition(key.count >= 8 && key.count <= 56)
+        precondition(key.count >= 5 && key.count <= 56)
 
         self.blockMode = blockMode
         self.padding = padding

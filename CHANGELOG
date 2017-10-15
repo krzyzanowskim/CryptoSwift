@@ -1,3 +1,4 @@
+0.8.0
 - Adds SHA3 Keccak variants
 - Adds String.bytes helper to convert String to array of bytes
 - Improves AES performance

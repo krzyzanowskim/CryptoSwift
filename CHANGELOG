@@ -1,3 +1,13 @@
+0.8.0
+- Adds SHA3 Keccak variants
+- Adds String.bytes helper to convert String to array of bytes
+- Improves AES performance
+- Speeds up compilation times with Swift 4
+- Fixes: Blowfish minimum key size is 5
+- Removes Ciphers "iv" parameter (value moved to BlockMode)
+- BlockMode uses associated value for IV value where apply e.g. .CBC(iv: ivbytes)
+- Refactors internal hacks no longer needed with Swift 4
+
 0.7.2
 - Adds Padding enum (.pkcs5, .pkcs7, .noPadding, .zeroPadding)
 - Removes Generics from the public API.

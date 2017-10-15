@@ -25,12 +25,12 @@ final class ExtensionsTest: XCTestCase {
     }
 
     func testToUInt32Array() {
-        let chunk: ArraySlice<UInt8> = [1, 1, 1, 7, 2, 3, 4, 5]
+        let chunk: ArraySlice<UInt8> = [0x8, 0x7, 0x6, 0x5, 0x4, 0x3, 0x2, 0x1]
         let result = chunk.toUInt32Array()
 
         XCTAssert(result.count == 2, "Invalid conversion")
-        XCTAssert(result[0] == 117_506_305, "Invalid conversion")
-        XCTAssert(result[1] == 84_148_994, "Invalid conversion")
+        XCTAssertEqual(result[0], 0x5060708)
+        XCTAssertEqual(result[1], 0x1020304)
     }
 
     func testDataInit() {
@@ -49,7 +49,7 @@ final class ExtensionsTest: XCTestCase {
 
     func testEmptyStringEncrypt() {
         do {
-            let cipher = try AES(key: Array("secret0key000000".utf8).md5(), iv: Array("secret0key000000".utf8).md5(), blockMode: .ECB)
+            let cipher = try AES(key: "secret0key000000".bytes.md5(), blockMode: .ECB)
             let encrypted = try "".encryptToBase64(cipher: cipher)
             let decrypted = try encrypted?.decryptBase64ToString(cipher: cipher)
             XCTAssertEqual("", decrypted)
@@ -81,15 +81,6 @@ final class ExtensionsTest: XCTestCase {
 
     extension ExtensionsTest {
 
-        func testArrayChunksPerformance() {
-            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false, for: { () -> Void in
-                let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
-                self.startMeasuring()
-                _ = message.chunks(size: AES.blockSize)
-                self.stopMeasuring()
-            })
-        }
-
         func testArrayInitHexPerformance() {
             var str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
             for _ in 0...12 {
@@ -99,7 +90,6 @@ final class ExtensionsTest: XCTestCase {
                 _ = Array<UInt8>(hex: str)
             }
         }
-
     }
 #endif
 
@@ -118,8 +108,7 @@ extension ExtensionsTest {
 
         #if !CI
             tests += [
-                ("testArrayChunksPerformance", testArrayChunksPerformance),
-                ("testArrayInitHexPerformance", testArrayInitHexPerformance)
+                ("testArrayInitHexPerformance", testArrayInitHexPerformance),
             ]
         #endif
         return tests

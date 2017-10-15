@@ -11,6 +11,7 @@
 		750509991F6BEF2A00394A1B /* PKCS7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750509981F6BEF2A00394A1B /* PKCS7.swift */; };
 		750CC3EB1DC0CACE0096BE6E /* BlowfishTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */; };
 		75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */; };
+		751EE9781F93996100161FFC /* AES.Cryptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751EE9771F93996100161FFC /* AES.Cryptors.swift */; };
 		753B33011DAB84D600D06422 /* RandomBytesSequenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753B33001DAB84D600D06422 /* RandomBytesSequenceTests.swift */; };
 		75482EA41CB310B7001F66A5 /* PBKDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75482EA31CB310B7001F66A5 /* PBKDF.swift */; };
 		754BE46819693E190098E6F3 /* DigestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* DigestTests.swift */; };
@@ -156,6 +157,7 @@
 		750509981F6BEF2A00394A1B /* PKCS7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7.swift; sourceTree = "<group>"; };
 		750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlowfishTests.swift; sourceTree = "<group>"; };
 		75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Poly1305Tests.swift; sourceTree = "<group>"; };
+		751EE9771F93996100161FFC /* AES.Cryptors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AES.Cryptors.swift; sourceTree = "<group>"; };
 		753B33001DAB84D600D06422 /* RandomBytesSequenceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomBytesSequenceTests.swift; sourceTree = "<group>"; };
 		75482EA31CB310B7001F66A5 /* PBKDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBKDF.swift; sourceTree = "<group>"; };
 		754BE45519693E190098E6F3 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -285,6 +287,7 @@
 		754BE46419693E190098E6F3 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */,
 				754BE46719693E190098E6F3 /* DigestTests.swift */,
 				75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */,
 				758A94271A65C59200E46135 /* HMACTests.swift */,
@@ -299,7 +302,6 @@
 				75C2E76C1D55F097003D2BCA /* Access.swift */,
 				756BFDCA1A82B87300B9D9A4 /* Bridging.h */,
 				754BE46519693E190098E6F3 /* Supporting Files */,
-				E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */,
 			);
 			name = Tests;
 			path = Tests/CryptoSwiftTests;
@@ -327,6 +329,7 @@
 			isa = PBXGroup;
 			children = (
 				75EC52381EE8B6CA0048EB3B /* AES.swift */,
+				751EE9771F93996100161FFC /* AES.Cryptors.swift */,
 				75EC52391EE8B6CA0048EB3B /* Array+Extension.swift */,
 				75EC523A1EE8B6CA0048EB3B /* Authenticator.swift */,
 				75EC523B1EE8B6CA0048EB3B /* BatchedCollection.swift */,
@@ -345,7 +348,6 @@
 				75EC52521EE8B6CA0048EB3B /* Foundation */,
 				75EC525C1EE8B6CA0048EB3B /* Generics.swift */,
 				75EC525D1EE8B6CA0048EB3B /* HMAC.swift */,
-				75EC525F1EE8B6CA0048EB3B /* Int+Extension.swift */,
 				75EC52611EE8B6CA0048EB3B /* MD5.swift */,
 				75EC52621EE8B6CA0048EB3B /* NoPadding.swift */,
 				75EC52631EE8B6CA0048EB3B /* Operators.swift */,
@@ -360,10 +362,11 @@
 				75EC52701EE8B6CA0048EB3B /* SHA2.swift */,
 				75EC52711EE8B6CA0048EB3B /* SHA3.swift */,
 				75EC52721EE8B6CA0048EB3B /* String+Extension.swift */,
+				75EC525F1EE8B6CA0048EB3B /* Int+Extension.swift */,
+				75EC52761EE8B6CA0048EB3B /* UInt8+Extension.swift */,
 				75EC52731EE8B6CA0048EB3B /* UInt16+Extension.swift */,
 				75EC52741EE8B6CA0048EB3B /* UInt32+Extension.swift */,
 				75EC52751EE8B6CA0048EB3B /* UInt64+Extension.swift */,
-				75EC52761EE8B6CA0048EB3B /* UInt8+Extension.swift */,
 				75EC52771EE8B6CA0048EB3B /* Updatable.swift */,
 				75EC52781EE8B6CA0048EB3B /* Utils.swift */,
 				75EC52791EE8B6CA0048EB3B /* ZeroPadding.swift */,
@@ -578,6 +581,7 @@
 				75EC52891EE8B8170048EB3B /* OFB.swift in Sources */,
 				75EC52831EE8B8170048EB3B /* BlockModeOptions.swift in Sources */,
 				75EC52961EE8B8200048EB3B /* Blowfish+Foundation.swift in Sources */,
+				751EE9781F93996100161FFC /* AES.Cryptors.swift in Sources */,
 				75EC528B1EE8B8170048EB3B /* RandomAccessBlockModeWorker.swift in Sources */,
 				75EC527D1EE8B8130048EB3B /* Array+Extension.swift in Sources */,
 				75EC52B31EE8B83D0048EB3B /* UInt16+Extension.swift in Sources */,
@@ -689,13 +693,13 @@
 				CODE_SIGNING_REQUIRED = NO;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -713,7 +717,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = CryptoSwift;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx appletvos watchos appletvsimulator watchsimulator";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -751,6 +754,7 @@
 				CODE_SIGNING_REQUIRED = NO;
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -769,7 +773,6 @@
 				METAL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = CryptoSwift;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx appletvos watchos appletvsimulator watchsimulator";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -793,10 +796,11 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = com.krzyzanowskim.CryptoSwift;
 				PRODUCT_NAME = CryptoSwift;
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -824,7 +828,9 @@
 				PRODUCT_NAME = CryptoSwift;
 				SKIP_INSTALL = YES;
 				SWIFT_DISABLE_SAFETY_CHECKS = YES;
+				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = "compile-time";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -835,10 +841,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"includes/**",
@@ -903,6 +905,7 @@
 				CODE_SIGNING_REQUIRED = NO;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -924,7 +927,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = CryptoSwift;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx appletvos watchos appletvsimulator watchsimulator";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -946,7 +948,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = YES;
 				"ENABLE_BITCODE[sdk=macosx*]" = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_UNROLL_LOOPS = YES;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -956,7 +957,9 @@
 				PRODUCT_NAME = CryptoSwift;
 				SKIP_INSTALL = YES;
 				SWIFT_DISABLE_SAFETY_CHECKS = YES;
+				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = "compile-time";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;

@@ -18,11 +18,8 @@ import Foundation
 
 extension AES {
 
-    public convenience init(key: String, iv: String, blockMode: BlockMode = .CBC, padding: Padding = .pkcs7) throws {
-        guard let kkey = key.data(using: String.Encoding.utf8, allowLossyConversion: false)?.bytes, let iiv = iv.data(using: String.Encoding.utf8, allowLossyConversion: false)?.bytes else {
-            throw Error.invalidKeyOrInitializationVector
-        }
-
-        try self.init(key: kkey, iv: iiv, blockMode: blockMode, padding: padding)
+    /// Initialize with CBC block mode.
+    public convenience init(key: String, iv: String, padding: Padding = .pkcs7) throws {
+        try self.init(key: key.bytes, blockMode: .CBC(iv: iv.bytes), padding: padding)
     }
 }

@@ -38,7 +38,7 @@ final class ChaCha20Tests: XCTestCase {
 
         for idx in 0..<keys.count {
             let expectedHex = expectedHexes[idx]
-            let message = Array<UInt8>(repeating: 0, count: (expectedHex.characters.count / 2))
+            let message = Array<UInt8>(repeating: 0, count: (expectedHex.count / 2))
 
             do {
                 let encrypted = try message.encrypt(cipher: ChaCha20(key: keys[idx], iv: ivs[idx]))
@@ -82,7 +82,7 @@ final class ChaCha20Tests: XCTestCase {
         let key: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f]
         let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07]
         let expectedHex = "F798A189F195E66982105FFB640BB7757F579DA31602FC93EC01AC56F85AC3C134A4547B733B46413042C9440049176905D3BE59EA1C53F15916155C2BE8241A38008B9A26BC35941E2444177C8ADE6689DE95264986D95889FB60E84629C9BD9A5ACB1CC118BE563EB9B3A4A472F82E09A7E778492B562EF7130E88DFE031C79DB9D4F7C7A899151B9A475032B63FC385245FE054E3DD5A97A5F576FE064025D3CE042C566AB2C507B138DB853E3D6959660996546CC9C4A6EAFDC777C040D70EAF46F76DAD3979E5C5360C3317166A1C894C94A371876A94DF7628FE4EAAF2CCB27D5AAAE0AD7AD0F9D4B6AD3B54098746D4524D38407A6DEB3AB78FAB78C9"
-        let plaintext: Array<UInt8> = Array<UInt8>(repeating: 0, count: (expectedHex.characters.count / 2))
+        let plaintext: Array<UInt8> = Array<UInt8>(repeating: 0, count: (expectedHex.count / 2))
 
         do {
             let cipher = try ChaCha20(key: key, iv: iv)
@@ -108,7 +108,7 @@ final class ChaCha20Tests: XCTestCase {
         func testChaCha20Performance() {
             let key: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f]
             let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07]
-            let message = Array<UInt8>(repeating: 7, count: 1024)
+            let message = Array<UInt8>(repeating: 7, count: 1024 * 1024)
             measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
                 do {
                     _ = try ChaCha20(key: key, iv: iv).encrypt(message)

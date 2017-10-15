@@ -167,10 +167,10 @@ class BlowfishTests: XCTestCase {
     }
 
     func testCBCZeroPadding() {
-        let key = Array<UInt8>.init(hex: "0123456789ABCDEFF0E1D2C3B4A59687")
-        let iv = Array<UInt8>.init(hex: "FEDCBA9876543210")
-        let input = Array<UInt8>.init(hex: "37363534333231204E6F77206973207468652074696D6520666F722000")
-        XCTAssertEqual(try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: .zeroPadding).encrypt(input), Array<UInt8>(hex: "6B77B4D63006DEE605B156E27403979358DEB9E7154616D959F1652BD5FF92CC"))
+        let key = Array<UInt8>(hex: "0123456789ABCDEFF0E1D2C3B4A59687")
+        let iv = Array<UInt8>(hex: "FEDCBA9876543210")
+        let input = Array<UInt8>(hex: "37363534333231204E6F77206973207468652074696D6520666F722000")
+        XCTAssertEqual(try Blowfish(key: key, blockMode: .CBC(iv: iv), padding: .zeroPadding).encrypt(input), Array<UInt8>(hex: "6B77B4D63006DEE605B156E27403979358DEB9E7154616D959F1652BD5FF92CC"))
     }
 
     func testEncryptDecrypt() {
@@ -179,7 +179,7 @@ class BlowfishTests: XCTestCase {
         let input = Array<UInt8>.init(hex: "37363534333231204E6F77206973207468652074696D6520666F722000")
 
         do {
-            let cipher = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: .pkcs7)
+            let cipher = try Blowfish(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7)
             let ciphertext = try cipher.encrypt(input)
             let plaintext = try cipher.decrypt(ciphertext)
             XCTAssertEqual(plaintext, input)
@@ -191,9 +191,11 @@ class BlowfishTests: XCTestCase {
     // https://github.com/krzyzanowskim/CryptoSwift/issues/415
     func testDecryptCFB415() {
         do {
-            let plaintext = Array("secret12".utf8)
-            let encrypted = try Blowfish(key: "passwordpassword", iv: "12345678", blockMode: .CFB, padding: .noPadding).encrypt(plaintext)
-            let decrypted = try Blowfish(key: "passwordpassword", iv: "12345678", blockMode: .CFB, padding: .noPadding).decrypt(encrypted)
+            let plaintext = "secret12".bytes
+            let key = "passwordpassword".bytes
+            let iv = "12345678".bytes
+            let encrypted = try Blowfish(key: key, blockMode: .CFB(iv: iv), padding: .noPadding).encrypt(plaintext)
+            let decrypted = try Blowfish(key: key, blockMode: .CFB(iv: iv), padding: .noPadding).decrypt(encrypted)
             XCTAssertEqual(plaintext, decrypted)
         } catch {
             XCTFail(error.localizedDescription)

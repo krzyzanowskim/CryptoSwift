@@ -186,11 +186,11 @@ also check [Playground](/CryptoSwift.playground/Contents.swift)
 import CryptoSwift
 ```
 
-CryptoSwift uses array of bytes aka `Array<UInt8>` as a base type for all operations. Every data may be converted to a stream of bytes. You will find convenience functions that accept String or NSData, and it will be internally converted to the array of bytes.
+CryptoSwift uses array of bytes aka `Array<UInt8>` as a base type for all operations. Every data may be converted to a stream of bytes. You will find convenience functions that accept `String` or `Data`, and it will be internally converted to the array of bytes.
 
 ##### Data types conversion
 
-For you convenience **CryptoSwift** provides two functions to easily convert array of bytes to NSData and another way around:
+For you convenience **CryptoSwift** provides two functions to easily convert array of bytes to `Data` and another way around:
 
 Data from bytes:
 
@@ -213,7 +213,7 @@ let hex   = bytes.toHexString()            // "010203"
 
 Build bytes out of `String`
 ```swift
-let bytes = Array("string".utf8)
+let bytes: Array<UInt8> = "password".bytes  // Array("password".utf8)
 ```
 
 Also... check out helpers that work with **Base64** encoded data:
@@ -255,7 +255,7 @@ do {
 Hashing a String and printing result
 
 ```swift
-let hash = "123".md5()
+let hash = "123".md5() // "123".bytes.md5()
 ```
 
 ##### Calculate CRC
@@ -312,8 +312,8 @@ let decrypted = try Rabbit(key: key, iv: iv).decrypt(encrypted)
 ##### Blowfish
 
 ```swift
-let encrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: .pkcs7).encrypt(message)
-let decrypted = try Blowfish(key: key, iv: iv, blockMode: .CBC, padding: .pkcs7).decrypt(encrypted)
+let encrypted = try Blowfish(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7).encrypt(message)
+let decrypted = try Blowfish(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7).decrypt(encrypted)
 ```
 
 ##### AES
@@ -328,7 +328,7 @@ Variant of AES encryption (AES-128, AES-192, AES-256) depends on given key lengt
 
 AES-256 example
 ```swift
-try AES(key: [1,2,3,...,32], iv: [1,2,3,...,16], blockMode: .CBC, padding: .pkcs7)
+try AES(key: [1,2,3,...,32], blockMode: .CBC(iv: [1,2,3,...,16]), padding: .pkcs7)
 ```
  
 ###### All at once
@@ -371,8 +371,8 @@ let key: Array<UInt8> = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 let iv: Array<UInt8> = AES.randomIV(AES.blockSize)
 
 do {
-    let encrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: .pkcs7).encrypt(input)
-    let decrypted = try AES(key: key, iv: iv, blockMode: .CBC, padding: .pkcs7).decrypt(encrypted)
+    let encrypted = try AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7).encrypt(input)
+    let decrypted = try AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7).decrypt(encrypted)
 } catch {
     print(error)
 }    
@@ -382,7 +382,7 @@ AES without data padding
 
 ```swift
 let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]
-let encrypted: Array<UInt8> = try! AES(key: "secret0key000000", iv:"0123456789012345", blockMode: .CBC, padding: .noPadding).encrypt(input)
+let encrypted: Array<UInt8> = try! AES(key: Array("secret0key000000".utf8), blockMode: .CBC(iv: Array("0123456789012345".utf8)), padding: .noPadding).encrypt(input)
 ```
 
 Using convenience extensions

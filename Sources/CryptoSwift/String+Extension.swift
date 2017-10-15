@@ -17,52 +17,56 @@
 /** String extension */
 extension String {
 
+    public var bytes: Array<UInt8> {
+        return data(using: String.Encoding.utf8, allowLossyConversion: true)?.bytes ?? Array(utf8)
+    }
+
     public func md5() -> String {
-        return utf8.lazy.map({ $0 as UInt8 }).md5().toHexString()
+        return bytes.md5().toHexString()
     }
 
     public func sha1() -> String {
-        return utf8.lazy.map({ $0 as UInt8 }).sha1().toHexString()
+        return bytes.sha1().toHexString()
     }
 
     public func sha224() -> String {
-        return utf8.lazy.map({ $0 as UInt8 }).sha224().toHexString()
+        return bytes.sha224().toHexString()
     }
 
     public func sha256() -> String {
-        return utf8.lazy.map({ $0 as UInt8 }).sha256().toHexString()
+        return bytes.sha256().toHexString()
     }
 
     public func sha384() -> String {
-        return utf8.lazy.map({ $0 as UInt8 }).sha384().toHexString()
+        return bytes.sha384().toHexString()
     }
 
     public func sha512() -> String {
-        return utf8.lazy.map({ $0 as UInt8 }).sha512().toHexString()
+        return bytes.sha512().toHexString()
     }
 
     public func sha3(_ variant: SHA3.Variant) -> String {
-        return utf8.lazy.map({ $0 as UInt8 }).sha3(variant).toHexString()
+        return bytes.sha3(variant).toHexString()
     }
 
     public func crc32(seed: UInt32? = nil, reflect: Bool = true) -> String {
-        return utf8.lazy.map({ $0 as UInt8 }).crc32(seed: seed, reflect: reflect).bytes().toHexString()
+        return bytes.crc32(seed: seed, reflect: reflect).bytes().toHexString()
     }
 
     public func crc16(seed: UInt16? = nil) -> String {
-        return utf8.lazy.map({ $0 as UInt8 }).crc16(seed: seed).bytes().toHexString()
+        return bytes.crc16(seed: seed).bytes().toHexString()
     }
 
     /// - parameter cipher: Instance of `Cipher`
     /// - returns: hex string of bytes
     public func encrypt(cipher: Cipher) throws -> String {
-        return try Array(utf8).encrypt(cipher: cipher).toHexString()
+        return try bytes.encrypt(cipher: cipher).toHexString()
     }
 
     /// - parameter cipher: Instance of `Cipher`
     /// - returns: base64 encoded string of encrypted bytes
     public func encryptToBase64(cipher: Cipher) throws -> String? {
-        return try Array(utf8).encrypt(cipher: cipher).toBase64()
+        return try bytes.encrypt(cipher: cipher).toBase64()
     }
 
     // decrypt() does not make sense for String
@@ -70,6 +74,6 @@ extension String {
     /// - parameter authenticator: Instance of `Authenticator`
     /// - returns: hex string of string
     public func authenticate<A: Authenticator>(with authenticator: A) throws -> String {
-        return try Array(utf8).authenticate(with: authenticator).toHexString()
+        return try bytes.authenticate(with: authenticator).toHexString()
     }
 }

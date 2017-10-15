@@ -18,13 +18,11 @@
 //
 
 struct OFBModeWorker: BlockModeWorker {
-    typealias Element = Array<UInt8>
-
     let cipherOperation: CipherOperationOnBlock
-    private let iv: Element
-    private var prev: Element?
+    private let iv: ArraySlice<UInt8>
+    private var prev: ArraySlice<UInt8>?
 
-    init(iv: Array<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
         self.iv = iv
         self.cipherOperation = cipherOperation
     }
@@ -33,7 +31,7 @@ struct OFBModeWorker: BlockModeWorker {
         guard let ciphertext = cipherOperation(prev ?? iv) else {
             return Array(plaintext)
         }
-        prev = ciphertext
+        prev = ciphertext.slice
         return xor(plaintext, ciphertext)
     }
 
@@ -41,8 +39,8 @@ struct OFBModeWorker: BlockModeWorker {
         guard let decrypted = cipherOperation(prev ?? iv) else {
             return Array(ciphertext)
         }
-        let plaintext = xor(decrypted, ciphertext)
-        prev = decrypted
+        let plaintext: Array<UInt8> = xor(decrypted, ciphertext)
+        prev = decrypted.slice
         return plaintext
     }
 }

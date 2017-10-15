@@ -60,24 +60,26 @@ func reversed(_ uint32: UInt32) -> UInt32 {
     return v
 }
 
-func xor(_ a: Array<UInt8>, _ b: Array<UInt8>) -> Array<UInt8> {
-    return xor(a.suffix(from: a.startIndex), b.suffix(from: b.startIndex))
+func xor<T, V>(_ left: T, _ right: V) -> ArraySlice<UInt8> where T: RandomAccessCollection, V: RandomAccessCollection, T.Element == UInt8, T.Index == Int, T.IndexDistance == Int, V.Element == UInt8, V.IndexDistance == Int, V.Index == Int {
+    return xor(left, right).slice
 }
 
-func xor(_ a: Array<UInt8>, _ b: ArraySlice<UInt8>) -> Array<UInt8> {
-    return xor(a.suffix(from: a.startIndex), b.suffix(from: b.startIndex))
-}
+func xor<T, V>(_ left: T, _ right: V) -> Array<UInt8> where T: RandomAccessCollection, V: RandomAccessCollection, T.Element == UInt8, T.Index == Int, T.IndexDistance == Int, V.Element == UInt8, V.IndexDistance == Int, V.Index == Int {
+    let length = Swift.min(left.count, right.count)
 
-func xor(_ a: ArraySlice<UInt8>, _ b: Array<UInt8>) -> Array<UInt8> {
-    return xor(a.suffix(from: a.startIndex), b.suffix(from: b.startIndex))
-}
-
-func xor(_ a: ArraySlice<UInt8>, _ b: ArraySlice<UInt8>) -> Array<UInt8> {
-    var xored = Array<UInt8>(repeating: 0, count: min(a.count, b.count))
-    for i in 0..<xored.count {
-        xored[xored.startIndex.advanced(by: i)] = a[a.startIndex.advanced(by: i)] ^ b[b.startIndex.advanced(by: i)]
+    let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: length)
+    buf.initialize(to: 0, count: length)
+    defer {
+        buf.deinitialize()
+        buf.deallocate(capacity: length)
     }
-    return xored
+
+    // xor
+    for i in 0..<length {
+        buf[i] = left[left.startIndex.advanced(by: i)] ^ right[right.startIndex.advanced(by: i)]
+    }
+
+    return Array(UnsafeBufferPointer(start: buf, count: length))
 }
 
 /**

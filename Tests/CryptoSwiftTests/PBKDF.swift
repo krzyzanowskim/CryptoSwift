@@ -46,19 +46,19 @@ class PBKDF: XCTestCase {
     }
 
     func testPBKDF2Length() {
-        let password: Array<UInt8> = Array("s33krit".utf8)
-        let salt: Array<UInt8> = Array("nacl".utf8)
+        let password: Array<UInt8> = "s33krit".bytes
+        let salt: Array<UInt8> = "nacl".bytes
         let value = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 2, keyLength: 8, variant: .sha1).calculate()
-        XCTAssert(value.toHexString() == "a53cf3df485e5cd9", "PBKDF2 fail")
+        XCTAssertEqual(value.toHexString(), "a53cf3df485e5cd9")
     }
 
     #if !CI
         func testPerformance() {
-            let password: Array<UInt8> = Array("s33krit".utf8)
-            let salt: Array<UInt8> = Array("nacl".utf8)
-            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true, for: { () -> Void in
+            let password: Array<UInt8> = "s33krit".bytes
+            let salt: Array<UInt8> = "nacl".bytes
+            measure {
                 _ = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 65536, keyLength: 32, variant: .sha1).calculate()
-            })
+            }
         }
     #endif
 

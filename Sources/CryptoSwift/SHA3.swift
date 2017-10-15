@@ -36,52 +36,42 @@ public final class SHA3: DigestType {
 
     public let blockSize: Int
     public let digestLength: Int
+    public let markByte: UInt8
 
     fileprivate var accumulated = Array<UInt8>()
     fileprivate var processedBytesTotalCount: Int = 0
     fileprivate var accumulatedHash: Array<UInt64>
 
-    public enum Variant: RawRepresentable {
-        case sha224, sha256, sha384, sha512
+    public enum Variant {
+        case sha224, sha256, sha384, sha512, keccak224, keccak256, keccak384, keccak512
 
         var digestLength: Int {
             return 100 - (blockSize / 2)
         }
 
         var blockSize: Int {
-            return (1600 - rawValue * 2) / 8
+            return (1600 - outputLength * 2) / 8
         }
 
-        public typealias RawValue = Int
-        public var rawValue: RawValue {
+        var markByte: UInt8 {
             switch self {
-            case .sha224:
-                return 224
-            case .sha256:
-                return 256
-            case .sha384:
-                return 384
-            case .sha512:
-                return 512
+            case .sha224, .sha256, .sha384, .sha512:
+                return 0x06 // 0x1F for SHAKE
+            case .keccak224, .keccak256, .keccak384, .keccak512:
+                return 0x01
             }
         }
 
-        public init?(rawValue: RawValue) {
-            switch rawValue {
-            case 224:
-                self = .sha224
-                break
-            case 256:
-                self = .sha256
-                break
-            case 384:
-                self = .sha384
-                break
-            case 512:
-                self = .sha512
-                break
-            default:
-                return nil
+        public var outputLength: Int {
+            switch self {
+            case .sha224, .keccak224:
+                return 224
+            case .sha256, .keccak256:
+                return 256
+            case .sha384, .keccak384:
+                return 384
+            case .sha512, .keccak512:
+                return 512
             }
         }
     }
@@ -89,6 +79,7 @@ public final class SHA3: DigestType {
     public init(variant: SHA3.Variant) {
         blockSize = variant.blockSize
         digestLength = variant.digestLength
+        markByte = variant.markByte
         accumulatedHash = Array<UInt64>(repeating: 0, count: digestLength)
     }
 
@@ -272,8 +263,7 @@ extension SHA3: Updatable {
                 let q = (r / 8) - (accumulated.count % (r / 8))
                 accumulated += Array<UInt8>(repeating: 0, count: q)
             }
-
-            accumulated[markByteIndex] |= 0x06 // 0x1F for SHAKE
+            accumulated[markByteIndex] |= markByte
             accumulated[self.accumulated.count - 1] |= 0x80
         }
 

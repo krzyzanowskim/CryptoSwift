@@ -20,6 +20,8 @@
     import Darwin
 #endif
 
+typealias Key = SecureBytes
+
 ///  Keeps bytes in memory. Because this is class, bytes are not copied
 ///  and memory area is locked as long as referenced, then unlocked on deinit
 final class SecureBytes {

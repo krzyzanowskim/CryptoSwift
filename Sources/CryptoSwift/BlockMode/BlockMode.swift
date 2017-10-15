@@ -14,25 +14,47 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-typealias CipherOperationOnBlock = (_ block: Array<UInt8>) -> Array<UInt8>?
+typealias CipherOperationOnBlock = (_ block: ArraySlice<UInt8>) -> Array<UInt8>?
 
 public enum BlockMode {
-    case ECB, CBC, PCBC, CFB, OFB, CTR
+    case ECB, CBC(iv: Array<UInt8>), PCBC(iv: Array<UInt8>), CFB(iv: Array<UInt8>), OFB(iv: Array<UInt8>), CTR(iv: Array<UInt8>)
 
-    func worker(_ iv: Array<UInt8>?, cipherOperation: @escaping CipherOperationOnBlock) -> BlockModeWorker {
+    public enum Error: Swift.Error {
+        /// Invalid key or IV
+        case invalidKeyOrInitializationVector
+        /// Invalid IV
+        case invalidInitializationVector
+    }
+
+    func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> BlockModeWorker {
         switch self {
         case .ECB:
-            return ECBModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
-        case .CBC:
-            return CBCModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
-        case .PCBC:
-            return PCBCModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
-        case .CFB:
-            return CFBModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
-        case .OFB:
-            return OFBModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
-        case .CTR:
-            return CTRModeWorker(iv: iv ?? [], cipherOperation: cipherOperation)
+            return ECBModeWorker(cipherOperation: cipherOperation)
+        case let .CBC(iv):
+            if iv.count != blockSize {
+                throw Error.invalidInitializationVector
+            }
+            return CBCModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
+        case let .PCBC(iv):
+            if iv.count != blockSize {
+                throw Error.invalidInitializationVector
+            }
+            return PCBCModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
+        case let .CFB(iv):
+            if iv.count != blockSize {
+                throw Error.invalidInitializationVector
+            }
+            return CFBModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
+        case let .OFB(iv):
+            if iv.count != blockSize {
+                throw Error.invalidInitializationVector
+            }
+            return OFBModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
+        case let .CTR(iv):
+            if iv.count != blockSize {
+                throw Error.invalidInitializationVector
+            }
+            return CTRModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
         }
     }
 

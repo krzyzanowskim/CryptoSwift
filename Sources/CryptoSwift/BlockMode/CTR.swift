@@ -22,8 +22,8 @@ struct CTRModeWorker: RandomAccessBlockModeWorker {
     private let iv: ArraySlice<UInt8>
     var counter: UInt = 0
 
-    init(iv: Array<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
-        self.iv = iv.slice
+    init(iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+        self.iv = iv
         self.cipherOperation = cipherOperation
     }
 

@@ -36,14 +36,14 @@ public final class Blowfish {
     fileprivate lazy var decryptWorker: BlockModeWorker = {
         switch self.blockMode {
         case .CFB, .OFB, .CTR:
-            return self.blockMode.worker(self.iv, cipherOperation: self.encrypt)
+            return self.blockMode.worker(self.iv.slice, cipherOperation: self.encrypt)
         default:
-            return self.blockMode.worker(self.iv, cipherOperation: self.decrypt)
+            return self.blockMode.worker(self.iv.slice, cipherOperation: self.decrypt)
         }
     }()
 
     fileprivate lazy var encryptWorker: BlockModeWorker = {
-        self.blockMode.worker(self.iv, cipherOperation: self.encrypt)
+        self.blockMode.worker(self.iv.slice, cipherOperation: self.encrypt)
     }()
 
     private let N = 16 // rounds

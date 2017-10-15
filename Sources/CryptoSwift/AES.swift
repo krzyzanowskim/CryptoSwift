@@ -17,8 +17,6 @@
 //  Implementation of Gladman algorithm http://www.gladman.me.uk/AES
 //
 
-private typealias Key = SecureBytes
-
 /// The Advanced Encryption Standard (AES)
 public final class AES: BlockCipher {
 
@@ -49,6 +47,10 @@ public final class AES: BlockCipher {
         }
     }
 
+    private lazy var variantNr: Int = self.variant.Nr
+    private lazy var variantNb: Int = self.variant.Nb
+    private lazy var variantNk: Int = self.variant.Nk
+
     public static let blockSize: Int = 16 // 128 /8
 
     public var variant: Variant {
@@ -65,10 +67,10 @@ public final class AES: BlockCipher {
     }
 
     // Parameters
-    private let blockMode: BlockMode
-    private let key: Key
-    private let iv: Array<UInt8>
-    private let padding: Padding
+    let key: Key
+    let blockMode: BlockMode
+    let iv: Array<UInt8>
+    let padding: Padding
 
     //
     private lazy var expandedKey: Array<Array<UInt32>> = self.expandKey(self.key, variant: self.variant)
@@ -141,18 +143,13 @@ public final class AES: BlockCipher {
             throw Error.invalidInitializationVector
         }
     }
-}
 
-// MARK: Private
-private extension AES {
-
-    func encrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
-
+    internal func encrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
         if blockMode.options.contains(.paddingRequired) && block.count != AES.blockSize {
             return Array(block)
         }
 
-        let rounds = variant.Nr
+        let rounds = variantNr
         let rk = expandedKey
 
         let b00 = UInt32(block[block.startIndex.advanced(by: 0)])
@@ -242,13 +239,12 @@ private extension AES {
         return encrypted
     }
 
-    func decrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
-
+    internal func decrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
         if blockMode.options.contains(.paddingRequired) && block.count != AES.blockSize {
             return Array(block)
         }
 
-        let rounds = variant.Nr
+        let rounds = variantNr
         let rk = expandedKeyInv
         var b = block.toUInt32Array()
 
@@ -332,9 +328,11 @@ private extension AES {
 
         return out
     }
+}
 
-    func expandKeyInv(_ key: Key, variant: Variant) -> Array<Array<UInt32>> {
-        let rounds = variant.Nr
+private extension AES {
+    private func expandKeyInv(_ key: Key, variant: Variant) -> Array<Array<UInt32>> {
+        let rounds = variantNr
         var rk2: Array<Array<UInt32>> = self.expandKey(key, variant: variant)
 
         for r in 1..<rounds {
@@ -351,7 +349,7 @@ private extension AES {
         return rk2
     }
 
-    func expandKey(_ key: Key, variant: Variant) -> Array<Array<UInt32>> {
+    private func expandKey(_ key: Key, variant: Variant) -> Array<Array<UInt32>> {
 
         func convertExpandedKey(_ expanded: Array<UInt8>) -> Array<Array<UInt32>> {
             return expanded.batched(by: 4).map({ UInt32(bytes: $0.reversed()) }).batched(by: 4).map({ Array($0) })
@@ -370,8 +368,8 @@ private extension AES {
             return result
         }
 
-        var w = Array<UInt8>(repeating: 0, count: variant.Nb * (variant.Nr + 1) * 4)
-        for i in 0..<variant.Nk {
+        var w = Array<UInt8>(repeating: 0, count: variantNb * (variantNr + 1) * 4)
+        for i in 0..<variantNk {
             for wordIdx in 0..<4 {
                 w[(4 * i) + wordIdx] = key[(4 * i) + wordIdx]
             }
@@ -379,44 +377,49 @@ private extension AES {
 
         var tmp: Array<UInt8>
 
-        for i in variant.Nk..<variant.Nb * (variant.Nr + 1) {
+        for i in variantNk..<variantNb * (variantNr + 1) {
             tmp = Array<UInt8>(repeating: 0, count: 4)
 
             for wordIdx in 0..<4 {
                 tmp[wordIdx] = w[4 * (i - 1) + wordIdx]
             }
-            if (i % variant.Nk) == 0 {
+            if (i % variantNk) == 0 {
                 tmp = subWord(rotateLeft(UInt32(bytes: tmp), by: 8).bytes(totalBytes: MemoryLayout<UInt32>.size))
-                tmp[0] = tmp.first! ^ AES.Rcon[i / variant.Nk]
-            } else if variant.Nk > 6 && (i % variant.Nk) == 4 {
+                tmp[0] = tmp.first! ^ AES.Rcon[i / variantNk]
+            } else if variantNk > 6 && (i % variantNk) == 4 {
                 tmp = subWord(tmp)
             }
 
             // xor array of bytes
             for wordIdx in 0..<4 {
-                w[4 * i + wordIdx] = w[4 * (i - variant.Nk) + wordIdx] ^ tmp[wordIdx]
+                w[4 * i + wordIdx] = w[4 * (i - variantNk) + wordIdx] ^ tmp[wordIdx]
             }
         }
         return convertExpandedKey(w)
     }
 
-    func B0(_ x: UInt32) -> UInt32 {
+    @inline(__always)
+    private func B0(_ x: UInt32) -> UInt32 {
         return x & 0xff
     }
 
-    func B1(_ x: UInt32) -> UInt32 {
+    @inline(__always)
+    private func B1(_ x: UInt32) -> UInt32 {
         return (x >> 8) & 0xff
     }
 
-    func B2(_ x: UInt32) -> UInt32 {
+    @inline(__always)
+    private func B2(_ x: UInt32) -> UInt32 {
         return (x >> 16) & 0xff
     }
 
-    func B3(_ x: UInt32) -> UInt32 {
+    @inline(__always)
+    private func B3(_ x: UInt32) -> UInt32 {
         return (x >> 24) & 0xff
     }
 
-    func F1(_ x0: UInt32, _ x1: UInt32, _ x2: UInt32, _ x3: UInt32) -> UInt32 {
+    @inline(__always)
+    private func F1(_ x0: UInt32, _ x1: UInt32, _ x2: UInt32, _ x3: UInt32) -> UInt32 {
         var result: UInt32 = 0
         result |= UInt32(B1(AES.T0[Int(x0 & 255)]))
         result |= UInt32(B1(AES.T0[Int((x1 >> 8) & 255)])) << 8
@@ -425,7 +428,7 @@ private extension AES {
         return result
     }
 
-    func calculateSBox() -> (sBox: Array<UInt32>, invSBox: Array<UInt32>) {
+    private func calculateSBox() -> (sBox: Array<UInt32>, invSBox: Array<UInt32>) {
         var sbox = Array<UInt32>(repeating: 0, count: 256)
         var invsbox = sbox
         sbox[0] = 0x63
@@ -446,135 +449,6 @@ private extension AES {
         } while (p != 1)
 
         return (sBox: sbox, invSBox: invsbox)
-    }
-}
-
-// MARK: Encryptor
-extension AES {
-
-    public struct Encryptor: Updatable {
-        private var worker: BlockModeWorker
-        private let padding: Padding
-        private var accumulated = Array<UInt8>()
-        private var processedBytesTotalCount: Int = 0
-        private let paddingRequired: Bool
-
-        init(aes: AES) {
-            self.padding = aes.padding
-            self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encrypt)
-            self.paddingRequired = aes.blockMode.options.contains(.paddingRequired)
-        }
-
-        public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
-            self.accumulated += bytes
-
-            if isLast {
-                self.accumulated = padding.add(to: self.accumulated, blockSize: AES.blockSize)
-            }
-
-            var processedBytes = 0
-            var encrypted = Array<UInt8>(reserveCapacity: self.accumulated.count)
-            for chunk in self.accumulated.batched(by: AES.blockSize) {
-                if isLast || (self.accumulated.count - processedBytes) >= AES.blockSize {
-                    encrypted += worker.encrypt(chunk)
-                    processedBytes += chunk.count
-                }
-            }
-            self.accumulated.removeFirst(processedBytes)
-            self.processedBytesTotalCount += processedBytes
-            return encrypted
-        }
-    }
-}
-
-// MARK: Decryptor
-extension AES {
-
-    public struct Decryptor: RandomAccessCryptor {
-        private var worker: BlockModeWorker
-        private let padding: Padding
-        private var accumulated = Array<UInt8>()
-        private var processedBytesTotalCount: Int = 0
-        private let paddingRequired: Bool
-
-        private var offset: Int = 0
-        private var offsetToRemove: Int = 0
-
-        init(aes: AES) {
-            self.padding = aes.padding
-
-            switch aes.blockMode {
-            case .CFB, .OFB, .CTR:
-                // CFB, OFB, CTR uses encryptBlock to decrypt
-                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.encrypt)
-            default:
-                self.worker = aes.blockMode.worker(aes.iv, cipherOperation: aes.decrypt)
-            }
-
-            self.paddingRequired = aes.blockMode.options.contains(.paddingRequired)
-        }
-
-        public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
-            // prepend "offset" number of bytes at the begining
-            if self.offset > 0 {
-                self.accumulated += Array<UInt8>(repeating: 0, count: offset) + bytes
-                self.offsetToRemove = offset
-                self.offset = 0
-            } else {
-                self.accumulated += bytes
-            }
-
-            var processedBytes = 0
-            var plaintext = Array<UInt8>(reserveCapacity: self.accumulated.count)
-            for chunk in self.accumulated.batched(by: AES.blockSize) {
-                if isLast || (self.accumulated.count - processedBytes) >= AES.blockSize {
-                    plaintext += self.worker.decrypt(chunk)
-
-                    // remove "offset" from the beginning of first chunk
-                    if self.offsetToRemove > 0 {
-                        plaintext.removeFirst(self.offsetToRemove)
-                        self.offsetToRemove = 0
-                    }
-
-                    processedBytes += chunk.count
-                }
-            }
-            self.accumulated.removeFirst(processedBytes)
-            self.processedBytesTotalCount += processedBytes
-
-            if isLast {
-                plaintext = padding.remove(from: plaintext, blockSize: AES.blockSize)
-            }
-
-            return plaintext
-        }
-
-        @discardableResult public mutating func seek(to position: Int) -> Bool {
-            guard var worker = self.worker as? RandomAccessBlockModeWorker else {
-                return false
-            }
-
-            worker.counter = UInt(position / AES.blockSize)
-            self.worker = worker
-
-            self.offset = position % AES.blockSize
-
-            self.accumulated = []
-
-            return true
-        }
-    }
-}
-
-// MARK: Cryptors
-extension AES: Cryptors {
-
-    public func makeEncryptor() -> AES.Encryptor {
-        return Encryptor(aes: self)
-    }
-
-    public func makeDecryptor() -> AES.Decryptor {
-        return Decryptor(aes: self)
     }
 }
 

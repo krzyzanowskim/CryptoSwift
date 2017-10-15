@@ -22,8 +22,8 @@ struct CBCModeWorker: BlockModeWorker {
     private let iv: ArraySlice<UInt8>
     private var prev: ArraySlice<UInt8>?
 
-    init(iv: Array<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
-        self.iv = iv.slice
+    init(iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+        self.iv = iv
         self.cipherOperation = cipherOperation
     }
 

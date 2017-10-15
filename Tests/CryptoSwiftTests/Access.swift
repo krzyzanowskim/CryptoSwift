@@ -183,23 +183,23 @@ class Access: XCTestCase {
     func testAES() {
         do {
             let cipher = try AES(key: "secret0key000000", iv: "0123456789012345")
-            var encryptor = cipher.makeEncryptor()
+            var encryptor = try cipher.makeEncryptor()
             _ = try encryptor.update(withBytes: [1, 2, 3])
             _ = try encryptor.finish()
 
-            var decryptor = cipher.makeDecryptor()
+            var decryptor = try cipher.makeDecryptor()
             _ = try decryptor.update(withBytes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
             _ = try decryptor.finish()
 
             let enc = try cipher.encrypt([1, 2, 3])
             _ = try cipher.decrypt(enc)
 
-            _ = try AES(key: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], iv: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], blockMode: .CBC, padding: .noPadding)
+            _ = try AES(key: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], blockMode: .CBC(iv: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6]), padding: .noPadding)
 
             _ = AES.Variant.aes128
             _ = AES.blockSize
         } catch {
-            XCTFail(error.localizedDescription)
+            XCTFail("\(error)")
         }
     }
 
@@ -209,7 +209,7 @@ class Access: XCTestCase {
             let enc = try cipher.encrypt([1, 2, 3])
             _ = try cipher.decrypt(enc)
 
-            _ = try Blowfish(key: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], iv: [1, 2, 3, 4, 5, 6, 7, 8], blockMode: .CBC, padding: .noPadding)
+            _ = try Blowfish(key: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6], iv: [1, 2, 3, 4, 5, 6, 7, 8], padding: .noPadding)
 
             _ = Blowfish.blockSize
         } catch {

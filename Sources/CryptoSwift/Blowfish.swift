@@ -30,21 +30,10 @@ public final class Blowfish {
     }
 
     public static let blockSize: Int = 8 // 64 bit
-    fileprivate let iv: Array<UInt8>
     fileprivate let blockMode: BlockMode
     fileprivate let padding: Padding
-    fileprivate lazy var decryptWorker: BlockModeWorker = {
-        switch self.blockMode {
-        case .CFB, .OFB, .CTR:
-            return self.blockMode.worker(self.iv.slice, cipherOperation: self.encrypt)
-        default:
-            return self.blockMode.worker(self.iv.slice, cipherOperation: self.decrypt)
-        }
-    }()
-
-    fileprivate lazy var encryptWorker: BlockModeWorker = {
-        self.blockMode.worker(self.iv.slice, cipherOperation: self.encrypt)
-    }()
+    private var decryptWorker: BlockModeWorker!
+    private var encryptWorker: BlockModeWorker!
 
     private let N = 16 // rounds
     private var P: Array<UInt32>
@@ -323,7 +312,7 @@ public final class Blowfish {
         ],
     ]
 
-    public init(key: Array<UInt8>, iv: Array<UInt8>? = nil, blockMode: BlockMode = .CBC, padding: Padding) throws {
+    public init(key: Array<UInt8>, iv: Array<UInt8>? = nil, blockMode: BlockMode = .CBC(iv: Array<UInt8>(repeating: 0, count: Blowfish.blockSize)), padding: Padding) throws {
         precondition(key.count >= 8 && key.count <= 56)
 
         self.blockMode = blockMode
@@ -332,18 +321,19 @@ public final class Blowfish {
         S = origS
         P = origP
 
-        if let iv = iv, !iv.isEmpty {
-            self.iv = iv
-        } else {
-            self.iv = Array<UInt8>(repeating: 0, count: Blowfish.blockSize)
-        }
-
-        if blockMode.options.contains(.initializationVectorRequired) && self.iv.count != Blowfish.blockSize {
-            assert(false, "Block size and Initialization Vector must be the same length!")
-            throw Error.invalidInitializationVector
-        }
-
         expandKey(key: key)
+        try setupBlockModeWorkers()
+    }
+
+    private func setupBlockModeWorkers() throws {
+        encryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: self.encrypt)
+
+        switch self.blockMode {
+            case .CFB, .OFB, .CTR:
+                decryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: self.encrypt)
+            default:
+                decryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: self.decrypt)
+        }
     }
 
     private func reset() {

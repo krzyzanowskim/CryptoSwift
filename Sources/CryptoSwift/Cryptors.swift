@@ -26,10 +26,10 @@ public protocol Cryptors: class {
     associatedtype DecryptorType: Updatable
 
     /// Cryptor suitable for encryption
-    func makeEncryptor() -> EncryptorType
+    func makeEncryptor() throws -> EncryptorType
 
     /// Cryptor suitable for decryption
-    func makeDecryptor() -> DecryptorType
+    func makeDecryptor() throws -> DecryptorType
 
     /// Generate array of random bytes. Helper function.
     static func randomIV(_ blockSize: Int) -> Array<UInt8>

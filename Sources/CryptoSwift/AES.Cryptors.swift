@@ -16,12 +16,12 @@
 
 // MARK: Cryptors
 extension AES: Cryptors {
-    public func makeEncryptor() -> AES.Encryptor {
-        return AES.Encryptor(aes: self)
+    public func makeEncryptor() throws -> AES.Encryptor {
+        return try AES.Encryptor(aes: self)
     }
 
-    public func makeDecryptor() -> AES.Decryptor {
-        return AES.Decryptor(aes: self)
+    public func makeDecryptor() throws -> AES.Decryptor {
+        return try AES.Decryptor(aes: self)
     }
 }
 
@@ -35,9 +35,9 @@ extension AES {
         private var processedBytesTotalCount: Int = 0
         private let paddingRequired: Bool
 
-        init(aes: AES) {
+        init(aes: AES) throws {
             self.padding = aes.padding
-            self.worker = aes.blockMode.worker(aes.iv.slice, cipherOperation: aes.encrypt)
+            self.worker = try aes.blockMode.worker(blockSize: AES.blockSize, cipherOperation: aes.encrypt)
             self.paddingRequired = aes.blockMode.options.contains(.paddingRequired)
         }
 
@@ -76,18 +76,18 @@ extension AES {
         private var offset: Int = 0
         private var offsetToRemove: Int = 0
 
-        init(aes: AES) {
+        init(aes: AES) throws {
             self.padding = aes.padding
 
             switch aes.blockMode {
             case .CFB, .OFB, .CTR:
                 // CFB, OFB, CTR uses encryptBlock to decrypt
-                self.worker = aes.blockMode.worker(aes.iv.slice, cipherOperation: aes.encrypt)
+                self.worker = try aes.blockMode.worker(blockSize: AES.blockSize, cipherOperation: aes.encrypt)
             default:
-                self.worker = aes.blockMode.worker(aes.iv.slice, cipherOperation: aes.decrypt)
+                self.worker = try aes.blockMode.worker(blockSize: AES.blockSize, cipherOperation: aes.decrypt)
             }
 
-            self.paddingRequired = aes.blockMode.options.contains(.paddingRequired)
+            self.paddingRequired = try aes.blockMode.options.contains(.paddingRequired)
         }
 
         public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {

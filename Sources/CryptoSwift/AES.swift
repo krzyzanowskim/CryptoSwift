@@ -23,10 +23,6 @@ public final class AES: BlockCipher {
     public enum Error: Swift.Error {
         /// Data padding is required
         case dataPaddingRequired
-        /// Invalid key or IV
-        case invalidKeyOrInitializationVector
-        /// Invalid IV
-        case invalidInitializationVector
         /// Invalid Data
         case invalidData
     }
@@ -69,7 +65,6 @@ public final class AES: BlockCipher {
     // Parameters
     let key: Key
     let blockMode: BlockMode
-    let iv: Array<UInt8>
     let padding: Padding
 
     //
@@ -126,22 +121,10 @@ public final class AES: BlockCipher {
     /// - throws: AES.Error
     ///
     /// - returns: Instance
-    public init(key: Array<UInt8>, iv: Array<UInt8>? = nil, blockMode: BlockMode = .CBC, padding: Padding = .pkcs7) throws {
+    public init(key: Array<UInt8>, blockMode: BlockMode, padding: Padding = .pkcs7) throws {
         self.key = Key(bytes: key)
         self.blockMode = blockMode
         self.padding = padding
-
-        if let iv = iv, !iv.isEmpty {
-            self.iv = iv
-        } else {
-            let defaultIV = Array<UInt8>(repeating: 0, count: AES.blockSize)
-            self.iv = defaultIV
-        }
-
-        if blockMode.options.contains(.initializationVectorRequired) && self.iv.count != AES.blockSize {
-            assert(false, "Block size and Initialization Vector must be the same length!")
-            throw Error.invalidInitializationVector
-        }
     }
 
     internal func encrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
@@ -458,7 +441,7 @@ extension AES: Cipher {
     public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
         let chunks = bytes.batched(by: AES.blockSize)
 
-        var oneTimeCryptor = self.makeEncryptor()
+        var oneTimeCryptor = try self.makeEncryptor()
         var out = Array<UInt8>(reserveCapacity: bytes.count)
         for chunk in chunks {
             out += try oneTimeCryptor.update(withBytes: chunk, isLast: false)
@@ -478,7 +461,7 @@ extension AES: Cipher {
             throw Error.dataPaddingRequired
         }
 
-        var oneTimeCryptor = self.makeDecryptor()
+        var oneTimeCryptor = try self.makeDecryptor()
         let chunks = bytes.batched(by: AES.blockSize)
         if chunks.count == 0 {
             throw Error.invalidData

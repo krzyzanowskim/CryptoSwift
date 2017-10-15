@@ -191,9 +191,9 @@ class BlowfishTests: XCTestCase {
     // https://github.com/krzyzanowskim/CryptoSwift/issues/415
     func testDecryptCFB415() {
         do {
-            let plaintext = Array("secret12".utf8)
-            let key = Array("passwordpassword".utf8)
-            let iv = Array("12345678".utf8)
+            let plaintext = "secret12".bytes
+            let key = "passwordpassword".bytes
+            let iv = "12345678".bytes
             let encrypted = try Blowfish(key: key, blockMode: .CFB(iv: iv), padding: .noPadding).encrypt(plaintext)
             let decrypted = try Blowfish(key: key, blockMode: .CFB(iv: iv), padding: .noPadding).decrypt(encrypted)
             XCTAssertEqual(plaintext, decrypted)

@@ -19,10 +19,6 @@ import Foundation
 extension HMAC {
 
     public convenience init(key: String, variant: HMAC.Variant = .md5) throws {
-        guard let kkey = key.data(using: String.Encoding.utf8, allowLossyConversion: false)?.bytes else {
-            throw Error.invalidInput
-        }
-
-        self.init(key: kkey, variant: variant)
+        self.init(key: key.bytes, variant: variant)
     }
 }

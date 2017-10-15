@@ -20,6 +20,6 @@ extension AES {
 
     /// Initialize with CBC block mode.
     public convenience init(key: String, iv: String, padding: Padding = .pkcs7) throws {
-        try self.init(key: Array(key.utf8), blockMode: .CBC(iv: Array(iv.utf8)), padding: padding)
+        try self.init(key: key.bytes, blockMode: .CBC(iv: iv.bytes), padding: padding)
     }
 }

@@ -19,10 +19,6 @@ import Foundation
 extension Blowfish {
 
     public convenience init(key: String, iv: String, blockMode: BlockMode = .CBC(iv: Array<UInt8>(repeating: 0, count: Blowfish.blockSize)), padding: Padding = .pkcs7) throws {
-        guard let kkey = key.data(using: String.Encoding.utf8, allowLossyConversion: false)?.bytes, let iiv = iv.data(using: String.Encoding.utf8, allowLossyConversion: false)?.bytes else {
-            throw Error.invalidKeyOrInitializationVector
-        }
-
-        try self.init(key: kkey, iv: iiv, blockMode: blockMode, padding: padding)
+        try self.init(key: key.bytes, iv: iv.bytes, blockMode: blockMode, padding: padding)
     }
 }

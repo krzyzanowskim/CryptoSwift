@@ -186,11 +186,11 @@ also check [Playground](/CryptoSwift.playground/Contents.swift)
 import CryptoSwift
 ```
 
-CryptoSwift uses array of bytes aka `Array<UInt8>` as a base type for all operations. Every data may be converted to a stream of bytes. You will find convenience functions that accept String or NSData, and it will be internally converted to the array of bytes.
+CryptoSwift uses array of bytes aka `Array<UInt8>` as a base type for all operations. Every data may be converted to a stream of bytes. You will find convenience functions that accept `String` or `Data`, and it will be internally converted to the array of bytes.
 
 ##### Data types conversion
 
-For you convenience **CryptoSwift** provides two functions to easily convert array of bytes to NSData and another way around:
+For you convenience **CryptoSwift** provides two functions to easily convert array of bytes to `Data` and another way around:
 
 Data from bytes:
 
@@ -213,7 +213,7 @@ let hex   = bytes.toHexString()            // "010203"
 
 Build bytes out of `String`
 ```swift
-let bytes = Array("string".utf8)
+let bytes: Array<UInt8> = "password".bytes  // Array("password".utf8)
 ```
 
 Also... check out helpers that work with **Base64** encoded data:
@@ -255,7 +255,7 @@ do {
 Hashing a String and printing result
 
 ```swift
-let hash = "123".md5()
+let hash = "123".md5() // "123".bytes.md5()
 ```
 
 ##### Calculate CRC

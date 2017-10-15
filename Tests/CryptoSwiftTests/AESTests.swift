@@ -48,11 +48,15 @@ final class AESTests: XCTestCase {
         let input: Array<UInt8> = [0x62, 0x72, 0x61, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
         let expected: Array<UInt8> = [0xae, 0x8c, 0x59, 0x95, 0xb2, 0x6f, 0x8e, 0x3d, 0xb0, 0x6f, 0x0a, 0xa5, 0xfe, 0xc4, 0xf0, 0xc2]
 
-        let aes = try! AES(key: key, iv: iv, padding: .noPadding)
-        let encrypted = try! aes.encrypt(input)
-        XCTAssertEqual(encrypted, expected, "encryption failed")
-        let decrypted = try! aes.decrypt(encrypted)
-        XCTAssertEqual(decrypted, input, "decryption failed")
+        do {
+            let aes = try AES(key: key, iv: iv, padding: .noPadding)
+            let encrypted = try aes.encrypt(input)
+            XCTAssertEqual(encrypted, expected, "encryption failed")
+            let decrypted = try aes.decrypt(encrypted)
+            XCTAssertEqual(decrypted, input, "decryption failed")
+        } catch {
+            XCTFail("\(error)")
+        }
     }
 
     func testAESEncryptCBCNoPadding() {
@@ -101,12 +105,12 @@ final class AESTests: XCTestCase {
         do {
             var ciphertext = Array<UInt8>()
             let plaintext = "Today Apple launched the open source Swift community, as well as amazing new tools and resources."
-            let aes = try AES(key: Array("passwordpassword".utf8), blockMode: .CBC(iv: Array("drowssapdrowssap".utf8)))
+            let aes = try AES(key: "passwordpassword".bytes, blockMode: .CBC(iv: "drowssapdrowssap".bytes))
             var encryptor = try! aes.makeEncryptor()
 
-            ciphertext += try encryptor.update(withBytes: Array(plaintext.utf8))
+            ciphertext += try encryptor.update(withBytes: plaintext.bytes)
             ciphertext += try encryptor.finish()
-            XCTAssertEqual(try aes.encrypt(Array(plaintext.utf8)), ciphertext, "encryption failed")
+            XCTAssertEqual(try aes.encrypt(plaintext.bytes), ciphertext, "encryption failed")
         } catch {
             XCTAssert(false, "\(error)")
         }
@@ -238,7 +242,7 @@ final class AESTests: XCTestCase {
         var plaintext: Array<UInt8> = Array<UInt8>(repeating: 0, count: 6000)
 
         for i in 0..<plaintext.count / 6 {
-            let s = Array(String(format: "%05d", i).utf8)
+            let s = String(format: "%05d", i).bytes
             plaintext[i * 6 + 0] = s[0]
             plaintext[i * 6 + 1] = s[1]
             plaintext[i * 6 + 2] = s[2]
@@ -328,9 +332,9 @@ final class AESTests: XCTestCase {
 
     // https://github.com/krzyzanowskim/CryptoSwift/issues/394
     func testIssue394() {
-        let plaintext = Array("Nullam quis risus eget urna mollis ornare vel eu leo.".utf8)
-        let key = Array("passwordpassword".utf8).md5() // -md md5
-        let iv = Array("drowssapdrowssap".utf8) // -iv 64726f777373617064726f7773736170
+        let plaintext = "Nullam quis risus eget urna mollis ornare vel eu leo.".bytes
+        let key = "passwordpassword".bytes.md5() // -md md5
+        let iv = "drowssapdrowssap".bytes // -iv 64726f777373617064726f7773736170
         let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7) // -aes-128-cbc
         let ciphertext = try! aes.encrypt(plaintext) // enc
 
@@ -343,8 +347,8 @@ final class AESTests: XCTestCase {
     // https://github.com/krzyzanowskim/CryptoSwift/issues/411
     func testIssue411() {
         let ciphertext: Array<UInt8> = [0x2a, 0x3a, 0x80, 0x05, 0xaf, 0x46, 0x58, 0x2d, 0x66, 0x52, 0x10, 0xae, 0x86, 0xd3, 0x8e, 0x8f] // test
-        let key = Array("passwordpassword".utf8).md5() // -md md5
-        let iv = Array("drowssapdrowssap".utf8) // -iv 64726f777373617064726f7773736170
+        let key = "passwordpassword".bytes.md5() // -md md5
+        let iv = "drowssapdrowssap".bytes // -iv 64726f777373617064726f7773736170
         let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7) // -aes-128-cbc
         let plaintext = try! ciphertext.decrypt(cipher: aes)
         XCTAssertEqual("74657374", plaintext.toHexString())

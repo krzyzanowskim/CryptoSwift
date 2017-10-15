@@ -155,35 +155,37 @@ private extension AES {
         let rounds = variant.Nr
         let rk = expandedKey
 
-        let b00 = UInt32(block[block.startIndex + 0 + (0 << 2)]) << 0
-        let b01 = UInt32(block[block.startIndex + 1 + (0 << 2)]) << 8
-        let b02 = UInt32(block[block.startIndex + 2 + (0 << 2)]) << 16
-        let b03 = UInt32(block[block.startIndex + 3 + (0 << 2)]) << 24
+        let b00 = UInt32(block[block.startIndex.advanced(by: 0)])
+        let b01 = UInt32(block[block.startIndex.advanced(by: 1)]) << 8
+        let b02 = UInt32(block[block.startIndex.advanced(by: 2)]) << 16
+        let b03 = UInt32(block[block.startIndex.advanced(by: 3)]) << 24
         var b0 = b00 | b01 | b02 | b03
 
-        let b10 = UInt32(block[block.startIndex + 0 + (1 << 2)]) << 0
-        let b11 = UInt32(block[block.startIndex + 1 + (1 << 2)]) << 8
-        let b12 = UInt32(block[block.startIndex + 2 + (1 << 2)]) << 16
-        let b13 = UInt32(block[block.startIndex + 3 + (1 << 2)]) << 24
+        let b10 = UInt32(block[block.startIndex.advanced(by: 4)])
+        let b11 = UInt32(block[block.startIndex.advanced(by: 5)]) << 8
+        let b12 = UInt32(block[block.startIndex.advanced(by: 6)]) << 16
+        let b13 = UInt32(block[block.startIndex.advanced(by: 7)]) << 24
         var b1 = b10 | b11 | b12 | b13
 
-        let b20 = UInt32(block[block.startIndex + 0 + (2 << 2)]) << 0
-        let b21 = UInt32(block[block.startIndex + 1 + (2 << 2)]) << 8
-        let b22 = UInt32(block[block.startIndex + 2 + (2 << 2)]) << 16
-        let b23 = UInt32(block[block.startIndex + 3 + (2 << 2)]) << 24
+        let b20 = UInt32(block[block.startIndex.advanced(by: 8)])
+        let b21 = UInt32(block[block.startIndex.advanced(by: 9)]) << 8
+        let b22 = UInt32(block[block.startIndex.advanced(by: 10)]) << 16
+        let b23 = UInt32(block[block.startIndex.advanced(by: 11)]) << 24
         var b2 = b20 | b21 | b22 | b23
 
-        let b30 = UInt32(block[block.startIndex + 0 + (3 << 2)]) << 0
-        let b31 = UInt32(block[block.startIndex + 1 + (3 << 2)]) << 8
-        let b32 = UInt32(block[block.startIndex + 2 + (3 << 2)]) << 16
-        let b33 = UInt32(block[block.startIndex + 3 + (3 << 2)]) << 24
+        let b30 = UInt32(block[block.startIndex.advanced(by: 12)])
+        let b31 = UInt32(block[block.startIndex.advanced(by: 13)]) << 8
+        let b32 = UInt32(block[block.startIndex.advanced(by: 14)]) << 16
+        let b33 = UInt32(block[block.startIndex.advanced(by: 15)]) << 24
         var b3 = b30 | b31 | b32 | b33
 
-        let t = UnsafeMutablePointer<UInt32>.allocate(capacity: 4)
-        t.initialize(to: 0, count: 4)
+
+        let tLength = 4
+        let t = UnsafeMutablePointer<UInt32>.allocate(capacity: tLength)
+        t.initialize(to: 0, count: tLength)
         defer {
-            t.deinitialize(count: 4)
-            t.deallocate(capacity: 4)
+            t.deinitialize(count: tLength)
+            t.deallocate(capacity: tLength)
         }
 
         for r in 0..<rounds - 1 {

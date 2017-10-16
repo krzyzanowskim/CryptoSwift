@@ -366,6 +366,8 @@ private extension AES {
          * produce an output word.
          */
         func subWord(_ word: Array<UInt8>) -> Array<UInt8> {
+            precondition(word.count == 4)
+
             var result = word
             for i in 0..<4 {
                 result[i] = UInt8(sBox[Int(word[i])])
@@ -373,7 +375,23 @@ private extension AES {
             return result
         }
 
-        var w = Array<UInt8>(repeating: 0, count: variantNb * (variantNr + 1) * 4)
+        @inline(__always)
+        func subWordInPlace(_ word: inout Array<UInt8>) {
+            precondition(word.count == 4)
+            word[0] = UInt8(sBox[Int(word[0])])
+            word[1] = UInt8(sBox[Int(word[1])])
+            word[2] = UInt8(sBox[Int(word[2])])
+            word[3] = UInt8(sBox[Int(word[3])])
+        }
+
+        let wLength = variantNb * (variantNr + 1) * 4
+        let w = UnsafeMutablePointer<UInt8>.allocate(capacity: wLength)
+        w.initialize(to: 0, count: wLength)
+        defer {
+            w.deinitialize(count: wLength)
+            w.deallocate(capacity: wLength)
+        }
+
         for i in 0..<variantNk {
             for wordIdx in 0..<4 {
                 w[(4 * i) + wordIdx] = key[(4 * i) + wordIdx]
@@ -389,10 +407,10 @@ private extension AES {
                 tmp[wordIdx] = w[4 * (i - 1) + wordIdx]
             }
             if (i % variantNk) == 0 {
-                tmp = subWord(rotateLeft(UInt32(bytes: tmp), by: 8).bytes(totalBytes: MemoryLayout<UInt32>.size))
+                tmp = subWord(rotateLeft(UInt32(bytes: tmp), by: 8).bytes(totalBytes: 4))
                 tmp[0] = tmp.first! ^ AES.Rcon[i / variantNk]
             } else if variantNk > 6 && (i % variantNk) == 4 {
-                tmp = subWord(tmp)
+                subWordInPlace(&tmp)
             }
 
             // xor array of bytes
@@ -400,7 +418,7 @@ private extension AES {
                 w[4 * i + wordIdx] = w[4 * (i - variantNk) + wordIdx] ^ tmp[wordIdx]
             }
         }
-        return convertExpandedKey(w)
+        return convertExpandedKey(Array(UnsafeBufferPointer(start: w, count: wLength)))
     }
 
     @inline(__always)
@@ -434,8 +452,18 @@ private extension AES {
     }
 
     private func calculateSBox() -> (sBox: Array<UInt32>, invSBox: Array<UInt32>) {
-        var sbox = Array<UInt32>(repeating: 0, count: 256)
-        var invsbox = sbox
+        let sboxLength = 256
+        let sbox = UnsafeMutablePointer<UInt32>.allocate(capacity: sboxLength)
+        let invsbox = UnsafeMutablePointer<UInt32>.allocate(capacity: sboxLength)
+        sbox.initialize(to: 0, count: sboxLength)
+        invsbox.initialize(to: 0, count: sboxLength)
+        defer {
+            sbox.deinitialize(count: sboxLength)
+            sbox.deallocate(capacity: sboxLength)
+            invsbox.deinitialize(count: sboxLength)
+            invsbox.deallocate(capacity: sboxLength)
+        }
+
         sbox[0] = 0x63
 
         var p: UInt8 = 1, q: UInt8 = 1
@@ -453,7 +481,7 @@ private extension AES {
             invsbox[Int(s)] = UInt32(p)
         } while (p != 1)
 
-        return (sBox: sbox, invSBox: invsbox)
+        return (sBox: Array(UnsafeBufferPointer(start: sbox, count: sboxLength)), invSBox: Array(UnsafeBufferPointer(start: invsbox, count: sboxLength)))
     }
 }
 

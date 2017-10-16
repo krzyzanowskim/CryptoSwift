@@ -14,34 +14,42 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+@_transparent
 func rotateLeft(_ value: UInt8, by: UInt8) -> UInt8 {
     return ((value << by) & 0xff) | (value >> (8 - by))
 }
 
+@_transparent
 func rotateLeft(_ value: UInt16, by: UInt16) -> UInt16 {
     return ((value << by) & 0xffff) | (value >> (16 - by))
 }
 
+@_transparent
 func rotateLeft(_ value: UInt32, by: UInt32) -> UInt32 {
     return ((value << by) & 0xffffffff) | (value >> (32 - by))
 }
 
+@_transparent
 func rotateLeft(_ value: UInt64, by: UInt64) -> UInt64 {
     return (value << by) | (value >> (64 - by))
 }
 
+@_transparent
 func rotateRight(_ value: UInt16, by: UInt16) -> UInt16 {
     return (value >> by) | (value << (16 - by))
 }
 
+@_transparent
 func rotateRight(_ value: UInt32, by: UInt32) -> UInt32 {
     return (value >> by) | (value << (32 - by))
 }
 
+@_transparent
 func rotateRight(_ value: UInt64, by: UInt64) -> UInt64 {
     return ((value >> by) | (value << (64 - by)))
 }
 
+@_transparent
 func reversed(_ uint8: UInt8) -> UInt8 {
     var v = uint8
     v = (v & 0xf0) >> 4 | (v & 0x0f) << 4
@@ -50,6 +58,7 @@ func reversed(_ uint8: UInt8) -> UInt8 {
     return v
 }
 
+@_transparent
 func reversed(_ uint32: UInt32) -> UInt32 {
     var v = uint32
     v = ((v >> 1) & 0x55555555) | ((v & 0x55555555) << 1)

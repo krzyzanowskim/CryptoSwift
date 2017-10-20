@@ -2,7 +2,8 @@
 
 import PackageDescription
 
-_ = Package(name: "CryptoSwift", products: [.library(name: "CryptoSwift", targets: ["CryptoSwift"])],
+_ = Package(name: "CryptoSwift", 
+            products: [.library(name: "CryptoSwift", targets: ["CryptoSwift"])],
             targets: [
                 .target(name: "CryptoSwift"),
                 .testTarget(name: "CryptoSwiftTests", dependencies: ["CryptoSwift"]),

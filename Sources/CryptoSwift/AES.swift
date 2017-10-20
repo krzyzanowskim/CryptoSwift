@@ -513,7 +513,7 @@ extension AES: Cipher {
 
         var oneTimeCryptor = try self.makeDecryptor()
         let chunks = bytes.batched(by: AES.blockSize)
-        if chunks.count == 0 {
+        if chunks.isEmpty {
             throw Error.invalidData
         }
 

@@ -52,7 +52,7 @@ public struct HKDF {
         let dkLen = keyLength ?? variant.digestLength
         let keyLengthFinal = Double(dkLen)
         let hLen = Double(variant.digestLength)
-        let numBlocks = Int(ceil(Double(keyLengthFinal) / hLen)) // l = ceil(keyLength / hLen)
+        let numBlocks = Int(ceil(keyLengthFinal / hLen)) // l = ceil(keyLength / hLen)
         guard numBlocks <= 255 else {
             throw Error.derivedKeyTooLong
         }
@@ -74,8 +74,12 @@ public struct HKDF {
         for i in 1...self.numBlocks {
             value.append(contentsOf: self.info)
             value.append(UInt8(i))
-            value = try hmac.authenticate(value)
-            ret.append(contentsOf: value)
+            
+            let bytes = try hmac.authenticate(value)
+            ret.append(contentsOf: bytes)
+            
+            /// update value to use it as input for next iteration
+            value = bytes
         }
         return Array(ret.prefix(dkLen))
     }

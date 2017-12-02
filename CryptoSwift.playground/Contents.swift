@@ -134,7 +134,7 @@ do {
     }
 
     let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap")
-    var encryptor = aes.makeEncryptor()
+    var encryptor = try! aes.makeEncryptor()
 
     // prepare streams
     let data = Data(bytes: (0..<100).map { $0 })

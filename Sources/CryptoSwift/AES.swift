@@ -228,51 +228,76 @@ public final class AES: BlockCipher {
 
         let rounds = variantNr
         let rk = expandedKeyInv
-        var b = block.toUInt32Array()
 
-        let t = UnsafeMutablePointer<UInt32>.allocate(capacity: 4)
-        t.initialize(to: 0, count: 4)
+        // Save miliseconds by not using `block.toUInt32Array()`
+        let b00 = UInt32(block[block.startIndex.advanced(by: 0)])
+        let b01 = UInt32(block[block.startIndex.advanced(by: 1)]) << 8
+        let b02 = UInt32(block[block.startIndex.advanced(by: 2)]) << 16
+        let b03 = UInt32(block[block.startIndex.advanced(by: 3)]) << 24
+        var b0 = b00 | b01 | b02 | b03
+
+        let b10 = UInt32(block[block.startIndex.advanced(by: 4)])
+        let b11 = UInt32(block[block.startIndex.advanced(by: 5)]) << 8
+        let b12 = UInt32(block[block.startIndex.advanced(by: 6)]) << 16
+        let b13 = UInt32(block[block.startIndex.advanced(by: 7)]) << 24
+        var b1 = b10 | b11 | b12 | b13
+
+        let b20 = UInt32(block[block.startIndex.advanced(by: 8)])
+        let b21 = UInt32(block[block.startIndex.advanced(by: 9)]) << 8
+        let b22 = UInt32(block[block.startIndex.advanced(by: 10)]) << 16
+        let b23 = UInt32(block[block.startIndex.advanced(by: 11)]) << 24
+        var b2 = b20 | b21 | b22 | b23
+
+        let b30 = UInt32(block[block.startIndex.advanced(by: 12)])
+        let b31 = UInt32(block[block.startIndex.advanced(by: 13)]) << 8
+        let b32 = UInt32(block[block.startIndex.advanced(by: 14)]) << 16
+        let b33 = UInt32(block[block.startIndex.advanced(by: 15)]) << 24
+        var b3 = b30 | b31 | b32 | b33
+
+        let tLength = 4
+        let t = UnsafeMutablePointer<UInt32>.allocate(capacity: tLength)
+        t.initialize(to: 0, count: tLength)
         defer {
-            t.deinitialize(count: 4)
-            t.deallocate(capacity: 4)
+            t.deinitialize(count: tLength)
+            t.deallocate(capacity: tLength)
         }
 
         for r in (2...rounds).reversed() {
-            t[0] = b[0] ^ rk[r][0]
-            t[1] = b[1] ^ rk[r][1]
-            t[2] = b[2] ^ rk[r][2]
-            t[3] = b[3] ^ rk[r][3]
+            t[0] = b0 ^ rk[r][0]
+            t[1] = b1 ^ rk[r][1]
+            t[2] = b2 ^ rk[r][2]
+            t[3] = b3 ^ rk[r][3]
 
             let b00 = AES.T0_INV[Int(t[0] & 0xff)]
             let b01 = AES.T1_INV[Int((t[3] >> 8) & 0xff)]
             let b02 = AES.T2_INV[Int((t[2] >> 16) & 0xff)]
             let b03 = AES.T3_INV[Int(t[1] >> 24)]
-            b[0] = b00 ^ b01 ^ b02 ^ b03
+            b0 = b00 ^ b01 ^ b02 ^ b03
 
             let b10 = AES.T0_INV[Int(t[1] & 0xff)]
             let b11 = AES.T1_INV[Int((t[0] >> 8) & 0xff)]
             let b12 = AES.T2_INV[Int((t[3] >> 16) & 0xff)]
             let b13 = AES.T3_INV[Int(t[2] >> 24)]
-            b[1] = b10 ^ b11 ^ b12 ^ b13
+            b1 = b10 ^ b11 ^ b12 ^ b13
 
             let b20 = AES.T0_INV[Int(t[2] & 0xff)]
             let b21 = AES.T1_INV[Int((t[1] >> 8) & 0xff)]
             let b22 = AES.T2_INV[Int((t[0] >> 16) & 0xff)]
             let b23 = AES.T3_INV[Int(t[3] >> 24)]
-            b[2] = b20 ^ b21 ^ b22 ^ b23
+            b2 = b20 ^ b21 ^ b22 ^ b23
 
             let b30 = AES.T0_INV[Int(t[3] & 0xff)]
             let b31 = AES.T1_INV[Int((t[2] >> 8) & 0xff)]
             let b32 = AES.T2_INV[Int((t[1] >> 16) & 0xff)]
             let b33 = AES.T3_INV[Int(t[0] >> 24)]
-            b[3] = b30 ^ b31 ^ b32 ^ b33
+            b3 = b30 ^ b31 ^ b32 ^ b33
         }
 
         // last round
-        t[0] = b[0] ^ rk[1][0]
-        t[1] = b[1] ^ rk[1][1]
-        t[2] = b[2] ^ rk[1][2]
-        t[3] = b[3] ^ rk[1][3]
+        t[0] = b0 ^ rk[1][0]
+        t[1] = b1 ^ rk[1][1]
+        t[2] = b2 ^ rk[1][2]
+        t[3] = b3 ^ rk[1][3]
 
         // rounds
 
@@ -280,35 +305,33 @@ public final class AES: BlockCipher {
         let lb01 = (sBoxInv[Int(B1(t[3]))] << 8)
         let lb02 = (sBoxInv[Int(B2(t[2]))] << 16)
         let lb03 = (sBoxInv[Int(B3(t[1]))] << 24)
-        b[0] = lb00 | lb01 | lb02 | lb03 ^ rk[0][0]
+        b0 = lb00 | lb01 | lb02 | lb03 ^ rk[0][0]
 
         let lb10 = sBoxInv[Int(B0(t[1]))]
         let lb11 = (sBoxInv[Int(B1(t[0]))] << 8)
         let lb12 = (sBoxInv[Int(B2(t[3]))] << 16)
         let lb13 = (sBoxInv[Int(B3(t[2]))] << 24)
-        b[1] = lb10 | lb11 | lb12 | lb13 ^ rk[0][1]
+        b1 = lb10 | lb11 | lb12 | lb13 ^ rk[0][1]
 
         let lb20 = sBoxInv[Int(B0(t[2]))]
         let lb21 = (sBoxInv[Int(B1(t[1]))] << 8)
         let lb22 = (sBoxInv[Int(B2(t[0]))] << 16)
         let lb23 = (sBoxInv[Int(B3(t[3]))] << 24)
-        b[2] = lb20 | lb21 | lb22 | lb23 ^ rk[0][2]
+        b2 = lb20 | lb21 | lb22 | lb23 ^ rk[0][2]
 
         let lb30 = sBoxInv[Int(B0(t[3]))]
         let lb31 = (sBoxInv[Int(B1(t[2]))] << 8)
         let lb32 = (sBoxInv[Int(B2(t[1]))] << 16)
         let lb33 = (sBoxInv[Int(B3(t[0]))] << 24)
-        b[3] = lb30 | lb31 | lb32 | lb33 ^ rk[0][3]
+        b3 = lb30 | lb31 | lb32 | lb33 ^ rk[0][3]
 
-        var out = Array<UInt8>(reserveCapacity: b.count * 4)
-        for num in b {
-            out.append(UInt8(num & 0xff))
-            out.append(UInt8((num >> 8) & 0xff))
-            out.append(UInt8((num >> 16) & 0xff))
-            out.append(UInt8((num >> 24) & 0xff))
-        }
-
-        return out
+        let result: Array<UInt8> = [
+            UInt8(b0 & 0xff), UInt8((b0 >> 8) & 0xff), UInt8((b0 >> 16) & 0xff), UInt8((b0 >> 24) & 0xff),
+            UInt8(b1 & 0xff), UInt8((b1 >> 8) & 0xff), UInt8((b1 >> 16) & 0xff), UInt8((b1 >> 24) & 0xff),
+            UInt8(b2 & 0xff), UInt8((b2 >> 8) & 0xff), UInt8((b2 >> 16) & 0xff), UInt8((b2 >> 24) & 0xff),
+            UInt8(b3 & 0xff), UInt8((b3 >> 8) & 0xff), UInt8((b3 >> 16) & 0xff), UInt8((b3 >> 24) & 0xff),
+            ]
+        return result
     }
 }
 
@@ -343,6 +366,8 @@ private extension AES {
          * produce an output word.
          */
         func subWord(_ word: Array<UInt8>) -> Array<UInt8> {
+            precondition(word.count == 4)
+
             var result = word
             for i in 0..<4 {
                 result[i] = UInt8(sBox[Int(word[i])])
@@ -350,7 +375,23 @@ private extension AES {
             return result
         }
 
-        var w = Array<UInt8>(repeating: 0, count: variantNb * (variantNr + 1) * 4)
+        @inline(__always)
+        func subWordInPlace(_ word: inout Array<UInt8>) {
+            precondition(word.count == 4)
+            word[0] = UInt8(sBox[Int(word[0])])
+            word[1] = UInt8(sBox[Int(word[1])])
+            word[2] = UInt8(sBox[Int(word[2])])
+            word[3] = UInt8(sBox[Int(word[3])])
+        }
+
+        let wLength = variantNb * (variantNr + 1) * 4
+        let w = UnsafeMutablePointer<UInt8>.allocate(capacity: wLength)
+        w.initialize(to: 0, count: wLength)
+        defer {
+            w.deinitialize(count: wLength)
+            w.deallocate(capacity: wLength)
+        }
+
         for i in 0..<variantNk {
             for wordIdx in 0..<4 {
                 w[(4 * i) + wordIdx] = key[(4 * i) + wordIdx]
@@ -366,10 +407,10 @@ private extension AES {
                 tmp[wordIdx] = w[4 * (i - 1) + wordIdx]
             }
             if (i % variantNk) == 0 {
-                tmp = subWord(rotateLeft(UInt32(bytes: tmp), by: 8).bytes(totalBytes: MemoryLayout<UInt32>.size))
+                tmp = subWord(rotateLeft(UInt32(bytes: tmp), by: 8).bytes(totalBytes: 4))
                 tmp[0] = tmp.first! ^ AES.Rcon[i / variantNk]
             } else if variantNk > 6 && (i % variantNk) == 4 {
-                tmp = subWord(tmp)
+                subWordInPlace(&tmp)
             }
 
             // xor array of bytes
@@ -377,7 +418,7 @@ private extension AES {
                 w[4 * i + wordIdx] = w[4 * (i - variantNk) + wordIdx] ^ tmp[wordIdx]
             }
         }
-        return convertExpandedKey(w)
+        return convertExpandedKey(Array(UnsafeBufferPointer(start: w, count: wLength)))
     }
 
     @inline(__always)
@@ -411,8 +452,18 @@ private extension AES {
     }
 
     private func calculateSBox() -> (sBox: Array<UInt32>, invSBox: Array<UInt32>) {
-        var sbox = Array<UInt32>(repeating: 0, count: 256)
-        var invsbox = sbox
+        let sboxLength = 256
+        let sbox = UnsafeMutablePointer<UInt32>.allocate(capacity: sboxLength)
+        let invsbox = UnsafeMutablePointer<UInt32>.allocate(capacity: sboxLength)
+        sbox.initialize(to: 0, count: sboxLength)
+        invsbox.initialize(to: 0, count: sboxLength)
+        defer {
+            sbox.deinitialize(count: sboxLength)
+            sbox.deallocate(capacity: sboxLength)
+            invsbox.deinitialize(count: sboxLength)
+            invsbox.deallocate(capacity: sboxLength)
+        }
+
         sbox[0] = 0x63
 
         var p: UInt8 = 1, q: UInt8 = 1
@@ -430,7 +481,7 @@ private extension AES {
             invsbox[Int(s)] = UInt32(p)
         } while (p != 1)
 
-        return (sBox: sbox, invSBox: invsbox)
+        return (sBox: Array(UnsafeBufferPointer(start: sbox, count: sboxLength)), invSBox: Array(UnsafeBufferPointer(start: invsbox, count: sboxLength)))
     }
 }
 
@@ -462,7 +513,7 @@ extension AES: Cipher {
 
         var oneTimeCryptor = try self.makeDecryptor()
         let chunks = bytes.batched(by: AES.blockSize)
-        if chunks.count == 0 {
+        if chunks.isEmpty {
             throw Error.invalidData
         }
 

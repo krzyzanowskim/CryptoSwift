@@ -223,7 +223,7 @@ public final class ChaCha20: BlockCipher {
             var u: UInt32 = 1
             for i in 0..<4 {
                 u += UInt32(counter[i])
-                counter[i] = UInt8(u)
+                counter[i] = UInt8(u & 0xFF)
                 u >>= 8
             }
             bytes = Array(bytes[ChaCha20.blockSize..<bytes.endIndex])

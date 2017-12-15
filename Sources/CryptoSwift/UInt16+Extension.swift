@@ -36,8 +36,4 @@ extension UInt16 {
 
         self = val0 | val1
     }
-
-    func bytes(totalBytes: Int = MemoryLayout<UInt16>.size) -> Array<UInt8> {
-        return arrayOfBytes(value: self, length: totalBytes)
-    }
 }

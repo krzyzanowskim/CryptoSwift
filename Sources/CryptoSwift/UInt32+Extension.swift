@@ -47,8 +47,4 @@ extension UInt32 {
 
         self = val0 | val1 | val2 | val3
     }
-
-    func bytes(totalBytes: Int = MemoryLayout<UInt32>.size) -> Array<UInt8> {
-        return arrayOfBytes(value: self, length: totalBytes)
-    }
 }

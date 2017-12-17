@@ -1,5 +1,4 @@
 //
-//  BlowfishTests.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 26/10/16.

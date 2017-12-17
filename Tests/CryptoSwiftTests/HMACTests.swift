@@ -1,5 +1,4 @@
 //
-//  HMACTests.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 29/08/14.

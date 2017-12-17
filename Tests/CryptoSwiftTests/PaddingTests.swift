@@ -1,5 +1,4 @@
 //
-//  PaddingTests.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 27/12/14.

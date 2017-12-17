@@ -1,5 +1,4 @@
 //
-//  RabbitTests.swift
 //  CryptoSwift
 //
 //  Created by Dima Kalachov on 13/11/15.

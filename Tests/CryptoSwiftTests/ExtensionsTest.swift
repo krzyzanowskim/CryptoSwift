@@ -1,5 +1,4 @@
 //
-//  ExtensionsTest.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 15/08/14.

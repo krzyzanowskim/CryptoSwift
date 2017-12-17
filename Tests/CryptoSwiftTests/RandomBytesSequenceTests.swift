@@ -1,5 +1,4 @@
 //
-//  RandomBytesSequenceTests.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 10/10/16.

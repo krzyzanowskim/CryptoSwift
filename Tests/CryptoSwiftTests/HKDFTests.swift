@@ -1,5 +1,4 @@
 //
-//  HKDFTests.swift
 //  CryptoSwift
 //
 //  Created by Alexey Komnin on 11/13/17.

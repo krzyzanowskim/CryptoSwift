@@ -1,5 +1,4 @@
 //
-//  Error+Extension.swift
 //  CryptoSwift
 //
 //  Created by Michael Ledin on 22.08.16.

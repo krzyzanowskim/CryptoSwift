@@ -1,5 +1,4 @@
 //
-//  Access.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 06/08/16.

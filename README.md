@@ -155,7 +155,7 @@ You can use [Swift Package Manager](https://swift.org/package-manager/) and spec
 
 ```swift
 dependencies: [
-    .Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", majorVersion: 0)
+    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "0.8.0")
 ]
 ```
 
@@ -163,7 +163,7 @@ or more strict
 
 ```swift
 dependencies: [
-    .Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", "0.7.2"),
+    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .exact("0.8.0"))
 ]
 ```
 

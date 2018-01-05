@@ -90,7 +90,7 @@ extension AES {
         }
 
         public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
-            // prepend "offset" number of bytes at the begining
+            // prepend "offset" number of bytes at the beginning
             if offset > 0 {
                 accumulated += Array<UInt8>(repeating: 0, count: offset) + bytes
                 offsetToRemove = offset

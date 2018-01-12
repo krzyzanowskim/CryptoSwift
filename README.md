@@ -1,5 +1,5 @@
-[![Platform](https://img.shields.io/badge/Platforms-ios%20%7C%20macos%20%7C%20watchos%20%7C%20tvos%20%7C%20linux-4E4E4E.svg?colorA=EF5138)](http://cocoadocs.org/docsets/CryptoSwift)
-[![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0-lightgrey.svg?colorA=EF5138&colorB=4E4E4E)](#swift-versions-support)
+[![Platform](https://img.shields.io/badge/Platforms-ios%20%7C%20macos%20%7C%20watchos%20%7C%20tvos%20%7C%20linux-4E4E4E.svg?colorA=28a745)](http://cocoadocs.org/docsets/CryptoSwift)
+[![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods)](https://cocoapods.org/pods/CryptoSwift)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat&colorB=64A5DE)](https://github.com/apple/swift-package-manager)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg?style=flat&colorB=64A5DE)](https://github.com/apple/swift-package-manager)

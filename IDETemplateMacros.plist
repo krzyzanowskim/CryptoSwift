@@ -1,7 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+<!--
+	This is a shared macro used in all internal Xcode projects.
+	This file is linked from <PROJECT>.xcodeproj/xcshareddata/IDETemplateMacros.plist.
+	Keep in mind that public Xcode projects have slightly different copyright notice, thus they might be using different template macros.
+-->
+	<key>FILEHEADER</key>
+	<string>
 //
 //  CryptoSwift
 //
-//  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  Copyright © ___YEAR___ Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 //  This software is provided 'as-is', without any express or implied warranty.
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
@@ -11,10 +22,6 @@
 //  - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
 //  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 //  - This notice may not be removed or altered from any source or binary distribution.
-//
-
-/// Message authentication code.
-public protocol Authenticator {
-    /// Calculate Message Authentication Code (MAC) for message.
-    func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8>
-}
+//</string>
+</dict>
+</plist>

@@ -1,5 +1,4 @@
 //
-//  IntExtension.swift
 //  CryptoSwift
 //
 //  Created by Marcin Krzyzanowski on 12/08/14.

@@ -1,5 +1,4 @@
 //
-//  AES.swift
 //  CryptoSwift
 //
 //  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
@@ -330,7 +329,7 @@ public final class AES: BlockCipher {
             UInt8(b1 & 0xff), UInt8((b1 >> 8) & 0xff), UInt8((b1 >> 16) & 0xff), UInt8((b1 >> 24) & 0xff),
             UInt8(b2 & 0xff), UInt8((b2 >> 8) & 0xff), UInt8((b2 >> 16) & 0xff), UInt8((b2 >> 24) & 0xff),
             UInt8(b3 & 0xff), UInt8((b3 >> 8) & 0xff), UInt8((b3 >> 16) & 0xff), UInt8((b3 >> 24) & 0xff),
-            ]
+        ]
         return result
     }
 }
@@ -491,7 +490,7 @@ extension AES: Cipher {
     public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
         let chunks = bytes.batched(by: AES.blockSize)
 
-        var oneTimeCryptor = try self.makeEncryptor()
+        var oneTimeCryptor = try makeEncryptor()
         var out = Array<UInt8>(reserveCapacity: bytes.count)
         for chunk in chunks {
             out += try oneTimeCryptor.update(withBytes: chunk, isLast: false)
@@ -511,7 +510,7 @@ extension AES: Cipher {
             throw Error.dataPaddingRequired
         }
 
-        var oneTimeCryptor = try self.makeDecryptor()
+        var oneTimeCryptor = try makeDecryptor()
         let chunks = bytes.batched(by: AES.blockSize)
         if chunks.isEmpty {
             throw Error.invalidData

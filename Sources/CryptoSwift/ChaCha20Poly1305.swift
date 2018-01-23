@@ -16,8 +16,6 @@
 //
 //  https://tools.ietf.org/html/rfc7539#section-2.8.1
 
-import UIKit
-
 public final class ChaCha20Poly1305 {
 
     public class func encrypt( message:Array<UInt8>, header:Array<UInt8>, key:Array<UInt8>, nonce:Array<UInt8> ) throws -> (cipher:Array<UInt8>, tag:Array<UInt8>) {
@@ -25,13 +23,13 @@ public final class ChaCha20Poly1305 {
         let chacha = try ChaCha20(key: key, iv: nonce)
         
         var polykey = Array<UInt8>(repeating: 0, count: 32)
-        var toEncrypt = Array<UInt8>()
+        var toEncrypt = Array<UInt8>(reserveCapacity: message.count + 64)
         
-        toEncrypt.append(contentsOf: polykey)
-        polykey = try chacha.encrypt( polykey )
-        toEncrypt.append(contentsOf: polykey)
+        toEncrypt += polykey
+        polykey = try chacha.encrypt(polykey)
+        toEncrypt += polykey
+        toEncrypt += message
         
-        toEncrypt.append(contentsOf: message)
         let fullCipher = try chacha.encrypt(toEncrypt)
         let cipher = Array(fullCipher.dropFirst(64))
         
@@ -45,37 +43,33 @@ public final class ChaCha20Poly1305 {
         let chacha = try ChaCha20(key: key, iv: nonce)
         
         var polykey = Array<UInt8>(repeating: 0, count: 32)
-        polykey = try chacha.encrypt( polykey )
+        polykey = try chacha.encrypt(polykey)
         
         let mac = try ChaCha20Poly1305.calculateTag(cipher: cipher, header: header, encodedKey: polykey)
         
-        if mac == tag {
-            var toDecrypt = Array<UInt8>()
-            toDecrypt.append(contentsOf: polykey)
-            toDecrypt.append(contentsOf: polykey)
-            toDecrypt.append(contentsOf: cipher)
-            let decrypted = try chacha.decrypt(toDecrypt)
-            let message = Array(decrypted.dropFirst(64))
-            return (message, true)
-        } else {
-            return ([], false)
-        }
+        guard mac == tag else { return (cipher, false) }
+        
+        var toDecrypt = Array<UInt8>(reserveCapacity: cipher.count + 64)
+        toDecrypt += polykey
+        toDecrypt += polykey
+        toDecrypt += cipher
+        let decrypted = try chacha.decrypt(toDecrypt)
+        let message = Array(decrypted.dropFirst(64))
+        return (message, true)
     }
     
     private class func calculateTag( cipher:Array<UInt8>, header:Array<UInt8>, encodedKey:Array<UInt8> ) throws -> Array<UInt8> {
         
         let poly1305 = Poly1305(key: encodedKey)
         var mac = Array<UInt8>()
-        mac.append(contentsOf: header)
+        mac += header
         let headerPadding = ((16 - (header.count & 0xf)) & 0xf)
-        mac.append(contentsOf: Array<UInt8>(repeating: 0, count: headerPadding))
-        mac.append(contentsOf: cipher)
+        mac += Array<UInt8>(repeating: 0, count: headerPadding)
+        mac += cipher
         let cipherPadding = ((16 - (cipher.count & 0xf)) & 0xf)
-        mac.append(contentsOf: Array<UInt8>(repeating: 0, count: cipherPadding))
-        let headerCount = UInt64(header.count).bytes().reversed()
-        mac.append(contentsOf: headerCount)
-        let cipherCount = UInt64(cipher.count).bytes().reversed()
-        mac.append(contentsOf: cipherCount)
+        mac += Array<UInt8>(repeating: 0, count: cipherPadding)
+        mac += UInt64(bigEndian: UInt64(header.count)).bytes()
+        mac += UInt64(bigEndian: UInt64(cipher.count)).bytes()
         
         return try poly1305.authenticate(mac)
     }

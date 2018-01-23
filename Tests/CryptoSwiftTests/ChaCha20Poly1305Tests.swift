@@ -71,7 +71,7 @@ class ChaCha20Poly1305Tests: XCTestCase {
             XCTAssertEqual(encryptResult.cipher, cipherArr, "cipher not equal")
             XCTAssertEqual(encryptResult.tag, tagArr,  "tag not equal")
         } catch {
-            XCTAssert(false, "Encryption Failed")
+            XCTAssert(false, "Encryption Failed with error: \(error.localizedDescription)")
         }
         
         do {
@@ -80,7 +80,7 @@ class ChaCha20Poly1305Tests: XCTestCase {
             XCTAssertEqual(decryptResult.success, true,  "decrypt mac check failed")
             XCTAssertEqual(decryptResult.message, messageArr, "message not equal")
         } catch {
-            XCTAssert(false, "Encryption Failed")
+            XCTAssert(false, "Encryption Failed with error: \(error.localizedDescription)")
         }
     }
 }

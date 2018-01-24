@@ -75,6 +75,9 @@ Good mood
 - [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
 - No padding
 
+#### Authenticated Encryption with Associated Data (AEAD)
+-[ChaCha20/Poly1305](https://tools.ietf.org/html/rfc7539)
+
 ## Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
 
@@ -181,7 +184,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 * [Rabbit](#rabbit)
 * [Blowfish](#blowfish)
 * [Advanced Encryption Standard (AES)](#aes)
-
+* [Authenticated Encryption with Associated Data (AEAD)](#aead)
 
 also check [Playground](/CryptoSwift.playground/Contents.swift)
 
@@ -344,7 +347,7 @@ AES-256 example
 ```swift
 try AES(key: [1,2,3,...,32], blockMode: .CBC(iv: [1,2,3,...,16]), padding: .pkcs7)
 ```
- 
+
 ###### All at once
 ```swift
 do {
@@ -405,6 +408,13 @@ Using convenience extensions
 let plain = Data(bytes: [0x01, 0x02, 0x03])
 let encrypted = try! plain.encrypt(ChaCha20(key: key, iv: iv))
 let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
+```
+
+##### AEAD
+
+```swift
+let encrypt = try ChaCha20Poly1305.encrypt(message: message, header: header, key: key, nonce: nonce)
+let decrypt = try ChaCha20Poly1305.decrypt(cipher: cipher, header: header, key: key, nonce: nonce, tag: tag)
 ```
 
 ## Author

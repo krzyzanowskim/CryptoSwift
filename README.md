@@ -76,7 +76,7 @@ Good mood
 - No padding
 
 #### Authenticated Encryption with Associated Data (AEAD)
--[ChaCha20/Poly1305](https://tools.ietf.org/html/rfc7539)
+- [ChaCha20/Poly1305](https://tools.ietf.org/html/rfc7539)
 
 ## Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).

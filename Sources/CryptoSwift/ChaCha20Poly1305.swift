@@ -16,9 +16,9 @@
 //
 //  https://tools.ietf.org/html/rfc7539#section-2.8.1
 
-public final class ChaCha20Poly1305 {
+public final class ChaCha20Poly1305: AEAD {
 
-    public class func encrypt( message:Array<UInt8>, header:Array<UInt8>, key:Array<UInt8>, nonce:Array<UInt8> ) throws -> (cipher:Array<UInt8>, tag:Array<UInt8>) {
+    public static func encrypt( message:Array<UInt8>, header:Array<UInt8>, key:Array<UInt8>, nonce:Array<UInt8> ) throws -> (cipher:Array<UInt8>, tag:Array<UInt8>) {
         
         let chacha = try ChaCha20(key: key, iv: nonce)
         
@@ -38,7 +38,7 @@ public final class ChaCha20Poly1305 {
         return (cipher, tag)
     }
     
-    public class func decrypt( cipher:Array<UInt8>, header:Array<UInt8>, key:Array<UInt8>, nonce:Array<UInt8>, tag:Array<UInt8> ) throws -> (message:Array<UInt8>, success:Bool) {
+    public static func decrypt( cipher:Array<UInt8>, header:Array<UInt8>, key:Array<UInt8>, nonce:Array<UInt8>, tag:Array<UInt8> ) throws -> (message:Array<UInt8>, success:Bool) {
         
         let chacha = try ChaCha20(key: key, iv: nonce)
         

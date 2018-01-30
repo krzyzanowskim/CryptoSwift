@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		14156CE320111B5C00DDCFBC /* ChaCha20Poly1305.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14156CE220111B5C00DDCFBC /* ChaCha20Poly1305.swift */; };
 		14156CE52011422400DDCFBC /* ChaCha20Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14156CE42011422400DDCFBC /* ChaCha20Poly1305Tests.swift */; };
+		1467460F2017BB3600DF04ED /* AEAD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1467460E2017BB3600DF04ED /* AEAD.swift */; };
 		674A736F1BF5D85B00866C5B /* RabbitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674A736E1BF5D85B00866C5B /* RabbitTests.swift */; };
 		750509991F6BEF2A00394A1B /* PKCS7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750509981F6BEF2A00394A1B /* PKCS7.swift */; };
 		750CC3EB1DC0CACE0096BE6E /* BlowfishTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */; };
@@ -159,6 +160,7 @@
 /* Begin PBXFileReference section */
 		14156CE220111B5C00DDCFBC /* ChaCha20Poly1305.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChaCha20Poly1305.swift; sourceTree = "<group>"; };
 		14156CE42011422400DDCFBC /* ChaCha20Poly1305Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChaCha20Poly1305Tests.swift; sourceTree = "<group>"; };
+		1467460E2017BB3600DF04ED /* AEAD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEAD.swift; sourceTree = "<group>"; };
 		674A736E1BF5D85B00866C5B /* RabbitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RabbitTests.swift; sourceTree = "<group>"; };
 		750509981F6BEF2A00394A1B /* PKCS7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7.swift; sourceTree = "<group>"; };
 		750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlowfishTests.swift; sourceTree = "<group>"; };
@@ -382,6 +384,7 @@
 				75EC52781EE8B6CA0048EB3B /* Utils.swift */,
 				75EC52791EE8B6CA0048EB3B /* ZeroPadding.swift */,
 				14156CE220111B5C00DDCFBC /* ChaCha20Poly1305.swift */,
+				1467460E2017BB3600DF04ED /* AEAD.swift */,
 			);
 			path = CryptoSwift;
 			sourceTree = "<group>";
@@ -600,6 +603,7 @@
 				75EC527D1EE8B8130048EB3B /* Array+Extension.swift in Sources */,
 				75EC52B31EE8B83D0048EB3B /* UInt16+Extension.swift in Sources */,
 				75EC52A81EE8B8390048EB3B /* PKCS5.swift in Sources */,
+				1467460F2017BB3600DF04ED /* AEAD.swift in Sources */,
 				75EC528A1EE8B8170048EB3B /* PCBC.swift in Sources */,
 				75EC528D1EE8B81A0048EB3B /* ChaCha20.swift in Sources */,
 				75EC52851EE8B8170048EB3B /* CBC.swift in Sources */,

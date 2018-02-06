@@ -178,6 +178,47 @@ final class DigestTests: XCTestCase {
         let data: Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
         XCTAssert(data.checksum() == 0x96, "Invalid checksum")
     }
+
+    func testSHAPartialUpdates() {
+        do {
+            let testSize = 1024 * 1024 * 5
+            let buf = malloc(testSize)!
+            defer { free(buf) }
+            let input = Data(bytes: buf, count: testSize)
+
+            // SHA1
+            let sha1Once = SHA1().calculate(for: input.bytes)
+
+            var sha1Partial = SHA1()
+            for batch in input.batched(by: 17) {
+                try sha1Partial.update(withBytes: batch.bytes)
+            }
+            let sha1Result = try sha1Partial.finish()
+            XCTAssertEqual(sha1Once, sha1Result)
+
+            // SHA2
+            let sha2Once = SHA2(variant: .sha224).calculate(for: input.bytes)
+
+            var sha2Partial = SHA2(variant: .sha224)
+            for batch in input.batched(by: 17) {
+                try sha2Partial.update(withBytes: batch.bytes)
+            }
+            let sha2Result = try sha2Partial.finish()
+            XCTAssertEqual(sha2Once, sha2Result)
+
+            // SHA3
+            let sha3Once = SHA3(variant: .sha224).calculate(for: input.bytes)
+
+            var sha3Partial = SHA3(variant: .sha224)
+            for batch in input.batched(by: 17) {
+                try sha3Partial.update(withBytes: batch.bytes)
+            }
+            let sha3Result = try sha3Partial.finish()
+            XCTAssertEqual(sha3Once, sha3Result)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
 }
 
 #if !CI
@@ -234,6 +275,7 @@ extension DigestTests {
             ("testCRC32NotReflected", testCRC32NotReflected),
             ("testCRC16", testCRC16),
             ("testChecksum", testChecksum),
+            ("testSHAPartialUpdates", testSHAPartialUpdates)
         ]
 
         #if !CI

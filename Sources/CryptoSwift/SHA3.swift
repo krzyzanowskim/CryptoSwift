@@ -38,7 +38,6 @@ public final class SHA3: DigestType {
     public let markByte: UInt8
 
     fileprivate var accumulated = Array<UInt8>()
-    fileprivate var processedBytesTotalCount: Int = 0
     fileprivate var accumulatedHash: Array<UInt64>
 
     public enum Variant {
@@ -256,7 +255,7 @@ extension SHA3: Updatable {
 
         if isLast {
             // Add padding
-            let markByteIndex = processedBytesTotalCount &+ accumulated.count
+            let markByteIndex = accumulated.count
             if accumulated.count == 0 || accumulated.count % blockSize != 0 {
                 let r = blockSize * 8
                 let q = (r / 8) - (accumulated.count % (r / 8))
@@ -274,7 +273,6 @@ extension SHA3: Updatable {
             }
         }
         accumulated.removeFirst(processedBytes)
-        processedBytesTotalCount += processedBytes
 
         // TODO: verify performance, reduce vs for..in
         let result = accumulatedHash.reduce(Array<UInt8>()) { (result, value) -> Array<UInt8> in

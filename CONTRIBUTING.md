@@ -1,3 +1,16 @@
+By submitting a pull request, you represent that you have the right to license
+your contribution to Marcin Krzyżanowski and the community, and agree by submitting the patch
+that your contributions are licensed under the CryptoSwift project license.
+
+---
+
+Before submitting the pull request, please make sure you have tested your changes.
+
+---
+
+For new files, please use the correct file header:
+
+```
 //
 //  CryptoSwift
 //
@@ -12,14 +25,4 @@
 //  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
-
-import Foundation
-
-#if !_runtime(_ObjC)
-
-    extension Error {
-        var localizedDescription: String {
-            return "\(self)"
-        }
-    }
-#endif
+```

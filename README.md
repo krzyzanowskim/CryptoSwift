@@ -1,5 +1,5 @@
-[![Platform](https://img.shields.io/badge/Platforms-ios%20%7C%20macos%20%7C%20watchos%20%7C%20tvos%20%7C%20linux-4E4E4E.svg?colorA=EF5138)](http://cocoadocs.org/docsets/CryptoSwift)
-[![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0-lightgrey.svg?colorA=EF5138&colorB=4E4E4E)](#swift-versions-support)
+[![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
+[![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods)](https://cocoapods.org/pods/CryptoSwift)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat&colorB=64A5DE)](https://github.com/apple/swift-package-manager)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg?style=flat&colorB=64A5DE)](https://github.com/apple/swift-package-manager)
@@ -29,6 +29,9 @@ Good mood
 - Convenient extensions for String and Data
 - Support for incremental updates (stream, ...)
 - iOS, macOS, AppleTV, watchOS, Linux support
+
+## Donation
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=92Z6U3LBHF9J4) to make the CryptoSwift awesome! Thank you.
 
 #### Hash (Digest)
 - [MD5](http://tools.ietf.org/html/rfc1321)
@@ -152,7 +155,7 @@ You can use [Swift Package Manager](https://swift.org/package-manager/) and spec
 
 ```swift
 dependencies: [
-    .Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", majorVersion: 0)
+    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "0.8.0"))
 ]
 ```
 
@@ -160,7 +163,7 @@ or more strict
 
 ```swift
 dependencies: [
-    .Package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", "0.7.2"),
+    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .exact("0.8.0"))
 ]
 ```
 
@@ -422,6 +425,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, **an acknowledgment in the product documentation is required**.
 - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 - This notice may not be removed or altered from any source or binary distribution.
+- Redistributions of any form whatsoever must retain the following acknowledgment: 'This product includes software developed by the "Marcin Krzyzanowski" (http://krzyzanowskim.com/).'
 
 ## Changelog
 

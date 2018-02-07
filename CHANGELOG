@@ -1,3 +1,6 @@
+0.8.2
+- Fix SHA3 partial updates calculations.
+
 0.8.1
 - Adds Data(hex:) helper.
 - Adds HKDF (HMAC-based Extract-and-Expand Key Derivation Function)

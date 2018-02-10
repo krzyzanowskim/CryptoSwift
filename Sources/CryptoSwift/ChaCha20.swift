@@ -211,13 +211,13 @@ public final class ChaCha20: BlockCipher {
         precondition(key.count == 32)
 
         var block = Array<UInt8>(repeating: 0, count: ChaCha20.blockSize)
-        var bytes = bytes // TODO: check bytes[bytes.indices]
-        var out = Array<UInt8>(reserveCapacity: bytes.count)
+        var bytesSlice = bytes.slice
+        var out = Array<UInt8>(reserveCapacity: bytesSlice.count)
 
-        while bytes.count >= ChaCha20.blockSize {
+        while bytesSlice.count >= ChaCha20.blockSize {
             core(block: &block, counter: counter, key: key)
             for (i, x) in block.enumerated() {
-                out.append(bytes[i] ^ x)
+                out.append(bytesSlice[bytesSlice.startIndex + i] ^ x)
             }
             var u: UInt32 = 1
             for i in 0..<4 {
@@ -225,12 +225,12 @@ public final class ChaCha20: BlockCipher {
                 counter[i] = UInt8(u & 0xFF)
                 u >>= 8
             }
-            bytes = Array(bytes[ChaCha20.blockSize..<bytes.endIndex])
+            bytesSlice = bytesSlice[bytesSlice.startIndex + ChaCha20.blockSize..<bytesSlice.endIndex]
         }
 
-        if bytes.count > 0 {
+        if bytesSlice.count > 0 {
             core(block: &block, counter: counter, key: key)
-            for (i, v) in bytes.enumerated() {
+            for (i, v) in bytesSlice.enumerated() {
                 out.append(v ^ block[i])
             }
         }

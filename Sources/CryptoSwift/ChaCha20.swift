@@ -206,12 +206,12 @@ public final class ChaCha20: BlockCipher {
     }
 
     // XORKeyStream
-    func process(bytes: Array<UInt8>, counter: inout Array<UInt8>, key: Array<UInt8>) -> Array<UInt8> {
+    func process(bytes: ArraySlice<UInt8>, counter: inout Array<UInt8>, key: Array<UInt8>) -> Array<UInt8> {
         precondition(counter.count == 16)
         precondition(key.count == 32)
 
         var block = Array<UInt8>(repeating: 0, count: ChaCha20.blockSize)
-        var bytesSlice = bytes.slice
+        var bytesSlice = bytes
         var out = Array<UInt8>(reserveCapacity: bytesSlice.count)
 
         while bytesSlice.count >= ChaCha20.blockSize {
@@ -242,7 +242,7 @@ public final class ChaCha20: BlockCipher {
 extension ChaCha20: Cipher {
 
     public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
-        return process(bytes: Array(bytes), counter: &counter, key: Array(key))
+        return process(bytes: bytes, counter: &counter, key: Array(key))
     }
 
     public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {

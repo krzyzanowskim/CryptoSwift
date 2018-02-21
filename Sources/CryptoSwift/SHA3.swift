@@ -256,11 +256,12 @@ extension SHA3: Updatable {
         if isLast {
             // Add padding
             let markByteIndex = accumulated.count
-            if accumulated.count == 0 || accumulated.count % blockSize != 0 {
-                let r = blockSize * 8
-                let q = (r / 8) - (accumulated.count % (r / 8))
-                accumulated += Array<UInt8>(repeating: 0, count: q)
-            }
+
+            // We need to always pad the input. Even if the input is a multiple of blockSize.
+            let r = blockSize * 8
+            let q = (r / 8) - (accumulated.count % (r / 8))
+            accumulated += Array<UInt8>(repeating: 0, count: q)
+
             accumulated[markByteIndex] |= markByte
             accumulated[self.accumulated.count - 1] |= 0x80
         }

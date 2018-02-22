@@ -121,6 +121,33 @@ final class DigestTests: XCTestCase {
         XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha3(.keccak256), Array<UInt8>(hex: "fadae6b49f129bbb812be8407b7b2894f34aecf6dbd1f9b0f0c7e9853098fc96"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
         XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha3(.keccak384), Array<UInt8>(hex: "0c8324e1ebc182822c5e2a086cac07c2fe00e3bce61d01ba8ad6b71780e2dec5fb89e5ae90cb593e57bc6258fdd94e17"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
         XCTAssertEqual(Array<UInt8>(repeating: 0x61, count: 1_000_000).sha3(.keccak512), Array<UInt8>(hex: "5cf53f2e556be5a624425ede23d0e8b2c7814b4ba0e4e09cbbf3c2fac7056f61e048fc341262875ebc58a5183fea651447124370c1ebf4d6c89bc9a7731063bb"), "One million (1,000,000) repetitions of the character 'a' (0x61)")
+
+        // *** Multiple of block size ***
+
+        // keccak block size bytes
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 144).sha3(.keccak224), Array<UInt8>(hex: "a50976d8ed54c961a052bfd01a64cd79b11928a9d5b75146a0828888"), "Block size bytes for keccak224")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 136).sha3(.keccak256), Array<UInt8>(hex: "3a5912a7c5faa06ee4fe906253e339467a9ce87d533c65be3c15cb231cdb25f9"), "Block size bytes for keccak256")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 104).sha3(.keccak384), Array<UInt8>(hex: "768e10c2eb9903fba6bf290669bf98bd03ce42e7492da9abb88cbbe2212ed153c857e4e883fb1b03a498391935ec6112"), "Block size bytes for keccak384")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 72).sha3(.keccak512), Array<UInt8>(hex: "bcf38e5b375422155b4d8eb150682a14778b0695d709cec479d013a772497bc8d7050ef2a23d69609d609b15e5001f275c4619270ffbd6e8c06a7a5bf72334b3"), "Block size bytes for keccak512")
+
+        // keccak two times block size bytes
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 288).sha3(.keccak224), Array<UInt8>(hex: "846f930bf21e7ec2175a635379adbdbce9ed9de6a34396c4a11aaf3c"), "Two times block size bytes for keccak224")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 272).sha3(.keccak256), Array<UInt8>(hex: "a8005c7a3125b6c3629b4181eca54d18721e41fef639718d205beb00b366ed7d"), "Two times block size bytes for keccak256")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 208).sha3(.keccak384), Array<UInt8>(hex: "db6451e6fb59ca16c9ba896de2967b07ca331e9558e21257cb6b26f126ed480c841d37788907f77ef71f8258218b0203"), "Two times block size bytes for keccak384")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 144).sha3(.keccak512), Array<UInt8>(hex: "04ddaacd88ce54a4acb468b792d5177ace573e9871dc10b33d02be637b674373601ba5f433b67cc6ba8dc3a1707052f1f6bffc55ef1580aca021ead8bc8e1f22"), "Two times block size bytes for keccak512")
+
+        // nist sha3 block size bytes
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 144).sha3(.sha224), Array<UInt8>(hex: "f2b8486fceee2c6a11a604ce4efe217da854829c2c2dcc9a23758b4d"), "Block size bytes for sha3 sha224")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 136).sha3(.sha256), Array<UInt8>(hex: "e772c9cf9eb9c991cdfcf125001b454fdbc0a95f188d1b4c844aa032ad6e075e"), "Block size bytes for sha3 sha256")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 104).sha3(.sha384), Array<UInt8>(hex: "aaed6beb61b1f9a9b469d38a27a35edde7f676f4603e67f5424c7588043b869ebbfcfc3ecee2ae6f5ecfaf7f706c49e3"), "Block size bytes for sha3 sha384")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 72).sha3(.sha512), Array<UInt8>(hex: "f8d76fdd8a082a67eaab47b5518ac486cb9a90dcb9f3c9efcfd86d5c8b3f1831601d3c8435f84b9e56da91283d5b98040e6e7b2c8dd9aa5bd4ebdf1823a7cf29"), "Block size bytes for sha3 sha512")
+
+        // nist sha3 two times block size bytes
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 288).sha3(.sha224), Array<UInt8>(hex: "920370d3fec17c0ecbc2b5b7cd64f551860fb93384e0dc4fcaf2e1ba"), "Two times block size bytes for sha3 sha224")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 272).sha3(.sha256), Array<UInt8>(hex: "5d86a8cc4aa8f0d98146a747281865a625a19f9580eef32e38905920bc532c5c"), "Two times block size bytes for sha3 sha256")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 208).sha3(.sha384), Array<UInt8>(hex: "e741867850b8753bf7fa714b11c1ca9904d0494adaf5e2db43cca42f39637bd67685279d9dfcc45d56e8c288273904af"), "Two times block size bytes for sha3 sha384")
+        XCTAssertEqual(Array<UInt8>(repeating: 0x00, count: 144).sha3(.sha512), Array<UInt8>(hex: "07625da1770011d59b0a71a8dec551f0ddf1917e4117fc860bd7e0a0e42f3e012284f86d509e2f22a8682aea5930197fc1f3c353d0141665c9ac2643278c3821"), "Two times block size bytes for sha3 sha512")
+        // *** End Multiple of block size ***
     }
 
     func testMD5Data() {

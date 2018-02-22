@@ -1,3 +1,7 @@
+0.8.3
+- Fix SHA3 padding.
+- Fix Carthage builds.
+
 0.8.2
 - Fix SHA3 partial updates calculations.
 - Make ChaCha20 processing faster again.

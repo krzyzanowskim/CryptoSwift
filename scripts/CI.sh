@@ -13,7 +13,7 @@ eval "$(swiftenv init -)"
 swiftenv version
 
 swift package clean
-swift package fetch
+swift package resolve
 
 if [ -d Packages ]; then
 	if ls Packages/*/Tests 1>/dev/null 2>&1; then

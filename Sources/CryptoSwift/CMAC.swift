@@ -40,15 +40,11 @@ public final class CMAC: Authenticator {
         let l = try aes.encrypt(CMAC.Zero)
         var subKey1 = bitShiftLeft(l)
         if (l[0] & 0x80) != 0 {
-            for idx in subKey1.indices {
-                subKey1[idx] = CMAC.Rb[idx] ^ subKey1[idx]
-            }
+            subKey1 = xor(CMAC.Rb, subKey1)
         }
         var subKey2 = bitShiftLeft(subKey1)
         if (subKey1[0] & 0x80) != 0 {
-            for idx in subKey2.indices {
-                subKey2[idx] = CMAC.Rb[idx] ^ subKey2[idx]
-            }
+            subKey2 = xor(CMAC.Rb, subKey2)
         }
 
         var blockCount: Int
@@ -65,14 +61,10 @@ public final class CMAC: Authenticator {
         var lastBlock = Array<UInt8>(repeating: 0x00, count: CMAC.BlockSize)
         if lastBlockComplete {
             let block = getBlock(bytes, at: lastBlockIndex)
-            for idx in block.indices {
-                lastBlock[idx] = block[idx] ^ subKey1[idx]
-            }
+            lastBlock = xor(block, subKey1)
         } else {
             let block = getPaddedBlock(bytes, at: lastBlockIndex)
-            for idx in block.indices {
-                lastBlock[idx] = block[idx] ^ subKey2[idx]
-            }
+            lastBlock = xor(block, subKey2)
         }
 
         var x = Array<UInt8>(repeating: 0x00, count: CMAC.BlockSize)
@@ -80,14 +72,10 @@ public final class CMAC: Authenticator {
 
         for idx in 0..<lastBlockIndex {
             let block = getBlock(bytes, at: idx)
-            for idx in block.indices {
-                y[idx] = block[idx] ^ x[idx]
-            }
+            y = xor(block, x)
             x = try aes.encrypt(y)
         }
-        for idx in lastBlock.indices {
-            y[idx] = lastBlock[idx] ^ x[idx]
-        }
+        y = xor(lastBlock, x)
         return try aes.encrypt(y)
     }
 

@@ -38,11 +38,11 @@ public final class CMAC: Authenticator {
         let aes = try AES(key: key, blockMode: .CBC(iv: CMAC.Zero), padding: .noPadding)
         
         let l = try aes.encrypt(CMAC.Zero)
-        var subKey1 = bitShiftLeft(l)
+        var subKey1 = leftShiftOneBit(l)
         if (l[0] & 0x80) != 0 {
             subKey1 = xor(CMAC.Rb, subKey1)
         }
-        var subKey2 = bitShiftLeft(subKey1)
+        var subKey2 = leftShiftOneBit(subKey1)
         if (subKey1[0] & 0x80) != 0 {
             subKey2 = xor(CMAC.Rb, subKey2)
         }
@@ -80,8 +80,13 @@ public final class CMAC: Authenticator {
     }
 
     // MARK: Helper methods
-
-    private func bitShiftLeft(_ bytes: Array<UInt8>) -> Array<UInt8> {
+    
+    /**
+     Performs left shift by one bit to the bit string aquired after concatenating al bytes in the byte array
+     - parameters:
+     - bytes: byte array
+     */
+    private func leftShiftOneBit(_ bytes: Array<UInt8>) -> Array<UInt8> {
         var shifted = Array<UInt8>(repeating: 0x00, count: bytes.count)
         let last = bytes.count - 1
         for index in 0..<last {

@@ -63,7 +63,9 @@ public final class CMAC: Authenticator {
             let block = getBlock(bytes, at: lastBlockIndex)
             lastBlock = xor(block, subKey1)
         } else {
-            let block = getPaddedBlock(bytes, at: lastBlockIndex)
+            var paddedBytes = bytes
+            bitPadding(to: &paddedBytes, blockSize: CMAC.BlockSize)
+            let block = getBlock(paddedBytes, at: lastBlockIndex)
             lastBlock = xor(block, subKey2)
         }
 
@@ -103,17 +105,6 @@ public final class CMAC: Authenticator {
         let start = index * CMAC.BlockSize
         let end = start + CMAC.BlockSize
         let block = Array(bytes[start..<end])
-        return block
-    }
-
-    private func getPaddedBlock(_ bytes: Array<UInt8>, at index: Int) -> Array<UInt8> {
-        var block = Array<UInt8>(repeating: 0x00, count: CMAC.BlockSize)
-        let start = index * CMAC.BlockSize
-        let end = bytes.count
-        for idx in start..<end {
-            block[idx - start] = bytes[idx]
-        }
-        block[end - start] = 0x80
         return block
     }
 }

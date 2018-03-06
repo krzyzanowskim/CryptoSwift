@@ -19,7 +19,7 @@ public final class CMAC: Authenticator {
         case wrongKeyLength
     }
 
-    let key: Array<UInt8>
+    private let key: Array<UInt8>
 
     private static let BlockSize: Int = 16
     private static let Zero: Array<UInt8> = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
@@ -47,33 +47,29 @@ public final class CMAC: Authenticator {
             subKey2 = xor(CMAC.Rb, subKey2)
         }
 
-        var blockCount: Int
         let lastBlockComplete: Bool
-        blockCount = (bytes.count + CMAC.BlockSize - 1) / CMAC.BlockSize
+        let blockCount = (bytes.count + CMAC.BlockSize - 1) / CMAC.BlockSize
         if blockCount == 0 {
-            blockCount = 1
             lastBlockComplete = false
         } else {
             lastBlockComplete = bytes.count % CMAC.BlockSize == 0
         }
-
-        let lastBlockIndex = blockCount - 1
-        var lastBlock = Array<UInt8>(repeating: 0x00, count: CMAC.BlockSize)
-        if lastBlockComplete {
-            let block = getBlock(bytes, at: lastBlockIndex)
-            lastBlock = xor(block, subKey1)
-        } else {
-            var paddedBytes = bytes
+        var paddedBytes = bytes
+        if !lastBlockComplete {
             bitPadding(to: &paddedBytes, blockSize: CMAC.BlockSize)
-            let block = getBlock(paddedBytes, at: lastBlockIndex)
-            lastBlock = xor(block, subKey2)
         }
-
+        
+        var blocks = Array(paddedBytes.batched(by: CMAC.BlockSize))
+        var lastBlock = blocks.popLast()!
+        if lastBlockComplete {
+            lastBlock = xor(lastBlock, subKey1)
+        } else {
+            lastBlock = xor(lastBlock, subKey2)
+        }
+        
         var x = Array<UInt8>(repeating: 0x00, count: CMAC.BlockSize)
         var y = Array<UInt8>(repeating: 0x00, count: CMAC.BlockSize)
-
-        for idx in 0..<lastBlockIndex {
-            let block = getBlock(bytes, at: idx)
+        for block in blocks {
             y = xor(block, x)
             x = try aes.encrypt(y)
         }
@@ -99,12 +95,5 @@ public final class CMAC: Authenticator {
         }
         shifted[last] = bytes[last] << 1
         return shifted
-    }
-
-    private func getBlock(_ bytes: Array<UInt8>, at index: Int) -> Array<UInt8> {
-        let start = index * CMAC.BlockSize
-        let end = start + CMAC.BlockSize
-        let block = Array(bytes[start..<end])
-        return block
     }
 }

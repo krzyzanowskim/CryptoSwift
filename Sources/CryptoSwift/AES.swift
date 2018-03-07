@@ -160,10 +160,10 @@ public final class AES: BlockCipher {
 
         let tLength = 4
         let t = UnsafeMutablePointer<UInt32>.allocate(capacity: tLength)
-        t.initialize(to: 0, count: tLength)
+        t.initialize(repeating: 0, count: tLength)
         defer {
             t.deinitialize(count: tLength)
-            t.deallocate(capacity: tLength)
+            t.deallocate()
         }
 
         for r in 0..<rounds - 1 {
@@ -255,10 +255,10 @@ public final class AES: BlockCipher {
 
         let tLength = 4
         let t = UnsafeMutablePointer<UInt32>.allocate(capacity: tLength)
-        t.initialize(to: 0, count: tLength)
+        t.initialize(repeating: 0, count: tLength)
         defer {
             t.deinitialize(count: tLength)
-            t.deallocate(capacity: tLength)
+            t.deallocate()
         }
 
         for r in (2...rounds).reversed() {
@@ -385,10 +385,10 @@ private extension AES {
 
         let wLength = variantNb * (variantNr + 1) * 4
         let w = UnsafeMutablePointer<UInt8>.allocate(capacity: wLength)
-        w.initialize(to: 0, count: wLength)
+        w.initialize(repeating: 0, count: wLength)
         defer {
             w.deinitialize(count: wLength)
-            w.deallocate(capacity: wLength)
+            w.deallocate()
         }
 
         for i in 0..<variantNk {
@@ -454,13 +454,13 @@ private extension AES {
         let sboxLength = 256
         let sbox = UnsafeMutablePointer<UInt32>.allocate(capacity: sboxLength)
         let invsbox = UnsafeMutablePointer<UInt32>.allocate(capacity: sboxLength)
-        sbox.initialize(to: 0, count: sboxLength)
-        invsbox.initialize(to: 0, count: sboxLength)
+        sbox.initialize(repeating: 0, count: sboxLength)
+        invsbox.initialize(repeating: 0, count: sboxLength)
         defer {
             sbox.deinitialize(count: sboxLength)
-            sbox.deallocate(capacity: sboxLength)
+            sbox.deallocate()
             invsbox.deinitialize(count: sboxLength)
-            invsbox.deallocate(capacity: sboxLength)
+            invsbox.deallocate()
         }
 
         sbox[0] = 0x63

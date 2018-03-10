@@ -1,7 +1,7 @@
 [![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
 [![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods)](https://cocoapods.org/pods/CryptoSwift)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat&colorB=64A5DE)](https://github.com/apple/swift-package-manager)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat&colorB=64A5DE)](https://github.com/Carthage/Carthage)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg?style=flat&colorB=64A5DE)](https://github.com/apple/swift-package-manager)
 [![Twitter](https://img.shields.io/badge/twitter-@krzyzanowskim-blue.svg?style=flat&colorB=64A5DE&label=Twitter)](http://twitter.com/krzyzanowskim)
 

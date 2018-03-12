@@ -19,23 +19,23 @@ public final class CMAC: Authenticator {
         case wrongKeyLength
     }
 
-    private let key: Array<UInt8>
+    private let key: SecureBytes
 
     private static let BlockSize: Int = 16
     private static let Zero: Array<UInt8> = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
     private static let Rb: Array<UInt8> = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x87]
 
     public init(key: Array<UInt8>) throws {
-        self.key = key
         if key.count != 16 {
             throw Error.wrongKeyLength
         }
+        self.key = SecureBytes(bytes: key)
     }
 
     // MARK: Authenticator
 
     public func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
-        let aes = try AES(key: key, blockMode: .CBC(iv: CMAC.Zero), padding: .noPadding)
+        let aes = try AES(key: Array(key), blockMode: .CBC(iv: CMAC.Zero), padding: .noPadding)
         
         let l = try aes.encrypt(CMAC.Zero)
         var subKey1 = leftShiftOneBit(l)

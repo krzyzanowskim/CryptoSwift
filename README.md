@@ -55,6 +55,7 @@ Good mood
 #### Message authenticators
 - [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
 - [HMAC](https://www.ietf.org/rfc/rfc2104.txt) MD5, SHA1, SHA256
+- [CMAC](https://tools.ietf.org/html/rfc4493)
 
 #### Cipher block mode
 - Electronic codebook ([ECB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_.28ECB.29))
@@ -173,7 +174,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 
 * [Basics (data types, conversion, ...)](#basics)
 * [Digest (MD5, SHA...)](#calculate-digest)
-* [Message authenticators (HMAC...)](#message-authenticators-1)
+* [Message authenticators (HMAC, CMAC...)](#message-authenticators-1)
 * [Password-Based Key Derivation Function (PBKDF2, ...)](#password-based-key-derivation-functions)
 * [HMAC-based Key Derivation Function (HKDF)](#hmac-based-key-derivation-function)
 * [Data Padding](#data-padding)
@@ -281,6 +282,7 @@ let key:Array<UInt8> = [1,2,3,4,5,6,7,8,9,10,...]
 
 try Poly1305(key: key).authenticate(bytes)
 try HMAC(key: key, variant: .sha256).authenticate(bytes)
+try CMAC(key: key).authenticate(bytes)
 ```
 
 ##### Password-Based Key Derivation Functions

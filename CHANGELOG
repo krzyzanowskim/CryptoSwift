@@ -1,3 +1,6 @@
+0.8.4
+- Added CMAC message authenticator https://tools.ietf.org/html/rfc4493
+
 0.8.3
 - Fix SHA3 padding.
 - Fix Carthage builds.

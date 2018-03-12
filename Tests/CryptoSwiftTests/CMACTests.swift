@@ -13,6 +13,8 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+// Test vectors from https://tools.ietf.org/html/rfc4493
+
 import XCTest
 @testable import CryptoSwift
 

@@ -1,6 +1,10 @@
 0.8.4
 - Added CMAC message authenticator https://tools.ietf.org/html/rfc4493
 
+0.8.3
+- Fix SHA3 padding.
+- Fix Carthage builds.
+
 0.8.2
 - Fix SHA3 partial updates calculations.
 - Make ChaCha20 processing faster again.

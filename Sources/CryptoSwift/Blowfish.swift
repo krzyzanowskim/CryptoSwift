@@ -495,7 +495,7 @@ extension Blowfish: Cipher {
     ///
     /// - Parameter bytes: Plaintext data
     /// - Returns: Encrypted data
-    public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
+    public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.Index == Int {
 
         let bytes = padding.add(to: Array(bytes), blockSize: Blowfish.blockSize) // FIXME: Array(bytes) copies
 
@@ -517,7 +517,7 @@ extension Blowfish: Cipher {
     ///
     /// - Parameter bytes: Ciphertext data
     /// - Returns: Plaintext data
-    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.IndexDistance == Int, C.Index == Int {
+    public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.Index == Int {
 
         if blockMode.options.contains(.paddingRequired) && (bytes.count % Blowfish.blockSize != 0) {
             throw Error.dataPaddingRequired

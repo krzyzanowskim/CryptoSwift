@@ -19,6 +19,8 @@ public enum CipherError: Error {
 }
 
 public protocol Cipher: class {
+    var keySize: Int { get }
+
     /// Encrypt given bytes at once
     ///
     /// - parameter bytes: Plaintext data

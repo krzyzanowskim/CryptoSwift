@@ -22,6 +22,7 @@ public final class ChaCha20: BlockCipher {
     }
 
     public static let blockSize = 64 // 512 / 8
+    public let keySize: Int
 
     fileprivate let key: Key
     fileprivate var counter: Array<UInt8>
@@ -34,6 +35,7 @@ public final class ChaCha20: BlockCipher {
         }
 
         self.key = Key(bytes: key)
+        keySize = self.key.count
 
         if nonce.count == 8 {
             counter = [0, 0, 0, 0, 0, 0, 0, 0] + nonce

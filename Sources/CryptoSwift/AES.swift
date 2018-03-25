@@ -46,9 +46,10 @@ public final class AES: BlockCipher {
     private lazy var variantNk: Int = self.variant.Nk
 
     public static let blockSize: Int = 16 // 128 /8
+    public let keySize: Int
 
     public var variant: Variant {
-        switch key.count * 8 {
+        switch keySize * 8 {
         case 128:
             return .aes128
         case 192:
@@ -123,6 +124,7 @@ public final class AES: BlockCipher {
         self.key = Key(bytes: key)
         self.blockMode = blockMode
         self.padding = padding
+        keySize = self.key.count
     }
 
     internal func encrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {

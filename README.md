@@ -77,7 +77,7 @@ Good mood
 - No padding
 
 #### Authenticated Encryption with Associated Data (AEAD)
-- [ChaCha20/Poly1305](https://tools.ietf.org/html/rfc7539)
+- [AEAD_CHACHA20_POLY1305](https://tools.ietf.org/html/rfc7539#section-2.8)
 
 ## Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
@@ -415,8 +415,8 @@ let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
 ##### AEAD
 
 ```swift
-let encrypt = try ChaCha20Poly1305.encrypt(message: message, header: header, key: key, nonce: nonce)
-let decrypt = try ChaCha20Poly1305.decrypt(cipher: cipher, header: header, key: key, nonce: nonce, tag: tag)
+let encrypt = try AEADChaCha20Poly1305.encrypt(plaintext, key: key, iv: nonce, authenticationHeader: header)
+let decrypt = try AEADChaCha20Poly1305.decrypt(ciphertext, key: key, iv: nonce, authenticationHeader: header, authenticationTag: tagArr: tag)
 ```
 
 ## Author

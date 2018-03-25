@@ -28,8 +28,10 @@ public final class Blowfish {
     }
 
     public static let blockSize: Int = 8 // 64 bit
-    fileprivate let blockMode: BlockMode
-    fileprivate let padding: Padding
+    public let keySize: Int
+
+    private let blockMode: BlockMode
+    private let padding: Padding
     private var decryptWorker: BlockModeWorker!
     private var encryptWorker: BlockModeWorker!
 
@@ -315,6 +317,7 @@ public final class Blowfish {
 
         self.blockMode = blockMode
         self.padding = padding
+        keySize = key.count
 
         S = origS
         P = origP

@@ -64,19 +64,19 @@ class ChaCha20Poly1305Tests: XCTestCase {
         let tagArr = Array<UInt8>(hex: tag)
 
         do {
-            let encryptResult = try ChaCha20Poly1305.encrypt(message: messageArr, header: headerArr, key: keyArr, nonce: nonceArr)
+            let encryptResult = try AEADChaCha20Poly1305.encrypt(messageArr, key: keyArr, iv: nonceArr, authenticationHeader: headerArr)
 
-            XCTAssertEqual(encryptResult.cipher, cipherArr, "cipher not equal")
-            XCTAssertEqual(encryptResult.tag, tagArr, "tag not equal")
+            XCTAssertEqual(encryptResult.cipherText, cipherArr, "cipher not equal")
+            XCTAssertEqual(encryptResult.authenticationTag, tagArr, "tag not equal")
         } catch {
             XCTAssert(false, "Encryption Failed with error: \(error.localizedDescription)")
         }
 
         do {
-            let decryptResult = try ChaCha20Poly1305.decrypt(cipher: cipherArr, header: headerArr, key: keyArr, nonce: nonceArr, tag: tagArr)
+            let decryptResult = try AEADChaCha20Poly1305.decrypt(cipherArr, key: keyArr, iv: nonceArr, authenticationHeader: headerArr, authenticationTag: tagArr)
 
             XCTAssertEqual(decryptResult.success, true, "decrypt mac check failed")
-            XCTAssertEqual(decryptResult.message, messageArr, "message not equal")
+            XCTAssertEqual(decryptResult.plainText, messageArr, "message not equal")
         } catch {
             XCTAssert(false, "Encryption Failed with error: \(error.localizedDescription)")
         }

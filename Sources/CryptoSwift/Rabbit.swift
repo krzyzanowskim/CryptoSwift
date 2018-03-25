@@ -27,6 +27,10 @@ public final class Rabbit: BlockCipher {
     /// Size of block in bytes
     public static let blockSize = 128 / 8
 
+    public var keySize: Int {
+        return key.count
+    }
+
     /// Key
     private let key: Key
 

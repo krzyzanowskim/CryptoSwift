@@ -1,5 +1,4 @@
 //
-//  Generics.swift
 //  CryptoSwift
 //
 //  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
@@ -49,8 +48,8 @@ func arrayOfBytes<T: FixedWidthInteger>(value: T, length totalBytes: Int = Memor
         bytes[totalBytes - 1 - j] = (bytesPointer + j).pointee
     }
 
-    valuePointer.deinitialize()
-    valuePointer.deallocate(capacity: 1)
+    valuePointer.deinitialize(count: 1)
+    valuePointer.deallocate()
 
     return bytes
 }

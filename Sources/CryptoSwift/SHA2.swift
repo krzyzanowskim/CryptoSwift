@@ -1,5 +1,4 @@
 //
-//  SHA2.swift
 //  CryptoSwift
 //
 //  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
@@ -159,10 +158,10 @@ public final class SHA2: DigestType {
         // break chunk into sixteen 64-bit words M[j], 0 ≤ j ≤ 15, big-endian
         // Extend the sixteen 64-bit words into eighty 64-bit words:
         let M = UnsafeMutablePointer<UInt64>.allocate(capacity: k.count)
-        M.initialize(to: 0, count: k.count)
+        M.initialize(repeating: 0, count: k.count)
         defer {
             M.deinitialize(count: self.k.count)
-            M.deallocate(capacity: self.k.count)
+            M.deallocate()
         }
         for x in 0..<k.count {
             switch x {
@@ -221,10 +220,10 @@ public final class SHA2: DigestType {
         // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
         // Extend the sixteen 32-bit words into sixty-four 32-bit words:
         let M = UnsafeMutablePointer<UInt32>.allocate(capacity: k.count)
-        M.initialize(to: 0, count: k.count)
+        M.initialize(repeating: 0, count: k.count)
         defer {
             M.deinitialize(count: self.k.count)
-            M.deallocate(capacity: self.k.count)
+            M.deallocate()
         }
 
         for x in 0..<k.count {

@@ -1,5 +1,4 @@
 //
-//  SHA3.swift
 //  CryptoSwift
 //
 //  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
@@ -39,7 +38,6 @@ public final class SHA3: DigestType {
     public let markByte: UInt8
 
     fileprivate var accumulated = Array<UInt8>()
-    fileprivate var processedBytesTotalCount: Int = 0
     fileprivate var accumulatedHash: Array<UInt64>
 
     public enum Variant {
@@ -99,16 +97,16 @@ public final class SHA3: DigestType {
     ///     A′[x, y,z] = A[x, y,z] ⊕ D[x,z].
     private func θ(_ a: inout Array<UInt64>) {
         let c = UnsafeMutablePointer<UInt64>.allocate(capacity: 5)
-        c.initialize(to: 0, count: 5)
+        c.initialize(repeating: 0, count: 5)
         defer {
             c.deinitialize(count: 5)
-            c.deallocate(capacity: 5)
+            c.deallocate()
         }
         let d = UnsafeMutablePointer<UInt64>.allocate(capacity: 5)
-        d.initialize(to: 0, count: 5)
+        d.initialize(repeating: 0, count: 5)
         defer {
             d.deinitialize(count: 5)
-            d.deallocate(capacity: 5)
+            d.deallocate()
         }
 
         for i in 0..<5 {
@@ -257,12 +255,13 @@ extension SHA3: Updatable {
 
         if isLast {
             // Add padding
-            let markByteIndex = processedBytesTotalCount &+ accumulated.count
-            if accumulated.count == 0 || accumulated.count % blockSize != 0 {
-                let r = blockSize * 8
-                let q = (r / 8) - (accumulated.count % (r / 8))
-                accumulated += Array<UInt8>(repeating: 0, count: q)
-            }
+            let markByteIndex = accumulated.count
+
+            // We need to always pad the input. Even if the input is a multiple of blockSize.
+            let r = blockSize * 8
+            let q = (r / 8) - (accumulated.count % (r / 8))
+            accumulated += Array<UInt8>(repeating: 0, count: q)
+
             accumulated[markByteIndex] |= markByte
             accumulated[self.accumulated.count - 1] |= 0x80
         }
@@ -275,7 +274,6 @@ extension SHA3: Updatable {
             }
         }
         accumulated.removeFirst(processedBytes)
-        processedBytesTotalCount += processedBytes
 
         // TODO: verify performance, reduce vs for..in
         let result = accumulatedHash.reduce(Array<UInt8>()) { (result, value) -> Array<UInt8> in

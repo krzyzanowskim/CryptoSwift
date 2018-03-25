@@ -18,7 +18,7 @@ struct BatchedCollectionIndex<Base: Collection> {
 }
 
 extension BatchedCollectionIndex: Comparable {
-    static func ==<Base>(lhs: BatchedCollectionIndex<Base>, rhs: BatchedCollectionIndex<Base>) -> Bool {
+    static func == <Base>(lhs: BatchedCollectionIndex<Base>, rhs: BatchedCollectionIndex<Base>) -> Bool {
         return lhs.range.lowerBound == rhs.range.lowerBound
     }
 

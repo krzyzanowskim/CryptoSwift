@@ -1,5 +1,5 @@
-import XCTest
 @testable import CryptoSwiftTests
+import XCTest
 
 XCTMain([
     testCase(DigestTests.allTests()),

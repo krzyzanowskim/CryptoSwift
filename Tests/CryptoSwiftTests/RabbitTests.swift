@@ -13,11 +13,10 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-import XCTest
 @testable import CryptoSwift
+import XCTest
 
 class RabbitTests: XCTestCase {
-
     func testInitialization() {
         var key = Array<UInt8>(repeating: 0, count: Rabbit.keySize - 1)
         var iv: Array<UInt8>?
@@ -119,7 +118,6 @@ class RabbitTests: XCTestCase {
 #if !CI
 
     extension RabbitTests {
-
         func testRabbitPerformance() {
             let key: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.keySize)
             let iv: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.ivSize)
@@ -132,7 +130,6 @@ class RabbitTests: XCTestCase {
 #endif
 
 extension RabbitTests {
-
     static func allTests() -> [(String, (RabbitTests) -> () -> Void)] {
         var tests = [
             ("testInitialization", testInitialization),

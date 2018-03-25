@@ -18,7 +18,6 @@
 
 /// The Advanced Encryption Standard (AES)
 public final class AES: BlockCipher {
-
     public enum Error: Swift.Error {
         /// Data padding is required
         case dataPaddingRequired
@@ -354,7 +353,6 @@ private extension AES {
     }
 
     private func expandKey(_ key: Key, variant _: Variant) -> Array<Array<UInt32>> {
-
         func convertExpandedKey(_ expanded: Array<UInt8>) -> Array<Array<UInt32>> {
             return expanded.batched(by: 4).map({ UInt32(bytes: $0.reversed()) }).batched(by: 4).map({ Array($0) })
         }
@@ -485,8 +483,8 @@ private extension AES {
 }
 
 // MARK: Cipher
-extension AES: Cipher {
 
+extension AES: Cipher {
     public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
         let chunks = bytes.batched(by: AES.blockSize)
 

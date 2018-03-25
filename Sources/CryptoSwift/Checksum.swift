@@ -108,8 +108,8 @@ public final class Checksum {
 }
 
 // MARK: Public interface
-public extension Checksum {
 
+public extension Checksum {
     /// Calculate CRC32
     ///
     /// - parameter message: Message

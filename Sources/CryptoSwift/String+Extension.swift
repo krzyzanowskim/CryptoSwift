@@ -15,7 +15,6 @@
 
 /** String extension */
 extension String {
-
     public var bytes: Array<UInt8> {
         return data(using: String.Encoding.utf8, allowLossyConversion: true)?.bytes ?? Array(utf8)
     }

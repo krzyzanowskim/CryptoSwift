@@ -14,7 +14,6 @@
 //
 
 public final class Rabbit: BlockCipher {
-
     public enum Error: Swift.Error {
         case invalidKeyOrInitializationVector
     }
@@ -56,6 +55,7 @@ public final class Rabbit: BlockCipher {
     ]
 
     // MARK: - Initializers
+
     public convenience init(key: Array<UInt8>) throws {
         try self.init(key: key, iv: nil)
     }
@@ -70,6 +70,7 @@ public final class Rabbit: BlockCipher {
     }
 
     // MARK: -
+
     fileprivate func setup() {
         p7 = 0
 
@@ -183,8 +184,8 @@ public final class Rabbit: BlockCipher {
 }
 
 // MARK: Cipher
-extension Rabbit: Cipher {
 
+extension Rabbit: Cipher {
     public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
         setup()
 

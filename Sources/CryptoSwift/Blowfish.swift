@@ -18,7 +18,6 @@
 //
 
 public final class Blowfish {
-
     public enum Error: Swift.Error {
         /// Data padding is required
         case dataPaddingRequired
@@ -490,13 +489,11 @@ public final class Blowfish {
 }
 
 extension Blowfish: Cipher {
-
     /// Encrypt the 8-byte padded buffer, block by block. Note that for amounts of data larger than a block, it is not safe to just call encrypt() on successive blocks.
     ///
     /// - Parameter bytes: Plaintext data
     /// - Returns: Encrypted data
     public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.Index == Int {
-
         let bytes = padding.add(to: Array(bytes), blockSize: Blowfish.blockSize) // FIXME: Array(bytes) copies
 
         var out = Array<UInt8>()
@@ -518,7 +515,6 @@ extension Blowfish: Cipher {
     /// - Parameter bytes: Ciphertext data
     /// - Returns: Plaintext data
     public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.Index == Int {
-
         if blockMode.options.contains(.paddingRequired) && (bytes.count % Blowfish.blockSize != 0) {
             throw Error.dataPaddingRequired
         }

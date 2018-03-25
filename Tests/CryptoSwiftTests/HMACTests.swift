@@ -13,11 +13,10 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-import XCTest
 @testable import CryptoSwift
+import XCTest
 
 final class HMACTests: XCTestCase {
-
     func testMD5() {
         let key: Array<UInt8> = []
         let msg: Array<UInt8> = []

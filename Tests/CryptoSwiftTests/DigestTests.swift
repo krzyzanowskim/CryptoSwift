@@ -16,12 +16,11 @@
 // http://www.di-mgt.com.au/sha_testvectors.html (http://csrc.nist.gov/groups/ST/toolkit/documents/Examples/SHA_All.pdf)
 //
 
-import XCTest
-import Foundation
 @testable import CryptoSwift
+import Foundation
+import XCTest
 
 final class DigestTests: XCTestCase {
-
     func testMD5() {
         XCTAssertEqual("123".md5(), "202cb962ac59075b964b07152d234b70", "MD5 calculation failed")
         XCTAssertEqual("".md5(), "d41d8cd98f00b204e9800998ecf8427e", "MD5 calculation failed")
@@ -260,7 +259,6 @@ final class DigestTests: XCTestCase {
 #if !CI
 
     extension DigestTests {
-
         func testMD5Performance() {
             measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
                 let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
@@ -281,22 +279,21 @@ final class DigestTests: XCTestCase {
 
         // Keep it to compare
         /*
-        func testSHA1PerformanceCC() {
-            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
-                let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
-                self.startMeasuring()
-                var digest = Array<UInt8>(repeating: 0, count: Int(CC_SHA1_DIGEST_LENGTH))
-                CC_SHA1(arr, CC_LONG(arr.count), &digest)
-                self.stopMeasuring()
-            }
-        }
+         func testSHA1PerformanceCC() {
+         measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
+         let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
+         self.startMeasuring()
+         var digest = Array<UInt8>(repeating: 0, count: Int(CC_SHA1_DIGEST_LENGTH))
+         CC_SHA1(arr, CC_LONG(arr.count), &digest)
+         self.stopMeasuring()
+         }
+         }
          */
     }
 
 #endif
 
 extension DigestTests {
-
     static func allTests() -> [(String, (DigestTests) -> () -> Void)] {
         var tests = [
             ("testMD5", testMD5),
@@ -311,7 +308,7 @@ extension DigestTests {
             ("testCRC32NotReflected", testCRC32NotReflected),
             ("testCRC16", testCRC16),
             ("testChecksum", testChecksum),
-            ("testSHAPartialUpdates", testSHAPartialUpdates)
+            ("testSHAPartialUpdates", testSHAPartialUpdates),
         ]
 
         #if !CI

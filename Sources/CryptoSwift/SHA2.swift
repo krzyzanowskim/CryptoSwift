@@ -280,7 +280,6 @@ public final class SHA2: DigestType {
 }
 
 extension SHA2: Updatable {
-
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
         accumulated += bytes
 

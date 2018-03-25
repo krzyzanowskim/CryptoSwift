@@ -14,7 +14,6 @@
 //
 
 public final class CMAC: Authenticator {
-    
     public enum Error: Swift.Error {
         case wrongKeyLength
     }
@@ -36,7 +35,7 @@ public final class CMAC: Authenticator {
 
     public func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
         let aes = try AES(key: Array(key), blockMode: .CBC(iv: CMAC.Zero), padding: .noPadding)
-        
+
         let l = try aes.encrypt(CMAC.Zero)
         var subKey1 = leftShiftOneBit(l)
         if (l[0] & 0x80) != 0 {
@@ -58,7 +57,7 @@ public final class CMAC: Authenticator {
         if !lastBlockComplete {
             bitPadding(to: &paddedBytes, blockSize: CMAC.BlockSize)
         }
-        
+
         var blocks = Array(paddedBytes.batched(by: CMAC.BlockSize))
         var lastBlock = blocks.popLast()!
         if lastBlockComplete {
@@ -66,7 +65,7 @@ public final class CMAC: Authenticator {
         } else {
             lastBlock = xor(lastBlock, subKey2)
         }
-        
+
         var x = Array<UInt8>(repeating: 0x00, count: CMAC.BlockSize)
         var y = Array<UInt8>(repeating: 0x00, count: CMAC.BlockSize)
         for block in blocks {
@@ -78,11 +77,11 @@ public final class CMAC: Authenticator {
     }
 
     // MARK: Helper methods
-    
+
     /**
      Performs left shift by one bit to the bit string aquired after concatenating al bytes in the byte array
      - parameters:
-       - bytes: byte array
+     - bytes: byte array
      - returns: bit shifted bit string split again in array of bytes
      */
     private func leftShiftOneBit(_ bytes: Array<UInt8>) -> Array<UInt8> {

@@ -13,9 +13,9 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-import XCTest
-import Foundation
 @testable import CryptoSwift
+import Foundation
+import XCTest
 
 final class AESTests: XCTestCase {
     // 128 bit key
@@ -366,7 +366,6 @@ final class AESTests: XCTestCase {
 #if !CI
 
     extension AESTests {
-
         func testAESEncryptPerformance() {
             let key: Array<UInt8> = [0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c]
             let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
@@ -390,7 +389,6 @@ final class AESTests: XCTestCase {
 #endif
 
 extension AESTests {
-
     static func allTests() -> [(String, (AESTests) -> () -> Void)] {
         var tests = [
             ("testAESEncrypt", testAESEncrypt),

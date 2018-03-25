@@ -20,7 +20,6 @@
 ///  message such that an attacker has a negligible chance of producing a valid tag for an inauthentic message.
 
 public final class Poly1305: Authenticator {
-
     public enum Error: Swift.Error {
         case authenticateError
     }

@@ -14,7 +14,6 @@
 //
 
 extension Array {
-
     public init(reserveCapacity: Int) {
         self = Array<Element>()
         self.reserveCapacity(reserveCapacity)
@@ -23,11 +22,9 @@ extension Array {
     var slice: ArraySlice<Element> {
         return self[self.startIndex..<self.endIndex]
     }
-
 }
 
 extension Array where Element == UInt8 {
-
     public init(hex: String) {
         self.init(reserveCapacity: hex.unicodeScalars.lazy.underestimatedCount)
         var buffer: UInt8?
@@ -78,7 +75,6 @@ extension Array where Element == UInt8 {
 }
 
 extension Array where Element == UInt8 {
-
     /// split in chunks with given chunk size
     @available(*, deprecated: 0.8.0, message: "")
     public func chunks(size chunksize: Int) -> Array<Array<Element>> {

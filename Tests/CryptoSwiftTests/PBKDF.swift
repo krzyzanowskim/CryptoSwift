@@ -13,11 +13,10 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-import XCTest
 @testable import CryptoSwift
+import XCTest
 
 class PBKDF: XCTestCase {
-
     func testPBKDF1() {
         let password: Array<UInt8> = [0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64]
         let salt: Array<UInt8> = [0x78, 0x57, 0x8e, 0x5a, 0x5d, 0x63, 0xcb, 0x06]

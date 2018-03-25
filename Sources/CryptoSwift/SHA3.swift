@@ -249,7 +249,6 @@ public final class SHA3: DigestType {
 }
 
 extension SHA3: Updatable {
-
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
         accumulated += bytes
 

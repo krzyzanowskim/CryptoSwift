@@ -13,11 +13,10 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-import XCTest
 @testable import CryptoSwift
+import XCTest
 
 final class PaddingTests: XCTestCase {
-
     func testPKCS7_0() {
         let input: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6]
         let expected: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16]

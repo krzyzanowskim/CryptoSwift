@@ -55,6 +55,7 @@ Good mood
 #### Message authenticators
 - [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
 - [HMAC](https://www.ietf.org/rfc/rfc2104.txt) MD5, SHA1, SHA256
+- [CMAC](https://tools.ietf.org/html/rfc4493)
 
 #### Cipher block mode
 - Electronic codebook ([ECB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_.28ECB.29))
@@ -74,6 +75,9 @@ Good mood
 - [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
 - [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
 - No padding
+
+#### Authenticated Encryption with Associated Data (AEAD)
+- [AEAD_CHACHA20_POLY1305](https://tools.ietf.org/html/rfc7539#section-2.8)
 
 ## Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
@@ -173,7 +177,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 
 * [Basics (data types, conversion, ...)](#basics)
 * [Digest (MD5, SHA...)](#calculate-digest)
-* [Message authenticators (HMAC...)](#message-authenticators-1)
+* [Message authenticators (HMAC, CMAC...)](#message-authenticators-1)
 * [Password-Based Key Derivation Function (PBKDF2, ...)](#password-based-key-derivation-functions)
 * [HMAC-based Key Derivation Function (HKDF)](#hmac-based-key-derivation-function)
 * [Data Padding](#data-padding)
@@ -181,7 +185,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 * [Rabbit](#rabbit)
 * [Blowfish](#blowfish)
 * [Advanced Encryption Standard (AES)](#aes)
-
+* [Authenticated Encryption with Associated Data (AEAD)](#aead)
 
 also check [Playground](/CryptoSwift.playground/Contents.swift)
 
@@ -281,6 +285,7 @@ let key:Array<UInt8> = [1,2,3,4,5,6,7,8,9,10,...]
 
 try Poly1305(key: key).authenticate(bytes)
 try HMAC(key: key, variant: .sha256).authenticate(bytes)
+try CMAC(key: key).authenticate(bytes)
 ```
 
 ##### Password-Based Key Derivation Functions
@@ -344,7 +349,7 @@ AES-256 example
 ```swift
 try AES(key: [1,2,3,...,32], blockMode: .CBC(iv: [1,2,3,...,16]), padding: .pkcs7)
 ```
- 
+
 ###### All at once
 ```swift
 do {
@@ -405,6 +410,13 @@ Using convenience extensions
 let plain = Data(bytes: [0x01, 0x02, 0x03])
 let encrypted = try! plain.encrypt(ChaCha20(key: key, iv: iv))
 let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
+```
+
+##### AEAD
+
+```swift
+let encrypt = try AEADChaCha20Poly1305.encrypt(plaintext, key: key, iv: nonce, authenticationHeader: header)
+let decrypt = try AEADChaCha20Poly1305.decrypt(ciphertext, key: key, iv: nonce, authenticationHeader: header, authenticationTag: tagArr: tag)
 ```
 
 ## Author

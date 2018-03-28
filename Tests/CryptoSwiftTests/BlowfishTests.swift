@@ -15,11 +15,10 @@
 
 // Test vector from http://www.schneier.com/code/vectors.txt
 
-import XCTest
 @testable import CryptoSwift
+import XCTest
 
 class BlowfishTests: XCTestCase {
-
     struct TestData {
         let key: Array<UInt8>
         let input: Array<UInt8>
@@ -211,7 +210,6 @@ class BlowfishTests: XCTestCase {
 }
 
 extension BlowfishTests {
-
     static func allTests() -> [(String, (BlowfishTests) -> () -> Void)] {
         let tests = [
             ("testEncrypt", testEncrypt),

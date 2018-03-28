@@ -1,10 +1,11 @@
-import XCTest
 @testable import CryptoSwiftTests
+import XCTest
 
 XCTMain([
     testCase(DigestTests.allTests()),
     testCase(Poly1305Tests.allTests),
     testCase(HMACTests.allTests),
+    testCase(CMACTests.allTests),
     testCase(AESTests.allTests()),
     testCase(BlowfishTests.allTests()),
     testCase(ChaCha20Tests.allTests()),

@@ -37,10 +37,10 @@ public final class SHA1: DigestType {
         // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
         // Extend the sixteen 32-bit words into eighty 32-bit words:
         let M = UnsafeMutablePointer<UInt32>.allocate(capacity: 80)
-        M.initialize(to: 0, count: 80)
+        M.initialize(repeating: 0, count: 80)
         defer {
             M.deinitialize(count: 80)
-            M.deallocate(capacity: 80)
+            M.deallocate()
         }
 
         for x in 0..<80 {
@@ -104,7 +104,6 @@ public final class SHA1: DigestType {
 }
 
 extension SHA1: Updatable {
-
     @discardableResult
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
         accumulated += bytes

@@ -97,16 +97,16 @@ public final class SHA3: DigestType {
     ///     A′[x, y,z] = A[x, y,z] ⊕ D[x,z].
     private func θ(_ a: inout Array<UInt64>) {
         let c = UnsafeMutablePointer<UInt64>.allocate(capacity: 5)
-        c.initialize(to: 0, count: 5)
+        c.initialize(repeating: 0, count: 5)
         defer {
             c.deinitialize(count: 5)
-            c.deallocate(capacity: 5)
+            c.deallocate()
         }
         let d = UnsafeMutablePointer<UInt64>.allocate(capacity: 5)
-        d.initialize(to: 0, count: 5)
+        d.initialize(repeating: 0, count: 5)
         defer {
             d.deinitialize(count: 5)
-            d.deallocate(capacity: 5)
+            d.deallocate()
         }
 
         for i in 0..<5 {
@@ -249,7 +249,6 @@ public final class SHA3: DigestType {
 }
 
 extension SHA3: Updatable {
-
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
         accumulated += bytes
 

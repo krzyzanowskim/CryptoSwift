@@ -122,7 +122,6 @@ public final class MD5: DigestType {
 }
 
 extension MD5: Updatable {
-
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
         accumulated += bytes
 

@@ -18,7 +18,6 @@ public typealias Hash = Digest
 
 /// Hash functions to calculate Digest.
 public struct Digest {
-
     /// Calculate MD5 Digest
     /// - parameter bytes: input message
     /// - returns: Digest bytes

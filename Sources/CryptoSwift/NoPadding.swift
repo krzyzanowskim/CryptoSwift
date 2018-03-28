@@ -14,7 +14,6 @@
 //
 
 struct NoPadding: PaddingProtocol {
-
     init() {
     }
 

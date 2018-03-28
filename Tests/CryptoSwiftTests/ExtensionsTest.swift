@@ -13,12 +13,11 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-import XCTest
-import Foundation
 @testable import CryptoSwift
+import Foundation
+import XCTest
 
 final class ExtensionsTest: XCTestCase {
-
     func testBytes() {
         let size = MemoryLayout<UInt32>.size // 32 or 64  bit
 
@@ -88,7 +87,6 @@ final class ExtensionsTest: XCTestCase {
 #if !CI
 
     extension ExtensionsTest {
-
         func testArrayInitHexPerformance() {
             var str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
             for _ in 0...12 {
@@ -102,7 +100,6 @@ final class ExtensionsTest: XCTestCase {
 #endif
 
 extension ExtensionsTest {
-
     static func allTests() -> [(String, (ExtensionsTest) -> () -> Void)] {
         var tests = [
             ("testBytes", testBytes),

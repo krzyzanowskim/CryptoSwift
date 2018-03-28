@@ -13,11 +13,10 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-import XCTest
 @testable import CryptoSwift
+import XCTest
 
 class RandomBytesSequenceTests: XCTestCase {
-
     func testSequence() {
         XCTAssertNil(RandomBytesSequence(size: 0).makeIterator().next())
 

@@ -16,7 +16,6 @@
 import Foundation
 
 extension String {
-
     /// Return Base64 back to String
     public func decryptBase64ToString(cipher: Cipher) throws -> String {
         guard let decodedData = Data(base64Encoded: self, options: []) else {

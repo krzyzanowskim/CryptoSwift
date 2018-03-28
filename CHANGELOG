@@ -1,3 +1,8 @@
+0.8.4
+- Added CMAC message authenticator https://tools.ietf.org/html/rfc4493
+- Added AEADChaCha20Poly1305 (AEAD_CHACHA20_POLY1305) https://tools.ietf.org/html/rfc7539#section-2.8.1
+- Swift 4.1 Update
+
 0.8.3
 - Fix SHA3 padding.
 - Fix Carthage builds.

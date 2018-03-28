@@ -16,7 +16,6 @@
 import Foundation
 
 extension Data {
-
     /// Two octet checksum as defined in RFC-4880. Sum of all octets, mod 65536
     public func checksum() -> UInt16 {
         var s: UInt32 = 0
@@ -78,7 +77,6 @@ extension Data {
 }
 
 extension Data {
-
     public init(hex: String) {
         self.init(bytes: Array<UInt8>(hex: hex))
     }

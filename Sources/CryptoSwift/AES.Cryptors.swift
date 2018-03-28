@@ -14,6 +14,7 @@
 //
 
 // MARK: Cryptors
+
 extension AES: Cryptors {
     public func makeEncryptor() throws -> AES.Encryptor {
         return try AES.Encryptor(aes: self)
@@ -25,6 +26,7 @@ extension AES: Cryptors {
 }
 
 // MARK: Encryptor
+
 extension AES {
     public struct Encryptor: Updatable {
         private var worker: BlockModeWorker
@@ -62,8 +64,8 @@ extension AES {
 }
 
 // MARK: Decryptor
-extension AES {
 
+extension AES {
     public struct Decryptor: RandomAccessCryptor {
         private var worker: BlockModeWorker
         private let padding: Padding

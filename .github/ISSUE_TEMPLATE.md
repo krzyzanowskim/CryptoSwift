@@ -1,28 +1,21 @@
-# Details
-
 - CryptoSwift version: 
 - Swift version: 
-- Platform version: 
-	- [ ] iOS/tvOS/watchOS
-	- [ ] macOS
-	- [ ] Linux
-- Installation: 
-	- [ ] CocoaPods
-	- [ ] Carthage
-	- [ ] Swift Package Manager
-	- [ ] Manual
-- [ ] [I'm a supporter](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=92Z6U3LBHF9J4).
+- Platform (iOS/macOS/Linux/...): 
+- Installation method (CocoaPods/Carthage/SPM/...): 
+- Project name:
 
 # Description
 
+> To whom may be concerned: I offer professional support to all my open source projects.
 
 # Steps to reproduce
 
 
-Sample code:
+Sample code to reproduce the issue:
 
 ```swift
 import CryptoSwift
 
+// Code goes here
 
 ```

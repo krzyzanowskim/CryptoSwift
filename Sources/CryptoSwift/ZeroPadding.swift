@@ -16,7 +16,6 @@
 /// All the bytes that are required to be padded are padded with zero.
 /// Zero padding may not be reversible if the original file ends with one or more zero bytes.
 struct ZeroPadding: PaddingProtocol {
-
     init() {
     }
 

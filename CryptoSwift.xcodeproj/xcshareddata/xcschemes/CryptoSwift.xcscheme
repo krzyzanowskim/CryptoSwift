@@ -42,7 +42,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       disableMainThreadChecker = "YES"
       systemAttachmentLifetime = "keepNever"
-      codeCoverageEnabled = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "YES"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
@@ -56,12 +56,22 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7595C1492072E48C00EA1A5F"
                BuildableName = "TestsPerformance.xctest"
                BlueprintName = "TestsPerformance"
+               ReferencedContainer = "container:CryptoSwift.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7564F04E2072EAEB00CA5A96"
+               BuildableName = "TestsPerformance-iOS.xctest"
+               BlueprintName = "TestsPerformance-iOS"
                ReferencedContainer = "container:CryptoSwift.xcodeproj">
             </BuildableReference>
          </TestableReference>

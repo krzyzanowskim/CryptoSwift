@@ -102,14 +102,6 @@ ONLY_ACTIVE_ARCH = YES
 
 
 
-// Active Compilation Conditions
-// 
-// A list of compilation conditions to enable for conditional compilation expressions.
-
-SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
-
-
-
 // Swift Optimization Level
 // 
 // * *None:* Compile without any optimization. [-Onone]

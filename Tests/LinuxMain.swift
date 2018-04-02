@@ -1,4 +1,5 @@
-@testable import CryptoSwiftTests
+@testable import Tests
+@testable import TestsPerformance
 import XCTest
 
 var tests = [

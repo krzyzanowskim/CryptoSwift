@@ -48,7 +48,7 @@ MTL_ENABLE_DEBUG_INFO = NO
 // * *Optimize for Size:* [-Osize]
 // * *Whole Module Optimization:* [-O -whole-module-optimization]
 
-SWIFT_OPTIMIZATION_LEVEL = -Owholemodule
+SWIFT_OPTIMIZATION_LEVEL = -O
 
 
 

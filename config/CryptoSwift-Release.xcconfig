@@ -79,4 +79,4 @@ SWIFT_ENFORCE_EXCLUSIVE_ACCESS = compile-time
 // * *Optimize for Size:* [-Osize]
 // * *Whole Module Optimization:* [-O -whole-module-optimization]
 
-SWIFT_OPTIMIZATION_LEVEL = -Owholemodule
+SWIFT_OPTIMIZATION_LEVEL = -O

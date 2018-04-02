@@ -37,7 +37,7 @@ HEADER_SEARCH_PATHS = $(inherited) includes/**
 // in [Runtime Configuration
 // Guidelines](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPRuntimeConfig/000-Introduction/introduction.html).
 
-INFOPLIST_FILE = Tests/CryptoSwiftTests/Info.plist
+INFOPLIST_FILE = Tests/${TARGET_NAME}/Info.plist
 
 
 
@@ -67,5 +67,5 @@ PRODUCT_BUNDLE_IDENTIFIER = com.krzyzanowskim.${PRODUCT_NAME:rfc1034identifier}
 // 
 // Path to the header defining the Objective-C interfaces to be exposed in Swift.
 
-SWIFT_OBJC_BRIDGING_HEADER = Tests/CryptoSwiftTests/Bridging.h
+SWIFT_OBJC_BRIDGING_HEADER = Tests/${TARGET_NAME}/Bridging.h
 

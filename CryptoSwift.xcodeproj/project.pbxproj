@@ -17,7 +17,6 @@
 		75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */; };
 		751EE9781F93996100161FFC /* AES.Cryptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751EE9771F93996100161FFC /* AES.Cryptors.swift */; };
 		75211F95207249D8004E41F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75211F94207249D8004E41F8 /* AppDelegate.swift */; };
-		75211F97207249D8004E41F8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75211F96207249D8004E41F8 /* ViewController.swift */; };
 		75211FB520724A10004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FA520724A0F004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig */; };
 		75211FB620724A10004E41F8 /* Project-Test.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FA620724A0F004E41F8 /* Project-Test.xcconfig */; };
 		75211FB720724A10004E41F8 /* Tests-Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FA720724A0F004E41F8 /* Tests-Debug.xcconfig */; };
@@ -40,8 +39,6 @@
 		75482EA41CB310B7001F66A5 /* PBKDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75482EA31CB310B7001F66A5 /* PBKDF.swift */; };
 		754BE46819693E190098E6F3 /* DigestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* DigestTests.swift */; };
 		755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755FB1D9199E347D00475437 /* ExtensionsTest.swift */; };
-		756901B02072D852006CCD74 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
-		756901B12072D852006CCD74 /* CryptoSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7576F64D20725BD6006688F8 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7576F64C20725BD5006688F8 /* Default-568h@2x.png */; };
 		7576F6F320728F00006688F8 /* RabbitTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F220728F00006688F8 /* RabbitTestsPerf.swift */; };
 		757DA2531A4ED0A4002BA3EF /* PaddingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2521A4ED0A4002BA3EF /* PaddingTests.swift */; };
@@ -192,7 +189,6 @@
 		751EE9771F93996100161FFC /* AES.Cryptors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AES.Cryptors.swift; sourceTree = "<group>"; };
 		75211F92207249D8004E41F8 /* CryptoSwift-TestHostApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CryptoSwift-TestHostApp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		75211F94207249D8004E41F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		75211F96207249D8004E41F8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		75211FA0207249D8004E41F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75211FA520724A0F004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-TestHostApp-Test.xcconfig"; sourceTree = "<group>"; };
 		75211FA620724A0F004E41F8 /* Project-Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Test.xcconfig"; sourceTree = "<group>"; };
@@ -339,7 +335,6 @@
 			isa = PBXGroup;
 			children = (
 				75211F94207249D8004E41F8 /* AppDelegate.swift */,
-				75211F96207249D8004E41F8 /* ViewController.swift */,
 				75211FA0207249D8004E41F8 /* Info.plist */,
 			);
 			path = "CryptoSwift-TestHostApp";
@@ -714,7 +709,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75211F97207249D8004E41F8 /* ViewController.swift in Sources */,
 				75211F95207249D8004E41F8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

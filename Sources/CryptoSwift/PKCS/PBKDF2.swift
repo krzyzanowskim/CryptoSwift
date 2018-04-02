@@ -16,10 +16,10 @@
 //  https://www.ietf.org/rfc/rfc2898.txt
 //
 
-#if os(Linux) || os(Android) || os(FreeBSD)
-    import Glibc
+#if canImport(Darwin)
+import Darwin
 #else
-    import Darwin
+import Glibc
 #endif
 
 public extension PKCS5 {

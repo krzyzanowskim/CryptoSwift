@@ -13,10 +13,10 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-#if os(Linux) || os(Android) || os(FreeBSD)
-    import Glibc
+#if canImport(Darwin)
+import Darwin
 #else
-    import Darwin
+import Glibc
 #endif
 
 public protocol _UInt8Type {}

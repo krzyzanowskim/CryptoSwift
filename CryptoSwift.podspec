@@ -8,6 +8,7 @@ Pod::Spec.new do |s|
   s.license      = {:type => "Attribution License", :file => "LICENSE"}
   s.authors      = {'Marcin Krzyżanowski' => 'marcin@krzyzanowskim.com'}
   s.social_media_url   = "https://twitter.com/krzyzanowskim"
+  s.cocoapods_version = '>= 1.4.0'
   s.swift_version = "4.0"
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.9"
@@ -15,5 +16,5 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = "9.0"
   s.source_files  = "Sources/CryptoSwift/**/*.swift"
   s.requires_arc = true
-  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0', 'SWIFT_OPTIMIZATION_LEVEL' => '-Owholemodule', 'SWIFT_DISABLE_SAFETY_CHECKS' => 'YES', 'SWIFT_ENFORCE_EXCLUSIVE_ACCESS' => 'compile-time', 'GCC_UNROLL_LOOPS' => 'YES'}
+  s.pod_target_xcconfig = { 'SWIFT_OPTIMIZATION_LEVEL' => '-O', 'SWIFT_COMPILATION_MODE' => 'wholemodule', 'SWIFT_DISABLE_SAFETY_CHECKS' => 'YES', 'SWIFT_ENFORCE_EXCLUSIVE_ACCESS' => 'compile-time', 'GCC_UNROLL_LOOPS' => 'YES'}
 end

@@ -115,31 +115,14 @@ class RabbitTests: XCTestCase {
     }
 }
 
-#if !CI
-
-    extension RabbitTests {
-        func testRabbitPerformance() {
-            let key: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.keySize)
-            let iv: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.ivSize)
-            let message = Array<UInt8>(repeating: 7, count: (1024 * 1024) * 1)
-            measure {
-                _ = try! Rabbit(key: key, iv: iv).encrypt(message)
-            }
-        }
-    }
-#endif
-
 extension RabbitTests {
     static func allTests() -> [(String, (RabbitTests) -> () -> Void)] {
-        var tests = [
+        let tests = [
             ("testInitialization", testInitialization),
             ("testRabbitWithoutIV", testRabbitWithoutIV),
             ("testRabbitWithIV", testRabbitWithIV),
         ]
 
-        #if !CI
-            tests += [("testRabbitPerformance", testRabbitPerformance)]
-        #endif
         return tests
     }
 }

@@ -256,46 +256,9 @@ final class DigestTests: XCTestCase {
     }
 }
 
-#if !CI
-
-    extension DigestTests {
-        func testMD5Performance() {
-            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
-                let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
-                self.startMeasuring()
-                _ = Digest.md5(arr)
-                self.stopMeasuring()
-            }
-        }
-
-        func testSHA1Performance() {
-            measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
-                let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
-                self.startMeasuring()
-                _ = Digest.sha1(arr)
-                self.stopMeasuring()
-            }
-        }
-
-        // Keep it to compare
-        /*
-         func testSHA1PerformanceCC() {
-         measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
-         let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
-         self.startMeasuring()
-         var digest = Array<UInt8>(repeating: 0, count: Int(CC_SHA1_DIGEST_LENGTH))
-         CC_SHA1(arr, CC_LONG(arr.count), &digest)
-         self.stopMeasuring()
-         }
-         }
-         */
-    }
-
-#endif
-
 extension DigestTests {
     static func allTests() -> [(String, (DigestTests) -> () -> Void)] {
-        var tests = [
+        let tests = [
             ("testMD5", testMD5),
             ("testSHA1", testSHA1),
             ("testSHA2", testSHA2),
@@ -310,13 +273,6 @@ extension DigestTests {
             ("testChecksum", testChecksum),
             ("testSHAPartialUpdates", testSHAPartialUpdates),
         ]
-
-        #if !CI
-            tests += [
-                ("testMD5Performance", testMD5Performance),
-                ("testSHA1Performance", testSHA1Performance),
-            ]
-        #endif
 
         return tests
     }

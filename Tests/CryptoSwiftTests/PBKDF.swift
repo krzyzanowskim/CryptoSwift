@@ -58,26 +58,12 @@ class PBKDF: XCTestCase {
         XCTAssertEqual(value.toHexString(), "a53cf3df485e5cd9")
     }
 
-    #if !CI
-        func testPerformance() {
-            let password: Array<UInt8> = "s33krit".bytes
-            let salt: Array<UInt8> = "nacl".bytes
-            measure {
-                _ = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 65536, keyLength: 32, variant: .sha1).calculate()
-            }
-        }
-    #endif
-
     static func allTests() -> [(String, (PBKDF) -> () -> Void)] {
-        var tests = [
+        let tests = [
             ("testPBKDF1", testPBKDF1),
             ("testPBKDF2", testPBKDF2),
             ("testPBKDF2Length", testPBKDF2Length),
         ]
-
-        #if !CI
-            tests += [("testPerformance", testPerformance)]
-        #endif
 
         return tests
     }

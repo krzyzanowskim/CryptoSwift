@@ -1,7 +1,7 @@
 @testable import CryptoSwiftTests
 import XCTest
 
-XCTMain([
+var tests = [
     testCase(DigestTests.allTests()),
     testCase(Poly1305Tests.allTests),
     testCase(HMACTests.allTests),
@@ -15,4 +15,17 @@ XCTMain([
     testCase(PBKDF.allTests()),
     testCase(RandomBytesSequenceTests.allTests),
     testCase(Access.allTests),
-])
+]
+
+#if !CI
+    tests += [
+        testCase(DigestTestsPerf.allTests()),
+        testCase(AESTestsPerf.allTests()),
+        testCase(ChaCha20TestsPerf.allTests()),
+        testCase(RabbitTestsPerf.allTests()),
+        testCase(ExtensionsTestPerf.allTests()),
+        testCase(PBKDFPerf.allTests()),
+    ]
+#endif
+
+XCTMain(tests)

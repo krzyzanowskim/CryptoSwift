@@ -41,6 +41,12 @@
 		754BE46819693E190098E6F3 /* DigestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* DigestTests.swift */; };
 		755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755FB1D9199E347D00475437 /* ExtensionsTest.swift */; };
 		7576F64D20725BD6006688F8 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7576F64C20725BD5006688F8 /* Default-568h@2x.png */; };
+		7576F6ED20726325006688F8 /* DigestTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6EB20726319006688F8 /* DigestTestsPerf.swift */; };
+		7576F6EF20726422006688F8 /* AESTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6EE20726422006688F8 /* AESTestsPerf.swift */; };
+		7576F6F120728EAB006688F8 /* ChaCha20TestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F020728EAB006688F8 /* ChaCha20TestsPerf.swift */; };
+		7576F6F320728F00006688F8 /* RabbitTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F220728F00006688F8 /* RabbitTestsPerf.swift */; };
+		7576F6F520729069006688F8 /* ExtensionsTestPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F420729069006688F8 /* ExtensionsTestPerf.swift */; };
+		7576F6F7207290F8006688F8 /* PBKDFPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F6207290F8006688F8 /* PBKDFPerf.swift */; };
 		757DA2531A4ED0A4002BA3EF /* PaddingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2521A4ED0A4002BA3EF /* PaddingTests.swift */; };
 		757DA2551A4ED408002BA3EF /* AESTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2541A4ED408002BA3EF /* AESTests.swift */; };
 		757DA2591A4ED4D7002BA3EF /* ChaCha20Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */; };
@@ -220,6 +226,12 @@
 		755FB1D9199E347D00475437 /* ExtensionsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionsTest.swift; sourceTree = "<group>"; };
 		756BFDCA1A82B87300B9D9A4 /* Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridging.h; sourceTree = "<group>"; };
 		7576F64C20725BD5006688F8 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		7576F6EB20726319006688F8 /* DigestTestsPerf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigestTestsPerf.swift; sourceTree = "<group>"; };
+		7576F6EE20726422006688F8 /* AESTestsPerf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AESTestsPerf.swift; sourceTree = "<group>"; };
+		7576F6F020728EAB006688F8 /* ChaCha20TestsPerf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChaCha20TestsPerf.swift; sourceTree = "<group>"; };
+		7576F6F220728F00006688F8 /* RabbitTestsPerf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RabbitTestsPerf.swift; sourceTree = "<group>"; };
+		7576F6F420729069006688F8 /* ExtensionsTestPerf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionsTestPerf.swift; sourceTree = "<group>"; };
+		7576F6F6207290F8006688F8 /* PBKDFPerf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBKDFPerf.swift; sourceTree = "<group>"; };
 		757DA2521A4ED0A4002BA3EF /* PaddingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddingTests.swift; sourceTree = "<group>"; };
 		757DA2541A4ED408002BA3EF /* AESTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AESTests.swift; sourceTree = "<group>"; };
 		757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChaCha20Tests.swift; sourceTree = "<group>"; };
@@ -348,7 +360,6 @@
 		754BE44B19693E190098E6F3 = {
 			isa = PBXGroup;
 			children = (
-				7576F64C20725BD5006688F8 /* Default-568h@2x.png */,
 				75843E9A2072457A0050583A /* config */,
 				755D27BC1D06DE6400C41692 /* CryptoSwift.playground */,
 				75EC52361EE8B6CA0048EB3B /* Sources */,
@@ -375,17 +386,23 @@
 				14156CE42011422400DDCFBC /* ChaCha20Poly1305Tests.swift */,
 				E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */,
 				754BE46719693E190098E6F3 /* DigestTests.swift */,
+				7576F6EB20726319006688F8 /* DigestTestsPerf.swift */,
 				75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */,
 				758A94271A65C59200E46135 /* HMACTests.swift */,
 				0EE73E72204D599C00110E11 /* CMACTests.swift */,
 				E6200E151FB9B67C00258382 /* HKDFTests.swift */,
 				757DA2541A4ED408002BA3EF /* AESTests.swift */,
+				7576F6EE20726422006688F8 /* AESTestsPerf.swift */,
 				750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */,
 				757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */,
+				7576F6F020728EAB006688F8 /* ChaCha20TestsPerf.swift */,
 				674A736E1BF5D85B00866C5B /* RabbitTests.swift */,
+				7576F6F220728F00006688F8 /* RabbitTestsPerf.swift */,
 				755FB1D9199E347D00475437 /* ExtensionsTest.swift */,
+				7576F6F420729069006688F8 /* ExtensionsTestPerf.swift */,
 				757DA2521A4ED0A4002BA3EF /* PaddingTests.swift */,
 				75482EA31CB310B7001F66A5 /* PBKDF.swift */,
+				7576F6F6207290F8006688F8 /* PBKDFPerf.swift */,
 				753B33001DAB84D600D06422 /* RandomBytesSequenceTests.swift */,
 				75C2E76C1D55F097003D2BCA /* Access.swift */,
 				756BFDCA1A82B87300B9D9A4 /* Bridging.h */,
@@ -399,6 +416,7 @@
 			isa = PBXGroup;
 			children = (
 				75EDCB811DAC4CA400D270E0 /* LinuxMain.swift */,
+				7576F64C20725BD5006688F8 /* Default-568h@2x.png */,
 				754BE46619693E190098E6F3 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -784,6 +802,7 @@
 			files = (
 				75C2E76D1D55F097003D2BCA /* Access.swift in Sources */,
 				75482EA41CB310B7001F66A5 /* PBKDF.swift in Sources */,
+				7576F6F520729069006688F8 /* ExtensionsTestPerf.swift in Sources */,
 				758A94291A65C67400E46135 /* HMACTests.swift in Sources */,
 				75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */,
 				E6200E171FB9B68C00258382 /* HKDFTests.swift in Sources */,
@@ -795,6 +814,11 @@
 				674A736F1BF5D85B00866C5B /* RabbitTests.swift in Sources */,
 				0EE73E74204D59C200110E11 /* CMACTests.swift in Sources */,
 				750CC3EB1DC0CACE0096BE6E /* BlowfishTests.swift in Sources */,
+				7576F6F7207290F8006688F8 /* PBKDFPerf.swift in Sources */,
+				7576F6F120728EAB006688F8 /* ChaCha20TestsPerf.swift in Sources */,
+				7576F6ED20726325006688F8 /* DigestTestsPerf.swift in Sources */,
+				7576F6EF20726422006688F8 /* AESTestsPerf.swift in Sources */,
+				7576F6F320728F00006688F8 /* RabbitTestsPerf.swift in Sources */,
 				757DA2531A4ED0A4002BA3EF /* PaddingTests.swift in Sources */,
 				14156CE52011422400DDCFBC /* ChaCha20Poly1305Tests.swift in Sources */,
 				757DA2551A4ED408002BA3EF /* AESTests.swift in Sources */,

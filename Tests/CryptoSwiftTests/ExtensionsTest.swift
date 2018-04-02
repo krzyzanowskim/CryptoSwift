@@ -84,24 +84,9 @@ final class ExtensionsTest: XCTestCase {
     }
 }
 
-#if !CI
-
-    extension ExtensionsTest {
-        func testArrayInitHexPerformance() {
-            var str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
-            for _ in 0...12 {
-                str += str
-            }
-            measure {
-                _ = Array<UInt8>(hex: str)
-            }
-        }
-    }
-#endif
-
 extension ExtensionsTest {
     static func allTests() -> [(String, (ExtensionsTest) -> () -> Void)] {
-        var tests = [
+        let tests = [
             ("testBytes", testBytes),
             ("testToUInt32Array", testToUInt32Array),
             ("testDataInit", testDataInit),
@@ -111,11 +96,6 @@ extension ExtensionsTest {
             ("testArrayInitHex", testArrayInitHex),
         ]
 
-        #if !CI
-            tests += [
-                ("testArrayInitHexPerformance", testArrayInitHexPerformance),
-            ]
-        #endif
         return tests
     }
 }

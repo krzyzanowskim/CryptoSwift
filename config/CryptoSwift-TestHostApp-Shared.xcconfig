@@ -6,6 +6,8 @@
 //
 
 
+ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
+
 // Asset Catalog App Icon Set Name
 // 
 // Name of an asset catalog app icon set whose contents will be merged into the

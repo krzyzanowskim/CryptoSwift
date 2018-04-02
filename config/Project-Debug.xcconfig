@@ -42,7 +42,7 @@ GCC_DYNAMIC_NO_PIC = NO
 // 
 // Space-separated list of preprocessor macros of the form `foo` or `foo=bar`.
 
-GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1 $(inherited)
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) DEBUG=1
 
 
 

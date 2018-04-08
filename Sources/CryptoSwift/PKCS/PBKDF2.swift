@@ -49,7 +49,7 @@ public extension PKCS5 {
 
             let prf = HMAC(key: password, variant: variant)
 
-            guard iterations > 0 && !password.isEmpty && !salt.isEmpty else {
+            guard iterations > 0 && !salt.isEmpty else {
                 throw Error.invalidInput
             }
 

@@ -133,11 +133,11 @@ extension SHA1: Updatable {
         var result = Array<UInt8>(repeating: 0, count: SHA1.digestLength)
         var pos = 0
         for idx in 0..<accumulatedHash.count {
-            let h = accumulatedHash[idx].bigEndian
-            result[pos] = UInt8(h & 0xff)
-            result[pos + 1] = UInt8((h >> 8) & 0xff)
-            result[pos + 2] = UInt8((h >> 16) & 0xff)
-            result[pos + 3] = UInt8((h >> 24) & 0xff)
+            let h = accumulatedHash[idx]
+            result[pos + 0] = UInt8((h >> 24) & 0xff)
+            result[pos + 1] = UInt8((h >> 16) & 0xff)
+            result[pos + 2] = UInt8((h >> 8) & 0xff)
+            result[pos + 3] = UInt8(h & 0xff)
             pos += 4
         }
 

@@ -315,25 +315,25 @@ extension SHA2: Updatable {
         case .sha224, .sha256:
             var pos = 0
             for idx in 0..<accumulatedHash32.count where idx < variant.finalLength {
-                let h = accumulatedHash32[idx].bigEndian
-                result[pos] = UInt8(h & 0xff)
-                result[pos + 1] = UInt8((h >> 8) & 0xff)
-                result[pos + 2] = UInt8((h >> 16) & 0xff)
-                result[pos + 3] = UInt8((h >> 24) & 0xff)
+                let h = accumulatedHash32[idx]
+                result[pos + 0] = UInt8((h >> 24) & 0xff)
+                result[pos + 1] = UInt8((h >> 16) & 0xff)
+                result[pos + 2] = UInt8((h >> 8) & 0xff)
+                result[pos + 3] = UInt8(h & 0xff)
                 pos += 4
             }
         case .sha384, .sha512:
             var pos = 0
             for idx in 0..<accumulatedHash64.count where idx < variant.finalLength {
-                let h = accumulatedHash64[idx].bigEndian
-                result[pos] = UInt8(h & 0xff)
-                result[pos + 1] = UInt8((h >> 8) & 0xff)
-                result[pos + 2] = UInt8((h >> 16) & 0xff)
-                result[pos + 3] = UInt8((h >> 24) & 0xff)
-                result[pos + 4] = UInt8((h >> 32) & 0xff)
-                result[pos + 5] = UInt8((h >> 40) & 0xff)
-                result[pos + 6] = UInt8((h >> 48) & 0xff)
-                result[pos + 7] = UInt8((h >> 56) & 0xff)
+                let h = accumulatedHash64[idx]
+                result[pos + 0] = UInt8((h >> 56) & 0xff)
+                result[pos + 1] = UInt8((h >> 48) & 0xff)
+                result[pos + 2] = UInt8((h >> 40) & 0xff)
+                result[pos + 3] = UInt8((h >> 32) & 0xff)
+                result[pos + 4] = UInt8((h >> 24) & 0xff)
+                result[pos + 5] = UInt8((h >> 16) & 0xff)
+                result[pos + 6] = UInt8((h >> 8) & 0xff)
+                result[pos + 7] = UInt8(h & 0xff)
                 pos += 8
             }
         }

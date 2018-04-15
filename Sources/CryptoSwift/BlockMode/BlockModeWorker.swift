@@ -15,6 +15,14 @@
 
 protocol BlockModeWorker {
     var cipherOperation: CipherOperationOnBlock { get }
+
     mutating func encrypt(_ plaintext: ArraySlice<UInt8>) -> Array<UInt8>
     mutating func decrypt(_ ciphertext: ArraySlice<UInt8>) -> Array<UInt8>
+}
+
+// TODO: remove and merge with BlockModeWorker
+protocol BlockModeWorkerFinalizing: BlockModeWorker {
+    // Any final calculations, eg. calculate tag
+    mutating func finalize(encrypt ciphertext: ArraySlice<UInt8>) -> Array<UInt8>
+    mutating func finalize(decrypt plaintext: ArraySlice<UInt8>) -> Array<UInt8>
 }

@@ -31,14 +31,13 @@ extension AES {
     public struct Encryptor: Updatable {
         private var worker: BlockModeWorker
         private let padding: Padding
+        // Accumulated bytes. Not all processed bytes.
         private var accumulated = Array<UInt8>()
         private var processedBytesTotalCount: Int = 0
-        private let paddingRequired: Bool
 
         init(aes: AES) throws {
             padding = aes.padding
             worker = try aes.blockMode.worker(blockSize: AES.blockSize, cipherOperation: aes.encrypt)
-            paddingRequired = aes.blockMode.options.contains(.paddingRequired)
         }
 
         public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
@@ -58,6 +57,11 @@ extension AES {
             }
             accumulated.removeFirst(processedBytes)
             processedBytesTotalCount += processedBytes
+
+            if var finalizingWorker = worker as? BlockModeWorkerFinalizing, isLast == true {
+                encrypted = finalizingWorker.finalize(encrypt: encrypted.slice)
+            }
+
             return encrypted
         }
     }
@@ -71,7 +75,6 @@ extension AES {
         private let padding: Padding
         private var accumulated = Array<UInt8>()
         private var processedBytesTotalCount: Int = 0
-        private let paddingRequired: Bool
 
         private var offset: Int = 0
         private var offsetToRemove: Int = 0
@@ -80,14 +83,12 @@ extension AES {
             padding = aes.padding
 
             switch aes.blockMode {
-            case .CFB, .OFB, .CTR:
+            case .CFB, .OFB, .CTR, .GCM:
                 // CFB, OFB, CTR uses encryptBlock to decrypt
                 worker = try aes.blockMode.worker(blockSize: AES.blockSize, cipherOperation: aes.encrypt)
-            default:
+            case .CBC, .ECB, .PCBC:
                 worker = try aes.blockMode.worker(blockSize: AES.blockSize, cipherOperation: aes.decrypt)
             }
-
-            paddingRequired = aes.blockMode.options.contains(.paddingRequired)
         }
 
         public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
@@ -120,6 +121,10 @@ extension AES {
 
             if isLast {
                 plaintext = padding.remove(from: plaintext, blockSize: AES.blockSize)
+            }
+
+            if var finalizingWorker = worker as? BlockModeWorkerFinalizing, isLast == true {
+                plaintext = finalizingWorker.finalize(decrypt: plaintext.slice)
             }
 
             return plaintext

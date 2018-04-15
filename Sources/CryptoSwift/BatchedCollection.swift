@@ -36,8 +36,7 @@ struct BatchedCollection<Base: Collection>: Collection {
     let size: Int
     typealias Index = BatchedCollectionIndex<Base>
     private func nextBreak(after idx: Base.Index) -> Base.Index {
-        return base.index(idx, offsetBy: size, limitedBy: base.endIndex)
-            ?? base.endIndex
+        return base.index(idx, offsetBy: size, limitedBy: base.endIndex) ?? base.endIndex
     }
 
     var startIndex: Index {

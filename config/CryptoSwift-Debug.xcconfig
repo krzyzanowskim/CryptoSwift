@@ -18,6 +18,15 @@ OTHER_SWIFT_FLAGS = -Xfrontend -debug-time-function-bodies
 
 SWIFT_COMPILATION_MODE = wholemodule
 
+// Swift Optimization Level
+//
+// * *None:* Compile without any optimization. [-Onone]
+// * *Optimize for Speed:* [-O]
+// * *Optimize for Size:* [-Osize]
+// * *Whole Module Optimization:* [-O -whole-module-optimization]
+
+SWIFT_OPTIMIZATION_LEVEL = -Onone
+
 
 
 // Exclusive Access to Memory

@@ -25,6 +25,8 @@ public final class Blowfish {
         case invalidKeyOrInitializationVector
         /// Invalid IV
         case invalidInitializationVector
+        /// Invalid block mode
+        case invalidBlockMode
     }
 
     public static let blockSize: Int = 8 // 64 bit
@@ -332,8 +334,10 @@ public final class Blowfish {
         switch blockMode {
         case .CFB, .OFB, .CTR:
             decryptWorker = try blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: encrypt)
-        default:
+        case .CBC, .ECB, .PCBC:
             decryptWorker = try blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: decrypt)
+        case .GCM:
+            throw Error.invalidBlockMode
         }
     }
 

@@ -43,9 +43,9 @@ struct CTRModeWorker: RandomAccessBlockModeWorker {
 }
 
 private func buildNonce(_ iv: ArraySlice<UInt8>, counter: UInt64) -> Array<UInt8> {
-    let noncePartLen = AES.blockSize / 2
-    let noncePrefix = Array(iv[iv.startIndex..<iv.startIndex.advanced(by: noncePartLen)])
-    let nonceSuffix = Array(iv[iv.startIndex.advanced(by: noncePartLen)..<iv.startIndex.advanced(by: iv.count)])
+    let noncePartLen = iv.count / 2
+    let noncePrefix = iv[iv.startIndex..<iv.startIndex.advanced(by: noncePartLen)]
+    let nonceSuffix = iv[iv.startIndex.advanced(by: noncePartLen)..<iv.startIndex.advanced(by: iv.count)]
     let c = UInt64(bytes: nonceSuffix) + counter
     return noncePrefix + c.bytes()
 }

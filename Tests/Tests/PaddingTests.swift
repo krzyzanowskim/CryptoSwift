@@ -44,9 +44,17 @@ final class PaddingTests: XCTestCase {
         XCTAssertEqual(clean, input, "PKCS7 failed")
     }
 
-    func testZeroPadding() {
+    func testZeroPadding1() {
         let input: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         let expected: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0, 0, 0, 0, 0, 0]
+        let padding = ZeroPadding()
+        XCTAssertEqual(padding.add(to: input, blockSize: 16), expected, "ZeroPadding failed")
+        XCTAssertEqual(padding.remove(from: padding.add(to: input, blockSize: 16), blockSize: 16), input, "ZeroPadding failed")
+    }
+
+    func testZeroPadding2() {
+        let input: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6]
+        let expected: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         let padding = ZeroPadding()
         XCTAssertEqual(padding.add(to: input, blockSize: 16), expected, "ZeroPadding failed")
         XCTAssertEqual(padding.remove(from: padding.add(to: input, blockSize: 16), blockSize: 16), input, "ZeroPadding failed")
@@ -56,6 +64,7 @@ final class PaddingTests: XCTestCase {
         ("testPKCS7_0", testPKCS7_0),
         ("testPKCS7_1", testPKCS7_1),
         ("testPKCS7_2", testPKCS7_2),
-        ("testZeroPadding", testZeroPadding),
+        ("testZeroPadding1", testZeroPadding1),
+        ("testZeroPadding2", testZeroPadding2),
     ]
 }

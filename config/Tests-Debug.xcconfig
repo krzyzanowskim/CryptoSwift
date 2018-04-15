@@ -26,3 +26,12 @@ LLVM_LTO = NO
 
 
 METAL_ENABLE_DEBUG_INFO = YES
+
+// Swift Optimization Level
+//
+// * *None:* Compile without any optimization. [-Onone]
+// * *Optimize for Speed:* [-O]
+// * *Optimize for Size:* [-Osize]
+// * *Whole Module Optimization:* [-O -whole-module-optimization]
+
+SWIFT_OPTIMIZATION_LEVEL = -Onone

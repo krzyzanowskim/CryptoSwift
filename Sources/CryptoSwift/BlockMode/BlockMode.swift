@@ -16,7 +16,14 @@
 typealias CipherOperationOnBlock = (_ block: ArraySlice<UInt8>) -> Array<UInt8>?
 
 public enum BlockMode {
-    case ECB, CBC(iv: Array<UInt8>), PCBC(iv: Array<UInt8>), CFB(iv: Array<UInt8>), OFB(iv: Array<UInt8>), CTR(iv: Array<UInt8>)
+    case ECB
+    case CBC(iv: Array<UInt8>)
+    case PCBC(iv: Array<UInt8>)
+    case CFB(iv: Array<UInt8>)
+    case OFB(iv: Array<UInt8>)
+    case CTR(iv: Array<UInt8>)
+    /// Additional authenticated data (AAD) is optional.
+    case GCM(iv: Array<UInt8>, aad: Array<UInt8>?)
 
     public enum Error: Swift.Error {
         /// Invalid key or IV
@@ -54,6 +61,11 @@ public enum BlockMode {
                 throw Error.invalidInitializationVector
             }
             return CTRModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
+        case let .GCM(iv, aad):
+            if iv.isEmpty {
+                throw Error.invalidInitializationVector
+            }
+            return GCMModeWorker(iv: iv.slice, aad: aad?.slice, cipherOperation: cipherOperation)
         }
     }
 
@@ -71,6 +83,8 @@ public enum BlockMode {
             return .initializationVectorRequired
         case .PCBC:
             return [.initializationVectorRequired, .paddingRequired]
+        case .GCM:
+            return .initializationVectorRequired
         }
     }
 }

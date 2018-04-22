@@ -18,16 +18,22 @@
 //  ref: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.694.695&rep=rep1&type=pdf
 //
 
-public class GCM: BlockMode {
-    public let options: BlockModeOptions = .initializationVectorRequired
+public final class GCM: BlockMode {
+    public let options: BlockModeOptions = [.initializationVectorRequired, .useEncryptToDecrypt]
 
     public enum Error: Swift.Error {
         /// Invalid IV
         case invalidInitializationVector
+        /// Special symbol FAIL that indicates that the inputs are not authentic.
+        case fail
     }
 
     private let iv: Array<UInt8>
     private let additionalAuthenticatedData: Array<UInt8>?
+
+    // `authenticationTag` nil for encryption, known tag for decryption
+    /// For encryption, the value is set at the end of the encryption.
+    /// For decryption, this is a known Tag to validate against.
     public var authenticationTag: Array<UInt8>?
 
     // encrypt
@@ -47,7 +53,7 @@ public class GCM: BlockMode {
             throw Error.invalidInitializationVector
         }
 
-        var worker = GCMModeWorker(iv: iv.slice, aad: additionalAuthenticatedData?.slice, cipherOperation: cipherOperation)
+        let worker = GCMModeWorker(iv: iv.slice, aad: additionalAuthenticatedData?.slice, expectedTag: authenticationTag, cipherOperation: cipherOperation)
         worker.didCalculateTag = { tag in
             self.authenticationTag = tag
         }
@@ -55,7 +61,11 @@ public class GCM: BlockMode {
     }
 }
 
-struct GCMModeWorker: BlockModeWorkerFinalizing {
+
+// MARK: - Worker
+
+final class GCMModeWorker: BlockModeWorkerFinalizing {
+
     let cipherOperation: CipherOperationOnBlock
 
     // Callback called when authenticationTag is ready
@@ -75,6 +85,8 @@ struct GCMModeWorker: BlockModeWorkerFinalizing {
 
     // Additional authenticated data
     private let aad: ArraySlice<UInt8>?
+    // Known Tag used to validate during decryption
+    private let expectedTag: Array<UInt8>?
 
     // Note: need new worker to reset instance
     // Use empty aad if not specified. AAD is optional.
@@ -85,10 +97,11 @@ struct GCMModeWorker: BlockModeWorkerFinalizing {
         return GF(aad: [UInt8](), h: h, blockSize: blockSize)
     }()
 
-    init(iv: ArraySlice<UInt8>, aad: ArraySlice<UInt8>?, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(iv: ArraySlice<UInt8>, aad: ArraySlice<UInt8>? = nil, expectedTag: Array<UInt8>? = nil, cipherOperation: @escaping CipherOperationOnBlock) {
         self.cipherOperation = cipherOperation
         self.iv = iv
         self.aad = aad
+        self.expectedTag = expectedTag
         self.h = UInt128(cipherOperation(Array<UInt8>(repeating: 0, count: blockSize).slice)!) // empty block
         
         // Assume nonce is 12 bytes long, otherwise initial counter would be calulated from GHASH
@@ -103,7 +116,7 @@ struct GCMModeWorker: BlockModeWorkerFinalizing {
         eky0 = UInt128(cipherOperation(counter.bytes.slice)!)
     }
 
-    mutating func encrypt(_ plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
+    func encrypt(_ plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
         counter = incrementCounter(counter)
 
         guard let ekyN = cipherOperation(counter.bytes.slice) else {
@@ -119,43 +132,50 @@ struct GCMModeWorker: BlockModeWorkerFinalizing {
         return Array(ciphertext)
     }
 
-    mutating func decrypt(_ ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+    func decrypt(_ ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
         counter = incrementCounter(counter)
 
-        let paddedCiphertext = addPadding(Array(ciphertext), blockSize: blockSize)
-        let paddedAuthData = addPadding([UInt8](), blockSize: blockSize)
-        let ghash = GF.ghash(h: h, aad: paddedAuthData, ciphertext: paddedCiphertext, blockSize: blockSize)
-        let computedT = (ghash ^ eky0).bytes.prefix(GCMModeWorker.tagSize)
+        // update ghash incrementally
+        gf.ghashUpdate(block: Array(ciphertext))
 
-        // TODO: validate Tag(T)
-        //        if !GCM.tsCompare(d1: computedT, d2: givenT) {
-        //            throw GCMError.authTagValidation
-        //        }
-
-        guard let ek1 = cipherOperation(counter.bytes.slice) else {
+        guard let ekN = cipherOperation(counter.bytes.slice) else {
             return Array(ciphertext)
         }
 
         // ciphertext block ^ ek1
-        let plaintext = xor(ciphertext, ek1) as [UInt8]
+        let plaintext = xor(ciphertext, ekN) as Array<UInt8>
         return plaintext
     }
 
-    mutating func finalize(encrypt ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
-        // Calculate MAC tag for a given ciphertext.
+    func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8> {
+        // Calculate MAC tag.
         let ghash = gf.ghashFinish()
         let tag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagSize))
 
         // Notify handler
         didCalculateTag?(tag)
-        // Append Tag at the end (arguable, but popular)
-        return Array(ciphertext) + tag
+        
+        return Array(ciphertext)
     }
 
-    func finalize(decrypt plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
-        return Array(plaintext)
+    // The authenticated decryption operation has five inputs: K, IV , C, A, and T. It has only a single
+    // output, either the plaintext value P or a special symbol FAIL that indicates that the inputs are not
+    // authentic.
+    func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> Array<UInt8> {
+        // Calculate MAC tag.
+        let ghash = gf.ghashFinish()
+        let computedTag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagSize))
+
+        // Validate tag
+        if let expectedTag = self.expectedTag, computedTag == expectedTag {
+            return Array(plaintext)
+        }
+
+        throw GCM.Error.fail
     }
 }
+
+// MARK: - Local utils
 
 private func makeCounter(nonce: Array<UInt8>) -> UInt128 {
     return UInt128(nonce + [0, 0, 0, 1])
@@ -190,6 +210,7 @@ private func addPadding(_ bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
 
 // MARK: - GF
 
+/// The Field GF(2^128)
 private final class GF {
     static let r = UInt128(a: 0xE100000000000000, b: 0)
 

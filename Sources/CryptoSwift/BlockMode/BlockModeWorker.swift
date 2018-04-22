@@ -23,6 +23,6 @@ public protocol BlockModeWorker {
 // TODO: remove and merge with BlockModeWorker
 public protocol BlockModeWorkerFinalizing: BlockModeWorker {
     // Any final calculations, eg. calculate tag
-    mutating func finalize(encrypt ciphertext: ArraySlice<UInt8>) -> Array<UInt8>
-    mutating func finalize(decrypt plaintext: ArraySlice<UInt8>) -> Array<UInt8>
+    mutating func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8>
+    mutating func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> Array<UInt8>
 }

@@ -59,7 +59,7 @@ extension AES {
             processedBytesTotalCount += processedBytes
 
             if var finalizingWorker = worker as? BlockModeWorkerFinalizing, isLast == true {
-                encrypted = finalizingWorker.finalize(encrypt: encrypted.slice)
+                encrypted = try finalizingWorker.finalize(encrypt: encrypted.slice)
             }
 
             return encrypted
@@ -122,7 +122,7 @@ extension AES {
             }
 
             if var finalizingWorker = worker as? BlockModeWorkerFinalizing, isLast == true {
-                plaintext = finalizingWorker.finalize(decrypt: plaintext.slice)
+                plaintext = try finalizingWorker.finalize(decrypt: plaintext.slice)
             }
 
             return plaintext

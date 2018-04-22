@@ -18,7 +18,7 @@
 //  ref: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.694.695&rep=rep1&type=pdf
 //
 
-public struct GCM: BlockMode {
+public class GCM: BlockMode {
     public let options: BlockModeOptions = .initializationVectorRequired
 
     public enum Error: Swift.Error {
@@ -37,7 +37,7 @@ public struct GCM: BlockMode {
     }
 
     // decrypt
-    public init(iv: Array<UInt8>, authenticationTag: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil) {
+    public convenience init(iv: Array<UInt8>, authenticationTag: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil) {
         self.init(iv: iv, additionalAuthenticatedData: additionalAuthenticatedData)
         self.authenticationTag = authenticationTag
     }
@@ -47,31 +47,41 @@ public struct GCM: BlockMode {
             throw Error.invalidInitializationVector
         }
 
-        return GCMModeWorker(iv: iv.slice, aad: additionalAuthenticatedData?.slice, cipherOperation: cipherOperation)
+        var worker = GCMModeWorker(iv: iv.slice, aad: additionalAuthenticatedData?.slice, cipherOperation: cipherOperation)
+        worker.didCalculateTag = { tag in
+            self.authenticationTag = tag
+        }
+        return worker
     }
 }
 
 struct GCMModeWorker: BlockModeWorkerFinalizing {
     let cipherOperation: CipherOperationOnBlock
+
+    // Callback called when authenticationTag is ready
+    var didCalculateTag: ((Array<UInt8>) -> Void)? = nil
+
+    // 128 bit tag. Other possible tags 4,8,12,13,14,15,16
+    private static let tagSize = 16
     // GCM nonce is 96-bits by default. It's the most effective length for the IV
-    static let nonceSize = 12
+    private static let nonceSize = 12
+
     // GCM is designed for 128-bit ciphers like AES (but not really for Blowfish). 64-bit mode is not implemented.
     private let blockSize = 16 // 128 bit
     private let iv: ArraySlice<UInt8>
-    // 128 bit tag. Other possible tags 4,8,12,13,14,15,16
-    private static let tagSize = 16
     private var counter: UInt128
     private let eky0: UInt128 // move to GF?
-    private let h: UInt128    // move to GF?
+    private let h: UInt128
+
     // Additional authenticated data
     private let aad: ArraySlice<UInt8>?
 
     // Note: need new worker to reset instance
+    // Use empty aad if not specified. AAD is optional.
     private lazy var gf: GF = {
         if let aad = aad {
             return GF(aad: Array(aad), h: h, blockSize: blockSize)
         }
-        // Empty auth if not specified. AAD is optional.
         return GF(aad: [UInt8](), h: h, blockSize: blockSize)
     }()
 
@@ -135,6 +145,9 @@ struct GCMModeWorker: BlockModeWorkerFinalizing {
         // Calculate MAC tag for a given ciphertext.
         let ghash = gf.ghashFinish()
         let tag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagSize))
+
+        // Notify handler
+        didCalculateTag?(tag)
         // Append Tag at the end (arguable, but popular)
         return Array(ciphertext) + tag
     }

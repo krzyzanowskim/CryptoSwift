@@ -314,7 +314,7 @@ public final class Blowfish {
         ],
     ]
 
-    public init(key: Array<UInt8>, blockMode: BlockMode = .CBC(iv: Array<UInt8>(repeating: 0, count: Blowfish.blockSize)), padding: Padding) throws {
+    public init(key: Array<UInt8>, blockMode: BlockMode = CBC(iv: Array<UInt8>(repeating: 0, count: Blowfish.blockSize)), padding: Padding) throws {
         precondition(key.count >= 5 && key.count <= 56)
 
         self.blockMode = blockMode
@@ -331,13 +331,10 @@ public final class Blowfish {
     private func setupBlockModeWorkers() throws {
         encryptWorker = try blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: encrypt)
 
-        switch blockMode {
-        case .CFB, .OFB, .CTR:
+        if blockMode.options.contains(.useEncryptToDecrypt) {
             decryptWorker = try blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: encrypt)
-        case .CBC, .ECB, .PCBC:
+        } else {
             decryptWorker = try blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: decrypt)
-        case .GCM:
-            throw Error.invalidBlockMode
         }
     }
 

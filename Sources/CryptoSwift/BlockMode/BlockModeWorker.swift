@@ -13,7 +13,7 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-protocol BlockModeWorker {
+public protocol BlockModeWorker {
     var cipherOperation: CipherOperationOnBlock { get }
 
     mutating func encrypt(_ plaintext: ArraySlice<UInt8>) -> Array<UInt8>
@@ -21,7 +21,7 @@ protocol BlockModeWorker {
 }
 
 // TODO: remove and merge with BlockModeWorker
-protocol BlockModeWorkerFinalizing: BlockModeWorker {
+public protocol BlockModeWorkerFinalizing: BlockModeWorker {
     // Any final calculations, eg. calculate tag
     mutating func finalize(encrypt ciphertext: ArraySlice<UInt8>) -> Array<UInt8>
     mutating func finalize(decrypt plaintext: ArraySlice<UInt8>) -> Array<UInt8>

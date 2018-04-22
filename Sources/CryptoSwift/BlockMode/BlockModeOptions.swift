@@ -13,10 +13,15 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-struct BlockModeOptions: OptionSet {
-    let rawValue: Int
+public struct BlockModeOptions: OptionSet {
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
 
     static let none = BlockModeOptions(rawValue: 1 << 0)
     static let initializationVectorRequired = BlockModeOptions(rawValue: 1 << 1)
     static let paddingRequired = BlockModeOptions(rawValue: 1 << 2)
+    static let useEncryptToDecrypt = BlockModeOptions(rawValue: 1 << 3)
 }

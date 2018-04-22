@@ -25,7 +25,7 @@ final class AESTests: XCTestCase {
         let input: Array<UInt8> = [0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff]
         let expected: Array<UInt8> = [0x69, 0xc4, 0xe0, 0xd8, 0x6a, 0x7b, 0x4, 0x30, 0xd8, 0xcd, 0xb7, 0x80, 0x70, 0xb4, 0xc5, 0x5a]
 
-        let aes = try! AES(key: aesKey, blockMode: .ECB, padding: .noPadding)
+        let aes = try! AES(key: aesKey, blockMode: ECB(), padding: .noPadding)
         let encrypted = try! aes.encrypt(input)
         XCTAssertEqual(encrypted, expected, "encryption failed")
         let decrypted = try! aes.decrypt(encrypted)
@@ -39,7 +39,7 @@ final class AESTests: XCTestCase {
 
         let expected: Array<UInt8> = [0xae, 0x8c, 0x59, 0x95, 0xb2, 0x6f, 0x8e, 0x3d, 0xb0, 0x6f, 0x0a, 0xa5, 0xfe, 0xc4, 0xf0, 0xc2]
 
-        let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CBC(iv: iv), padding: .noPadding)
         do {
             let encrypted = try aes.encrypt(input)
             XCTAssertEqual(encrypted, expected, "encryption failed")
@@ -73,7 +73,7 @@ final class AESTests: XCTestCase {
         let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a]
         let expected: Array<UInt8> = [0x76, 0x49, 0xab, 0xac, 0x81, 0x19, 0xb2, 0x46, 0xce, 0xe9, 0x8e, 0x9b, 0x12, 0xe9, 0x19, 0x7d]
 
-        let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CBC(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(encrypted, expected, "encryption failed")
         let decrypted = try! aes.decrypt(encrypted)
@@ -86,7 +86,7 @@ final class AESTests: XCTestCase {
         let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a]
         let expected: Array<UInt8> = [0x76, 0x49, 0xab, 0xac, 0x81, 0x19, 0xb2, 0x46, 0xce, 0xe9, 0x8e, 0x9b, 0x12, 0xe9, 0x19, 0x7d, 0x89, 0x64, 0xe0, 0xb1, 0x49, 0xc1, 0x0b, 0x7b, 0x68, 0x2e, 0x6e, 0x39, 0xaa, 0xeb, 0x73, 0x1c]
 
-        let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7)
+        let aes = try! AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(encrypted, expected, "encryption failed")
         let decrypted = try! aes.decrypt(encrypted)
@@ -98,7 +98,7 @@ final class AESTests: XCTestCase {
         let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
         let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a, 0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a]
 
-        let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7)
+        let aes = try! AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7)
 
         var ciphertext = Array<UInt8>()
         var encryptor = try! aes.makeEncryptor()
@@ -113,7 +113,7 @@ final class AESTests: XCTestCase {
         do {
             var ciphertext = Array<UInt8>()
             let plaintext = "Today Apple launched the open source Swift community, as well as amazing new tools and resources."
-            let aes = try AES(key: "passwordpassword".bytes, blockMode: .CBC(iv: "drowssapdrowssap".bytes))
+            let aes = try AES(key: "passwordpassword".bytes, blockMode: CBC(iv: "drowssapdrowssap".bytes))
             var encryptor = try! aes.makeEncryptor()
 
             ciphertext += try encryptor.update(withBytes: plaintext.bytes)
@@ -129,7 +129,7 @@ final class AESTests: XCTestCase {
         let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
         let ciphertext: Array<UInt8> = [118, 73, 171, 172, 129, 25, 178, 70, 206, 233, 142, 155, 18, 233, 25, 125, 76, 187, 200, 88, 117, 107, 53, 129, 37, 82, 158, 150, 152, 163, 143, 68, 169, 105, 137, 234, 93, 98, 239, 215, 41, 45, 51, 254, 138, 92, 251, 17]
 
-        let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7)
+        let aes = try! AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7)
         var plaintext = Array<UInt8>()
         var decryptor = try! aes.makeDecryptor()
         plaintext += try! decryptor.update(withBytes: ciphertext[0..<8])
@@ -145,7 +145,7 @@ final class AESTests: XCTestCase {
         let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a]
         let expected: Array<UInt8> = [0x3b, 0x3f, 0xd9, 0x2e, 0xb7, 0x2d, 0xad, 0x20, 0x33, 0x34, 0x49, 0xf8, 0xe8, 0x3c, 0xfb, 0x4a]
 
-        let aes = try! AES(key: key, blockMode: .CFB(iv: iv), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CFB(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(encrypted, expected, "encryption failed")
         let decrypted = try! aes.decrypt(encrypted)
@@ -157,8 +157,8 @@ final class AESTests: XCTestCase {
         let key: Array<UInt8> = [56, 118, 37, 51, 125, 78, 103, 107, 119, 40, 74, 88, 117, 112, 123, 75, 122, 89, 72, 36, 46, 91, 106, 60, 54, 110, 34, 126, 69, 126, 61, 87]
         let iv: Array<UInt8> = [69, 122, 99, 87, 83, 112, 110, 65, 54, 109, 107, 89, 73, 122, 74, 49]
         let plaintext: Array<UInt8> = [123, 10, 32, 32, 34, 67, 111, 110, 102, 105, 114, 109, 34, 32, 58, 32, 34, 116, 101, 115, 116, 105, 110, 103, 34, 44, 10, 32, 32, 34, 70, 105, 114, 115, 116, 78, 97, 109, 101, 34, 32, 58, 32, 34, 84, 101, 115, 116, 34, 44, 10, 32, 32, 34, 69, 109, 97, 105, 108, 34, 32, 58, 32, 34, 116, 101, 115, 116, 64, 116, 101, 115, 116, 46, 99, 111, 109, 34, 44, 10, 32, 32, 34, 76, 97, 115, 116, 78, 97, 109, 101, 34, 32, 58, 32, 34, 84, 101, 115, 116, 101, 114, 34, 44, 10, 32, 32, 34, 80, 97, 115, 115, 119, 111, 114, 100, 34, 32, 58, 32, 34, 116, 101, 115, 116, 105, 110, 103, 34, 44, 10, 32, 32, 34, 85, 115, 101, 114, 110, 97, 109, 101, 34, 32, 58, 32, 34, 84, 101, 115, 116, 34, 10, 125]
-        let encrypted: Array<UInt8> = try! AES(key: key, blockMode: .CFB(iv: iv)).encrypt(plaintext)
-        let decrypted: Array<UInt8> = try! AES(key: key, blockMode: .CFB(iv: iv)).decrypt(encrypted)
+        let encrypted: Array<UInt8> = try! AES(key: key, blockMode: CFB(iv: iv)).encrypt(plaintext)
+        let decrypted: Array<UInt8> = try! AES(key: key, blockMode: CFB(iv: iv)).decrypt(encrypted)
         XCTAssert(decrypted == plaintext, "decryption failed")
     }
 
@@ -168,7 +168,7 @@ final class AESTests: XCTestCase {
         let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a]
         let expected: Array<UInt8> = [0x3b, 0x3f, 0xd9, 0x2e, 0xb7, 0x2d, 0xad, 0x20, 0x33, 0x34, 0x49, 0xf8, 0xe8, 0x3c, 0xfb, 0x4a]
 
-        let aes = try! AES(key: key, blockMode: .OFB(iv: iv), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: OFB(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(encrypted, expected, "encryption failed")
         let decrypted = try! aes.decrypt(encrypted)
@@ -181,7 +181,7 @@ final class AESTests: XCTestCase {
         let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a]
         let expected: Array<UInt8> = [0xdc, 0x7e, 0x84, 0xbf, 0xda, 0x79, 0x16, 0x4b, 0x7e, 0xcd, 0x84, 0x86, 0x98, 0x5d, 0x38, 0x60]
 
-        let aes = try! AES(key: key, blockMode: .OFB(iv: iv), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: OFB(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(encrypted, expected, "encryption failed")
         let decrypted = try! aes.decrypt(encrypted)
@@ -194,7 +194,7 @@ final class AESTests: XCTestCase {
         let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a]
         let expected: Array<UInt8> = [0xf5, 0x8c, 0x4c, 0x04, 0xd6, 0xe5, 0xf1, 0xba, 0x77, 0x9e, 0xab, 0xfb, 0x5f, 0x7b, 0xfb, 0xd6]
 
-        let aes = try! AES(key: key, blockMode: .PCBC(iv: iv), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: PCBC(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         print(encrypted.toHexString())
         XCTAssertEqual(encrypted, expected, "encryption failed")
@@ -208,7 +208,7 @@ final class AESTests: XCTestCase {
         let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a]
         let expected: Array<UInt8> = [0x87, 0x4d, 0x61, 0x91, 0xb6, 0x20, 0xe3, 0x26, 0x1b, 0xef, 0x68, 0x64, 0x99, 0x0d, 0xb6, 0xce]
 
-        let aes = try! AES(key: key, blockMode: .CTR(iv: iv), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CTR(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(encrypted.count, plaintext.count)
         XCTAssertEqual(encrypted, expected, "encryption failed")
@@ -223,7 +223,7 @@ final class AESTests: XCTestCase {
         let iv: Array<UInt8> = [0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff]
         let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a, 0xfd]
 
-        let aes = try! AES(key: key, blockMode: .CTR(iv: iv), padding: .zeroPadding)
+        let aes = try! AES(key: key, blockMode: CTR(iv: iv), padding: .zeroPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
         XCTAssertEqual(plaintext.count, 17)
@@ -236,7 +236,7 @@ final class AESTests: XCTestCase {
         let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a, 0x01]
         let expected: Array<UInt8> = [0x87, 0x4d, 0x61, 0x91, 0xb6, 0x20, 0xe3, 0x26, 0x1b, 0xef, 0x68, 0x64, 0x99, 0x0d, 0xb6, 0xce, 0x37]
 
-        let aes = try! AES(key: key, blockMode: .CTR(iv: iv), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CTR(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(encrypted, expected, "encryption failed")
         let decrypted = try! aes.decrypt(encrypted)
@@ -259,7 +259,7 @@ final class AESTests: XCTestCase {
             plaintext[i * 6 + 5] = "|".utf8.first!
         }
 
-        let aes = try! AES(key: key, blockMode: .CTR(iv: iv), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CTR(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
         var decryptor = try! aes.makeDecryptor()
@@ -291,7 +291,7 @@ final class AESTests: XCTestCase {
         let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a, 0x01, 0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a, 0x01]
         let expected: Array<UInt8> = [0x87, 0x4d, 0x61, 0x91, 0xb6, 0x20, 0xe3, 0x26, 0x1b, 0xef, 0x68, 0x64, 0x99, 0xd, 0xb6, 0xce, 0x37, 0x40, 0xbd, 0x82, 0x85, 0x5d, 0x11, 0xfc, 0x8e, 0x49, 0x4a, 0xa9, 0xed, 0x23, 0xe0, 0xb9, 0x40, 0x2d]
 
-        let aes = try! AES(key: key, blockMode: .CTR(iv: iv), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CTR(iv: iv), padding: .noPadding)
         var encryptor = try! aes.makeEncryptor()
         var encrypted = Array<UInt8>()
         encrypted += try! encryptor.update(withBytes: plaintext[0..<5])
@@ -315,8 +315,8 @@ final class AESTests: XCTestCase {
         let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
         let plaintext: Array<UInt8> = [49, 46, 50, 50, 50, 51, 51, 51, 51]
 
-        let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7)
-        let aes2 = try! AES(key: key2, blockMode: .CBC(iv: iv), padding: .pkcs7)
+        let aes = try! AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7)
+        let aes2 = try! AES(key: key2, blockMode: CBC(iv: iv), padding: .pkcs7)
         let encrypted = try! aes.encrypt(plaintext)
         let decrypted = try? aes2.decrypt(encrypted)
         XCTAssertTrue(decrypted! != plaintext, "failed")
@@ -343,7 +343,7 @@ final class AESTests: XCTestCase {
         let plaintext = "Nullam quis risus eget urna mollis ornare vel eu leo.".bytes
         let key = "passwordpassword".bytes.md5() // -md md5
         let iv = "drowssapdrowssap".bytes // -iv 64726f777373617064726f7773736170
-        let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7) // -aes-128-cbc
+        let aes = try! AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7) // -aes-128-cbc
         let ciphertext = try! aes.encrypt(plaintext) // enc
 
         // $ echo -n "Nullam quis risus eget urna mollis ornare vel eu leo." | openssl enc -aes-128-cbc -md md5 -nosalt -iv 64726f777373617064726f7773736170 -pass pass:passwordpassword -base64
@@ -357,7 +357,7 @@ final class AESTests: XCTestCase {
         let ciphertext: Array<UInt8> = [0x2a, 0x3a, 0x80, 0x05, 0xaf, 0x46, 0x58, 0x2d, 0x66, 0x52, 0x10, 0xae, 0x86, 0xd3, 0x8e, 0x8f] // test
         let key = "passwordpassword".bytes.md5() // -md md5
         let iv = "drowssapdrowssap".bytes // -iv 64726f777373617064726f7773736170
-        let aes = try! AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7) // -aes-128-cbc
+        let aes = try! AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7) // -aes-128-cbc
         let plaintext = try! ciphertext.decrypt(cipher: aes)
         XCTAssertEqual("74657374", plaintext.toHexString())
     }
@@ -370,10 +370,11 @@ extension AESTests {
         let key = Array<UInt8>(hex: "0x00000000000000000000000000000000")
         let iv = Array<UInt8>(hex: "0x000000000000000000000000")
 
-        let aes = try! AES(key: key, blockMode: .GCM(iv: iv, aad: nil), padding: .noPadding)
+        var authenticationTag: Array<UInt8> = []
+        let aes = try! AES(key: key, blockMode: GCM(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt([UInt8]())
         XCTAssertEqual(Array(encrypted.prefix(encrypted.endIndex - 16)), [UInt8](hex: "")) // C
-        XCTAssertEqual(Array(encrypted.suffix(16)), [UInt8](hex: "58e2fccefa7e3061367f1d57a4e7455a")) // T (128-bit)
+        XCTAssertEqual(authenticationTag, [UInt8](hex: "58e2fccefa7e3061367f1d57a4e7455a")) // T (128-bit)
     }
 
     func testAESGCMTestCase2() {
@@ -382,10 +383,11 @@ extension AESTests {
         let plaintext = Array<UInt8>(hex: "0x00000000000000000000000000000000")
         let iv = Array<UInt8>(hex: "0x000000000000000000000000")
 
-        let aes = try! AES(key: key, blockMode: .GCM(iv: iv, aad: nil), padding: .noPadding)
+        var authenticationTag: Array<UInt8> = []
+        let aes = try! AES(key: key, blockMode: GCM(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(Array(encrypted.prefix(encrypted.endIndex - 16)), [UInt8](hex: "0388dace60b6a392f328c2b971b2fe78")) // C
-        XCTAssertEqual(Array(encrypted.suffix(16)), [UInt8](hex: "ab6e47d42cec13bdf53a67b21257bddf")) // T (128-bit)
+        XCTAssertEqual(authenticationTag, [UInt8](hex: "ab6e47d42cec13bdf53a67b21257bddf")) // T (128-bit)
     }
 
     func testAESGCMTestCase3() {
@@ -394,11 +396,12 @@ extension AESTests {
         let plaintext = Array<UInt8>(hex: "0xd9313225f88406e5a55909c5aff5269a86a7a9531534f7da2e4c303d8a318a721c3c0c95956809532fcf0e2449a6b525b16aedf5aa0de657ba637b391aafd255")
         let iv = Array<UInt8>(hex: "0xcafebabefacedbaddecaf888")
 
-        let aes = try! AES(key: key, blockMode: .GCM(iv: iv, aad: nil), padding: .noPadding)
+        var authenticationTag: Array<UInt8> = []
+        let aes = try! AES(key: key, blockMode: GCM(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
         XCTAssertEqual(Array(encrypted.prefix(encrypted.endIndex - 16)), [UInt8](hex: "0x42831ec2217774244b7221b784d0d49ce3aa212f2c02a4e035c17e2329aca12e21d514b25466931c7d8f6a5aac84aa051ba30b396a0aac973d58e091473f5985")) // C
-        XCTAssertEqual(Array(encrypted.suffix(16)), [UInt8](hex: "0x4d5c2af327cd64a62cf35abd2ba6fab4")) // T (128-bit)
+        XCTAssertEqual(authenticationTag, [UInt8](hex: "0x4d5c2af327cd64a62cf35abd2ba6fab4")) // T (128-bit)
     }
 
     func testAESGCMTestCase4() {
@@ -408,11 +411,12 @@ extension AESTests {
         let iv = Array<UInt8>(hex: "0xcafebabefacedbaddecaf888")
         let auth = Array<UInt8>(hex: "0xfeedfacedeadbeeffeedfacedeadbeefabaddad2")
 
-        let aes = try! AES(key: key, blockMode: .GCM(iv: iv, aad: auth), padding: .noPadding)
+        var authenticationTag: Array<UInt8> = []
+        let aes = try! AES(key: key, blockMode: GCM(iv: iv, additionalAuthenticatedData: auth), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
         XCTAssertEqual(Array(encrypted.prefix(encrypted.endIndex - 16)), [UInt8](hex: "0x42831ec2217774244b7221b784d0d49ce3aa212f2c02a4e035c17e2329aca12e21d514b25466931c7d8f6a5aac84aa051ba30b396a0aac973d58e091")) // C
-        XCTAssertEqual(Array(encrypted.suffix(16)), [UInt8](hex: "0x5bc94fbc3221a5db94fae95ae7121a47")) // T (128-bit)
+        XCTAssertEqual(authenticationTag, [UInt8](hex: "0x5bc94fbc3221a5db94fae95ae7121a47")) // T (128-bit)
     }
 
     func testAESGCMTestCase5() {
@@ -422,11 +426,12 @@ extension AESTests {
         let iv = Array<UInt8>(hex: "0xcafebabefacedbad")
         let auth = Array<UInt8>(hex: "0xfeedfacedeadbeeffeedfacedeadbeefabaddad2")
 
-        let aes = try! AES(key: key, blockMode: .GCM(iv: iv, aad: auth), padding: .noPadding)
+        var authenticationTag: Array<UInt8> = []
+        let aes = try! AES(key: key, blockMode: GCM(iv: iv, additionalAuthenticatedData: auth), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
         XCTAssertEqual(Array(encrypted.prefix(encrypted.endIndex - 16)), [UInt8](hex: "0x61353b4c2806934a777ff51fa22a4755699b2a714fcdc6f83766e5f97b6c742373806900e49f24b22b097544d4896b424989b5e1ebac0f07c23f4598")) // C
-        XCTAssertEqual(Array(encrypted.suffix(16)), [UInt8](hex: "0x3612d2e79e3b0785561be14aaca2fccb")) // T (128-bit)
+        XCTAssertEqual(authenticationTag, [UInt8](hex: "0x3612d2e79e3b0785561be14aaca2fccb")) // T (128-bit)
     }
 
     func testAESGCMTestCase6() {
@@ -436,11 +441,12 @@ extension AESTests {
         let iv = Array<UInt8>(hex: "0x9313225df88406e555909c5aff5269aa6a7a9538534f7da1e4c303d2a318a728c3c0c95156809539fcf0e2429a6b525416aedbf5a0de6a57a637b39b")
         let auth = Array<UInt8>(hex: "0xfeedfacedeadbeeffeedfacedeadbeefabaddad2")
 
-        let aes = try! AES(key: key, blockMode: .GCM(iv: iv, aad: auth), padding: .noPadding)
+        var authenticationTag: Array<UInt8> = []
+        let aes = try! AES(key: key, blockMode: GCM(iv: iv, additionalAuthenticatedData: auth), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
         XCTAssertEqual(Array(encrypted.prefix(encrypted.endIndex - 16)), [UInt8](hex: "0x8ce24998625615b603a033aca13fb894be9112a5c3a211a8ba262a3cca7e2ca701e4a9a4fba43c90ccdcb281d48c7c6fd62875d2aca417034c34aee5")) // C
-        XCTAssertEqual(Array(encrypted.suffix(16)), [UInt8](hex: "0x619cc5aefffe0bfa462af43c1699d050")) // T (128-bit)
+        XCTAssertEqual(authenticationTag, [UInt8](hex: "0x619cc5aefffe0bfa462af43c1699d050")) // T (128-bit)
     }
 
     func testAESGCMTestCase7() {
@@ -449,11 +455,12 @@ extension AESTests {
         let plaintext = Array<UInt8>(hex: "")
         let iv = Array<UInt8>(hex: "0x000000000000000000000000")
 
-        let aes = try! AES(key: key, blockMode: .GCM(iv: iv, aad: nil), padding: .noPadding)
+        var authenticationTag: Array<UInt8> = []
+        let aes = try! AES(key: key, blockMode: GCM(iv: iv), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
         XCTAssertEqual(Array(encrypted.prefix(encrypted.endIndex - 16)), [UInt8](hex: "")) // C
-        XCTAssertEqual(Array(encrypted.suffix(16)), [UInt8](hex: "0xcd33b28ac773f74ba00ed1f312572435")) // T (128-bit)
+        XCTAssertEqual(authenticationTag, [UInt8](hex: "0xcd33b28ac773f74ba00ed1f312572435")) // T (128-bit)
     }
 }
 

@@ -16,6 +16,28 @@
 //  Cipher-block chaining (CBC)
 //
 
+public struct CBC: BlockMode {
+    public enum Error: Swift.Error {
+        /// Invalid IV
+        case invalidInitializationVector
+    }
+
+    public let options: BlockModeOptions = [.initializationVectorRequired, .paddingRequired]
+    private let iv: Array<UInt8>
+
+    public init(iv: Array<UInt8>) {
+        self.iv = iv
+    }
+
+    public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> BlockModeWorker {
+        if iv.count != blockSize {
+            throw Error.invalidInitializationVector
+        }
+
+        return CBCModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
+    }
+}
+
 struct CBCModeWorker: BlockModeWorker {
     let cipherOperation: CipherOperationOnBlock
     private let iv: ArraySlice<UInt8>

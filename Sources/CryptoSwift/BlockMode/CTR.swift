@@ -16,6 +16,28 @@
 //  Counter (CTR)
 //
 
+public struct CTR: BlockMode {
+    public enum Error: Swift.Error {
+        /// Invalid IV
+        case invalidInitializationVector
+    }
+
+    public let options: BlockModeOptions = [.initializationVectorRequired, .useEncryptToDecrypt]
+    private let iv: Array<UInt8>
+
+    public init(iv: Array<UInt8>) {
+        self.iv = iv
+    }
+
+    public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> BlockModeWorker {
+        if iv.count != blockSize {
+            throw Error.invalidInitializationVector
+        }
+
+        return CTRModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
+    }
+}
+
 struct CTRModeWorker: RandomAccessBlockModeWorker {
     let cipherOperation: CipherOperationOnBlock
     private let iv: ArraySlice<UInt8>

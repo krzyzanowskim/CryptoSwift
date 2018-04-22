@@ -56,7 +56,7 @@ final class ExtensionsTest: XCTestCase {
 
     func testEmptyStringEncrypt() {
         do {
-            let cipher = try AES(key: "secret0key000000".bytes.md5(), blockMode: .ECB)
+            let cipher = try AES(key: "secret0key000000".bytes.md5(), blockMode: ECB())
             let encrypted = try "".encryptToBase64(cipher: cipher)
             let decrypted = try encrypted?.decryptBase64ToString(cipher: cipher)
             XCTAssertEqual("", decrypted)

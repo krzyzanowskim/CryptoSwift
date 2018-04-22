@@ -18,6 +18,39 @@
 //  ref: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.694.695&rep=rep1&type=pdf
 //
 
+public struct GCM: BlockMode {
+    public let options: BlockModeOptions = .initializationVectorRequired
+
+    public enum Error: Swift.Error {
+        /// Invalid IV
+        case invalidInitializationVector
+    }
+
+    private let iv: Array<UInt8>
+    private let additionalAuthenticatedData: Array<UInt8>?
+    public var authenticationTag: Array<UInt8>?
+
+    // encrypt
+    public init(iv: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil) {
+        self.iv = iv
+        self.additionalAuthenticatedData = additionalAuthenticatedData
+    }
+
+    // decrypt
+    public init(iv: Array<UInt8>, authenticationTag: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil) {
+        self.init(iv: iv, additionalAuthenticatedData: additionalAuthenticatedData)
+        self.authenticationTag = authenticationTag
+    }
+
+    public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> BlockModeWorker {
+        if iv.isEmpty {
+            throw Error.invalidInitializationVector
+        }
+
+        return GCMModeWorker(iv: iv.slice, aad: additionalAuthenticatedData?.slice, cipherOperation: cipherOperation)
+    }
+}
+
 struct GCMModeWorker: BlockModeWorkerFinalizing {
     let cipherOperation: CipherOperationOnBlock
     // GCM nonce is 96-bits by default. It's the most effective length for the IV

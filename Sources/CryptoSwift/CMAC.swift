@@ -34,7 +34,7 @@ public final class CMAC: Authenticator {
     // MARK: Authenticator
 
     public func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
-        let aes = try AES(key: Array(key), blockMode: .CBC(iv: CMAC.Zero), padding: .noPadding)
+        let aes = try AES(key: Array(key), blockMode: CBC(iv: CMAC.Zero), padding: .noPadding)
 
         let l = try aes.encrypt(CMAC.Zero)
         var subKey1 = leftShiftOneBit(l)

@@ -82,11 +82,9 @@ extension AES {
         init(aes: AES) throws {
             padding = aes.padding
 
-            switch aes.blockMode {
-            case .CFB, .OFB, .CTR, .GCM:
-                // CFB, OFB, CTR uses encryptBlock to decrypt
+            if aes.blockMode.options.contains(.useEncryptToDecrypt) {
                 worker = try aes.blockMode.worker(blockSize: AES.blockSize, cipherOperation: aes.encrypt)
-            case .CBC, .ECB, .PCBC:
+            } else {
                 worker = try aes.blockMode.worker(blockSize: AES.blockSize, cipherOperation: aes.decrypt)
             }
         }

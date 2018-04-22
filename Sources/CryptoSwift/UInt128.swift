@@ -13,6 +13,8 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+import Foundation
+
 struct UInt128: Equatable, ExpressibleByIntegerLiteral {
     let i: (a: UInt64, b: UInt64)
 

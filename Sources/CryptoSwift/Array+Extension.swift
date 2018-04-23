@@ -126,6 +126,10 @@ extension Array where Element == UInt8 {
         return Checksum.crc32(self, seed: seed, reflect: reflect)
     }
 
+    public func crc32c(seed: UInt32? = nil, reflect: Bool = true) -> UInt32 {
+        return Checksum.crc32c(self, seed: seed, reflect: reflect)
+    }
+    
     public func crc16(seed: UInt16? = nil) -> UInt16 {
         return Checksum.crc16(self, seed: seed)
     }

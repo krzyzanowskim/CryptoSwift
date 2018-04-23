@@ -41,6 +41,7 @@ do {
  */
 bytes.crc16()
 bytes.crc32()
+bytes.crc32c()
 
 /*:
  # HMAC

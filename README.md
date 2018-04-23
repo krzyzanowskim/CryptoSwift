@@ -51,6 +51,7 @@ Good mood
 
 #### Cyclic Redundancy Check (CRC)
 - [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
+- [CRC32C](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
 - [CRC16](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
 
 #### Cipher

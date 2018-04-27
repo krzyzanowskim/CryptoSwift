@@ -473,6 +473,18 @@ extension AESTests {
         XCTAssertEqual(Array(encrypted), [UInt8](hex: "")) // C
         XCTAssertEqual(gcm.authenticationTag, [UInt8](hex: "0xcd33b28ac773f74ba00ed1f312572435")) // T (128-bit)
     }
+
+    func testEncryptTooLongKey() {
+        let key = "f83c08efba542f025f13cfd90110e29a09add0de242b3o587dbc3777b2232dbn".bytes
+        let iv = "0000000000000000".bytes
+
+        do {
+            let aes = try AES(key: key, blockMode: CBC(iv: iv))
+            _ = try aes.encrypt(key)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
 }
 
 extension AESTests {

@@ -481,8 +481,45 @@ extension AESTests {
         do {
             let aes = try AES(key: key, blockMode: CBC(iv: iv))
             _ = try aes.encrypt(key)
+            XCTFail("not supposed to success without specified variant")
         } catch {
-            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testEncryptTooLongWithVariantKey() {
+        let key = "f83c08efba542f025f13cfd90110e29a09add0de242b3o587dbc3777b2232dbn".bytes
+        let iv = "0000000000000000".bytes
+
+        do {
+            let aes = try AES(key: key, blockMode: CBC(iv: iv), variant: .aes128)
+            _ = try aes.encrypt(key)
+        } catch {
+            XCTFail("an error occured : \(error)")
+        }
+    }
+
+
+    func testEncryptTooShortKey() {
+        let key = "f83".bytes
+        let iv = "0000000000000000".bytes
+
+        do {
+            let aes = try AES(key: key, blockMode: CBC(iv: iv))
+            _ = try aes.encrypt(key)
+            XCTFail("not supposed to success without specified variant")
+        } catch {
+        }
+    }
+
+    func testEncryptTooShortWithVariantKey() {
+        let key = "f83".bytes
+        let iv = "0000000000000000".bytes
+
+        do {
+            let aes = try AES(key: key, blockMode: CBC(iv: iv), variant: .aes128)
+            _ = try aes.encrypt(key)
+        } catch {
+            XCTFail("an error occured : \(error)")
         }
     }
 }
@@ -519,6 +556,10 @@ extension AESTests {
             ("testAESGCMTestCase5", testAESGCMTestCase5),
             ("testAESGCMTestCase6", testAESGCMTestCase6),
             ("testAESGCMTestCase7", testAESGCMTestCase7),
+            ("testEncryptTooLongKey", testEncryptTooLongKey),
+            ("testEncryptTooLongWithVariantKey", testEncryptTooLongWithVariantKey),
+            ("testEncryptTooShortKey", testEncryptTooShortKey),
+            ("testEncryptTooShortWithVariantKey", testEncryptTooShortWithVariantKey)
         ]
         return tests
     }

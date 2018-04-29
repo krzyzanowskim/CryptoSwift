@@ -19,6 +19,13 @@
 //
 
 public final class GCM: BlockMode {
+    public enum Mode {
+        /// In combined mode, the authentication tag is directly appended to the encrypted message. This is usually what you want.
+        case combined
+        /// Some applications may need to store the authentication tag and the encrypted message at different locations
+        case detached
+    }
+
     public let options: BlockModeOptions = [.initializationVectorRequired, .useEncryptToDecrypt]
 
     public enum Error: Swift.Error {
@@ -30,6 +37,7 @@ public final class GCM: BlockMode {
 
     private let iv: Array<UInt8>
     private let additionalAuthenticatedData: Array<UInt8>?
+    private let mode: Mode
 
     // `authenticationTag` nil for encryption, known tag for decryption
     /// For encryption, the value is set at the end of the encryption.
@@ -37,14 +45,15 @@ public final class GCM: BlockMode {
     public var authenticationTag: Array<UInt8>?
 
     // encrypt
-    public init(iv: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil) {
+    public init(iv: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil, mode: Mode = .combined) {
         self.iv = iv
         self.additionalAuthenticatedData = additionalAuthenticatedData
+        self.mode = mode
     }
 
     // decrypt
-    public convenience init(iv: Array<UInt8>, authenticationTag: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil) {
-        self.init(iv: iv, additionalAuthenticatedData: additionalAuthenticatedData)
+    public convenience init(iv: Array<UInt8>, authenticationTag: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil, mode: Mode = .combined) {
+        self.init(iv: iv, additionalAuthenticatedData: additionalAuthenticatedData, mode: mode)
         self.authenticationTag = authenticationTag
     }
 
@@ -53,23 +62,21 @@ public final class GCM: BlockMode {
             throw Error.invalidInitializationVector
         }
 
-        let worker = GCMModeWorker(iv: iv.slice, aad: additionalAuthenticatedData?.slice, expectedTag: authenticationTag, cipherOperation: cipherOperation)
-        worker.didCalculateTag = { tag in
-            self.authenticationTag = tag
+        let worker = GCMModeWorker(iv: iv.slice, aad: additionalAuthenticatedData?.slice, expectedTag: authenticationTag, mode: mode, cipherOperation: cipherOperation)
+        worker.didCalculateTag = { [weak self] tag in
+            self?.authenticationTag = tag
         }
         return worker
     }
 }
 
-
 // MARK: - Worker
 
 final class GCMModeWorker: BlockModeWorkerFinalizing {
-
     let cipherOperation: CipherOperationOnBlock
 
     // Callback called when authenticationTag is ready
-    var didCalculateTag: ((Array<UInt8>) -> Void)? = nil
+    var didCalculateTag: ((Array<UInt8>) -> Void)?
 
     // 128 bit tag. Other possible tags 4,8,12,13,14,15,16
     private static let tagSize = 16
@@ -79,6 +86,7 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
     // GCM is designed for 128-bit ciphers like AES (but not really for Blowfish). 64-bit mode is not implemented.
     private let blockSize = 16 // 128 bit
     private let iv: ArraySlice<UInt8>
+    private let mode: GCM.Mode
     private var counter: UInt128
     private let eky0: UInt128 // move to GF?
     private let h: UInt128
@@ -86,7 +94,7 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
     // Additional authenticated data
     private let aad: ArraySlice<UInt8>?
     // Known Tag used to validate during decryption
-    private let expectedTag: Array<UInt8>?
+    private var expectedTag: Array<UInt8>?
 
     // Note: need new worker to reset instance
     // Use empty aad if not specified. AAD is optional.
@@ -97,13 +105,14 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
         return GF(aad: [UInt8](), h: h, blockSize: blockSize)
     }()
 
-    init(iv: ArraySlice<UInt8>, aad: ArraySlice<UInt8>? = nil, expectedTag: Array<UInt8>? = nil, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(iv: ArraySlice<UInt8>, aad: ArraySlice<UInt8>? = nil, expectedTag: Array<UInt8>? = nil, mode: GCM.Mode, cipherOperation: @escaping CipherOperationOnBlock) {
         self.cipherOperation = cipherOperation
         self.iv = iv
+        self.mode = mode
         self.aad = aad
         self.expectedTag = expectedTag
-        self.h = UInt128(cipherOperation(Array<UInt8>(repeating: 0, count: blockSize).slice)!) // empty block
-        
+        h = UInt128(cipherOperation(Array<UInt8>(repeating: 0, count: blockSize).slice)!) // empty block
+
         // Assume nonce is 12 bytes long, otherwise initial counter would be calulated from GHASH
         // counter = GF.ghash(aad: [UInt8](), ciphertext: nonce)
         if iv.count == GCMModeWorker.nonceSize {
@@ -154,14 +163,35 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
 
         // Notify handler
         didCalculateTag?(tag)
-        
-        return Array(ciphertext)
+
+        switch mode {
+        case .combined:
+            return ciphertext + tag
+        case .detached:
+            return Array(ciphertext)
+        }
     }
 
     // The authenticated decryption operation has five inputs: K, IV , C, A, and T. It has only a single
     // output, either the plaintext value P or a special symbol FAIL that indicates that the inputs are not
     // authentic.
-    func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> Array<UInt8> {
+    func willDecryptLast(ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+        // Validate tag
+        switch mode {
+        case .combined:
+            // overwrite expectedTag property used later for verification
+            self.expectedTag = Array(ciphertext.suffix(GCMModeWorker.tagSize))
+            // gf.ciphertextLength = gf.ciphertextLength - GCMModeWorker.tagSize
+            // strip tag from the plaintext.
+            var strippedCiphertext = ciphertext
+            strippedCiphertext.removeLast(GCMModeWorker.tagSize)
+            return strippedCiphertext
+        case .detached:
+            return ciphertext
+        }
+    }
+
+    func didDecryptLast(plaintext: ArraySlice<UInt8>) throws -> Array<UInt8> {
         // Calculate MAC tag.
         let ghash = gf.ghashFinish()
         let computedTag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagSize))
@@ -173,6 +203,7 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
 
         throw GCM.Error.fail
     }
+
 }
 
 // MARK: - Local utils
@@ -228,10 +259,10 @@ private final class GF {
 
     init(aad: [UInt8], h: UInt128, blockSize: Int) {
         self.blockSize = blockSize
-        self.aadLength = aad.count
-        self.ciphertextLength = 0
+        aadLength = aad.count
+        ciphertextLength = 0
         self.h = h
-        self.x = 0
+        x = 0
 
         // Calculate for AAD at the begining
         x = GF.calculateX(aad: aad, x: x, h: h, blockSize: blockSize)
@@ -254,7 +285,7 @@ private final class GF {
     // GHASH. One-time calculation
     static func ghash(x startx: UInt128 = 0, h: UInt128, aad: Array<UInt8>, ciphertext: Array<UInt8>, blockSize: Int) -> UInt128 {
         var x = calculateX(aad: aad, x: startx, h: h, blockSize: blockSize)
-            x = calculateX(ciphertext: ciphertext, x: x, h: h, blockSize: blockSize)
+        x = calculateX(ciphertext: ciphertext, x: x, h: h, blockSize: blockSize)
 
         // len(aad) || len(ciphertext)
         let len = UInt128(a: UInt64(aad.count * 8), b: UInt64(ciphertext.count * 8))

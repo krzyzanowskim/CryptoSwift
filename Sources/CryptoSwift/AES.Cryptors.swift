@@ -101,14 +101,25 @@ extension AES {
 
             var processedBytes = 0
             var plaintext = Array<UInt8>(reserveCapacity: accumulated.count)
-            for chunk in accumulated.batched(by: AES.blockSize) {
+            for var chunk in accumulated.batched(by: AES.blockSize) {
                 if isLast || (accumulated.count - processedBytes) >= AES.blockSize {
-                    plaintext += worker.decrypt(chunk)
+
+                    if isLast, var finalizingWorker = worker as? BlockModeWorkerFinalizing {
+                        chunk = try finalizingWorker.willDecryptLast(ciphertext: chunk)
+                    }
+
+                    if !chunk.isEmpty {
+                        plaintext += worker.decrypt(chunk)
+                    }
 
                     // remove "offset" from the beginning of first chunk
                     if offsetToRemove > 0 {
                         plaintext.removeFirst(offsetToRemove)
                         offsetToRemove = 0
+                    }
+
+                    if var finalizingWorker = worker as? BlockModeWorkerFinalizing, isLast == true {
+                        plaintext = try finalizingWorker.didDecryptLast(plaintext: plaintext.slice)
                     }
 
                     processedBytes += chunk.count
@@ -119,10 +130,6 @@ extension AES {
 
             if isLast {
                 plaintext = padding.remove(from: plaintext, blockSize: AES.blockSize)
-            }
-
-            if var finalizingWorker = worker as? BlockModeWorkerFinalizing, isLast == true {
-                plaintext = try finalizingWorker.finalize(decrypt: plaintext.slice)
             }
 
             return plaintext

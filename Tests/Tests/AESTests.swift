@@ -370,7 +370,7 @@ extension AESTests {
         let key = Array<UInt8>(hex: "0x00000000000000000000000000000000")
         let iv = Array<UInt8>(hex: "0x000000000000000000000000")
 
-        let gcm = GCM(iv: iv)
+        let gcm = GCM(iv: iv, mode: .detached)
         let aes = try! AES(key: key, blockMode: gcm, padding: .noPadding)
         let encrypted = try! aes.encrypt([UInt8]())
         XCTAssertEqual(Array(encrypted), [UInt8](hex: "")) // C
@@ -383,7 +383,7 @@ extension AESTests {
         let plaintext = Array<UInt8>(hex: "0x00000000000000000000000000000000")
         let iv = Array<UInt8>(hex: "0x000000000000000000000000")
 
-        let gcm = GCM(iv: iv)
+        let gcm = GCM(iv: iv, mode: .detached)
         let aes = try! AES(key: key, blockMode: gcm, padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(Array(encrypted), [UInt8](hex: "0388dace60b6a392f328c2b971b2fe78")) // C
@@ -396,7 +396,7 @@ extension AESTests {
         let plaintext = Array<UInt8>(hex: "0xd9313225f88406e5a55909c5aff5269a86a7a9531534f7da2e4c303d8a318a721c3c0c95956809532fcf0e2449a6b525b16aedf5aa0de657ba637b391aafd255")
         let iv = Array<UInt8>(hex: "0xcafebabefacedbaddecaf888")
 
-        let encGCM = GCM(iv: iv)
+        let encGCM = GCM(iv: iv, mode: .detached)
         let aes = try! AES(key: key, blockMode: encGCM, padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
@@ -406,12 +406,37 @@ extension AESTests {
 
         // decrypt
         func decrypt(_ encrypted: Array<UInt8>, tag: Array<UInt8>) -> Array<UInt8> {
-            let decGCM = GCM(iv: iv, authenticationTag: tag)
+            let decGCM = GCM(iv: iv, authenticationTag: tag, mode: .detached)
             let aes = try! AES(key: key, blockMode: decGCM, padding: .noPadding)
             return try! aes.decrypt(encrypted)
         }
 
         let decrypted = decrypt(encrypted, tag: encGCM.authenticationTag!)
+        XCTAssertEqual(decrypted, plaintext)
+    }
+
+    func testAESGCMTestCase3Combined() {
+        // Test Case 3
+        let key = Array<UInt8>(hex: "0xfeffe9928665731c6d6a8f9467308308")
+        let plaintext = Array<UInt8>(hex: "0xd9313225f88406e5a55909c5aff5269a86a7a9531534f7da2e4c303d8a318a721c3c0c95956809532fcf0e2449a6b525b16aedf5aa0de657ba637b391aafd255")
+        let iv = Array<UInt8>(hex: "0xcafebabefacedbaddecaf888")
+
+        let encGCM = GCM(iv: iv, mode: .combined)
+        let aes = try! AES(key: key, blockMode: encGCM, padding: .noPadding)
+        let encrypted = try! aes.encrypt(plaintext)
+
+        XCTAssertNotNil(encGCM.authenticationTag)
+        XCTAssertEqual(Array(encrypted), [UInt8](hex: "0x42831ec2217774244b7221b784d0d49ce3aa212f2c02a4e035c17e2329aca12e21d514b25466931c7d8f6a5aac84aa051ba30b396a0aac973d58e091473f59854d5c2af327cd64a62cf35abd2ba6fab4")) // C
+        XCTAssertEqual(encGCM.authenticationTag, [UInt8](hex: "0x4d5c2af327cd64a62cf35abd2ba6fab4")) // T (128-bit)
+
+        // decrypt
+        func decrypt(_ encrypted: Array<UInt8>) -> Array<UInt8> {
+            let decGCM = GCM(iv: iv, mode: .combined)
+            let aes = try! AES(key: key, blockMode: decGCM, padding: .noPadding)
+            return try! aes.decrypt(encrypted)
+        }
+
+        let decrypted = decrypt(encrypted)
         XCTAssertEqual(decrypted, plaintext)
     }
 
@@ -422,7 +447,7 @@ extension AESTests {
         let iv = Array<UInt8>(hex: "0xcafebabefacedbaddecaf888")
         let auth = Array<UInt8>(hex: "0xfeedfacedeadbeeffeedfacedeadbeefabaddad2")
 
-        let gcm = GCM(iv: iv, additionalAuthenticatedData: auth)
+        let gcm = GCM(iv: iv, additionalAuthenticatedData: auth, mode: .detached)
         let aes = try! AES(key: key, blockMode: gcm, padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
@@ -437,7 +462,7 @@ extension AESTests {
         let iv = Array<UInt8>(hex: "0xcafebabefacedbad")
         let auth = Array<UInt8>(hex: "0xfeedfacedeadbeeffeedfacedeadbeefabaddad2")
 
-        let gcm = GCM(iv: iv, additionalAuthenticatedData: auth)
+        let gcm = GCM(iv: iv, additionalAuthenticatedData: auth, mode: .detached)
         let aes = try! AES(key: key, blockMode: gcm, padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
@@ -452,7 +477,7 @@ extension AESTests {
         let iv = Array<UInt8>(hex: "0x9313225df88406e555909c5aff5269aa6a7a9538534f7da1e4c303d2a318a728c3c0c95156809539fcf0e2429a6b525416aedbf5a0de6a57a637b39b")
         let auth = Array<UInt8>(hex: "0xfeedfacedeadbeeffeedfacedeadbeefabaddad2")
 
-        let gcm = GCM(iv: iv, additionalAuthenticatedData: auth)
+        let gcm = GCM(iv: iv, additionalAuthenticatedData: auth, mode: .detached)
         let aes = try! AES(key: key, blockMode: gcm, padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
@@ -466,7 +491,7 @@ extension AESTests {
         let plaintext = Array<UInt8>(hex: "")
         let iv = Array<UInt8>(hex: "0x000000000000000000000000")
 
-        let gcm = GCM(iv: iv)
+        let gcm = GCM(iv: iv, mode: .detached)
         let aes = try! AES(key: key, blockMode: gcm, padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
 
@@ -503,6 +528,7 @@ extension AESTests {
             ("testAESGCMTestCase1", testAESGCMTestCase1),
             ("testAESGCMTestCase2", testAESGCMTestCase2),
             ("testAESGCMTestCase3", testAESGCMTestCase3),
+            ("testAESGCMTestCase3Combined", testAESGCMTestCase3Combined),
             ("testAESGCMTestCase4", testAESGCMTestCase4),
             ("testAESGCMTestCase5", testAESGCMTestCase5),
             ("testAESGCMTestCase6", testAESGCMTestCase6),

@@ -431,7 +431,8 @@ encryption
 
 ```swift
 do {
-    let gcm = GCM(iv: iv)
+    // In combined mode, the authentication tag is directly appended to the encrypted message. This is usually what you want.
+    let gcm = GCM(iv: iv, mode: .combined)
     let aes = try AES(key: key, blockMode: gcm, padding: .noPadding)
     let encrypted = try aes.encrypt(plaintext)
     let tag = gcm.authenticationTag
@@ -444,7 +445,8 @@ decryption
 
 ```swift
 do {
-    let gcm = GCM(iv: iv, authenticationTag: tag)
+    // In combined mode, the authentication tag is directly appended to the encrypted message. This is usually what you want.
+    let gcm = GCM(iv: iv, mode: .combined)
     let aes = try AES(key: key, blockMode: gcm, padding: .noPadding)
     return try aes.decrypt(encrypted)
 } catch {

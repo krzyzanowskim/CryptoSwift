@@ -23,6 +23,7 @@ public final class AES: BlockCipher {
         case dataPaddingRequired
         /// Invalid Data
         case invalidData
+        /// Invalid key size for aes variant
         case invalidKeySize
     }
 
@@ -131,6 +132,7 @@ public final class AES: BlockCipher {
         self.keySize = self.key.count
 
         if let variant = variant {
+            precondition((try? Variant(keySize: key.count)) == variant, "Warning : Key size should be chosen according to the Variant : 16 bytes for AES-128, 24 bytes for AES-192 and 32 bytes for AES-256")
             self.variant = variant
         } else {
             self.variant = try Variant(keySize: keySize)

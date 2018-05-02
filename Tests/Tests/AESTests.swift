@@ -419,6 +419,7 @@ extension AESTests {
         // Test Case 3
         let key = Array<UInt8>(hex: "0xfeffe9928665731c6d6a8f9467308308")
         let plaintext = Array<UInt8>(hex: "0xd9313225f88406e5a55909c5aff5269a86a7a9531534f7da2e4c303d8a318a721c3c0c95956809532fcf0e2449a6b525b16aedf5aa0de657ba637b391aafd255")
+        // let plaintext = Array<UInt8>(hex: "0xd9313225f88406e5a55909")
         let iv = Array<UInt8>(hex: "0xcafebabefacedbaddecaf888")
 
         let encGCM = GCM(iv: iv, mode: .combined)

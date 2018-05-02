@@ -183,9 +183,7 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
             self.expectedTag = Array(ciphertext.suffix(GCMModeWorker.tagSize))
             // gf.ciphertextLength = gf.ciphertextLength - GCMModeWorker.tagSize
             // strip tag from the plaintext.
-            var strippedCiphertext = ciphertext
-            strippedCiphertext.removeLast(GCMModeWorker.tagSize)
-            return strippedCiphertext
+            return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(GCMModeWorker.tagSize,ciphertext.count))]
         case .detached:
             return ciphertext
         }

@@ -1,15 +1,21 @@
+0.10.0
+- API: BlockMode is no longer an enum. Please migrate to eg. CBC() etc...
+- Adds AES-GCM support.
+- Adds CRC32c support.
+- Fixes empty password in PBKDF2.
+
 0.9.0
+- Swift 4.1 compatibility
 - Added CMAC message authenticator https://tools.ietf.org/html/rfc4493
 - Added AEADChaCha20Poly1305 (AEAD_CHACHA20_POLY1305) https://tools.ietf.org/html/rfc7539#section-2.8.1
-- Swift 4.1 Update
 
 0.8.3
-- Fix SHA3 padding.
-- Fix Carthage builds.
+- Fixes SHA3 padding.
+- Fixes Carthage builds.
 
 0.8.2
-- Fix SHA3 partial updates calculations.
-- Make ChaCha20 processing faster again.
+- Fixes SHA3 partial updates calculations.
+- Makes ChaCha20 processing faster again.
 
 0.8.1
 - Adds Data(hex:) helper.

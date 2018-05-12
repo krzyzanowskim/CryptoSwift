@@ -20,10 +20,10 @@
 
 public final class GCM: BlockMode {
     public enum Mode {
+        /// Some applications may need to store the authentication tag and the encrypted message at different locations.
+        case detached
         /// In combined mode, the authentication tag is directly appended to the encrypted message. This is usually what you want.
         case combined
-        /// Some applications may need to store the authentication tag and the encrypted message at different locations
-        case detached
     }
 
     public let options: BlockModeOptions = [.initializationVectorRequired, .useEncryptToDecrypt]
@@ -45,14 +45,14 @@ public final class GCM: BlockMode {
     public var authenticationTag: Array<UInt8>?
 
     // encrypt
-    public init(iv: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil, mode: Mode = .combined) {
+    public init(iv: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil, mode: Mode = .detached) {
         self.iv = iv
         self.additionalAuthenticatedData = additionalAuthenticatedData
         self.mode = mode
     }
 
     // decrypt
-    public convenience init(iv: Array<UInt8>, authenticationTag: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil, mode: Mode = .combined) {
+    public convenience init(iv: Array<UInt8>, authenticationTag: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil, mode: Mode = .detached) {
         self.init(iv: iv, additionalAuthenticatedData: additionalAuthenticatedData, mode: mode)
         self.authenticationTag = authenticationTag
     }

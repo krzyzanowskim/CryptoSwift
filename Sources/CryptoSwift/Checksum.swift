@@ -120,6 +120,7 @@ public final class Checksum {
         0x8201, 0x42C0, 0x4380, 0x8341, 0x4100, 0x81C1, 0x8081, 0x4040,
     ]
 
+    /// Polynomial: 0xEDB88320 (Reversed) - IEEE
     func crc32(_ message: Array<UInt8>, seed: UInt32? = nil, reflect: Bool = true) -> UInt32 {
         var crc: UInt32 = seed != nil ? seed! : 0xFFFF_FFFF
         for chunk in message.batched(by: 256) {
@@ -131,6 +132,7 @@ public final class Checksum {
         return (reflect ? crc : reversed(crc)) ^ 0xFFFF_FFFF
     }
 
+    /// Polynomial: 0x82F63B78 (Reversed) - Castagnoli
     func crc32c(_ message: Array<UInt8>, seed: UInt32? = nil, reflect: Bool = true) -> UInt32 {
         var crc: UInt32 = seed != nil ? seed! : 0xFFFF_FFFF
         for chunk in message.batched(by: 256) {
@@ -142,6 +144,7 @@ public final class Checksum {
         return (reflect ? crc : reversed(crc)) ^ 0xFFFF_FFFF
     }
 
+    /// Polynomial: 0xA001 (Reversed) - IBM
     func crc16(_ message: Array<UInt8>, seed: UInt16? = nil) -> UInt16 {
         var crc: UInt16 = seed != nil ? seed! : 0x0000
         for chunk in message.batched(by: 256) {
@@ -157,7 +160,6 @@ public final class Checksum {
 
 public extension Checksum {
     /// Calculate CRC32.
-    /// Polynomial: 0xEDB88320 (Reversed) - IEEE
     ///
     /// - parameter message: Message
     /// - parameter seed:    Seed value (Optional)

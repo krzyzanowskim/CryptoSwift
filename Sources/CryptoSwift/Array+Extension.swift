@@ -20,7 +20,7 @@ extension Array {
     }
 
     var slice: ArraySlice<Element> {
-        return self[self.startIndex..<self.endIndex]
+        return self[self.startIndex ..< self.endIndex]
     }
 }
 
@@ -81,7 +81,7 @@ extension Array where Element == UInt8 {
         var words = Array<Array<Element>>()
         words.reserveCapacity(count / chunksize)
         for idx in stride(from: chunksize, through: count, by: chunksize) {
-            words.append(Array(self[idx - chunksize..<idx])) // slow for large table
+            words.append(Array(self[idx - chunksize ..< idx])) // slow for large table
         }
         let remainder = suffix(count % chunksize)
         if !remainder.isEmpty {
@@ -124,6 +124,10 @@ extension Array where Element == UInt8 {
 
     public func crc32(seed: UInt32? = nil, reflect: Bool = true) -> UInt32 {
         return Checksum.crc32(self, seed: seed, reflect: reflect)
+    }
+
+    public func crc32c(seed: UInt32? = nil, reflect: Bool = true) -> UInt32 {
+        return Checksum.crc32c(self, seed: seed, reflect: reflect)
     }
 
     public func crc16(seed: UInt16? = nil) -> UInt16 {

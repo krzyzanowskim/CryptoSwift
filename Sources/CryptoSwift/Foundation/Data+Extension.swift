@@ -20,7 +20,7 @@ extension Data {
     public func checksum() -> UInt16 {
         var s: UInt32 = 0
         var bytesArray = bytes
-        for i in 0..<bytesArray.count {
+        for i in 0 ..< bytesArray.count {
             s = s + UInt32(bytesArray[i])
         }
         s = s % 65536
@@ -57,6 +57,10 @@ extension Data {
 
     public func crc32(seed: UInt32? = nil, reflect: Bool = true) -> Data {
         return Data(bytes: Checksum.crc32(bytes, seed: seed, reflect: reflect).bytes())
+    }
+
+    public func crc32c(seed: UInt32? = nil, reflect: Bool = true) -> Data {
+        return Data(bytes: Checksum.crc32c(bytes, seed: seed, reflect: reflect).bytes())
     }
 
     public func crc16(seed: UInt16? = nil) -> Data {

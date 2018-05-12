@@ -151,7 +151,7 @@ final class DigestTests: XCTestCase {
 
     func testMD5Data() {
         let data = [0x31, 0x32, 0x33] as Array<UInt8> // "1", "2", "3"
-        XCTAssertEqual(Digest.md5(data), [0x20, 0x2c, 0xb9, 0x62, 0xac, 0x59, 0x07, 0x5b, 0x96, 0x4b, 0x07, 0x15, 0x2d, 0x23, 0x4b, 0x70], "MD5 calculation failed")
+        XCTAssertEqual(Digest.md5(data), [0x20, 0x2C, 0xB9, 0x62, 0xAC, 0x59, 0x07, 0x5B, 0x96, 0x4B, 0x07, 0x15, 0x2D, 0x23, 0x4B, 0x70], "MD5 calculation failed")
     }
 
     func testMD5Updates() {
@@ -160,7 +160,7 @@ final class DigestTests: XCTestCase {
             _ = try hash.update(withBytes: [0x31, 0x32])
             _ = try hash.update(withBytes: [0x33])
             let result = try hash.finish()
-            XCTAssertEqual(result, [0x20, 0x2c, 0xb9, 0x62, 0xac, 0x59, 0x07, 0x5b, 0x96, 0x4b, 0x07, 0x15, 0x2d, 0x23, 0x4b, 0x70])
+            XCTAssertEqual(result, [0x20, 0x2C, 0xB9, 0x62, 0xAC, 0x59, 0x07, 0x5B, 0x96, 0x4B, 0x07, 0x15, 0x2D, 0x23, 0x4B, 0x70])
         } catch {
             XCTFail()
         }
@@ -196,6 +196,12 @@ final class DigestTests: XCTestCase {
         XCTAssertEqual("".crc32(seed: nil), "00000000", "CRC32 calculation failed")
     }
 
+    func testCRC32C() {
+        let data: Data = Data(bytes: UnsafePointer<UInt8>([0x32, 0, 0, 0] as Array<UInt8>), count: 4)
+        XCTAssertEqual(data.crc32c(seed: nil).toHexString(), "c941cdf0", "CRC32C calculation failed")
+        XCTAssertEqual("".crc32c(seed: nil), "00000000", "CRC32 calculation failed")
+    }
+
     func testCRC32NotReflected() {
         let bytes: Array<UInt8> = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39]
         let data: Data = Data(bytes: UnsafePointer<UInt8>(bytes), count: bytes.count)
@@ -206,7 +212,7 @@ final class DigestTests: XCTestCase {
 
     func testCRC16() {
         let result = Checksum.crc16([49, 50, 51, 52, 53, 54, 55, 56, 57] as Array<UInt8>)
-        XCTAssert(result == 0xbb3d, "CRC16 failed")
+        XCTAssert(result == 0xBB3D, "CRC16 failed")
     }
 
     func testChecksum() {

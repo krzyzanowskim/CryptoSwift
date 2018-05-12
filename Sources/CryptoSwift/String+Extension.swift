@@ -51,6 +51,10 @@ extension String {
         return bytes.crc32(seed: seed, reflect: reflect).bytes().toHexString()
     }
 
+    public func crc32c(seed: UInt32? = nil, reflect: Bool = true) -> String {
+        return bytes.crc32(seed: seed, reflect: reflect).bytes().toHexString()
+    }
+
     public func crc16(seed: UInt16? = nil) -> String {
         return bytes.crc16(seed: seed).bytes().toHexString()
     }

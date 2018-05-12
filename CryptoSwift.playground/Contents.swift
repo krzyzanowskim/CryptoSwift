@@ -41,6 +41,7 @@ do {
  */
 bytes.crc16()
 bytes.crc32()
+bytes.crc32c()
 
 /*:
  # HMAC
@@ -137,7 +138,7 @@ do {
     var encryptor = try! aes.makeEncryptor()
 
     // prepare streams
-    let data = Data(bytes: (0..<100).map { $0 })
+    let data = Data(bytes: (0 ..< 100).map { $0 })
     let inputStream = InputStream(data: data)
     let outputStream = OutputStream(toMemory: ())
     inputStream.open()
@@ -149,7 +150,7 @@ do {
     while inputStream.hasBytesAvailable {
         let readCount = inputStream.read(&buffer, maxLength: buffer.count)
         if readCount > 0 {
-            try encryptor.update(withBytes: buffer[0..<readCount]) { bytes in
+            try encryptor.update(withBytes: buffer[0 ..< readCount]) { bytes in
                 writeTo(stream: outputStream, bytes: bytes)
             }
         }

@@ -234,7 +234,7 @@ let hex   = bytes.toHexString()            // "010203"
 
 Build bytes out of `String`
 ```swift
-let bytes: Array<UInt8> = "password".bytes  // Array("password".utf8)
+let bytes: Array<UInt8> = "cipherkey".bytes  // Array("cipherkey".utf8)
 ```
 
 Also... check out helpers that work with **Base64** encoded data:
@@ -306,7 +306,7 @@ try CMAC(key: key).authenticate(bytes)
 let password: Array<UInt8> = Array("s33krit".utf8)
 let salt: Array<UInt8> = Array("nacllcan".utf8)
 
-try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha256).calculate()
+let key = try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha256).calculate()
 ```
 
 ##### HMAC-based Key Derivation Function
@@ -315,7 +315,7 @@ try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha
 let password: Array<UInt8> = Array("s33krit".utf8)
 let salt: Array<UInt8> = Array("nacllcan".utf8)
 
-try HKDF(password: password, salt: salt, variant: .sha256).calculate()
+let key = try HKDF(password: password, salt: salt, variant: .sha256).calculate()
 ```
 
 ##### Data Padding
@@ -365,7 +365,7 @@ try AES(key: [1,2,3,...,32], blockMode: CBC(iv: [1,2,3,...,16]), padding: .pkcs7
 ###### All at once
 ```swift
 do {
-    let aes = try AES(key: "passwordpassword", iv: "drowssapdrowssap") // aes128
+    let aes = try AES(key: "keykeykeykeykeyk", iv: "drowssapdrowssap") // aes128
     let ciphertext = try aes.encrypt(Array("Nullam quis risus eget urna mollis ornare vel eu leo.".utf8))
 } catch { }
 ```
@@ -376,7 +376,7 @@ Incremental operations use instance of Cryptor and encrypt/decrypt one part at a
 
 ```swift
 do {
-    var encryptor = try AES(key: "passwordpassword", iv: "drowssapdrowssap").makeEncryptor()
+    var encryptor = try AES(key: "keykeykeykeykeyk", iv: "drowssapdrowssap").makeEncryptor()
 
     var ciphertext = Array<UInt8>()
     // aggregate partial results

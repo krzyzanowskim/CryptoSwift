@@ -110,7 +110,8 @@ public final class Checksum {
 // MARK: Public interface
 
 public extension Checksum {
-    /// Calculate CRC32
+    /// Calculate CRC32.
+    /// Polynomial: 0xEDB88320 (Reversed) - IEEE
     ///
     /// - parameter message: Message
     /// - parameter seed:    Seed value (Optional)

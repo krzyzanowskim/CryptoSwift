@@ -499,6 +499,57 @@ extension AESTests {
         XCTAssertEqual(Array(encrypted), [UInt8](hex: "")) // C
         XCTAssertEqual(gcm.authenticationTag, [UInt8](hex: "0xcd33b28ac773f74ba00ed1f312572435")) // T (128-bit)
     }
+
+    func testEncryptTooLongKey() {
+        let key = "f83c08efba542f025f13cfd90110e29a09add0de242b3o587dbc3777b2232dbn".bytes
+        let iv = [UInt8](repeating: 0, count: AES.blockSize)
+
+        do {
+            let aes = try AES(key: key, blockMode: CBC(iv: iv))
+            _ = try aes.encrypt(key)
+            XCTFail("not supposed to success without specified variant")
+        } catch {
+        }
+    }
+
+    func testEncryptTooLongWithVariantKey() {
+        let key = "f83c08efba542f025f13cfd90110e29a09add0de242b3o587dbc3777b2232dbn".bytes
+        let iv = [UInt8](repeating: 0, count: AES.blockSize)
+
+        do {
+            let aes = try AES(key: key, blockMode: CBC(iv: iv), variant: .aes128)
+            _ = try aes.encrypt(key)
+            print("testEncryptTooLongWithVariantKey ok !")
+        } catch {
+            XCTFail("an error occured : \(error)")
+        }
+    }
+
+
+    func testEncryptTooShortKey() {
+        let key = "f83".bytes
+        let iv = [UInt8](repeating: 0, count: AES.blockSize)
+
+        do {
+            let aes = try AES(key: key, blockMode: CBC(iv: iv))
+            _ = try aes.encrypt(key)
+            XCTFail("not supposed to success without specified variant")
+        } catch {
+            print("testEncryptTooShortKey ok !")
+        }
+    }
+
+    func testEncryptTooShortWithVariantKey() {
+        let key = "f83".bytes
+        let iv = [UInt8](repeating: 0, count: AES.blockSize)
+
+        do {
+            let aes = try AES(key: key, blockMode: CBC(iv: iv), variant: .aes128)
+            _ = try aes.encrypt(key)
+            XCTFail("not supposed to success with specified variant")
+        } catch {
+        }
+    }
 }
 
 extension AESTests {
@@ -534,6 +585,10 @@ extension AESTests {
             ("testAESGCMTestCase5", testAESGCMTestCase5),
             ("testAESGCMTestCase6", testAESGCMTestCase6),
             ("testAESGCMTestCase7", testAESGCMTestCase7),
+            ("testEncryptTooLongKey", testEncryptTooLongKey),
+            ("testEncryptTooLongWithVariantKey", testEncryptTooLongWithVariantKey),
+            ("testEncryptTooShortKey", testEncryptTooShortKey),
+            ("testEncryptTooShortWithVariantKey", testEncryptTooShortWithVariantKey)
         ]
         return tests
     }

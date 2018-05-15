@@ -520,9 +520,8 @@ extension AESTests {
         do {
             let aes = try AES(key: key, blockMode: CBC(iv: iv), variant: .aes128)
             _ = try aes.encrypt(key)
-            print("testEncryptTooShortWithVariantKey ok !")
+            XCTFail("not supposed to success with specified variant")
         } catch {
-            XCTFail("an error occured : \(error)")
         }
     }
 }

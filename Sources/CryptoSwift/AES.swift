@@ -42,17 +42,25 @@ public final class AES: BlockCipher {
             return Nk + 6
         }
 
-        init(keySize: Int) throws {
-            switch keySize * 8 {
-            case 128:
-                self = .aes128
-            case 192:
-                self = .aes192
-            case 256:
-                self = .aes256
-            default:
-                throw Error.invalidKeySize
+        var keySize: Int {
+            switch self {
+            case .aes128:
+                return 16
+            case .aes192:
+                return 24
+            case .aes256:
+                return 32
             }
+        }
+
+        init(keySize: Int) throws {
+            for variant in [Variant.aes128, .aes192, .aes256] {
+                if variant.keySize == keySize {
+                    self = variant
+                    return
+                }
+            }
+            throw Error.invalidKeySize
         }
     }
 
@@ -132,6 +140,9 @@ public final class AES: BlockCipher {
         self.keySize = self.key.count
 
         if let variant = variant {
+            guard variant.keySize <= keySize else {
+                throw Error.invalidKeySize
+            }
             precondition((try? Variant(keySize: key.count)) == variant, "Warning : Key size should be chosen according to the Variant : 16 bytes for AES-128, 24 bytes for AES-192 and 32 bytes for AES-256")
             self.variant = variant
         } else {

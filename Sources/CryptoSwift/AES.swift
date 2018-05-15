@@ -377,18 +377,14 @@ private extension AES {
          * produce an output word.
          */
         func subWord(_ word: Array<UInt8>) -> Array<UInt8> {
-            precondition(word.count == 4)
+            precondition(word.count == 4, "word count != 4")
 
-            var result = word
-            for i in 0..<4 {
-                result[i] = UInt8(sBox[Int(word[i])])
-            }
-            return result
+            return word.map { UInt8(sBox[Int($0)]) }
         }
 
         @inline(__always)
         func subWordInPlace(_ word: inout Array<UInt8>) {
-            precondition(word.count == 4)
+            precondition(word.count == 4, "word count != 4")
             word[0] = UInt8(sBox[Int(word[0])])
             word[1] = UInt8(sBox[Int(word[1])])
             word[2] = UInt8(sBox[Int(word[2])])

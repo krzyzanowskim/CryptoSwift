@@ -343,8 +343,8 @@ let decrypted = try Rabbit(key: key, iv: iv).decrypt(encrypted)
 ##### Blowfish
 
 ```swift
-let encrypted = try Blowfish(key: key, blockMode: CBC(iv: iv), padding: .pkcs7).encrypt(message)
-let decrypted = try Blowfish(key: key, blockMode: CBC(iv: iv), padding: .pkcs7).decrypt(encrypted)
+let encrypted = try Blowfish(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7).encrypt(message)
+let decrypted = try Blowfish(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7).decrypt(encrypted)
 ```
 
 ##### AES
@@ -359,7 +359,7 @@ Variant of AES encryption (AES-128, AES-192, AES-256) depends on given key lengt
 
 AES-256 example
 ```swift
-try AES(key: [1,2,3,...,32], blockMode: CBC(iv: [1,2,3,...,16]), padding: .pkcs7)
+try AES(key: [1,2,3,...,32], blockMode: .CBC(iv: [1,2,3,...,16]), padding: .pkcs7)
 ```
 
 ###### All at once
@@ -402,8 +402,8 @@ let key: Array<UInt8> = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 let iv: Array<UInt8> = AES.randomIV(AES.blockSize)
 
 do {
-    let encrypted = try AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7).encrypt(input)
-    let decrypted = try AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7).decrypt(encrypted)
+    let encrypted = try AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7).encrypt(input)
+    let decrypted = try AES(key: key, blockMode: .CBC(iv: iv), padding: .pkcs7).decrypt(encrypted)
 } catch {
     print(error)
 }    

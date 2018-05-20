@@ -28,7 +28,7 @@ extension AES: Cryptors {
 // MARK: Encryptor
 
 extension AES {
-    public struct Encryptor: Updatable {
+    public struct Encryptor: Cryptor, Updatable {
         private var worker: BlockModeWorker
         private let padding: Padding
         // Accumulated bytes. Not all processed bytes.
@@ -40,6 +40,7 @@ extension AES {
             worker = try aes.blockMode.worker(blockSize: AES.blockSize, cipherOperation: aes.encrypt)
         }
 
+        // MARK: Updatable
         public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
             accumulated += bytes
 
@@ -70,7 +71,7 @@ extension AES {
 // MARK: Decryptor
 
 extension AES {
-    public struct Decryptor: RandomAccessCryptor {
+    public struct Decryptor: RandomAccessCryptor, Updatable {
         private var worker: BlockModeWorker
         private let padding: Padding
         private var accumulated = Array<UInt8>()

@@ -254,7 +254,7 @@ extension ChaCha20: Cipher {
 // MARK: Encryptor
 
 extension ChaCha20 {
-    public struct Encryptor: Updatable {
+    public struct Encryptor: Cryptor, Updatable {
         private var accumulated = Array<UInt8>()
         private let chacha: ChaCha20
 
@@ -281,7 +281,7 @@ extension ChaCha20 {
 // MARK: Decryptor
 
 extension ChaCha20 {
-    public struct Decryptor: Updatable {
+    public struct Decryptor: Cryptor, Updatable {
         private var accumulated = Array<UInt8>()
 
         private var offset: Int = 0

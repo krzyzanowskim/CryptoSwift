@@ -48,7 +48,7 @@ struct CFBModeWorker: BlockModeWorker {
         self.cipherOperation = cipherOperation
     }
 
-    mutating func encrypt(_ plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
+    mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
         guard let ciphertext = cipherOperation(prev ?? iv) else {
             return Array(plaintext)
         }
@@ -56,7 +56,7 @@ struct CFBModeWorker: BlockModeWorker {
         return Array(prev ?? [])
     }
 
-    mutating func decrypt(_ ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+    mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
         guard let plaintext = cipherOperation(prev ?? iv) else {
             return Array(ciphertext)
         }

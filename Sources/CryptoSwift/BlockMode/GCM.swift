@@ -125,7 +125,7 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
         eky0 = UInt128(cipherOperation(counter.bytes.slice)!)
     }
 
-    func encrypt(_ plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
+    func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
         counter = incrementCounter(counter)
 
         guard let ekyN = cipherOperation(counter.bytes.slice) else {
@@ -141,7 +141,7 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
         return Array(ciphertext)
     }
 
-    func decrypt(_ ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+    func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
         counter = incrementCounter(counter)
 
         // update ghash incrementally
@@ -175,7 +175,7 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
     // The authenticated decryption operation has five inputs: K, IV , C, A, and T. It has only a single
     // output, either the plaintext value P or a special symbol FAIL that indicates that the inputs are not
     // authentic.
-    func willDecryptLast(ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+    func willDecryptLast(block ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         // Validate tag
         switch mode {
         case .combined:
@@ -189,7 +189,7 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
         }
     }
 
-    func didDecryptLast(plaintext: ArraySlice<UInt8>) throws -> Array<UInt8> {
+    func didDecryptLast(block plaintext: ArraySlice<UInt8>) throws -> Array<UInt8> {
         // Calculate MAC tag.
         let ghash = gf.ghashFinish()
         let computedTag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagSize))

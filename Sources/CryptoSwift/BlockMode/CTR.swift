@@ -48,7 +48,7 @@ struct CTRModeWorker: RandomAccessBlockModeWorker {
         self.cipherOperation = cipherOperation
     }
 
-    mutating func encrypt(_ plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
+    mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
         let nonce = buildNonce(iv, counter: UInt64(counter))
         counter = counter + 1
 
@@ -59,8 +59,8 @@ struct CTRModeWorker: RandomAccessBlockModeWorker {
         return xor(plaintext, ciphertext)
     }
 
-    mutating func decrypt(_ ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
-        return encrypt(ciphertext)
+    mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+        return encrypt(block: ciphertext)
     }
 }
 

@@ -52,7 +52,7 @@ extension AES {
             var encrypted = Array<UInt8>(reserveCapacity: accumulated.count)
             for chunk in accumulated.batched(by: AES.blockSize) {
                 if isLast || (accumulated.count - processedBytes) >= AES.blockSize {
-                    encrypted += worker.encrypt(chunk)
+                    encrypted += worker.encrypt(block: chunk)
                     processedBytes += chunk.count
                 }
             }
@@ -100,17 +100,33 @@ extension AES {
                 accumulated += bytes
             }
 
-            var processedBytes = 0
+            var processedBytesCount = 0
             var plaintext = Array<UInt8>(reserveCapacity: accumulated.count)
+            // Processing in a block-size manner. It's good for block modes, but bad for stream modes.
             for var chunk in accumulated.batched(by: AES.blockSize) {
-                if isLast || (accumulated.count - processedBytes) >= AES.blockSize {
+                if isLast || (accumulated.count - processedBytesCount) >= AES.blockSize {
 
                     if isLast, var finalizingWorker = worker as? BlockModeWorkerFinalizing {
-                        chunk = try finalizingWorker.willDecryptLast(ciphertext: chunk)
+                        // ERR: chunk is limited by block, but I don't want block
+                        // For GCM: Tag is appended at the end and shouldn't be processed
+                        //          so chunk is stripped of the Tag.
+                        /*
+                         Failure scenario:
+                         Encrypt:
+                         Input: 11 bytes
+                         Combined: 11 + 16 (ciphertext + tag)
+
+                         Decrypt in chunks:
+                         1st chunk: 16 bytes = 11 ciphertext + 4 bytes of tag
+                         2nd chunk: 11 bytes = 11 remaining bytes of tag
+
+                         Problem: by the time of 1st chunk, the total length is unknown so can't decide to decrypt only 11 bytes.
+                         */
+                        chunk = try finalizingWorker.willDecryptLast(block: chunk)
                     }
 
                     if !chunk.isEmpty {
-                        plaintext += worker.decrypt(chunk)
+                        plaintext += worker.decrypt(block: chunk)
                     }
 
                     // remove "offset" from the beginning of first chunk
@@ -120,14 +136,14 @@ extension AES {
                     }
 
                     if var finalizingWorker = worker as? BlockModeWorkerFinalizing, isLast == true {
-                        plaintext = try finalizingWorker.didDecryptLast(plaintext: plaintext.slice)
+                        plaintext = try finalizingWorker.didDecryptLast(block: plaintext.slice)
                     }
 
-                    processedBytes += chunk.count
+                    processedBytesCount += chunk.count
                 }
             }
-            accumulated.removeFirst(processedBytes)
-            processedBytesTotalCount += processedBytes
+            accumulated.removeFirst(processedBytesCount) // super-slow
+            processedBytesTotalCount += processedBytesCount
 
             if isLast {
                 plaintext = padding.remove(from: plaintext, blockSize: AES.blockSize)

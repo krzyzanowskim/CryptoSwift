@@ -16,8 +16,8 @@
 public protocol BlockModeWorker {
     var cipherOperation: CipherOperationOnBlock { get }
 
-    mutating func encrypt(_ plaintext: ArraySlice<UInt8>) -> Array<UInt8>
-    mutating func decrypt(_ ciphertext: ArraySlice<UInt8>) -> Array<UInt8>
+    mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8>
+    mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8>
 }
 
 // TODO: remove and merge with BlockModeWorker
@@ -26,7 +26,7 @@ public protocol BlockModeWorkerFinalizing: BlockModeWorker {
     // Called after the last block is encrypted
     mutating func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8>
     // Called before decryption, hence input is ciphertext
-    mutating func willDecryptLast(ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8>
+    mutating func willDecryptLast(block ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8>
     // Called after decryption, hence input is ciphertext
-    mutating func didDecryptLast(plaintext: ArraySlice<UInt8>) throws -> Array<UInt8>
+    mutating func didDecryptLast(block plaintext: ArraySlice<UInt8>) throws -> Array<UInt8>
 }

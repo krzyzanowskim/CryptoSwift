@@ -419,7 +419,6 @@ extension AESTests {
         // Test Case 3
         let key = Array<UInt8>(hex: "0xfeffe9928665731c6d6a8f9467308308")
         let plaintext = Array<UInt8>(hex: "0xd9313225f88406e5a55909c5aff5269a86a7a9531534f7da2e4c303d8a318a721c3c0c95956809532fcf0e2449a6b525b16aedf5aa0de657ba637b391aafd255")
-        // let plaintext = Array<UInt8>(hex: "0xd9313225f88406e5a55909")
         let iv = Array<UInt8>(hex: "0xcafebabefacedbaddecaf888")
 
         let encGCM = GCM(iv: iv, mode: .combined)
@@ -429,6 +428,33 @@ extension AESTests {
         XCTAssertNotNil(encGCM.authenticationTag)
         XCTAssertEqual(Array(encrypted), [UInt8](hex: "0x42831ec2217774244b7221b784d0d49ce3aa212f2c02a4e035c17e2329aca12e21d514b25466931c7d8f6a5aac84aa051ba30b396a0aac973d58e091473f59854d5c2af327cd64a62cf35abd2ba6fab4")) // C
         XCTAssertEqual(encGCM.authenticationTag, [UInt8](hex: "0x4d5c2af327cd64a62cf35abd2ba6fab4")) // T (128-bit)
+
+        // decrypt
+        func decrypt(_ encrypted: Array<UInt8>) -> Array<UInt8> {
+            let decGCM = GCM(iv: iv, mode: .combined)
+            let aes = try! AES(key: key, blockMode: decGCM, padding: .noPadding)
+            return try! aes.decrypt(encrypted)
+        }
+
+        let decrypted = decrypt(encrypted)
+        XCTAssertEqual(decrypted, plaintext)
+    }
+
+    func testAESGCMTestCaseIrregularCombined() {
+        // echo -n "0123456789010123456789012345" | openssl enc -aes-128-gcm -K feffe9928665731c6d6a8f9467308308 -iv cafebabefacedbaddecaf888 -nopad -nosalt
+        // openssl note: The enc program does not support authenticated encryption modes like CCM and GCM. The utility does not store or retrieve the authentication tag
+        let key = Array<UInt8>(hex: "0xfeffe9928665731c6d6a8f9467308308")
+        //let plaintext = Array<UInt8>(hex: "0xd9313225f88406e5a55909c5aff5269a86a7a9531534f7da2e4c303d8a318a721c3c0c95956809532fcf0e2449a6b525b16aedf5aa0de657ba637b391aafd255")
+        let plaintext = "0123456789010123456789012345".bytes
+        let iv = Array<UInt8>(hex: "0xcafebabefacedbaddecaf888")
+
+        let encGCM = GCM(iv: iv, mode: .combined)
+        let aes = try! AES(key: key, blockMode: encGCM, padding: .noPadding)
+        let encrypted = try! aes.encrypt(plaintext)
+
+        XCTAssertNotNil(encGCM.authenticationTag)
+        XCTAssertEqual(Array(encrypted), [UInt8](hex: "0xab831ed4edc644f6d61218431b14c0355138be4b010f630b29be7a2b9793b9fbecc7b44cc86dfd697a50c1c6")) // C
+        XCTAssertEqual(encGCM.authenticationTag, [UInt8](hex: "0x9793b9fbecc7b44cc86dfd697a50c1c6")) // T (128-bit)
 
         // decrypt
         func decrypt(_ encrypted: Array<UInt8>) -> Array<UInt8> {

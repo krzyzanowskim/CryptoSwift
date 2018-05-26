@@ -22,7 +22,7 @@ public struct CTR: BlockMode {
         case invalidInitializationVector
     }
 
-    public let options: BlockModeOptions = [.initializationVectorRequired, .useEncryptToDecrypt]
+    public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
     private let iv: Array<UInt8>
 
     public init(iv: Array<UInt8>) {
@@ -34,16 +34,19 @@ public struct CTR: BlockMode {
             throw Error.invalidInitializationVector
         }
 
-        return CTRModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
+        return CTRModeWorker(blockSize: blockSize, iv: iv.slice, cipherOperation: cipherOperation)
     }
 }
 
 struct CTRModeWorker: RandomAccessBlockModeWorker {
     let cipherOperation: CipherOperationOnBlock
+    let blockSize: Int
+    let additionalBufferSize: Int = 0
     private let iv: ArraySlice<UInt8>
     var counter: UInt = 0
 
-    init(iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(blockSize: Int, iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+        self.blockSize = blockSize
         self.iv = iv
         self.cipherOperation = cipherOperation
     }

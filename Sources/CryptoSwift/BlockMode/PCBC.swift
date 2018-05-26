@@ -22,7 +22,7 @@ public struct PCBC: BlockMode {
         case invalidInitializationVector
     }
 
-    public let options: BlockModeOptions = [.initializationVectorRequired, .paddingRequired]
+    public let options: BlockModeOption = [.initializationVectorRequired, .paddingRequired]
     private let iv: Array<UInt8>
 
     public init(iv: Array<UInt8>) {
@@ -34,16 +34,19 @@ public struct PCBC: BlockMode {
             throw Error.invalidInitializationVector
         }
 
-        return PCBCModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
+        return PCBCModeWorker(blockSize: blockSize, iv: iv.slice, cipherOperation: cipherOperation)
     }
 }
 
 struct PCBCModeWorker: BlockModeWorker {
     let cipherOperation: CipherOperationOnBlock
+    var blockSize: Int
+    let additionalBufferSize: Int = 0
     private let iv: ArraySlice<UInt8>
     private var prev: ArraySlice<UInt8>?
 
-    init(iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(blockSize: Int, iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+        self.blockSize = blockSize
         self.iv = iv
         self.cipherOperation = cipherOperation
     }

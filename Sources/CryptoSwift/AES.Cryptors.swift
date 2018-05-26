@@ -74,6 +74,7 @@ extension AES {
     public struct Decryptor: RandomAccessCryptor, Updatable {
         private var worker: BlockModeWorker
         private let padding: Padding
+        private let additionalBufferSize: Int
         private var accumulated = Array<UInt8>()
         private var processedBytesTotalCount: Int = 0
 
@@ -88,6 +89,8 @@ extension AES {
             } else {
                 worker = try aes.blockMode.worker(blockSize: AES.blockSize, cipherOperation: aes.decrypt)
             }
+
+            additionalBufferSize = worker.additionalBufferSize
         }
 
         public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
@@ -100,29 +103,28 @@ extension AES {
                 accumulated += bytes
             }
 
+            // If a worker (eg GCM) can combine ciphertext + tag
+            // we need to remove tag from the ciphertext.
+            if !isLast && accumulated.count < worker.blockSize + additionalBufferSize {
+                return []
+            }
+
+            let accumulatedWithoutSuffix: Array<UInt8>
+            if additionalBufferSize > 0 {
+                // FIXME: how slow is that?
+                accumulatedWithoutSuffix = Array(accumulated.prefix(accumulated.count - additionalBufferSize))
+            } else {
+                accumulatedWithoutSuffix = accumulated
+            }
+
             var processedBytesCount = 0
-            var plaintext = Array<UInt8>(reserveCapacity: accumulated.count)
+            var plaintext = Array<UInt8>(reserveCapacity: accumulatedWithoutSuffix.count)
             // Processing in a block-size manner. It's good for block modes, but bad for stream modes.
-            for var chunk in accumulated.batched(by: AES.blockSize) {
-                if isLast || (accumulated.count - processedBytesCount) >= AES.blockSize {
+            for var chunk in accumulatedWithoutSuffix.batched(by: worker.blockSize) {
+                if isLast || (accumulatedWithoutSuffix.count - processedBytesCount) >= worker.blockSize {
 
                     if isLast, var finalizingWorker = worker as? BlockModeWorkerFinalizing {
-                        // ERR: chunk is limited by block, but I don't want block
-                        // For GCM: Tag is appended at the end and shouldn't be processed
-                        //          so chunk is stripped of the Tag.
-                        /*
-                         Failure scenario:
-                         Encrypt:
-                         Input: 11 bytes
-                         Combined: 11 + 16 (ciphertext + tag)
-
-                         Decrypt in chunks:
-                         1st chunk: 16 bytes = 11 ciphertext + 4 bytes of tag
-                         2nd chunk: 11 bytes = 11 remaining bytes of tag
-
-                         Problem: by the time of 1st chunk, the total length is unknown so can't decide to decrypt only 11 bytes.
-                         */
-                        chunk = try finalizingWorker.willDecryptLast(block: chunk)
+                        chunk = try finalizingWorker.willDecryptLast(block: chunk + accumulated.suffix(additionalBufferSize)) // tag size
                     }
 
                     if !chunk.isEmpty {
@@ -146,7 +148,7 @@ extension AES {
             processedBytesTotalCount += processedBytesCount
 
             if isLast {
-                plaintext = padding.remove(from: plaintext, blockSize: AES.blockSize)
+                plaintext = padding.remove(from: plaintext, blockSize: worker.blockSize)
             }
 
             return plaintext
@@ -157,10 +159,10 @@ extension AES {
                 return false
             }
 
-            worker.counter = UInt(position / AES.blockSize)
+            worker.counter = UInt(position / AES.blockSize) // TODO: worker.blockSize
             self.worker = worker
 
-            offset = position % AES.blockSize
+            offset = position % worker.blockSize
 
             accumulated = []
 

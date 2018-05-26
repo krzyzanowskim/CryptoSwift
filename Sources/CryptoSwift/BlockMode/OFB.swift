@@ -22,7 +22,7 @@ public struct OFB: BlockMode {
         case invalidInitializationVector
     }
 
-    public let options: BlockModeOptions = [.initializationVectorRequired, .useEncryptToDecrypt]
+    public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
     private let iv: Array<UInt8>
 
     public init(iv: Array<UInt8>) {
@@ -34,16 +34,19 @@ public struct OFB: BlockMode {
             throw Error.invalidInitializationVector
         }
 
-        return OFBModeWorker(iv: iv.slice, cipherOperation: cipherOperation)
+        return OFBModeWorker(blockSize: blockSize, iv: iv.slice, cipherOperation: cipherOperation)
     }
 }
 
 struct OFBModeWorker: BlockModeWorker {
     let cipherOperation: CipherOperationOnBlock
+    let blockSize: Int
+    let additionalBufferSize: Int = 0
     private let iv: ArraySlice<UInt8>
     private var prev: ArraySlice<UInt8>?
 
-    init(iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(blockSize: Int, iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+        self.blockSize = blockSize
         self.iv = iv
         self.cipherOperation = cipherOperation
     }

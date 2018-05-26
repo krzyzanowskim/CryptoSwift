@@ -20,13 +20,22 @@
 
 public final class GCM: BlockMode {
     public enum Mode {
-        /// Some applications may need to store the authentication tag and the encrypted message at different locations.
-        case detached
         /// In combined mode, the authentication tag is directly appended to the encrypted message. This is usually what you want.
         case combined
+        /// Some applications may need to store the authentication tag and the encrypted message at different locations.
+        case detached
+
+        var additionalBufferSize: Int {
+            switch self {
+            case .combined:
+                return GCMModeWorker.tagSize
+            case .detached:
+                return 0
+            }
+        }
     }
 
-    public let options: BlockModeOptions = [.initializationVectorRequired, .useEncryptToDecrypt]
+    public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
 
     public enum Error: Swift.Error {
         /// Invalid IV
@@ -79,12 +88,13 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
     var didCalculateTag: ((Array<UInt8>) -> Void)?
 
     // 128 bit tag. Other possible tags 4,8,12,13,14,15,16
-    private static let tagSize = 16
+    fileprivate static let tagSize = 16
     // GCM nonce is 96-bits by default. It's the most effective length for the IV
     private static let nonceSize = 12
 
     // GCM is designed for 128-bit ciphers like AES (but not really for Blowfish). 64-bit mode is not implemented.
-    private let blockSize = 16 // 128 bit
+    let blockSize = 16 // 128 bit
+    let additionalBufferSize: Int
     private let iv: ArraySlice<UInt8>
     private let mode: GCM.Mode
     private var counter: UInt128
@@ -109,6 +119,7 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
         self.cipherOperation = cipherOperation
         self.iv = iv
         self.mode = mode
+        self.additionalBufferSize = mode.additionalBufferSize
         self.aad = aad
         self.expectedTag = expectedTag
         h = UInt128(cipherOperation(Array<UInt8>(repeating: 0, count: blockSize).slice)!) // empty block

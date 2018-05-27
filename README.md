@@ -1,34 +1,33 @@
 [![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
-[![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0%20%7C%204.1-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 
+[![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0%20%7C%204.1-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods&colorA=28a745&&colorB=4E4E4E)](https://cocoapods.org/pods/CryptoSwift)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat&colorA=28a745&&colorB=4E4E4E)](https://github.com/Carthage/Carthage)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg?style=flat&colorA=28a745&&colorB=4E4E4E)](https://github.com/apple/swift-package-manager)
 
-[![Twitter](https://img.shields.io/badge/twitter-@krzyzanowskim-blue.svg?style=flat&label=Contact&colorA=28a745&&colorB=4E4E4E)](http://twitter.com/krzyzanowskim)
+[![Twitter](https://img.shields.io/badge/Twitter-@krzyzanowskim-blue.svg?style=flat)](http://twitter.com/krzyzanowskim)
 
 # CryptoSwift
 
 Crypto related functions and helpers for [Swift](https://swift.org) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
-**Notice**: The master branch follows the latest currently released version of Swift. If you need an version for older version of Swift, you can specify it's version in your Podfile or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
+**Notice**: The `master` branch follows the latest currently released version of Swift. If you need an version for older version of Swift, you can specify it's version in your Podfile or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
 
-<hr />
+---
 
 If you find the project useful, please [support authors](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=92Z6U3LBHF9J4) to keep it alive.
 
-<hr />
+---
 
-# Table of Contents
-- [Requirements](#requirements)
-- [Features](#features)
-- [Contribution](#contribution)
-- [Installation](#installation)
-- [Swift versions](#swift-versions-support)
-- [Usage](#usage)
-- [Author](#author)
-- [License](#license)
-- [Changelog](#changelog)
+[Requirements](#requirements)
+| [Features](#features)
+| [Contribution](#contribution)
+| [Installation](#installation)
+| [Swift versions](#swift-versions-support)
+| [Usage](#usage)
+| [Author](#author)
+| [License](#license)
+| [Changelog](#changelog)
 
 ## Requirements
 Good mood
@@ -41,31 +40,31 @@ Good mood
 - iOS, macOS, AppleTV, watchOS, Linux support
 
 #### Hash (Digest)
-- [MD5](http://tools.ietf.org/html/rfc1321)
-- [SHA1](http://tools.ietf.org/html/rfc3174)
-- [SHA224](http://tools.ietf.org/html/rfc6234)
-- [SHA256](http://tools.ietf.org/html/rfc6234)
-- [SHA384](http://tools.ietf.org/html/rfc6234)
-- [SHA512](http://tools.ietf.org/html/rfc6234)
-- [SHA3](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
+  [MD5](http://tools.ietf.org/html/rfc1321)
+| [SHA1](http://tools.ietf.org/html/rfc3174)
+| [SHA224](http://tools.ietf.org/html/rfc6234)
+| [SHA256](http://tools.ietf.org/html/rfc6234)
+| [SHA384](http://tools.ietf.org/html/rfc6234)
+| [SHA512](http://tools.ietf.org/html/rfc6234)
+| [SHA3](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
 
 #### Cyclic Redundancy Check (CRC)
-- [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
-- [CRC32C](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
-- [CRC16](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
+  [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
+| [CRC32C](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
+| [CRC16](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
 
 #### Cipher
-- [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)
-- [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
-- [Rabbit](https://tools.ietf.org/html/rfc4503)
-- [Blowfish](https://www.schneier.com/academic/blowfish/)
+  [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)
+| [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
+| [Rabbit](https://tools.ietf.org/html/rfc4503)
+| [Blowfish](https://www.schneier.com/academic/blowfish/)
 
 #### Message authenticators
-- [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
-- [HMAC](https://www.ietf.org/rfc/rfc2104.txt) MD5, SHA1, SHA256
-- [CMAC](https://tools.ietf.org/html/rfc4493)
+  [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
+| [HMAC (MD5, SHA1, SHA256)](https://www.ietf.org/rfc/rfc2104.txt)
+| [CMAC](https://tools.ietf.org/html/rfc4493)
 
-#### Cipher block mode
+#### Cipher mode of operation
 - Electronic codebook ([ECB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_.28ECB.29))
 - Cipher-block chaining ([CBC](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher-block_chaining_.28CBC.29))
 - Propagating Cipher Block Chaining ([PCBC](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Propagating_Cipher_Block_Chaining_.28PCBC.29))
@@ -80,16 +79,20 @@ Good mood
 - [HKDF](https://tools.ietf.org/html/rfc5869) (HMAC-based Extract-and-Expand Key Derivation Function)
 
 #### Data padding
-- PKCS#5
-- [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
-- [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
-- No padding
+  PKCS#5
+| [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
+| [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
+| No padding
 
 #### Authenticated Encryption with Associated Data (AEAD)
 - [AEAD\_CHACHA20\_POLY1305](https://tools.ietf.org/html/rfc7539#section-2.8)
 
 ## Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
+
+## How do I get involved?
+
+You want to help, great! Go ahead and fork our repo, make your changes and send us a pull request.
 
 ## Contribution
 

@@ -11,7 +11,7 @@
 
 Crypto related functions and helpers for [Swift](https://swift.org) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
-**Notice**: The `master` branch follows the latest currently released version of Swift. If you need an version for older version of Swift, you can specify it's version in your Podfile or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
+**Note**: The `master` branch follows the latest currently released **version of Swift**. If you need an version for older version of Swift, you can specify it's version in your Podfile or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
 
 ---
 
@@ -24,7 +24,7 @@ If you find the project useful, please [support authors](https://www.paypal.com/
 | [Contribution](#contribution)
 | [Installation](#installation)
 | [Swift versions](#swift-versions-support)
-| [Usage](#usage)
+| [How-to](#how-to)
 | [Author](#author)
 | [License](#license)
 | [Changelog](#changelog)
@@ -187,7 +187,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 
 ---
  
-## Usage
+## How-to
 
 * [Basics (data types, conversion, ...)](#basics)
 * [Digest (MD5, SHA...)](#calculate-digest)
@@ -198,7 +198,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 * [ChaCha20](#chacha20)
 * [Rabbit](#rabbit)
 * [Blowfish](#blowfish)
-* [Advanced Encryption Standard (AES)](#aes)
+* [AES - Advanced Encryption Standard](#aes)
 * [AES-GCM](#aes-gcm)
 * [Authenticated Encryption with Associated Data (AEAD)](#aead)
 
@@ -459,7 +459,7 @@ do {
 ```
 
 
-Note: GCM instance is not intended to be reused. So you can't use the `GCM` from encoding, do decoding.
+**Note**: GCM instance is not intended to be reused. So you can't use the `GCM` from encoding, do decoding.
 
 ##### AEAD
 

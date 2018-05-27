@@ -20,7 +20,7 @@ public protocol Updatable {
     ///
     /// - parameter bytes: Bytes to process.
     /// - parameter isLast: Indicate if given chunk is the last one. No more updates after this call.
-    /// - returns: Processed data or empty array.
+    /// - returns: Processed partial result data or empty array.
     mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8>
 
     /// Update given bytes in chunks.
@@ -29,19 +29,8 @@ public protocol Updatable {
     ///   - bytes: Bytes to process.
     ///   - isLast: Indicate if given chunk is the last one. No more updates after this call.
     ///   - output: Resulting bytes callback.
-    /// - Returns: Processed data or empty array.
+    /// - Returns: Processed partial result data or empty array.
     mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool, output: (_ bytes: Array<UInt8>) -> Void) throws
-
-    /// Finish updates. This may apply padding.
-    /// - parameter bytes: Bytes to process
-    /// - returns: Processed data.
-    mutating func finish(withBytes bytes: ArraySlice<UInt8>) throws -> Array<UInt8>
-
-    /// Finish updates. This may apply padding.
-    /// - parameter bytes: Bytes to process
-    /// - parameter output: Resulting data
-    /// - returns: Processed data.
-    mutating func finish(withBytes bytes: ArraySlice<UInt8>, output: (_ bytes: Array<UInt8>) -> Void) throws
 }
 
 extension Updatable {
@@ -52,30 +41,6 @@ extension Updatable {
         }
     }
 
-    @discardableResult
-    public mutating func finish(withBytes bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
-        return try update(withBytes: bytes, isLast: true)
-    }
-
-    @discardableResult
-    public mutating func finish() throws -> Array<UInt8> {
-        return try update(withBytes: [], isLast: true)
-    }
-
-    public mutating func finish(withBytes bytes: ArraySlice<UInt8>, output: (_ bytes: Array<UInt8>) -> Void) throws {
-        let processed = try update(withBytes: bytes, isLast: true)
-        if !processed.isEmpty {
-            output(processed)
-        }
-    }
-
-    public mutating func finish(output: (Array<UInt8>) -> Void) throws {
-        try finish(withBytes: [], output: output)
-    }
-}
-
-extension Updatable {
-    @discardableResult
     public mutating func update(withBytes bytes: Array<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
         return try update(withBytes: bytes.slice, isLast: isLast)
     }
@@ -84,12 +49,46 @@ extension Updatable {
         return try update(withBytes: bytes.slice, isLast: isLast, output: output)
     }
 
-    @discardableResult
+    /// Finish updates. This may apply padding.
+    /// - parameter bytes: Bytes to process
+    /// - returns: Processed data.
+    public mutating func finish(withBytes bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
+        return try update(withBytes: bytes, isLast: true)
+    }
+
     public mutating func finish(withBytes bytes: Array<UInt8>) throws -> Array<UInt8> {
         return try finish(withBytes: bytes.slice)
     }
 
+
+    /// Finish updates. May add padding.
+    ///
+    /// - Returns: Processed data
+    /// - Throws: Error
+    public mutating func finish() throws -> Array<UInt8> {
+        return try update(withBytes: [], isLast: true)
+    }
+
+    /// Finish updates. This may apply padding.
+    /// - parameter bytes: Bytes to process
+    /// - parameter output: Resulting data
+    /// - returns: Processed data.
+    public mutating func finish(withBytes bytes: ArraySlice<UInt8>, output: (_ bytes: Array<UInt8>) -> Void) throws {
+        let processed = try update(withBytes: bytes, isLast: true)
+        if !processed.isEmpty {
+            output(processed)
+        }
+    }
+
     public mutating func finish(withBytes bytes: Array<UInt8>, output: (_ bytes: Array<UInt8>) -> Void) throws {
         return try finish(withBytes: bytes.slice, output: output)
+    }
+
+    /// Finish updates. May add padding.
+    ///
+    /// - Parameter output: Processed data
+    /// - Throws: Error
+    public mutating func finish(output: (Array<UInt8>) -> Void) throws {
+        try finish(withBytes: [], output: output)
     }
 }

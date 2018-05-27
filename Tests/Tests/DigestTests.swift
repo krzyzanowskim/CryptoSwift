@@ -232,7 +232,7 @@ final class DigestTests: XCTestCase {
 
             var sha1Partial = SHA1()
             for batch in input.batched(by: 17) {
-                try sha1Partial.update(withBytes: batch.bytes)
+                _ = try sha1Partial.update(withBytes: batch.bytes)
             }
             let sha1Result = try sha1Partial.finish()
             XCTAssertEqual(sha1Once, sha1Result)
@@ -242,7 +242,7 @@ final class DigestTests: XCTestCase {
 
             var sha2Partial = SHA2(variant: .sha224)
             for batch in input.batched(by: 17) {
-                try sha2Partial.update(withBytes: batch.bytes)
+                _ = try sha2Partial.update(withBytes: batch.bytes)
             }
             let sha2Result = try sha2Partial.finish()
             XCTAssertEqual(sha2Once, sha2Result)
@@ -252,7 +252,7 @@ final class DigestTests: XCTestCase {
 
             var sha3Partial = SHA3(variant: .sha224)
             for batch in input.batched(by: 17) {
-                try sha3Partial.update(withBytes: batch.bytes)
+                _ = try sha3Partial.update(withBytes: batch.bytes)
             }
             let sha3Result = try sha3Partial.finish()
             XCTAssertEqual(sha3Once, sha3Result)

@@ -16,9 +16,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7595C1492072E48C00EA1A5F"
-               BuildableName = "TestsPerformance.xctest"
-               BlueprintName = "TestsPerformance"
+               BlueprintIdentifier = "7564F04E2072EAEB00CA5A96"
+               BuildableName = "TestsPerformance-iOS.xctest"
+               BlueprintName = "TestsPerformance-iOS"
                ReferencedContainer = "container:CryptoSwift.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -40,7 +40,7 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Test"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"

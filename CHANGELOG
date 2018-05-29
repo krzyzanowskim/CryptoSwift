@@ -1,6 +1,6 @@
 0.10.0
 - API: BlockMode is no longer an enum. Please migrate to eg. CBC() etc...
-- Adds AES-GCM support.
+- Adds AES-GCM support. #97 - Feature sponsored by GesundheitsCloud (http://www.gesundheitscloud.de/)
 - Adds CRC32c support.
 - Improves AES variant validation.
 - Fixes empty password in PBKDF2.

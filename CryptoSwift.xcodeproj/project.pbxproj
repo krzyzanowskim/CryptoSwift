@@ -17,22 +17,6 @@
 		75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */; };
 		751EE9781F93996100161FFC /* AES.Cryptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751EE9771F93996100161FFC /* AES.Cryptors.swift */; };
 		75211F95207249D8004E41F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75211F94207249D8004E41F8 /* AppDelegate.swift */; };
-		75211FB520724A10004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FA520724A0F004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig */; };
-		75211FB620724A10004E41F8 /* Project-Test.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FA620724A0F004E41F8 /* Project-Test.xcconfig */; };
-		75211FB720724A10004E41F8 /* Tests-Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FA720724A0F004E41F8 /* Tests-Debug.xcconfig */; };
-		75211FB820724A10004E41F8 /* CryptoSwift-Shared.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FA820724A0F004E41F8 /* CryptoSwift-Shared.xcconfig */; };
-		75211FB920724A10004E41F8 /* CryptoSwift-TestHostApp-Shared.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FA920724A0F004E41F8 /* CryptoSwift-TestHostApp-Shared.xcconfig */; };
-		75211FBA20724A10004E41F8 /* Project-Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FAA20724A0F004E41F8 /* Project-Release.xcconfig */; };
-		75211FBB20724A10004E41F8 /* CryptoSwift-TestHostApp-Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FAB20724A0F004E41F8 /* CryptoSwift-TestHostApp-Debug.xcconfig */; };
-		75211FBC20724A10004E41F8 /* CryptoSwift-Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FAC20724A0F004E41F8 /* CryptoSwift-Release.xcconfig */; };
-		75211FBD20724A10004E41F8 /* Tests-Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FAD20724A0F004E41F8 /* Tests-Release.xcconfig */; };
-		75211FBE20724A10004E41F8 /* Tests-Shared.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FAE20724A10004E41F8 /* Tests-Shared.xcconfig */; };
-		75211FBF20724A10004E41F8 /* CryptoSwift-Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FAF20724A10004E41F8 /* CryptoSwift-Debug.xcconfig */; };
-		75211FC020724A10004E41F8 /* Project-Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FB020724A10004E41F8 /* Project-Debug.xcconfig */; };
-		75211FC120724A10004E41F8 /* Tests-Test.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FB120724A10004E41F8 /* Tests-Test.xcconfig */; };
-		75211FC220724A10004E41F8 /* Project-Shared.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FB220724A10004E41F8 /* Project-Shared.xcconfig */; };
-		75211FC320724A10004E41F8 /* CryptoSwift-TestHostApp-Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FB320724A10004E41F8 /* CryptoSwift-TestHostApp-Release.xcconfig */; };
-		75211FC420724A10004E41F8 /* CryptoSwift-Test.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 75211FB420724A10004E41F8 /* CryptoSwift-Test.xcconfig */; };
 		7523742D2083C61D0016D662 /* GCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7523742C2083C61C0016D662 /* GCM.swift */; };
 		7529366A20683DFC00195874 /* AEADChaCha20Poly1305.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7529366920683DFC00195874 /* AEADChaCha20Poly1305.swift */; };
 		752BED9D208C120D00FC4743 /* Blowfish+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52541EE8B6CA0048EB3B /* Blowfish+Foundation.swift */; };
@@ -763,7 +747,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Marcin Krzyzanowski";
 				TargetAttributes = {
 					75211F91207249D8004E41F8 = {
@@ -825,22 +809,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75211FC020724A10004E41F8 /* Project-Debug.xcconfig in Resources */,
-				75211FB920724A10004E41F8 /* CryptoSwift-TestHostApp-Shared.xcconfig in Resources */,
-				75211FB820724A10004E41F8 /* CryptoSwift-Shared.xcconfig in Resources */,
-				75211FC420724A10004E41F8 /* CryptoSwift-Test.xcconfig in Resources */,
-				75211FBA20724A10004E41F8 /* Project-Release.xcconfig in Resources */,
-				75211FB620724A10004E41F8 /* Project-Test.xcconfig in Resources */,
-				75211FBF20724A10004E41F8 /* CryptoSwift-Debug.xcconfig in Resources */,
-				75211FBD20724A10004E41F8 /* Tests-Release.xcconfig in Resources */,
-				75211FC220724A10004E41F8 /* Project-Shared.xcconfig in Resources */,
-				75211FC120724A10004E41F8 /* Tests-Test.xcconfig in Resources */,
-				75211FC320724A10004E41F8 /* CryptoSwift-TestHostApp-Release.xcconfig in Resources */,
-				75211FB520724A10004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig in Resources */,
-				75211FB720724A10004E41F8 /* Tests-Debug.xcconfig in Resources */,
-				75211FBE20724A10004E41F8 /* Tests-Shared.xcconfig in Resources */,
-				75211FBB20724A10004E41F8 /* CryptoSwift-TestHostApp-Debug.xcconfig in Resources */,
-				75211FBC20724A10004E41F8 /* CryptoSwift-Release.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1121,7 +1089,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FAF20724A10004E41F8 /* CryptoSwift-Debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				DEVELOPMENT_TEAM = HA4H7JURM8;
 			};
 			name = Debug;
@@ -1130,7 +1098,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FAC20724A0F004E41F8 /* CryptoSwift-Release.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				DEVELOPMENT_TEAM = HA4H7JURM8;
 			};
 			name = Release;
@@ -1208,7 +1176,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FB420724A10004E41F8 /* CryptoSwift-Test.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				DEVELOPMENT_TEAM = HA4H7JURM8;
 			};
 			name = Test;

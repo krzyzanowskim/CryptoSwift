@@ -29,7 +29,7 @@ public struct CBC: BlockMode {
         self.iv = iv
     }
 
-    public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> BlockModeWorker {
+    public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
         if iv.count != blockSize {
             throw Error.invalidInitializationVector
         }

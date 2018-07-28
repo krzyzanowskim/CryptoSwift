@@ -63,14 +63,13 @@
 		75EC52811EE8B8130048EB3B /* BlockCipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC523D1EE8B6CA0048EB3B /* BlockCipher.swift */; };
 		75EC52821EE8B8170048EB3B /* BlockMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC523F1EE8B6CA0048EB3B /* BlockMode.swift */; };
 		75EC52831EE8B8170048EB3B /* BlockModeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52401EE8B6CA0048EB3B /* BlockModeOptions.swift */; };
-		75EC52841EE8B8170048EB3B /* BlockModeWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52411EE8B6CA0048EB3B /* BlockModeWorker.swift */; };
+		75EC52841EE8B8170048EB3B /* CipherModeWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52411EE8B6CA0048EB3B /* CipherModeWorker.swift */; };
 		75EC52851EE8B8170048EB3B /* CBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52421EE8B6CA0048EB3B /* CBC.swift */; };
 		75EC52861EE8B8170048EB3B /* CFB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52431EE8B6CA0048EB3B /* CFB.swift */; };
 		75EC52871EE8B8170048EB3B /* CTR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52441EE8B6CA0048EB3B /* CTR.swift */; };
 		75EC52881EE8B8170048EB3B /* ECB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52451EE8B6CA0048EB3B /* ECB.swift */; };
 		75EC52891EE8B8170048EB3B /* OFB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52461EE8B6CA0048EB3B /* OFB.swift */; };
 		75EC528A1EE8B8170048EB3B /* PCBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52471EE8B6CA0048EB3B /* PCBC.swift */; };
-		75EC528B1EE8B8170048EB3B /* RandomAccessBlockModeWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52481EE8B6CA0048EB3B /* RandomAccessBlockModeWorker.swift */; };
 		75EC528D1EE8B81A0048EB3B /* ChaCha20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC524A1EE8B6CA0048EB3B /* ChaCha20.swift */; };
 		75EC528E1EE8B81A0048EB3B /* Checksum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC524B1EE8B6CA0048EB3B /* Checksum.swift */; };
 		75EC528F1EE8B81A0048EB3B /* Cipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC524C1EE8B6CA0048EB3B /* Cipher.swift */; };
@@ -295,14 +294,13 @@
 		75EC523D1EE8B6CA0048EB3B /* BlockCipher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockCipher.swift; sourceTree = "<group>"; };
 		75EC523F1EE8B6CA0048EB3B /* BlockMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockMode.swift; sourceTree = "<group>"; };
 		75EC52401EE8B6CA0048EB3B /* BlockModeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockModeOptions.swift; sourceTree = "<group>"; };
-		75EC52411EE8B6CA0048EB3B /* BlockModeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockModeWorker.swift; sourceTree = "<group>"; };
+		75EC52411EE8B6CA0048EB3B /* CipherModeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherModeWorker.swift; sourceTree = "<group>"; };
 		75EC52421EE8B6CA0048EB3B /* CBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBC.swift; sourceTree = "<group>"; };
 		75EC52431EE8B6CA0048EB3B /* CFB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFB.swift; sourceTree = "<group>"; };
 		75EC52441EE8B6CA0048EB3B /* CTR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTR.swift; sourceTree = "<group>"; };
 		75EC52451EE8B6CA0048EB3B /* ECB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECB.swift; sourceTree = "<group>"; };
 		75EC52461EE8B6CA0048EB3B /* OFB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OFB.swift; sourceTree = "<group>"; };
 		75EC52471EE8B6CA0048EB3B /* PCBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCBC.swift; sourceTree = "<group>"; };
-		75EC52481EE8B6CA0048EB3B /* RandomAccessBlockModeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomAccessBlockModeWorker.swift; sourceTree = "<group>"; };
 		75EC52491EE8B6CA0048EB3B /* Blowfish.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blowfish.swift; sourceTree = "<group>"; };
 		75EC524A1EE8B6CA0048EB3B /* ChaCha20.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChaCha20.swift; sourceTree = "<group>"; };
 		75EC524B1EE8B6CA0048EB3B /* Checksum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checksum.swift; sourceTree = "<group>"; };
@@ -592,7 +590,7 @@
 			children = (
 				75EC523F1EE8B6CA0048EB3B /* BlockMode.swift */,
 				75EC52401EE8B6CA0048EB3B /* BlockModeOptions.swift */,
-				75EC52411EE8B6CA0048EB3B /* BlockModeWorker.swift */,
+				75EC52411EE8B6CA0048EB3B /* CipherModeWorker.swift */,
 				75EC52421EE8B6CA0048EB3B /* CBC.swift */,
 				75EC52431EE8B6CA0048EB3B /* CFB.swift */,
 				75EC52441EE8B6CA0048EB3B /* CTR.swift */,
@@ -600,7 +598,6 @@
 				75EC52451EE8B6CA0048EB3B /* ECB.swift */,
 				75EC52461EE8B6CA0048EB3B /* OFB.swift */,
 				75EC52471EE8B6CA0048EB3B /* PCBC.swift */,
-				75EC52481EE8B6CA0048EB3B /* RandomAccessBlockModeWorker.swift */,
 			);
 			path = BlockMode;
 			sourceTree = "<group>";
@@ -884,7 +881,7 @@
 				75EC52B41EE8B83D0048EB3B /* UInt32+Extension.swift in Sources */,
 				75EC52911EE8B81A0048EB3B /* Cryptors.swift in Sources */,
 				75EC52881EE8B8170048EB3B /* ECB.swift in Sources */,
-				75EC52841EE8B8170048EB3B /* BlockModeWorker.swift in Sources */,
+				75EC52841EE8B8170048EB3B /* CipherModeWorker.swift in Sources */,
 				75EC52A41EE8B8290048EB3B /* Operators.swift in Sources */,
 				75EC529A1EE8B8200048EB3B /* HMAC+Foundation.swift in Sources */,
 				75EC52B21EE8B83D0048EB3B /* String+Extension.swift in Sources */,
@@ -905,7 +902,6 @@
 				75EC52891EE8B8170048EB3B /* OFB.swift in Sources */,
 				75EC52831EE8B8170048EB3B /* BlockModeOptions.swift in Sources */,
 				751EE9781F93996100161FFC /* AES.Cryptors.swift in Sources */,
-				75EC528B1EE8B8170048EB3B /* RandomAccessBlockModeWorker.swift in Sources */,
 				75EC527D1EE8B8130048EB3B /* Array+Extension.swift in Sources */,
 				75D7AF38208BFB1600D22BEB /* UInt128.swift in Sources */,
 				75EC52B31EE8B83D0048EB3B /* UInt16+Extension.swift in Sources */,

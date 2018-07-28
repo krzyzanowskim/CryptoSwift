@@ -24,36 +24,37 @@ public struct CTR: BlockMode {
 
     public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
     private let iv: Array<UInt8>
+    private let counter: Int
 
-    public init(iv: Array<UInt8>) {
+    public init(iv: Array<UInt8>, counter: Int = 0) {
         self.iv = iv
+        self.counter = counter
     }
 
-    public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> BlockModeWorker {
+    public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
         if iv.count != blockSize {
             throw Error.invalidInitializationVector
         }
 
-        return CTRModeWorker(blockSize: blockSize, iv: iv.slice, cipherOperation: cipherOperation)
+        return CTRModeWorker(blockSize: blockSize, iv: iv.slice, counter: counter, cipherOperation: cipherOperation)
     }
 }
 
 struct CTRModeWorker: RandomAccessBlockModeWorker {
     let cipherOperation: CipherOperationOnBlock
-    let blockSize: Int
     let additionalBufferSize: Int = 0
     private let iv: ArraySlice<UInt8>
     var counter: UInt = 0
 
-    init(blockSize: Int, iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
-        self.blockSize = blockSize
+    init(blockSize: Int, iv: ArraySlice<UInt8>, counter: Int, cipherOperation: @escaping CipherOperationOnBlock) {
         self.iv = iv
+        self.counter = UInt(counter)
         self.cipherOperation = cipherOperation
     }
 
     mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
         let nonce = buildNonce(iv, counter: UInt64(counter))
-        counter = counter + 1
+        defer { counter += 1 }
 
         guard let ciphertext = cipherOperation(nonce.slice) else {
             return Array(plaintext)

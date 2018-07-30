@@ -120,7 +120,7 @@ final class AESTests: XCTestCase {
             ciphertext += try encryptor.finish()
             XCTAssertEqual(try aes.encrypt(plaintext.bytes), ciphertext, "encryption failed")
         } catch {
-            XCTAssert(false, "\(error)")
+            XCTFail("\(error)")
         }
     }
 

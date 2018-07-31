@@ -13,14 +13,10 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-/// Random access cryptor
-public protocol Cryptor { }
-
-public protocol RandomAccessCryptor: Cryptor {
+/// Cryptor (Encryptor or Decryptor)
+public protocol Cryptor {
     /// Seek to position in file, if block mode allows random access.
     ///
     /// - parameter to: new value of counter
-    ///
-    /// - returns: true if seek succeed
-    @discardableResult mutating func seek(to: Int) -> Bool
+    mutating func seek(to: Int) throws
 }

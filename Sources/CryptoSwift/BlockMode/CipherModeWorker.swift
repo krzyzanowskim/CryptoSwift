@@ -13,15 +13,28 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-public protocol BlockModeWorker {
+public protocol CipherModeWorker {
     var cipherOperation: CipherOperationOnBlock { get }
-    var blockSize: Int { get }
+
     // Additional space needed when incrementally process data
     // eg. for GCM combined mode
     var additionalBufferSize: Int { get }
 
     mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8>
     mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8>
+}
+
+public protocol BlockModeWorker: CipherModeWorker {
+    var blockSize: Int { get }
+}
+
+public protocol CounterModeWorker: CipherModeWorker {
+    associatedtype Counter
+    var counter: Counter { get set }
+}
+
+public protocol StreamModeWorker: CipherModeWorker {
+    mutating func seek(to position: Int) throws
 }
 
 // TODO: remove and merge with BlockModeWorker

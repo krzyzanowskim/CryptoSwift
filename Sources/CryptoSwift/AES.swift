@@ -518,7 +518,7 @@ extension AES: Cipher {
             throw Error.dataPaddingRequired
         }
 
-        let oneTimeCryptor = try makeDecryptor()
+        var oneTimeCryptor = try makeDecryptor()
         let chunks = bytes.batched(by: AES.blockSize)
         if chunks.isEmpty {
             throw Error.invalidData

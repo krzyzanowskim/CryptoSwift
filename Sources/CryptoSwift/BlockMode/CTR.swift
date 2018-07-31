@@ -14,7 +14,6 @@
 //
 
 //  Counter (CTR)
-//
 
 public struct CTR: StreamMode {
     public enum Error: Swift.Error {
@@ -40,10 +39,12 @@ public struct CTR: StreamMode {
     }
 }
 
-struct CTRModeWorker: RandomAccessCipherModeWorker {
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+struct CTRModeWorker: StreamModeWorker, CounterModeWorker {
     typealias Counter = CTRCounter
 
-    class CTRCounter {
+    final class CTRCounter {
         private let constPrefix: Array<UInt8>
         private var value: UInt64
         //TODO: make it an updatable value, computing is too slow
@@ -55,7 +56,7 @@ struct CTRModeWorker: RandomAccessCipherModeWorker {
             let halfIndex = initialValue.startIndex.advanced(by: initialValue.count / 2)
             constPrefix = Array(initialValue[initialValue.startIndex..<halfIndex])
 
-            let suffixBytes = Array(initialValue[halfIndex..<initialValue.endIndex])
+            let suffixBytes = Array(initialValue[halfIndex...])
             value = UInt64(bytes: suffixBytes)
         }
 
@@ -68,26 +69,46 @@ struct CTRModeWorker: RandomAccessCipherModeWorker {
         }
     }
 
-
     let cipherOperation: CipherOperationOnBlock
     let additionalBufferSize: Int = 0
-    var counter: Counter
+    let counter: Counter
+
+    private let blockSize: Int
+
+    // The same keystream is used for the block length plaintext
+    // As new data is added, keystream suffix is used to xor operation.
+    private var keystream: Array<UInt8>
+    private var keystreamPosIdx = 0
 
     init(blockSize: Int, iv: ArraySlice<UInt8>, counter: Int, cipherOperation: @escaping CipherOperationOnBlock) {
-        self.counter = Counter(nonce: Array(iv), startAt: counter)
         self.cipherOperation = cipherOperation
+        self.blockSize = blockSize
+
+        // the first keystream is calculated from the nonce = initial value of counter
+        self.counter = Counter(nonce: Array(iv), startAt: counter)
+        self.keystream = Array(cipherOperation(self.counter.bytes.slice)!)
     }
 
+    // plaintext is at most blockSize long
     mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
-        defer {
-            counter += 1
+        var result = Array<UInt8>(reserveCapacity: plaintext.count)
+
+        var processed = 0
+        while processed < plaintext.count {
+            // Update keystream
+            if keystreamPosIdx == blockSize {
+                counter += 1
+                keystream = Array(cipherOperation(counter.bytes.slice)!)
+                keystreamPosIdx = 0
+            }
+
+            let xored: Array<UInt8> = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...])
+            keystreamPosIdx += xored.count
+            processed += xored.count
+            result += xored
         }
 
-        guard let ciphertext = cipherOperation(counter.bytes.slice) else {
-            return Array(plaintext)
-        }
-
-        return xor(plaintext, ciphertext)
+        return result
     }
 
     mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {

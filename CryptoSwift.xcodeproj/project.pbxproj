@@ -51,6 +51,8 @@
 		7595C15C2072E5B900EA1A5F /* ExtensionsTestPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F420729069006688F8 /* ExtensionsTestPerf.swift */; };
 		7595C15D2072E5B900EA1A5F /* PBKDFPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F6207290F8006688F8 /* PBKDFPerf.swift */; };
 		7595C1602072E64900EA1A5F /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
+		75B3ED77210F9DF7005D4ADA /* BlockDecryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3ED76210F9DF7005D4ADA /* BlockDecryptor.swift */; };
+		75B3ED79210FA016005D4ADA /* Encryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3ED78210FA016005D4ADA /* Encryptor.swift */; };
 		75B601EB197D6A6C0009B53D /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
 		75C2E76D1D55F097003D2BCA /* Access.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C2E76C1D55F097003D2BCA /* Access.swift */; };
 		75D7AF38208BFB1600D22BEB /* UInt128.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D7AF37208BFB1600D22BEB /* UInt128.swift */; };
@@ -284,6 +286,8 @@
 		7595C14A2072E48C00EA1A5F /* TestsPerformance-Mac.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TestsPerformance-Mac.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7595C14C2072E48C00EA1A5F /* TestsPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsPerformance.swift; sourceTree = "<group>"; };
 		7595C14E2072E48C00EA1A5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		75B3ED76210F9DF7005D4ADA /* BlockDecryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockDecryptor.swift; sourceTree = "<group>"; };
+		75B3ED78210FA016005D4ADA /* Encryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encryptor.swift; sourceTree = "<group>"; };
 		75C2E76C1D55F097003D2BCA /* Access.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Access.swift; sourceTree = "<group>"; };
 		75D7AF37208BFB1600D22BEB /* UInt128.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UInt128.swift; sourceTree = "<group>"; };
 		75EC52381EE8B6CA0048EB3B /* AES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AES.swift; sourceTree = "<group>"; };
@@ -581,6 +585,8 @@
 				75EC52781EE8B6CA0048EB3B /* Utils.swift */,
 				75EC52791EE8B6CA0048EB3B /* ZeroPadding.swift */,
 				754310432050111A003FB1DF /* CompactMap.swift */,
+				75B3ED76210F9DF7005D4ADA /* BlockDecryptor.swift */,
+				75B3ED78210FA016005D4ADA /* Encryptor.swift */,
 			);
 			path = CryptoSwift;
 			sourceTree = "<group>";
@@ -868,6 +874,7 @@
 				75EC52821EE8B8170048EB3B /* BlockMode.swift in Sources */,
 				75EC52AE1EE8B83D0048EB3B /* SecureBytes.swift in Sources */,
 				75EC528F1EE8B81A0048EB3B /* Cipher.swift in Sources */,
+				75B3ED79210FA016005D4ADA /* Encryptor.swift in Sources */,
 				75EC52A01EE8B8290048EB3B /* Int+Extension.swift in Sources */,
 				75EC52B01EE8B83D0048EB3B /* SHA2.swift in Sources */,
 				752BED9D208C120D00FC4743 /* Blowfish+Foundation.swift in Sources */,
@@ -914,6 +921,7 @@
 				75EC529D1EE8B8200048EB3B /* Utils+Foundation.swift in Sources */,
 				75EC527E1EE8B8130048EB3B /* Authenticator.swift in Sources */,
 				75EC52AB1EE8B83D0048EB3B /* Rabbit.swift in Sources */,
+				75B3ED77210F9DF7005D4ADA /* BlockDecryptor.swift in Sources */,
 				75EC529C1EE8B8200048EB3B /* String+FoundationExtension.swift in Sources */,
 				75EC52B81EE8B83D0048EB3B /* Utils.swift in Sources */,
 				75EC52981EE8B8200048EB3B /* Array+Foundation.swift in Sources */,

@@ -254,7 +254,7 @@ extension ChaCha20: Cipher {
 // MARK: Encryptor
 
 extension ChaCha20 {
-    public struct Encryptor: Cryptor, Updatable {
+    public struct ChaChaEncryptor: Cryptor, Updatable {
         private var accumulated = Array<UInt8>()
         private let chacha: ChaCha20
 
@@ -281,7 +281,7 @@ extension ChaCha20 {
 // MARK: Decryptor
 
 extension ChaCha20 {
-    public struct Decryptor: Cryptor, Updatable {
+    public struct ChaChaDecryptor: Cryptor, Updatable {
         private var accumulated = Array<UInt8>()
 
         private var offset: Int = 0
@@ -326,11 +326,13 @@ extension ChaCha20 {
 // MARK: Cryptors
 
 extension ChaCha20: Cryptors {
-    public func makeEncryptor() -> ChaCha20.Encryptor {
-        return Encryptor(chacha: self)
+    //TODO: Use BlockEncryptor/BlockDecryptor
+    
+    public func makeEncryptor() -> Cryptor & Updatable {
+        return ChaCha20.ChaChaEncryptor(chacha: self)
     }
 
-    public func makeDecryptor() -> ChaCha20.Decryptor {
-        return Decryptor(chacha: self)
+    public func makeDecryptor() -> Cryptor & Updatable {
+        return ChaCha20.ChaChaDecryptor(chacha: self)
     }
 }

@@ -28,10 +28,12 @@ public protocol BlockModeWorker: CipherModeWorker {
     var blockSize: Int { get }
 }
 
-protocol RandomAccessCipherModeWorker: CipherModeWorker {
-     associatedtype Counter
-     var counter: Counter { set get }
+public protocol CounterModeWorker: CipherModeWorker {
+    associatedtype Counter
+    var counter: Counter { get }
 }
+
+public protocol StreamModeWorker: CipherModeWorker { }
 
 // TODO: remove and merge with BlockModeWorker
 public protocol BlockModeWorkerFinalizing: BlockModeWorker {

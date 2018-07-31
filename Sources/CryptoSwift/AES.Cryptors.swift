@@ -18,7 +18,10 @@
 extension AES: Cryptors {
     public func makeEncryptor() throws -> Cryptor & Updatable {
         let worker = try blockMode.worker(blockSize: AES.blockSize, cipherOperation: encrypt)
-        return try Encryptor(blockSize: AES.blockSize, padding: padding, worker)
+        if worker is StreamModeWorker {
+            return try StreamEncryptor(blockSize: AES.blockSize, padding: padding, worker)
+        }
+        return try BlockEncryptor(blockSize: AES.blockSize, padding: padding, worker)
     }
 
     public func makeDecryptor() throws -> Cryptor & Updatable {

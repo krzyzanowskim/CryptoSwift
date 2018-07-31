@@ -11,33 +11,24 @@
 //  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
-final class Encryptor: Cryptor, Updatable {
+
+final class StreamEncryptor: Cryptor, Updatable {
     private let blockSize: Int
     private var worker: CipherModeWorker
     private let padding: Padding
     // Accumulated bytes. Not all processed bytes.
     private var accumulated = Array<UInt8>(reserveCapacity: 16)
 
-    private let isStream: Bool
     private var lastBlockRemainder = 0
 
     init(blockSize: Int, padding: Padding, _ worker: CipherModeWorker) throws {
         self.blockSize = blockSize
         self.padding = padding
         self.worker = worker
-        self.isStream = worker is StreamModeWorker
     }
 
     // MARK: Updatable
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8> {
-        if isStream {
-            return try self.updateStream(withBytes: bytes, isLast: isLast)
-        } else {
-            return try self.updateBlocks(withBytes: bytes, isLast: isLast)
-        }
-    }
-
-    private func updateStream(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8> {
         accumulated = Array(bytes)
         if isLast {
             // CTR doesn't need padding. Really. Add padding to the last block if really want. but... don't.
@@ -57,27 +48,7 @@ final class Encryptor: Cryptor, Updatable {
         return encrypted
     }
 
-    private func updateBlocks(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8> {
-        accumulated += bytes
-
-        if isLast {
-            accumulated = padding.add(to: accumulated, blockSize: blockSize)
-        }
-
-        var encrypted = Array<UInt8>(reserveCapacity: accumulated.count)
-        for chunk in accumulated.batched(by: blockSize) {
-            if isLast || chunk.count == blockSize {
-                encrypted += worker.encrypt(block: chunk)
-            }
-        }
-
-        // Stream encrypts all, so it removes all elements
-        accumulated.removeFirst(encrypted.count)
-
-        if var finalizingWorker = worker as? BlockModeWorkerFinalizing, isLast == true {
-            encrypted = try finalizingWorker.finalize(encrypt: encrypted.slice)
-        }
-
-        return encrypted
+    func seek(to: Int) throws {
+        fatalError("Not supported")
     }
 }

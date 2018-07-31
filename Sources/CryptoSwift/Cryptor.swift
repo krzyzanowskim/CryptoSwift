@@ -14,14 +14,9 @@
 //
 
 /// Cryptor (Encryptor or Decryptor)
-public protocol Cryptor { }
-
-/// Random access cryptor
-public protocol RandomAccessCryptor: Cryptor {
+public protocol Cryptor {
     /// Seek to position in file, if block mode allows random access.
     ///
     /// - parameter to: new value of counter
-    ///
-    /// - returns: true if seek succeed
-    /// @discardableResult mutating func seek(to: Int) -> Bool
+    mutating func seek(to: Int) throws
 }

@@ -246,45 +246,46 @@ final class AESTests: XCTestCase {
     }
 
     // https://github.com/krzyzanowskim/CryptoSwift/pull/290
-//    func testAESDecryptCTRSeek() {
-//        let key: Array<UInt8> = [0x52, 0x72, 0xb5, 0x9c, 0xab, 0x07, 0xc5, 0x01, 0x11, 0x7a, 0x39, 0xb6, 0x10, 0x35, 0x87, 0x02]
-//        let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01]
-//        var plaintext: Array<UInt8> = Array<UInt8>(repeating: 0, count: 6000)
-//
-//        for i in 0..<plaintext.count / 6 {
-//            let s = String(format: "%05d", i).bytes
-//            plaintext[i * 6 + 0] = s[0]
-//            plaintext[i * 6 + 1] = s[1]
-//            plaintext[i * 6 + 2] = s[2]
-//            plaintext[i * 6 + 3] = s[3]
-//            plaintext[i * 6 + 4] = s[4]
-//            plaintext[i * 6 + 5] = "|".utf8.first!
-//        }
-//
-//        let aes = try! AES(key: key, blockMode: CTR(iv: iv), padding: .noPadding)
-//        let encrypted = try! aes.encrypt(plaintext)
-//
-//        var decryptor = try! aes.makeDecryptor()
-//        decryptor.seek(to: 2)
-//        var part1 = try! decryptor.update(withBytes: Array(encrypted[2..<5]))
-//        part1 += try! decryptor.finish()
-//        XCTAssertEqual(part1, Array(plaintext[2..<5]), "seek decryption failed")
-//
-//        decryptor.seek(to: 1000)
-//        var part2 = try! decryptor.update(withBytes: Array(encrypted[1000..<1200]))
-//        part2 += try! decryptor.finish()
-//        XCTAssertEqual(part2, Array(plaintext[1000..<1200]), "seek decryption failed")
-//
-//        decryptor.seek(to: 5500)
-//        var part3 = try! decryptor.update(withBytes: Array(encrypted[5500..<6000]))
-//        part3 += try! decryptor.finish()
-//        XCTAssertEqual(part3, Array(plaintext[5500..<6000]), "seek decryption failed")
-//
-//        decryptor.seek(to: 0)
-//        var part4 = try! decryptor.update(withBytes: Array(encrypted[0..<80]))
-//        part4 += try! decryptor.finish()
-//        XCTAssertEqual(part4, Array(plaintext[0..<80]), "seek decryption failed")
-//    }
+    func testAESDecryptCTRSeek() {
+        let key: Array<UInt8> = [0x52, 0x72, 0xb5, 0x9c, 0xab, 0x07, 0xc5, 0x01, 0x11, 0x7a, 0x39, 0xb6, 0x10, 0x35, 0x87, 0x02]
+        let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x00, 0x01, 0x02, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01]
+        var plaintext: Array<UInt8> = Array<UInt8>(repeating: 0, count: 6000)
+
+        for i in 0..<plaintext.count / 6 {
+            let s = String(format: "%05d", i).bytes
+            plaintext[i * 6 + 0] = s[0]
+            plaintext[i * 6 + 1] = s[1]
+            plaintext[i * 6 + 2] = s[2]
+            plaintext[i * 6 + 3] = s[3]
+            plaintext[i * 6 + 4] = s[4]
+            plaintext[i * 6 + 5] = "|".utf8.first!
+        }
+
+        var aes = try! AES(key: key, blockMode: CTR(iv: iv), padding: .noPadding)
+        let encrypted = try! aes.encrypt(plaintext)
+
+        aes = try! AES(key: key, blockMode: CTR(iv: iv), padding: .noPadding)
+        var decryptor = try! aes.makeDecryptor()
+        try! decryptor.seek(to: 2)
+        var part1 = try! decryptor.update(withBytes: Array(encrypted[2..<5]))
+        part1 += try! decryptor.finish()
+        XCTAssertEqual(part1, Array(plaintext[2..<5]), "seek decryption failed")
+
+        try! decryptor.seek(to: 1000)
+        var part2 = try! decryptor.update(withBytes: Array(encrypted[1000..<1010]))
+        part2 += try! decryptor.finish()
+        XCTAssertEqual(part2, Array(plaintext[1000..<1010]), "seek decryption failed")
+
+        try! decryptor.seek(to: 5500)
+        var part3 = try! decryptor.update(withBytes: Array(encrypted[5500..<6000]))
+        part3 += try! decryptor.finish()
+        XCTAssertEqual(part3, Array(plaintext[5500..<6000]), "seek decryption failed")
+
+        try! decryptor.seek(to: 0)
+        var part4 = try! decryptor.update(withBytes: Array(encrypted[0..<80]))
+        part4 += try! decryptor.finish()
+        XCTAssertEqual(part4, Array(plaintext[0..<80]), "seek decryption failed")
+    }
 
     // https://github.com/krzyzanowskim/CryptoSwift/pull/289
     func testAESEncryptCTRIrregularLengthIncrementalUpdate() {
@@ -593,7 +594,7 @@ extension AESTests {
             ("testAESEncryptCTR", testAESEncryptCTR),
             ("testAESEncryptCTRZeroPadding", testAESEncryptCTRZeroPadding),
             ("testAESEncryptCTRIrregularLength", testAESEncryptCTRIrregularLength),
-//            ("testAESDecryptCTRSeek", testAESDecryptCTRSeek),
+            ("testAESDecryptCTRSeek", testAESDecryptCTRSeek),
             ("testAESEncryptCTRIrregularLengthIncrementalUpdate", testAESEncryptCTRIrregularLengthIncrementalUpdate),
             ("testAESEncryptCTRStream", testAESEncryptCTRStream),
             ("testIssue298", testIssue298),

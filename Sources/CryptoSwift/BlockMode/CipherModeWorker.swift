@@ -30,10 +30,12 @@ public protocol BlockModeWorker: CipherModeWorker {
 
 public protocol CounterModeWorker: CipherModeWorker {
     associatedtype Counter
-    var counter: Counter { get }
+    var counter: Counter { get set }
 }
 
-public protocol StreamModeWorker: CipherModeWorker { }
+public protocol StreamModeWorker: CipherModeWorker {
+    mutating func seek(to position: Int) throws
+}
 
 // TODO: remove and merge with BlockModeWorker
 public protocol BlockModeWorkerFinalizing: BlockModeWorker {

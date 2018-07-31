@@ -12,15 +12,11 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-public class BlockDecryptor: RandomAccessCryptor, Updatable {
+public class BlockDecryptor: Cryptor, Updatable {
     private let blockSize: Int
     private let padding: Padding
     private var worker: CipherModeWorker
     private var accumulated = Array<UInt8>()
-    private var processedBytesTotalCount: Int = 0
-
-    private var offset: Int = 0
-    private var offsetToRemove: Int = 0
 
     init(blockSize: Int, padding: Padding, _ worker: CipherModeWorker) throws {
         self.blockSize = blockSize
@@ -29,14 +25,7 @@ public class BlockDecryptor: RandomAccessCryptor, Updatable {
     }
 
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
-        // prepend "offset" number of bytes at the beginning
-        if offset > 0 {
-            accumulated += Array<UInt8>(repeating: 0, count: offset) + bytes
-            offsetToRemove = offset
-            offset = 0
-        } else {
-            accumulated += bytes
-        }
+        accumulated += bytes
 
         // If a worker (eg GCM) can combine ciphertext + tag
         // we need to remove tag from the ciphertext.
@@ -66,12 +55,6 @@ public class BlockDecryptor: RandomAccessCryptor, Updatable {
                     plaintext += worker.decrypt(block: chunk)
                 }
 
-                // remove "offset" from the beginning of first chunk
-                if offsetToRemove > 0 {
-                    plaintext.removeFirst(offsetToRemove)
-                    offsetToRemove = 0
-                }
-
                 if var finalizingWorker = worker as? BlockModeWorkerFinalizing, isLast == true {
                     plaintext = try finalizingWorker.didDecryptLast(block: plaintext.slice)
                 }
@@ -80,7 +63,6 @@ public class BlockDecryptor: RandomAccessCryptor, Updatable {
             }
         }
         accumulated.removeFirst(processedBytesCount) // super-slow
-        processedBytesTotalCount += processedBytesCount
 
         if isLast {
             plaintext = padding.remove(from: plaintext, blockSize: blockSize)
@@ -89,18 +71,14 @@ public class BlockDecryptor: RandomAccessCryptor, Updatable {
         return plaintext
     }
 
-    //        @discardableResult public func seek(to position: Int) -> Bool {
-    //            guard var worker = self.worker as? RandomAccessCipherModeWorker else {
-    //                return false
-    //            }
-    //
-    //            worker.counter = UInt(position / blockSize)
-    //            self.worker = worker
-    //
-    //            offset = position % blockSize
-    //
-    //            accumulated = []
-    //
-    //            return true
-    //        }
+    public func seek(to position: Int) throws {
+        guard var worker = self.worker as? StreamModeWorker else {
+            fatalError("Not supported")
+        }
+
+        try worker.seek(to: position)
+        self.worker = worker
+
+        accumulated = []
+    }
 }

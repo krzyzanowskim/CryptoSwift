@@ -19,6 +19,7 @@
 public final class ChaCha20: BlockCipher {
     public enum Error: Swift.Error {
         case invalidKeyOrInitializationVector
+        case notSupported
     }
 
     public static let blockSize = 64 // 512 / 8
@@ -275,6 +276,10 @@ extension ChaCha20 {
             }
             return encrypted
         }
+
+        public func seek(to: Int) throws {
+            throw Error.notSupported
+        }
     }
 }
 
@@ -319,6 +324,10 @@ extension ChaCha20 {
             }
 
             return plaintext
+        }
+
+        public func seek(to: Int) throws {
+            throw Error.notSupported
         }
     }
 }

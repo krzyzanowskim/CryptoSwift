@@ -71,7 +71,8 @@ struct CTRModeWorker: StreamModeWorker, CounterModeWorker {
 
     let cipherOperation: CipherOperationOnBlock
     let additionalBufferSize: Int = 0
-    let counter: Counter
+    let iv: Array<UInt8>
+    var counter: CTRCounter
 
     private let blockSize: Int
 
@@ -83,10 +84,18 @@ struct CTRModeWorker: StreamModeWorker, CounterModeWorker {
     init(blockSize: Int, iv: ArraySlice<UInt8>, counter: Int, cipherOperation: @escaping CipherOperationOnBlock) {
         self.cipherOperation = cipherOperation
         self.blockSize = blockSize
+        self.iv = Array(iv)
 
         // the first keystream is calculated from the nonce = initial value of counter
-        self.counter = Counter(nonce: Array(iv), startAt: counter)
+        self.counter = CTRCounter(nonce: Array(iv), startAt: counter)
         self.keystream = Array(cipherOperation(self.counter.bytes.slice)!)
+    }
+
+    mutating func seek(to position: Int) throws {
+        let offset = position % blockSize
+        counter = CTRCounter(nonce: iv, startAt: position / blockSize)
+        keystream = Array(cipherOperation(counter.bytes.slice)!)
+        keystreamPosIdx = offset
     }
 
     // plaintext is at most blockSize long

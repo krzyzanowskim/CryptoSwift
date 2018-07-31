@@ -21,6 +21,7 @@ import Glibc
 
 /// Worker cryptor/decryptor of `Updatable` types
 public protocol Cryptors: class {
+
     /// Cryptor suitable for encryption
     func makeEncryptor() throws -> Cryptor & Updatable
 

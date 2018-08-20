@@ -37,7 +37,7 @@ Good mood
 - Easy to use
 - Convenient extensions for String and Data
 - Support for incremental updates (stream, ...)
-- iOS, macOS, AppleTV, watchOS, Linux support
+- iOS, Android, macOS, AppleTV, watchOS, Linux support
 
 #### Hash (Digest)
   [MD5](http://tools.ietf.org/html/rfc1321)

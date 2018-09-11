@@ -224,19 +224,19 @@ public final class SHA3: DigestType {
         hh[7] ^= chunk[7].littleEndian
         hh[8] ^= chunk[8].littleEndian
         
-        guard blockSize > 72 else { return }
+        guard blockSize > 72 else { return } // 72 / 8, sha-512
         hh[9] ^= chunk[9].littleEndian
         hh[10] ^= chunk[10].littleEndian
         hh[11] ^= chunk[11].littleEndian
         hh[12] ^= chunk[12].littleEndian
         
-        guard blockSize > 104 else { return }
+        guard blockSize > 104 else { return } // 104 / 8, sha-384
         hh[13] ^= chunk[13].littleEndian
         hh[14] ^= chunk[14].littleEndian
         hh[15] ^= chunk[15].littleEndian
         hh[16] ^= chunk[16].littleEndian
         
-        guard blockSize > 136 else { return }
+        guard blockSize > 136 else { return } // 136 / 8, sha-256
         hh[17] ^= chunk[17].littleEndian
         
         // FULL_SHA3_FAMILY_SUPPORT

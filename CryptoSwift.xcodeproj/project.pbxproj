@@ -761,29 +761,32 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Marcin Krzyzanowski";
 				TargetAttributes = {
 					75211F91207249D8004E41F8 = {
 						CreatedOnToolsVersion = 9.3;
-						ProvisioningStyle = Automatic;
+						LastSwiftMigration = 1000;
+						ProvisioningStyle = Manual;
 					};
 					754BE45419693E190098E6F3 = {
 						CreatedOnToolsVersion = 6.0;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 					};
 					754BE45F19693E190098E6F3 = {
 						CreatedOnToolsVersion = 6.0;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 					};
 					7564F04E2072EAEB00CA5A96 = {
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 						TestTargetID = 75211F91207249D8004E41F8;
 					};
 					7595C1492072E48C00EA1A5F = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 					};
 				};

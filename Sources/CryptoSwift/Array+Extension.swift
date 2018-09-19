@@ -64,13 +64,7 @@ extension Array where Element == UInt8 {
     }
 
     public func toHexString() -> String {
-        return `lazy`.reduce("") {
-            var s = String($1, radix: 16)
-            if s.count == 1 {
-                s = "0" + s
-            }
-            return $0 + s
-        }
+        return `lazy`.map { String(format: "%0.2x", $0) }.joined()
     }
 }
 

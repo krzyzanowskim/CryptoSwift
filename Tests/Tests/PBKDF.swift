@@ -62,26 +62,11 @@ class PBKDF: XCTestCase {
         XCTAssertEqual(value.toHexString(), "a53cf3df485e5cd9")
     }
     
-    func testScrypt() {
-        let password = Array("password".data(using: .ascii)!)
-        let salt = Array("NaCl".data(using: .ascii)!)
-        let deriver = try! CryptoSwift.PKCS5.Scrypt(password: password, salt: salt, dkLen: 64, N: 1024, r: 8, p: 16)
-        let derived = try! deriver.calculate()
-        let expected: [UInt8] = Array<UInt8>.init(hex: """
-            fd ba be 1c 9d 34 72 00 78 56 e7 19 0d 01 e9 fe
-               7c 6a d7 cb c8 23 78 30 e7 73 76 63 4b 37 31 62
-               2e af 30 d9 2e 22 a3 88 6f f1 09 27 9d 98 30 da
-               c7 27 af b9 4a 83 ee 6d 83 60 cb df a2 cc 06 40
-""".replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\t", with: ""))
-        XCTAssertEqual(derived, expected)
-    }
-
     static func allTests() -> [(String, (PBKDF) -> () -> Void)] {
         let tests = [
             ("testPBKDF1", testPBKDF1),
             ("testPBKDF2", testPBKDF2),
-            ("testPBKDF2Length", testPBKDF2Length),
-            ("testScrypt", testScrypt),
+            ("testPBKDF2Length", testPBKDF2Length)
         ]
 
         return tests

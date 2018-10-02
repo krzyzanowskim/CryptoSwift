@@ -114,6 +114,10 @@
 		75EC52B71EE8B83D0048EB3B /* Updatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52771EE8B6CA0048EB3B /* Updatable.swift */; };
 		75EC52B81EE8B83D0048EB3B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52781EE8B6CA0048EB3B /* Utils.swift */; };
 		75EC52B91EE8B83D0048EB3B /* ZeroPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52791EE8B6CA0048EB3B /* ZeroPadding.swift */; };
+		813247AB2163991A006BC789 /* Scrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813247AA2163991A006BC789 /* Scrypt.swift */; };
+		813247AD21639E93006BC789 /* Scrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813247AC21639E93006BC789 /* Scrypt.swift */; };
+		813247B22163A214006BC789 /* ScryptTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813247B12163A214006BC789 /* ScryptTestsPerf.swift */; };
+		813247B32163A214006BC789 /* ScryptTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813247B12163A214006BC789 /* ScryptTestsPerf.swift */; };
 		E3FD2D531D6B81CE00A9F35F /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */; };
 		E6200E141FB9A7AE00258382 /* HKDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6200E131FB9A7AE00258382 /* HKDF.swift */; };
 		E6200E171FB9B68C00258382 /* HKDFTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6200E151FB9B67C00258382 /* HKDFTests.swift */; };
@@ -353,6 +357,9 @@
 		75EC52791EE8B6CA0048EB3B /* ZeroPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPadding.swift; sourceTree = "<group>"; };
 		75EC527A1EE8B6CA0048EB3B /* CryptoSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CryptoSwift.h; sourceTree = "<group>"; };
 		75EDCB811DAC4CA400D270E0 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinuxMain.swift; path = Tests/LinuxMain.swift; sourceTree = SOURCE_ROOT; };
+		813247AA2163991A006BC789 /* Scrypt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scrypt.swift; sourceTree = "<group>"; };
+		813247AC21639E93006BC789 /* Scrypt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scrypt.swift; sourceTree = "<group>"; };
+		813247B12163A214006BC789 /* ScryptTestsPerf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScryptTestsPerf.swift; sourceTree = "<group>"; };
 		E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		E6200E131FB9A7AE00258382 /* HKDF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKDF.swift; sourceTree = "<group>"; };
 		E6200E151FB9B67C00258382 /* HKDFTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKDFTests.swift; sourceTree = "<group>"; };
@@ -456,6 +463,8 @@
 		754BE46419693E190098E6F3 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				813247B12163A214006BC789 /* ScryptTestsPerf.swift */,
+				813247AC21639E93006BC789 /* Scrypt.swift */,
 				14156CE42011422400DDCFBC /* ChaCha20Poly1305Tests.swift */,
 				E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */,
 				754BE46719693E190098E6F3 /* DigestTests.swift */,
@@ -565,6 +574,7 @@
 				75EC525D1EE8B6CA0048EB3B /* HMAC.swift */,
 				75EC52611EE8B6CA0048EB3B /* MD5.swift */,
 				75EC52621EE8B6CA0048EB3B /* NoPadding.swift */,
+				813247AA2163991A006BC789 /* Scrypt.swift */,
 				75EC52631EE8B6CA0048EB3B /* Operators.swift */,
 				75EC52641EE8B6CA0048EB3B /* Padding.swift */,
 				75EC52651EE8B6CA0048EB3B /* PKCS */,
@@ -925,6 +935,7 @@
 				75EC528D1EE8B81A0048EB3B /* ChaCha20.swift in Sources */,
 				75EC52851EE8B8170048EB3B /* CBC.swift in Sources */,
 				75EC52A71EE8B8390048EB3B /* PBKDF2.swift in Sources */,
+				813247AB2163991A006BC789 /* Scrypt.swift in Sources */,
 				75EC529D1EE8B8200048EB3B /* Utils+Foundation.swift in Sources */,
 				75EC527E1EE8B8130048EB3B /* Authenticator.swift in Sources */,
 				75EC52AB1EE8B83D0048EB3B /* Rabbit.swift in Sources */,
@@ -951,6 +962,7 @@
 				753B33011DAB84D600D06422 /* RandomBytesSequenceTests.swift in Sources */,
 				754BE46819693E190098E6F3 /* DigestTests.swift in Sources */,
 				E3FD2D531D6B81CE00A9F35F /* Error+Extension.swift in Sources */,
+				813247AD21639E93006BC789 /* Scrypt.swift in Sources */,
 				757DA2591A4ED4D7002BA3EF /* ChaCha20Tests.swift in Sources */,
 				755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */,
 				674A736F1BF5D85B00866C5B /* RabbitTests.swift in Sources */,
@@ -973,6 +985,7 @@
 				7564F0562072EAEB00CA5A96 /* DigestTestsPerf.swift in Sources */,
 				7564F0572072EAEB00CA5A96 /* TestsPerformance.swift in Sources */,
 				7564F0582072EAEB00CA5A96 /* AESTestsPerf.swift in Sources */,
+				813247B32163A214006BC789 /* ScryptTestsPerf.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -987,6 +1000,7 @@
 				7595C1582072E5B900EA1A5F /* DigestTestsPerf.swift in Sources */,
 				7595C14D2072E48C00EA1A5F /* TestsPerformance.swift in Sources */,
 				7595C1592072E5B900EA1A5F /* AESTestsPerf.swift in Sources */,
+				813247B22163A214006BC789 /* ScryptTestsPerf.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

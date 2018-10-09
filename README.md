@@ -63,6 +63,7 @@ Good mood
   [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
 | [HMAC (MD5, SHA1, SHA256)](https://www.ietf.org/rfc/rfc2104.txt)
 | [CMAC](https://tools.ietf.org/html/rfc4493)
+| [CBC-MAC](https://en.wikipedia.org/wiki/CBC-MAC)
 
 #### Cipher mode of operation
 - Electronic codebook ([ECB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_.28ECB.29))

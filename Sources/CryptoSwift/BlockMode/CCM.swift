@@ -39,47 +39,13 @@ public struct CCM: BlockMode {
         return CBCModeWorker(blockSize: blockSize, iv: iv.slice, cipherOperation: cipherOperation)
     }
 
+//    // Apply the formatting function to (N, A, P) to produce blocks [B0, ..., Br]
+//    private func format(N: [UInt8], A: [UInt8], P: [UInt8]) throws -> [UInt8] {
+//        let block0 = try format(nonce: N, Q: 512, q: 3, t: 12, hasAssociatedData: false) // mock
+//        let ctr1 = try format(counter: 1, nonce: N, q: 3)
+//        return block0 + ctr1
+//    }
 
-    // Apply the formatting function to (N, A, P) to produce blocks [B0, ..., Br]
-    private func format(N: [UInt8], A: [UInt8], P: [UInt8]) throws -> [UInt8] {
-        let block0 = try formatNonce(N: N, Q: 512, q: 3, t: 12, hasAssociatedData: false) // mock
-        return []
-    }
-
-    // Q - octet length of P
-    // q - octet length of Q. Maximum length (in octets) of payload. An element of {2,3,4,5,6,7,8}
-    // t - octet length of T (MAC length). An element of {4,6,8,10,12,14,16}
-    private func formatNonce(N: [UInt8], Q: UInt32, q: UInt8, t: UInt8, hasAssociatedData: Bool) throws -> [UInt8] {
-        var flags0: UInt8 = 0
-
-        if hasAssociatedData {
-            // 6 bit
-            flags0 |= (1 << 6)
-        }
-
-        // 5,4,3 is t in 3 bits
-        flags0 |= (((t-2)/2) & 0x07) << 3
-
-        // 2,1,0 is q in 3 bits
-        flags0 |= ((q-1) & 0x07) << 0
-
-        var block0: [UInt8] = Array<UInt8>(repeating: 0, count: 16) // block[0]
-        block0[0] = flags0
-
-        // N in 1...(15-q) octets, n = 15-q
-        // n is an element of {7,8,9,10,11,12,13}
-        let n = 15-Int(q)
-        guard (n + Int(q)) == 15 else {
-            // n+q == 15
-            throw Error.invalidParameter
-        }
-        block0[1...n] = N[0...(n-1)]
-
-        // Q in (16-q)...15 octets
-        block0[(16-Int(q))...15] = Q.bytes(totalBytes: Int(q)).slice
-
-        return block0
-    }
 }
 
 struct CCMModeWorker: BlockModeWorker {
@@ -88,6 +54,11 @@ struct CCMModeWorker: BlockModeWorker {
     let additionalBufferSize: Int = 0
     private let iv: ArraySlice<UInt8>
     private var prev: ArraySlice<UInt8>?
+
+    public enum Error: Swift.Error {
+        case invalidParameter
+    }
+
 
     init(blockSize: Int, iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
         self.blockSize = blockSize
@@ -110,5 +81,70 @@ struct CCMModeWorker: BlockModeWorker {
         let result: Array<UInt8> = xor(prev ?? iv, plaintext)
         prev = ciphertext
         return result
+    }
+
+    // Q - octet length of P
+    // q - octet length of Q. Maximum length (in octets) of payload. An element of {2,3,4,5,6,7,8}
+    // t - octet length of T (MAC length). An element of {4,6,8,10,12,14,16}
+    private func format(nonce N: [UInt8], Q: UInt32, q: UInt8, t: UInt8, hasAssociatedData: Bool) throws -> [UInt8] {
+        var flags0: UInt8 = 0
+
+        if hasAssociatedData {
+            // 7 bit
+            flags0 |= (1 << 6)
+        }
+
+        // 6,5,4 bit is t in 3 bits
+        flags0 |= (((t-2)/2) & 0x07) << 3
+
+        // 3,2,1 bit is q in 3 bits
+        flags0 |= ((q-1) & 0x07) << 0
+
+        var block0: [UInt8] = Array<UInt8>(repeating: 0, count: 16) // block[0]
+        block0[0] = flags0
+
+        // N in 1...(15-q) octets, n = 15-q
+        // n is an element of {7,8,9,10,11,12,13}
+        let n = 15-Int(q)
+        guard (n + Int(q)) == 15 else {
+            // n+q == 15
+            throw Error.invalidParameter
+        }
+        block0[1...n] = N[0...(n-1)]
+
+        // Q in (16-q)...15 octets
+        block0[(16-Int(q))...15] = Q.bytes(totalBytes: Int(q)).slice
+
+        return block0
+    }
+
+    /// Formatting of the Counter Blocks. Ctr[i]
+    /// The counter generation function.
+    /// Q - octet length of P
+    /// q - octet length of Q. Maximum length (in octets) of payload. An element of {2,3,4,5,6,7,8}
+    private func format(counter i: Int, nonce N: [UInt8], q: UInt8) throws -> [UInt8] {
+        var flags0: UInt8 = 0
+
+        // bit 8,7 is Reserved
+        // bit 4,5,6 shall be set to 0
+        // 3,2,1 bit is q in 3 bits
+        flags0 |= ((q-1) & 0x07) << 0
+
+        var block = Array<UInt8>(repeating: 0, count: 16) // block[0]
+        block[0] = flags0
+
+        // N in 1...(15-q) octets, n = 15-q
+        // n is an element of {7,8,9,10,11,12,13}
+        let n = 15-Int(q)
+        guard (n + Int(q)) == 15 else {
+            // n+q == 15
+            throw Error.invalidParameter
+        }
+        block[1...n] = N[0...(n-1)]
+
+        // [i]8q in (16-q)...15 octets
+        block[(16-Int(q))...15] = i.bytes(totalBytes: Int(q)).slice
+
+        return block
     }
 }

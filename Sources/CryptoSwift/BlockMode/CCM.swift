@@ -25,27 +25,19 @@ public struct CCM: BlockMode {
     }
 
     public let options: BlockModeOption = [.initializationVectorRequired, .paddingRequired]
-    private let iv: Array<UInt8>
+    private let nonce: Array<UInt8>
 
-    public init(iv: Array<UInt8>) {
-        self.iv = iv
+    public init(nonce: Array<UInt8>) {
+        self.nonce = nonce
     }
 
     public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
-        if iv.count != blockSize {
+        if nonce.isEmpty {
             throw Error.invalidInitializationVector
         }
 
-        return CBCModeWorker(blockSize: blockSize, iv: iv.slice, cipherOperation: cipherOperation)
+        return CCMModeWorker(blockSize: blockSize, nonce: nonce.slice, tagSize: 16, cipherOperation: cipherOperation)
     }
-
-//    // Apply the formatting function to (N, A, P) to produce blocks [B0, ..., Br]
-//    private func format(N: [UInt8], A: [UInt8], P: [UInt8]) throws -> [UInt8] {
-//        let block0 = try format(nonce: N, Q: 512, q: 3, t: 12, hasAssociatedData: false) // mock
-//        let ctr1 = try format(counter: 1, nonce: N, q: 3)
-//        return block0 + ctr1
-//    }
-
 }
 
 struct CCMModeWorker: BlockModeWorkerFinalizing {
@@ -57,7 +49,7 @@ struct CCMModeWorker: BlockModeWorkerFinalizing {
         return cipherOperation(ctr.slice)!
     }()
     var counter: Int = 0
-    let q: UInt8 = 3 // ??????????
+    let q: UInt8
 
     let additionalBufferSize: Int = 0
     private let nonce: ArraySlice<UInt8>
@@ -72,6 +64,7 @@ struct CCMModeWorker: BlockModeWorkerFinalizing {
         self.tagSize = tagSize
         self.cipherOperation = cipherOperation
         self.nonce = nonce
+        self.q = UInt8(15 - nonce.count) // n = 15-q
 
         // For the very first time setup new IV (aka y0) from the block0
         let block0 = try! format(nonce: Array(nonce), Q: UInt32(blockSize), q: q, t: UInt8(tagSize), hasAssociatedData: false).slice
@@ -92,6 +85,7 @@ struct CCMModeWorker: BlockModeWorkerFinalizing {
         return xor(y_i, S_j) // P xor MSBplen(S)
     }
 
+    // TODO
     mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
         guard let plaintext = cipherOperation(ciphertext) else {
             return Array(ciphertext)

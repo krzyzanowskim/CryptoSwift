@@ -27,10 +27,14 @@ public struct CCM: BlockMode {
     public let options: BlockModeOption = [.initializationVectorRequired, .paddingRequired]
     private let nonce: Array<UInt8>
     private let additionalAuthenticatedData: Array<UInt8>?
+    private let tagSize: Int
+    private let messageLength: Int // total message length. need to know in advance
 
-    public init(nonce: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil) {
+    public init(nonce: Array<UInt8>, tagSize: Int, messageLength: Int, additionalAuthenticatedData: Array<UInt8>? = nil) {
         self.nonce = nonce
+        self.tagSize = tagSize
         self.additionalAuthenticatedData = additionalAuthenticatedData
+        self.messageLength = messageLength
     }
 
     public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
@@ -38,15 +42,16 @@ public struct CCM: BlockMode {
             throw Error.invalidInitializationVector
         }
 
-        return CCMModeWorker(blockSize: blockSize, nonce: nonce.slice, additionalAuthenticatedData: additionalAuthenticatedData, tagSize: 16, cipherOperation: cipherOperation)
+        return CCMModeWorker(blockSize: blockSize, nonce: nonce.slice, messageLength: messageLength, additionalAuthenticatedData: additionalAuthenticatedData, tagSize: tagSize, cipherOperation: cipherOperation)
     }
 }
 
 struct CCMModeWorker: BlockModeWorkerFinalizing {
     let cipherOperation: CipherOperationOnBlock
     let blockSize: Int
-    let tagSize: Int
-    lazy var S0: Array<UInt8> = {
+    private let tagSize: Int
+    private let messageLength: Int // total message length. need to know in advance
+    private lazy var S0: Array<UInt8> = {
         let ctr = try! format(counter: counter, nonce: Array(nonce), q: q) // ???? q = 3
         return cipherOperation(ctr.slice)!
     }()
@@ -61,15 +66,17 @@ struct CCMModeWorker: BlockModeWorkerFinalizing {
         case invalidParameter
     }
 
-    init(blockSize: Int, nonce: ArraySlice<UInt8>, additionalAuthenticatedData: [UInt8]?, tagSize: Int, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(blockSize: Int, nonce: ArraySlice<UInt8>, messageLength: Int,  additionalAuthenticatedData: [UInt8]?, tagSize: Int, cipherOperation: @escaping CipherOperationOnBlock) {
         self.blockSize = blockSize
         self.tagSize = tagSize
+        self.messageLength = messageLength
         self.cipherOperation = cipherOperation
         self.nonce = nonce
         self.q = UInt8(15 - nonce.count) // n = 15-q
 
         // For the very first time setup new IV (aka y0) from the block0
-        let block0 = try! format(nonce: Array(nonce), Q: UInt32(blockSize), q: q, t: UInt8(tagSize), hasAssociatedData: false).slice
+        let hasAssociatedData = additionalAuthenticatedData != nil && !additionalAuthenticatedData!.isEmpty
+        let block0 = try! format(nonce: Array(nonce), Q: UInt32(messageLength), q: q, t: UInt8(tagSize), hasAssociatedData: hasAssociatedData).slice
         let encodedAAD: [UInt8]
         if let aad = additionalAuthenticatedData {
             encodedAAD = format(aad: aad)

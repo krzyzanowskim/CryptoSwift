@@ -51,6 +51,7 @@ struct CCMModeWorker: BlockModeWorkerFinalizing {
     let blockSize: Int
     private let tagSize: Int
     private let messageLength: Int // total message length. need to know in advance
+    private let encodedAAD: [UInt8]
     private lazy var S0: Array<UInt8> = {
         let ctr = try! format(counter: counter, nonce: Array(nonce), q: q) // ???? q = 3
         return cipherOperation(ctr.slice)!
@@ -77,13 +78,16 @@ struct CCMModeWorker: BlockModeWorkerFinalizing {
         // For the very first time setup new IV (aka y0) from the block0
         let hasAssociatedData = additionalAuthenticatedData != nil && !additionalAuthenticatedData!.isEmpty
         let block0 = try! format(nonce: Array(nonce), Q: UInt32(messageLength), q: q, t: UInt8(tagSize), hasAssociatedData: hasAssociatedData).slice
+
         let encodedAAD: [UInt8]
         if let aad = additionalAuthenticatedData {
             encodedAAD = format(aad: aad)
         } else {
             encodedAAD = []
         }
-        prev = cipherOperation(block0 + encodedAAD)!.slice // y0
+        self.encodedAAD = encodedAAD
+
+        prev = cipherOperation(block0)!.slice // y0
     }
 
     mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
@@ -191,21 +195,22 @@ private func format(counter i: Int, nonce N: [UInt8], q: UInt8) throws -> [UInt8
     return block
 }
 
+/// Resulting can be partitioned into 16-octet blocks
 private func format(aad: [UInt8]) -> [UInt8] {
     let a = aad.count
 
     switch Double(a) {
     case 0..<65280: // 2^16-2^8
         // [a]16
-        return a.bytes(totalBytes: 2)
+        return ZeroPadding().add(to: a.bytes(totalBytes: 2) + aad, blockSize: 16)
     case 65280..<4_294_967_296: // 2^32
         // [a]32
-        return [0xFF, 0xFE] + a.bytes(totalBytes: 4)
+        return ZeroPadding().add(to: [0xFF, 0xFE] + a.bytes(totalBytes: 4) + aad, blockSize: 16)
     case 4_294_967_296..<pow(2,64): // 2^64
         // [a]64
-        return [0xFF, 0xFF] + a.bytes(totalBytes: 8)
+        return ZeroPadding().add(to: [0xFF, 0xFF] + a.bytes(totalBytes: 8) + aad, blockSize: 16)
     default:
         // Reserved
-        return aad
+        return ZeroPadding().add(to: aad, blockSize: 16)
     }
 }

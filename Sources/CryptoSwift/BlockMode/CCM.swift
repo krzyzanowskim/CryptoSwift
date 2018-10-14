@@ -26,9 +26,11 @@ public struct CCM: BlockMode {
 
     public let options: BlockModeOption = [.initializationVectorRequired, .paddingRequired]
     private let nonce: Array<UInt8>
+    private let additionalAuthenticatedData: Array<UInt8>?
 
-    public init(nonce: Array<UInt8>) {
+    public init(nonce: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil) {
         self.nonce = nonce
+        self.additionalAuthenticatedData = additionalAuthenticatedData
     }
 
     public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
@@ -36,7 +38,7 @@ public struct CCM: BlockMode {
             throw Error.invalidInitializationVector
         }
 
-        return CCMModeWorker(blockSize: blockSize, nonce: nonce.slice, tagSize: 16, cipherOperation: cipherOperation)
+        return CCMModeWorker(blockSize: blockSize, nonce: nonce.slice, additionalAuthenticatedData: additionalAuthenticatedData, tagSize: 16, cipherOperation: cipherOperation)
     }
 }
 
@@ -59,7 +61,7 @@ struct CCMModeWorker: BlockModeWorkerFinalizing {
         case invalidParameter
     }
 
-    init(blockSize: Int, nonce: ArraySlice<UInt8>, tagSize: Int, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(blockSize: Int, nonce: ArraySlice<UInt8>, additionalAuthenticatedData: [UInt8]?, tagSize: Int, cipherOperation: @escaping CipherOperationOnBlock) {
         self.blockSize = blockSize
         self.tagSize = tagSize
         self.cipherOperation = cipherOperation
@@ -68,7 +70,13 @@ struct CCMModeWorker: BlockModeWorkerFinalizing {
 
         // For the very first time setup new IV (aka y0) from the block0
         let block0 = try! format(nonce: Array(nonce), Q: UInt32(blockSize), q: q, t: UInt8(tagSize), hasAssociatedData: false).slice
-        prev = cipherOperation(block0)!.slice // y0
+        let encodedAAD: [UInt8]
+        if let aad = additionalAuthenticatedData {
+            encodedAAD = format(aad: aad)
+        } else {
+            encodedAAD = []
+        }
+        prev = cipherOperation(block0 + encodedAAD)!.slice // y0
     }
 
     mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
@@ -174,4 +182,23 @@ private func format(counter i: Int, nonce N: [UInt8], q: UInt8) throws -> [UInt8
     block[(16-Int(q))...15] = i.bytes(totalBytes: Int(q)).slice
 
     return block
+}
+
+private func format(aad: [UInt8]) -> [UInt8] {
+    let a = aad.count
+
+    switch Double(a) {
+    case 0..<65280: // 2^16-2^8
+        // [a]16
+        return a.bytes(totalBytes: 2)
+    case 65280..<4_294_967_296: // 2^32
+        // [a]32
+        return [0xFF, 0xFE] + a.bytes(totalBytes: 4)
+    case 4_294_967_296..<pow(2,64): // 2^64
+        // [a]64
+        return [0xFF, 0xFF] + a.bytes(totalBytes: 8)
+    default:
+        // Reserved
+        return aad
+    }
 }

@@ -96,7 +96,6 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         for block_i in encodedAAD.batched(by: 16) {
             let y_i = cipherOperation(xor(block_i, last_y))!.slice
             last_y = y_i
-            counter += 1
         }
     }
 
@@ -120,13 +119,13 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
             // Need a full block here to update keystream and do CBC
             if keystream.isEmpty || keystreamPosIdx == blockSize {
                 // y[i], where i is the counter. Can encrypt 1 block at a time
+                counter += 1
                 guard let S = try? S(i: counter) else { return Array(plaintext) }
 
-                let plaintextP = ZeroPadding().add(to: Array(plaintext), blockSize: 16)
+                let plaintextP = addPadding(Array(plaintext), blockSize: 16)
                 guard let y = cipherOperation(xor(last_y, plaintextP)) else { return Array(plaintext) }
                 last_y = y.slice
 
-                counter += 1
                 keystream = S
                 keystreamPosIdx = 0
             }
@@ -238,15 +237,34 @@ private func format(aad: [UInt8]) -> [UInt8] {
     switch Double(a) {
     case 0..<65280: // 2^16-2^8
         // [a]16
-        return ZeroPadding().add(to: a.bytes(totalBytes: 2) + aad, blockSize: 16)
+        return addPadding(a.bytes(totalBytes: 2) + aad, blockSize: 16)
     case 65280..<4_294_967_296: // 2^32
         // [a]32
-        return ZeroPadding().add(to: [0xFF, 0xFE] + a.bytes(totalBytes: 4) + aad, blockSize: 16)
+        return addPadding([0xFF, 0xFE] + a.bytes(totalBytes: 4) + aad, blockSize: 16)
     case 4_294_967_296..<pow(2,64): // 2^64
         // [a]64
-        return ZeroPadding().add(to: [0xFF, 0xFF] + a.bytes(totalBytes: 8) + aad, blockSize: 16)
+        return addPadding([0xFF, 0xFF] + a.bytes(totalBytes: 8) + aad, blockSize: 16)
     default:
         // Reserved
-        return ZeroPadding().add(to: aad, blockSize: 16)
+        return addPadding(aad, blockSize: 16)
     }
+}
+
+// If data is not a multiple of block size bytes long then the remainder is zero padded
+// Note: It's similar to ZeroPadding, but it's not the same.
+private func addPadding(_ bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
+    if bytes.isEmpty {
+        return Array<UInt8>(repeating: 0, count: blockSize)
+    }
+
+    let remainder = bytes.count % blockSize
+    if remainder == 0 {
+        return bytes
+    }
+
+    let paddingCount = blockSize - remainder
+    if paddingCount > 0 {
+        return bytes + Array<UInt8>(repeating: 0, count: paddingCount)
+    }
+    return bytes
 }

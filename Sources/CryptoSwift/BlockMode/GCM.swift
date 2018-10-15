@@ -28,7 +28,7 @@ public final class GCM: BlockMode {
         var additionalBufferSize: Int {
             switch self {
             case .combined:
-                return GCMModeWorker.tagSize
+                return GCMModeWorker.tagLength
             case .detached:
                 return 0
             }
@@ -88,7 +88,7 @@ final class GCMModeWorker: BlockModeWorker, FinalizingModeWorker {
     var didCalculateTag: ((Array<UInt8>) -> Void)?
 
     // 128 bit tag. Other possible tags 4,8,12,13,14,15,16
-    fileprivate static let tagSize = 16
+    fileprivate static let tagLength = 16
     // GCM nonce is 96-bits by default. It's the most effective length for the IV
     private static let nonceSize = 12
 
@@ -170,7 +170,7 @@ final class GCMModeWorker: BlockModeWorker, FinalizingModeWorker {
     func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8> {
         // Calculate MAC tag.
         let ghash = gf.ghashFinish()
-        let tag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagSize))
+        let tag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagLength))
 
         // Notify handler
         didCalculateTag?(tag)
@@ -191,10 +191,10 @@ final class GCMModeWorker: BlockModeWorker, FinalizingModeWorker {
         switch mode {
         case .combined:
             // overwrite expectedTag property used later for verification
-            self.expectedTag = Array(ciphertext.suffix(GCMModeWorker.tagSize))
-            // gf.ciphertextLength = gf.ciphertextLength - GCMModeWorker.tagSize
+            self.expectedTag = Array(ciphertext.suffix(GCMModeWorker.tagLength))
+            // gf.ciphertextLength = gf.ciphertextLength - GCMModeWorker.tagLength
             // strip tag from the plaintext.
-            return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(GCMModeWorker.tagSize,ciphertext.count))]
+            return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(GCMModeWorker.tagLength,ciphertext.count))]
         case .detached:
             return ciphertext
         }
@@ -203,7 +203,7 @@ final class GCMModeWorker: BlockModeWorker, FinalizingModeWorker {
     func didDecryptLast(block plaintext: ArraySlice<UInt8>) throws -> Array<UInt8> {
         // Calculate MAC tag.
         let ghash = gf.ghashFinish()
-        let computedTag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagSize))
+        let computedTag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagLength))
 
         // Validate tag
         if let expectedTag = self.expectedTag, computedTag == expectedTag {

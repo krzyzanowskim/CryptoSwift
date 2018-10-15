@@ -72,7 +72,7 @@ public class BlockDecryptor: Cryptor, Updatable {
     }
 
     public func seek(to position: Int) throws {
-        guard var worker = self.worker as? StreamModeWorker else {
+        guard var worker = self.worker as? SeekableModeWorker else {
             fatalError("Not supported")
         }
 

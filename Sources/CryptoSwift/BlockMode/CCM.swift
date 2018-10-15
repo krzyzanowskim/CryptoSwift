@@ -46,7 +46,7 @@ public struct CCM: StreamMode {
     }
 }
 
-class CCMModeWorker: StreamModeWorker, CounterModeWorker, FinalizingModeWorker {
+class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, FinalizingModeWorker {
     typealias Counter = Int
     var counter = 0
 

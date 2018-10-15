@@ -24,6 +24,7 @@ public protocol CipherModeWorker {
     mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8>
 }
 
+/// Block workers use `BlockEncryptor`
 public protocol BlockModeWorker: CipherModeWorker {
     var blockSize: Int { get }
 }
@@ -33,8 +34,12 @@ public protocol CounterModeWorker: CipherModeWorker {
     var counter: Counter { get set }
 }
 
-public protocol StreamModeWorker: CipherModeWorker {
+public protocol SeekableModeWorker: CipherModeWorker {
     mutating func seek(to position: Int) throws
+}
+
+/// Stream workers use `StreamEncryptor`
+public protocol StreamModeWorker: CipherModeWorker {
 }
 
 public protocol FinalizingModeWorker: CipherModeWorker {

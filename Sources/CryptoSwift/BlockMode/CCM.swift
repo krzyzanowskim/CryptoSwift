@@ -27,12 +27,12 @@ public struct CCM: BlockMode {
     public let options: BlockModeOption = [.initializationVectorRequired, .paddingRequired]
     private let nonce: Array<UInt8>
     private let additionalAuthenticatedData: Array<UInt8>?
-    private let tagSize: Int
+    private let tagLength: Int
     private let messageLength: Int // total message length. need to know in advance
 
     public init(nonce: Array<UInt8>, tagSize: Int, messageLength: Int, additionalAuthenticatedData: Array<UInt8>? = nil) {
         self.nonce = nonce
-        self.tagSize = tagSize
+        self.tagLength = tagSize
         self.additionalAuthenticatedData = additionalAuthenticatedData
         self.messageLength = messageLength
     }
@@ -42,25 +42,20 @@ public struct CCM: BlockMode {
             throw Error.invalidInitializationVector
         }
 
-        return CCMModeWorker(blockSize: blockSize, nonce: nonce.slice, messageLength: messageLength, additionalAuthenticatedData: additionalAuthenticatedData, tagSize: tagSize, cipherOperation: cipherOperation)
+        return CCMModeWorker(blockSize: blockSize, nonce: nonce.slice, messageLength: messageLength, additionalAuthenticatedData: additionalAuthenticatedData, tagSize: tagLength, cipherOperation: cipherOperation)
     }
 }
 
 struct CCMModeWorker: BlockModeWorkerFinalizing {
     let cipherOperation: CipherOperationOnBlock
     let blockSize: Int
-    private let tagSize: Int
+    private let tagLength: Int
     private let messageLength: Int // total message length. need to know in advance
-    private let encodedAAD: [UInt8]
-    private lazy var S0: Array<UInt8> = {
-        let ctr = try! format(counter: counter, nonce: Array(nonce), q: q) // ???? q = 3
-        return cipherOperation(ctr.slice)!
-    }()
-    var counter: Int = 0
-    let q: UInt8
+    private var counter = 0
+    private let q: UInt8
 
     let additionalBufferSize: Int = 0
-    private let nonce: ArraySlice<UInt8>
+    private let nonce: Array<UInt8>
     private var prev: ArraySlice<UInt8>
 
     public enum Error: Swift.Error {
@@ -69,39 +64,52 @@ struct CCMModeWorker: BlockModeWorkerFinalizing {
 
     init(blockSize: Int, nonce: ArraySlice<UInt8>, messageLength: Int,  additionalAuthenticatedData: [UInt8]?, tagSize: Int, cipherOperation: @escaping CipherOperationOnBlock) {
         self.blockSize = blockSize
-        self.tagSize = tagSize
+        self.tagLength = tagSize
         self.messageLength = messageLength
         self.cipherOperation = cipherOperation
-        self.nonce = nonce
+        self.nonce = Array(nonce)
         self.q = UInt8(15 - nonce.count) // n = 15-q
 
         // For the very first time setup new IV (aka y0) from the block0
         let hasAssociatedData = additionalAuthenticatedData != nil && !additionalAuthenticatedData!.isEmpty
-        let block0 = try! format(nonce: Array(nonce), Q: UInt32(messageLength), q: q, t: UInt8(tagSize), hasAssociatedData: hasAssociatedData).slice
+        let block0 = try! format(nonce: self.nonce, Q: UInt32(messageLength), q: q, t: UInt8(tagSize), hasAssociatedData: hasAssociatedData).slice
+        let y0 = cipherOperation(block0)!.slice
+        prev = y0
 
-        let encodedAAD: [UInt8]
         if let aad = additionalAuthenticatedData {
-            encodedAAD = format(aad: aad)
-        } else {
-            encodedAAD = []
+            process(aad: aad)
         }
-        self.encodedAAD = encodedAAD
+    }
 
-        prev = cipherOperation(block0)!.slice // y0
+    private mutating func process(aad: [UInt8]) {
+        let encodedAAD = format(aad: aad)
+
+        for block_i in encodedAAD.batched(by: 16) {
+            let y_i = cipherOperation(xor(block_i, prev))!.slice
+            prev = y_i
+            counter += 1
+        }
+    }
+
+    private func S(i: Int) throws -> [UInt8] {
+        let ctr = try format(counter: i, nonce: nonce, q: q)
+        return cipherOperation(ctr.slice)!
     }
 
     mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
-        guard let y_i = cipherOperation(xor(prev, plaintext)) else {
+        // y[i], where i is the counter
+        guard let y = cipherOperation(xor(prev, plaintext)),
+              let S = try? S(i: counter)
+        else {
             return Array(plaintext)
         }
 
-        guard let ctr_j = try? format(counter: counter, nonce: Array(nonce), q: q), let S_j = cipherOperation(ctr_j.slice) else {
-            return Array(plaintext)
-        }
+        let result = xor(plaintext, S) as Array<UInt8> // P xor MSBplen(S)
 
-        prev = y_i.slice
-        counter = counter + 1
-        return xor(y_i, S_j) // P xor MSBplen(S)
+        prev = y.slice
+        counter += 1
+
+        return result
     }
 
     // TODO
@@ -116,9 +124,13 @@ struct CCMModeWorker: BlockModeWorkerFinalizing {
 
     mutating func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8> {
         // contatenate T at the end
-        let T = ciphertext.prefix(tagSize) // T
-        let tag = xor(T, S0.prefix(tagSize)) as Array<UInt8> // T xor MSBtlen(S0)
-        return Array(ciphertext) + tag
+        guard let S0 = try? S(i: 0) else {
+            return Array(ciphertext)
+        }
+
+        let tag = prev.prefix(tagLength)
+
+        return Array(ciphertext) + (xor(tag, S0) as Array<UInt8>)
     }
 
     func willDecryptLast(block ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
@@ -147,7 +159,7 @@ private func format(nonce N: [UInt8], Q: UInt32, q: UInt8, t: UInt8, hasAssociat
     // 3,2,1 bit is q in 3 bits
     flags0 |= ((q-1) & 0x07) << 0
 
-    var block0: [UInt8] = Array<UInt8>(repeating: 0, count: 16) // block[0]
+    var block0: [UInt8] = Array<UInt8>(repeating: 0, count: 16)
     block0[0] = flags0
 
     // N in 1...(15-q) octets, n = 15-q

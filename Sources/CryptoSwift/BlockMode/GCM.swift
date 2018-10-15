@@ -81,7 +81,7 @@ public final class GCM: BlockMode {
 
 // MARK: - Worker
 
-final class GCMModeWorker: BlockModeWorkerFinalizing {
+final class GCMModeWorker: BlockModeWorker, FinalizingModeWorker {
     let cipherOperation: CipherOperationOnBlock
 
     // Callback called when authenticationTag is ready

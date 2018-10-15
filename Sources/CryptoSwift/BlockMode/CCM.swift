@@ -17,7 +17,7 @@
 // https://csrc.nist.gov/publications/detail/sp/800-38c/final
 
 
-public struct CCM: BlockMode {
+public struct CCM: StreamMode {
     public enum Error: Swift.Error {
         /// Invalid IV
         case invalidInitializationVector
@@ -30,9 +30,9 @@ public struct CCM: BlockMode {
     private let tagLength: Int
     private let messageLength: Int // total message length. need to know in advance
 
-    public init(nonce: Array<UInt8>, tagSize: Int, messageLength: Int, additionalAuthenticatedData: Array<UInt8>? = nil) {
+    public init(nonce: Array<UInt8>, tagLength: Int, messageLength: Int, additionalAuthenticatedData: Array<UInt8>? = nil) {
         self.nonce = nonce
-        self.tagLength = tagSize
+        self.tagLength = tagLength
         self.additionalAuthenticatedData = additionalAuthenticatedData
         self.messageLength = messageLength
     }
@@ -42,19 +42,21 @@ public struct CCM: BlockMode {
             throw Error.invalidInitializationVector
         }
 
-        return CCMModeWorker(blockSize: blockSize, nonce: nonce.slice, messageLength: messageLength, additionalAuthenticatedData: additionalAuthenticatedData, tagSize: tagLength, cipherOperation: cipherOperation)
+        return CCMModeWorker(blockSize: blockSize, nonce: nonce.slice, messageLength: messageLength, additionalAuthenticatedData: additionalAuthenticatedData, tagLength: tagLength, cipherOperation: cipherOperation)
     }
 }
 
-class CCMModeWorker: BlockModeWorkerFinalizing {
+class CCMModeWorker: StreamModeWorker, CounterModeWorker, FinalizingModeWorker {
+    typealias Counter = Int
+    var counter = 0
+
     let cipherOperation: CipherOperationOnBlock
     let blockSize: Int
     private let tagLength: Int
     private let messageLength: Int // total message length. need to know in advance
-    private var counter = 0
     private let q: UInt8
 
-    let additionalBufferSize: Int = 0
+    let additionalBufferSize: Int
     private let nonce: Array<UInt8>
     private var prev: ArraySlice<UInt8> = []
 
@@ -62,9 +64,10 @@ class CCMModeWorker: BlockModeWorkerFinalizing {
         case invalidParameter
     }
 
-    init(blockSize: Int, nonce: ArraySlice<UInt8>, messageLength: Int,  additionalAuthenticatedData: [UInt8]?, tagSize: Int, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(blockSize: Int, nonce: ArraySlice<UInt8>, messageLength: Int,  additionalAuthenticatedData: [UInt8]?, tagLength: Int, cipherOperation: @escaping CipherOperationOnBlock) {
         self.blockSize = blockSize
-        self.tagLength = tagSize
+        self.tagLength = tagLength
+        self.additionalBufferSize = tagLength
         self.messageLength = messageLength
         self.cipherOperation = cipherOperation
         self.nonce = Array(nonce)
@@ -98,6 +101,10 @@ class CCMModeWorker: BlockModeWorkerFinalizing {
     private func S(i: Int) throws -> [UInt8] {
         let ctr = try format(counter: i, nonce: nonce, q: q)
         return cipherOperation(ctr.slice)!
+    }
+
+    func seek(to position: Int) throws {
+        self.counter = position
     }
 
     func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {

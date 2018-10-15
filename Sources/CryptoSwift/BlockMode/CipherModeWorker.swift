@@ -37,8 +37,7 @@ public protocol StreamModeWorker: CipherModeWorker {
     mutating func seek(to position: Int) throws
 }
 
-// TODO: remove and merge with BlockModeWorker
-public protocol BlockModeWorkerFinalizing: BlockModeWorker {
+public protocol FinalizingModeWorker: CipherModeWorker {
     // Any final calculations, eg. calculate tag
     // Called after the last block is encrypted
     mutating func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8>

@@ -45,6 +45,10 @@ final class StreamEncryptor: Cryptor, Updatable {
             lastBlockRemainder = encrypted.count.quotientAndRemainder(dividingBy: blockSize).remainder
         }
 
+        if var finalizingWorker = worker as? FinalizingModeWorker, isLast == true {
+            encrypted = try finalizingWorker.finalize(encrypt: encrypted.slice)
+        }
+
         return encrypted
     }
 

@@ -24,7 +24,7 @@ public struct CCM: StreamMode {
         case invalidParameter
     }
 
-    public let options: BlockModeOption = [.initializationVectorRequired, .paddingRequired]
+    public let options: BlockModeOption = [.initializationVectorRequired]
     private let nonce: Array<UInt8>
     private let additionalAuthenticatedData: Array<UInt8>?
     private let tagLength: Int
@@ -57,8 +57,10 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
     private let q: UInt8
 
     let additionalBufferSize: Int
+    private var keystreamPosIdx = 0
     private let nonce: Array<UInt8>
-    private var prev: ArraySlice<UInt8> = []
+    private var last_y: ArraySlice<UInt8> = []
+    private var keystream: Array<UInt8> = []
 
     public enum Error: Swift.Error {
         case invalidParameter
@@ -85,15 +87,15 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
     private func processControlInformation(nonce: [UInt8], tagLength: Int, hasAssociatedData: Bool) {
         let block0 = try! format(nonce: nonce, Q: UInt32(messageLength), q: q, t: UInt8(tagLength), hasAssociatedData: hasAssociatedData).slice
         let y0 = cipherOperation(block0)!.slice
-        prev = y0
+        last_y = y0
     }
 
     private func process(aad: [UInt8]) {
         let encodedAAD = format(aad: aad)
 
         for block_i in encodedAAD.batched(by: 16) {
-            let y_i = cipherOperation(xor(block_i, prev))!.slice
-            prev = y_i
+            let y_i = cipherOperation(xor(block_i, last_y))!.slice
+            last_y = y_i
             counter += 1
         }
     }
@@ -105,21 +107,35 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
 
     func seek(to position: Int) throws {
         self.counter = position
+        keystream = try S(i: position)
+        let offset = position % blockSize
+        keystreamPosIdx = offset
     }
 
     func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
-        // y[i], where i is the counter
-        guard let y = cipherOperation(xor(prev, plaintext)),
-              let S = try? S(i: counter)
-        else {
-            return Array(plaintext)
+        var result = Array<UInt8>(reserveCapacity: plaintext.count)
+
+        var processed = 0
+        while processed < plaintext.count {
+            // Need a full block here to update keystream and do CBC
+            if keystream.isEmpty || keystreamPosIdx == blockSize {
+                // y[i], where i is the counter. Can encrypt 1 block at a time
+                guard let S = try? S(i: counter) else { return Array(plaintext) }
+
+                let plaintextP = ZeroPadding().add(to: Array(plaintext), blockSize: 16)
+                guard let y = cipherOperation(xor(last_y, plaintextP)) else { return Array(plaintext) }
+                last_y = y.slice
+
+                counter += 1
+                keystream = S
+                keystreamPosIdx = 0
+            }
+
+            let xored: Array<UInt8> = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...])
+            keystreamPosIdx += xored.count
+            processed += xored.count
+            result += xored
         }
-
-        let result = xor(plaintext, S) as Array<UInt8> // P xor MSBplen(S)
-
-        prev = y.slice
-        counter += 1
-
         return result
     }
 
@@ -128,18 +144,16 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         guard let plaintext = cipherOperation(ciphertext) else {
             return Array(ciphertext)
         }
-        let result: Array<UInt8> = xor(prev, plaintext)
-        prev = ciphertext
+        let result: Array<UInt8> = xor(last_y, plaintext)
+        last_y = ciphertext
         return result
     }
 
     func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8> {
         // concatenate T at the end
-        guard let S0 = try? S(i: 0) else {
-            return Array(ciphertext)
-        }
+        guard let S0 = try? S(i: 0) else { return Array(ciphertext) }
 
-        let tag = prev.prefix(tagLength)
+        let tag = last_y.prefix(tagLength)
         return Array(ciphertext) + (xor(tag, S0) as Array<UInt8>)
     }
 

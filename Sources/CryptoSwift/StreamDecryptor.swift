@@ -32,8 +32,19 @@ final class StreamDecryptor: Cryptor, Updatable {
         accumulated = Array(bytes)
         
         var plaintext = Array<UInt8>(reserveCapacity: bytes.count)
-        for chunk in accumulated.batched(by: blockSize) {
-            plaintext += worker.decrypt(block: chunk)
+        for var chunk in accumulated.batched(by: blockSize) {
+
+            if isLast, var finalizingWorker = worker as? FinalizingModeWorker {
+                chunk = try finalizingWorker.willDecryptLast(block: chunk + accumulated.suffix(worker.additionalBufferSize)) // tag size
+            }
+
+            if !chunk.isEmpty {
+                plaintext += worker.decrypt(block: chunk)
+            }
+
+            if var finalizingWorker = worker as? FinalizingModeWorker, isLast == true {
+                plaintext = try finalizingWorker.didDecryptLast(block: plaintext.slice)
+            }
         }
 
         // omit unecessary calculation if not needed

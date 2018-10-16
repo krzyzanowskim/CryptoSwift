@@ -167,7 +167,7 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
         return plaintext
     }
 
-    func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8> {
+    func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         // Calculate MAC tag.
         let ghash = gf.ghashFinish()
         let tag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagLength))
@@ -177,14 +177,15 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
 
         switch mode {
         case .combined:
-            return ciphertext + tag
+            return (ciphertext + tag).slice
         case .detached:
-            return Array(ciphertext)
+            return ciphertext
         }
     }
 
-    func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> Array<UInt8> {
-        return Array(plaintext)
+    func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+        // do nothing
+        return plaintext
     }
 
     // The authenticated decryption operation has five inputs: K, IV , C, A, and T. It has only a single
@@ -196,8 +197,6 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
         case .combined:
             // overwrite expectedTag property used later for verification
             self.expectedTag = Array(ciphertext.suffix(GCMModeWorker.tagLength))
-            // gf.ciphertextLength = gf.ciphertextLength - GCMModeWorker.tagLength
-            // strip tag from the plaintext.
             return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(GCMModeWorker.tagLength,ciphertext.count))]
         case .detached:
             return ciphertext

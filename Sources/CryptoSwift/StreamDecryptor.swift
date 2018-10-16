@@ -43,7 +43,7 @@ final class StreamDecryptor: Cryptor, Updatable {
         }
 
         if var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
-            plaintext = try finalizingWorker.finalize(decrypt: plaintext.slice)
+            plaintext = Array(try finalizingWorker.finalize(decrypt: plaintext.slice))
         }
 
         return plaintext

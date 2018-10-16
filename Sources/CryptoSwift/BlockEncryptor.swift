@@ -45,7 +45,7 @@ final class BlockEncryptor: Cryptor, Updatable {
         accumulated.removeFirst(encrypted.count)
 
         if var finalizingWorker = worker as? FinalizingEncryptModeWorker, isLast == true {
-            encrypted = try finalizingWorker.finalize(encrypt: encrypted.slice)
+            encrypted = Array(try finalizingWorker.finalize(encrypt: encrypted.slice))
         }
 
         return encrypted

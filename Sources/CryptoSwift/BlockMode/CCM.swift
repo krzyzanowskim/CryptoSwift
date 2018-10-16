@@ -154,16 +154,16 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         return result
     }
 
-    func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8> {
+    func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         // concatenate T at the end
-        guard let S0 = try? S(i: 0) else { return Array(ciphertext) }
+        guard let S0 = try? S(i: 0) else { return ciphertext }
 
         let tag = last_y.prefix(tagLength)
-        return Array(ciphertext) + (xor(tag, S0) as Array<UInt8>)
+        return ciphertext + (xor(tag, S0) as ArraySlice<UInt8>)
     }
 
-    func finalize(decrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8> {
-        return []
+    func finalize(decrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+        return ciphertext
     }
 
     func willDecryptLast(bytes ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {

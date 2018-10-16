@@ -162,15 +162,15 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         return result
     }
 
-    func finalize(decrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
-        return ciphertext
+    func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+        return plaintext
     }
 
     func willDecryptLast(bytes ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         return ciphertext
     }
 
-    func didDecryptLast(block plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+    func didDecryptLast(bytes plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         return plaintext
     }
 }

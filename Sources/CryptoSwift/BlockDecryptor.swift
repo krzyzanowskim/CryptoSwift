@@ -56,7 +56,7 @@ public class BlockDecryptor: Cryptor, Updatable {
                 }
 
                 if var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
-                    plaintext = Array(try finalizingWorker.didDecryptLast(block: plaintext.slice))
+                    plaintext = Array(try finalizingWorker.didDecryptLast(bytes: plaintext.slice))
                 }
 
                 processedBytesCount += chunk.count

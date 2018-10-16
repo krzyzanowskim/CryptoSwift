@@ -144,6 +144,14 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         return result
     }
 
+    func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+        // concatenate T at the end
+        guard let S0 = try? S(i: 0) else { return ciphertext }
+
+        let tag = last_y.prefix(tagLength)
+        return ciphertext + (xor(tag, S0) as ArraySlice<UInt8>)
+    }
+
     // TODO
     func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
         guard let plaintext = cipherOperation(ciphertext) else {
@@ -154,14 +162,6 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         return result
     }
 
-    func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
-        // concatenate T at the end
-        guard let S0 = try? S(i: 0) else { return ciphertext }
-
-        let tag = last_y.prefix(tagLength)
-        return ciphertext + (xor(tag, S0) as ArraySlice<UInt8>)
-    }
-
     func finalize(decrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         return ciphertext
     }
@@ -170,8 +170,8 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         return ciphertext
     }
 
-    func didDecryptLast(block plaintext: ArraySlice<UInt8>) throws -> Array<UInt8> {
-        return Array(plaintext)
+    func didDecryptLast(block plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+        return plaintext
     }
 }
 

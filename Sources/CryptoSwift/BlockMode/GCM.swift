@@ -203,14 +203,14 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
         }
     }
 
-    func didDecryptLast(block plaintext: ArraySlice<UInt8>) throws -> Array<UInt8> {
+    func didDecryptLast(block plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         // Calculate MAC tag.
         let ghash = gf.ghashFinish()
         let computedTag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagLength))
 
         // Validate tag
         if let expectedTag = self.expectedTag, computedTag == expectedTag {
-            return Array(plaintext)
+            return plaintext
         }
 
         throw GCM.Error.fail

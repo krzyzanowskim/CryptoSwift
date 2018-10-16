@@ -152,21 +152,6 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
         return Array(ciphertext)
     }
 
-    func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
-        counter = incrementCounter(counter)
-
-        // update ghash incrementally
-        gf.ghashUpdate(block: Array(ciphertext))
-
-        guard let ekN = cipherOperation(counter.bytes.slice) else {
-            return Array(ciphertext)
-        }
-
-        // ciphertext block ^ ek1
-        let plaintext = xor(ciphertext, ekN) as Array<UInt8>
-        return plaintext
-    }
-
     func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         // Calculate MAC tag.
         let ghash = gf.ghashFinish()
@@ -183,8 +168,18 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
         }
     }
 
-    func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
-        // do nothing
+    func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+        counter = incrementCounter(counter)
+
+        // update ghash incrementally
+        gf.ghashUpdate(block: Array(ciphertext))
+
+        guard let ekN = cipherOperation(counter.bytes.slice) else {
+            return Array(ciphertext)
+        }
+
+        // ciphertext block ^ ek1
+        let plaintext = xor(ciphertext, ekN) as Array<UInt8>
         return plaintext
     }
 
@@ -216,6 +211,10 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
         throw GCM.Error.fail
     }
 
+    func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+        // do nothing
+        return plaintext
+    }
 }
 
 // MARK: - Local utils

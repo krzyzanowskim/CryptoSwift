@@ -67,6 +67,8 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
     private let nonce: Array<UInt8>
     private var last_y: ArraySlice<UInt8> = []
     private var keystream: Array<UInt8> = []
+    // Known Tag used to validate during decryption
+    private var expectedTag: Array<UInt8>?
 
     public enum Error: Swift.Error {
         case invalidParameter
@@ -167,7 +169,11 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
     }
 
     func willDecryptLast(bytes ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
-        return ciphertext
+        // get tag of additionalBufferSize size
+        // `ciphertext` contains at least additionalBufferSize bytes
+        // overwrite expectedTag property used later for verification
+        self.expectedTag = Array(ciphertext.suffix(tagLength))
+        return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(tagLength,ciphertext.count))]
     }
 
     func didDecryptLast(bytes plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {

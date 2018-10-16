@@ -27,9 +27,21 @@ final class StreamDecryptor: Cryptor, Updatable {
 
     // MARK: Updatable
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8> {
+        // TODO: accumulate `worker.additionalBufferSize`
+        // and pass it to willDecrypt(), most likely it will contains MAC
+        var bytes = bytes
+
+        if isLast, var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
+            bytes = try finalizingWorker.willDecryptLast(bytes: bytes)
+        }
+
         var plaintext = Array<UInt8>(reserveCapacity: bytes.count)
         for chunk in Array(bytes).batched(by: blockSize) {
-            plaintext += worker.encrypt(block: chunk)
+            plaintext += worker.decrypt(block: chunk)
+        }
+
+        if isLast, var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
+            plaintext = Array(try finalizingWorker.didDecryptLast(bytes: plaintext.slice))
         }
 
         // omit unecessary calculation if not needed

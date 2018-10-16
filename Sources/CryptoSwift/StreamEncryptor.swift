@@ -16,8 +16,6 @@ final class StreamEncryptor: Cryptor, Updatable {
     private let blockSize: Int
     private var worker: CipherModeWorker
     private let padding: Padding
-    // Accumulated bytes. Not all processed bytes.
-    private var accumulated = Array<UInt8>(reserveCapacity: 16)
 
     private var lastBlockRemainder = 0
 
@@ -29,7 +27,7 @@ final class StreamEncryptor: Cryptor, Updatable {
 
     // MARK: Updatable
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8> {
-        accumulated = Array(bytes)
+        var accumulated = Array(bytes)
         if isLast {
             // CTR doesn't need padding. Really. Add padding to the last block if really want. but... don't.
             accumulated = padding.add(to: accumulated, blockSize: blockSize - lastBlockRemainder)
@@ -45,7 +43,7 @@ final class StreamEncryptor: Cryptor, Updatable {
             lastBlockRemainder = encrypted.count.quotientAndRemainder(dividingBy: blockSize).remainder
         }
 
-        if var finalizingWorker = worker as? FinalizingModeWorker, isLast == true {
+        if var finalizingWorker = worker as? FinalizingEncryptModeWorker, isLast == true {
             encrypted = try finalizingWorker.finalize(encrypt: encrypted.slice)
         }
 

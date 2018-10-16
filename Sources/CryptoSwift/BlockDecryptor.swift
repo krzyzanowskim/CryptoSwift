@@ -47,7 +47,7 @@ public class BlockDecryptor: Cryptor, Updatable {
         for var chunk in accumulatedWithoutSuffix.batched(by: blockSize) {
             if isLast || (accumulatedWithoutSuffix.count - processedBytesCount) >= blockSize {
 
-                if isLast, var finalizingWorker = worker as? FinalizingModeWorker {
+                if isLast, var finalizingWorker = worker as? FinalizingDecryptModeWorker {
                     chunk = try finalizingWorker.willDecryptLast(bytes: chunk + accumulated.suffix(worker.additionalBufferSize)) // tag size
                 }
 
@@ -55,7 +55,7 @@ public class BlockDecryptor: Cryptor, Updatable {
                     plaintext += worker.decrypt(block: chunk)
                 }
 
-                if var finalizingWorker = worker as? FinalizingModeWorker, isLast == true {
+                if var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
                     plaintext = try finalizingWorker.didDecryptLast(block: plaintext.slice)
                 }
 

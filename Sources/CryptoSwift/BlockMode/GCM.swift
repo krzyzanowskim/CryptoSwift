@@ -81,7 +81,7 @@ public final class GCM: BlockMode {
 
 // MARK: - Worker
 
-final class GCMModeWorker: BlockModeWorker, FinalizingModeWorker {
+final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, FinalizingDecryptModeWorker {
     let cipherOperation: CipherOperationOnBlock
 
     // Callback called when authenticationTag is ready
@@ -181,6 +181,10 @@ final class GCMModeWorker: BlockModeWorker, FinalizingModeWorker {
         case .detached:
             return Array(ciphertext)
         }
+    }
+
+    func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> Array<UInt8> {
+        return Array(plaintext)
     }
 
     // The authenticated decryption operation has five inputs: K, IV , C, A, and T. It has only a single

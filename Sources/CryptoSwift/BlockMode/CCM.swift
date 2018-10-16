@@ -52,7 +52,7 @@ public struct CCM: StreamMode {
     }
 }
 
-class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, FinalizingModeWorker {
+class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, FinalizingEncryptModeWorker, FinalizingDecryptModeWorker {
     typealias Counter = Int
     var counter = 0
 
@@ -160,6 +160,10 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
 
         let tag = last_y.prefix(tagLength)
         return Array(ciphertext) + (xor(tag, S0) as Array<UInt8>)
+    }
+
+    func finalize(decrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8> {
+        return []
     }
 
     func willDecryptLast(bytes ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {

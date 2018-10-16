@@ -27,10 +27,8 @@ final class StreamDecryptor: Cryptor, Updatable {
 
     // MARK: Updatable
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8> {
-        let accumulated = Array(bytes)
-
         var plaintext = Array<UInt8>(reserveCapacity: bytes.count)
-        for chunk in accumulated.batched(by: blockSize) {
+        for chunk in Array(bytes).batched(by: blockSize) {
             plaintext += worker.encrypt(block: chunk)
         }
 
@@ -44,8 +42,8 @@ final class StreamDecryptor: Cryptor, Updatable {
             plaintext = padding.remove(from: plaintext, blockSize: blockSize - lastBlockRemainder)
         }
 
-        if var finalizingWorker = worker as? FinalizingModeWorker, isLast == true {
-            plaintext = try finalizingWorker.finalize(encrypt: plaintext.slice)
+        if var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
+            plaintext = try finalizingWorker.finalize(decrypt: plaintext.slice)
         }
 
         return plaintext

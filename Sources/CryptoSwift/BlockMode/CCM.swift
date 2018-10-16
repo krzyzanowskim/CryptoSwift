@@ -16,6 +16,12 @@
 // https://tools.ietf.org/html/rfc3610
 // https://csrc.nist.gov/publications/detail/sp/800-38c/final
 
+#if canImport(Darwin)
+import Darwin
+#else
+import Glibc
+#endif
+
 
 public struct CCM: StreamMode {
     public enum Error: Swift.Error {

@@ -48,7 +48,7 @@ public class BlockDecryptor: Cryptor, Updatable {
             if isLast || (accumulatedWithoutSuffix.count - processedBytesCount) >= blockSize {
 
                 if isLast, var finalizingWorker = worker as? FinalizingModeWorker {
-                    chunk = try finalizingWorker.willDecryptLast(block: chunk + accumulated.suffix(worker.additionalBufferSize)) // tag size
+                    chunk = try finalizingWorker.willDecryptLast(bytes: chunk + accumulated.suffix(worker.additionalBufferSize)) // tag size
                 }
 
                 if !chunk.isEmpty {

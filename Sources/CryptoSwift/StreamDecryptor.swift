@@ -16,8 +16,6 @@ final class StreamDecryptor: Cryptor, Updatable {
     private let blockSize: Int
     private var worker: CipherModeWorker
     private let padding: Padding
-    // Accumulated bytes. Not all processed bytes.
-    private var accumulated = Array<UInt8>(reserveCapacity: 16)
 
     private var lastBlockRemainder = 0
 
@@ -29,22 +27,11 @@ final class StreamDecryptor: Cryptor, Updatable {
 
     // MARK: Updatable
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8> {
-        accumulated = Array(bytes)
-        
+        let accumulated = Array(bytes)
+
         var plaintext = Array<UInt8>(reserveCapacity: bytes.count)
-        for var chunk in accumulated.batched(by: blockSize) {
-
-            if isLast, var finalizingWorker = worker as? FinalizingModeWorker {
-                chunk = try finalizingWorker.willDecryptLast(block: chunk + accumulated.suffix(worker.additionalBufferSize)) // tag size
-            }
-
-            if !chunk.isEmpty {
-                plaintext += worker.decrypt(block: chunk)
-            }
-
-            if var finalizingWorker = worker as? FinalizingModeWorker, isLast == true {
-                plaintext = try finalizingWorker.didDecryptLast(block: plaintext.slice)
-            }
+        for chunk in accumulated.batched(by: blockSize) {
+            plaintext += worker.encrypt(block: chunk)
         }
 
         // omit unecessary calculation if not needed
@@ -54,7 +41,7 @@ final class StreamDecryptor: Cryptor, Updatable {
 
         if isLast {
             // CTR doesn't need padding. Really. Add padding to the last block if really want. but... don't.
-            plaintext = padding.remove(from: plaintext, blockSize: blockSize)
+            plaintext = padding.remove(from: plaintext, blockSize: blockSize - lastBlockRemainder)
         }
 
         if var finalizingWorker = worker as? FinalizingModeWorker, isLast == true {
@@ -71,7 +58,5 @@ final class StreamDecryptor: Cryptor, Updatable {
 
         try worker.seek(to: position)
         self.worker = worker
-
-        accumulated = []
     }
 }

@@ -162,7 +162,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         return Array(ciphertext) + (xor(tag, S0) as Array<UInt8>)
     }
 
-    func willDecryptLast(block ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+    func willDecryptLast(bytes ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         return ciphertext
     }
 

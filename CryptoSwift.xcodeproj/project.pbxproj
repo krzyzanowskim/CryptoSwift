@@ -600,8 +600,8 @@
 				754310432050111A003FB1DF /* CompactMap.swift */,
 				75B3ED76210F9DF7005D4ADA /* BlockDecryptor.swift */,
 				75B3ED78210FA016005D4ADA /* BlockEncryptor.swift */,
-				756A64C52111083B00BE8805 /* StreamEncryptor.swift */,
 				753674062175D012003E32A6 /* StreamDecryptor.swift */,
+				756A64C52111083B00BE8805 /* StreamEncryptor.swift */,
 			);
 			path = CryptoSwift;
 			sourceTree = "<group>";

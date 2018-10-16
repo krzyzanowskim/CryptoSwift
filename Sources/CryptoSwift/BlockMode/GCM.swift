@@ -186,7 +186,7 @@ final class GCMModeWorker: BlockModeWorker, FinalizingModeWorker {
     // The authenticated decryption operation has five inputs: K, IV , C, A, and T. It has only a single
     // output, either the plaintext value P or a special symbol FAIL that indicates that the inputs are not
     // authentic.
-    func willDecryptLast(block ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+    func willDecryptLast(bytes ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         // Validate tag
         switch mode {
         case .combined:

@@ -22,6 +22,7 @@
 		752BED9D208C120D00FC4743 /* Blowfish+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52541EE8B6CA0048EB3B /* Blowfish+Foundation.swift */; };
 		752BED9E208C121000FC4743 /* Blowfish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52491EE8B6CA0048EB3B /* Blowfish.swift */; };
 		752BED9F208C135700FC4743 /* AES+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52531EE8B6CA0048EB3B /* AES+Foundation.swift */; };
+		753674072175D012003E32A6 /* StreamDecryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753674062175D012003E32A6 /* StreamDecryptor.swift */; };
 		753B33011DAB84D600D06422 /* RandomBytesSequenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753B33001DAB84D600D06422 /* RandomBytesSequenceTests.swift */; };
 		754310442050111A003FB1DF /* CompactMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754310432050111A003FB1DF /* CompactMap.swift */; };
 		75482EA41CB310B7001F66A5 /* PBKDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75482EA31CB310B7001F66A5 /* PBKDF.swift */; };
@@ -262,6 +263,7 @@
 		75211FB420724A10004E41F8 /* CryptoSwift-Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-Test.xcconfig"; sourceTree = "<group>"; };
 		7523742C2083C61C0016D662 /* GCM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCM.swift; sourceTree = "<group>"; };
 		7529366920683DFC00195874 /* AEADChaCha20Poly1305.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEADChaCha20Poly1305.swift; sourceTree = "<group>"; };
+		753674062175D012003E32A6 /* StreamDecryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamDecryptor.swift; sourceTree = "<group>"; };
 		7536A93E207254A000F39140 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		753B33001DAB84D600D06422 /* RandomBytesSequenceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomBytesSequenceTests.swift; sourceTree = "<group>"; };
 		754310432050111A003FB1DF /* CompactMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactMap.swift; sourceTree = "<group>"; };
@@ -599,6 +601,7 @@
 				75B3ED76210F9DF7005D4ADA /* BlockDecryptor.swift */,
 				75B3ED78210FA016005D4ADA /* BlockEncryptor.swift */,
 				756A64C52111083B00BE8805 /* StreamEncryptor.swift */,
+				753674062175D012003E32A6 /* StreamDecryptor.swift */,
 			);
 			path = CryptoSwift;
 			sourceTree = "<group>";
@@ -927,6 +930,7 @@
 				75EC52B61EE8B83D0048EB3B /* UInt8+Extension.swift in Sources */,
 				75EC52891EE8B8170048EB3B /* OFB.swift in Sources */,
 				75EC52831EE8B8170048EB3B /* BlockModeOptions.swift in Sources */,
+				753674072175D012003E32A6 /* StreamDecryptor.swift in Sources */,
 				751EE9781F93996100161FFC /* AES.Cryptors.swift in Sources */,
 				75EC527D1EE8B8130048EB3B /* Array+Extension.swift in Sources */,
 				75D7AF38208BFB1600D22BEB /* UInt128.swift in Sources */,

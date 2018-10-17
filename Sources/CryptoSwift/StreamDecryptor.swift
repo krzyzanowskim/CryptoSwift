@@ -16,6 +16,7 @@ final class StreamDecryptor: Cryptor, Updatable {
     private let blockSize: Int
     private var worker: CipherModeWorker
     private let padding: Padding
+    private var accumulated = Array<UInt8>()
 
     private var lastBlockRemainder = 0
 
@@ -29,18 +30,27 @@ final class StreamDecryptor: Cryptor, Updatable {
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8> {
         // TODO: accumulate `worker.additionalBufferSize`
         // and pass it to willDecrypt(), most likely it will contains MAC
-        var bytes = bytes
+        accumulated += bytes
 
-        if isLast, var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
-            bytes = try finalizingWorker.willDecryptLast(bytes: bytes)
+        // If a worker (eg CCM) can combine ciphertext + tag
+        // we need to remove tag from the ciphertext.
+        if !isLast && accumulated.count < worker.additionalBufferSize {
+            return []
         }
 
-        var plaintext = Array<UInt8>(reserveCapacity: bytes.count)
-        for chunk in Array(bytes).batched(by: blockSize) {
+        if var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
+            // will truncate suffix if needed
+            accumulated = Array(try finalizingWorker.willDecryptLast(bytes: accumulated.slice))
+        }
+
+        var processedBytesCount = 0
+        var plaintext = Array<UInt8>(reserveCapacity: bytes.count + worker.additionalBufferSize)
+        for chunk in accumulated.batched(by: blockSize) {
             plaintext += worker.decrypt(block: chunk)
+            processedBytesCount += chunk.count
         }
 
-        if isLast, var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
+        if var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
             plaintext = Array(try finalizingWorker.didDecryptLast(bytes: plaintext.slice))
         }
 
@@ -53,6 +63,8 @@ final class StreamDecryptor: Cryptor, Updatable {
             // CTR doesn't need padding. Really. Add padding to the last block if really want. but... don't.
             plaintext = padding.remove(from: plaintext, blockSize: blockSize - lastBlockRemainder)
         }
+
+        accumulated.removeFirst(processedBytesCount) // super-slow
 
         if var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
             plaintext = Array(try finalizingWorker.finalize(decrypt: plaintext.slice))

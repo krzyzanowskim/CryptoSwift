@@ -47,7 +47,7 @@ public struct CCM: StreamMode {
         self.nonce = nonce
         self.tagLength = tagLength
         self.additionalAuthenticatedData = additionalAuthenticatedData
-        self.messageLength = messageLength - tagLength
+        self.messageLength = messageLength // - tagLength
     }
 
     // decrypt
@@ -89,7 +89,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
     }
 
     init(blockSize: Int, nonce: ArraySlice<UInt8>, messageLength: Int,  additionalAuthenticatedData: [UInt8]?, expectedTag: Array<UInt8>? = nil, tagLength: Int, cipherOperation: @escaping CipherOperationOnBlock) {
-        self.blockSize = 16// blockSize
+        self.blockSize = 16 // CCM is defined for 128 block size
         self.tagLength = tagLength
         self.additionalBufferSize = tagLength
         self.messageLength = messageLength
@@ -165,8 +165,8 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         // concatenate T at the end
         guard let S0 = try? S(i: 0) else { return ciphertext }
 
-        let tag = xor(last_y.prefix(tagLength), S0) as ArraySlice<UInt8>
-        return ciphertext + tag
+        let computedTag = xor(last_y.prefix(tagLength), S0) as ArraySlice<UInt8>
+        return ciphertext + computedTag
     }
 
     func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
@@ -199,9 +199,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
 
     func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         // concatenate T at the end
-        guard let S0 = try? S(i: 0) else { return plaintext }
-
-        let computedTag = xor(last_y.prefix(tagLength), S0) as Array<UInt8>
+        let computedTag = Array(last_y.prefix(tagLength))
         guard let expectedTag = self.expectedTag, expectedTag == computedTag else {
             throw CCM.Error.fail
         }
@@ -213,7 +211,8 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         // get tag of additionalBufferSize size
         // `ciphertext` contains at least additionalBufferSize bytes
         // overwrite expectedTag property used later for verification
-        self.expectedTag = Array(ciphertext.suffix(tagLength))
+        guard let S0 = try? S(i: 0) else { return ciphertext }
+        self.expectedTag = xor(ciphertext.suffix(tagLength), S0) as [UInt8]
         return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(tagLength,ciphertext.count))]
     }
 

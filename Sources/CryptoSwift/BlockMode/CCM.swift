@@ -23,6 +23,7 @@ import Glibc
 #endif
 
 
+/// Counter with Cipher Block Chaining-Message Authentication Code
 public struct CCM: StreamMode {
     public enum Error: Swift.Error {
         /// Invalid IV
@@ -42,17 +43,30 @@ public struct CCM: StreamMode {
     /// For decryption, this is a known Tag to validate against.
     public var authenticationTag: Array<UInt8>?
 
-    // encrypt
-    public init(nonce: Array<UInt8>, tagLength: Int, messageLength: Int, additionalAuthenticatedData: Array<UInt8>? = nil) {
-        self.nonce = nonce
+    /// Initialize CCM
+    ///
+    /// - Parameters:
+    ///   - iv: Initialization vector. Nonce. Valid length between 7 and 13 bytes.
+    ///   - tagLength: Authentication tag length, in bytes. Value of {4, 6, 8, 10, 12, 14, 16}.
+    ///   - messageLength: Plaintext message length (excluding tag if attached). Length have to be provided in advance.
+    ///   - additionalAuthenticatedData: Additional authenticated data.
+    public init(iv: Array<UInt8>, tagLength: Int, messageLength: Int, additionalAuthenticatedData: Array<UInt8>? = nil) {
+        self.nonce = iv
         self.tagLength = tagLength
         self.additionalAuthenticatedData = additionalAuthenticatedData
         self.messageLength = messageLength // - tagLength
     }
 
-    // decrypt
-    public init(nonce: Array<UInt8>, tagLength: Int, messageLength: Int, authenticationTag: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil) {
-        self.init(nonce: nonce, tagLength: tagLength, messageLength: messageLength, additionalAuthenticatedData: additionalAuthenticatedData)
+    /// Initialize CCM
+    ///
+    /// - Parameters:
+    ///   - iv: Initialization vector. Nonce. Valid length between 7 and 13 bytes.
+    ///   - tagLength: Authentication tag length, in bytes. Value of {4, 6, 8, 10, 12, 14, 16}.
+    ///   - messageLength: Plaintext message length (excluding tag if attached). Length have to be provided in advance.
+    ///   - authenticationTag: Authentication Tag value if not concatenated to ciphertext.
+    ///   - additionalAuthenticatedData: Additional authenticated data.
+    public init(iv: Array<UInt8>, tagLength: Int, messageLength: Int, authenticationTag: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil) {
+        self.init(iv: iv, tagLength: tagLength, messageLength: messageLength, additionalAuthenticatedData: additionalAuthenticatedData)
         self.authenticationTag = authenticationTag
     }
 

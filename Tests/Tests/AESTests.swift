@@ -584,7 +584,7 @@ extension AESTests {
         let plaintext: Array<UInt8> = [0x20, 0x21, 0x22, 0x23]
         let expected: Array<UInt8> =  [0x71, 0x62, 0x01, 0x5b, 0x4d, 0xac, 0x25, 0x5d]
 
-        let aes = try! AES(key: key, blockMode: CCM(nonce: nonce, tagLength: 4, messageLength: plaintext.count, additionalAuthenticatedData: aad), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CCM(iv: nonce, tagLength: 4, messageLength: plaintext.count, additionalAuthenticatedData: aad), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(encrypted, expected, "encryption failed")
     }
@@ -596,7 +596,7 @@ extension AESTests {
         let ciphertext: Array<UInt8> = [0x71, 0x62, 0x01, 0x5b, 0x4d, 0xac, 0x25, 0x5d]
         let expected: Array<UInt8> = [0x20, 0x21, 0x22, 0x23]
 
-        let aes = try! AES(key: key, blockMode: CCM(nonce: nonce, tagLength: 4, messageLength: ciphertext.count - 4, additionalAuthenticatedData: aad), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CCM(iv: nonce, tagLength: 4, messageLength: ciphertext.count - 4, additionalAuthenticatedData: aad), padding: .noPadding)
         let decrypted = try! aes.decrypt(ciphertext)
         XCTAssertEqual(decrypted, expected, "decryption failed")
     }
@@ -608,7 +608,7 @@ extension AESTests {
         let plaintext: Array<UInt8> = [0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f]
         let expected: Array<UInt8>  = [0xd2, 0xa1, 0xf0, 0xe0, 0x51, 0xea, 0x5f, 0x62, 0x08, 0x1a, 0x77, 0x92, 0x07, 0x3d, 0x59, 0x3d, 0x1f, 0xc6, 0x4f, 0xbf, 0xac, 0xcd]
 
-        let aes = try! AES(key: key, blockMode: CCM(nonce: nonce, tagLength: 6, messageLength: plaintext.count, additionalAuthenticatedData: aad), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CCM(iv: nonce, tagLength: 6, messageLength: plaintext.count, additionalAuthenticatedData: aad), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(encrypted, expected, "encryption failed")
     }
@@ -620,7 +620,7 @@ extension AESTests {
         let ciphertext: Array<UInt8> = [0xd2, 0xa1, 0xf0, 0xe0, 0x51, 0xea, 0x5f, 0x62, 0x08, 0x1a, 0x77, 0x92, 0x07, 0x3d, 0x59, 0x3d, 0x1f, 0xc6, 0x4f, 0xbf, 0xac, 0xcd]
         let expected: Array<UInt8>   = [0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f]
 
-        let aes = try! AES(key: key, blockMode: CCM(nonce: nonce, tagLength: 6, messageLength: ciphertext.count - 6, additionalAuthenticatedData: aad), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CCM(iv: nonce, tagLength: 6, messageLength: ciphertext.count - 6, additionalAuthenticatedData: aad), padding: .noPadding)
         let plaintext = try! aes.decrypt(ciphertext)
         XCTAssertEqual(plaintext, expected, "encryption failed")
     }
@@ -632,7 +632,7 @@ extension AESTests {
         let plaintext: Array<UInt8> = [0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37]
         let expected: Array<UInt8>  = [0xe3, 0xb2, 0x01, 0xa9, 0xf5, 0xb7, 0x1a, 0x7a, 0x9b, 0x1c, 0xea, 0xec, 0xcd, 0x97, 0xe7, 0x0b, 0x61, 0x76, 0xaa, 0xd9, 0xa4, 0x42, 0x8a, 0xa5, 0x48, 0x43, 0x92, 0xfb, 0xc1, 0xb0, 0x99, 0x51]
 
-        let aes = try! AES(key: key, blockMode: CCM(nonce: nonce, tagLength: 8, messageLength: plaintext.count, additionalAuthenticatedData: aad), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CCM(iv: nonce, tagLength: 8, messageLength: plaintext.count, additionalAuthenticatedData: aad), padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(encrypted, expected, "encryption failed")
     }
@@ -644,7 +644,7 @@ extension AESTests {
         let ciphertext: Array<UInt8> = [0xe3, 0xb2, 0x01, 0xa9, 0xf5, 0xb7, 0x1a, 0x7a, 0x9b, 0x1c, 0xea, 0xec, 0xcd, 0x97, 0xe7, 0x0b, 0x61, 0x76, 0xaa, 0xd9, 0xa4, 0x42, 0x8a, 0xa5, 0x48, 0x43, 0x92, 0xfb, 0xc1, 0xb0, 0x99, 0x51]
         let expected: Array<UInt8> =   [0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37]
 
-        let aes = try! AES(key: key, blockMode: CCM(nonce: nonce, tagLength: 8, messageLength: ciphertext.count - 8, additionalAuthenticatedData: aad), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CCM(iv: nonce, tagLength: 8, messageLength: ciphertext.count - 8, additionalAuthenticatedData: aad), padding: .noPadding)
         let plaintext = try! aes.decrypt(ciphertext)
         XCTAssertEqual(plaintext, expected, "encryption failed")
     }
@@ -656,7 +656,7 @@ extension AESTests {
         let ciphertext: Array<UInt8> = [0xe3, 0xb2, 0x01, 0xa9, 0xf5, 0xb7, 0x1a, 0x7a, 0x9b, 0x1c, 0xea, 0xec, 0xcd, 0x97, 0xe7, 0x0b, 0x61, 0x76, 0xaa, 0xd9, 0xa4, 0x42, 0x8a, 0xa5, 0x48, 0x43, 0x92, 0xfb, 0xc1, 0xb0, 0x99, 0x51]
         let expected: Array<UInt8> =   [0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37]
 
-        let aes = try! AES(key: key, blockMode: CCM(nonce: nonce, tagLength: 8, messageLength: ciphertext.count - 8, additionalAuthenticatedData: aad), padding: .noPadding)
+        let aes = try! AES(key: key, blockMode: CCM(iv: nonce, tagLength: 8, messageLength: ciphertext.count - 8, additionalAuthenticatedData: aad), padding: .noPadding)
         var decryptor = try! aes.makeDecryptor()
 
         var plaintext = [UInt8]()

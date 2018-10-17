@@ -704,8 +704,12 @@ extension AESTests {
             ("testAESGCMTestCaseIrregularCombined1", testAESGCMTestCaseIrregularCombined1),
             ("testAESGCMTestCaseIrregularCombined2", testAESGCMTestCaseIrregularCombined2),
             ("testAESCCMTestCase1", testAESCCMTestCase1),
+            ("testAESCCMTestCase1Decrypt", testAESCCMTestCase1Decrypt),
             ("testAESCCMTestCase2", testAESCCMTestCase2),
+            ("testAESCCMTestCase2Decrypt", testAESCCMTestCase2Decrypt),
             ("testAESCCMTestCase3", testAESCCMTestCase3)
+            ("testAESCCMTestCase3Decrypt", testAESCCMTestCase3Decrypt)
+            ("testAESCCMTestCase3DecryptPartial", testAESCCMTestCase3DecryptPartial)
         ]
         return tests
     }

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "CryptoSwift"
-  s.version      = "0.12.0"
+  s.version      = "0.13.0"
   s.source       = { :git => "https://github.com/krzyzanowskim/CryptoSwift.git", :tag => "#{s.version}" }
   s.summary      = "Cryptography in Swift. SHA, MD5, CRC, PBKDF, Poly1305, HMAC, CMAC, HDKF, ChaCha20, Rabbit, Blowfish, AES."
   s.description  = "Cryptography functions and helpers for Swift implemented in Swift. SHA-1, SHA-2, SHA-3, MD5, PBKDF1, PBKDF2, CRC, Poly1305, HMAC, ChaCha20, Rabbit, Blowfish, AES"

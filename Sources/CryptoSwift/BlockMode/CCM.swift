@@ -28,20 +28,34 @@ public struct CCM: StreamMode {
         /// Invalid IV
         case invalidInitializationVector
         case invalidParameter
+        case fail
     }
 
-    public let options: BlockModeOption = [.initializationVectorRequired]
+    public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
     private let nonce: Array<UInt8>
     private let additionalAuthenticatedData: Array<UInt8>?
     private let tagLength: Int
     private let messageLength: Int // total message length. need to know in advance
 
+    // `authenticationTag` nil for encryption, known tag for decryption
+    /// For encryption, the value is set at the end of the encryption.
+    /// For decryption, this is a known Tag to validate against.
+    public var authenticationTag: Array<UInt8>?
+
+    // encrypt
     public init(nonce: Array<UInt8>, tagLength: Int, messageLength: Int, additionalAuthenticatedData: Array<UInt8>? = nil) {
         self.nonce = nonce
         self.tagLength = tagLength
         self.additionalAuthenticatedData = additionalAuthenticatedData
-        self.messageLength = messageLength
+        self.messageLength = messageLength - tagLength
     }
+
+    // decrypt
+    public init(nonce: Array<UInt8>, tagLength: Int, messageLength: Int, authenticationTag: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil) {
+        self.init(nonce: nonce, tagLength: tagLength, messageLength: messageLength, additionalAuthenticatedData: additionalAuthenticatedData)
+        self.authenticationTag = authenticationTag
+    }
+
 
     public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
         if nonce.isEmpty {
@@ -74,11 +88,12 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         case invalidParameter
     }
 
-    init(blockSize: Int, nonce: ArraySlice<UInt8>, messageLength: Int,  additionalAuthenticatedData: [UInt8]?, tagLength: Int, cipherOperation: @escaping CipherOperationOnBlock) {
-        self.blockSize = blockSize
+    init(blockSize: Int, nonce: ArraySlice<UInt8>, messageLength: Int,  additionalAuthenticatedData: [UInt8]?, expectedTag: Array<UInt8>? = nil, tagLength: Int, cipherOperation: @escaping CipherOperationOnBlock) {
+        self.blockSize = 16// blockSize
         self.tagLength = tagLength
         self.additionalBufferSize = tagLength
         self.messageLength = messageLength
+        self.expectedTag = expectedTag
         self.cipherOperation = cipherOperation
         self.nonce = Array(nonce)
         self.q = UInt8(15 - nonce.count) // n = 15-q
@@ -130,7 +145,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
                 counter += 1
                 guard let S = try? S(i: counter) else { return Array(plaintext) }
 
-                let plaintextP = addPadding(Array(plaintext), blockSize: 16)
+                let plaintextP = addPadding(Array(plaintext), blockSize: blockSize)
                 guard let y = cipherOperation(xor(last_y, plaintextP)) else { return Array(plaintext) }
                 last_y = y.slice
 
@@ -150,21 +165,47 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         // concatenate T at the end
         guard let S0 = try? S(i: 0) else { return ciphertext }
 
-        let tag = last_y.prefix(tagLength)
-        return ciphertext + (xor(tag, S0) as ArraySlice<UInt8>)
+        let tag = xor(last_y.prefix(tagLength), S0) as ArraySlice<UInt8>
+        return ciphertext + tag
     }
 
-    // TODO
     func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
-        guard let plaintext = cipherOperation(ciphertext) else {
-            return Array(ciphertext)
+        var result = Array<UInt8>(reserveCapacity: ciphertext.count)
+
+        var processed = 0
+        while processed < ciphertext.count {
+            // Need a full block here to update keystream and do CBC
+            if keystream.isEmpty || keystreamPosIdx == blockSize {
+                // y[i], where i is the counter. Can encrypt 1 block at a time
+                counter += 1
+                guard let S = try? S(i: counter) else { return Array(ciphertext) }
+                let plaintextP = addPadding(xor(ciphertext, S), blockSize: blockSize)
+                guard let y = cipherOperation(xor(last_y, plaintextP)) else { return Array(ciphertext) }
+                last_y = y.slice
+
+                keystream = S
+                keystreamPosIdx = 0
+            }
+
+            let xored: Array<UInt8> = xor(ciphertext[ciphertext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...])
+            keystreamPosIdx += xored.count
+            processed += xored.count
+            result += xored
         }
-        let result: Array<UInt8> = xor(last_y, plaintext)
-        last_y = ciphertext
+        // Shouldn't return plaintext until validate tag.
+        // With incremental update, can't validate tag until all block are processed.
         return result
     }
 
     func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+        // concatenate T at the end
+        guard let S0 = try? S(i: 0) else { return plaintext }
+
+        let computedTag = xor(last_y.prefix(tagLength), S0) as Array<UInt8>
+        guard let expectedTag = self.expectedTag, expectedTag == computedTag else {
+            throw CCM.Error.fail
+        }
+
         return plaintext
     }
 

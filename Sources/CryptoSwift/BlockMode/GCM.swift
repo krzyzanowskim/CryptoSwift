@@ -204,11 +204,11 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
         let computedTag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagLength))
 
         // Validate tag
-        if let expectedTag = self.expectedTag, computedTag == expectedTag {
-            return plaintext
+        guard let expectedTag = self.expectedTag, computedTag == expectedTag else {
+            throw GCM.Error.fail
         }
 
-        throw GCM.Error.fail
+        return plaintext
     }
 
     func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {

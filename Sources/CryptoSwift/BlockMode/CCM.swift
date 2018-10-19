@@ -115,7 +115,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         let hasAssociatedData = additionalAuthenticatedData != nil && !additionalAuthenticatedData!.isEmpty
         processControlInformation(nonce: self.nonce, tagLength: tagLength, hasAssociatedData: hasAssociatedData)
 
-        if let aad = additionalAuthenticatedData {
+        if let aad = additionalAuthenticatedData, hasAssociatedData {
             process(aad: aad)
         }
     }

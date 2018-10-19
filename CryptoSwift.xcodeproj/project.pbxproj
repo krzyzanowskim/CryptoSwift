@@ -45,6 +45,7 @@
 		757DA2591A4ED4D7002BA3EF /* ChaCha20Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */; };
 		758A94291A65C67400E46135 /* HMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758A94271A65C59200E46135 /* HMACTests.swift */; };
 		758F95AB2072E8E20080D664 /* Bridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 758F95AA2072E8E10080D664 /* Bridging.h */; };
+		7594CCBC217A76DC0055C95D /* AESCCMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755E0303217A756F00065FC6 /* AESCCMTests.swift */; };
 		7595C14D2072E48C00EA1A5F /* TestsPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7595C14C2072E48C00EA1A5F /* TestsPerformance.swift */; };
 		7595C1582072E5B900EA1A5F /* DigestTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6EB20726319006688F8 /* DigestTestsPerf.swift */; };
 		7595C1592072E5B900EA1A5F /* AESTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6EE20726422006688F8 /* AESTestsPerf.swift */; };
@@ -273,6 +274,7 @@
 		754BE46619693E190098E6F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		754BE46719693E190098E6F3 /* DigestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigestTests.swift; sourceTree = "<group>"; };
 		755D27BC1D06DE6400C41692 /* CryptoSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = CryptoSwift.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		755E0303217A756F00065FC6 /* AESCCMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESCCMTests.swift; sourceTree = "<group>"; };
 		755FB1D9199E347D00475437 /* ExtensionsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionsTest.swift; sourceTree = "<group>"; };
 		7564F0602072EAEB00CA5A96 /* TestsPerformance-iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TestsPerformance-iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		756A64C52111083B00BE8805 /* StreamEncryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryptor.swift; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 				0EE73E72204D599C00110E11 /* CMACTests.swift */,
 				E6200E151FB9B67C00258382 /* HKDFTests.swift */,
 				757DA2541A4ED408002BA3EF /* AESTests.swift */,
+				755E0303217A756F00065FC6 /* AESCCMTests.swift */,
 				7576F6EE20726422006688F8 /* AESTestsPerf.swift */,
 				750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */,
 				757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */,
@@ -975,6 +978,7 @@
 				757DA2531A4ED0A4002BA3EF /* PaddingTests.swift in Sources */,
 				14156CE52011422400DDCFBC /* ChaCha20Poly1305Tests.swift in Sources */,
 				757DA2551A4ED408002BA3EF /* AESTests.swift in Sources */,
+				7594CCBC217A76DC0055C95D /* AESCCMTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

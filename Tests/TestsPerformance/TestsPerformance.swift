@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import CryptoSwift
 
 class TestsPerformance: XCTestCase {
     
@@ -20,9 +21,15 @@ class TestsPerformance: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testMD5() {
+        let data = Array("passworddrowssap".utf8)
+        var md5 = MD5()
+        
+        measure {
+            for _ in 0..<100_000 {
+                _ = try! md5.finish(withBytes: data)
+            }
+        }
     }
     
     func testPerformanceExample() {

@@ -33,7 +33,7 @@ public final class HMAC: Authenticator {
             case .sha512:
                 return SHA2.Variant.sha512.digestLength
             case .md5:
-                return MD5.digestLength
+                return _MD5.digestSize
             }
         }
 
@@ -55,7 +55,7 @@ public final class HMAC: Authenticator {
         func blockSize() -> Int {
             switch self {
             case .md5:
-                return MD5.blockSize
+                return _MD5.chunkSize
             case .sha1, .sha256:
                 return 64
             case .sha384, .sha512:

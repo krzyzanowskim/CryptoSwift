@@ -13,153 +13,188 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-public final class MD5: DigestType {
-    static let blockSize: Int = 64
-    static let digestLength: Int = 16 // 128 / 8
-    fileprivate static let hashInitialValue: Array<UInt32> = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
+fileprivate let s: [UInt32] = [ 7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,
+                                5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,
+                                4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,
+                                6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21]
 
-    fileprivate var accumulated = Array<UInt8>()
-    fileprivate var processedBytesTotalCount: Int = 0
-    fileprivate var accumulatedHash: Array<UInt32> = MD5.hashInitialValue
+fileprivate let k: [UInt32] = [ 0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
+                                0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
+                                0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
+                                0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821,
+                                0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa,
+                                0xd62f105d, 0x02441453, 0xd8a1e681, 0xe7d3fbc8,
+                                0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed,
+                                0xa9e3e905, 0xfcefa3f8, 0x676f02d9, 0x8d2a4c8a,
+                                0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c,
+                                0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70,
+                                0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x04881d05,
+                                0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665,
+                                0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039,
+                                0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1,
+                                0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
+                                0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391]
 
-    /** specifies the per-round shift amounts */
-    private let s: Array<UInt32> = [
-        7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
-        5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
-        4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
-        6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21,
-    ]
+fileprivate let chunkSize = 64
 
-    /** binary integer part of the sines of integers (Radians) */
-    private let k: Array<UInt32> = [
-        0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
-        0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
-        0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
-        0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821,
-        0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa,
-        0xd62f105d, 0x2441453, 0xd8a1e681, 0xe7d3fbc8,
-        0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed,
-        0xa9e3e905, 0xfcefa3f8, 0x676f02d9, 0x8d2a4c8a,
-        0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c,
-        0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70,
-        0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x4881d05,
-        0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665,
-        0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039,
-        0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1,
-        0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
-        0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391,
-    ]
-
+public struct _MD5: SimpleDigestType {
+    public static let littleEndian = true
+    public static let chunkSize = 64
+    public static let digestSize = 16
+    
+    // The initial hash
+    var a0: UInt32 = 0x67452301
+    var b0: UInt32 = 0xefcdab89
+    var c0: UInt32 = 0x98badcfe
+    var d0: UInt32 = 0x10325476
+    
+    // Working variables
+    var a1: UInt32 = 0
+    var b1: UInt32 = 0
+    var c1: UInt32 = 0
+    var d1: UInt32 = 0
+    
+    var F: UInt32 = 0
+    var g: Int = 0
+    var Mg: UInt32 = 0
+    
+    public private(set) var processedBytes: UInt64 = 0
+    
+    public mutating func reset() {
+        a0 = 0x67452301
+        b0 = 0xefcdab89
+        c0 = 0x98badcfe
+        d0 = 0x10325476
+        processedBytes = 0
+    }
+    
     public init() {
+        reset()
     }
-
-    public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
-        do {
-            return try update(withBytes: bytes.slice, isLast: true)
-        } catch {
-            fatalError()
+    
+    public var hashValue: [UInt8] {
+        var buffer = [UInt8]()
+        buffer.reserveCapacity(16)
+        
+        func convert(_ int: UInt32) {
+            let int = int.littleEndian
+            
+            buffer.append(UInt8(int & 0xff))
+            buffer.append(UInt8((int >> 8) & 0xff))
+            buffer.append(UInt8((int >> 16) & 0xff))
+            buffer.append(UInt8((int >> 24) & 0xff))
         }
+        
+        convert(a0)
+        convert(b0)
+        convert(c0)
+        convert(d0)
+        
+        return buffer
     }
-
-    // mutating currentHash in place is way faster than returning new result
-    fileprivate func process(block chunk: ArraySlice<UInt8>, currentHash: inout Array<UInt32>) {
-        assert(chunk.count == 16 * 4)
-
-        // Initialize hash value for this chunk:
-        var A: UInt32 = currentHash[0]
-        var B: UInt32 = currentHash[1]
-        var C: UInt32 = currentHash[2]
-        var D: UInt32 = currentHash[3]
-
-        var dTemp: UInt32 = 0
-
-        // Main loop
-        for j in 0..<k.count {
-            var g = 0
-            var F: UInt32 = 0
-
-            switch j {
+    
+    public mutating func update(from pointer: UnsafePointer<UInt8>) {
+        a1 = a0
+        b1 = b0
+        c1 = c0
+        d1 = d0
+        
+        for i in 0...63 {
+            switch i {
             case 0...15:
-                F = (B & C) | ((~B) & D)
-                g = j
-                break
+                F = (b1 & c1) | ((~b1) & d1)
+                g = i
             case 16...31:
-                F = (D & B) | (~D & C)
-                g = (5 * j + 1) % 16
-                break
+                F = (d1 & b1) | ((~d1) & c1)
+                g = (5 &* i &+ 1) % 16
             case 32...47:
-                F = B ^ C ^ D
-                g = (3 * j + 5) % 16
-                break
-            case 48...63:
-                F = C ^ (B | (~D))
-                g = (7 * j) % 16
-                break
+                F = b1 ^ c1 ^ d1
+                g = (3 &* i &+ 5) % 16
             default:
-                break
+                F = c1 ^ (b1 | (~d1))
+                g = (7 &* i) % 16
             }
-            dTemp = D
-            D = C
-            C = B
-
-            // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15 and get M[g] value
-            let gAdvanced = g << 2
-
-            var Mg = UInt32(chunk[chunk.startIndex &+ gAdvanced])
-            Mg |= UInt32(chunk[chunk.startIndex &+ gAdvanced &+ 1]) << 8
-            Mg |= UInt32(chunk[chunk.startIndex &+ gAdvanced &+ 2]) << 16
-            Mg |= UInt32(chunk[chunk.startIndex &+ gAdvanced &+ 3]) << 24
-
-            B = B &+ rotateLeft(A &+ F &+ k[j] &+ Mg, by: s[j])
-            A = dTemp
+            
+            Mg = pointer.advanced(by: g << 2).withMemoryRebound(to: UInt32.self, capacity: 1) { $0.pointee }
+            
+            F = F &+ a1 &+ k[i] &+ Mg
+            a1 = d1
+            d1 = c1
+            c1 = b1
+            b1 = b1 &+ leftRotate(F, count: s[i])
         }
-
-        currentHash[0] = currentHash[0] &+ A
-        currentHash[1] = currentHash[1] &+ B
-        currentHash[2] = currentHash[2] &+ C
-        currentHash[3] = currentHash[3] &+ D
+        
+        a0 = a0 &+ a1
+        b0 = b0 &+ b1
+        c0 = c0 &+ c1
+        d0 = d0 &+ d1
     }
 }
 
-extension MD5: Updatable {
-    public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
-        accumulated += bytes
+fileprivate func leftRotate(_ x: UInt32, count c: UInt32) -> UInt32 {
+    return (x << c) | (x >> (32 &- c))
+}
 
-        if isLast {
-            let lengthInBits = (processedBytesTotalCount + accumulated.count) * 8
-            let lengthBytes = lengthInBits.bytes(totalBytes: 64 / 8) // A 64-bit representation of b
+public typealias MD5 = SimpleDigest<_MD5>
 
-            // Step 1. Append padding
-            bitPadding(to: &accumulated, blockSize: MD5.blockSize, allowance: 64 / 8)
-
-            // Step 2. Append Length a 64-bit representation of lengthInBits
-            accumulated += lengthBytes.reversed()
+public final class SimpleDigest<S: SimpleDigestType>: Updatable {
+    fileprivate var accumulated = Array<UInt8>()
+    private var hash = S()
+    
+    public init() {
+        accumulated.reserveCapacity(S.chunkSize)
+    }
+    
+    public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
+        return update(withBytes: bytes.slice, isLast: true)
+    }
+    
+    public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) -> Array<UInt8> {
+        let addedToAccumulated: Int
+        
+        if accumulated.count > 0 {
+            addedToAccumulated = S.chunkSize &- accumulated.count
+            
+            if bytes.count < addedToAccumulated {
+                accumulated.append(contentsOf: bytes)
+                return hash.hashValue
+            }
+            
+            accumulated.append(contentsOf: bytes[0..<addedToAccumulated])
+        } else {
+            addedToAccumulated = 0
         }
-
-        var processedBytes = 0
-        for chunk in accumulated.batched(by: MD5.blockSize) {
-            if isLast || (accumulated.count - processedBytes) >= MD5.blockSize {
-                process(block: chunk, currentHash: &accumulatedHash)
-                processedBytes += chunk.count
+        
+        let bytes = bytes[addedToAccumulated...]
+        
+        if isLast {
+            return bytes.withUnsafeBytes { buffer in
+                let bound = buffer.bindMemory(to: UInt8.self)
+                let buffer = UnsafeBufferPointer(
+                    start: bound.baseAddress?.advanced(by: addedToAccumulated),
+                    count: bound.count &- addedToAccumulated
+                )
+                return hash.finish(from: buffer)
             }
         }
-        accumulated.removeFirst(processedBytes)
-        processedBytesTotalCount += processedBytes
-
-        // output current hash
-        var result = Array<UInt8>()
-        result.reserveCapacity(MD5.digestLength)
-
-        for hElement in accumulatedHash {
-            let hLE = hElement.littleEndian
-            result += Array<UInt8>(arrayLiteral: UInt8(hLE & 0xff), UInt8((hLE >> 8) & 0xff), UInt8((hLE >> 16) & 0xff), UInt8((hLE >> 24) & 0xff))
+        
+        var remainingBytes = bytes.count
+        var offset = 0
+        
+        if remainingBytes < S.chunkSize {
+            accumulated = Array(bytes)
+            return hash.hashValue
         }
-
-        // reset hash value for instance
-        if isLast {
-            accumulatedHash = MD5.hashInitialValue
+        
+        while remainingBytes < S.chunkSize {
+            bytes.withUnsafeBytes { buffer in
+                let pointer = buffer.bindMemory(to: UInt8.self).baseAddress!
+                hash.update(from: pointer.advanced(by: offset))
+            }
+            remainingBytes = remainingBytes &- S.chunkSize
+            offset = offset &+ S.chunkSize
         }
-
-        return result
+        
+        return hash.hashValue
     }
 }

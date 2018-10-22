@@ -158,7 +158,6 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
                 // y[i], where i is the counter. Can encrypt 1 block at a time
                 counter += 1
                 guard let S = try? S(i: counter) else { return Array(plaintext) }
-
                 let plaintextP = addPadding(Array(plaintext), blockSize: blockSize)
                 guard let y = cipherOperation(xor(last_y, plaintextP)) else { return Array(plaintext) }
                 last_y = y.slice
@@ -183,32 +182,41 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         return ciphertext + computedTag
     }
 
+    // Decryption is stream
+    // CBC is block
+    private var accumulatedPlaintext: [UInt8] = []
+
     func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
-        var result = Array<UInt8>(reserveCapacity: ciphertext.count)
+        var output = Array<UInt8>(reserveCapacity: ciphertext.count)
 
-        var processed = 0
-        while processed < ciphertext.count {
-            // Need a full block here to update keystream and do CBC
-            if keystream.isEmpty || keystreamPosIdx == blockSize {
-                // y[i], where i is the counter. Can encrypt 1 block at a time
-                counter += 1
-                guard let S = try? S(i: counter) else { return Array(ciphertext) }
-                let plaintextP = addPadding(xor(ciphertext, S), blockSize: blockSize)
-                guard let y = cipherOperation(xor(last_y, plaintextP)) else { return Array(ciphertext) }
-                last_y = y.slice
+        do {
+            var currentCounter = counter
+            var processed = 0
+            while processed < ciphertext.count {
+                // Need a full block here to update keystream and do CBC
+                // New keystream for a new block
+                if keystream.isEmpty || keystreamPosIdx == blockSize {
+                    currentCounter += 1
+                    guard let S = try? S(i: currentCounter) else { return Array(ciphertext) }
+                    keystream = S
+                    keystreamPosIdx = 0
+                }
 
-                keystream = S
-                keystreamPosIdx = 0
+                let xored: Array<UInt8> = xor(ciphertext[ciphertext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...]) // plaintext
+                keystreamPosIdx += xored.count
+                processed += xored.count
+                output += xored
+                counter = currentCounter
             }
-
-            let xored: Array<UInt8> = xor(ciphertext[ciphertext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...])
-            keystreamPosIdx += xored.count
-            processed += xored.count
-            result += xored
         }
+
+        // Accumulate plaintext for the MAC calculations at the end.
+        // It would be good to process it together though, here.
+        accumulatedPlaintext += output
+
         // Shouldn't return plaintext until validate tag.
         // With incremental update, can't validate tag until all block are processed.
-        return result
+        return output
     }
 
     func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
@@ -231,6 +239,16 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
     }
 
     func didDecryptLast(bytes plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+
+        // Calculate Tag, from the last CBC block, for accumulated plaintext.
+        var processed = 0
+        for block in accumulatedPlaintext.batched(by: blockSize) {
+            let blockP = addPadding(Array(block), blockSize: blockSize)
+            guard let y = cipherOperation(xor(last_y, blockP)) else { return plaintext }
+            last_y = y.slice
+            processed += block.count
+        }
+        accumulatedPlaintext.removeFirst(processed)
         return plaintext
     }
 }

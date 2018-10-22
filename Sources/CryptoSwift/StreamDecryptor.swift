@@ -28,24 +28,18 @@ final class StreamDecryptor: Cryptor, Updatable {
 
     // MARK: Updatable
     public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8> {
-        // TODO: accumulate `worker.additionalBufferSize`
-        // and pass it to willDecrypt(), most likely it will contains MAC
         accumulated += bytes
 
-        // If a worker (eg CCM) can combine ciphertext + tag
-        // we need to remove tag from the ciphertext.
-        if !isLast && accumulated.count < worker.additionalBufferSize {
-            return []
-        }
+        let toProcess = accumulated.prefix(max(accumulated.count - worker.additionalBufferSize, 0))
 
         if var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
             // will truncate suffix if needed
-            accumulated = Array(try finalizingWorker.willDecryptLast(bytes: accumulated.slice))
+            try finalizingWorker.willDecryptLast(bytes: accumulated.slice)
         }
 
         var processedBytesCount = 0
         var plaintext = Array<UInt8>(reserveCapacity: bytes.count + worker.additionalBufferSize)
-        for chunk in accumulated.batched(by: blockSize) {
+        for chunk in toProcess.batched(by: blockSize) {
             plaintext += worker.decrypt(block: chunk)
             processedBytesCount += chunk.count
         }

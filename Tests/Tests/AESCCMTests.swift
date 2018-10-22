@@ -1,6 +1,6 @@
 ////  CryptoSwift
 //
-//  Copyright (C) 2014-__YEAR__ Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  Copyright (C) 2014-2018 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 //  This software is provided 'as-is', without any express or implied warranty.
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
@@ -381,8 +381,18 @@ final class AESCCMTests: XCTestCase {
             return true
         }
 
-        for fixture in fixtures {
-            XCTAssertTrue(testEncrypt(fixture: fixture))
+        func testDecrypt(fixture: TestFixture) -> Bool {
+            let aes = try! AES(key: fixture.key, blockMode: CCM(iv: fixture.nonce, tagLength: fixture.tagLength, messageLength: fixture.plaintext.count /*- fixture.tagLength*/, additionalAuthenticatedData: fixture.aad), padding: .noPadding)
+            let plaintext = try! aes.decrypt(fixture.expected)
+            if plaintext != fixture.plaintext {
+                return false
+            }
+            return true
+        }
+
+        for (i,fixture) in fixtures.enumerated() {
+            XCTAssertTrue(testEncrypt(fixture: fixture), "Encryption failed")
+            XCTAssertTrue(testDecrypt(fixture: fixture), "(\(i) - Decryption failed.")
         }
     }
 

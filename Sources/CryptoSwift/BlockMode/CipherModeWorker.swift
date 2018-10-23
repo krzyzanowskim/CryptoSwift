@@ -51,6 +51,7 @@ public protocol FinalizingEncryptModeWorker: CipherModeWorker {
 public protocol FinalizingDecryptModeWorker: CipherModeWorker {
     // Called before decryption, hence input is ciphertext.
     // ciphertext is either a last block, or a tag (for stream workers)
+    @discardableResult
     mutating func willDecryptLast(bytes ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8>
     // Called after decryption, hence input is ciphertext
     mutating func didDecryptLast(bytes plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8>

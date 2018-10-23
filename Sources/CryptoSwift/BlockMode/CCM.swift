@@ -229,6 +229,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         return plaintext
     }
 
+    @discardableResult
     func willDecryptLast(bytes ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         // get tag of additionalBufferSize size
         // `ciphertext` contains at least additionalBufferSize bytes

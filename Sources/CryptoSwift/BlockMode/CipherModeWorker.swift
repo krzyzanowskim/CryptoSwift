@@ -24,6 +24,7 @@ public protocol CipherModeWorker {
     mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8>
 }
 
+/// Block workers use `BlockEncryptor`
 public protocol BlockModeWorker: CipherModeWorker {
     var blockSize: Int { get }
 }
@@ -33,17 +34,28 @@ public protocol CounterModeWorker: CipherModeWorker {
     var counter: Counter { get set }
 }
 
-public protocol StreamModeWorker: CipherModeWorker {
+public protocol SeekableModeWorker: CipherModeWorker {
     mutating func seek(to position: Int) throws
 }
 
-// TODO: remove and merge with BlockModeWorker
-public protocol BlockModeWorkerFinalizing: BlockModeWorker {
+/// Stream workers use `StreamEncryptor`
+public protocol StreamModeWorker: CipherModeWorker {
+}
+
+public protocol FinalizingEncryptModeWorker: CipherModeWorker {
     // Any final calculations, eg. calculate tag
     // Called after the last block is encrypted
-    mutating func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8>
-    // Called before decryption, hence input is ciphertext
-    mutating func willDecryptLast(block ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8>
+    mutating func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8>
+}
+
+public protocol FinalizingDecryptModeWorker: CipherModeWorker {
+    // Called before decryption, hence input is ciphertext.
+    // ciphertext is either a last block, or a tag (for stream workers)
+    @discardableResult
+    mutating func willDecryptLast(bytes ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8>
     // Called after decryption, hence input is ciphertext
-    mutating func didDecryptLast(block plaintext: ArraySlice<UInt8>) throws -> Array<UInt8>
+    mutating func didDecryptLast(bytes plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8>
+    // Any final calculations, eg. calculate tag
+    // Called after the last block is encrypted
+    mutating func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8>
 }

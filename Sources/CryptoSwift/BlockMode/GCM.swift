@@ -28,7 +28,7 @@ public final class GCM: BlockMode {
         var additionalBufferSize: Int {
             switch self {
             case .combined:
-                return GCMModeWorker.tagSize
+                return GCMModeWorker.tagLength
             case .detached:
                 return 0
             }
@@ -81,14 +81,14 @@ public final class GCM: BlockMode {
 
 // MARK: - Worker
 
-final class GCMModeWorker: BlockModeWorkerFinalizing {
+final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, FinalizingDecryptModeWorker {
     let cipherOperation: CipherOperationOnBlock
 
     // Callback called when authenticationTag is ready
     var didCalculateTag: ((Array<UInt8>) -> Void)?
 
     // 128 bit tag. Other possible tags 4,8,12,13,14,15,16
-    fileprivate static let tagSize = 16
+    fileprivate static let tagLength = 16
     // GCM nonce is 96-bits by default. It's the most effective length for the IV
     private static let nonceSize = 12
 
@@ -152,6 +152,22 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
         return Array(ciphertext)
     }
 
+    func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+        // Calculate MAC tag.
+        let ghash = gf.ghashFinish()
+        let tag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagLength))
+
+        // Notify handler
+        didCalculateTag?(tag)
+
+        switch mode {
+        case .combined:
+            return (ciphertext + tag).slice
+        case .detached:
+            return ciphertext
+        }
+    }
+
     func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
         counter = incrementCounter(counter)
 
@@ -167,52 +183,39 @@ final class GCMModeWorker: BlockModeWorkerFinalizing {
         return plaintext
     }
 
-    func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> Array<UInt8> {
-        // Calculate MAC tag.
-        let ghash = gf.ghashFinish()
-        let tag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagSize))
-
-        // Notify handler
-        didCalculateTag?(tag)
-
-        switch mode {
-        case .combined:
-            return ciphertext + tag
-        case .detached:
-            return Array(ciphertext)
-        }
-    }
-
     // The authenticated decryption operation has five inputs: K, IV , C, A, and T. It has only a single
     // output, either the plaintext value P or a special symbol FAIL that indicates that the inputs are not
     // authentic.
-    func willDecryptLast(block ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+    @discardableResult
+    func willDecryptLast(bytes ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         // Validate tag
         switch mode {
         case .combined:
             // overwrite expectedTag property used later for verification
-            self.expectedTag = Array(ciphertext.suffix(GCMModeWorker.tagSize))
-            // gf.ciphertextLength = gf.ciphertextLength - GCMModeWorker.tagSize
-            // strip tag from the plaintext.
-            return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(GCMModeWorker.tagSize,ciphertext.count))]
+            self.expectedTag = Array(ciphertext.suffix(GCMModeWorker.tagLength))
+            return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(GCMModeWorker.tagLength,ciphertext.count))]
         case .detached:
             return ciphertext
         }
     }
 
-    func didDecryptLast(block plaintext: ArraySlice<UInt8>) throws -> Array<UInt8> {
+    func didDecryptLast(bytes plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
         // Calculate MAC tag.
         let ghash = gf.ghashFinish()
-        let computedTag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagSize))
+        let computedTag = Array((ghash ^ eky0).bytes.prefix(GCMModeWorker.tagLength))
 
         // Validate tag
-        if let expectedTag = self.expectedTag, computedTag == expectedTag {
-            return Array(plaintext)
+        guard let expectedTag = self.expectedTag, computedTag == expectedTag else {
+            throw GCM.Error.fail
         }
 
-        throw GCM.Error.fail
+        return plaintext
     }
 
+    func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
+        // do nothing
+        return plaintext
+    }
 }
 
 // MARK: - Local utils

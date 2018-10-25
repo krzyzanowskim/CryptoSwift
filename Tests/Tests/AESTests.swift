@@ -386,7 +386,7 @@ final class AESTests: XCTestCase {
     }
 }
 
-// GCM Test Vectors
+// MARK: - GCM
 extension AESTests {
     func testAESGCMTestCase1() {
         // Test Case 1
@@ -610,7 +610,7 @@ extension AESTests {
             ("testAESGCMTestCase6", testAESGCMTestCase6),
             ("testAESGCMTestCase7", testAESGCMTestCase7),
             ("testAESGCMTestCaseIrregularCombined1", testAESGCMTestCaseIrregularCombined1),
-            ("testAESGCMTestCaseIrregularCombined2", testAESGCMTestCaseIrregularCombined2),
+            ("testAESGCMTestCaseIrregularCombined2", testAESGCMTestCaseIrregularCombined2)
         ]
         return tests
     }

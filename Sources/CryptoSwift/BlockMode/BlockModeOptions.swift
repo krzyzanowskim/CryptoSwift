@@ -20,10 +20,6 @@ public struct BlockModeOption: OptionSet {
         self.rawValue = rawValue
     }
 
-    public init(rawValue: Int, authenticationTagSize: Int) {
-        self.rawValue = rawValue
-    }
-
     static let none = BlockModeOption(rawValue: 1 << 0)
     static let initializationVectorRequired = BlockModeOption(rawValue: 1 << 1)
     static let paddingRequired = BlockModeOption(rawValue: 1 << 2)

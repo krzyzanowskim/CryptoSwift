@@ -1,6 +1,6 @@
 //  CryptoSwift
 //
-//  Copyright (C) 2014-__YEAR__ Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  Copyright (C) 2014-2018 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 //  This software is provided 'as-is', without any express or implied warranty.
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
@@ -44,8 +44,8 @@ final class BlockEncryptor: Cryptor, Updatable {
         // Stream encrypts all, so it removes all elements
         accumulated.removeFirst(encrypted.count)
 
-        if var finalizingWorker = worker as? BlockModeWorkerFinalizing, isLast == true {
-            encrypted = try finalizingWorker.finalize(encrypt: encrypted.slice)
+        if var finalizingWorker = worker as? FinalizingEncryptModeWorker, isLast == true {
+            encrypted = Array(try finalizingWorker.finalize(encrypt: encrypted.slice))
         }
 
         return encrypted

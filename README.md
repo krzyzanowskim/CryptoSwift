@@ -1,4 +1,4 @@
-[![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
+[![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20Android%20%7CmacOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
 
 [![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0%20%7C%204.1-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods&colorA=28a745&&colorB=4E4E4E)](https://cocoapods.org/pods/CryptoSwift)
@@ -37,7 +37,7 @@ Good mood
 - Easy to use
 - Convenient extensions for String and Data
 - Support for incremental updates (stream, ...)
-- iOS, macOS, AppleTV, watchOS, Linux support
+- iOS, Android, macOS, AppleTV, watchOS, Linux support
 
 #### Hash (Digest)
   [MD5](http://tools.ietf.org/html/rfc1321)

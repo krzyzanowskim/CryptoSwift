@@ -1,12 +1,16 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.2
 
 import PackageDescription
 
-_ = Package(name: "CryptoSwift",
-            products: [.library(name: "CryptoSwift", targets: ["CryptoSwift"])],
-            targets: [
-                .target(name: "CryptoSwift"),
-                .testTarget(name: "Tests", dependencies: ["CryptoSwift"]),
-                .testTarget(name: "TestsPerformance", dependencies: ["CryptoSwift"]),
-            ],
-            swiftLanguageVersions: [4])
+let package = Package(
+    name: "CryptoSwift",
+    products: [
+        .library(
+            name: "CryptoSwift",
+            targets: ["CryptoSwift"])
+    ],
+    targets: [
+        .target(name: "CryptoSwift"),
+        .testTarget(name: "Tests", dependencies: ["CryptoSwift"]),
+        .testTarget(name: "TestsPerformance", dependencies: ["CryptoSwift"]),
+    ])

@@ -1,5 +1,9 @@
+0.13.1
+- Adds AES-GCM tag length configuration.
+- Fixes count check for initializing UInt64 from Data.
+
 0.13.0
-- Adds CBC-MAC authenticator
+- Adds CBC-MAC authenticator.
 - Adds AES-CCM operation mode.
 
 0.12.0

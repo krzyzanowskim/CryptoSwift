@@ -567,6 +567,43 @@ extension AESTests {
         let decrypted = decrypt(encrypted)
         XCTAssertEqual(decrypted, plaintext)
     }
+    
+    func testAESGCMTagLengthCombined2() {
+        let key = Data(base64Encoded: "X2V2b2x2ZV91c2FnZV9zZXJ2ZXJfZW5jcnlwdGlvbl8=")!.bytes
+        let plaintext = Array<UInt8>(hex: "0x0000000000000000000000000000000000000000")
+        let iv = Array<UInt8>(hex: "0x000000000000")
+        
+        let gcm = GCM(iv: iv, tagLength: 12, mode: .combined)
+        let aes = try! AES(key: key, blockMode: gcm, padding: .noPadding)
+        let encrypted = try! aes.encrypt(plaintext)
+        
+        // decrypt
+        func decrypt(_ encrypted: Array<UInt8>) -> Array<UInt8> {
+            let decGCM = GCM(iv: iv, authenticationTag: gcm.authenticationTag!, mode: .combined)
+            let aes = try! AES(key: key, blockMode: decGCM, padding: .noPadding)
+            return try! aes.decrypt(encrypted)
+        }
+        
+        let decrypted = decrypt(encrypted)
+        XCTAssertEqual(decrypted, plaintext)
+    }
+    
+    func testAESGCMTagLengthCombined3() {
+        let data = Data(base64Encoded: "jkVoOail9ZLbGBX/glT5S7Sql7OcH9Fr3sGt0liSBPKaykJ4+Gc=")!.bytes
+        let key = Data(base64Encoded: "X2V2b2x2ZV91c2FnZV9zZXJ2ZXJfZW5jcnlwdGlvbl8=")!.bytes
+        let plaintext = Data(base64Encoded: "fg/LQuxydo5JwrbqBkEAOlweBxs=")!.bytes
+        
+        let ciphertextLength = 32
+        let encrypted = data.prefix(upTo: ciphertextLength)
+        let iv = Array(data.dropFirst(ciphertextLength))
+        
+        // decrypt
+        let gcm = GCM(iv: iv, tagLength: 12, mode: .combined)
+        let aes = try! AES(key: key, blockMode: gcm, padding: .noPadding)
+        let decrypted = try! aes.decrypt(encrypted)
+    
+        XCTAssertEqual(decrypted, plaintext)
+    }
 
     func testAESGCMTestCaseIrregularCombined1() {
         // echo -n "0123456789010123456789012345" | openssl enc -aes-128-gcm -K feffe9928665731c6d6a8f9467308308 -iv cafebabefacedbaddecaf888 -nopad -nosalt

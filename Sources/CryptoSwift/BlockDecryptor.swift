@@ -46,8 +46,9 @@ public class BlockDecryptor: Cryptor, Updatable {
         // Processing in a block-size manner. It's good for block modes, but bad for stream modes.
         for var chunk in accumulatedWithoutSuffix.batched(by: blockSize) {
             if isLast || (accumulatedWithoutSuffix.count - processedBytesCount) >= blockSize {
-
-                if isLast, var finalizingWorker = worker as? FinalizingDecryptModeWorker {
+                let isLastChunk = processedBytesCount + chunk.count == accumulatedWithoutSuffix.count
+                
+                if isLast, isLastChunk, var finalizingWorker = worker as? FinalizingDecryptModeWorker {
                     chunk = try finalizingWorker.willDecryptLast(bytes: chunk + accumulated.suffix(worker.additionalBufferSize)) // tag size
                 }
 
@@ -55,7 +56,7 @@ public class BlockDecryptor: Cryptor, Updatable {
                     plaintext += worker.decrypt(block: chunk)
                 }
 
-                if var finalizingWorker = worker as? FinalizingDecryptModeWorker, isLast == true {
+                if isLast, isLastChunk, var finalizingWorker = worker as? FinalizingDecryptModeWorker {
                     plaintext = Array(try finalizingWorker.didDecryptLast(bytes: plaintext.slice))
                 }
 

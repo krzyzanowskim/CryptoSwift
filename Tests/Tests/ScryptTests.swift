@@ -46,24 +46,26 @@ class Scrypt: XCTestCase {
         XCTAssertEqual(derived, expected)
     }
     
-    //      Takes too long to run in debug mode!
-    //    func testScrypt_2() {
-    //        let password = Array("pleaseletmein".data(using: .ascii)!)
-    //        let salt = Array("SodiumChloride".data(using: .ascii)!)
-    //        let deriver = try! CryptoSwift.Scrypt(password: password, salt: salt, dkLen: 64, N: 1048576, r: 8, p: 16)
-    //        let derived = try! deriver.calculate()
-    //        let expected: [UInt8] = Array<UInt8>.init(hex: """
-    //                21 01 cb 9b 6a 51 1a ae ad db be 09 cf 70 f8 81
-    //                ec 56 8d 57 4a 2f fd 4d ab e5 ee 98 20 ad aa 47
-    //                8e 56 fd 8f 4b a5 d0 9f fa 1c 6d 92 7c 40 f4 c3
-    //                37 30 40 49 e8 a9 52 fb cb f4 5c 6f a7 7a 41 a4
-    //""".replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\t", with: ""))
-    //        XCTAssertEqual(derived, expected)
-    //    }
+//          Takes too long to run in debug mode!
+        func testScrypt_2() {
+            #if !DEBUG
+            let password = Array("pleaseletmein".data(using: .ascii)!)
+            let salt = Array("SodiumChloride".data(using: .ascii)!)
+            let deriver = try! CryptoSwift.Scrypt(password: password, salt: salt, dkLen: 64, N: 1048576, r: 8, p: 16)
+            let derived = try! deriver.calculate()
+            let expected: [UInt8] = Array<UInt8>.init(hex: """
+                    21 01 cb 9b 6a 51 1a ae ad db be 09 cf 70 f8 81
+                    ec 56 8d 57 4a 2f fd 4d ab e5 ee 98 20 ad aa 47
+                    8e 56 fd 8f 4b a5 d0 9f fa 1c 6d 92 7c 40 f4 c3
+                    37 30 40 49 e8 a9 52 fb cb f4 5c 6f a7 7a 41 a4
+    """.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\t", with: ""))
+            XCTAssertEqual(derived, expected)
+            #endif
+        }
     
     static let allTests = [
         ("testScrypt_0", testScrypt_0),
         ("testScrypt_1", testScrypt_1),
-        //        ("testScrypt_2", testScrypt_2)
+        ("testScrypt_2", testScrypt_2)
     ]
 }

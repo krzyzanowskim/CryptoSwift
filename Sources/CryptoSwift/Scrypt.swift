@@ -27,8 +27,8 @@ public final class Scrypt {
     }
 
     /// Configuration parameters.
-    private let salt: Array<UInt8>
-    private let password: Array<UInt8>
+    private let salt: SecureBytes
+    private let password: SecureBytes
     fileprivate let blocksize: Int // 128 * r
     fileprivate let salsaBlock = UnsafeMutableRawPointer.allocate(byteCount: 64, alignment: 64)
     private let dkLen: Int
@@ -62,8 +62,8 @@ public final class Scrypt {
         self.N = N
         self.r = r
         self.p = p
-        self.password = password
-        self.salt = salt
+        self.password = SecureBytes.init(bytes: password)
+        self.salt = SecureBytes.init(bytes: salt)
         self.dkLen = dkLen
     }
 
@@ -83,7 +83,7 @@ public final class Scrypt {
 
         /* 1: (B_0 ... B_{p-1}) <-- PBKDF2(P, S, 1, p * MFLen) */
         // Expand the initial key
-        let barray = try PKCS5.PBKDF2(password: password, salt: salt, iterations: 1, keyLength: p * 128 * r, variant: .sha256).calculate()
+        let barray = try PKCS5.PBKDF2(password: Array(password), salt: Array(salt), iterations: 1, keyLength: p * 128 * r, variant: .sha256).calculate()
         barray.withUnsafeBytes { p in
             B.copyMemory(from: p.baseAddress!, byteCount: barray.count)
         }
@@ -99,7 +99,7 @@ public final class Scrypt {
         let pointer = B.assumingMemoryBound(to: UInt8.self)
         let bufferPointer = UnsafeBufferPointer(start: pointer, count: p * 128 * r)
         let block = [UInt8](bufferPointer)
-        return try PKCS5.PBKDF2(password: password, salt: block, iterations: 1, keyLength: dkLen, variant: .sha256).calculate()
+        return try PKCS5.PBKDF2(password: Array(password), salt: block, iterations: 1, keyLength: dkLen, variant: .sha256).calculate()
     }
 }
 

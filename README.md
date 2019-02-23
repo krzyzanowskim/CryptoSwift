@@ -79,6 +79,7 @@ Good mood
 - [PBKDF1](http://tools.ietf.org/html/rfc2898#section-5.1) (Password-Based Key Derivation Function 1)
 - [PBKDF2](http://tools.ietf.org/html/rfc2898#section-5.2) (Password-Based Key Derivation Function 2)
 - [HKDF](https://tools.ietf.org/html/rfc5869) (HMAC-based Extract-and-Expand Key Derivation Function)
+- [Scrypt](https://tools.ietf.org/html/rfc7914) (The scrypt Password-Based Key Derivation Function)
 
 #### Data padding
   PKCS#5
@@ -314,6 +315,14 @@ let salt: Array<UInt8> = Array("nacllcan".utf8)
 let key = try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha256).calculate()
 ```
 
+```swift
+let password: Array<UInt8> = Array("s33krit".utf8)
+let salt: Array<UInt8> = Array("nacllcan".utf8)
+// Scrypt implementation does not implement work parallelization, so `p` parameter will
+// increase the work time even in multicore systems
+let key = try Scrypt(password: password, salt: salt, dkLen: 64, N: 16384, r: 8, p: 1).calculate()
+```
+
 ##### HMAC-based Key Derivation Function
 
 ```swift
@@ -322,6 +331,7 @@ let salt: Array<UInt8> = Array("nacllcan".utf8)
 
 let key = try HKDF(password: password, salt: salt, variant: .sha256).calculate()
 ```
+
 
 ##### Data Padding
     
@@ -466,7 +476,7 @@ do {
 
 The result of Counter with Cipher Block Chaining-Message Authentication Code encryption is ciphertext and **authentication tag**, that is later used to decryption.
 
-```
+```swift
 do {
     // The authentication tag is appended to the encrypted message.
 	let tagLength = 8

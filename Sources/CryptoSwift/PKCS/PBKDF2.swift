@@ -27,7 +27,7 @@ public extension PKCS5 {
     ///
     /// PBKDF2 - Password-Based Key Derivation Function 2. Key stretching technique.
     ///          DK = PBKDF2(PRF, Password, Salt, c, dkLen)
-    public struct PBKDF2 {
+    struct PBKDF2 {
         public enum Error: Swift.Error {
             case invalidInput
             case derivedKeyTooLong

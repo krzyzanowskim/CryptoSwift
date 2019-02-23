@@ -19,7 +19,7 @@ public extension PKCS5 {
     /// PBKDF1 is recommended only for compatibility with existing
     /// applications since the keys it produces may not be large enough for
     /// some applications.
-    public struct PBKDF1 {
+    struct PBKDF1 {
         public enum Error: Swift.Error {
             case invalidInput
             case derivedKeyTooLong

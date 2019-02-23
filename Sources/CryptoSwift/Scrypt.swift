@@ -103,7 +103,7 @@ public final class Scrypt {
     }
 }
 
-fileprivate extension Scrypt {
+private extension Scrypt {
     /// Computes `B = SMix_r(B, N)`.
     ///
     /// The input `block` must be `128*r` bytes in length; the temporary storage `v` must be `128*r*n` bytes in length;
@@ -240,7 +240,7 @@ fileprivate extension Scrypt {
         }
     }
 
-    @inline(__always) fileprivate func blockXor(_ dest: UnsafeMutableRawPointer, _ src: UnsafeRawPointer, _ len: Int) {
+    @inline(__always) func blockXor(_ dest: UnsafeMutableRawPointer, _ src: UnsafeRawPointer, _ len: Int) {
         let D = dest.assumingMemoryBound(to: UInt64.self)
         let S = src.assumingMemoryBound(to: UInt64.self)
         let L = len / MemoryLayout<UInt64>.size

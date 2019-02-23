@@ -33,7 +33,7 @@ do {
     _ = try digest.update(withBytes: [0x31, 0x32])
     _ = try digest.update(withBytes: [0x33])
     let result = try digest.finish()
-    print(result)
+    result.toBase64()
 } catch {}
 
 /*:

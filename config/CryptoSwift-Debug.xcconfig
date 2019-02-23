@@ -16,7 +16,7 @@ OTHER_SWIFT_FLAGS = $(inherited) -Xfrontend -debug-time-function-bodies
 
 
 
-SWIFT_COMPILATION_MODE = wholemodule
+SWIFT_COMPILATION_MODE = incremental
 
 // Swift Optimization Level
 //

@@ -27,7 +27,7 @@ var tests = [
         testCase(RabbitTestsPerf.allTests()),
         testCase(ExtensionsTestPerf.allTests()),
         testCase(PBKDFPerf.allTests()),
-        testCase(ScryptTestsPerf.allTests))
+        testCase(ScryptTestsPerf.allTests())
     ]
 #endif
 

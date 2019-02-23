@@ -474,6 +474,7 @@
 			isa = PBXGroup;
 			children = (
 				81F279DE2181F5A000449EDA /* ScryptTests.swift */,
+				81F279E02181F5C500449EDA /* ScryptTestsPerf.swift */,
 				14156CE42011422400DDCFBC /* ChaCha20Poly1305Tests.swift */,
 				E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */,
 				754BE46719693E190098E6F3 /* DigestTests.swift */,
@@ -499,7 +500,6 @@
 				75C2E76C1D55F097003D2BCA /* Access.swift */,
 				756BFDCA1A82B87300B9D9A4 /* Bridging.h */,
 				754BE46519693E190098E6F3 /* Supporting Files */,
-				81F279E02181F5C500449EDA /* ScryptTestsPerf.swift */,
 			);
 			name = Tests;
 			path = Tests/Tests;

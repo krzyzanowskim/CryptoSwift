@@ -16,6 +16,7 @@ var tests = [
     testCase(PBKDF.allTests()),
     testCase(RandomBytesSequenceTests.allTests),
     testCase(Access.allTests),
+    testCase(Scrypt.allTests)
 ]
 
 #if !CI
@@ -26,6 +27,7 @@ var tests = [
         testCase(RabbitTestsPerf.allTests()),
         testCase(ExtensionsTestPerf.allTests()),
         testCase(PBKDFPerf.allTests()),
+        testCase(ScryptTestsPerf.allTests))
     ]
 #endif
 

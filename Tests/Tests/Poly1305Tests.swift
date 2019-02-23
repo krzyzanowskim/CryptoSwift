@@ -26,8 +26,8 @@ final class Poly1305Tests: XCTestCase {
         XCTAssertEqual(try Poly1305(key: key).authenticate(msg), expectedMac)
 
         // extensions
-        let msgData = Data(bytes: msg)
-        XCTAssertEqual(try msgData.authenticate(with: Poly1305(key: key)), Data(bytes: expectedMac), "Invalid authentication result")
+        let msgData = Data( msg)
+        XCTAssertEqual(try msgData.authenticate(with: Poly1305(key: key)), Data( expectedMac), "Invalid authentication result")
     }
 
     // https://github.com/krzyzanowskim/CryptoSwift/issues/183

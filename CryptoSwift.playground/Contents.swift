@@ -8,7 +8,7 @@ import Foundation
 /*:
  # Data types conversinn
  */
-let data = Data(bytes: [0x01, 0x02, 0x03])
+let data = Data([0x01, 0x02, 0x03])
 let bytes = data.bytes
 let bytesHex = Array<UInt8>(hex: "0x010203")
 let hexString = bytesHex.toHexString()
@@ -138,7 +138,7 @@ do {
     var encryptor = try! aes.makeEncryptor()
 
     // prepare streams
-    let data = Data(bytes: (0 ..< 100).map { $0 })
+    let data = Data( (0 ..< 100).map { $0 })
     let inputStream = InputStream(data: data)
     let outputStream = OutputStream(toMemory: ())
     inputStream.open()

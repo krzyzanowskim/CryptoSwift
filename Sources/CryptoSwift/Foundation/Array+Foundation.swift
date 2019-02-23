@@ -17,7 +17,7 @@ import Foundation
 
 public extension Array where Element == UInt8 {
     func toBase64() -> String? {
-        return Data(bytes: self).base64EncodedString()
+        return Data( self).base64EncodedString()
     }
 
     init(base64: String) {

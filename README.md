@@ -222,7 +222,7 @@ For you convenience **CryptoSwift** provides two functions to easily convert arr
 Data from bytes:
 
 ```swift
-let data = Data(bytes: [0x01, 0x02, 0x03])
+let data = Data( [0x01, 0x02, 0x03])
 ```
 
 `Data` to `Array<UInt8>`
@@ -261,7 +261,7 @@ let digest = Digest.md5(bytes)
 ```
 
 ```swift
-let data = Data(bytes: [0x01, 0x02, 0x03])
+let data = Data( [0x01, 0x02, 0x03])
 
 let hash = data.md5()
 let hash = data.sha1()
@@ -434,7 +434,7 @@ let encrypted: Array<UInt8> = try! AES(key: Array("secret0key000000".utf8), bloc
 Using convenience extensions
     
 ```swift
-let plain = Data(bytes: [0x01, 0x02, 0x03])
+let plain = Data( [0x01, 0x02, 0x03])
 let encrypted = try! plain.encrypt(ChaCha20(key: key, iv: iv))
 let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
 ```

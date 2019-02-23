@@ -129,7 +129,7 @@ class Access: XCTestCase {
     }
 
     func testDataExtension() {
-        let data = Data(bytes: [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8])
+        let data = Data( [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8])
         _ = data.checksum()
         _ = data.md5()
         _ = data.sha1()

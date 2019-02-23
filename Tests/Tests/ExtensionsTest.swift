@@ -41,7 +41,7 @@ final class ExtensionsTest: XCTestCase {
     }
 
     func testDataInit() {
-        let data = Data(bytes: [0x01, 0x02, 0x03])
+        let data = Data( [0x01, 0x02, 0x03])
         XCTAssert(data.count == 3, "Invalid data")
     }
 

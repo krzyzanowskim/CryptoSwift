@@ -217,7 +217,7 @@ CryptoSwift uses array of bytes aka `Array<UInt8>` as a base type for all operat
 
 ##### Data types conversion
 
-For you convenience **CryptoSwift** provides two functions to easily convert array of bytes to `Data` and another way around:
+For your convenience, **CryptoSwift** provides two functions to easily convert an array of bytes to `Data` or `Data` to an array of bytes:
 
 Data from bytes:
 
@@ -364,7 +364,7 @@ let decrypted = try Blowfish(key: key, blockMode: CBC(iv: iv), padding: .pkcs7).
 
 ##### AES
 
-Notice regarding padding: *Manual padding of data is optional, and CryptoSwift is using PKCS7 padding by default. If you need manually disable/enable padding, you can do this by setting parameter for __AES__ class*
+Notice regarding padding: *Manual padding of data is optional, and CryptoSwift is using PKCS7 padding by default. If you need to manually disable/enable padding, you can do this by setting parameter for __AES__ class*
 
 Variant of AES encryption (AES-128, AES-192, AES-256) depends on given key length:
 
@@ -470,7 +470,7 @@ do {
 }
 ```
 
-**Note**: GCM instance is not intended to be reused. So you can't use the `GCM` from encoding, do decoding.
+**Note**: GCM instance is not intended to be reused. So you can't use the same `GCM` instance from encoding to also perform decoding.
 
 ##### AES-CCM
 

@@ -11,7 +11,7 @@
 
 Crypto related functions and helpers for [Swift](https://swift.org) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
-**Note**: The `master` branch follows the latest currently released **version of Swift**. If you need an version for older version of Swift, you can specify it's version in your Podfile or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
+**Note**: The `master` branch follows the latest currently released **version of Swift**. If you need an earlier version for an older version of Swift, you can specify its version in your Podfile or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
 
 ---
 

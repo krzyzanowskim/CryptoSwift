@@ -135,7 +135,11 @@ private extension Scrypt {
 
         /* 6: for i = 0 to N - 1 do */
         for _ in stride(from: 0, to: N, by: 2) {
-            /* 7: j <-- Integerify(X) mod N */
+            /*
+             7: j <-- Integerify (X) mod N
+             where Integerify (B[0] ... B[2 * r - 1]) is defined
+             as the result of interpreting B[2 * r - 1] as a little-endian integer.
+             */
             var j = Int(integerify(X) & UInt64(N - 1))
 
             /* 8: X <-- H(X \xor V_j) */

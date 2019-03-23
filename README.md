@@ -135,7 +135,8 @@ In the project, you'll find [single scheme](http://promisekit.org/news/2016/08/M
 - Swift 3.1, branch [swift3](https://github.com/krzyzanowskim/CryptoSwift/tree/swift3) version <= 0.6.9
 - Swift 3.2, branch [swift32](https://github.com/krzyzanowskim/CryptoSwift/tree/swift32) version = 0.7.0
 - Swift 4.0, branch [swift4](https://github.com/krzyzanowskim/CryptoSwift/tree/swift4) version >= 0.7.1
-- Swift 4.1, branch [master](https://github.com/krzyzanowskim/CryptoSwift/tree/master) version >= 0.9.0
+- Swift 4.2, branch [master](https://github.com/krzyzanowskim/CryptoSwift/tree/master) version >= 0.9.0
+- Swift 5.0, branch [swift5](https://github.com/krzyzanowskim/CryptoSwift/tree/swift5) version > 0.15.0
 
 #### CocoaPods
 

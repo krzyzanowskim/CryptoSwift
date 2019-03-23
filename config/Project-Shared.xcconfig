@@ -479,7 +479,7 @@ SWIFT_COMPILATION_MODE = wholemodule
 // 
 // 
 
-SWIFT_VERSION = 4.2
+SWIFT_VERSION = 5.0
 
 
 

@@ -82,7 +82,7 @@ extension Data {
 
 extension Data {
     public init(hex: String) {
-        self.init(bytes: Array<UInt8>(hex: hex))
+        self.init(Array<UInt8>(hex: hex))
     }
 
     public var bytes: Array<UInt8> {

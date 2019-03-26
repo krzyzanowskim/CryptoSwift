@@ -792,27 +792,27 @@
 				TargetAttributes = {
 					75211F91207249D8004E41F8 = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					754BE45419693E190098E6F3 = {
 						CreatedOnToolsVersion = 6.0;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
 					};
 					754BE45F19693E190098E6F3 = {
 						CreatedOnToolsVersion = 6.0;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
 					};
 					7564F04E2072EAEB00CA5A96 = {
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
 						TestTargetID = 75211F91207249D8004E41F8;
 					};
 					7595C1492072E48C00EA1A5F = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -1121,7 +1121,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FB020724A10004E41F8 /* Project-Debug.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 			};
 			name = Debug;
 		};
@@ -1129,7 +1128,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FAA20724A0F004E41F8 /* Project-Release.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 			};
 			name = Release;
 		};
@@ -1198,7 +1196,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FA620724A0F004E41F8 /* Project-Test.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 			};
 			name = Test;
 		};

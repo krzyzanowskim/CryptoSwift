@@ -5,6 +5,7 @@
 // https://github.com/dempseyatgithub/BuildSettingExtractor
 //
 
+CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES
 
 // Require Only App-Extension-Safe API
 // 
@@ -139,7 +140,7 @@ SKIP_INSTALL = YES
 // 
 // 
 
-SWIFT_VERSION = 4.2
+SWIFT_VERSION = 5.0
 
 
 

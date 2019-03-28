@@ -134,16 +134,16 @@ In the project, you'll find [single scheme](http://promisekit.org/news/2016/08/M
 - Swift 2.2, 2.3: branch [swift2](https://github.com/krzyzanowskim/CryptoSwift/tree/swift2) version <= 0.5.2
 - Swift 3.1, branch [swift3](https://github.com/krzyzanowskim/CryptoSwift/tree/swift3) version <= 0.6.9
 - Swift 3.2, branch [swift32](https://github.com/krzyzanowskim/CryptoSwift/tree/swift32) version = 0.7.0
-- Swift 4.0, branch [swift4](https://github.com/krzyzanowskim/CryptoSwift/tree/swift4) version >= 0.7.1
-- Swift 4.2, branch [master](https://github.com/krzyzanowskim/CryptoSwift/tree/master) version >= 0.9.0
-- Swift 5.0, branch [swift5](https://github.com/krzyzanowskim/CryptoSwift/tree/swift5) version > 0.15.0
+- Swift 4.0, branch [swift4](https://github.com/krzyzanowskim/CryptoSwift/tree/swift4) version <= 0.12.0
+- Swift 4.2, branch [swift42](https://github.com/krzyzanowskim/CryptoSwift/tree/swift42) version <= 0.15.0
+- Swift 5.0, branch [master](https://github.com/krzyzanowskim/CryptoSwift/tree/master)
 
 #### CocoaPods
 
 You can use [CocoaPods](http://cocoapods.org/?q=cryptoSwift).
 
 ```ruby
-platform :ios, '8.0'
+platform :ios, '10.0'
 use_frameworks!
 
 target 'MyApp' do
@@ -175,7 +175,7 @@ You can use [Swift Package Manager](https://swift.org/package-manager/) and spec
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "0.9.0"))
+    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.0.0"))
 ]
 ```
 
@@ -183,7 +183,7 @@ or more strict
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .exact("0.9.0"))
+    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .exact("1.0.0"))
 ]
 ```
 

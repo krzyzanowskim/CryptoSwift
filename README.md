@@ -175,7 +175,7 @@ You can use [Accio](https://github.com/JamitLabs/Accio).
 Specify in Package.swift:
 
 ```swift
-.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "0.15.0")),
+.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "1.0.0")),
 ```
 
 Next, add `CryptoSwift` to your App targets dependencies like so:

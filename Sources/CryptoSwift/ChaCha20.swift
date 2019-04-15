@@ -2,6 +2,7 @@
 //  CryptoSwift
 //
 //  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  Copyright (C) 2019 Roger Miret (@roger_miret) <roger.miret@gmail.com>
 //  This software is provided 'as-is', without any express or implied warranty.
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
@@ -47,6 +48,28 @@ public final class ChaCha20: BlockCipher {
         assert(counter.count == 16)
     }
 
+    fileprivate func rotl(_ a: UInt32, _ b: Int) -> UInt32 {
+        return (a << b) | (a >> (32 - b))
+    }
+
+    fileprivate func qr(_ a: inout UInt32, _ b: inout UInt32, _ c: inout UInt32, _ d: inout UInt32) {
+        a = a &+ b
+        d ^= a
+        d = rotl(d, 16)
+
+        c = c &+ d
+        b ^= c
+        b = rotl(b, 12)
+
+        a = a &+ b
+        d ^= a
+        d = rotl(d, 8)
+
+        c = c &+ d
+        b ^= c
+        b = rotl(b, 7)
+    }
+
     /// https://tools.ietf.org/html/rfc7539#section-2.3.
     fileprivate func core(block: inout Array<UInt8>, counter: Array<UInt8>, key: Array<UInt8>) {
         precondition(block.count == ChaCha20.blockSize)
@@ -74,102 +97,16 @@ public final class ChaCha20: BlockCipher {
         var (x8, x9, x10, x11, x12, x13, x14, x15) = (j8, j9, j10, j11, j12, j13, j14, j15)
 
         for _ in 0..<10 { // 20 rounds
-            x0 = x0 &+ x4
-            x12 ^= x0
-            x12 = (x12 << 16) | (x12 >> 16)
-            x8 = x8 &+ x12
-            x4 ^= x8
-            x4 = (x4 << 12) | (x4 >> 20)
-            x0 = x0 &+ x4
-            x12 ^= x0
-            x12 = (x12 << 8) | (x12 >> 24)
-            x8 = x8 &+ x12
-            x4 ^= x8
-            x4 = (x4 << 7) | (x4 >> 25)
-            x1 = x1 &+ x5
-            x13 ^= x1
-            x13 = (x13 << 16) | (x13 >> 16)
-            x9 = x9 &+ x13
-            x5 ^= x9
-            x5 = (x5 << 12) | (x5 >> 20)
-            x1 = x1 &+ x5
-            x13 ^= x1
-            x13 = (x13 << 8) | (x13 >> 24)
-            x9 = x9 &+ x13
-            x5 ^= x9
-            x5 = (x5 << 7) | (x5 >> 25)
-            x2 = x2 &+ x6
-            x14 ^= x2
-            x14 = (x14 << 16) | (x14 >> 16)
-            x10 = x10 &+ x14
-            x6 ^= x10
-            x6 = (x6 << 12) | (x6 >> 20)
-            x2 = x2 &+ x6
-            x14 ^= x2
-            x14 = (x14 << 8) | (x14 >> 24)
-            x10 = x10 &+ x14
-            x6 ^= x10
-            x6 = (x6 << 7) | (x6 >> 25)
-            x3 = x3 &+ x7
-            x15 ^= x3
-            x15 = (x15 << 16) | (x15 >> 16)
-            x11 = x11 &+ x15
-            x7 ^= x11
-            x7 = (x7 << 12) | (x7 >> 20)
-            x3 = x3 &+ x7
-            x15 ^= x3
-            x15 = (x15 << 8) | (x15 >> 24)
-            x11 = x11 &+ x15
-            x7 ^= x11
-            x7 = (x7 << 7) | (x7 >> 25)
-            x0 = x0 &+ x5
-            x15 ^= x0
-            x15 = (x15 << 16) | (x15 >> 16)
-            x10 = x10 &+ x15
-            x5 ^= x10
-            x5 = (x5 << 12) | (x5 >> 20)
-            x0 = x0 &+ x5
-            x15 ^= x0
-            x15 = (x15 << 8) | (x15 >> 24)
-            x10 = x10 &+ x15
-            x5 ^= x10
-            x5 = (x5 << 7) | (x5 >> 25)
-            x1 = x1 &+ x6
-            x12 ^= x1
-            x12 = (x12 << 16) | (x12 >> 16)
-            x11 = x11 &+ x12
-            x6 ^= x11
-            x6 = (x6 << 12) | (x6 >> 20)
-            x1 = x1 &+ x6
-            x12 ^= x1
-            x12 = (x12 << 8) | (x12 >> 24)
-            x11 = x11 &+ x12
-            x6 ^= x11
-            x6 = (x6 << 7) | (x6 >> 25)
-            x2 = x2 &+ x7
-            x13 ^= x2
-            x13 = (x13 << 16) | (x13 >> 16)
-            x8 = x8 &+ x13
-            x7 ^= x8
-            x7 = (x7 << 12) | (x7 >> 20)
-            x2 = x2 &+ x7
-            x13 ^= x2
-            x13 = (x13 << 8) | (x13 >> 24)
-            x8 = x8 &+ x13
-            x7 ^= x8
-            x7 = (x7 << 7) | (x7 >> 25)
-            x3 = x3 &+ x4
-            x14 ^= x3
-            x14 = (x14 << 16) | (x14 >> 16)
-            x9 = x9 &+ x14
-            x4 ^= x9
-            x4 = (x4 << 12) | (x4 >> 20)
-            x3 = x3 &+ x4
-            x14 ^= x3
-            x14 = (x14 << 8) | (x14 >> 24)
-            x9 = x9 &+ x14
-            x4 ^= x9
-            x4 = (x4 << 7) | (x4 >> 25)
+            // Odd round
+            qr(&x0, &x4, &x8, &x12)
+            qr(&x1, &x5, &x9, &x13)
+            qr(&x2, &x6, &x10, &x14)
+            qr(&x3, &x7, &x11, &x15)
+            // Even round
+            qr(&x0, &x5, &x10, &x15)
+            qr(&x1, &x6, &x11, &x12)
+            qr(&x2, &x7, &x8, &x13)
+            qr(&x3, &x4, &x9, &x14)
         }
 
         x0 = x0 &+ j0

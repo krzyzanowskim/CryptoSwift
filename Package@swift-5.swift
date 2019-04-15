@@ -1,4 +1,4 @@
-// swift-tools-version:4.1
+// swift-tools-version:5.0
 
 import PackageDescription
 
@@ -14,5 +14,5 @@ let package = Package(
         .testTarget(name: "Tests", dependencies: ["CryptoSwift"]),
         .testTarget(name: "TestsPerformance", dependencies: ["CryptoSwift"]),
     ],
-    swiftLanguageVersions: [4]
+    swiftLanguageVersions: [.v5]
 )

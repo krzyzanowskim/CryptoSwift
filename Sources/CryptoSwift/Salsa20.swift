@@ -1,0 +1,266 @@
+//
+//  CryptoSwift
+//
+//  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  Copyright (C) 2019      Roger Miret Giné    <roger.miret@gmail.com>
+//  This software is provided 'as-is', without any express or implied warranty.
+//
+//  In no event will the authors be held liable for any damages arising from the use of this software.
+//
+//  Permission is granted to anyone to use this software for any purpose,including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+//
+//  - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
+//  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+//  - This notice may not be removed or altered from any source or binary distribution.
+//
+
+public class Salsa20: BlockCipher {
+    public enum Error: Swift.Error {
+        case invalidKeyOrInitializationVector
+        case notSupported
+    }
+
+    public static let blockSize = 64 // 512 / 8
+    public let keySize: Int
+
+    let key: Key
+    var counter: Array<UInt8>
+
+    public init(key: Array<UInt8>, iv nonce: Array<UInt8>) throws {
+        precondition(nonce.count == 12 || nonce.count == 8)
+
+        if key.count != 32 {
+            throw Error.invalidKeyOrInitializationVector
+        }
+
+        self.key = Key(bytes: key)
+        keySize = self.key.count
+
+        if nonce.count == 8 {
+            counter = [0, 0, 0, 0, 0, 0, 0, 0] + nonce
+        } else {
+            counter = [0, 0, 0, 0] + nonce
+        }
+
+        assert(counter.count == 16)
+    }
+
+    func qr(_ a: inout UInt32, _ b: inout UInt32, _ c: inout UInt32, _ d: inout UInt32) {
+        b ^= rotl(a + d, 7)
+        c ^= rotl(b + a, 9)
+        d ^= rotl(c + b, 13)
+        a ^= rotl(d + c, 18)
+    }
+
+    func core(block: inout Array<UInt8>, counter: Array<UInt8>, key: Array<UInt8>) {
+        precondition(block.count == Salsa20.blockSize)
+        precondition(counter.count == 16)
+        precondition(key.count == 32)
+
+        let j0: UInt32 = 0x61707865
+        let j1: UInt32 = UInt32(bytes: key[0..<4]).bigEndian
+        let j2: UInt32 = UInt32(bytes: key[4..<8]).bigEndian
+        let j3: UInt32 = UInt32(bytes: key[8..<12]).bigEndian
+        let j4: UInt32 = UInt32(bytes: key[12..<16]).bigEndian
+        let j5: UInt32 = 0x3320646e // 0x3620646e sigma/tau
+        let j6: UInt32 = UInt32(bytes: counter[8..<12]).bigEndian
+        let j7: UInt32 = UInt32(bytes: counter[12..<16]).bigEndian
+        let j8: UInt32 = UInt32(bytes: counter[0..<4]).bigEndian
+        let j9: UInt32 = UInt32(bytes: counter[4..<8]).bigEndian
+        let j10: UInt32 = 0x79622d32
+        let j11: UInt32 = UInt32(bytes: key[16..<20]).bigEndian
+        let j12: UInt32 = UInt32(bytes: key[20..<24]).bigEndian
+        let j13: UInt32 = UInt32(bytes: key[24..<28]).bigEndian
+        let j14: UInt32 = UInt32(bytes: key[28..<32]).bigEndian
+        let j15: UInt32 = 0x6b206574
+
+        var (x0, x1, x2, x3, x4, x5, x6, x7) = (j0, j1, j2, j3, j4, j5, j6, j7)
+        var (x8, x9, x10, x11, x12, x13, x14, x15) = (j8, j9, j10, j11, j12, j13, j14, j15)
+
+        for _ in 0..<10 { // 20 rounds
+            // Odd round
+            qr(&x0, &x4, &x8, &x12)  // column 1
+            qr(&x5, &x9, &x13, &x1)  // column 2
+            qr(&x10, &x14, &x2, &x6) // column 3
+            qr(&x15, &x3, &x7, &x11) // column 4
+
+            // Even round
+            qr(&x0, &x1, &x2, &x3)     // row 1
+            qr(&x5, &x6, &x7, &x4)     // row 2
+            qr(&x10, &x11, &x8, &x9)   // row 3
+            qr(&x15, &x12, &x13, &x14) // row 4
+        }
+
+        x0 = x0 &+ j0
+        x1 = x1 &+ j1
+        x2 = x2 &+ j2
+        x3 = x3 &+ j3
+        x4 = x4 &+ j4
+        x5 = x5 &+ j5
+        x6 = x6 &+ j6
+        x7 = x7 &+ j7
+        x8 = x8 &+ j8
+        x9 = x9 &+ j9
+        x10 = x10 &+ j10
+        x11 = x11 &+ j11
+        x12 = x12 &+ j12
+        x13 = x13 &+ j13
+        x14 = x14 &+ j14
+        x15 = x15 &+ j15
+
+        block.replaceSubrange(0..<4, with: x0.bigEndian.bytes())
+        block.replaceSubrange(4..<8, with: x1.bigEndian.bytes())
+        block.replaceSubrange(8..<12, with: x2.bigEndian.bytes())
+        block.replaceSubrange(12..<16, with: x3.bigEndian.bytes())
+        block.replaceSubrange(16..<20, with: x4.bigEndian.bytes())
+        block.replaceSubrange(20..<24, with: x5.bigEndian.bytes())
+        block.replaceSubrange(24..<28, with: x6.bigEndian.bytes())
+        block.replaceSubrange(28..<32, with: x7.bigEndian.bytes())
+        block.replaceSubrange(32..<36, with: x8.bigEndian.bytes())
+        block.replaceSubrange(36..<40, with: x9.bigEndian.bytes())
+        block.replaceSubrange(40..<44, with: x10.bigEndian.bytes())
+        block.replaceSubrange(44..<48, with: x11.bigEndian.bytes())
+        block.replaceSubrange(48..<52, with: x12.bigEndian.bytes())
+        block.replaceSubrange(52..<56, with: x13.bigEndian.bytes())
+        block.replaceSubrange(56..<60, with: x14.bigEndian.bytes())
+        block.replaceSubrange(60..<64, with: x15.bigEndian.bytes())
+    }
+
+    // XORKeyStream
+    func process(bytes: ArraySlice<UInt8>, counter: inout Array<UInt8>, key: Array<UInt8>) -> Array<UInt8> {
+        precondition(counter.count == 16)
+        precondition(key.count == 32)
+
+        var block = Array<UInt8>(repeating: 0, count: Salsa20.blockSize)
+        var bytesSlice = bytes
+        var out = Array<UInt8>(reserveCapacity: bytesSlice.count)
+
+        while bytesSlice.count >= Salsa20.blockSize {
+            core(block: &block, counter: counter, key: key)
+            for (i, x) in block.enumerated() {
+                out.append(bytesSlice[bytesSlice.startIndex + i] ^ x)
+            }
+            var u: UInt32 = 1
+            for i in 0..<4 {
+                u += UInt32(counter[i])
+                counter[i] = UInt8(u & 0xff)
+                u >>= 8
+            }
+            bytesSlice = bytesSlice[bytesSlice.startIndex + Salsa20.blockSize..<bytesSlice.endIndex]
+        }
+
+        if bytesSlice.count > 0 {
+            core(block: &block, counter: counter, key: key)
+            for (i, v) in bytesSlice.enumerated() {
+                out.append(v ^ block[i])
+            }
+        }
+        return out
+    }
+}
+
+// MARK: Cipher
+
+extension Salsa20: Cipher {
+    public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
+        return process(bytes: bytes, counter: &counter, key: Array(key))
+    }
+
+    public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
+        return try encrypt(bytes)
+    }
+}
+
+// MARK: Encryptor
+
+extension Salsa20 {
+    public struct SalsaEncryptor: Cryptor, Updatable {
+        private var accumulated = Array<UInt8>()
+        private let salsa: Salsa20
+
+        init(salsa: Salsa20) {
+            self.salsa = salsa
+        }
+
+        public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
+            accumulated += bytes
+
+            var encrypted = Array<UInt8>()
+            encrypted.reserveCapacity(accumulated.count)
+            for chunk in accumulated.batched(by: Salsa20.blockSize) {
+                if isLast || accumulated.count >= Salsa20.blockSize {
+                    encrypted += try salsa.encrypt(chunk)
+                    accumulated.removeFirst(chunk.count) // TODO: improve performance
+                }
+            }
+            return encrypted
+        }
+
+        public func seek(to: Int) throws {
+            throw Error.notSupported
+        }
+    }
+}
+
+// MARK: Decryptor
+
+extension Salsa20 {
+    public struct SalsaDecryptor: Cryptor, Updatable {
+        private var accumulated = Array<UInt8>()
+
+        private var offset: Int = 0
+        private var offsetToRemove: Int = 0
+        private let salsa: Salsa20
+
+        init(salsa: Salsa20) {
+            self.salsa = salsa
+        }
+
+        public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = true) throws -> Array<UInt8> {
+            // prepend "offset" number of bytes at the beginning
+            if offset > 0 {
+                accumulated += Array<UInt8>(repeating: 0, count: offset) + bytes
+                offsetToRemove = offset
+                offset = 0
+            } else {
+                accumulated += bytes
+            }
+
+            var plaintext = Array<UInt8>()
+            plaintext.reserveCapacity(accumulated.count)
+            for chunk in accumulated.batched(by: Salsa20.blockSize) {
+                if isLast || accumulated.count >= Salsa20.blockSize {
+                    plaintext += try salsa.decrypt(chunk)
+
+                    // remove "offset" from the beginning of first chunk
+                    if offsetToRemove > 0 {
+                        plaintext.removeFirst(offsetToRemove) // TODO: improve performance
+                        offsetToRemove = 0
+                    }
+
+                    accumulated.removeFirst(chunk.count)
+                }
+            }
+
+            return plaintext
+        }
+
+        public func seek(to: Int) throws {
+            throw Error.notSupported
+        }
+    }
+}
+
+// MARK: Cryptors
+
+extension Salsa20: Cryptors {
+    //TODO: Use BlockEncryptor/BlockDecryptor
+
+    public func makeEncryptor() -> Cryptor & Updatable {
+        return Salsa20.SalsaEncryptor(salsa: self)
+    }
+
+    public func makeDecryptor() -> Cryptor & Updatable {
+        return Salsa20.SalsaDecryptor(salsa: self)
+    }
+}

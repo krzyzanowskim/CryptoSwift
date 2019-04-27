@@ -5,6 +5,19 @@
    <BuildAction
       parallelizeBuildables = "NO"
       buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForRunning = "YES"
+            buildForTesting = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7595C1492072E48C00EA1A5F"
+               BuildableName = "TestsPerformance-Mac.xctest"
+               BlueprintName = "TestsPerformance-Mac"
+               ReferencedContainer = "container:CryptoSwift.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
    </BuildAction>
    <TestAction
       buildConfiguration = "Test"

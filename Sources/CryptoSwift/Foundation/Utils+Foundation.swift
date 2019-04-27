@@ -25,3 +25,7 @@ func perf(_ text: String, closure: () -> Void) {
 
     print("\(text) \(executionTime)")
 }
+
+func rotl(_ a: UInt32, _ b: Int) -> UInt32 {
+    return (a << b) | (a >> (32 - b))
+}

@@ -2,7 +2,7 @@
 //  CryptoSwift
 //
 //  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
-//  Copyright (C) 2019 Roger Miret (@roger_miret) <roger.miret@gmail.com>
+//  Copyright (C) 2019 Roger Miret <roger.miret@gmail.com>
 //  This software is provided 'as-is', without any express or implied warranty.
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.

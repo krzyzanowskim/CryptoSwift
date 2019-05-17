@@ -43,10 +43,6 @@ extension UInt8 {
 
 /** Bits */
 extension UInt8 {
-    init(bits: [Bit]) {
-        self.init(integerFrom(bits) as UInt8)
-    }
-
     /** array of bits */
     public func bits() -> [Bit] {
         let totalBitsCount = MemoryLayout<UInt8>.size * 8

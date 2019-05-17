@@ -20,13 +20,6 @@ import Darwin
 import Glibc
 #endif
 
-/* array of bits */
-extension Int {
-    init(bits: [Bit]) {
-        self.init(bitPattern: integerFrom(bits) as UInt)
-    }
-}
-
 extension FixedWidthInteger {
     @_transparent
     func bytes(totalBytes: Int = MemoryLayout<Self>.size) -> Array<UInt8> {

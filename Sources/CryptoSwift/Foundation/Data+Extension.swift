@@ -19,7 +19,7 @@ extension Data {
     /// Two octet checksum as defined in RFC-4880. Sum of all octets, mod 65536
     public func checksum() -> UInt16 {
         var s: UInt32 = 0
-        var bytesArray = bytes
+        let bytesArray = bytes
         for i in 0 ..< bytesArray.count {
             s = s + UInt32(bytesArray[i])
         }

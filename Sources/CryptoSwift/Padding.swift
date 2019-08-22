@@ -19,7 +19,7 @@ public protocol PaddingProtocol {
 }
 
 public enum Padding: PaddingProtocol {
-  case noPadding, zeroPadding, pkcs7, pkcs5
+  case noPadding, zeroPadding, pkcs7, pkcs5, iso78164
 
   public func add(to: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
     switch self {
@@ -31,6 +31,8 @@ public enum Padding: PaddingProtocol {
         return PKCS7.Padding().add(to: to, blockSize: blockSize)
       case .pkcs5:
         return PKCS5.Padding().add(to: to, blockSize: blockSize)
+      case .iso78164:
+        return ISO78164Padding().add(to: to, blockSize: blockSize)
     }
   }
 
@@ -44,6 +46,8 @@ public enum Padding: PaddingProtocol {
         return PKCS7.Padding().remove(from: from, blockSize: blockSize)
       case .pkcs5:
         return PKCS5.Padding().remove(from: from, blockSize: blockSize)
+      case .iso78164:
+        return ISO78164Padding().remove(from: from, blockSize: blockSize)
     }
   }
 }

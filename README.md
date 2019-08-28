@@ -125,7 +125,7 @@ Sometimes "embedded framework" option is not available. In that case, you have t
 
 ##### iOS, macOS, watchOS, tvOS
 
-In the project, you'll find [single scheme](http://promisekit.org/news/2016/08/Multiplatform-Single-Scheme-Xcode-Projects/) for all platforms:
+In the project, you'll find [single scheme](https://mxcl.dev/PromiseKit/news/2016/08/Multiplatform-Single-Scheme-Xcode-Projects/) for all platforms:
 - CryptoSwift
 
 #### Swift versions support

@@ -125,6 +125,8 @@
 		E3FD2D531D6B81CE00A9F35F /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */; };
 		E6200E141FB9A7AE00258382 /* HKDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6200E131FB9A7AE00258382 /* HKDF.swift */; };
 		E6200E171FB9B68C00258382 /* HKDFTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6200E151FB9B67C00258382 /* HKDFTests.swift */; };
+		EBB32ABF22737C16003A065D /* Salsa20Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB51933F2268D600009CE32B /* Salsa20Tests.swift */; };
+		EBCE52E7226515AD00D8DAE7 /* Salsa20.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE52E6226515AD00D8DAE7 /* Salsa20.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -373,6 +375,8 @@
 		E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		E6200E131FB9A7AE00258382 /* HKDF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKDF.swift; sourceTree = "<group>"; };
 		E6200E151FB9B67C00258382 /* HKDFTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKDFTests.swift; sourceTree = "<group>"; };
+		EB51933F2268D600009CE32B /* Salsa20Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Salsa20Tests.swift; sourceTree = "<group>"; };
+		EBCE52E6226515AD00D8DAE7 /* Salsa20.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Salsa20.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -500,6 +504,7 @@
 				75C2E76C1D55F097003D2BCA /* Access.swift */,
 				756BFDCA1A82B87300B9D9A4 /* Bridging.h */,
 				754BE46519693E190098E6F3 /* Supporting Files */,
+				EB51933F2268D600009CE32B /* Salsa20Tests.swift */,
 			);
 			name = Tests;
 			path = Tests/Tests;
@@ -615,6 +620,7 @@
 				75B3ED78210FA016005D4ADA /* BlockEncryptor.swift */,
 				753674062175D012003E32A6 /* StreamDecryptor.swift */,
 				756A64C52111083B00BE8805 /* StreamEncryptor.swift */,
+				EBCE52E6226515AD00D8DAE7 /* Salsa20.swift */,
 			);
 			path = CryptoSwift;
 			sourceTree = "<group>";
@@ -925,6 +931,7 @@
 				75EC52841EE8B8170048EB3B /* CipherModeWorker.swift in Sources */,
 				75EC52A41EE8B8290048EB3B /* Operators.swift in Sources */,
 				75EC529A1EE8B8200048EB3B /* HMAC+Foundation.swift in Sources */,
+				EBCE52E7226515AD00D8DAE7 /* Salsa20.swift in Sources */,
 				75EC52B21EE8B83D0048EB3B /* String+Extension.swift in Sources */,
 				750509991F6BEF2A00394A1B /* PKCS7.swift in Sources */,
 				75EC52B51EE8B83D0048EB3B /* UInt64+Extension.swift in Sources */,
@@ -978,6 +985,7 @@
 				758A94291A65C67400E46135 /* HMACTests.swift in Sources */,
 				75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */,
 				E6200E171FB9B68C00258382 /* HKDFTests.swift in Sources */,
+				EBB32ABF22737C16003A065D /* Salsa20Tests.swift in Sources */,
 				753B33011DAB84D600D06422 /* RandomBytesSequenceTests.swift in Sources */,
 				754BE46819693E190098E6F3 /* DigestTests.swift in Sources */,
 				E3FD2D531D6B81CE00A9F35F /* Error+Extension.swift in Sources */,

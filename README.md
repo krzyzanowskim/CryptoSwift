@@ -56,6 +56,7 @@ Good mood
 
 #### Cipher
   [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)
+| [Salsa20](https://cr.yp.to/snuffle/spec.pdf)
 | [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
 | [Rabbit](https://tools.ietf.org/html/rfc4503)
 | [Blowfish](https://www.schneier.com/academic/blowfish/)
@@ -220,6 +221,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 * [Password-Based Key Derivation Function (PBKDF2, ...)](#password-based-key-derivation-functions)
 * [HMAC-based Key Derivation Function (HKDF)](#hmac-based-key-derivation-function)
 * [Data Padding](#data-padding)
+* [Salsa20](#salsa20)
 * [ChaCha20](#chacha20)
 * [Rabbit](#rabbit)
 * [Blowfish](#blowfish)
@@ -364,6 +366,13 @@ Padding.pkcs7.add(to: bytes, blockSize: AES.blockSize)
 ```
 
 #### Working with Ciphers
+##### Salsa20
+
+```swift
+let encrypted = try Salsa20(key: key, iv: iv).encrypt(message)
+let decrypted = try Salsa20(key: key, iv: iv).decrypt(encrypted)
+```
+
 ##### ChaCha20
 
 ```swift

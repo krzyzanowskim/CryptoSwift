@@ -14,7 +14,7 @@
 //
 
 extension Array {
-    public init(reserveCapacity: Int) {
+    init(reserveCapacity: Int) {
         self = Array<Element>()
         self.reserveCapacity(reserveCapacity)
     }

@@ -15,6 +15,7 @@ xcuserdata
 DerivedData
 *.xcuserstate
 timeline.xctimeline
+.swiftpm/xcode
 
 /Framework
 .DS_Store

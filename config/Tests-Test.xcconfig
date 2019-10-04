@@ -9,10 +9,10 @@
 
 
 // Optimization Level
-// 
+//
 // Specifies the degree to which the generated code is optimized for speed and binary
 // size.
-// 
+//
 // * *None:* Do not optimize. [-O0]
 // With this setting, the compiler's goal is to reduce the cost of compilation and to
 // make debugging produce the expected results. Statements are independent—if you stop
@@ -45,7 +45,7 @@ GCC_OPTIMIZATION_LEVEL = fast
 
 
 // Unroll Loops
-// 
+//
 // Unrolls loops. Unrolling makes the code larger, but may make it faster by reducing the
 // number of branches executed.
 
@@ -54,9 +54,9 @@ GCC_UNROLL_LOOPS = YES
 
 
 // Link-Time Optimization
-// 
+//
 // Enabling this setting allows optimization across file boundaries during linking.
-// 
+//
 // * *No:* Disabled. Do not use link-time optimization.
 // * *Monolithic Link-Time Optimization:* This mode performs monolithic link-time
 // optimization of binaries, combining all executable code into a single unit and running
@@ -75,7 +75,7 @@ METAL_ENABLE_DEBUG_INFO = NO
 
 
 // Disable Safety Checks
-// 
+//
 // Disable runtime safety checks when optimizing.
 
 SWIFT_DISABLE_SAFETY_CHECKS = YES
@@ -83,7 +83,7 @@ SWIFT_DISABLE_SAFETY_CHECKS = YES
 
 
 // Swift Optimization Level
-// 
+//
 // * *None:* Compile without any optimization. [-Onone]
 // * *Optimize for Speed:* [-O]
 // * *Optimize for Size:* [-Osize]

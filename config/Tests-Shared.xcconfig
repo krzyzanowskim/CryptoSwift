@@ -7,7 +7,7 @@
 
 
 // Always Embed Swift Standard Libraries
-// 
+//
 // Always embed the Swift standard libraries in the target's products, even if the target
 // does not contain any Swift code.  For example, this should be enabled if the target is
 // embedding other products which contain Swift, or if it is a test target which does not
@@ -19,7 +19,7 @@ ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
 
 
 // Header Search Paths
-// 
+//
 // This is a list of paths to folders to be searched by the compiler for included or
 // imported header files when compiling C, Objective-C, C++, or Objective-C++. Paths are
 // delimited by whitespace, so any paths with spaces in them need to be properly quoted.
@@ -29,7 +29,7 @@ HEADER_SEARCH_PATHS = $(inherited) includes/**
 
 
 // Info.plist File
-// 
+//
 // The project-relative path to the property list file that contains the `Info.plist`
 // information used by bundles. For details on information property list files, see
 // [Information Property List
@@ -42,7 +42,7 @@ INFOPLIST_FILE = Tests/${TARGET_NAME}/Info.plist
 
 
 // Runpath Search Paths
-// 
+//
 // This is a list of paths to be added to the `runpath` search path list for the image
 // being created. At runtime, `dyld` uses the `runpath` when searching for dylibs whose
 // load path begins with `@rpath/`. See [Dynamic Library Programming
@@ -53,7 +53,7 @@ LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks @loader_path/
 
 
 // Product Bundle Identifier
-// 
+//
 // A string that uniquely identifies the bundle. The string should be in reverse DNS
 // format using only alphanumeric characters (`A-Z`, `a-z`, `0-9`), the dot (`.`), and
 // the hyphen (`-`). This value is used as the `CFBundleIdentifier` in the `Info.plist`
@@ -64,8 +64,7 @@ PRODUCT_BUNDLE_IDENTIFIER = com.krzyzanowskim.${PRODUCT_NAME:rfc1034identifier}
 
 
 // Objective-C Bridging Header
-// 
+//
 // Path to the header defining the Objective-C interfaces to be exposed in Swift.
 
 SWIFT_OBJC_BRIDGING_HEADER = Tests/${TARGET_NAME}/Bridging.h
-

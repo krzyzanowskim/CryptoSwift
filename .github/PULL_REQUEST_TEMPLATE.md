@@ -6,4 +6,4 @@ Checklist:
 - [ ] Tests added.
 
 Changes proposed in this pull request:
-- 
+-

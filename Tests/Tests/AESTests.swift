@@ -320,7 +320,7 @@ final class AESTests: XCTestCase {
         do {
             let aes = try AES(key: key, blockMode: CTR(iv: iv), padding: .noPadding)
             var encryptor = try aes.makeEncryptor()
-            
+
             let encrypted1 = try encryptor.update(withBytes: [0x00, 0x01, 0x02, 0x03] as [UInt8])
             XCTAssertEqual(encrypted1, Array<UInt8>(hex: "d79d0344"))
             let encrypted2 = try encryptor.update(withBytes: [0x04, 0x05, 0x06, 0x07] as [UInt8])
@@ -521,69 +521,69 @@ extension AESTests {
         XCTAssertEqual(Array(encrypted), [UInt8](hex: "")) // C
         XCTAssertEqual(gcm.authenticationTag, [UInt8](hex: "0xcd33b28ac773f74ba00ed1f312572435")) // T (128-bit)
     }
-    
+
     func testAESGCMTagLengthDetached() {
         // Test Case 2
         let key = Array<UInt8>(hex: "0x00000000000000000000000000000000")
         let plaintext = Array<UInt8>(hex: "0x00000000000000000000000000000000")
         let iv = Array<UInt8>(hex: "0x000000000000000000000000")
-        
+
         let gcm = GCM(iv: iv, tagLength: 12, mode: .detached)
         let aes = try! AES(key: key, blockMode: gcm, padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(Array(encrypted), [UInt8](hex: "0388dace60b6a392f328c2b971b2fe78")) // C
         XCTAssertEqual(gcm.authenticationTag, [UInt8](hex: "ab6e47d42cec13bdf53a67b2")) // T (96-bit)
-        
+
         // decrypt
         func decrypt(_ encrypted: Array<UInt8>) -> Array<UInt8> {
             let decGCM = GCM(iv: iv, authenticationTag: gcm.authenticationTag!, mode: .detached)
             let aes = try! AES(key: key, blockMode: decGCM, padding: .noPadding)
             return try! aes.decrypt(encrypted)
         }
-        
+
         let decrypted = decrypt(encrypted)
         XCTAssertEqual(decrypted, plaintext)
     }
-    
+
     func testAESGCMTagLengthCombined() {
         // Test Case 2
         let key = Array<UInt8>(hex: "0x00000000000000000000000000000000")
         let plaintext = Array<UInt8>(hex: "0x00000000000000000000000000000000")
         let iv = Array<UInt8>(hex: "0x000000000000000000000000")
-        
+
         let gcm = GCM(iv: iv, tagLength: 12, mode: .combined)
         let aes = try! AES(key: key, blockMode: gcm, padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
         XCTAssertEqual(Array(encrypted), [UInt8](hex: "0388dace60b6a392f328c2b971b2fe78ab6e47d42cec13bdf53a67b2")) // C
         XCTAssertEqual(gcm.authenticationTag, [UInt8](hex: "ab6e47d42cec13bdf53a67b2")) // T (96-bit)
-        
+
         // decrypt
         func decrypt(_ encrypted: Array<UInt8>) -> Array<UInt8> {
             let decGCM = GCM(iv: iv, authenticationTag: gcm.authenticationTag!, mode: .combined)
             let aes = try! AES(key: key, blockMode: decGCM, padding: .noPadding)
             return try! aes.decrypt(encrypted)
         }
-        
+
         let decrypted = decrypt(encrypted)
         XCTAssertEqual(decrypted, plaintext)
     }
-    
+
     func testAESGCMTagLengthCombined2() {
         let key = Array<UInt8>(hex: "0x00000000000000000000000000000000")
         let plaintext = Array<UInt8>(hex: "0x0000000000000000000000000000000000000000")
         let iv = Array<UInt8>(hex: "0x000000000000")
-        
+
         let gcm = GCM(iv: iv, tagLength: 12, mode: .combined)
         let aes = try! AES(key: key, blockMode: gcm, padding: .noPadding)
         let encrypted = try! aes.encrypt(plaintext)
-        
+
         // decrypt
         func decrypt(_ encrypted: Array<UInt8>) -> Array<UInt8> {
             let decGCM = GCM(iv: iv, authenticationTag: gcm.authenticationTag!, mode: .combined)
             let aes = try! AES(key: key, blockMode: decGCM, padding: .noPadding)
             return try! aes.decrypt(encrypted)
         }
-        
+
         let decrypted = decrypt(encrypted)
         XCTAssertEqual(decrypted, plaintext)
     }

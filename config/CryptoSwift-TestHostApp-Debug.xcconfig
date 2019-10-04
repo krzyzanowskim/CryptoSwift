@@ -9,9 +9,9 @@
 
 
 // Debug Information Format
-// 
+//
 // The type of debug information to produce.
-// 
+//
 // * *DWARF:* Object files and linked products will use DWARF as the debug information
 // format. [dwarf]
 // * *DWARF with dSYM File:* Object files and linked products will use DWARF as the debug
@@ -24,7 +24,7 @@ DEBUG_INFORMATION_FORMAT = dwarf
 
 
 // Enable Testability
-// 
+//
 // When this setting is activated, the product will be built with options appropriate for
 // running automated tests, such as making private interfaces accessible to the tests.
 // This may result in tests running slower than they would without testability enabled.
@@ -34,7 +34,7 @@ ENABLE_TESTABILITY = YES
 
 
 // Generate Position-Dependent Code
-// 
+//
 // Faster function calls for applications. Not appropriate for shared libraries, which
 // need to be position-independent.
 
@@ -43,10 +43,10 @@ GCC_DYNAMIC_NO_PIC = NO
 
 
 // Optimization Level
-// 
+//
 // Specifies the degree to which the generated code is optimized for speed and binary
 // size.
-// 
+//
 // * *None:* Do not optimize. [-O0]
 // With this setting, the compiler's goal is to reduce the cost of compilation and to
 // make debugging produce the expected results. Statements are independent—if you stop
@@ -79,7 +79,7 @@ GCC_OPTIMIZATION_LEVEL = 0
 
 
 // Preprocessor Macros
-// 
+//
 // Space-separated list of preprocessor macros of the form `foo` or `foo=bar`.
 
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) DEBUG=1
@@ -87,7 +87,7 @@ GCC_PREPROCESSOR_DEFINITIONS = $(inherited) DEBUG=1
 
 
 // Produce debugging information
-// 
+//
 // Produce debugging information. This information is required for shader profiling.
 
 MTL_ENABLE_DEBUG_INFO = YES
@@ -95,7 +95,7 @@ MTL_ENABLE_DEBUG_INFO = YES
 
 
 // Build Active Architecture Only
-// 
+//
 // If enabled, only the active architecture is built.
 
 ONLY_ACTIVE_ARCH = YES
@@ -103,7 +103,7 @@ ONLY_ACTIVE_ARCH = YES
 
 
 // Swift Optimization Level
-// 
+//
 // * *None:* Compile without any optimization. [-Onone]
 // * *Optimize for Speed:* [-O]
 // * *Optimize for Size:* [-Osize]

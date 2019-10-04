@@ -17,7 +17,7 @@
 import XCTest
 
 class Scrypt: XCTestCase {
-    
+
     func testScrypt_0() {
         let password = Array("password".data(using: .ascii)!)
         let salt = Array("NaCl".data(using: .ascii)!)
@@ -31,7 +31,7 @@ class Scrypt: XCTestCase {
 """.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\t", with: ""))
         XCTAssertEqual(derived, expected)
     }
-    
+
     func testScrypt_1() {
         let password = Array("pleaseletmein".data(using: .ascii)!)
         let salt = Array("SodiumChloride".data(using: .ascii)!)
@@ -45,7 +45,7 @@ class Scrypt: XCTestCase {
 """.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\t", with: ""))
         XCTAssertEqual(derived, expected)
     }
-    
+
 //          Takes too long to run in debug mode!
     func testScrypt_2() {
         #if !DEBUG
@@ -62,7 +62,7 @@ class Scrypt: XCTestCase {
         XCTAssertEqual(derived, expected)
         #endif
     }
-    
+
     static let allTests = [
         ("testScrypt_0", testScrypt_0),
         ("testScrypt_1", testScrypt_1),

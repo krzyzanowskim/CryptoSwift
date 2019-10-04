@@ -110,7 +110,7 @@ Check out [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to help
 To install CryptoSwift, add it as a submodule to your project (on the top level project directory):
 
     git submodule add https://github.com/krzyzanowskim/CryptoSwift.git
-    
+
 It is recommended to enable [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) to gain better performance. Non-optimized build results in significantly worse performance.
 
 #### Embedded Framework
@@ -160,8 +160,8 @@ pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :bran
 
 Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
 
-#### Carthage 
-You can use [Carthage](https://github.com/Carthage/Carthage). 
+#### Carthage
+You can use [Carthage](https://github.com/Carthage/Carthage).
 Specify in Cartfile:
 
 ```ruby
@@ -170,8 +170,8 @@ github "krzyzanowskim/CryptoSwift"
 
 Run `carthage` to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started). [Common issues](https://github.com/krzyzanowskim/CryptoSwift/issues/492#issuecomment-330822874).
 
-#### Accio 
-You can use [Accio](https://github.com/JamitLabs/Accio). 
+#### Accio
+You can use [Accio](https://github.com/JamitLabs/Accio).
 Specify in Package.swift:
 
 ```swift
@@ -211,7 +211,7 @@ dependencies: [
 See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
 
 ---
- 
+
 ## How-to
 
 * [Basics (data types, conversion, ...)](#basics)
@@ -290,7 +290,7 @@ let hash = data.sha1()
 let hash = data.sha224()
 let hash = data.sha256()
 let hash = data.sha384()
-let hash = data.sha512()    
+let hash = data.sha512()
 ```
 ```swift
 do {
@@ -300,7 +300,7 @@ do {
     let result = try digest.finish()
 } catch { }
 ```
-    
+
 Hashing a String and printing result
 
 ```swift
@@ -356,7 +356,7 @@ let key = try HKDF(password: password, salt: salt, variant: .sha256).calculate()
 
 
 ##### Data Padding
-    
+
 Some content-encryption algorithms assume the input length is a multiple of `k` octets, where `k` is greater than one. For such algorithms, the input shall be padded.
 
 ```swift
@@ -409,7 +409,7 @@ do {
 
 ###### Incremental updates
 
-Incremental operations use instance of Cryptor and encrypt/decrypt one part at a time, this way you can save on memory for large files. 
+Incremental operations use instance of Cryptor and encrypt/decrypt one part at a time, this way you can save on memory for large files.
 
 ```swift
 do {
@@ -443,9 +443,9 @@ do {
     let decrypted = try AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7).decrypt(encrypted)
 } catch {
     print(error)
-}    
+}
 ```
-    
+
 AES without data padding
 
 ```swift
@@ -454,7 +454,7 @@ let encrypted: Array<UInt8> = try! AES(key: Array("secret0key000000".utf8), bloc
 ```
 
 Using convenience extensions
-    
+
 ```swift
 let plain = Data( [0x01, 0x02, 0x03])
 let encrypted = try! plain.encrypt(ChaCha20(key: key, iv: iv))
@@ -532,9 +532,9 @@ This distribution includes cryptographic software. The country in which you curr
 ## License
 
 Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
-This software is provided 'as-is', without any express or implied warranty. 
+This software is provided 'as-is', without any express or implied warranty.
 
-In no event will the authors be held liable for any damages arising from the use of this software. 
+In no event will the authors be held liable for any damages arising from the use of this software.
 
 Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
 

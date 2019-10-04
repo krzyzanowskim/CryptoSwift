@@ -28,10 +28,10 @@ CLANG_ANALYZER_NONNULL = YES
 CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE
 
 // Always Search User Paths (Deprecated)
-// 
+//
 // This setting is deprecated as of Xcode 8.3 and may not be supported in future
 // versions. It is recommended that you disable the setting.
-// 
+//
 // If enabled, both `#include <header.h>`-style and `#include "header.h"`-style
 // directives search the paths in `USER_HEADER_SEARCH_PATHS` before
 // `HEADER_SEARCH_PATHS`. As a consequence, user headers, such as your own `String.h`
@@ -39,7 +39,7 @@ CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE
 // done using the `-iquote` flag for the paths provided in `USER_HEADER_SEARCH_PATHS`. If
 // disabled and your compiler fully supports separate user paths, user headers are only
 // accessible with `#include "header.h"`-style preprocessor directives.
-// 
+//
 // For backwards compatibility reasons, this setting is enabled by default. Disabling it
 // is strongly recommended.
 
@@ -48,9 +48,9 @@ ALWAYS_SEARCH_USER_PATHS = NO
 
 
 // C++ Language Dialect
-// 
+//
 // Choose a standard or non-standard C++ language dialect. Options include:
-// 
+//
 // * *C++98:* Accept ISO C++ 1998 with amendments, but not GNU extensions. [-std=c++98]
 // * *GNU++98:* Accept ISO C++ 1998 with amendments and GNU extensions. [-std=gnu++98]
 // * *C++11:* Accept the ISO C++ 2011 standard with amendments, but not GNU extensions.
@@ -74,9 +74,9 @@ CLANG_CXX_LANGUAGE_STANDARD = gnu++0x
 
 
 // C++ Standard Library
-// 
+//
 // Choose a version of the C++ standard library to use.
-// 
+//
 // * *libstdc++:* A traditional C++ standard library that works with GCC and the LLVM
 // Compiler (default).
 // * *libc++:* A highly optimized C++ standard library that works only with the LLVM
@@ -87,7 +87,7 @@ CLANG_CXX_LIBRARY = libc++
 
 
 // Enable Modules (C and Objective-C)
-// 
+//
 // Enables the use of modules for system APIs. System headers are imported as semantic
 // modules instead of raw headers. This can result in faster builds and project indexing.
 
@@ -96,7 +96,7 @@ CLANG_ENABLE_MODULES = YES
 
 
 // Objective-C Automatic Reference Counting
-// 
+//
 // Compiles reference-counted Objective-C code (when garbage collection is not enabled)
 // to use Automatic Reference Counting. Code compiled using automated reference counting
 // is compatible with other code (such as frameworks) compiled using either manual
@@ -116,7 +116,7 @@ CLANG_ENABLE_OBJC_WEAK = YES
 
 
 // Duplicate Method Definitions
-// 
+//
 // Warn about declaring the same method more than once within the same `@interface`.
 
 CLANG_WARN__DUPLICATE_METHOD_MATCH = YES
@@ -124,7 +124,7 @@ CLANG_WARN__DUPLICATE_METHOD_MATCH = YES
 
 
 // Block Capture of Autoreleasing
-// 
+//
 // Warn about block captures of implicitly autoreleasing parameters.
 
 CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES
@@ -132,7 +132,7 @@ CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES
 
 
 // Implicit Boolean Conversions
-// 
+//
 // Warn about implicit conversions to boolean values that are suspicious. For example,
 // writing `if (foo)` where `foo` is the name a function will trigger a warning.
 
@@ -141,7 +141,7 @@ CLANG_WARN_BOOL_CONVERSION = YES
 
 
 // Suspicious Commas
-// 
+//
 // Warn about suspicious uses of the comma operator.
 
 CLANG_WARN_COMMA = YES
@@ -149,7 +149,7 @@ CLANG_WARN_COMMA = YES
 
 
 // Implicit Constant Conversions
-// 
+//
 // Warn about implicit conversions of constant values that cause the constant value to
 // change, either through a loss of precision, or entirely in its meaning.
 
@@ -158,7 +158,7 @@ CLANG_WARN_CONSTANT_CONVERSION = YES
 
 
 // Overriding Deprecated Objective-C Methods
-// 
+//
 // Warn if an Objective-C class either subclasses a deprecated class or overrides a
 // method that has been marked deprecated or unavailable.
 
@@ -167,7 +167,7 @@ CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES
 
 
 // Direct usage of 'isa'
-// 
+//
 // Warn about direct accesses to the Objective-C `isa` pointer instead of using a runtime
 // API.
 
@@ -176,7 +176,7 @@ CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR
 
 
 // Empty Loop Bodies
-// 
+//
 // Warn about loop bodies that are suspiciously empty.
 
 CLANG_WARN_EMPTY_BODY = YES
@@ -184,7 +184,7 @@ CLANG_WARN_EMPTY_BODY = YES
 
 
 // Implicit Enum Conversions
-// 
+//
 // Warn about implicit conversions between different kinds of enum values. For example,
 // this can catch issues when using the wrong enum flag as an argument to a function or
 // method.
@@ -194,7 +194,7 @@ CLANG_WARN_ENUM_CONVERSION = YES
 
 
 // Infinite Recursion
-// 
+//
 // Warn if all paths through a function call itself.
 
 CLANG_WARN_INFINITE_RECURSION = YES
@@ -202,7 +202,7 @@ CLANG_WARN_INFINITE_RECURSION = YES
 
 
 // Implicit Integer to Pointer Conversions
-// 
+//
 // Warn about implicit conversions between pointers and integers. For example, this can
 // catch issues when one incorrectly intermixes using `NSNumber*`'s and raw integers.
 
@@ -211,7 +211,7 @@ CLANG_WARN_INT_CONVERSION = YES
 
 
 // Implicit Non-Literal Null Conversions
-// 
+//
 // Warn about non-literal expressions that evaluate to zero being treated as a null
 // pointer.
 
@@ -220,7 +220,7 @@ CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES
 
 
 // Implicit retain of 'self' within blocks
-// 
+//
 // Warn about implicit retains of `self` within blocks, which can create a retain-cycle.
 
 CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES
@@ -228,7 +228,7 @@ CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES
 
 
 // Implicit Objective-C Literal Conversions
-// 
+//
 // Warn about implicit conversions from Objective-C literals to values of incompatible
 // type.
 
@@ -237,7 +237,7 @@ CLANG_WARN_OBJC_LITERAL_CONVERSION = YES
 
 
 // Unintentional Root Class
-// 
+//
 // Warn about classes that unintentionally do not subclass a root class, such as
 // `NSObject`.
 
@@ -246,7 +246,7 @@ CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR
 
 
 // Range-based For Loops
-// 
+//
 // Warn about ranged-based for loops.
 
 CLANG_WARN_RANGE_LOOP_ANALYSIS = YES
@@ -254,7 +254,7 @@ CLANG_WARN_RANGE_LOOP_ANALYSIS = YES
 
 
 // Strict Prototypes
-// 
+//
 // Warn about non-prototype declarations.
 
 CLANG_WARN_STRICT_PROTOTYPES = YES
@@ -262,7 +262,7 @@ CLANG_WARN_STRICT_PROTOTYPES = YES
 
 
 // Suspicious Moves
-// 
+//
 // Warn about suspicious uses of `std::move`.
 
 CLANG_WARN_SUSPICIOUS_MOVE = YES
@@ -270,7 +270,7 @@ CLANG_WARN_SUSPICIOUS_MOVE = YES
 
 
 // Unreachable Code
-// 
+//
 // Warns about potentially unreachable code.
 
 CLANG_WARN_UNREACHABLE_CODE = YES
@@ -298,7 +298,7 @@ CODE_SIGNING_REQUIRED = NO
 
 
 // Current Project Version
-// 
+//
 // This setting defines the current version of the project. The value must be a integer
 // or floating point number, such as `57` or `365.8`.
 
@@ -307,9 +307,9 @@ CURRENT_PROJECT_VERSION = 1
 
 
 // Debug Information Format
-// 
+//
 // The type of debug information to produce.
-// 
+//
 // * *DWARF:* Object files and linked products will use DWARF as the debug information
 // format. [dwarf]
 // * *DWARF with dSYM File:* Object files and linked products will use DWARF as the debug
@@ -322,7 +322,7 @@ DEBUG_INFORMATION_FORMAT = dwarf
 
 
 // Defines Module
-// 
+//
 // If enabled, the product will be treated as defining its own module. This enables
 // automatic production of LLVM module map files when appropriate, and allows the product
 // to be imported as a module.
@@ -332,7 +332,7 @@ DEFINES_MODULE = YES
 
 
 // Enable Strict Checking of objc_msgSend Calls
-// 
+//
 // Controls whether `objc_msgSend` calls must be cast to the appropriate function pointer
 // type before being called.
 
@@ -341,9 +341,9 @@ ENABLE_STRICT_OBJC_MSGSEND = YES
 
 
 // C Language Dialect
-// 
+//
 // Choose a standard or non-standard C language dialect.
-// 
+//
 // * *ANSI C:* Accept ISO C90 and ISO C++, turning off GNU extensions that are
 // incompatible. [-ansi]
 // Incompatible GNU extensions include the `asm`, `inline`, and `typeof` keywords (but
@@ -365,7 +365,7 @@ GCC_C_LANGUAGE_STANDARD = gnu99
 
 
 // No Common Blocks
-// 
+//
 // In C, allocate even uninitialized global variables in the data section of the object
 // file, rather than generating them as common blocks. This has the effect that if the
 // same variable is declared (without `extern`) in two different compilations, you will
@@ -376,7 +376,7 @@ GCC_NO_COMMON_BLOCKS = YES
 
 
 // Implicit Conversion to 32 Bit Type
-// 
+//
 // Warn if a value is implicitly converted from a 64-bit type to a 32-bit type. This is a
 // subset of the warnings provided by -Wconversion.
 
@@ -385,7 +385,7 @@ GCC_WARN_64_TO_32_BIT_CONVERSION = YES
 
 
 // Mismatched Return Type
-// 
+//
 // Causes warnings to be emitted when a function with a defined return type (not `void`)
 // contains a return statement without a return-value. Also emits a warning when a
 // function is defined without specifying a return type.
@@ -395,7 +395,7 @@ GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR
 
 
 // Undeclared Selector
-// 
+//
 // Warn if a `@selector(...)` expression referring to an undeclared selector is found. A
 // selector is considered undeclared if no method with that name has been declared before
 // the `@selector(...)` expression, either explicitly in an `@interface` or `@protocol`
@@ -410,10 +410,10 @@ GCC_WARN_UNDECLARED_SELECTOR = YES
 
 
 // Uninitialized Variables
-// 
+//
 // Warn if a variable might be clobbered by a `setjmp` call or if an automatic variable
 // is used without prior initialization.
-// 
+//
 // The compiler may not detect all cases where an automatic variable is initialized or
 // all usage patterns that may lead to use prior to initialization. You can toggle
 // between the normal uninitialized value checking or the more aggressive (conservative)
@@ -424,7 +424,7 @@ GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE
 
 
 // Unused Functions
-// 
+//
 // Warn whenever a static function is declared but not defined or a noninline static
 // function is unused.
 
@@ -433,7 +433,7 @@ GCC_WARN_UNUSED_FUNCTION = YES
 
 
 // Unused Labels
-// 
+//
 // Warn whenever a label is declared but not used.
 
 GCC_WARN_UNUSED_LABEL = YES
@@ -441,7 +441,7 @@ GCC_WARN_UNUSED_LABEL = YES
 
 
 // Unused Variables
-// 
+//
 // Warn whenever a local variable or nonconstant static variable is unused aside from its
 // declaration.
 
@@ -453,7 +453,7 @@ IPHONEOS_DEPLOYMENT_TARGET = 8.0
 
 
 // macOS Deployment Target
-// 
+//
 // Code will load on this and later versions of macOS. Framework APIs that are
 // unavailable in earlier versions will be weak-linked; your code should check for `null`
 // function pointers or specific system versions before calling newer APIs.
@@ -463,7 +463,7 @@ MACOSX_DEPLOYMENT_TARGET = 10.10
 
 
 // Supported Platforms
-// 
+//
 // The list of supported platforms from which a base SDK can be used. This setting is
 // used if the product can be built for multiple platforms using different SDKs.
 
@@ -476,15 +476,15 @@ SWIFT_COMPILATION_MODE = wholemodule
 
 
 // Swift Language Version
-// 
-// 
+//
+//
 
 SWIFT_VERSION = 5.0
 
 
 
 // Targeted Device Family
-// 
+//
 // The build system uses the selected device to set the correct value for the
 // `UIDeviceFamily` key it adds to the target's `Info.plist` file. This also drives the
 // --target-device flag to actool, which determines the idioms selected during catalog
@@ -499,19 +499,19 @@ TVOS_DEPLOYMENT_TARGET = 9.0
 
 
 // Versioning Name Prefix
-// 
+//
 // Used as a prefix for the name of the version info symbol in the generated versioning
 // source file. If you prefix your exported symbols you will probably want to set this to
 // the same prefix.
 
-VERSION_INFO_PREFIX = 
+VERSION_INFO_PREFIX =
 
 
 
 // Versioning System
-// 
+//
 // Selects the process used for version-stamping generated files.
-// 
+//
 // * *None:* Use no versioning system.
 // * *Apple Generic:* Use the current project version setting. [apple-generic]
 

@@ -13,7 +13,7 @@ BITCODE_GENERATION_MODE = bitcode
 
 
 // Use Optimization Profile
-// 
+//
 // When this setting is enabled, `clang` will use the optimization profile collected for
 // a target when building it.
 
@@ -22,7 +22,7 @@ CLANG_USE_OPTIMIZATION_PROFILE = NO
 
 
 // Generate Debug Symbols
-// 
+//
 // Enables or disables generation of debug symbols. When debug symbols are enabled, the
 // level of detail can be controlled by the `DEBUG_INFORMATION_FORMAT` setting.
 
@@ -31,7 +31,7 @@ GCC_GENERATE_DEBUGGING_SYMBOLS = NO
 
 
 // Unroll Loops
-// 
+//
 // Unrolls loops. Unrolling makes the code larger, but may make it faster by reducing the
 // number of branches executed.
 
@@ -40,9 +40,9 @@ GCC_UNROLL_LOOPS = YES
 
 
 // Link-Time Optimization
-// 
+//
 // Enabling this setting allows optimization across file boundaries during linking.
-// 
+//
 // * *No:* Disabled. Do not use link-time optimization.
 // * *Monolithic Link-Time Optimization:* This mode performs monolithic link-time
 // optimization of binaries, combining all executable code into a single unit and running
@@ -57,7 +57,7 @@ LLVM_LTO = YES
 
 
 // Disable Safety Checks
-// 
+//
 // Disable runtime safety checks when optimizing.
 
 SWIFT_DISABLE_SAFETY_CHECKS = YES
@@ -65,7 +65,7 @@ SWIFT_DISABLE_SAFETY_CHECKS = YES
 
 
 // Exclusive Access to Memory
-// 
+//
 // Enforce exclusive access to memory
 
 SWIFT_ENFORCE_EXCLUSIVE_ACCESS = compile-time
@@ -73,7 +73,7 @@ SWIFT_ENFORCE_EXCLUSIVE_ACCESS = compile-time
 
 
 // Swift Optimization Level
-// 
+//
 // * *None:* Compile without any optimization. [-Onone]
 // * *Optimize for Speed:* [-O]
 // * *Optimize for Size:* [-Osize]

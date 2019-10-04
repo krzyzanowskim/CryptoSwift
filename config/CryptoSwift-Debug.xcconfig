@@ -9,7 +9,7 @@
 
 
 // Other Swift Flags
-// 
+//
 // A list of additional flags to pass to the Swift compiler.
 
 OTHER_SWIFT_FLAGS = $(inherited) -Xfrontend -debug-time-function-bodies
@@ -30,7 +30,7 @@ SWIFT_OPTIMIZATION_LEVEL = -Onone
 
 
 // Exclusive Access to Memory
-// 
+//
 // Enforce exclusive access to memory
 
 SWIFT_ENFORCE_EXCLUSIVE_ACCESS = none

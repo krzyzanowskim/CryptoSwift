@@ -9,9 +9,9 @@
 
 
 // Link-Time Optimization
-// 
+//
 // Enabling this setting allows optimization across file boundaries during linking.
-// 
+//
 // * *No:* Disabled. Do not use link-time optimization.
 // * *Monolithic Link-Time Optimization:* This mode performs monolithic link-time
 // optimization of binaries, combining all executable code into a single unit and running

@@ -26,7 +26,7 @@ class ScryptTestsPeft: XCTestCase {
             _ = try! CryptoSwift.Scrypt(password: password, salt: salt, dkLen: 64, N: N, r: 8, p: 1).calculate()
         }
     }
-    
+
 }
 
 extension ScryptTestsPeft {

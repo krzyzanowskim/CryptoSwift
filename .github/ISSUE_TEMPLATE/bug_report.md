@@ -9,7 +9,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-1. 
+1.
 
 **Sample code**
 
@@ -23,9 +23,9 @@ Steps to reproduce the behavior:
 
 
 **Environment (please complete the following information):**
-- Swift version: 
-- Platform (iOS/macOS/Linux/...): 
-- Installation method (CocoaPods/Carthage/SPM/...): 
+- Swift version:
+- Platform (iOS/macOS/Linux/...):
+- Installation method (CocoaPods/Carthage/SPM/...):
 - Project name:
 
 **Additional context**

@@ -1,7 +1,7 @@
-- CryptoSwift version: 
-- Swift version: 
-- Platform (iOS/macOS/Linux/...): 
-- Installation method (CocoaPods/Carthage/SPM/...): 
+- CryptoSwift version:
+- Swift version:
+- Platform (iOS/macOS/Linux/...):
+- Installation method (CocoaPods/Carthage/SPM/...):
 - Project name:
 
 # Description

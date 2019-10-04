@@ -9,7 +9,7 @@
 
 
 // Use Optimization Profile
-// 
+//
 // When this setting is enabled, `clang` will use the optimization profile collected for
 // a target when building it.
 
@@ -18,7 +18,7 @@ CLANG_USE_OPTIMIZATION_PROFILE = YES
 
 
 // Strip Debug Symbols During Copy
-// 
+//
 // Specifies whether binary files that are copied during the build, such as in a Copy
 // Bundle Resources or Copy Files build phase, should be stripped of debugging symbols.
 // It does not cause the linked product of a target to be stripped—use
@@ -29,7 +29,7 @@ COPY_PHASE_STRIP = YES
 
 
 // Enable Foundation Assertions
-// 
+//
 // Controls whether assertion logic provided by `NSAssert` is included in the
 // preprocessed source code or is elided during preprocessing. Disabling assertions can
 // improve code performance.
@@ -39,10 +39,10 @@ ENABLE_NS_ASSERTIONS = NO
 
 
 // Optimization Level
-// 
+//
 // Specifies the degree to which the generated code is optimized for speed and binary
 // size.
-// 
+//
 // * *None:* Do not optimize. [-O0]
 // With this setting, the compiler's goal is to reduce the cost of compilation and to
 // make debugging produce the expected results. Statements are independent—if you stop
@@ -79,7 +79,7 @@ METAL_ENABLE_DEBUG_INFO = NO
 
 
 // Validate Built Product
-// 
+//
 // If enabled, perform validation checks on the product as part of the build process.
 
 VALIDATE_PRODUCT = YES

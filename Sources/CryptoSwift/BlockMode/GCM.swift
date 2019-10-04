@@ -38,7 +38,7 @@ public final class GCM: BlockMode {
     private let iv: Array<UInt8>
     private let additionalAuthenticatedData: Array<UInt8>?
     private let mode: Mode
-    
+
     /// Length of authentication tag, in bytes.
     /// For encryption, the value is given as init parameter.
     /// For decryption, the lenght of given authentication tag is used.
@@ -126,7 +126,7 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
         } else {
             self.additionalBufferSize = 0
         }
-        
+
         // Assume nonce is 12 bytes long, otherwise initial counter would be calulated from GHASH
         // counter = GF.ghash(aad: [UInt8](), ciphertext: nonce)
         if iv.count == GCMModeWorker.nonceSize {

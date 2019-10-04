@@ -13,7 +13,7 @@ BITCODE_GENERATION_MODE = bitcode
 
 
 // Unroll Loops
-// 
+//
 // Unrolls loops. Unrolling makes the code larger, but may make it faster by reducing the
 // number of branches executed.
 
@@ -22,9 +22,9 @@ GCC_UNROLL_LOOPS = YES
 
 
 // Link-Time Optimization
-// 
+//
 // Enabling this setting allows optimization across file boundaries during linking.
-// 
+//
 // * *No:* Disabled. Do not use link-time optimization.
 // * *Monolithic Link-Time Optimization:* This mode performs monolithic link-time
 // optimization of binaries, combining all executable code into a single unit and running
@@ -39,7 +39,7 @@ LLVM_LTO = YES
 
 
 // Other Swift Flags
-// 
+//
 // A list of additional flags to pass to the Swift compiler.
 
 OTHER_SWIFT_FLAGS = $(inherited) -Xfrontend -debug-time-function-bodies
@@ -47,7 +47,7 @@ OTHER_SWIFT_FLAGS = $(inherited) -Xfrontend -debug-time-function-bodies
 
 
 // Disable Safety Checks
-// 
+//
 // Disable runtime safety checks when optimizing.
 
 SWIFT_DISABLE_SAFETY_CHECKS = YES
@@ -55,7 +55,7 @@ SWIFT_DISABLE_SAFETY_CHECKS = YES
 
 
 // Exclusive Access to Memory
-// 
+//
 // Enforce exclusive access to memory
 
 SWIFT_ENFORCE_EXCLUSIVE_ACCESS = compile-time
@@ -63,7 +63,7 @@ SWIFT_ENFORCE_EXCLUSIVE_ACCESS = compile-time
 
 
 // Swift Optimization Level
-// 
+//
 // * *None:* Compile without any optimization. [-Onone]
 // * *Optimize for Speed:* [-O]
 // * *Optimize for Size:* [-Osize]

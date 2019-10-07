@@ -6,7 +6,7 @@
 import CryptoSwift
 import Foundation
 /*:
- # Data types conversinn
+ # Data types conversion
  */
 let data = Data([0x01, 0x02, 0x03])
 let bytes = data.bytes

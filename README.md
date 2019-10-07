@@ -12,23 +12,17 @@
 
 Crypto related functions and helpers for [Swift](https://swift.org) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
-**Note**: The `master` branch follows the latest currently released **version of Swift**. If you need an earlier version for an older version of Swift, you can specify its version in your Podfile or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
+**Note**: The `master` branch follows the latest currently released **version of Swift**. If you need an earlier version for an older version of Swift, you can specify its version in your `Podfile` or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
 
 ---
 
-If you find the project useful, please [support authors](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=92Z6U3LBHF9J4) to keep it alive.
+[Requirements](#requirements) | [Features](#features) | [Contribution](#contribution) | [Installation](#installation) | [Swift versions](#swift-versions-support) | [How-to](#how-to) | [Author](#author) | [License](#license) | [Changelog](#changelog)
 
----
+## Sponsorship
 
-[Requirements](#requirements)
-| [Features](#features)
-| [Contribution](#contribution)
-| [Installation](#installation)
-| [Swift versions](#swift-versions-support)
-| [How-to](#how-to)
-| [Author](#author)
-| [License](#license)
-| [Changelog](#changelog)
+If you (or your Company) use this work, please consider [Sponsorship](https://github.com/users/krzyzanowskim/sponsorship). This is the only option to keep the project alive, that is in your own best interrest.
+
+CryptoSwift isn't backed by a big company and is developer in my spare time that I also use to as a freelancer.
 
 ## Requirements
 Good mood
@@ -137,25 +131,14 @@ In the project, you'll find [single scheme](https://mxcl.dev/PromiseKit/news/201
 - Swift 3.2, branch [swift32](https://github.com/krzyzanowskim/CryptoSwift/tree/swift32) version = 0.7.0
 - Swift 4.0, branch [swift4](https://github.com/krzyzanowskim/CryptoSwift/tree/swift4) version <= 0.12.0
 - Swift 4.2, branch [swift42](https://github.com/krzyzanowskim/CryptoSwift/tree/swift42) version <= 0.15.0
-- Swift 5.0, branch [master](https://github.com/krzyzanowskim/CryptoSwift/tree/master)
+- Swift 5.0, 5.1, branch [master](https://github.com/krzyzanowskim/CryptoSwift/tree/master)
 
 #### CocoaPods
 
-You can use [CocoaPods](http://cocoapods.org/?q=cryptoSwift).
+You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
 
 ```ruby
-platform :ios, '10.0'
-use_frameworks!
-
-target 'MyApp' do
-  pod 'CryptoSwift'
-end
-```
-
-or for newest version from specified branch of code:
-
-```ruby
-pod 'CryptoSwift', :git => "https://github.com/krzyzanowskim/CryptoSwift", :branch => "master"
+pod 'CryptoSwift', '~> 1.0'
 ```
 
 Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
@@ -170,45 +153,24 @@ github "krzyzanowskim/CryptoSwift"
 
 Run `carthage` to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started). [Common issues](https://github.com/krzyzanowskim/CryptoSwift/issues/492#issuecomment-330822874).
 
-#### Accio
-You can use [Accio](https://github.com/JamitLabs/Accio).
-Specify in Package.swift:
-
-```swift
-.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "1.0.0")),
-```
-
-Next, add `CryptoSwift` to your App targets dependencies like so:
-```swift
-.target(
-    name: "App",
-    dependencies: [
-        "CryptoSwift",
-    ]
-),
-```
-
-Then run `accio update`.
-
 #### Swift Package Manager
 
 You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding this:
 
 ```swift
-dependencies: [
-    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.0.0"))
-]
-```
-
-or more strict
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .exact("1.0.0"))
-]
+.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.0.0"))
 ```
 
 See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
+
+#### Accio
+You can use [Accio](https://github.com/JamitLabs/Accio). Specify in `Package.swift`:
+
+```swift
+.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "1.0.0")),
+```
+
+Then run `accio update`.
 
 ---
 
@@ -436,7 +398,7 @@ See [Playground](/CryptoSwift.playground/Contents.swift) for sample code that wo
 let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]
 
 let key: Array<UInt8> = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00]
-let iv: Array<UInt8> = AES.randomIV(AES.blockSize)
+let iv: Array<UInt8> = // Random bytes of `AES.blockSize` length
 
 do {
     let encrypted = try AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7).encrypt(input)

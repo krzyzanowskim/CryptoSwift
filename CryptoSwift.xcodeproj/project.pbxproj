@@ -23,7 +23,6 @@
 		752BED9E208C121000FC4743 /* Blowfish.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52491EE8B6CA0048EB3B /* Blowfish.swift */; };
 		752BED9F208C135700FC4743 /* AES+Foundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52531EE8B6CA0048EB3B /* AES+Foundation.swift */; };
 		753674072175D012003E32A6 /* StreamDecryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753674062175D012003E32A6 /* StreamDecryptor.swift */; };
-		753B33011DAB84D600D06422 /* RandomBytesSequenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753B33001DAB84D600D06422 /* RandomBytesSequenceTests.swift */; };
 		754310442050111A003FB1DF /* CompactMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754310432050111A003FB1DF /* CompactMap.swift */; };
 		75482EA41CB310B7001F66A5 /* PBKDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75482EA31CB310B7001F66A5 /* PBKDF.swift */; };
 		754BE46819693E190098E6F3 /* DigestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* DigestTests.swift */; };
@@ -269,7 +268,6 @@
 		7529366920683DFC00195874 /* AEADChaCha20Poly1305.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEADChaCha20Poly1305.swift; sourceTree = "<group>"; };
 		753674062175D012003E32A6 /* StreamDecryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamDecryptor.swift; sourceTree = "<group>"; };
 		7536A93E207254A000F39140 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		753B33001DAB84D600D06422 /* RandomBytesSequenceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomBytesSequenceTests.swift; sourceTree = "<group>"; };
 		754310432050111A003FB1DF /* CompactMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactMap.swift; sourceTree = "<group>"; };
 		75482EA31CB310B7001F66A5 /* PBKDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBKDF.swift; sourceTree = "<group>"; };
 		754BE45519693E190098E6F3 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -494,7 +492,6 @@
 				757DA2521A4ED0A4002BA3EF /* PaddingTests.swift */,
 				75482EA31CB310B7001F66A5 /* PBKDF.swift */,
 				7576F6F6207290F8006688F8 /* PBKDFPerf.swift */,
-				753B33001DAB84D600D06422 /* RandomBytesSequenceTests.swift */,
 				75C2E76C1D55F097003D2BCA /* Access.swift */,
 				756BFDCA1A82B87300B9D9A4 /* Bridging.h */,
 				754BE46519693E190098E6F3 /* Supporting Files */,
@@ -974,7 +971,6 @@
 				758A94291A65C67400E46135 /* HMACTests.swift in Sources */,
 				75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */,
 				E6200E171FB9B68C00258382 /* HKDFTests.swift in Sources */,
-				753B33011DAB84D600D06422 /* RandomBytesSequenceTests.swift in Sources */,
 				754BE46819693E190098E6F3 /* DigestTests.swift in Sources */,
 				E3FD2D531D6B81CE00A9F35F /* Error+Extension.swift in Sources */,
 				757DA2591A4ED4D7002BA3EF /* ChaCha20Tests.swift in Sources */,

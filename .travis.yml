@@ -1,16 +1,14 @@
 language: generic
 matrix:
    include:
-      # Test Ubuntu Linux 14.04 / Swift 4.1.2
+      # Test Ubuntu Linux 14.04
        - os: linux
          dist: trusty
          sudo: required
-      # Test Xcode 10 / Swift 4.2
        - os: osx
-         osx_image: xcode10
-      # Test Xcode 10.2 / Swift 5
+         osx_image: xcode10.3
        - os: osx
-         osx_image: xcode10.2
+         osx_image: xcode11.1
 install:
     - eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
 script:

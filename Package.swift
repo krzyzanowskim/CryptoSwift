@@ -1,9 +1,12 @@
-// swift-tools-version:4.1
+// swift-tools-version:5.0
 
 import PackageDescription
 
 let package = Package(
     name: "CryptoSwift",
+    platforms: [
+        .macOS(.v10_10), .iOS(.v8), .tvOS(.v9),
+    ],
     products: [
         .library(
             name: "CryptoSwift",
@@ -11,8 +14,8 @@ let package = Package(
     ],
     targets: [
         .target(name: "CryptoSwift"),
-        .testTarget(name: "Tests", dependencies: ["CryptoSwift"]),
+        .testTarget(name: "CryptoSwiftTests", dependencies: ["CryptoSwift"]),
         .testTarget(name: "TestsPerformance", dependencies: ["CryptoSwift"]),
     ],
-    swiftLanguageVersions: [4]
+    swiftLanguageVersions: [.v5]
 )

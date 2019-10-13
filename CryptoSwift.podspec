@@ -16,5 +16,4 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = "9.0"
   s.source_files  = "Sources/CryptoSwift/**/*.swift"
   s.requires_arc = true
-  s.pod_target_xcconfig = { 'SWIFT_OPTIMIZATION_LEVEL' => '-O', 'SWIFT_COMPILATION_MODE' => 'wholemodule', 'SWIFT_DISABLE_SAFETY_CHECKS' => 'YES', 'SWIFT_ENFORCE_EXCLUSIVE_ACCESS' => 'debug-only', 'GCC_UNROLL_LOOPS' => 'YES'}
 end

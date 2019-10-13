@@ -133,23 +133,3 @@ PRODUCT_NAME = $(TARGET_NAME)
 // If enabled, don't install built products even if deployment locations are active.
 
 SKIP_INSTALL = YES
-
-
-
-// Swift Language Version
-//
-//
-
-SWIFT_VERSION = 5.0
-
-
-
-TVOS_DEPLOYMENT_TARGET = 9.0
-
-
-
-WATCHOS_DEPLOYMENT_TARGET = 2.0
-
-
-// XCFramework
-BUILD_LIBRARY_FOR_DISTRIBUTION = YES

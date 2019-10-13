@@ -458,7 +458,7 @@ IPHONEOS_DEPLOYMENT_TARGET = 8.0
 // unavailable in earlier versions will be weak-linked; your code should check for `null`
 // function pointers or specific system versions before calling newer APIs.
 
-MACOSX_DEPLOYMENT_TARGET = 10.10
+MACOSX_DEPLOYMENT_TARGET = 10.12
 
 
 
@@ -520,3 +520,10 @@ VERSIONING_SYSTEM = apple-generic
 
 
 WATCHOS_DEPLOYMENT_TARGET = 2.0
+
+// XCFramework
+BUILD_LIBRARY_FOR_DISTRIBUTION = YES
+
+// Catalyst
+SUPPORTS_MACCATALYST = YES
+DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO

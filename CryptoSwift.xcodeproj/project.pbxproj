@@ -1008,7 +1008,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FAB20724A0F004E41F8 /* CryptoSwift-TestHostApp-Debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 			};
 			name = Debug;
@@ -1017,7 +1016,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FB320724A10004E41F8 /* CryptoSwift-TestHostApp-Release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 			};
 			name = Release;
@@ -1026,7 +1024,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FA520724A0F004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 			};
 			name = Test;

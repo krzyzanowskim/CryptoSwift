@@ -1,3 +1,8 @@
+1.1.0
+- Replace RandomBytesSequence with Swift.RandomNumberGenerator
+- Fix CBC-MAC
+- Update SPM support
+
 1.0.0
 - Swift 5
 - Let's

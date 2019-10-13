@@ -103,7 +103,6 @@
 		75EC52AA1EE8B83D0048EB3B /* Poly1305.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC526A1EE8B6CA0048EB3B /* Poly1305.swift */; };
 		75EC52AB1EE8B83D0048EB3B /* Rabbit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC526B1EE8B6CA0048EB3B /* Rabbit.swift */; };
 		75EC52AC1EE8B83D0048EB3B /* Cryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC526C1EE8B6CA0048EB3B /* Cryptor.swift */; };
-		75EC52AD1EE8B83D0048EB3B /* RandomBytesSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC526D1EE8B6CA0048EB3B /* RandomBytesSequence.swift */; };
 		75EC52AE1EE8B83D0048EB3B /* SecureBytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC526E1EE8B6CA0048EB3B /* SecureBytes.swift */; };
 		75EC52AF1EE8B83D0048EB3B /* SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC526F1EE8B6CA0048EB3B /* SHA1.swift */; };
 		75EC52B01EE8B83D0048EB3B /* SHA2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EC52701EE8B6CA0048EB3B /* SHA2.swift */; };
@@ -348,7 +347,6 @@
 		75EC526A1EE8B6CA0048EB3B /* Poly1305.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poly1305.swift; sourceTree = "<group>"; };
 		75EC526B1EE8B6CA0048EB3B /* Rabbit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rabbit.swift; sourceTree = "<group>"; };
 		75EC526C1EE8B6CA0048EB3B /* Cryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptor.swift; sourceTree = "<group>"; };
-		75EC526D1EE8B6CA0048EB3B /* RandomBytesSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomBytesSequence.swift; sourceTree = "<group>"; };
 		75EC526E1EE8B6CA0048EB3B /* SecureBytes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBytes.swift; sourceTree = "<group>"; };
 		75EC526F1EE8B6CA0048EB3B /* SHA1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA1.swift; sourceTree = "<group>"; };
 		75EC52701EE8B6CA0048EB3B /* SHA2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA2.swift; sourceTree = "<group>"; };
@@ -594,7 +592,6 @@
 				75EC526A1EE8B6CA0048EB3B /* Poly1305.swift */,
 				75EC526B1EE8B6CA0048EB3B /* Rabbit.swift */,
 				75EC526C1EE8B6CA0048EB3B /* Cryptor.swift */,
-				75EC526D1EE8B6CA0048EB3B /* RandomBytesSequence.swift */,
 				75EC526E1EE8B6CA0048EB3B /* SecureBytes.swift */,
 				81F279DC2181F58300449EDA /* Scrypt.swift */,
 				75EC526F1EE8B6CA0048EB3B /* SHA1.swift */,
@@ -965,7 +962,6 @@
 				75EC52A31EE8B8290048EB3B /* NoPadding.swift in Sources */,
 				81F279DD2181F58300449EDA /* Scrypt.swift in Sources */,
 				75EC52931EE8B81A0048EB3B /* Digest.swift in Sources */,
-				75EC52AD1EE8B83D0048EB3B /* RandomBytesSequence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -26,6 +26,7 @@
 		754310442050111A003FB1DF /* CompactMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754310432050111A003FB1DF /* CompactMap.swift */; };
 		75482EA41CB310B7001F66A5 /* PBKDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75482EA31CB310B7001F66A5 /* PBKDF.swift */; };
 		754BE46819693E190098E6F3 /* DigestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* DigestTests.swift */; };
+		755BA296235387700039CAB5 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7576F64C20725BD5006688F8 /* Default-568h@2x.png */; };
 		755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755FB1D9199E347D00475437 /* ExtensionsTest.swift */; };
 		7564F0522072EAEB00CA5A96 /* PBKDFPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F6207290F8006688F8 /* PBKDFPerf.swift */; };
 		7564F0532072EAEB00CA5A96 /* ChaCha20TestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F020728EAB006688F8 /* ChaCha20TestsPerf.swift */; };
@@ -38,7 +39,6 @@
 		7564F0642072ED7000CA5A96 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
 		7564F0652072ED7000CA5A96 /* CryptoSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		756A64C62111083B00BE8805 /* StreamEncryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756A64C52111083B00BE8805 /* StreamEncryptor.swift */; };
-		7576F64D20725BD6006688F8 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7576F64C20725BD5006688F8 /* Default-568h@2x.png */; };
 		757DA2531A4ED0A4002BA3EF /* PaddingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2521A4ED0A4002BA3EF /* PaddingTests.swift */; };
 		757DA2551A4ED408002BA3EF /* AESTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2541A4ED408002BA3EF /* AESTests.swift */; };
 		757DA2591A4ED4D7002BA3EF /* ChaCha20Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DA2581A4ED4D7002BA3EF /* ChaCha20Tests.swift */; };
@@ -161,48 +161,6 @@
 			remoteGlobalIDString = 754BE45419693E190098E6F3;
 			remoteInfo = CryptoSwift;
 		};
-		75B601E5197D6A270009B53D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 754BE44C19693E190098E6F3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 754BE45419693E190098E6F3;
-			remoteInfo = CryptoSwift;
-		};
-		75B601E7197D6A3A0009B53D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 754BE44C19693E190098E6F3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 754BE45419693E190098E6F3;
-			remoteInfo = CryptoSwift;
-		};
-		75B601E9197D6A5C0009B53D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 754BE44C19693E190098E6F3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 754BE45419693E190098E6F3;
-			remoteInfo = CryptoSwift;
-		};
-		75B601EC197D6B3D0009B53D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 754BE44C19693E190098E6F3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 754BE45419693E190098E6F3;
-			remoteInfo = CryptoSwift;
-		};
-		75B6021C197D6CF10009B53D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 754BE44C19693E190098E6F3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 754BE45419693E190098E6F3;
-			remoteInfo = CryptoSwift;
-		};
-		75B6021E197D6D070009B53D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 754BE44C19693E190098E6F3 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 754BE45419693E190098E6F3;
-			remoteInfo = CryptoSwift;
-		};
 		75F9482120BDDF9900956311 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 754BE44C19693E190098E6F3 /* Project object */;
@@ -271,7 +229,7 @@
 		754310432050111A003FB1DF /* CompactMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactMap.swift; sourceTree = "<group>"; };
 		75482EA31CB310B7001F66A5 /* PBKDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBKDF.swift; sourceTree = "<group>"; };
 		754BE45519693E190098E6F3 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		754BE46019693E190098E6F3 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		754BE46019693E190098E6F3 /* CryptoSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		754BE46619693E190098E6F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		754BE46719693E190098E6F3 /* DigestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigestTests.swift; sourceTree = "<group>"; };
 		755D27BC1D06DE6400C41692 /* CryptoSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = CryptoSwift.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -458,7 +416,7 @@
 			isa = PBXGroup;
 			children = (
 				754BE45519693E190098E6F3 /* CryptoSwift.framework */,
-				754BE46019693E190098E6F3 /* Tests.xctest */,
+				754BE46019693E190098E6F3 /* CryptoSwiftTests.xctest */,
 				75211F92207249D8004E41F8 /* CryptoSwift-TestHostApp.app */,
 				7595C14A2072E48C00EA1A5F /* TestsPerformance-Mac.xctest */,
 				7564F0602072EAEB00CA5A96 /* TestsPerformance-iOS.xctest */,
@@ -497,7 +455,7 @@
 				754BE46519693E190098E6F3 /* Supporting Files */,
 			);
 			name = Tests;
-			path = Tests/Tests;
+			path = Tests/CryptoSwiftTests;
 			sourceTree = "<group>";
 		};
 		754BE46519693E190098E6F3 /* Supporting Files */ = {
@@ -712,9 +670,9 @@
 			productReference = 754BE45519693E190098E6F3 /* CryptoSwift.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		754BE45F19693E190098E6F3 /* Tests */ = {
+		754BE45F19693E190098E6F3 /* CryptoSwiftTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 754BE46E19693E190098E6F3 /* Build configuration list for PBXNativeTarget "Tests" */;
+			buildConfigurationList = 754BE46E19693E190098E6F3 /* Build configuration list for PBXNativeTarget "CryptoSwiftTests" */;
 			buildPhases = (
 				754BE45C19693E190098E6F3 /* Sources */,
 				754BE45D19693E190098E6F3 /* Frameworks */,
@@ -724,17 +682,11 @@
 			);
 			dependencies = (
 				75B601E4197D69EB0009B53D /* PBXTargetDependency */,
-				75B601E6197D6A270009B53D /* PBXTargetDependency */,
-				75B601E8197D6A3A0009B53D /* PBXTargetDependency */,
-				75B601EA197D6A5C0009B53D /* PBXTargetDependency */,
-				75B601ED197D6B3D0009B53D /* PBXTargetDependency */,
-				75B6021D197D6CF10009B53D /* PBXTargetDependency */,
-				75B6021F197D6D070009B53D /* PBXTargetDependency */,
 				75F9482220BDDF9900956311 /* PBXTargetDependency */,
 			);
-			name = Tests;
+			name = CryptoSwiftTests;
 			productName = Tests;
-			productReference = 754BE46019693E190098E6F3 /* Tests.xctest */;
+			productReference = 754BE46019693E190098E6F3 /* CryptoSwiftTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		7564F04E2072EAEB00CA5A96 /* TestsPerformance-iOS */ = {
@@ -826,7 +778,7 @@
 			targets = (
 				754BE45419693E190098E6F3 /* CryptoSwift */,
 				75211F91207249D8004E41F8 /* CryptoSwift-TestHostApp */,
-				754BE45F19693E190098E6F3 /* Tests */,
+				754BE45F19693E190098E6F3 /* CryptoSwiftTests */,
 				7595C1492072E48C00EA1A5F /* TestsPerformance-Mac */,
 				7564F04E2072EAEB00CA5A96 /* TestsPerformance-iOS */,
 			);
@@ -838,7 +790,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7576F64D20725BD6006688F8 /* Default-568h@2x.png in Resources */,
+				755BA296235387700039CAB5 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1044,36 +996,6 @@
 			target = 754BE45419693E190098E6F3 /* CryptoSwift */;
 			targetProxy = 75B601E3197D69EB0009B53D /* PBXContainerItemProxy */;
 		};
-		75B601E6197D6A270009B53D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 754BE45419693E190098E6F3 /* CryptoSwift */;
-			targetProxy = 75B601E5197D6A270009B53D /* PBXContainerItemProxy */;
-		};
-		75B601E8197D6A3A0009B53D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 754BE45419693E190098E6F3 /* CryptoSwift */;
-			targetProxy = 75B601E7197D6A3A0009B53D /* PBXContainerItemProxy */;
-		};
-		75B601EA197D6A5C0009B53D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 754BE45419693E190098E6F3 /* CryptoSwift */;
-			targetProxy = 75B601E9197D6A5C0009B53D /* PBXContainerItemProxy */;
-		};
-		75B601ED197D6B3D0009B53D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 754BE45419693E190098E6F3 /* CryptoSwift */;
-			targetProxy = 75B601EC197D6B3D0009B53D /* PBXContainerItemProxy */;
-		};
-		75B6021D197D6CF10009B53D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 754BE45419693E190098E6F3 /* CryptoSwift */;
-			targetProxy = 75B6021C197D6CF10009B53D /* PBXContainerItemProxy */;
-		};
-		75B6021F197D6D070009B53D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 754BE45419693E190098E6F3 /* CryptoSwift */;
-			targetProxy = 75B6021E197D6D070009B53D /* PBXContainerItemProxy */;
-		};
 		75F9482220BDDF9900956311 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 75211F91207249D8004E41F8 /* CryptoSwift-TestHostApp */;
@@ -1268,7 +1190,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		754BE46E19693E190098E6F3 /* Build configuration list for PBXNativeTarget "Tests" */ = {
+		754BE46E19693E190098E6F3 /* Build configuration list for PBXNativeTarget "CryptoSwiftTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				754BE46F19693E190098E6F3 /* Debug */,

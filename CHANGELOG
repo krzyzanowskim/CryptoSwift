@@ -2,6 +2,8 @@
 - Replace RandomBytesSequence with Swift.RandomNumberGenerator
 - Fix CBC-MAC
 - Update SPM support
+- Update for Xcode 11 and Swift 5.1
+- Xcode: BUILD_LIBRARY_FOR_DISTRIBUTION = YES
 
 1.0.0
 - Swift 5

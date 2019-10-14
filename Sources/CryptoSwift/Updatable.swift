@@ -64,7 +64,6 @@ extension Updatable {
         return try finish(withBytes: bytes.slice)
     }
 
-
     /// Finish updates. May add padding.
     ///
     /// - Returns: Processed data

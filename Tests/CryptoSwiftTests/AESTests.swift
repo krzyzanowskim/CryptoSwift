@@ -312,7 +312,6 @@ final class AESTests: XCTestCase {
         XCTAssertEqual(decrypted, plaintext, "decryption failed")
     }
 
-
     func testAESEncryptCTRStream() {
         let key = Array<UInt8>(hex: "0xbe3e9020816eb838782e2d9f4a2f40d4")
         let iv  =  Array<UInt8>(hex: "0x0000000000000000a9bbd681ded0c0c8")

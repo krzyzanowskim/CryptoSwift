@@ -22,7 +22,6 @@ import Darwin
 import Glibc
 #endif
 
-
 /// Counter with Cipher Block Chaining-Message Authentication Code
 public struct CCM: StreamMode {
     public enum Error: Swift.Error {
@@ -69,7 +68,6 @@ public struct CCM: StreamMode {
         self.init(iv: iv, tagLength: tagLength, messageLength: messageLength, additionalAuthenticatedData: additionalAuthenticatedData)
         self.authenticationTag = authenticationTag
     }
-
 
     public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
         if nonce.isEmpty {

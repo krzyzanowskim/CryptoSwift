@@ -13,7 +13,6 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-
 @testable import CryptoSwift
 import XCTest
 

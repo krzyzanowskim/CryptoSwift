@@ -5,7 +5,7 @@
 // https://github.com/dempseyatgithub/BuildSettingExtractor
 //
 
-MARKETING_VERSION = 1.1.1
+MARKETING_VERSION = 1.1.2
 
 PRODUCT_NAME = ${TARGET_NAME}
 

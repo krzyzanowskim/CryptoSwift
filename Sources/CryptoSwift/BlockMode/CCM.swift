@@ -102,7 +102,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         case invalidParameter
     }
 
-    init(blockSize: Int, nonce: ArraySlice<UInt8>, messageLength: Int,  additionalAuthenticatedData: [UInt8]?, expectedTag: Array<UInt8>? = nil, tagLength: Int, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(blockSize: Int, nonce: ArraySlice<UInt8>, messageLength: Int, additionalAuthenticatedData: [UInt8]?, expectedTag: Array<UInt8>? = nil, tagLength: Int, cipherOperation: @escaping CipherOperationOnBlock) {
         self.blockSize = 16 // CCM is defined for 128 block size
         self.tagLength = tagLength
         self.additionalBufferSize = tagLength
@@ -236,7 +236,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         // overwrite expectedTag property used later for verification
         guard let S0 = try? S(i: 0) else { return ciphertext }
         self.expectedTag = xor(ciphertext.suffix(tagLength), S0) as [UInt8]
-        return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(tagLength,ciphertext.count))]
+        return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(tagLength, ciphertext.count))]
     }
 
     func didDecryptLast(bytes plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
@@ -330,7 +330,7 @@ private func format(aad: [UInt8]) -> [UInt8] {
     case 65280..<4_294_967_296: // 2^32
         // [a]32
         return addPadding([0xFF, 0xFE] + a.bytes(totalBytes: 4) + aad, blockSize: 16)
-    case 4_294_967_296..<pow(2,64): // 2^64
+    case 4_294_967_296..<pow(2, 64): // 2^64
         // [a]64
         return addPadding([0xFF, 0xFF] + a.bytes(totalBytes: 8) + aad, blockSize: 16)
     default:

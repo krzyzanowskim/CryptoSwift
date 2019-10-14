@@ -26,7 +26,7 @@ final class AESCCMTests: XCTestCase {
         let plaintext: Array<UInt8>
         let expected: Array<UInt8>
 
-        init(_ tagLength: Int, _ key: String, _ nonce: String,  _ plaintext: String, _ expected: String, _ aad: String) {
+        init(_ tagLength: Int, _ key: String, _ nonce: String, _ plaintext: String, _ expected: String, _ aad: String) {
             self.tagLength = tagLength
             self.key = Array<UInt8>(hex: key)
             self.nonce = Array<UInt8>(hex: nonce)
@@ -55,7 +55,7 @@ final class AESCCMTests: XCTestCase {
             TestFixture(4, "e1b8a927a95efe94656677b692662000278b441c79e879dd5c0ddc758bdc9ee8", "0545fd9ecbc73ccdbbbd4244fd", "", "5c349fb2", ""),
             TestFixture(4, "e1b8a927a95efe94656677b692662000278b441c79e879dd5c0ddc758bdc9ee8", "0a37f2e7c66490e97285f1b09e", "", "c59bf14c", ""),
             TestFixture(4, "e1b8a927a95efe94656677b692662000278b441c79e879dd5c0ddc758bdc9ee8", "c1ad812bf2bbb2cdaee4636ee7", "", "5b96f41d", ""),
-            TestFixture(16, "af063639e66c284083c5cf72b70d8bc277f5978e80d9322d99f2fdc718cda569", "a544218dadd3c10583db49cf39", "","97e1a8dd4259ccd2e431e057b0397fcf", ""),
+            TestFixture(16, "af063639e66c284083c5cf72b70d8bc277f5978e80d9322d99f2fdc718cda569", "a544218dadd3c10583db49cf39", "", "97e1a8dd4259ccd2e431e057b0397fcf", ""),
             TestFixture(16, "af063639e66c284083c5cf72b70d8bc277f5978e80d9322d99f2fdc718cda569", "79ac204a26b9fee1132370c20f", "", "5c8c9a5b97be8c7bc01ca8d693b809f9", ""),
             TestFixture(16, "af063639e66c284083c5cf72b70d8bc277f5978e80d9322d99f2fdc718cda569", "0545fd9ecbc73ccdbbbd4244fd", "", "84201662b213c7a1ff0c1b3c25e4ec45", ""),
             TestFixture(16, "af063639e66c284083c5cf72b70d8bc277f5978e80d9322d99f2fdc718cda569", "0a37f2e7c66490e97285f1b09e", "", "586e728193ce6db9a926b03b2d77dd6e", ""),
@@ -390,7 +390,7 @@ final class AESCCMTests: XCTestCase {
             return true
         }
 
-        for (i,fixture) in fixtures.enumerated() {
+        for (i, fixture) in fixtures.enumerated() {
             XCTAssertTrue(testEncrypt(fixture: fixture), "Encryption failed")
             XCTAssertTrue(testDecrypt(fixture: fixture), "(\(i) - Decryption failed.")
         }

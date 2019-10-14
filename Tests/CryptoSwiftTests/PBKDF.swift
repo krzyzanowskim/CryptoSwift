@@ -66,7 +66,7 @@ class PBKDF: XCTestCase {
         let tests = [
             ("testPBKDF1", testPBKDF1),
             ("testPBKDF2", testPBKDF2),
-            ("testPBKDF2Length", testPBKDF2Length),
+            ("testPBKDF2Length", testPBKDF2Length)
         ]
 
         return tests

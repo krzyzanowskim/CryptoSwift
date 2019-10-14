@@ -23,7 +23,7 @@ class ChaCha20Poly1305Tests: XCTestCase {
     static let allTests = [
         ("testCCPoly1", test1),
         ("testCCPoly2", test2),
-        ("testCCPoly3", test3),
+        ("testCCPoly3", test3)
     ]
 
     func test1() {

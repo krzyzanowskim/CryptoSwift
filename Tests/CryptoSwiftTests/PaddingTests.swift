@@ -65,6 +65,6 @@ final class PaddingTests: XCTestCase {
         ("testPKCS7_1", testPKCS7_1),
         ("testPKCS7_2", testPKCS7_2),
         ("testZeroPadding1", testZeroPadding1),
-        ("testZeroPadding2", testZeroPadding2),
+        ("testZeroPadding2", testZeroPadding2)
     ]
 }

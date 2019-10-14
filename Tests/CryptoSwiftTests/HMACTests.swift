@@ -66,6 +66,6 @@ final class HMACTests: XCTestCase {
         ("testSHA1", testSHA1),
         ("testSHA256", testSHA256),
         ("testSHA384", testSHA384),
-        ("testSHA512", testSHA512),
+        ("testSHA512", testSHA512)
     ]
 }

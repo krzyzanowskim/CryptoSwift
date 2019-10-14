@@ -32,7 +32,7 @@ final class ExtensionsTestPerf: XCTestCase {
 extension ExtensionsTestPerf {
     static func allTests() -> [(String, (ExtensionsTestPerf) -> () -> Void)] {
         let tests = [
-            ("testArrayInitHexPerformance", testArrayInitHexPerformance),
+            ("testArrayInitHexPerformance", testArrayInitHexPerformance)
         ]
         return tests
     }

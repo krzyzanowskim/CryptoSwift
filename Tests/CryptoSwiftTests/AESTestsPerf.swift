@@ -43,7 +43,7 @@ extension AESTestsPerf {
     static func allTests() -> [(String, (AESTestsPerf) -> () -> Void)] {
         let tests = [
             ("testAESEncryptPerformance", testAESEncryptPerformance),
-            ("testAESDecryptPerformance", testAESDecryptPerformance),
+            ("testAESDecryptPerformance", testAESDecryptPerformance)
         ]
         return tests
     }

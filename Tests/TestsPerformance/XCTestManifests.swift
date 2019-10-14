@@ -7,13 +7,13 @@ extension TestsPerformance {
     // to regenerate.
     static let __allTests__TestsPerformance = [
         ("testExample", testExample),
-        ("testPerformanceExample", testPerformanceExample),
+        ("testPerformanceExample", testPerformanceExample)
     ]
 }
 
 public func __allTests() -> [XCTestCaseEntry] {
     return [
-        testCase(TestsPerformance.__allTests__TestsPerformance),
+        testCase(TestsPerformance.__allTests__TestsPerformance)
     ]
 }
 #endif

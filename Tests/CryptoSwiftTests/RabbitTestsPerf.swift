@@ -30,7 +30,7 @@ class RabbitTestsPerf: XCTestCase {
 extension RabbitTestsPerf {
     static func allTests() -> [(String, (RabbitTestsPerf) -> () -> Void)] {
         let tests = [
-            ("testRabbitPerformance", testRabbitPerformance),
+            ("testRabbitPerformance", testRabbitPerformance)
         ]
         return tests
     }

@@ -89,7 +89,7 @@ class HKDFTests: XCTestCase {
             ("Test with SHA-256 and zero-length salt/info", testHKDF3),
             ("Basic test case with SHA-1", testHKDF4),
             ("Test with SHA-1 and longer inputs/outputs", testHKDF5),
-            ("Test with SHA-1 and zero-length salt/info", testHKDF6),
+            ("Test with SHA-1 and zero-length salt/info", testHKDF6)
         ]
 
         return tests

@@ -44,7 +44,7 @@ public final class Blowfish {
         0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344, 0xa4093822,
         0x299f31d0, 0x082efa98, 0xec4e6c89, 0x452821e6, 0x38d01377,
         0xbe5466cf, 0x34e90c6c, 0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5,
-        0xb5470917, 0x9216d5d9, 0x8979fb1b,
+        0xb5470917, 0x9216d5d9, 0x8979fb1b
     ]
 
     private let origS: Array<Array<UInt32>> = [
@@ -112,7 +112,7 @@ public final class Blowfish {
             0xd60f573f, 0xbc9bc6e4, 0x2b60a476, 0x81e67400,
             0x08ba6fb5, 0x571be91f, 0xf296ec6b, 0x2a0dd915,
             0xb6636521, 0xe7b9f9b6, 0xff34052e, 0xc5855664,
-            0x53b02d5d, 0xa99f8fa1, 0x08ba4799, 0x6e85076a,
+            0x53b02d5d, 0xa99f8fa1, 0x08ba4799, 0x6e85076a
         ],
         [
             0x4b7a70e9, 0xb5b32944, 0xdb75092e, 0xc4192623,
@@ -178,7 +178,7 @@ public final class Blowfish {
             0x9e447a2e, 0xc3453484, 0xfdd56705, 0x0e1e9ec9,
             0xdb73dbd3, 0x105588cd, 0x675fda79, 0xe3674340,
             0xc5c43465, 0x713e38d8, 0x3d28f89e, 0xf16dff20,
-            0x153e21e7, 0x8fb03d4a, 0xe6e39f2b, 0xdb83adf7,
+            0x153e21e7, 0x8fb03d4a, 0xe6e39f2b, 0xdb83adf7
         ],
         [
             0xe93d5a68, 0x948140f7, 0xf64c261c, 0x94692934,
@@ -244,7 +244,7 @@ public final class Blowfish {
             0xed545578, 0x08fca5b5, 0xd83d7cd3, 0x4dad0fc4,
             0x1e50ef5e, 0xb161e6f8, 0xa28514d9, 0x6c51133c,
             0x6fd5c7e7, 0x56e14ec4, 0x362abfce, 0xddc6c837,
-            0xd79a3234, 0x92638212, 0x670efa8e, 0x406000e0,
+            0xd79a3234, 0x92638212, 0x670efa8e, 0x406000e0
         ],
         [
             0x3a39ce37, 0xd3faf5cf, 0xabc27737, 0x5ac52d1b,
@@ -310,8 +310,8 @@ public final class Blowfish {
             0x85cbfe4e, 0x8ae88dd8, 0x7aaaf9b0, 0x4cf9aa7e,
             0x1948c25c, 0x02fb8a8c, 0x01c36ae4, 0xd6ebe1f9,
             0x90d4f869, 0xa65cdea0, 0x3f09252d, 0xc208e69f,
-            0xb74e6132, 0xce77e25b, 0x578fdfe3, 0x3ac372e6,
-        ],
+            0xb74e6132, 0xce77e25b, 0x578fdfe3, 0x3ac372e6
+        ]
     ]
 
     public init(key: Array<UInt8>, blockMode: BlockMode = CBC(iv: Array<UInt8>(repeating: 0, count: Blowfish.blockSize)), padding: Padding) throws {
@@ -387,19 +387,19 @@ public final class Blowfish {
         // because everything is too complex to be solved in reasonable time o_O
         result += [
             UInt8((l >> 24) & 0xff),
-            UInt8((l >> 16) & 0xff),
+            UInt8((l >> 16) & 0xff)
         ]
         result += [
             UInt8((l >> 8) & 0xff),
-            UInt8((l >> 0) & 0xff),
+            UInt8((l >> 0) & 0xff)
         ]
         result += [
             UInt8((r >> 24) & 0xff),
-            UInt8((r >> 16) & 0xff),
+            UInt8((r >> 16) & 0xff)
         ]
         result += [
             UInt8((r >> 8) & 0xff),
-            UInt8((r >> 0) & 0xff),
+            UInt8((r >> 0) & 0xff)
         ]
 
         return result
@@ -416,19 +416,19 @@ public final class Blowfish {
         // because everything is too complex to be solved in reasonable time o_O
         result += [
             UInt8((l >> 24) & 0xff),
-            UInt8((l >> 16) & 0xff),
+            UInt8((l >> 16) & 0xff)
         ]
         result += [
             UInt8((l >> 8) & 0xff),
-            UInt8((l >> 0) & 0xff),
+            UInt8((l >> 0) & 0xff)
         ]
         result += [
             UInt8((r >> 24) & 0xff),
-            UInt8((r >> 16) & 0xff),
+            UInt8((r >> 16) & 0xff)
         ]
         result += [
             UInt8((r >> 8) & 0xff),
-            UInt8((r >> 0) & 0xff),
+            UInt8((r >> 0) & 0xff)
         ]
         return result
     }

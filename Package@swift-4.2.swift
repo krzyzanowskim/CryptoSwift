@@ -12,7 +12,7 @@ let package = Package(
     targets: [
         .target(name: "CryptoSwift"),
         .testTarget(name: "Tests", dependencies: ["CryptoSwift"]),
-        .testTarget(name: "TestsPerformance", dependencies: ["CryptoSwift"]),
+        .testTarget(name: "TestsPerformance", dependencies: ["CryptoSwift"])
     ],
     swiftLanguageVersions: [.v4, .v4_2]
 )

@@ -289,6 +289,6 @@ class Access: XCTestCase {
         ("testRabbit", testRabbit),
         ("testChaCha20", testChaCha20),
         ("testUpdatable", testUpdatable),
-        ("testRandomIV", testRandomIV),
+        ("testRandomIV", testRandomIV)
     ]
 }

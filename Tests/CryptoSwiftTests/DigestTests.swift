@@ -277,7 +277,7 @@ extension DigestTests {
             ("testCRC32NotReflected", testCRC32NotReflected),
             ("testCRC16", testCRC16),
             ("testChecksum", testChecksum),
-            ("testSHAPartialUpdates", testSHAPartialUpdates),
+            ("testSHAPartialUpdates", testSHAPartialUpdates)
         ]
 
         return tests

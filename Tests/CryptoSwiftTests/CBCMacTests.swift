@@ -56,6 +56,6 @@ class CBCMacTests: XCTestCase {
         ("testMessageLength0", testMessageLength0),
         ("testMessageLength16", testMessageLength16),
         ("testMessageLength40", testMessageLength40),
-        ("testMessageLength64", testMessageLength64),
+        ("testMessageLength64", testMessageLength64)
     ]
 }

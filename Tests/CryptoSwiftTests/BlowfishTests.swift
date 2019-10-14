@@ -157,7 +157,7 @@ class BlowfishTests: XCTestCase {
 
         TestData(key: [0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54, 0x32, 0x10],
                  input: [0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff],
-                 output: [0x6b, 0x5c, 0x5a, 0x9c, 0x5d, 0x9e, 0x0a, 0x5a]),
+                 output: [0x6b, 0x5c, 0x5a, 0x9c, 0x5d, 0x9e, 0x0a, 0x5a])
     ]
 
     func testEncrypt() {
@@ -216,7 +216,7 @@ extension BlowfishTests {
             ("testDecrypt", testDecrypt),
             ("testCBCZeroPadding", testCBCZeroPadding),
             ("testEncryptDecrypt", testEncryptDecrypt),
-            ("testDecryptCFB415", testDecryptCFB415),
+            ("testDecryptCFB415", testDecryptCFB415)
         ]
         return tests
     }

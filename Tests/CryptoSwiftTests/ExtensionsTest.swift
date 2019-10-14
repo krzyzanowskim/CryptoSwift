@@ -93,7 +93,7 @@ extension ExtensionsTest {
             ("testStringEncrypt", testStringEncrypt),
             ("testStringDecryptBase64", testStringDecryptBase64),
             ("testEmptyStringEncrypt", testEmptyStringEncrypt),
-            ("testArrayInitHex", testArrayInitHex),
+            ("testArrayInitHex", testArrayInitHex)
         ]
 
         return tests

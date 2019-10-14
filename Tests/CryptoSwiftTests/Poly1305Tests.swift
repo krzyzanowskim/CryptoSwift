@@ -40,6 +40,6 @@ final class Poly1305Tests: XCTestCase {
 
     static let allTests = [
         ("testPoly1305", testPoly1305),
-        ("testIssue183", testIssue183),
+        ("testIssue183", testIssue183)
     ]
 }

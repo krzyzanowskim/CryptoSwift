@@ -32,7 +32,7 @@ class ScryptTestsPeft: XCTestCase {
 extension ScryptTestsPeft {
     static func allTests() -> [(String, (ScryptTestsPeft) -> () -> Void)] {
         let tests = [
-            ("testScryptPerformance", testScryptPerformance),
+            ("testScryptPerformance", testScryptPerformance)
             ]
         return tests
     }

@@ -55,7 +55,7 @@ public final class Rabbit: BlockCipher {
         0xd34d34d3,
         0x34d34d34,
         0x4d34d34d,
-        0xd34d34d3,
+        0xd34d34d3
     ]
 
     // MARK: - Initializers

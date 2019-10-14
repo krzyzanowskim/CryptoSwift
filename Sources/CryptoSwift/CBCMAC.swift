@@ -18,13 +18,13 @@ public final class CBCMAC: CMAC {
         var inBytes = bytes
         bitPadding(to: &inBytes, blockSize: CMAC.BlockSize)
         let blocks = inBytes.batched(by: CMAC.BlockSize)
-        
-        var lastBlockEncryptionResult : [UInt8] = CBCMAC.Zero
+
+        var lastBlockEncryptionResult: [UInt8] = CBCMAC.Zero
         try blocks.forEach { (block) in
             let aes = try AES(key: Array(key), blockMode: CBC(iv: lastBlockEncryptionResult), padding: .noPadding)
             lastBlockEncryptionResult = try aes.encrypt(block)
         }
-        
+
         return lastBlockEncryptionResult
     }
 }

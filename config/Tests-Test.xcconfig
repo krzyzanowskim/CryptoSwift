@@ -7,86 +7,17 @@
 
 #include "Tests-Shared.xcconfig"
 
-
-// Optimization Level
-//
-// Specifies the degree to which the generated code is optimized for speed and binary
-// size.
-//
-// * *None:* Do not optimize. [-O0]
-// With this setting, the compiler's goal is to reduce the cost of compilation and to
-// make debugging produce the expected results. Statements are independent—if you stop
-// the program with a breakpoint between statements, you can then assign a new value to
-// any variable or change the program counter to any other statement in the function and
-// get exactly the results you would expect from the source code.
-// * *Fast:* Optimizing compilation takes somewhat more time, and a lot more memory for a
-// large function. [-O1]
-// With this setting, the compiler tries to reduce code size and execution time,
-// without performing any optimizations that take a great deal of compilation time. In
-// Apple's compiler, strict aliasing, block reordering, and inter-block scheduling are
-// disabled by default when optimizing.
-// * *Faster:* The compiler performs nearly all supported optimizations that do not
-// involve a space-speed tradeoff. [-O2]
-// With this setting, the compiler does not perform loop unrolling or function
-// inlining, or register renaming. As compared to the `Fast` setting, this setting
-// increases both compilation time and the performance of the generated code.
-// * *Fastest:* Turns on all optimizations specified by the `Faster` setting and also
-// turns on function inlining and register renaming options. This setting may result in a
-// larger binary. [-O3]
-// * *Fastest, Smallest:* Optimize for size. This setting enables all `Faster`
-// optimizations that do not typically increase code size. It also performs further
-// optimizations designed to reduce code size. [-Os]
-// * *Fastest, Aggressive Optimizations:* This setting enables `Fastest` but also enables
-// aggressive optimizations that may break strict standards compliance but should work
-// well on well-behaved code. [-Ofast]
-
+COPY_PHASE_STRIP = NO
+ENABLE_NS_ASSERTIONS = NO
+ENABLE_TESTABILITY = YES
 GCC_OPTIMIZATION_LEVEL = fast
 
-
-
-// Unroll Loops
-//
-// Unrolls loops. Unrolling makes the code larger, but may make it faster by reducing the
-// number of branches executed.
-
-GCC_UNROLL_LOOPS = YES
-
-
-
-// Link-Time Optimization
-//
-// Enabling this setting allows optimization across file boundaries during linking.
-//
-// * *No:* Disabled. Do not use link-time optimization.
-// * *Monolithic Link-Time Optimization:* This mode performs monolithic link-time
-// optimization of binaries, combining all executable code into a single unit and running
-// aggressive compiler optimizations.
-// * *Incremental Link-Time Optimization:* This mode performs partitioned link-time
-// optimization of binaries, inlining between compilation units and running aggressive
-// compiler optimizations on each unit in parallel. This enables fast incremental builds
-// and uses less memory than Monolithic LTO.
-
-LLVM_LTO = YES
-
-
-
-METAL_ENABLE_DEBUG_INFO = NO
-
-
-
-// Disable Safety Checks
-//
-// Disable runtime safety checks when optimizing.
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) DEBUG=1 CI=1
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
 
 SWIFT_DISABLE_SAFETY_CHECKS = YES
-
-
-
-// Swift Optimization Level
-//
-// * *None:* Compile without any optimization. [-Onone]
-// * *Optimize for Speed:* [-O]
-// * *Optimize for Size:* [-Osize]
-// * *Whole Module Optimization:* [-O -whole-module-optimization]
-
 SWIFT_OPTIMIZATION_LEVEL = -O
+
+METAL_ENABLE_DEBUG_INFO = NO
+ONLY_ACTIVE_ARCH = YES
+VALIDATE_PRODUCT = YES

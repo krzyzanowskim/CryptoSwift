@@ -34,6 +34,34 @@
                ReferencedContainer = "container:CryptoSwift.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7595C1492072E48C00EA1A5F"
+               BuildableName = "TestsPerformance-Mac.xctest"
+               BlueprintName = "TestsPerformance-Mac"
+               ReferencedContainer = "container:CryptoSwift.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7564F04E2072EAEB00CA5A96"
+               BuildableName = "TestsPerformance-iOS.xctest"
+               BlueprintName = "TestsPerformance-iOS"
+               ReferencedContainer = "container:CryptoSwift.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -61,26 +89,6 @@
                BlueprintIdentifier = "754BE45F19693E190098E6F3"
                BuildableName = "CryptoSwiftTests.xctest"
                BlueprintName = "CryptoSwiftTests"
-               ReferencedContainer = "container:CryptoSwift.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7595C1492072E48C00EA1A5F"
-               BuildableName = "TestsPerformance-Mac.xctest"
-               BlueprintName = "TestsPerformance-Mac"
-               ReferencedContainer = "container:CryptoSwift.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7564F04E2072EAEB00CA5A96"
-               BuildableName = "TestsPerformance-iOS.xctest"
-               BlueprintName = "TestsPerformance-iOS"
                ReferencedContainer = "container:CryptoSwift.xcodeproj">
             </BuildableReference>
          </TestableReference>

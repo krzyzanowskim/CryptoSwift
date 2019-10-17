@@ -20,8 +20,8 @@ public struct BlockModeOption: OptionSet {
         self.rawValue = rawValue
     }
 
-    static let none = BlockModeOption(rawValue: 1 << 0)
-    static let initializationVectorRequired = BlockModeOption(rawValue: 1 << 1)
-    static let paddingRequired = BlockModeOption(rawValue: 1 << 2)
-    static let useEncryptToDecrypt = BlockModeOption(rawValue: 1 << 3)
+    public static let none = BlockModeOption(rawValue: 1 << 0)
+    public static let initializationVectorRequired = BlockModeOption(rawValue: 1 << 1)
+    public static let paddingRequired = BlockModeOption(rawValue: 1 << 2)
+    public static let useEncryptToDecrypt = BlockModeOption(rawValue: 1 << 3)
 }

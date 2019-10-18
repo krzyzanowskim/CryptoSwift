@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -207,20 +207,15 @@
 		75211F94207249D8004E41F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75211FA0207249D8004E41F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75211FA520724A0F004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-TestHostApp-Test.xcconfig"; sourceTree = "<group>"; };
-		75211FA620724A0F004E41F8 /* Project-Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Test.xcconfig"; sourceTree = "<group>"; };
-		75211FA720724A0F004E41F8 /* Tests-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Tests-Debug.xcconfig"; sourceTree = "<group>"; };
 		75211FA820724A0F004E41F8 /* CryptoSwift-Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-Shared.xcconfig"; sourceTree = "<group>"; };
 		75211FA920724A0F004E41F8 /* CryptoSwift-TestHostApp-Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-TestHostApp-Shared.xcconfig"; sourceTree = "<group>"; };
 		75211FAA20724A0F004E41F8 /* Project-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
-		75211FAB20724A0F004E41F8 /* CryptoSwift-TestHostApp-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-TestHostApp-Debug.xcconfig"; sourceTree = "<group>"; };
 		75211FAC20724A0F004E41F8 /* CryptoSwift-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-Release.xcconfig"; sourceTree = "<group>"; };
-		75211FAD20724A0F004E41F8 /* Tests-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Tests-Release.xcconfig"; sourceTree = "<group>"; };
 		75211FAE20724A10004E41F8 /* Tests-Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Tests-Shared.xcconfig"; sourceTree = "<group>"; };
 		75211FAF20724A10004E41F8 /* CryptoSwift-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-Debug.xcconfig"; sourceTree = "<group>"; };
 		75211FB020724A10004E41F8 /* Project-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Debug.xcconfig"; sourceTree = "<group>"; };
 		75211FB120724A10004E41F8 /* Tests-Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Tests-Test.xcconfig"; sourceTree = "<group>"; };
 		75211FB220724A10004E41F8 /* Project-Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Shared.xcconfig"; sourceTree = "<group>"; };
-		75211FB320724A10004E41F8 /* CryptoSwift-TestHostApp-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-TestHostApp-Release.xcconfig"; sourceTree = "<group>"; };
 		75211FB420724A10004E41F8 /* CryptoSwift-Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-Test.xcconfig"; sourceTree = "<group>"; };
 		7523742C2083C61C0016D662 /* GCM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCM.swift; sourceTree = "<group>"; };
 		7529366920683DFC00195874 /* AEADChaCha20Poly1305.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEADChaCha20Poly1305.swift; sourceTree = "<group>"; };
@@ -477,16 +472,11 @@
 				75211FAC20724A0F004E41F8 /* CryptoSwift-Release.xcconfig */,
 				75211FA820724A0F004E41F8 /* CryptoSwift-Shared.xcconfig */,
 				75211FB420724A10004E41F8 /* CryptoSwift-Test.xcconfig */,
-				75211FAB20724A0F004E41F8 /* CryptoSwift-TestHostApp-Debug.xcconfig */,
-				75211FB320724A10004E41F8 /* CryptoSwift-TestHostApp-Release.xcconfig */,
 				75211FA520724A0F004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig */,
 				75211FA920724A0F004E41F8 /* CryptoSwift-TestHostApp-Shared.xcconfig */,
 				75211FB020724A10004E41F8 /* Project-Debug.xcconfig */,
 				75211FAA20724A0F004E41F8 /* Project-Release.xcconfig */,
 				75211FB220724A10004E41F8 /* Project-Shared.xcconfig */,
-				75211FA620724A0F004E41F8 /* Project-Test.xcconfig */,
-				75211FA720724A0F004E41F8 /* Tests-Debug.xcconfig */,
-				75211FAD20724A0F004E41F8 /* Tests-Release.xcconfig */,
 				75211FAE20724A10004E41F8 /* Tests-Shared.xcconfig */,
 				75211FB120724A10004E41F8 /* Tests-Test.xcconfig */,
 			);
@@ -739,7 +729,7 @@
 					75211F91207249D8004E41F8 = {
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					754BE45419693E190098E6F3 = {
 						CreatedOnToolsVersion = 6.0;
@@ -978,6 +968,7 @@
 		};
 		7564F0622072EB5D00CA5A96 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 75211F91207249D8004E41F8 /* CryptoSwift-TestHostApp */;
 			targetProxy = 7564F0612072EB5D00CA5A96 /* PBXContainerItemProxy */;
 		};
@@ -998,6 +989,7 @@
 		};
 		75F9482220BDDF9900956311 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 75211F91207249D8004E41F8 /* CryptoSwift-TestHostApp */;
 			targetProxy = 75F9482120BDDF9900956311 /* PBXContainerItemProxy */;
 		};
@@ -1006,17 +998,13 @@
 /* Begin XCBuildConfiguration section */
 		75211FA1207249D8004E41F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FAB20724A0F004E41F8 /* CryptoSwift-TestHostApp-Debug.xcconfig */;
 			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 			};
 			name = Debug;
 		};
 		75211FA2207249D8004E41F8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FB320724A10004E41F8 /* CryptoSwift-TestHostApp-Release.xcconfig */;
 			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 			};
 			name = Release;
 		};
@@ -1024,7 +1012,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FA520724A0F004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig */;
 			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 			};
 			name = Test;
 		};
@@ -1058,37 +1045,29 @@
 		};
 		754BE46F19693E190098E6F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FA720724A0F004E41F8 /* Tests-Debug.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		754BE47019693E190098E6F3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FAD20724A0F004E41F8 /* Tests-Release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
 		7564F05D2072EAEB00CA5A96 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FA720724A0F004E41F8 /* Tests-Debug.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = Tests/TestsPerformance/Bridging.h;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CryptoSwift-TestHostApp.app/CryptoSwift-TestHostApp";
 			};
 			name = Debug;
 		};
 		7564F05E2072EAEB00CA5A96 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FAD20724A0F004E41F8 /* Tests-Release.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = Tests/TestsPerformance/Bridging.h;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CryptoSwift-TestHostApp.app/CryptoSwift-TestHostApp";
 			};
 			name = Release;
 		};
@@ -1098,14 +1077,12 @@
 			buildSettings = {
 				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = Tests/TestsPerformance/Bridging.h;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CryptoSwift-TestHostApp.app/CryptoSwift-TestHostApp";
 			};
 			name = Test;
 		};
 		756B66AA1F6AAFDB00DEC41C /* Test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FA620724A0F004E41F8 /* Project-Test.xcconfig */;
+			baseConfigurationReference = 75211FB220724A10004E41F8 /* Project-Shared.xcconfig */;
 			buildSettings = {
 			};
 			name = Test;
@@ -1126,21 +1103,15 @@
 		};
 		7595C14F2072E48C00EA1A5F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FA720724A0F004E41F8 /* Tests-Debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = Tests/TestsPerformance/Bridging.h;
 			};
 			name = Debug;
 		};
 		7595C1502072E48C00EA1A5F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FAD20724A0F004E41F8 /* Tests-Release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = Tests/TestsPerformance/Bridging.h;
 			};
 			name = Release;
 		};
@@ -1148,9 +1119,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FB120724A10004E41F8 /* Tests-Test.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = Tests/TestsPerformance/Bridging.h;
 			};
 			name = Test;
 		};

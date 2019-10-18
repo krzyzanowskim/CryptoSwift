@@ -7,53 +7,8 @@
 
 #include "CryptoSwift-TestHostApp-Shared.xcconfig"
 
-
-// Debug Information Format
-//
-// The type of debug information to produce.
-//
-// * *DWARF:* Object files and linked products will use DWARF as the debug information
-// format. [dwarf]
-// * *DWARF with dSYM File:* Object files and linked products will use DWARF as the debug
-// information format, and Xcode will also produce a dSYM file containing the debug
-// information from the individual object files (except that a dSYM file is not needed
-// and will not be created for static library or object file products). [dwarf-with-dsym]
-
 DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
-
-
-
-// Enable Foundation Assertions
-//
-// Controls whether assertion logic provided by `NSAssert` is included in the
-// preprocessed source code or is elided during preprocessing. Disabling assertions can
-// improve code performance.
-
 ENABLE_NS_ASSERTIONS = NO
-
-
-
-// Produce debugging information
-//
-// Produce debugging information. This information is required for shader profiling.
-
 MTL_ENABLE_DEBUG_INFO = NO
-
-
-
-// Swift Optimization Level
-//
-// * *None:* Compile without any optimization. [-Onone]
-// * *Optimize for Speed:* [-O]
-// * *Optimize for Size:* [-Osize]
-// * *Whole Module Optimization:* [-O -whole-module-optimization]
-
 SWIFT_OPTIMIZATION_LEVEL = -O
-
-
-
-// Validate Built Product
-//
-// If enabled, perform validation checks on the product as part of the build process.
-
 VALIDATE_PRODUCT = YES

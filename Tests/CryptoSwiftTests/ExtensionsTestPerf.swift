@@ -13,27 +13,27 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-@testable import CryptoSwift
 import Foundation
 import XCTest
+@testable import CryptoSwift
 
 final class ExtensionsTestPerf: XCTestCase {
-    func testArrayInitHexPerformance() {
-        var str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
-        for _ in 0...12 {
-            str += str
-        }
-        measure {
-            _ = Array<UInt8>(hex: str)
-        }
+  func testArrayInitHexPerformance() {
+    var str = "b1b2b3b3b3b3b3b3b1b2b3b3b3b3b3b3"
+    for _ in 0...12 {
+      str += str
     }
+    measure {
+      _ = Array<UInt8>(hex: str)
+    }
+  }
 }
 
 extension ExtensionsTestPerf {
-    static func allTests() -> [(String, (ExtensionsTestPerf) -> () -> Void)] {
-        let tests = [
-            ("testArrayInitHexPerformance", testArrayInitHexPerformance)
-        ]
-        return tests
-    }
+  static func allTests() -> [(String, (ExtensionsTestPerf) -> () -> Void)] {
+    let tests = [
+      ("testArrayInitHexPerformance", testArrayInitHexPerformance)
+    ]
+    return tests
+  }
 }

@@ -14,12 +14,12 @@
 //
 
 public enum Bit: Int {
-    case zero
-    case one
+  case zero
+  case one
 }
 
 extension Bit {
-    func inverted() -> Bit {
-        return self == .zero ? .one : .zero
-    }
+  func inverted() -> Bit {
+    self == .zero ? .one : .zero
+  }
 }

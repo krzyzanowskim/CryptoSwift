@@ -13,25 +13,25 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-@testable import CryptoSwift
 import XCTest
+@testable import CryptoSwift
 
 class RabbitTestsPerf: XCTestCase {
-    func testRabbitPerformance() {
-        let key: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.keySize)
-        let iv: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.ivSize)
-        let message = Array<UInt8>(repeating: 7, count: (1024 * 1024) * 1)
-        measure {
-            _ = try! Rabbit(key: key, iv: iv).encrypt(message)
-        }
+  func testRabbitPerformance() {
+    let key: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.keySize)
+    let iv: Array<UInt8> = Array<UInt8>(repeating: 0, count: Rabbit.ivSize)
+    let message = Array<UInt8>(repeating: 7, count: (1024 * 1024) * 1)
+    measure {
+      _ = try! Rabbit(key: key, iv: iv).encrypt(message)
     }
+  }
 }
 
 extension RabbitTestsPerf {
-    static func allTests() -> [(String, (RabbitTestsPerf) -> () -> Void)] {
-        let tests = [
-            ("testRabbitPerformance", testRabbitPerformance)
-        ]
-        return tests
-    }
+  static func allTests() -> [(String, (RabbitTestsPerf) -> () -> Void)] {
+    let tests = [
+      ("testRabbitPerformance", testRabbitPerformance)
+    ]
+    return tests
+  }
 }

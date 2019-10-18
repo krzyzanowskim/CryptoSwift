@@ -13,20 +13,20 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-@testable import CryptoSwift
 import XCTest
+@testable import CryptoSwift
 
 class PBKDFPerf: XCTestCase {
-    func testPerformance() {
-        let password: Array<UInt8> = "s33krit".bytes
-        let salt: Array<UInt8> = "nacl".bytes
-        measure {
-            _ = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 65536, keyLength: 32, variant: .sha1).calculate()
-        }
+  func testPerformance() {
+    let password: Array<UInt8> = "s33krit".bytes
+    let salt: Array<UInt8> = "nacl".bytes
+    measure {
+      _ = try! PKCS5.PBKDF2(password: password, salt: salt, iterations: 65536, keyLength: 32, variant: .sha1).calculate()
     }
+  }
 
-    static func allTests() -> [(String, (PBKDFPerf) -> () -> Void)] {
-        let tests = [("testPerformance", testPerformance)]
-        return tests
-    }
+  static func allTests() -> [(String, (PBKDFPerf) -> () -> Void)] {
+    let tests = [("testPerformance", testPerformance)]
+    return tests
+  }
 }

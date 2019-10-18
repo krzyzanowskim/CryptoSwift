@@ -284,7 +284,7 @@ extension SHA2: Updatable {
         accumulated += bytes
 
         if isLast {
-            let lengthInBits = (processedBytesTotalCount + accumulated.count) * 8
+            let lengthInBits = UInt64((processedBytesTotalCount + accumulated.count) * 8)
             let lengthBytes = lengthInBits.bytes(totalBytes: blockSize / 8) // A 64-bit/128-bit representation of b. blockSize fit by accident.
 
             // Step 1. Append padding

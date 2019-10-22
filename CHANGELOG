@@ -1,3 +1,9 @@
+1.1.3
+- Fix build crash: https://bugs.swift.org/browse/SR-11630
+- Fixes Xcode project tests build
+- SwiftFormat all the things
+- Increase/fix SHA2 data length for big input by use Int64 for calculation
+
 1.1.2
 - Fix Swift 5.0 build (for real this time)
 

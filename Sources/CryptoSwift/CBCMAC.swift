@@ -14,17 +14,17 @@
 //
 
 public final class CBCMAC: CMAC {
-    override public func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
-        var inBytes = bytes
-        bitPadding(to: &inBytes, blockSize: CMAC.BlockSize)
-        let blocks = inBytes.batched(by: CMAC.BlockSize)
-        
-        var lastBlockEncryptionResult : [UInt8] = CBCMAC.Zero
-        try blocks.forEach { (block) in
-            let aes = try AES(key: Array(key), blockMode: CBC(iv: lastBlockEncryptionResult), padding: .noPadding)
-            lastBlockEncryptionResult = try aes.encrypt(block)
-        }
-        
-        return lastBlockEncryptionResult
+  public override func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
+    var inBytes = bytes
+    bitPadding(to: &inBytes, blockSize: CMAC.BlockSize)
+    let blocks = inBytes.batched(by: CMAC.BlockSize)
+
+    var lastBlockEncryptionResult: [UInt8] = CBCMAC.Zero
+    try blocks.forEach { block in
+      let aes = try AES(key: Array(key), blockMode: CBC(iv: lastBlockEncryptionResult), padding: .noPadding)
+      lastBlockEncryptionResult = try aes.encrypt(block)
     }
+
+    return lastBlockEncryptionResult
+  }
 }

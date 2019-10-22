@@ -16,48 +16,48 @@
 // http://www.di-mgt.com.au/sha_testvectors.html (http://csrc.nist.gov/groups/ST/toolkit/documents/Examples/SHA_All.pdf)
 //
 
-@testable import CryptoSwift
 import Foundation
 import XCTest
+@testable import CryptoSwift
 
 final class DigestTestsPerf: XCTestCase {
-    func testMD5Performance() {
-        measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
-            let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
-            self.startMeasuring()
-            _ = Digest.md5(arr)
-            self.stopMeasuring()
-        }
+  func testMD5Performance() {
+    measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
+      let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
+      self.startMeasuring()
+      _ = Digest.md5(arr)
+      self.stopMeasuring()
     }
+  }
 
-    func testSHA1Performance() {
-        measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
-            let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
-            self.startMeasuring()
-            _ = Digest.sha1(arr)
-            self.stopMeasuring()
-        }
+  func testSHA1Performance() {
+    measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
+      let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
+      self.startMeasuring()
+      _ = Digest.sha1(arr)
+      self.stopMeasuring()
     }
+  }
 
-    // Keep it to compare
-    /*
-    func testSHA1PerformanceCC() {
-        measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
-            let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
-            self.startMeasuring()
-            var digest = Array<UInt8>(repeating: 0, count: Int(CC_SHA1_DIGEST_LENGTH))
-            CC_SHA1(arr, CC_LONG(arr.count), &digest)
-            self.stopMeasuring()
-        }
-    }
-    */
+  // Keep it to compare
+  /*
+   func testSHA1PerformanceCC() {
+       measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: false) {
+           let arr = Array<UInt8>(repeating: 200, count: 1024 * 1024)
+           self.startMeasuring()
+           var digest = Array<UInt8>(repeating: 0, count: Int(CC_SHA1_DIGEST_LENGTH))
+           CC_SHA1(arr, CC_LONG(arr.count), &digest)
+           self.stopMeasuring()
+       }
+   }
+   */
 }
 
 extension DigestTestsPerf {
-    static func allTests() -> [(String, (DigestTestsPerf) -> () -> Void)] {
-        return [
-            ("testMD5Performance", testMD5Performance),
-            ("testSHA1Performance", testSHA1Performance)
-        ]
-    }
+  static func allTests() -> [(String, (DigestTestsPerf) -> () -> Void)] {
+    [
+      ("testMD5Performance", testMD5Performance),
+      ("testSHA1Performance", testSHA1Performance)
+    ]
+  }
 }

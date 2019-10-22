@@ -16,12 +16,12 @@
 import Foundation
 
 func perf(_ text: String, closure: () -> Void) {
-    let measurementStart = Date()
+  let measurementStart = Date()
 
-    closure()
+  closure()
 
-    let measurementStop = Date()
-    let executionTime = measurementStop.timeIntervalSince(measurementStart)
+  let measurementStop = Date()
+  let executionTime = measurementStop.timeIntervalSince(measurementStart)
 
-    print("\(text) \(executionTime)")
+  print("\(text) \(executionTime)")
 }

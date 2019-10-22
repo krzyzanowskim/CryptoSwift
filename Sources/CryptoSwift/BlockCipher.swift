@@ -14,5 +14,5 @@
 //
 
 protocol BlockCipher: Cipher {
-    static var blockSize: Int { get }
+  static var blockSize: Int { get }
 }

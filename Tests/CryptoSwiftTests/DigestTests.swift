@@ -220,6 +220,20 @@ final class DigestTests: XCTestCase {
     XCTAssert(data.checksum() == 0x96, "Invalid checksum")
   }
 
+  func testChecksumPerformance() {
+    let len = 1_000_000
+    let a = [UInt8](unsafeUninitializedCapacity: len) { buf, count in
+      for i in 0..<len {
+        buf[i] = UInt8.random(in: 0...UInt8.max)
+      }
+      count = len
+    }
+    let data: Data = Data(bytes: UnsafePointer<UInt8>(a), count: len)
+    self.measure {
+      _ = data.checksum()
+    }
+  }
+
   func testSHAPartialUpdates() {
     do {
       let testSize = 1024 * 1024 * 5

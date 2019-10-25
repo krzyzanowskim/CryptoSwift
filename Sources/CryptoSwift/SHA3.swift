@@ -275,8 +275,8 @@ extension SHA3: Updatable {
     self.accumulated.removeFirst(processedBytes)
 
     // TODO: verify performance, reduce vs for..in
-    let result = self.accumulatedHash.reduce(Array<UInt8>()) { (result, value) -> Array<UInt8> in
-      result + value.bigEndian.bytes()
+    let result = self.accumulatedHash.reduce(into: Array<UInt8>()) { (result, value) in
+      result += value.bigEndian.bytes()
     }
 
     // reset hash value for instance

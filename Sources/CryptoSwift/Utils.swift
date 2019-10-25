@@ -75,19 +75,13 @@ func xor<T, V>(_ left: T, _ right: V) -> ArraySlice<UInt8> where T: RandomAccess
 func xor<T, V>(_ left: T, _ right: V) -> Array<UInt8> where T: RandomAccessCollection, V: RandomAccessCollection, T.Element == UInt8, T.Index == Int, V.Element == UInt8, V.Index == Int {
   let length = Swift.min(left.count, right.count)
 
-  let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: length)
-  buf.initialize(repeating: 0, count: length)
-  defer {
-    buf.deinitialize(count: length)
-    buf.deallocate()
-  }
-
-  // xor
-  for i in 0..<length {
-    buf[i] = left[left.startIndex.advanced(by: i)] ^ right[right.startIndex.advanced(by: i)]
-  }
-
-  return Array(UnsafeBufferPointer(start: buf, count: length))
+  return Array<UInt8>(unsafeUninitializedCapacity: length) { buf, count in
+    // xor
+    for i in 0..<length {
+      buf[i] = left[left.startIndex.advanced(by: i)] ^ right[right.startIndex.advanced(by: i)]
+    }
+    count = length
+    }
 }
 
 /**

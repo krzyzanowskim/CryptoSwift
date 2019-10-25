@@ -96,29 +96,22 @@ public final class SHA3: DigestType {
   ///  3. For all triples (x, y, z) such that 0≤x<5, 0≤y<5, and 0≤z<w, let
   ///     A′[x, y,z] = A[x, y,z] ⊕ D[x,z].
   private func θ(_ a: inout Array<UInt64>) {
-    let c = UnsafeMutablePointer<UInt64>.allocate(capacity: 5)
-    c.initialize(repeating: 0, count: 5)
-    defer {
-      c.deinitialize(count: 5)
-      c.deallocate()
-    }
-    let d = UnsafeMutablePointer<UInt64>.allocate(capacity: 5)
-    d.initialize(repeating: 0, count: 5)
-    defer {
-      d.deinitialize(count: 5)
-      d.deallocate()
+    let c = Array<UInt64>(unsafeUninitializedCapacity: 5) { buf, count in
+      for i in 0..<5 {
+        buf[i] = a[i] ^ a[i &+ 5] ^ a[i &+ 10] ^ a[i &+ 15] ^ a[i &+ 20]
+      }
+      count = 5
     }
 
-    for i in 0..<5 {
-      c[i] = a[i] ^ a[i &+ 5] ^ a[i &+ 10] ^ a[i &+ 15] ^ a[i &+ 20]
+    let d = Array<UInt64>(unsafeUninitializedCapacity: 5) { buf, count in
+      buf[0] = rotateLeft(c[1], by: 1) ^ c[4]
+      buf[1] = rotateLeft(c[2], by: 1) ^ c[0]
+      buf[2] = rotateLeft(c[3], by: 1) ^ c[1]
+      buf[3] = rotateLeft(c[4], by: 1) ^ c[2]
+      buf[4] = rotateLeft(c[0], by: 1) ^ c[3]
+      count = 5
     }
-
-    d[0] = rotateLeft(c[1], by: 1) ^ c[4]
-    d[1] = rotateLeft(c[2], by: 1) ^ c[0]
-    d[2] = rotateLeft(c[3], by: 1) ^ c[1]
-    d[3] = rotateLeft(c[4], by: 1) ^ c[2]
-    d[4] = rotateLeft(c[0], by: 1) ^ c[3]
-
+    
     for i in 0..<5 {
       a[i] ^= d[i]
       a[i &+ 5] ^= d[i]

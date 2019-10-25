@@ -168,12 +168,7 @@ public final class AES: BlockCipher {
     var b3 = b30 | b31 | b32 | b33
 
     let tLength = 4
-    let t = UnsafeMutablePointer<UInt32>.allocate(capacity: tLength)
-    t.initialize(repeating: 0, count: tLength)
-    defer {
-      t.deinitialize(count: tLength)
-      t.deallocate()
-    }
+    var t = Array<UInt32>(repeating: 0, count: tLength)
 
     for r in 0..<rounds - 1 {
       t[0] = b0 ^ rk[r][0]
@@ -263,12 +258,7 @@ public final class AES: BlockCipher {
     var b3 = b30 | b31 | b32 | b33
 
     let tLength = 4
-    let t = UnsafeMutablePointer<UInt32>.allocate(capacity: tLength)
-    t.initialize(repeating: 0, count: tLength)
-    defer {
-      t.deinitialize(count: tLength)
-      t.deallocate()
-    }
+    var t = Array<UInt32>(repeating: 0, count: tLength)
 
     for r in (2...rounds).reversed() {
       t[0] = b0 ^ rk[r][0]
@@ -392,12 +382,7 @@ private extension AES {
     }
 
     let wLength = self.variantNb * (self.variantNr + 1) * 4
-    let w = UnsafeMutablePointer<UInt8>.allocate(capacity: wLength)
-    w.initialize(repeating: 0, count: wLength)
-    defer {
-      w.deinitialize(count: wLength)
-      w.deallocate()
-    }
+    var w = Array<UInt8>(repeating: 0, count: wLength)
 
     for i in 0..<self.variantNk {
       for wordIdx in 0..<4 {
@@ -460,16 +445,8 @@ private extension AES {
 
   private func calculateSBox() -> (sBox: Array<UInt32>, invSBox: Array<UInt32>) {
     let sboxLength = 256
-    let sbox = UnsafeMutablePointer<UInt32>.allocate(capacity: sboxLength)
-    let invsbox = UnsafeMutablePointer<UInt32>.allocate(capacity: sboxLength)
-    sbox.initialize(repeating: 0, count: sboxLength)
-    invsbox.initialize(repeating: 0, count: sboxLength)
-    defer {
-      sbox.deinitialize(count: sboxLength)
-      sbox.deallocate()
-      invsbox.deinitialize(count: sboxLength)
-      invsbox.deallocate()
-    }
+    var sbox = Array<UInt32>(repeating: 0, count: sboxLength)
+    var invsbox = Array<UInt32>(repeating: 0, count: sboxLength)
 
     sbox[0] = 0x63
 

@@ -40,6 +40,32 @@ final class ExtensionsTest: XCTestCase {
     XCTAssertEqual(result[1], 0x1020304)
   }
 
+  func testToUInt32Performance() {
+    let len = 1_000_000
+    let a = [UInt8](unsafeUninitializedCapacity: len) { buf, count in
+      for i in 0..<len {
+      buf[i] = UInt8.random(in: 0...UInt8.max)
+      }
+      count = len
+    }
+    self.measure {
+      _ = a.toUInt32Array()
+    }
+  }
+
+  func testToUInt64Performance() {
+    let len = 1_000_000
+    let a = [UInt8](unsafeUninitializedCapacity: len) { buf, count in
+      for i in 0..<len {
+        buf[i] = UInt8.random(in: 0...UInt8.max)
+      }
+      count = len
+    }
+    self.measure {
+      _ = a.toUInt64Array()
+    }
+  }
+
   func testDataInit() {
     let data = Data( [0x01, 0x02, 0x03])
     XCTAssert(data.count == 3, "Invalid data")

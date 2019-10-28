@@ -15,7 +15,7 @@
 extension Collection where Self.Element == UInt8, Self.Index == Int {
   // Big endian order
   func toUInt32Array() -> Array<UInt32> {
-    if isEmpty {
+    guard !isEmpty else {
       return []
     }
 
@@ -30,7 +30,7 @@ extension Collection where Self.Element == UInt8, Self.Index == Int {
 
   // Big endian order
   func toUInt64Array() -> Array<UInt64> {
-    if isEmpty {
+    guard !isEmpty else {
       return []
     }
 

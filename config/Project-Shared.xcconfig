@@ -9,7 +9,7 @@ MARKETING_VERSION = 1.1.3
 
 SUPPORTED_PLATFORMS = iphonesimulator iphoneos macosx appletvos watchos appletvsimulator watchsimulator
 
-SWIFT_COMPILATION_MODE = incremental
+SWIFT_COMPILATION_MODE = wholemodule
 SWIFT_VERSION = 5.0
 
 TARGETED_DEVICE_FAMILY = 1,2,3,4

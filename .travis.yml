@@ -8,9 +8,7 @@ matrix:
        - os: osx
          osx_image: xcode11.2
 git:
-    submodules: false
-before_install:
-    - git submodule update --init --recursive
+    submodules: true
 install:
     - eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
 script:

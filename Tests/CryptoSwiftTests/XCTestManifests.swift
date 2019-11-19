@@ -13,7 +13,7 @@ extension AESCCMTests {
         ("testAESCCMTestCase3", testAESCCMTestCase3),
         ("testAESCCMTestCase3Decrypt", testAESCCMTestCase3Decrypt),
         ("testAESCCMTestCase3DecryptPartial", testAESCCMTestCase3DecryptPartial),
-        ("testAESCCMTestDVPT256", testAESCCMTestDVPT256)
+        ("testAESCCMTestDVPT256", testAESCCMTestDVPT256),
     ]
 }
 
@@ -57,7 +57,7 @@ extension AESTests {
         ("testAESWithWrongKey", testAESWithWrongKey),
         ("testIssue298", testIssue298),
         ("testIssue394", testIssue394),
-        ("testIssue411", testIssue411)
+        ("testIssue411", testIssue411),
     ]
 }
 
@@ -67,7 +67,7 @@ extension AESTestsPerf {
     // to regenerate.
     static let __allTests__AESTestsPerf = [
         ("testAESDecryptPerformance", testAESDecryptPerformance),
-        ("testAESEncryptPerformance", testAESEncryptPerformance)
+        ("testAESEncryptPerformance", testAESEncryptPerformance),
     ]
 }
 
@@ -96,7 +96,7 @@ extension Access {
         ("testUInt32Extension", testUInt32Extension),
         ("testUInt64Extension", testUInt64Extension),
         ("testUInt8Extension", testUInt8Extension),
-        ("testUpdatable", testUpdatable)
+        ("testUpdatable", testUpdatable),
     ]
 }
 
@@ -109,7 +109,7 @@ extension BlowfishTests {
         ("testDecrypt", testDecrypt),
         ("testDecryptCFB415", testDecryptCFB415),
         ("testEncrypt", testEncrypt),
-        ("testEncryptDecrypt", testEncryptDecrypt)
+        ("testEncryptDecrypt", testEncryptDecrypt),
     ]
 }
 
@@ -121,7 +121,7 @@ extension CBCMacTests {
         ("testMessageLength0", testMessageLength0),
         ("testMessageLength16", testMessageLength16),
         ("testMessageLength40", testMessageLength40),
-        ("testMessageLength64", testMessageLength64)
+        ("testMessageLength64", testMessageLength64),
     ]
 }
 
@@ -133,7 +133,7 @@ extension CMACTests {
         ("testMessageLength0", testMessageLength0),
         ("testMessageLength16", testMessageLength16),
         ("testMessageLength40", testMessageLength40),
-        ("testMessageLength64", testMessageLength64)
+        ("testMessageLength64", testMessageLength64),
     ]
 }
 
@@ -144,7 +144,7 @@ extension ChaCha20Poly1305Tests {
     static let __allTests__ChaCha20Poly1305Tests = [
         ("test1", test1),
         ("test2", test2),
-        ("test3", test3)
+        ("test3", test3),
     ]
 }
 
@@ -156,7 +156,7 @@ extension ChaCha20Tests {
         ("testChaCha20", testChaCha20),
         ("testChaCha20EncryptPartial", testChaCha20EncryptPartial),
         ("testCore", testCore),
-        ("testVector1Py", testVector1Py)
+        ("testVector1Py", testVector1Py),
     ]
 }
 
@@ -165,7 +165,7 @@ extension ChaCha20TestsPerf {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__ChaCha20TestsPerf = [
-        ("testChaCha20Performance", testChaCha20Performance)
+        ("testChaCha20Performance", testChaCha20Performance),
     ]
 }
 
@@ -187,7 +187,7 @@ extension DigestTests {
         ("testSHA1Updatable2", testSHA1Updatable2),
         ("testSHA2", testSHA2),
         ("testSHA3", testSHA3),
-        ("testSHAPartialUpdates", testSHAPartialUpdates)
+        ("testSHAPartialUpdates", testSHAPartialUpdates),
     ]
 }
 
@@ -197,7 +197,7 @@ extension DigestTestsPerf {
     // to regenerate.
     static let __allTests__DigestTestsPerf = [
         ("testMD5Performance", testMD5Performance),
-        ("testSHA1Performance", testSHA1Performance)
+        ("testSHA1Performance", testSHA1Performance),
     ]
 }
 
@@ -212,7 +212,8 @@ extension ExtensionsTest {
         ("testEmptyStringEncrypt", testEmptyStringEncrypt),
         ("testStringDecryptBase64", testStringDecryptBase64),
         ("testStringEncrypt", testStringEncrypt),
-        ("testToUInt32Array", testToUInt32Array)
+        ("testToHexStringPerformance", testToHexStringPerformance),
+        ("testToUInt32Array", testToUInt32Array),
     ]
 }
 
@@ -221,7 +222,7 @@ extension ExtensionsTestPerf {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__ExtensionsTestPerf = [
-        ("testArrayInitHexPerformance", testArrayInitHexPerformance)
+        ("testArrayInitHexPerformance", testArrayInitHexPerformance),
     ]
 }
 
@@ -235,7 +236,7 @@ extension HKDFTests {
         ("testHKDF3", testHKDF3),
         ("testHKDF4", testHKDF4),
         ("testHKDF5", testHKDF5),
-        ("testHKDF6", testHKDF6)
+        ("testHKDF6", testHKDF6),
     ]
 }
 
@@ -248,7 +249,7 @@ extension HMACTests {
         ("testSHA1", testSHA1),
         ("testSHA256", testSHA256),
         ("testSHA384", testSHA384),
-        ("testSHA512", testSHA512)
+        ("testSHA512", testSHA512),
     ]
 }
 
@@ -259,7 +260,7 @@ extension PBKDF {
     static let __allTests__PBKDF = [
         ("testPBKDF1", testPBKDF1),
         ("testPBKDF2", testPBKDF2),
-        ("testPBKDF2Length", testPBKDF2Length)
+        ("testPBKDF2Length", testPBKDF2Length),
     ]
 }
 
@@ -268,7 +269,7 @@ extension PBKDFPerf {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__PBKDFPerf = [
-        ("testPerformance", testPerformance)
+        ("testPerformance", testPerformance),
     ]
 }
 
@@ -281,7 +282,7 @@ extension PaddingTests {
         ("testPKCS7_1", testPKCS7_1),
         ("testPKCS7_2", testPKCS7_2),
         ("testZeroPadding1", testZeroPadding1),
-        ("testZeroPadding2", testZeroPadding2)
+        ("testZeroPadding2", testZeroPadding2),
     ]
 }
 
@@ -291,7 +292,7 @@ extension Poly1305Tests {
     // to regenerate.
     static let __allTests__Poly1305Tests = [
         ("testIssue183", testIssue183),
-        ("testPoly1305", testPoly1305)
+        ("testPoly1305", testPoly1305),
     ]
 }
 
@@ -302,7 +303,7 @@ extension RabbitTests {
     static let __allTests__RabbitTests = [
         ("testInitialization", testInitialization),
         ("testRabbitWithIV", testRabbitWithIV),
-        ("testRabbitWithoutIV", testRabbitWithoutIV)
+        ("testRabbitWithoutIV", testRabbitWithoutIV),
     ]
 }
 
@@ -311,7 +312,28 @@ extension RabbitTestsPerf {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__RabbitTestsPerf = [
-        ("testRabbitPerformance", testRabbitPerformance)
+        ("testRabbitPerformance", testRabbitPerformance),
+    ]
+}
+
+extension SHATestsPerf {
+    // DO NOT MODIFY: This is autogenerated, use:
+    //   `swift test --generate-linuxmain`
+    // to regenerate.
+    static let __allTests__SHATestsPerf = [
+        ("testSHA1Performance", testSHA1Performance),
+        ("testSHA2224Performance", testSHA2224Performance),
+        ("testSHA2256Performance", testSHA2256Performance),
+        ("testSHA2384Performance", testSHA2384Performance),
+        ("testSHA2512Performance", testSHA2512Performance),
+        ("testSHA3224Performance", testSHA3224Performance),
+        ("testSHA3256Performance", testSHA3256Performance),
+        ("testSHA3384Performance", testSHA3384Performance),
+        ("testSHA3512Performance", testSHA3512Performance),
+        ("testSHA3keccak224Performance", testSHA3keccak224Performance),
+        ("testSHA3keccak256Performance", testSHA3keccak256Performance),
+        ("testSHA3keccak384Performance", testSHA3keccak384Performance),
+        ("testSHA3keccak512Performance", testSHA3keccak512Performance),
     ]
 }
 
@@ -322,7 +344,7 @@ extension Scrypt {
     static let __allTests__Scrypt = [
         ("testScrypt_0", testScrypt_0),
         ("testScrypt_1", testScrypt_1),
-        ("testScrypt_2", testScrypt_2)
+        ("testScrypt_2", testScrypt_2),
     ]
 }
 
@@ -331,7 +353,7 @@ extension ScryptTestsPeft {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__ScryptTestsPeft = [
-        ("testScryptPerformance", testScryptPerformance)
+        ("testScryptPerformance", testScryptPerformance),
     ]
 }
 
@@ -359,8 +381,9 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(Poly1305Tests.__allTests__Poly1305Tests),
         testCase(RabbitTests.__allTests__RabbitTests),
         testCase(RabbitTestsPerf.__allTests__RabbitTestsPerf),
+        testCase(SHATestsPerf.__allTests__SHATestsPerf),
         testCase(Scrypt.__allTests__Scrypt),
-        testCase(ScryptTestsPeft.__allTests__ScryptTestsPeft)
+        testCase(ScryptTestsPeft.__allTests__ScryptTestsPeft),
     ]
 }
 #endif

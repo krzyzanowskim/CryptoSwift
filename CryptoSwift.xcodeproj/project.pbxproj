@@ -405,7 +405,9 @@
 				754BE45619693E190098E6F3 /* Products */,
 				24B0BBA29D734E62809E53BC /* Frameworks */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		754BE45619693E190098E6F3 /* Products */ = {
 			isa = PBXGroup;

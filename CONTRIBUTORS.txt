@@ -50,7 +50,6 @@ organizations who have contributed source code to ObjectivePGP.
 - Logan Wright <logan.william.wright@gmail.com>
 - Ludo Galabru <ludovic@galabru.com>
 - Luis Reisewitz <reisewitz@me.com>
-- Luis Reisewitz <zweigraf@users.noreply.github.com>
 - Luís Silva <lm2s@gmx.com>
 - Madhava Jay <me@madhavajay.com>
 - Marc Prud'hommeaux <marc@prux.org>

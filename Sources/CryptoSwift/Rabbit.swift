@@ -79,9 +79,11 @@ public final class Rabbit: BlockCipher {
     self.p7 = 0
 
     // Key divided into 8 subkeys
-    var k = Array<UInt32>(repeating: 0, count: 8)
-    for j in 0..<8 {
-      k[j] = UInt32(self.key[Rabbit.blockSize - (2 * j + 1)]) | (UInt32(self.key[Rabbit.blockSize - (2 * j + 2)]) << 8)
+    let k = Array<UInt32>(unsafeUninitializedCapacity: 8) { buf, count in
+      for j in 0..<8 {
+        buf[j] = UInt32(self.key[Rabbit.blockSize - (2 * j + 1)]) | (UInt32(self.key[Rabbit.blockSize - (2 * j + 2)]) << 8)
+      }
+      count = 8
     }
 
     // Initialize state and counter variables from subkeys
@@ -147,16 +149,17 @@ public final class Rabbit: BlockCipher {
     self.p7 = carry // save last carry bit
 
     // Iteration of the system
-    var newX = Array<UInt32>(repeating: 0, count: 8)
-    newX[0] = self.g(0) &+ rotateLeft(self.g(7), by: 16) &+ rotateLeft(self.g(6), by: 16)
-    newX[1] = self.g(1) &+ rotateLeft(self.g(0), by: 8) &+ self.g(7)
-    newX[2] = self.g(2) &+ rotateLeft(self.g(1), by: 16) &+ rotateLeft(self.g(0), by: 16)
-    newX[3] = self.g(3) &+ rotateLeft(self.g(2), by: 8) &+ self.g(1)
-    newX[4] = self.g(4) &+ rotateLeft(self.g(3), by: 16) &+ rotateLeft(self.g(2), by: 16)
-    newX[5] = self.g(5) &+ rotateLeft(self.g(4), by: 8) &+ self.g(3)
-    newX[6] = self.g(6) &+ rotateLeft(self.g(5), by: 16) &+ rotateLeft(self.g(4), by: 16)
-    newX[7] = self.g(7) &+ rotateLeft(self.g(6), by: 8) &+ self.g(5)
-    self.x = newX
+    self.x = Array<UInt32>(unsafeUninitializedCapacity: 8) { newX, count in
+      newX[0] = self.g(0) &+ rotateLeft(self.g(7), by: 16) &+ rotateLeft(self.g(6), by: 16)
+      newX[1] = self.g(1) &+ rotateLeft(self.g(0), by: 8) &+ self.g(7)
+      newX[2] = self.g(2) &+ rotateLeft(self.g(1), by: 16) &+ rotateLeft(self.g(0), by: 16)
+      newX[3] = self.g(3) &+ rotateLeft(self.g(2), by: 8) &+ self.g(1)
+      newX[4] = self.g(4) &+ rotateLeft(self.g(3), by: 16) &+ rotateLeft(self.g(2), by: 16)
+      newX[5] = self.g(5) &+ rotateLeft(self.g(4), by: 8) &+ self.g(3)
+      newX[6] = self.g(6) &+ rotateLeft(self.g(5), by: 16) &+ rotateLeft(self.g(4), by: 16)
+      newX[7] = self.g(7) &+ rotateLeft(self.g(6), by: 8) &+ self.g(5)
+      count = 8
+    }
   }
 
   private func g(_ j: Int) -> UInt32 {
@@ -193,22 +196,23 @@ extension Rabbit: Cipher {
   public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
     self.setup()
 
-    var result = Array<UInt8>(repeating: 0, count: bytes.count)
-    var output = self.nextOutput()
-    var byteIdx = 0
-    var outputIdx = 0
-    while byteIdx < bytes.count {
-      if outputIdx == Rabbit.blockSize {
-        output = self.nextOutput()
-        outputIdx = 0
+    return Array<UInt8>(unsafeUninitializedCapacity: bytes.count) { result, count in
+      var output = self.nextOutput()
+      var byteIdx = 0
+      var outputIdx = 0
+      while byteIdx < bytes.count {
+        if outputIdx == Rabbit.blockSize {
+          output = self.nextOutput()
+          outputIdx = 0
+        }
+
+        result[byteIdx] = bytes[byteIdx] ^ output[outputIdx]
+
+        byteIdx += 1
+        outputIdx += 1
       }
-
-      result[byteIdx] = bytes[byteIdx] ^ output[outputIdx]
-
-      byteIdx += 1
-      outputIdx += 1
+      count = bytes.count
     }
-    return result
   }
 
   public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {

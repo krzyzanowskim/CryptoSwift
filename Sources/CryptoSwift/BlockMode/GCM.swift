@@ -41,7 +41,7 @@ public final class GCM: BlockMode {
 
   /// Length of authentication tag, in bytes.
   /// For encryption, the value is given as init parameter.
-  /// For decryption, the lenght of given authentication tag is used.
+  /// For decryption, the length of given authentication tag is used.
   private let tagLength: Int
 
   // `authenticationTag` nil for encryption, known tag for decryption

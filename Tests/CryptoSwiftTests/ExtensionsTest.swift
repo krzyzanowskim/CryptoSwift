@@ -86,13 +86,13 @@ final class ExtensionsTest: XCTestCase {
   func testToHexStringPerformance() {
     let len = 100000
     let a = [UInt8](unsafeUninitializedCapacity: len) { buf, count in
-        for i in 0..<len {
-            buf[i] = UInt8.random(in: 0...UInt8.max)
-        }
-        count = len
+      for i in 0..<len {
+        buf[i] = UInt8.random(in: 0...UInt8.max)
+      }
+      count = len
     }
     self.measure {
-        _ = a.toHexString()
+      _ = a.toHexString()
     }
   }
 }

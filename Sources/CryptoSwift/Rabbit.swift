@@ -120,7 +120,7 @@ public final class Rabbit: BlockCipher {
     let iv3 = UInt32(bytes: [iv[2], iv[3], iv[6], iv[7]])
 
     // Modify the counter state as function of the IV
-    c[0] = self.c[0] ^ iv0
+    self.c[0] = self.c[0] ^ iv0
     self.c[1] = self.c[1] ^ iv1
     self.c[2] = self.c[2] ^ iv2
     self.c[3] = self.c[3] ^ iv3

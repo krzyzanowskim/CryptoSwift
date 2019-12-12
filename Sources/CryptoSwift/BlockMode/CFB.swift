@@ -64,7 +64,7 @@ struct CFBModeWorker: BlockModeWorker {
       return Array(ciphertext)
     }
     let result: Array<UInt8> = xor(plaintext, ciphertext)
-    prev = ciphertext
+    self.prev = ciphertext
     return result
   }
 }

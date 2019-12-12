@@ -55,7 +55,7 @@ public extension PKCS5 {
       }
 
       self.dkLen = keyLength ?? variant.digestLength
-      let keyLengthFinal = Double(dkLen)
+      let keyLengthFinal = Double(self.dkLen)
       let hLen = Double(prf.variant.digestLength)
       if keyLengthFinal > (pow(2, 32) - 1) * hLen {
         throw Error.derivedKeyTooLong

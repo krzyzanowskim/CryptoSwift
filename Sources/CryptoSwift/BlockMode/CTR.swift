@@ -57,7 +57,7 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
       self.constPrefix = Array(initialValue[initialValue.startIndex..<halfIndex])
 
       let suffixBytes = Array(initialValue[halfIndex...])
-      value = UInt64(bytes: suffixBytes)
+      self.value = UInt64(bytes: suffixBytes)
     }
 
     convenience init(nonce: Array<UInt8>, startAt index: Int) {
@@ -111,8 +111,8 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
         self.keystreamPosIdx = 0
       }
 
-      let xored: Array<UInt8> = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...])
-      keystreamPosIdx += xored.count
+      let xored: Array<UInt8> = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], self.keystream[keystreamPosIdx...])
+      self.keystreamPosIdx += xored.count
       processed += xored.count
       result += xored
     }

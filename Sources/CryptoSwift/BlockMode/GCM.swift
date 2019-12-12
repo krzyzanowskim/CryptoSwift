@@ -69,7 +69,7 @@ public final class GCM: BlockMode {
       throw Error.invalidInitializationVector
     }
 
-    let worker = GCMModeWorker(iv: iv.slice, aad: self.additionalAuthenticatedData?.slice, expectedTag: self.authenticationTag, tagLength: self.tagLength, mode: self.mode, cipherOperation: cipherOperation)
+    let worker = GCMModeWorker(iv: self.iv.slice, aad: self.additionalAuthenticatedData?.slice, expectedTag: self.authenticationTag, tagLength: self.tagLength, mode: self.mode, cipherOperation: cipherOperation)
     worker.didCalculateTag = { [weak self] tag in
       self?.authenticationTag = tag
     }
@@ -150,7 +150,7 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     let ciphertext = xor(plaintext, ekyN) as Array<UInt8>
 
     // update ghash incrementally
-    gf.ghashUpdate(block: ciphertext)
+    self.gf.ghashUpdate(block: ciphertext)
 
     return Array(ciphertext)
   }
@@ -292,8 +292,8 @@ private final class GF {
 
   func ghashFinish() -> UInt128 {
     // len(A) || len(C)
-    let len = UInt128(a: UInt64(aadLength * 8), b: UInt64(ciphertextLength * 8))
-    x = GF.multiply(self.x ^ len, self.h)
+    let len = UInt128(a: UInt64(self.aadLength * 8), b: UInt64(self.ciphertextLength * 8))
+    self.x = GF.multiply(self.x ^ len, self.h)
     return self.x
   }
 

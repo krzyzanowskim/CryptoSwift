@@ -302,7 +302,7 @@ extension SHA2: Updatable {
     self.processedBytesTotalCount += processedBytes
 
     // output current hash
-    var result = Array<UInt8>(repeating: 0, count: variant.digestLength)
+    var result = Array<UInt8>(repeating: 0, count: self.variant.digestLength)
     switch self.variant {
       case .sha224, .sha256:
         var pos = 0

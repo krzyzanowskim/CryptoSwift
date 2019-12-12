@@ -63,7 +63,7 @@ struct CBCModeWorker: BlockModeWorker {
     guard let plaintext = cipherOperation(ciphertext) else {
       return Array(ciphertext)
     }
-    let result: Array<UInt8> = xor(prev ?? self.iv, plaintext)
+    let result: Array<UInt8> = xor(self.prev ?? self.iv, plaintext)
     self.prev = ciphertext
     return result
   }

@@ -35,7 +35,7 @@ final class BlockEncryptor: Cryptor, Updatable {
       self.accumulated = self.padding.add(to: self.accumulated, blockSize: self.blockSize)
     }
 
-    var encrypted = Array<UInt8>(reserveCapacity: accumulated.count)
+    var encrypted = Array<UInt8>(reserveCapacity: self.accumulated.count)
     for chunk in self.accumulated.batched(by: self.blockSize) {
       if isLast || chunk.count == self.blockSize {
         encrypted += self.worker.encrypt(block: chunk)

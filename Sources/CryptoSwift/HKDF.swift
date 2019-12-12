@@ -65,7 +65,7 @@ public struct HKDF {
   }
 
   public func calculate() throws -> Array<UInt8> {
-    let hmac = HMAC(key: prk, variant: variant)
+    let hmac = HMAC(key: self.prk, variant: self.variant)
     var ret = Array<UInt8>()
     ret.reserveCapacity(self.numBlocks * self.variant.digestLength)
     var value = Array<UInt8>()

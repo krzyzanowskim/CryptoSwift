@@ -97,7 +97,7 @@ public final class Scrypt {
 
     /* 5: DK <-- PBKDF2(P, B, 1, dkLen) */
     let pointer = B.assumingMemoryBound(to: UInt8.self)
-    let bufferPointer = UnsafeBufferPointer(start: pointer, count: p * 128 * self.r)
+    let bufferPointer = UnsafeBufferPointer(start: pointer, count: self.p * 128 * self.r)
     let block = [UInt8](bufferPointer)
     return try PKCS5.PBKDF2(password: Array(self.password), salt: block, iterations: 1, keyLength: self.dkLen, variant: .sha256).calculate()
   }
@@ -140,7 +140,7 @@ private extension Scrypt {
        where Integerify (B[0] ... B[2 * r - 1]) is defined
        as the result of interpreting B[2 * r - 1] as a little-endian integer.
        */
-      var j = Int(integerify(X) & UInt64(self.N - 1))
+      var j = Int(self.integerify(X) & UInt64(self.N - 1))
 
       /* 8: X <-- H(X \xor V_j) */
       self.blockXor(X, v + j * 32 * self.r, 128 * self.r)

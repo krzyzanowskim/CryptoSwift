@@ -156,7 +156,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         // y[i], where i is the counter. Can encrypt 1 block at a time
         self.counter += 1
         guard let S = try? S(i: counter) else { return Array(plaintext) }
-        let plaintextP = addPadding(Array(plaintext), blockSize: blockSize)
+        let plaintextP = addPadding(Array(plaintext), blockSize: self.blockSize)
         guard let y = cipherOperation(xor(last_y, plaintextP)) else { return Array(plaintext) }
         self.last_y = y.slice
 
@@ -164,8 +164,8 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         self.keystreamPosIdx = 0
       }
 
-      let xored: Array<UInt8> = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...])
-      keystreamPosIdx += xored.count
+      let xored: Array<UInt8> = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], self.keystream[keystreamPosIdx...])
+      self.keystreamPosIdx += xored.count
       processed += xored.count
       result += xored
     }
@@ -176,7 +176,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
     // concatenate T at the end
     guard let S0 = try? S(i: 0) else { return ciphertext }
 
-    let computedTag = xor(last_y.prefix(self.tagLength), S0) as ArraySlice<UInt8>
+    let computedTag = xor(self.last_y.prefix(self.tagLength), S0) as ArraySlice<UInt8>
     return ciphertext + computedTag
   }
 
@@ -200,8 +200,8 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
           self.keystreamPosIdx = 0
         }
 
-        let xored: Array<UInt8> = xor(ciphertext[ciphertext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...]) // plaintext
-        keystreamPosIdx += xored.count
+        let xored: Array<UInt8> = xor(ciphertext[ciphertext.startIndex.advanced(by: processed)...], self.keystream[keystreamPosIdx...]) // plaintext
+        self.keystreamPosIdx += xored.count
         processed += xored.count
         output += xored
         self.counter = currentCounter
@@ -219,7 +219,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
 
   func finalize(decrypt plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
     // concatenate T at the end
-    let computedTag = Array(last_y.prefix(self.tagLength))
+    let computedTag = Array(self.last_y.prefix(self.tagLength))
     guard let expectedTag = self.expectedTag, expectedTag == computedTag else {
       throw CCM.Error.fail
     }
@@ -242,7 +242,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
     // Calculate Tag, from the last CBC block, for accumulated plaintext.
     var processed = 0
     for block in self.accumulatedPlaintext.batched(by: self.blockSize) {
-      let blockP = addPadding(Array(block), blockSize: blockSize)
+      let blockP = addPadding(Array(block), blockSize: self.blockSize)
       guard let y = cipherOperation(xor(last_y, blockP)) else { return plaintext }
       self.last_y = y.slice
       processed += block.count

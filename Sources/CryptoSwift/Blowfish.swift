@@ -382,7 +382,7 @@ public final class Blowfish {
     var l = UInt32(bytes: block[block.startIndex..<block.startIndex.advanced(by: 4)])
     var r = UInt32(bytes: block[block.startIndex.advanced(by: 4)..<block.startIndex.advanced(by: 8)])
 
-    encryptBlowfishBlock(l: &l, r: &r)
+    self.encryptBlowfishBlock(l: &l, r: &r)
 
     // because everything is too complex to be solved in reasonable time o_O
     result += [
@@ -411,7 +411,7 @@ public final class Blowfish {
     var l = UInt32(bytes: block[block.startIndex..<block.startIndex.advanced(by: 4)])
     var r = UInt32(bytes: block[block.startIndex.advanced(by: 4)..<block.startIndex.advanced(by: 8)])
 
-    decryptBlowfishBlock(l: &l, r: &r)
+    self.decryptBlowfishBlock(l: &l, r: &r)
 
     // because everything is too complex to be solved in reasonable time o_O
     result += [

@@ -25,7 +25,7 @@ public final class AEADChaCha20Poly1305: AEAD {
   public static func encrypt(_ plainText: Array<UInt8>, key: Array<UInt8>, iv: Array<UInt8>, authenticationHeader: Array<UInt8>) throws -> (cipherText: Array<UInt8>, authenticationTag: Array<UInt8>) {
     let cipher = try ChaCha20(key: key, iv: iv)
 
-    var polykey = Array<UInt8>(repeating: 0, count: kLen)
+    var polykey = Array<UInt8>(repeating: 0, count: self.kLen)
     var toEncrypt = polykey
     polykey = try cipher.encrypt(polykey)
     toEncrypt += polykey

@@ -66,6 +66,10 @@ public class BlockDecryptor: Cryptor, Updatable {
     accumulated.removeFirst(processedBytesCount) // super-slow
 
     if isLast {
+      if accumulatedWithoutSuffix.isEmpty, var finalizingWorker = worker as? FinalizingDecryptModeWorker {
+        try finalizingWorker.willDecryptLast(bytes: self.accumulated.suffix(self.worker.additionalBufferSize))
+        plaintext = Array(try finalizingWorker.didDecryptLast(bytes: plaintext.slice))
+      }
       plaintext = self.padding.remove(from: plaintext, blockSize: self.blockSize)
     }
 

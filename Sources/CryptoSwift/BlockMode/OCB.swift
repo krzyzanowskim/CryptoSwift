@@ -30,7 +30,6 @@ public final class OCB: BlockMode {
 
   public enum Error: Swift.Error {
     case invalidNonce
-    case additionalAuthenticatedDataNotSupportedYet
     case fail
   }
 
@@ -65,9 +64,6 @@ public final class OCB: BlockMode {
   public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock, encryptionOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
     if self.N.isEmpty || self.N.count > 15 {
       throw Error.invalidNonce
-    }
-    if self.additionalAuthenticatedData != nil {
-      throw Error.additionalAuthenticatedDataNotSupportedYet
     }
 
     let worker = OCBModeWorker(N: N.slice, aad: self.additionalAuthenticatedData?.slice, expectedTag: self.authenticationTag, tagLength: self.tagLength, mode: self.mode, cipherOperation: cipherOperation, encryptionOperation: encryptionOperation)
@@ -107,14 +103,12 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
   private var lAsterisk: Array<UInt8>
   private var lDollar: Array<UInt8>
 
-
   /*
    * PER-ENCRYPTION/DECRYPTION
    */
   private var mainBlockCount: UInt64
   private var offsetMain: Array<UInt8>
   private var checksum: Array<UInt8>
-  private var sum: Array<UInt8>
 
   init(N: ArraySlice<UInt8>, aad: ArraySlice<UInt8>? = nil, expectedTag: Array<UInt8>? = nil, tagLength: Int, mode: OCB.Mode, cipherOperation: @escaping CipherOperationOnBlock, encryptionOperation: @escaping CipherOperationOnBlock) {
 
@@ -136,10 +130,9 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
      */
 
     let zeros = Array<UInt8>(repeating: 0, count: self.blockSize)
-    lAsterisk = hashOperation(zeros.slice)!         /// L_* = ENCIPHER(K, zeros(128))
-    lDollar = double(lAsterisk)                     /// L_$ = double(L_*)
-    l.append(double(lDollar))                       /// L_0 = double(L_$)
-
+    self.lAsterisk = self.hashOperation(zeros.slice)! /// L_* = ENCIPHER(K, zeros(128))
+    self.lDollar = double(self.lAsterisk) /// L_$ = double(L_*)
+    self.l.append(double(self.lDollar)) /// L_0 = double(L_$)
 
     /*
      * NONCE-DEPENDENT AND PER-ENCRYPTION/DECRYPTION INITIALIZATION
@@ -156,7 +149,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
 
     /// Ktop = ENCIPHER(K, Nonce[1..122] || zeros(6))
     nonce[15] &= 0xC0
-    let Ktop = hashOperation(nonce.slice)!
+    let Ktop = self.hashOperation(nonce.slice)!
 
     /// Stretch = Ktop || (Ktop[1..64] xor Ktop[9..72])
     let Stretch = Ktop + xor(Ktop[0..<8], Ktop[1..<9])
@@ -165,65 +158,106 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     var offsetMAIN_0 = Array<UInt8>(repeating: 0, count: blockSize)
     let bits = bottom % 8
     let bytes = Int(bottom / 8)
-    if (bits == 0) {
+    if bits == 0 {
       offsetMAIN_0[0..<blockSize] = Stretch[bytes..<(bytes + blockSize)]
     } else {
-      for i in 0..<blockSize {
-        let b1 = Stretch[bytes + i];
-        let b2 = Stretch[bytes + i + 1];
-        offsetMAIN_0[i] = ((b1 << bits) | (b2 >> (8 - bits)));
+      for i in 0..<self.blockSize {
+        let b1 = Stretch[bytes + i]
+        let b2 = Stretch[bytes + i + 1]
+        offsetMAIN_0[i] = ((b1 << bits) | (b2 >> (8 - bits)))
       }
     }
 
-    self.mainBlockCount = 0;
-
+    self.mainBlockCount = 0
     self.offsetMain = Array<UInt8>(offsetMAIN_0.slice)
-    self.checksum = Array<UInt8>(repeating: 0, count: blockSize) /// Checksum_0 = zeros(128)
-    self.sum = Array<UInt8>(repeating: 0, count: blockSize)
+    self.checksum = Array<UInt8>(repeating: 0, count: self.blockSize) /// Checksum_0 = zeros(128)
   }
 
   /// L_i = double(L_{i-1}) for every integer i > 0
   func getLSub(_ n: Int) -> Array<UInt8> {
-    while n >= l.count {
-      l.append(double(l.last!))
+    while n >= self.l.count {
+      self.l.append(double(self.l.last!))
     }
-    return l[n]
+    return self.l[n]
   }
 
   func computeTag() -> Array<UInt8> {
+
+    let sum = self.hashAAD()
+
     ///  Tag = ENCIPHER(K, Checksum_* xor Offset_* xor L_$) xor HASH(K,A)
-    return xor(hashOperation(xor(xor(checksum, offsetMain).slice, lDollar))!, sum)
+    return xor(self.hashOperation(xor(xor(self.checksum, self.offsetMain).slice, self.lDollar))!, sum)
+  }
+
+  func hashAAD() -> Array<UInt8> {
+    var sum = Array<UInt8>(repeating: 0, count: blockSize)
+
+    guard let aad = self.aad else {
+      return sum
+    }
+
+    var offset = Array<UInt8>(repeating: 0, count: blockSize)
+    var blockCount: UInt64 = 1
+    for aadBlock in aad.batched(by: self.blockSize) {
+
+      if aadBlock.count == self.blockSize {
+
+        /// Offset_i = Offset_{i-1} xor L_{ntz(i)}
+        offset = xor(offset, self.getLSub(ntz(blockCount)))
+
+        /// Sum_i = Sum_{i-1} xor ENCIPHER(K, A_i xor Offset_i)
+        sum = xor(sum, self.hashOperation(xor(aadBlock, offset))!)
+      } else {
+        if !aadBlock.isEmpty {
+
+          /// Offset_* = Offset_m xor L_*
+          offset = xor(offset, self.lAsterisk)
+
+          /// CipherInput = (A_* || 1 || zeros(127-bitlen(A_*))) xor Offset_*
+          var cipherInput = Array<UInt8>(repeating: 0, count: blockSize)
+          cipherInput[0..<aadBlock.count] = aadBlock
+          cipherInput[aadBlock.count] |= 0x80
+          cipherInput = xor(cipherInput, offset)
+
+          /// Sum = Sum_m xor ENCIPHER(K, CipherInput)
+          sum = xor(sum, self.hashOperation(cipherInput.slice)!)
+        }
+      }
+      blockCount += 1
+    }
+
+    return sum
   }
 
   func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
 
-    if (plaintext.count == blockSize) {
-      return processBlock(block: plaintext, forEncryption: true)
+    if plaintext.count == self.blockSize {
+      return self.processBlock(block: plaintext, forEncryption: true)
     } else {
-      return processFinalBlock(block: plaintext, forEncryption: true)
+      return self.processFinalBlock(block: plaintext, forEncryption: true)
     }
   }
 
   func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
 
-    let tag = computeTag()
+    let tag = self.computeTag()
 
-    didCalculateTag?(tag)
+    self.didCalculateTag?(tag)
 
-    switch mode {
-    case .combined:
-      return ciphertext + tag
-    case .detached:
-      return ciphertext
+    switch self.mode {
+      case .combined:
+        return ciphertext + tag
+      case .detached:
+        return ciphertext
     }
   }
 
   func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
 
-    if ciphertext.count == blockSize {
-      return processBlock(block: ciphertext, forEncryption: false)
+    if ciphertext.count == self.blockSize {
+      return self.processBlock(block: ciphertext, forEncryption: false)
     } else {
-      return processFinalBlock(block: ciphertext, forEncryption: false)
+      return self.processFinalBlock(block: ciphertext, forEncryption: false)
     }
   }
 
@@ -238,34 +272,33 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
      * OCB-ENCRYPT/OCB-DECRYPT: Process any whole blocks
      */
 
-    mainBlockCount += 1
+    self.mainBlockCount += 1
 
     /// Offset_i = Offset_{i-1} xor L_{ntz(i)}
-    offsetMain = xor(offsetMain, getLSub(ntz(mainBlockCount)));
+    self.offsetMain = xor(self.offsetMain, self.getLSub(ntz(self.mainBlockCount)))
 
     /// C_i = Offset_i xor ENCIPHER(K, P_i xor Offset_i)
     /// P_i = Offset_i xor DECIPHER(K, C_i xor Offset_i)
     var mainBlock = Array<UInt8>(block)
-    mainBlock = xor(mainBlock, offsetMain);
-    mainBlock = cipherOperation(mainBlock.slice)!;
-    mainBlock = xor(mainBlock, offsetMain);
+    mainBlock = xor(mainBlock, offsetMain)
+    mainBlock = self.cipherOperation(mainBlock.slice)!
+    mainBlock = xor(mainBlock, self.offsetMain)
 
     /// Checksum_i = Checksum_{i-1} xor P_i
     if forEncryption {
-      checksum = xor(checksum, block);
+      self.checksum = xor(self.checksum, block)
     } else {
-      checksum = xor(checksum, mainBlock);
+      self.checksum = xor(self.checksum, mainBlock)
     }
 
     return mainBlock
   }
 
-
   private func processFinalBlock(block: ArraySlice<UInt8>, forEncryption: Bool) -> Array<UInt8> {
 
     let out: Array<UInt8>
 
-    if block.count == 0 {
+    if block.isEmpty {
       /// C_* = <empty string>
       /// P_* = <empty string>
       out = []
@@ -273,10 +306,10 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     } else {
 
       /// Offset_* = Offset_m xor L_*
-      offsetMain = xor(offsetMain, lAsterisk);
+      self.offsetMain = xor(self.offsetMain, self.lAsterisk)
 
       /// Pad = ENCIPHER(K, Offset_*)
-      let Pad = hashOperation(offsetMain.slice)!
+      let Pad = self.hashOperation(self.offsetMain.slice)!
 
       /// C_* = P_* xor Pad[1..bitlen(P_*)]
       /// P_* = C_* xor Pad[1..bitlen(C_*)]
@@ -284,13 +317,12 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
 
       /// Checksum_* = Checksum_m xor (P_* || 1 || zeros(127-bitlen(P_*)))
       let plaintext = forEncryption ? block : out.slice
-      var plaintextExtended = plaintext + Array<UInt8>(repeating: 0, count: blockSize - plaintext.count)
+      var plaintextExtended = plaintext + Array<UInt8>(repeating: 0, count: self.blockSize - plaintext.count)
       plaintextExtended[plaintext.count] |= 0x80
-      checksum = xor(checksum, plaintextExtended)
+      self.checksum = xor(self.checksum, plaintextExtended)
     }
     return out
   }
-
 
   // The authenticated decryption operation has five inputs: K, IV , C, A, and T. It has only a single
   // output, either the plaintext value P or a special symbol FAIL that indicates that the inputs are not
@@ -299,18 +331,18 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
   func willDecryptLast(bytes ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
     // Validate tag
     switch self.mode {
-    case .combined:
-      // overwrite expectedTag property used later for verification
-      self.expectedTag = Array(ciphertext.suffix(self.tagLength))
-      return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(tagLength, ciphertext.count))]
-    case .detached:
-      return ciphertext
+      case .combined:
+        // overwrite expectedTag property used later for verification
+        self.expectedTag = Array(ciphertext.suffix(self.tagLength))
+        return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(tagLength, ciphertext.count))]
+      case .detached:
+        return ciphertext
     }
   }
 
   func didDecryptLast(bytes plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
     // Calculate MAC tag.
-    let computedTag = computeTag()
+    let computedTag = self.computeTag()
 
     // Validate tag
     guard let expectedTag = self.expectedTag, computedTag == expectedTag else {
@@ -325,39 +357,39 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
 
 private func ntz(_ x: UInt64) -> Int {
   if x == 0 {
-    return 64;
+    return 64
   }
 
   var xv = x
-  var n = 0;
-  while ((xv & 1) == 0) {
+  var n = 0
+  while (xv & 1) == 0 {
     n += 1
-    xv = xv >> 1;
+    xv = xv >> 1
   }
-  return n;
+  return n
 }
 
 private func double(_ block: Array<UInt8>) -> Array<UInt8> {
-  var ( carry,  result) = shiftLeft(block);
+  var ( carry, result) = shiftLeft(block)
 
   /*
    * NOTE: This construction is an attempt at a constant-time implementation.
    */
-  result[15] ^= (0x87 >> ((1 - carry) << 3));
+  result[15] ^= (0x87 >> ((1 - carry) << 3))
 
-  return result;
+  return result
 }
 
 private func shiftLeft(_ block: Array<UInt8>) -> (UInt8, Array<UInt8>)
 {
   var output = Array<UInt8>(repeating: 0, count: block.count)
 
-  var bit:UInt8 = 0;
+  var bit: UInt8 = 0
 
   for i in 0..<block.count {
-    let b = block[block.count - 1 - i];
-    output[block.count - 1 - i] = ((b << 1) | bit);
-    bit = (b >> 7) & 1;
+    let b = block[block.count - 1 - i]
+    output[block.count - 1 - i] = ((b << 1) | bit)
+    bit = (b >> 7) & 1
   }
-  return (bit, output);
+  return (bit, output)
 }

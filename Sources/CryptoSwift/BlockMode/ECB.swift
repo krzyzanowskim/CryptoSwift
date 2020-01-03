@@ -22,7 +22,7 @@ public struct ECB: BlockMode {
   public init() {
   }
 
-  public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
+  public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock, encryptionOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
     ECBModeWorker(blockSize: blockSize, cipherOperation: cipherOperation)
   }
 }

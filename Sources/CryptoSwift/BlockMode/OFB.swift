@@ -29,7 +29,7 @@ public struct OFB: BlockMode {
     self.iv = iv
   }
 
-  public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
+  public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock, encryptionOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
     if self.iv.count != blockSize {
       throw Error.invalidInitializationVector
     }

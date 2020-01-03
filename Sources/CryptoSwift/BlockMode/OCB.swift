@@ -214,10 +214,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
           offset = xor(offset, self.lAsterisk)
 
           /// CipherInput = (A_* || 1 || zeros(127-bitlen(A_*))) xor Offset_*
-          var cipherInput = Array<UInt8>(repeating: 0, count: blockSize)
-          cipherInput[0..<aadBlock.count] = aadBlock
-          cipherInput[aadBlock.count] |= 0x80
-          cipherInput = xor(cipherInput, offset)
+          let cipherInput: Array<UInt8> = xor(extend(aadBlock, size: blockSize), offset)
 
           /// Sum = Sum_m xor ENCIPHER(K, CipherInput)
           sum = xor(sum, self.hashOperation(cipherInput.slice)!)
@@ -317,9 +314,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
 
       /// Checksum_* = Checksum_m xor (P_* || 1 || zeros(127-bitlen(P_*)))
       let plaintext = forEncryption ? block : out.slice
-      var plaintextExtended = plaintext + Array<UInt8>(repeating: 0, count: self.blockSize - plaintext.count)
-      plaintextExtended[plaintext.count] |= 0x80
-      self.checksum = xor(self.checksum, plaintextExtended)
+      self.checksum = xor(self.checksum, extend(plaintext, size: self.blockSize))
     }
     return out
   }
@@ -380,8 +375,7 @@ private func double(_ block: Array<UInt8>) -> Array<UInt8> {
   return result
 }
 
-private func shiftLeft(_ block: Array<UInt8>) -> (UInt8, Array<UInt8>)
-{
+private func shiftLeft(_ block: Array<UInt8>) -> (UInt8, Array<UInt8>) {
   var output = Array<UInt8>(repeating: 0, count: block.count)
 
   var bit: UInt8 = 0
@@ -392,4 +386,11 @@ private func shiftLeft(_ block: Array<UInt8>) -> (UInt8, Array<UInt8>)
     bit = (b >> 7) & 1
   }
   return (bit, output)
+}
+
+private func extend(_ block: ArraySlice<UInt8>, size: Int) -> Array<UInt8> {
+  var output = Array<UInt8>(repeating: 0, count: size)
+  output[0..<block.count] = block
+  output[block.count] |= 0x80
+  return output
 }

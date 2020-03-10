@@ -438,7 +438,7 @@ do {
     let aes = try AES(key: key, blockMode: gcm, padding: .noPadding)
     let encrypted = try aes.encrypt(plaintext)
     let tag = gcm.authenticationTag
-catch {
+} catch {
     // failed
 }
 ```

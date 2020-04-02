@@ -190,21 +190,21 @@ final class DigestTests: XCTestCase {
   }
 
   func testCRC32() {
-    let data: Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
+    let data: Data = Data(bytes: [49, 50, 51] as Array<UInt8>, count: 3)
     XCTAssertEqual(data.crc32(seed: nil).toHexString(), "884863d2", "CRC32 calculation failed")
 
     XCTAssertEqual("".crc32(seed: nil), "00000000", "CRC32 calculation failed")
   }
 
   func testCRC32C() {
-    let data: Data = Data(bytes: UnsafePointer<UInt8>([0x32, 0, 0, 0] as Array<UInt8>), count: 4)
+    let data: Data = Data(bytes: [0x32, 0, 0, 0] as Array<UInt8>, count: 4)
     XCTAssertEqual(data.crc32c(seed: nil).toHexString(), "c941cdf0", "CRC32C calculation failed")
     XCTAssertEqual("".crc32c(seed: nil), "00000000", "CRC32 calculation failed")
   }
 
   func testCRC32NotReflected() {
     let bytes: Array<UInt8> = [0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39]
-    let data: Data = Data(bytes: UnsafePointer<UInt8>(bytes), count: bytes.count)
+    let data: Data = Data(bytes: bytes, count: bytes.count)
     XCTAssertEqual(data.crc32(seed: nil, reflect: false).toHexString(), "fc891918", "CRC32 (with reflection) calculation failed")
 
     XCTAssertEqual("".crc32(seed: nil, reflect: false), "00000000", "CRC32 (with reflection) calculation failed")
@@ -216,7 +216,7 @@ final class DigestTests: XCTestCase {
   }
 
   func testChecksum() {
-    let data: Data = Data(bytes: UnsafePointer<UInt8>([49, 50, 51] as Array<UInt8>), count: 3)
+    let data: Data = Data(bytes: [49, 50, 51] as Array<UInt8>, count: 3)
     XCTAssert(data.checksum() == 0x96, "Invalid checksum")
   }
 
@@ -228,7 +228,7 @@ final class DigestTests: XCTestCase {
       }
       count = len
     }
-    let data: Data = Data(bytes: UnsafePointer<UInt8>(a), count: len)
+    let data: Data = Data(bytes: a, count: len)
     self.measure {
       _ = data.checksum()
     }

@@ -6,7 +6,7 @@ matrix:
          dist: trusty
          sudo: required
        - os: osx
-         osx_image: xcode11.3
+         osx_image: xcode11.4
 install:
     - eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
 script:

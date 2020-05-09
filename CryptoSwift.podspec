@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.license      = {:type => "Attribution", :file => "LICENSE"}
   s.authors      = {'Marcin Krzyżanowski' => 'marcin@krzyzanowskim.com'}
   s.social_media_url = "https://twitter.com/krzyzanowskim"
-  s.cocoapods_version = '>= 1.6.0'
+  s.cocoapods_version = '>= 1.9.1'
   s.swift_version = "5.2"
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.10"

@@ -25,9 +25,6 @@ public class CMAC: Authenticator {
   private static let Rb: Array<UInt8> = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x87]
 
   public init(key: Array<UInt8>) throws {
-    if key.count != 16 {
-      throw Error.wrongKeyLength
-    }
     self.key = SecureBytes(bytes: key)
   }
 

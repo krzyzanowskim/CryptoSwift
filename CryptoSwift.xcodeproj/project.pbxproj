@@ -12,6 +12,7 @@
 		0EE73E74204D59C200110E11 /* CMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE73E72204D599C00110E11 /* CMACTests.swift */; };
 		14156CE52011422400DDCFBC /* ChaCha20Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14156CE42011422400DDCFBC /* ChaCha20Poly1305Tests.swift */; };
 		1467460F2017BB3600DF04ED /* AEAD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1467460E2017BB3600DF04ED /* AEAD.swift */; };
+		5E4D13782482B74500ED077F /* AESWithCBCMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4D13772482B74500ED077F /* AESWithCBCMode.swift */; };
 		674A736F1BF5D85B00866C5B /* RabbitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674A736E1BF5D85B00866C5B /* RabbitTests.swift */; };
 		750509991F6BEF2A00394A1B /* PKCS7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750509981F6BEF2A00394A1B /* PKCS7.swift */; };
 		750CC3EB1DC0CACE0096BE6E /* BlowfishTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */; };
@@ -200,6 +201,7 @@
 		0EE73E72204D599C00110E11 /* CMACTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMACTests.swift; sourceTree = "<group>"; };
 		14156CE42011422400DDCFBC /* ChaCha20Poly1305Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChaCha20Poly1305Tests.swift; sourceTree = "<group>"; };
 		1467460E2017BB3600DF04ED /* AEAD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEAD.swift; sourceTree = "<group>"; };
+		5E4D13772482B74500ED077F /* AESWithCBCMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESWithCBCMode.swift; sourceTree = "<group>"; };
 		674A736E1BF5D85B00866C5B /* RabbitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RabbitTests.swift; sourceTree = "<group>"; };
 		750509981F6BEF2A00394A1B /* PKCS7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7.swift; sourceTree = "<group>"; };
 		750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlowfishTests.swift; sourceTree = "<group>"; };
@@ -377,6 +379,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5E4D13762482B70A00ED077F /* CommonUseCase */ = {
+			isa = PBXGroup;
+			children = (
+				5E4D13772482B74500ED077F /* AESWithCBCMode.swift */,
+			);
+			path = CommonUseCase;
+			sourceTree = "<group>";
+		};
 		75211F93207249D8004E41F8 /* CryptoSwift-TestHostApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -510,6 +520,7 @@
 		75EC52371EE8B6CA0048EB3B /* CryptoSwift */ = {
 			isa = PBXGroup;
 			children = (
+				5E4D13762482B70A00ED077F /* CommonUseCase */,
 				0AF023D4230F2B0F008E4E68 /* ISO78164Padding.swift */,
 				7529366820683DFC00195874 /* AEAD */,
 				75EC52381EE8B6CA0048EB3B /* AES.swift */,
@@ -849,6 +860,7 @@
 				75EC52821EE8B8170048EB3B /* BlockMode.swift in Sources */,
 				75EC52AE1EE8B83D0048EB3B /* SecureBytes.swift in Sources */,
 				75EC528F1EE8B81A0048EB3B /* Cipher.swift in Sources */,
+				5E4D13782482B74500ED077F /* AESWithCBCMode.swift in Sources */,
 				75B3ED79210FA016005D4ADA /* BlockEncryptor.swift in Sources */,
 				75EC52A01EE8B8290048EB3B /* Int+Extension.swift in Sources */,
 				75EC52B01EE8B83D0048EB3B /* SHA2.swift in Sources */,

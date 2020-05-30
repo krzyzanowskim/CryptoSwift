@@ -395,6 +395,21 @@ do {
 
 See [Playground](/CryptoSwift.playground/Contents.swift) for sample code that work with stream.
 
+
+###### AES Simple Usage
+
+In real life AES is widely used with CBC mode. Here is some helper functions to encrypt and decrypt your data.
+
+```swift
+let plainText = "I'd like to encrypt this text"
+let secretKey = "_This_Is_My_Key_"
+let iv = "I'm_Using_ThisIV" // Note that iv has the same length as the secret key, `AES.blockSize` length
+
+let encryptedText = encryptAESWithCBCMode(plainText: plainText, secretKey: secretKey, iv: iv, padding: .pkcs5)
+let decryptedText = decryptAESWithCBCMode(cipherText: encryptedText, secretKey: secretKey, iv: iv, padding: .pkcs5)
+```
+
+
 ###### AES Advanced usage
 ```swift
 let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]

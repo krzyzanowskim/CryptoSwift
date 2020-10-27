@@ -120,12 +120,16 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 
 Notice: Swift Package Manager uses debug configuration for debug Xcode build, that may result in significant (up to x10000) worse performance. Performance characteristic is different in Release build. To overcome this prolem, consider embed `CryptoSwift.xcframework` described below.
 
+Notice: As of Swift 5.3, it's impossible to use Swift Package Manager to distribute binary (pre-compiled, optimized) version of CryptoSwift.
+
 #### XCFramework
 
 XCFrameworks require Xcode 11 or later and they can be integrated similarly to how we’re used to integrating the `.framework` format.
 Please us a script [scripts/build-framework.sh](scripts/build-framework.sh) to generate binary `CryptoSwift.xcframework` archive that you can use as a dependency in Xcode.
 
 CryptoSwift.xcframework is a Release (Optimized) binary that offer best available Swift code performance.
+
+<img width="320" alt="Screen Shot 2020-10-27 at 00 06 32" src="https://user-images.githubusercontent.com/758033/97240586-f0878280-17ee-11eb-9119-e5a960417d04.png">
 
 #### Embedded Framework
 
@@ -136,10 +140,6 @@ Embedded frameworks require a minimum deployment target of iOS 9 or macOS Sierra
 Sometimes "embedded framework" option is not available. In that case, you have to add new build phase for the target.
 
 ![](https://cloud.githubusercontent.com/assets/758033/18415615/d5edabb0-77f8-11e6-8c94-f41d9fc2b8cb.png)
-
-<img width="320" alt="Screen Shot 2020-10-27 at 00 06 32" src="https://user-images.githubusercontent.com/758033/97240586-f0878280-17ee-11eb-9119-e5a960417d04.png">
-
-Notice: As of Swift 5.3, it's impossible to use Swift Package Manager to distribute binary version of CryptoSwift.
 
 #### CocoaPods
 

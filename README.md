@@ -5,8 +5,6 @@
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods&colorA=28a745&&colorB=4E4E4E)](https://cocoapods.org/pods/CryptoSwift)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat&colorA=28a745&&colorB=4E4E4E)](https://github.com/Carthage/Carthage)
 
-[![Twitter](https://img.shields.io/badge/Twitter-@krzyzanowskim-blue.svg?style=flat)](http://twitter.com/krzyzanowskim)
-
 # CryptoSwift
 
 Crypto related functions and helpers for [Swift](https://swift.org) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
@@ -19,9 +17,11 @@ Crypto related functions and helpers for [Swift](https://swift.org) implemented 
 
 ## Sponsorship
 
-If you (or your Company) use this work, please consider [Sponsorship](https://github.com/users/krzyzanowskim/sponsorship). This is the only option to keep the project alive, that is in your own best interrest.
+If you (or your Company) use this piece of work, please consider [Sponsorship](https://github.com/users/krzyzanowskim/sponsorship). This is the only option to keep the project alive. This is in your own best interrest.
 
-CryptoSwift isn't backed by a big company and is developer in my spare time that I also use to as a freelancer.
+CryptoSwift isn't backed by any big company and is developer in my spare time that I also use to as a freelancer.
+
+[![Twitter](https://img.shields.io/badge/Twitter-@krzyzanowskim-blue.svg?style=flat)](http://twitter.com/krzyzanowskim)
 
 ## Requirements
 Good mood

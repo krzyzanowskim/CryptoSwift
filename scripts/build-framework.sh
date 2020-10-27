@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xe
+set -e
 
 BASE_PWD="$PWD"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
@@ -109,7 +109,10 @@ xcrun xcodebuild -create-xcframework \
 	-framework "${OUTPUT_DIR}/maccatalyst/CryptoSwift.framework" \
 	-output ${OUTPUT_DIR}/CryptoSwift.xcframework
 
-zip CryptoSwift.xcframework.zip ${OUTPUT_DIR}/CryptoSwift.xcframework
+# zip CryptoSwift.xcframework.zip ${OUTPUT_DIR}/CryptoSwift.xcframework
+mv ${OUTPUT_DIR}/CryptoSwift.xcframework ${BASE_PWD}
+
+echo "✔️ CryptoSwift.xcframework"
 
 rm -rf ${OUTPUT_DIR}
 

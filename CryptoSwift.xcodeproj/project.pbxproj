@@ -655,7 +655,6 @@
 				754BE45219693E190098E6F3 /* Headers */,
 				754BE45319693E190098E6F3 /* Resources */,
 				75B601E0197D69770009B53D /* CopyFiles */,
-				75469A2125477544000CB17D /* XCFramework */,
 			);
 			buildRules = (
 			);
@@ -819,27 +818,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		75469A2125477544000CB17D /* XCFramework */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = XCFramework;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "rm -rf ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.xcframework\nxcodebuild -create-xcframework -framework ${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME} -output ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.xcframework\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		75211F8E207249D8004E41F8 /* Sources */ = {

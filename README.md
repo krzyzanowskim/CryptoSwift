@@ -362,8 +362,40 @@ Variant of AES encryption (AES-128, AES-192, AES-256) depends on given key lengt
 - AES-256 = 32 bytes
 
 AES-256 example
+
 ```swift
-try AES(key: [1,2,3,...,32], blockMode: CBC(iv: [1,2,3,...,16]), padding: .pkcs7)
+let encryptedBytes = try AES(key: [1,2,3,...,32], blockMode: CBC(iv: [1,2,3,...,16]), padding: .pkcs7)
+```
+
+Full example:
+
+```swift
+  let password: [UInt8] = Array("s33krit".utf8)
+  let salt: [UInt8] = Array("nacllcan".utf8)
+
+  /* Generate a key from a `password`. Optional if you already have a key */
+  let key = try PKCS5.PBKDF2(
+      password: password,
+      salt: salt,
+      iterations: 4096,
+      keyLength: 32, /* AES-256 */
+      variant: .sha256
+  ).calculate()
+
+  /* Generate random IV value. IV is public value. Either need to generate, or get it from elsewhere */
+  let iv = AES.randomIV(AES.blockSize)
+
+  /* AES cryptor instance */
+  let aes = try AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7)
+
+  /* Encrypt Data */
+  let inputData = Data()
+  let encryptedBytes = try aes.encrypt(inputData.bytes)
+  let encryptedData = Data(encryptedBytes)
+
+  /* Decrypt Data */
+  let decryptedBytes = try aes.decrypt(encryptedData.bytes)
+  let decryptedData = Data(decryptedBytes)
 ```
 
 ###### All at once

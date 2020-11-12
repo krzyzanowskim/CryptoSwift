@@ -17,7 +17,7 @@ Crypto related functions and helpers for [Swift](https://swift.org) implemented 
 
 ## Sponsorship
 
-If you (or your Company) use this piece of work, please consider [Sponsorship](https://github.com/users/krzyzanowskim/sponsorship). This is the only option to keep the project alive. This is in your own best interrest.
+It takes some time to keep it all for your convenience, so maybe spare $1, so I can keep working on that. There are more than 8000 clones daily. If I'd get $1/month from each company that uses my work here, I'd say we're even. Hurry up, find the [Sponsorship](https://github.com/users/krzyzanowskim/sponsorship) button, and fulfill your duty.
 
 CryptoSwift isn't backed by any big company and is developer in my spare time that I also use to as a freelancer.
 
@@ -112,7 +112,7 @@ It is recommended to enable [Whole-Module Optimization](https://swift.org/blog/w
 You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding this:
 
 ```swift
-.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.3.1"))
+.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.3.2"))
 ```
 
 See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
@@ -120,6 +120,27 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 Notice: Swift Package Manager uses debug configuration for debug Xcode build, that may result in significant (up to x10000) worse performance. Performance characteristic is different in Release build. To overcome this prolem, consider embed `CryptoSwift.xcframework` described below.
 
 Notice: As of Swift 5.3, it's impossible to use Swift Package Manager to distribute binary (pre-compiled, optimized) version of CryptoSwift.
+
+#### CocoaPods
+
+You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
+
+```ruby
+pod 'CryptoSwift', '~> 1.0'
+```
+
+Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
+
+#### Carthage
+
+You can use [Carthage](https://github.com/Carthage/Carthage).
+Specify in Cartfile:
+
+```ruby
+github "krzyzanowskim/CryptoSwift"
+```
+
+Run `carthage` to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started). [Common issues](https://github.com/krzyzanowskim/CryptoSwift/issues/492#issuecomment-330822874).
 
 #### XCFramework
 
@@ -139,28 +160,6 @@ Embedded frameworks require a minimum deployment target of iOS 9 or macOS Sierra
 Sometimes "embedded framework" option is not available. In that case, you have to add new build phase for the target.
 
 ![](https://cloud.githubusercontent.com/assets/758033/18415615/d5edabb0-77f8-11e6-8c94-f41d9fc2b8cb.png)
-
-#### CocoaPods
-
-You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
-
-```ruby
-pod 'CryptoSwift', '~> 1.0'
-```
-
-Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
-
-#### Carthage
-You can use [Carthage](https://github.com/Carthage/Carthage).
-Specify in Cartfile:
-
-```ruby
-github "krzyzanowskim/CryptoSwift"
-```
-
-Run `carthage` to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started). [Common issues](https://github.com/krzyzanowskim/CryptoSwift/issues/492#issuecomment-330822874).
-
----
 
 ##### iOS, macOS, watchOS, tvOS
 

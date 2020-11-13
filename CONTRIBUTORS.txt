@@ -12,12 +12,14 @@ organizations who have contributed source code to CryptoSwift.
 - Alexey Komnin <Interfere@users.noreply.github.com>
 - Alsey Coleman Miller <alseycmiller@gmail.com>
 - Andrew Wagner <845683+drewag@users.noreply.github.com>
+- André Berenguel <andre.berenguel@gmail.com>
 - Anton <antonmes@users.noreply.github.com>
 - Ayaka Nonaka <ayanonagon@gmail.com>
 - Bart Cone <cone.bart@gmail.com>
 - Bing Cheung <32565605+eungch@users.noreply.github.com>
 - Bogdan Bystritskiy <q80061@gmail.com>
 - Brice Cesarin <bc@dejamobile.com>
+- Bruce Geerdes <bruce@vdub.software>
 - Bryan Chen <xlchen1291@gmail.com>
 - Bryant Luk <bryant.luk@bryantluk.com>
 - C.W. Betts <computers57@hotmail.com>
@@ -35,6 +37,7 @@ organizations who have contributed source code to CryptoSwift.
 - Frank Langel <frank@frankjlangel.com>
 - Frank Langel <gr.markin@googlemail.com>
 - Franklin Schrans <f.schrans@me.com>
+- FreeThinker <59345560+Free-FreeThinker@users.noreply.github.com>
 - Grzegorz Nowicki <sp3esu@gmail.com>
 - Hamilton Chapman <hamchapman@gmail.com>
 - Honza Dvorsky <jan.dvorsky@yahoo.com>
@@ -84,6 +87,7 @@ organizations who have contributed source code to CryptoSwift.
 - ScottieY <scottieyan@gmail.com>
 - Semen Zhydenko <simeon.zhidenko@gmail.com>
 - Simon Hartmann <simon.hartmann@andrena.de>
+- Stefan Hintz <stefan.hintz@bild.de>
 - Thomas Bibby <hello@ipadtills.com>
 - Thomas Haak <thomas.haak@teleboy.ch>
 - TictoDev <kjelldebaeremaecker@icloud.com>

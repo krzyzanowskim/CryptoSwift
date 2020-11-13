@@ -194,8 +194,6 @@ In the project, you'll find [single scheme](https://mxcl.dev/PromiseKit/news/201
 * [AES-GCM](#aes-gcm)
 * [Authenticated Encryption with Associated Data (AEAD)](#aead)
 
-also check [Playground](/CryptoSwift.playground/Contents.swift)
-
 ##### Basics
 
 ```swift
@@ -427,8 +425,6 @@ do {
     print(error)
 }
 ```
-
-See [Playground](/CryptoSwift.playground/Contents.swift) for sample code that work with stream.
 
 ###### AES Advanced usage
 ```swift

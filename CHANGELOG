@@ -2,6 +2,7 @@
 - Adds OCB Authenticated-Encryption Algorithm (RFC7253)
 - build-framework.sh output CryptoSwift.xcframework
 - Xcode 12.2 maintenance updates
+- Removed CryptoSwift.playground (couldn't make it work since Xcode 12 update)
 
 1.3.2
 - Swift 5.3 update (Xcode 12)

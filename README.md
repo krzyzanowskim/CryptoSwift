@@ -112,21 +112,21 @@ It is recommended to enable [Whole-Module Optimization](https://swift.org/blog/w
 You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding this:
 
 ```swift
-.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.3.2"))
+.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.3.3"))
 ```
 
 See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
 
 Notice: Swift Package Manager uses debug configuration for debug Xcode build, that may result in significant (up to x10000) worse performance. Performance characteristic is different in Release build. To overcome this prolem, consider embed `CryptoSwift.xcframework` described below.
 
-Notice: As of Swift 5.3, it's impossible to use Swift Package Manager to distribute binary (pre-compiled, optimized) version of CryptoSwift.
+Notice: As of Swift 5.3, it's impossible to use Swift Package Manager to distribute binary (pre-compiled, optimized) version of CryptoSwift for every platform.
 
 #### CocoaPods
 
 You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
 
 ```ruby
-pod 'CryptoSwift', '~> 1.0'
+pod 'CryptoSwift', '~> 1.3.3'
 ```
 
 Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.

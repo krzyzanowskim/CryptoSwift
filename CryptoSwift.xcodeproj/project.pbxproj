@@ -1025,7 +1025,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FB020724A10004E41F8 /* Project-Debug.xcconfig */;
 			buildSettings = {
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 			};
 			name = Debug;
 		};
@@ -1033,7 +1032,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FAA20724A0F004E41F8 /* Project-Release.xcconfig */;
 			buildSettings = {
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 			};
 			name = Release;
 		};
@@ -1092,7 +1090,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FB220724A10004E41F8 /* Project-Shared.xcconfig */;
 			buildSettings = {
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 			};
 			name = Test;
 		};

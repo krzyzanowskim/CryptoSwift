@@ -1,6 +1,7 @@
 1.3.3
 - Xcode 12.2 update
 - build-framework.sh now output CryptoSwift.xcframework
+- Adds OCB Authenticated-Encryption Algorithm (RFC7253)
 
 1.3.2
 - Swift 5.3 update (Xcode 12)

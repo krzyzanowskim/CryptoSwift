@@ -68,6 +68,7 @@ Good mood
 - Counter Mode ([CTR](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Counter_.28CTR.29))
 - Galois/Counter Mode ([GCM](https://csrc.nist.gov/publications/detail/sp/800-38d/final))
 - Counter with Cipher Block Chaining-Message Authentication Code ([CCM](https://csrc.nist.gov/publications/detail/sp/800-38c/final))
+- OCB Authenticated-Encryption Algorithm ([OCB](https://tools.ietf.org/html/rfc7253))
 
 #### Password-Based Key Derivation Function
 - [PBKDF1](http://tools.ietf.org/html/rfc2898#section-5.1) (Password-Based Key Derivation Function 1)

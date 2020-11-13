@@ -1,5 +1,5 @@
 For the purpose of tracking copyright, this is the list of individuals and
-organizations who have contributed source code to ObjectivePGP.
+organizations who have contributed source code to CryptoSwift.
 
 ### Contributors
 
@@ -16,6 +16,7 @@ organizations who have contributed source code to ObjectivePGP.
 - Ayaka Nonaka <ayanonagon@gmail.com>
 - Bart Cone <cone.bart@gmail.com>
 - Bing Cheung <32565605+eungch@users.noreply.github.com>
+- Bogdan Bystritskiy <q80061@gmail.com>
 - Brice Cesarin <bc@dejamobile.com>
 - Bryan Chen <xlchen1291@gmail.com>
 - Bryant Luk <bryant.luk@bryantluk.com>
@@ -27,6 +28,7 @@ organizations who have contributed source code to ObjectivePGP.
 - Cihat Gündüz <github@cihatguenduez.de>
 - Dave Wood <dave@cerebralgardens.com>
 - Dima Kalachov <dima.kalachov@gmail.com>
+- Dusan Klinec <dusan.klinec@gmail.com>
 - Eneko Alonso <eneko.alonso@gmail.com>
 - Evan Maloney <emaloney@gilt.com>
 - Evin Ugur <evinoog96@gmail.com>
@@ -96,6 +98,7 @@ organizations who have contributed source code to ObjectivePGP.
 - jose <nextgenappsllc@gmail.com>
 - mrahmiao <mrahmiao@gmail.com>
 - spatno <seanpatno@gmail.com>
+- sweepty <adie0423@gmail.com>
 - venj <im.venj@gmail.com>
 
 **Updating this list**

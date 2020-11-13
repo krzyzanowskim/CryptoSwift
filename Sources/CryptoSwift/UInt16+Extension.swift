@@ -15,12 +15,12 @@
 
 /** array of bytes */
 extension UInt16 {
-  @_specialize(exported: true, where T == ArraySlice<UInt8>)
+  @_specialize(where T == ArraySlice<UInt8>)
   init<T: Collection>(bytes: T) where T.Element == UInt8, T.Index == Int {
     self = UInt16(bytes: bytes, fromIndex: bytes.startIndex)
   }
 
-  @_specialize(exported: true, where T == ArraySlice<UInt8>)
+  @_specialize(where T == ArraySlice<UInt8>)
   init<T: Collection>(bytes: T, fromIndex index: T.Index) where T.Element == UInt8, T.Index == Int {
     if bytes.isEmpty {
       self = 0

@@ -1,0 +1,24 @@
+name: macOS
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_11.4.1.app/Contents/Developer
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Swift Package Build
+      run: swift build -v
+
+    - name: Run tests
+      run: swift test -c release -Xswiftc -enable-testing -Xswiftc -DCI -Xswiftc -Xfrontend -Xswiftc -solver-memory-threshold -Xswiftc -Xfrontend -Xswiftc 999999999

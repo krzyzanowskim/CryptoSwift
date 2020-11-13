@@ -8,10 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0AF023D5230F2B0F008E4E68 /* ISO78164Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF023D4230F2B0F008E4E68 /* ISO78164Padding.swift */; };
-		0AF023D6230F2B0F008E4E68 /* ISO78164Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF023D4230F2B0F008E4E68 /* ISO78164Padding.swift */; };
-		0AF023D7230F2B0F008E4E68 /* ISO78164Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF023D4230F2B0F008E4E68 /* ISO78164Padding.swift */; };
-		0AF023D8230F2B0F008E4E68 /* ISO78164Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF023D4230F2B0F008E4E68 /* ISO78164Padding.swift */; };
-		0AF023D9230F2B0F008E4E68 /* ISO78164Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF023D4230F2B0F008E4E68 /* ISO78164Padding.swift */; };
 		0EE73E71204D598100110E11 /* CMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE73E70204D598100110E11 /* CMAC.swift */; };
 		0EE73E74204D59C200110E11 /* CMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE73E72204D599C00110E11 /* CMACTests.swift */; };
 		14156CE52011422400DDCFBC /* ChaCha20Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14156CE42011422400DDCFBC /* ChaCha20Poly1305Tests.swift */; };
@@ -738,7 +734,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "Marcin Krzyzanowski";
 				TargetAttributes = {
 					75211F91207249D8004E41F8 = {
@@ -834,7 +830,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0AF023D6230F2B0F008E4E68 /* ISO78164Padding.swift in Sources */,
 				75211F95207249D8004E41F8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -927,7 +922,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0AF023D7230F2B0F008E4E68 /* ISO78164Padding.swift in Sources */,
 				75C2E76D1D55F097003D2BCA /* Access.swift in Sources */,
 				75482EA41CB310B7001F66A5 /* PBKDF.swift in Sources */,
 				758A94291A65C67400E46135 /* HMACTests.swift in Sources */,
@@ -958,7 +952,6 @@
 				7564F0552072EAEB00CA5A96 /* ExtensionsTestPerf.swift in Sources */,
 				7564F0562072EAEB00CA5A96 /* DigestTestsPerf.swift in Sources */,
 				81F279E22181F5C500449EDA /* ScryptTestsPerf.swift in Sources */,
-				0AF023D9230F2B0F008E4E68 /* ISO78164Padding.swift in Sources */,
 				7564F0572072EAEB00CA5A96 /* TestsPerformance.swift in Sources */,
 				7564F0582072EAEB00CA5A96 /* AESTestsPerf.swift in Sources */,
 			);
@@ -974,7 +967,6 @@
 				7595C15C2072E5B900EA1A5F /* ExtensionsTestPerf.swift in Sources */,
 				7595C1582072E5B900EA1A5F /* DigestTestsPerf.swift in Sources */,
 				81F279E12181F5C500449EDA /* ScryptTestsPerf.swift in Sources */,
-				0AF023D8230F2B0F008E4E68 /* ISO78164Padding.swift in Sources */,
 				7595C14D2072E48C00EA1A5F /* TestsPerformance.swift in Sources */,
 				7595C1592072E5B900EA1A5F /* AESTestsPerf.swift in Sources */,
 			);

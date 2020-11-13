@@ -8,5 +8,5 @@ about: Create a report to help us improve
 
 
 **Reproduce**
-Steps to reproduce the behavior:
+Steps to reproduce:
 1.

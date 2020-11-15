@@ -7,8 +7,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 OUTPUT_DIR=$( mktemp -d )
 COMMON_SETUP="-project ${SCRIPT_DIR}/../CryptoSwift.xcodeproj -scheme CryptoSwift -configuration Release -quiet SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES"
 
-# carthage build --no-skip-current --create-xcframework --configuration "Release" --platform all
-
 # macOS
 DERIVED_DATA_PATH=$( mktemp -d )
 xcrun xcodebuild build \
@@ -110,7 +108,7 @@ xcrun xcodebuild -quiet -create-xcframework \
 	-output ${OUTPUT_DIR}/CryptoSwift.xcframework
 
 # zip CryptoSwift.xcframework.zip ${OUTPUT_DIR}/CryptoSwift.xcframework
-mv ${OUTPUT_DIR}/CryptoSwift.xcframework ${BASE_PWD}
+mv -f ${OUTPUT_DIR}/CryptoSwift.xcframework ${BASE_PWD}
 
 echo "✔️ CryptoSwift.xcframework"
 

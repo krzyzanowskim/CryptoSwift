@@ -314,7 +314,6 @@
 		75EC52781EE8B6CA0048EB3B /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		75EC52791EE8B6CA0048EB3B /* ZeroPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPadding.swift; sourceTree = "<group>"; };
 		75EC527A1EE8B6CA0048EB3B /* CryptoSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CryptoSwift.h; sourceTree = "<group>"; };
-		75EDCB811DAC4CA400D270E0 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinuxMain.swift; path = Tests/CryptoSwiftTests/LinuxMain.swift; sourceTree = SOURCE_ROOT; };
 		75F4E433216C93EF00F09710 /* CCM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCM.swift; sourceTree = "<group>"; };
 		75F4E435216C98DE00F09710 /* CBCMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBCMAC.swift; sourceTree = "<group>"; };
 		75F4E437216C9B5D00F09710 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG; sourceTree = SOURCE_ROOT; };
@@ -453,7 +452,6 @@
 				75482EA31CB310B7001F66A5 /* PBKDF.swift */,
 				7576F6F6207290F8006688F8 /* PBKDFPerf.swift */,
 				75C2E76C1D55F097003D2BCA /* Access.swift */,
-				75EDCB811DAC4CA400D270E0 /* LinuxMain.swift */,
 				756BFDCA1A82B87300B9D9A4 /* Bridging.h */,
 			);
 			name = Tests;

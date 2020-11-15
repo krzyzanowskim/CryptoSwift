@@ -98,7 +98,7 @@ cp -r "${DERIVED_DATA_PATH}/Build/Products/Release-watchsimulator/CryptoSwift.fr
 rm -rf "${DERIVED_DATA_PATH}"
 
 # XCFRAMEWORK
-xcrun xcodebuild -create-xcframework \
+xcrun xcodebuild -quiet -create-xcframework \
 	-framework "${OUTPUT_DIR}/iphoneos/CryptoSwift.framework" \
 	-framework "${OUTPUT_DIR}/iphonesimulator/CryptoSwift.framework" \
 	-framework "${OUTPUT_DIR}/appletvos/CryptoSwift.framework" \

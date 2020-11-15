@@ -1,3 +1,6 @@
+1.3.4
+- Distribute optimized binary (xcframework) via SPM for apple platforms
+
 1.3.3
 - Adds OCB Authenticated-Encryption Algorithm (RFC7253)
 - build-framework.sh output CryptoSwift.xcframework

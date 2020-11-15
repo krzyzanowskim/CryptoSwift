@@ -2,7 +2,7 @@
 
 import PackageDescription
 
-#if os(macOS)
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 let package = Package(
   name: "CryptoSwift",
   platforms: [

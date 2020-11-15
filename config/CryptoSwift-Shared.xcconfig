@@ -99,15 +99,8 @@ INSTALL_PATH = $(LOCAL_LIBRARY_DIR)/Frameworks
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks @loader_path/Frameworks
 
 // Info.plist File
-//
-// The project-relative path to the property list file that contains the `Info.plist`
-// information used by bundles. For details on information property list files, see
-// [Information Property List
-// Files](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPRuntimeConfig/Articles/ConfigFiles.html#//apple_ref/doc/uid/20002091-CJBJIEDH)
-// in [Runtime Configuration
-// Guidelines](https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPRuntimeConfig/000-Introduction/introduction.html).
 
-INFOPLIST_FILE = Sources/CryptoSwift/Info.plist
+INFOPLIST_FILE = Info.plist
 
 // Product Bundle Identifier
 //

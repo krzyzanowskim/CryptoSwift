@@ -7,8 +7,6 @@
 
 HEADER_SEARCH_PATHS = $(inherited) includes/**
 
-INFOPLIST_FILE = Tests/${TARGET_NAME}/Info.plist
-
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks @loader_path/Frameworks @loader_path/../Frameworks @executable_path/../Frameworks
 
 PRODUCT_BUNDLE_IDENTIFIER = com.krzyzanowskim.${PRODUCT_NAME:rfc1034identifier}
@@ -20,3 +18,4 @@ BUILD_LIBRARY_FOR_DISTRIBUTION = NO
 
 MACOSX_DEPLOYMENT_TARGET = 10.15
 
+INFOPLIST_FILE = Info.plist

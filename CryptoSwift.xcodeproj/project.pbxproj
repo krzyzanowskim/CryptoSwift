@@ -31,13 +31,13 @@
 		754BE46819693E190098E6F3 /* DigestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* DigestTests.swift */; };
 		755BA296235387700039CAB5 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7576F64C20725BD5006688F8 /* Default-568h@2x.png */; };
 		755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755FB1D9199E347D00475437 /* ExtensionsTest.swift */; };
-		7564F0522072EAEB00CA5A96 /* PBKDFPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F6207290F8006688F8 /* PBKDFPerf.swift */; };
-		7564F0532072EAEB00CA5A96 /* ChaCha20TestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F020728EAB006688F8 /* ChaCha20TestsPerf.swift */; };
-		7564F0542072EAEB00CA5A96 /* RabbitTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F220728F00006688F8 /* RabbitTestsPerf.swift */; };
-		7564F0552072EAEB00CA5A96 /* ExtensionsTestPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F420729069006688F8 /* ExtensionsTestPerf.swift */; };
-		7564F0562072EAEB00CA5A96 /* DigestTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6EB20726319006688F8 /* DigestTestsPerf.swift */; };
-		7564F0572072EAEB00CA5A96 /* TestsPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7595C14C2072E48C00EA1A5F /* TestsPerformance.swift */; };
-		7564F0582072EAEB00CA5A96 /* AESTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6EE20726422006688F8 /* AESTestsPerf.swift */; };
+		7564F0522072EAEB00CA5A96 /* PBKDFPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F6207290F8006688F8 /* PBKDFPerf.swift */; platformFilter = ios; };
+		7564F0532072EAEB00CA5A96 /* ChaCha20TestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F020728EAB006688F8 /* ChaCha20TestsPerf.swift */; platformFilter = ios; };
+		7564F0542072EAEB00CA5A96 /* RabbitTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F220728F00006688F8 /* RabbitTestsPerf.swift */; platformFilter = ios; };
+		7564F0552072EAEB00CA5A96 /* ExtensionsTestPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F420729069006688F8 /* ExtensionsTestPerf.swift */; platformFilter = ios; };
+		7564F0562072EAEB00CA5A96 /* DigestTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6EB20726319006688F8 /* DigestTestsPerf.swift */; platformFilter = ios; };
+		7564F0572072EAEB00CA5A96 /* TestsPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7595C14C2072E48C00EA1A5F /* TestsPerformance.swift */; platformFilter = ios; };
+		7564F0582072EAEB00CA5A96 /* AESTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6EE20726422006688F8 /* AESTestsPerf.swift */; platformFilter = ios; };
 		7564F05A2072EAEB00CA5A96 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
 		7564F0642072ED7000CA5A96 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; };
 		7564F0652072ED7000CA5A96 /* CryptoSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 754BE45519693E190098E6F3 /* CryptoSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -122,7 +122,7 @@
 		81F279DD2181F58300449EDA /* Scrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F279DC2181F58300449EDA /* Scrypt.swift */; };
 		81F279DF2181F5A000449EDA /* ScryptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F279DE2181F5A000449EDA /* ScryptTests.swift */; };
 		81F279E12181F5C500449EDA /* ScryptTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F279E02181F5C500449EDA /* ScryptTestsPerf.swift */; };
-		81F279E22181F5C500449EDA /* ScryptTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F279E02181F5C500449EDA /* ScryptTestsPerf.swift */; };
+		81F279E22181F5C500449EDA /* ScryptTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F279E02181F5C500449EDA /* ScryptTestsPerf.swift */; platformFilter = ios; };
 		E3FD2D531D6B81CE00A9F35F /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */; };
 		E6200E141FB9A7AE00258382 /* HKDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6200E131FB9A7AE00258382 /* HKDF.swift */; };
 		E6200E171FB9B68C00258382 /* HKDFTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6200E151FB9B67C00258382 /* HKDFTests.swift */; };
@@ -231,9 +231,7 @@
 		75482EA31CB310B7001F66A5 /* PBKDF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBKDF.swift; sourceTree = "<group>"; };
 		754BE45519693E190098E6F3 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		754BE46019693E190098E6F3 /* CryptoSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		754BE46619693E190098E6F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		754BE46719693E190098E6F3 /* DigestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigestTests.swift; sourceTree = "<group>"; };
-		755D27BC1D06DE6400C41692 /* CryptoSwift.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = CryptoSwift.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		755E0303217A756F00065FC6 /* AESCCMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESCCMTests.swift; sourceTree = "<group>"; };
 		755FB1D9199E347D00475437 /* ExtensionsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionsTest.swift; sourceTree = "<group>"; };
 		7564F0602072EAEB00CA5A96 /* TestsPerformance-iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TestsPerformance-iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,7 +251,6 @@
 		758F95AA2072E8E10080D664 /* Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridging.h; sourceTree = "<group>"; };
 		7595C14A2072E48C00EA1A5F /* TestsPerformance-Mac.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TestsPerformance-Mac.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7595C14C2072E48C00EA1A5F /* TestsPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsPerformance.swift; sourceTree = "<group>"; };
-		7595C14E2072E48C00EA1A5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75B3ED76210F9DF7005D4ADA /* BlockDecryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockDecryptor.swift; sourceTree = "<group>"; };
 		75B3ED78210FA016005D4ADA /* BlockEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockEncryptor.swift; sourceTree = "<group>"; };
 		75C2E76C1D55F097003D2BCA /* Access.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Access.swift; sourceTree = "<group>"; };
@@ -317,7 +314,7 @@
 		75EC52781EE8B6CA0048EB3B /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		75EC52791EE8B6CA0048EB3B /* ZeroPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPadding.swift; sourceTree = "<group>"; };
 		75EC527A1EE8B6CA0048EB3B /* CryptoSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CryptoSwift.h; sourceTree = "<group>"; };
-		75EDCB811DAC4CA400D270E0 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinuxMain.swift; path = Tests/LinuxMain.swift; sourceTree = SOURCE_ROOT; };
+		75EDCB811DAC4CA400D270E0 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinuxMain.swift; path = Tests/CryptoSwiftTests/LinuxMain.swift; sourceTree = SOURCE_ROOT; };
 		75F4E433216C93EF00F09710 /* CCM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCM.swift; sourceTree = "<group>"; };
 		75F4E435216C98DE00F09710 /* CBCMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBCMAC.swift; sourceTree = "<group>"; };
 		75F4E437216C9B5D00F09710 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG; sourceTree = SOURCE_ROOT; };
@@ -384,6 +381,7 @@
 		75211F93207249D8004E41F8 /* CryptoSwift-TestHostApp */ = {
 			isa = PBXGroup;
 			children = (
+				7576F64C20725BD5006688F8 /* Default-568h@2x.png */,
 				75211F94207249D8004E41F8 /* AppDelegate.swift */,
 				75211FA0207249D8004E41F8 /* Info.plist */,
 			);
@@ -403,11 +401,11 @@
 			isa = PBXGroup;
 			children = (
 				75843E9A2072457A0050583A /* config */,
-				755D27BC1D06DE6400C41692 /* CryptoSwift.playground */,
 				75EC52361EE8B6CA0048EB3B /* Sources */,
 				754BE46419693E190098E6F3 /* Tests */,
 				7595C14B2072E48C00EA1A5F /* TestsPerformance */,
 				75211F93207249D8004E41F8 /* CryptoSwift-TestHostApp */,
+				754BE46519693E190098E6F3 /* Supporting Files */,
 				754BE45619693E190098E6F3 /* Products */,
 				24B0BBA29D734E62809E53BC /* Frameworks */,
 			);
@@ -455,8 +453,8 @@
 				75482EA31CB310B7001F66A5 /* PBKDF.swift */,
 				7576F6F6207290F8006688F8 /* PBKDFPerf.swift */,
 				75C2E76C1D55F097003D2BCA /* Access.swift */,
+				75EDCB811DAC4CA400D270E0 /* LinuxMain.swift */,
 				756BFDCA1A82B87300B9D9A4 /* Bridging.h */,
-				754BE46519693E190098E6F3 /* Supporting Files */,
 			);
 			name = Tests;
 			path = Tests/CryptoSwiftTests;
@@ -467,11 +465,9 @@
 			children = (
 				75F4E438216C9B6900F09710 /* README.md */,
 				75F4E437216C9B5D00F09710 /* CHANGELOG */,
-				75EDCB811DAC4CA400D270E0 /* LinuxMain.swift */,
-				7576F64C20725BD5006688F8 /* Default-568h@2x.png */,
-				754BE46619693E190098E6F3 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			path = CryptoSwiftTests;
 			sourceTree = "<group>";
 		};
 		75843E9A2072457A0050583A /* config */ = {
@@ -497,7 +493,6 @@
 			children = (
 				758F95AA2072E8E10080D664 /* Bridging.h */,
 				7595C14C2072E48C00EA1A5F /* TestsPerformance.swift */,
-				7595C14E2072E48C00EA1A5F /* Info.plist */,
 			);
 			name = TestsPerformance;
 			path = Tests/TestsPerformance;
@@ -1072,7 +1067,6 @@
 		7564F05D2072EAEB00CA5A96 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1080,7 +1074,6 @@
 		7564F05E2072EAEB00CA5A96 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -1089,7 +1082,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FB120724A10004E41F8 /* Tests-Test.xcconfig */;
 			buildSettings = {
-				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
 				SDKROOT = iphoneos;
 			};
 			name = Test;
@@ -1118,14 +1110,12 @@
 		7595C14F2072E48C00EA1A5F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
 			};
 			name = Debug;
 		};
 		7595C1502072E48C00EA1A5F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
 			};
 			name = Release;
 		};
@@ -1133,7 +1123,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75211FB120724A10004E41F8 /* Tests-Test.xcconfig */;
 			buildSettings = {
-				INFOPLIST_FILE = Tests/TestsPerformance/Info.plist;
 			};
 			name = Test;
 		};

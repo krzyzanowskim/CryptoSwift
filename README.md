@@ -175,7 +175,8 @@ In the project, you'll find [single scheme](https://mxcl.dev/PromiseKit/news/201
 - Swift 4.0, branch [swift4](https://github.com/krzyzanowskim/CryptoSwift/tree/swift4) version <= 0.12.0
 - Swift 4.2, branch [swift42](https://github.com/krzyzanowskim/CryptoSwift/tree/swift42) version <= 0.15.0
 - Swift 5.0, branch [swift5](https://github.com/krzyzanowskim/CryptoSwift/tree/swift5) version <= 1.2.0
-- Swift 5.1 and newer, branch [master](https://github.com/krzyzanowskim/CryptoSwift/tree/master)
+- Swift 5.1, branch [swift5](https://github.com/krzyzanowskim/CryptoSwift/tree/swift51) version <= 1.3.3
+- Swift 5.3 and newer, branch [master](https://github.com/krzyzanowskim/CryptoSwift/tree/master)
 
 ## How-to
 

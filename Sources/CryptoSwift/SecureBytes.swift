@@ -14,9 +14,11 @@
 //
 
 #if canImport(Darwin)
-  import Darwin
-#else
-  import Glibc
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(WinSDK)
+import WinSDK
 #endif
 
 typealias Key = SecureBytes
@@ -31,13 +33,21 @@ final class SecureBytes {
     self.bytes = bytes
     self.count = bytes.count
     self.bytes.withUnsafeBufferPointer { (pointer) -> Void in
-      mlock(pointer.baseAddress, pointer.count)
+      #if os(Windows)
+        VirtualLock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
+      #else
+        mlock(pointer.baseAddress, pointer.count)
+      #endif
     }
   }
 
   deinit {
     self.bytes.withUnsafeBufferPointer { (pointer) -> Void in
-      munlock(pointer.baseAddress, pointer.count)
+      #if os(Windows)
+        VirtualUnlock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
+      #else
+        munlock(pointer.baseAddress, pointer.count)
+      #endif
     }
   }
 }

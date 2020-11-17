@@ -14,9 +14,11 @@
 //
 
 #if canImport(Darwin)
-  import Darwin
-#else
-  import Glibc
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(ucrt)
+import ucrt
 #endif
 
 protocol _UInt32Type {}

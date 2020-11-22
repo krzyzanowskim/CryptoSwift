@@ -102,6 +102,12 @@ Check out [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to help
 
 ## Installation
 
+# Hardened Runtime (macOS)
+
+To overcome performance limitations of debug builds, on Apple platforms CryptoSwift is distributed as a binary `CryptoSwift.xcframework` to use with Xcode. This surface has some code signing troubles that you have to workaround now. Binary is signed, and this should work for most of the cases, except when Hardened Runtime is involved. In this case you have to add `com.apple.security.cs.disable-library-validation` aka `Disable Library Validation` option. 
+
+#### Xcode Project
+
 To install CryptoSwift, add it as a submodule to your project (on the top level project directory):
 
     git submodule add https://github.com/krzyzanowskim/CryptoSwift.git

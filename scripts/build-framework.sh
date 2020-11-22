@@ -15,7 +15,7 @@ xcrun xcodebuild build \
 	-destination 'generic/platform=macOS'
 
 mkdir -p "${OUTPUT_DIR}/macos"
-cp -r "${DERIVED_DATA_PATH}/Build/Products/Release/CryptoSwift.framework" "${OUTPUT_DIR}/macos"
+ditto "${DERIVED_DATA_PATH}/Build/Products/Release/CryptoSwift.framework" "${OUTPUT_DIR}/macos/CryptoSwift.framework"
 rm -rf "${DERIVED_DATA_PATH}"
 
 # macOS Catalyst
@@ -26,7 +26,7 @@ xcrun xcodebuild build \
 	-destination 'generic/platform=macOS,variant=Mac Catalyst'
 
 mkdir -p "${OUTPUT_DIR}/maccatalyst"
-cp -r "${DERIVED_DATA_PATH}/Build/Products/Release-maccatalyst/CryptoSwift.framework" "${OUTPUT_DIR}/maccatalyst"
+ditto "${DERIVED_DATA_PATH}/Build/Products/Release-maccatalyst/CryptoSwift.framework" "${OUTPUT_DIR}/maccatalyst/CryptoSwift.framework"
 rm -rf "${DERIVED_DATA_PATH}"
 
 # iOS
@@ -37,7 +37,7 @@ xcrun xcodebuild build \
 	-destination 'generic/platform=iOS'
 
 mkdir -p "${OUTPUT_DIR}/iphoneos"
-cp -r "${DERIVED_DATA_PATH}/Build/Products/Release-iphoneos/CryptoSwift.framework" "${OUTPUT_DIR}/iphoneos"
+ditto "${DERIVED_DATA_PATH}/Build/Products/Release-iphoneos/CryptoSwift.framework" "${OUTPUT_DIR}/iphoneos/CryptoSwift.framework"
 rm -rf "${DERIVED_DATA_PATH}"
 
 # iOS Simulator
@@ -48,7 +48,7 @@ xcrun xcodebuild build \
 	-destination 'generic/platform=iOS Simulator'
 
 mkdir -p "${OUTPUT_DIR}/iphonesimulator"
-cp -r "${DERIVED_DATA_PATH}/Build/Products/Release-iphonesimulator/CryptoSwift.framework" "${OUTPUT_DIR}/iphonesimulator"
+ditto "${DERIVED_DATA_PATH}/Build/Products/Release-iphonesimulator/CryptoSwift.framework" "${OUTPUT_DIR}/iphonesimulator/CryptoSwift.framework"
 rm -rf "${DERIVED_DATA_PATH}"
 
 # tvOS
@@ -59,7 +59,7 @@ xcrun xcodebuild build \
 	-destination 'generic/platform=tvOS'
 
 mkdir -p "${OUTPUT_DIR}/appletvos"
-cp -r "${DERIVED_DATA_PATH}/Build/Products/Release-appletvos/CryptoSwift.framework" "${OUTPUT_DIR}/appletvos"
+ditto "${DERIVED_DATA_PATH}/Build/Products/Release-appletvos/CryptoSwift.framework" "${OUTPUT_DIR}/appletvos/CryptoSwift.framework"
 rm -rf "${DERIVED_DATA_PATH}"
 
 # tvOS Simulator
@@ -70,7 +70,7 @@ xcrun xcodebuild build \
 	-destination 'generic/platform=tvOS Simulator'
 
 mkdir -p "${OUTPUT_DIR}/appletvsimulator"
-cp -r "${DERIVED_DATA_PATH}/Build/Products/Release-appletvsimulator/CryptoSwift.framework" "${OUTPUT_DIR}/appletvsimulator"
+ditto "${DERIVED_DATA_PATH}/Build/Products/Release-appletvsimulator/CryptoSwift.framework" "${OUTPUT_DIR}/appletvsimulator/CryptoSwift.framework"
 rm -rf "${DERIVED_DATA_PATH}"
 
 # watchOS
@@ -81,7 +81,7 @@ xcrun xcodebuild build \
 	-destination 'generic/platform=watchOS'
 
 mkdir -p "${OUTPUT_DIR}/watchos"
-cp -r "${DERIVED_DATA_PATH}/Build/Products/Release-watchos/CryptoSwift.framework" "${OUTPUT_DIR}/watchos"
+ditto "${DERIVED_DATA_PATH}/Build/Products/Release-watchos/CryptoSwift.framework" "${OUTPUT_DIR}/watchos/CryptoSwift.framework"
 rm -rf "${DERIVED_DATA_PATH}"
 
 # watchOS Simulator
@@ -92,7 +92,7 @@ xcrun xcodebuild build \
 	-destination 'generic/platform=watchOS Simulator'
 
 mkdir -p "${OUTPUT_DIR}/watchsimulator"
-cp -r "${DERIVED_DATA_PATH}/Build/Products/Release-watchsimulator/CryptoSwift.framework" "${OUTPUT_DIR}/watchsimulator"
+ditto "${DERIVED_DATA_PATH}/Build/Products/Release-watchsimulator/CryptoSwift.framework" "${OUTPUT_DIR}/watchsimulator/CryptoSwift.framework"
 rm -rf "${DERIVED_DATA_PATH}"
 
 # XCFRAMEWORK
@@ -107,7 +107,9 @@ xcrun xcodebuild -quiet -create-xcframework \
 	-framework "${OUTPUT_DIR}/maccatalyst/CryptoSwift.framework" \
 	-output ${OUTPUT_DIR}/CryptoSwift.xcframework
 
-xcrun zip --symlinks -r ${BASE_PWD}/CryptoSwift.xcframework.zip ${OUTPUT_DIR}/CryptoSwift.xcframework
+pushd ${OUTPUT_DIR}/CryptoSwift.xcframework
+xcrun zip --symlinks -r -o ${BASE_PWD}/CryptoSwift.xcframework.zip .
+popd
 
 echo "✔️ CryptoSwift.xcframework"
 

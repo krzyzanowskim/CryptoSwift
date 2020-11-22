@@ -107,11 +107,9 @@ xcrun xcodebuild -quiet -create-xcframework \
 	-framework "${OUTPUT_DIR}/maccatalyst/CryptoSwift.framework" \
 	-output ${OUTPUT_DIR}/CryptoSwift.xcframework
 
-# zip CryptoSwift.xcframework.zip ${OUTPUT_DIR}/CryptoSwift.xcframework
-mv -f ${OUTPUT_DIR}/CryptoSwift.xcframework ${BASE_PWD}
+xcrun zip --symlinks -r ${BASE_PWD}/CryptoSwift.xcframework.zip ${OUTPUT_DIR}/CryptoSwift.xcframework
 
 echo "✔️ CryptoSwift.xcframework"
 
 rm -rf ${OUTPUT_DIR}
-
 cd ${BASE_PWD}

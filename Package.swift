@@ -17,8 +17,8 @@ let package = Package(
   targets: [
     .binaryTarget(
         name: "CryptoSwift",
-        url: "https://github.com/krzyzanowskim/CryptoSwift/releases/download/1.3.5/CryptoSwift.xcframework.zip",
-        checksum: "6368602213b62cc8d5ec2f12ee0b593fdb963cb1b0c30ea98af4a14689fd601a"
+        url: "https://github.com/krzyzanowskim/CryptoSwift/releases/download/1.3.6/CryptoSwift.xcframework.zip",
+        checksum: "555f8e141dacb9f5a1635d7a5afa6cbee62709f3dba13f799c84e62339c2a2a8"
     ),
     .testTarget(name: "TestsPerformance", dependencies: ["CryptoSwift"])
   ]

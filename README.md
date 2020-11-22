@@ -102,9 +102,11 @@ Check out [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to help
 
 ## Installation
 
-### Hardened Runtime (macOS)
+### Hardened Runtime (macOS) and Xcode
 
-To overcome performance limitations of debug builds, on Apple platforms CryptoSwift is distributed as a binary `CryptoSwift.xcframework` to use with Xcode. This surface has some code signing troubles that you have to workaround now. Binary is signed, and this should work for most of the cases, except when Hardened Runtime is involved. In this case you have to add `com.apple.security.cs.disable-library-validation` aka `Disable Library Validation` option. 
+Binary CryptoSwift.xcframework (Used by Swift Package Manager package integration) won't load properly in your app if the app uses **Sign to Run Locally**  Signing Certificate with Hardened Runtime enabled. It is possible to setup Xcode like this. To solve the problem you have two options:
+- Use proper Signing Certificate, eg. *Development* <- this is the proper action
+- Use `Disable Library Validation` aka `com.apple.security.cs.disable-library-validation` entitlement
 
 #### Xcode Project
 

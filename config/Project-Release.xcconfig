@@ -1,6 +1,6 @@
 #include "Project-Shared.xcconfig"
 
-CODE_SIGN_IDENTITY[sdk=macosx*] = -
+CODE_SIGN_IDENTITY[sdk=macosx*] = Developer ID Application
 
 CLANG_USE_OPTIMIZATION_PROFILE = YES
 COPY_PHASE_STRIP = YES

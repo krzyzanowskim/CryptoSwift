@@ -96,6 +96,7 @@ ditto "${DERIVED_DATA_PATH}/Build/Products/Release-watchsimulator/CryptoSwift.fr
 rm -rf "${DERIVED_DATA_PATH}"
 
 # XCFRAMEWORK
+rm -rf ${SCRIPT_DIR}/../CryptoSwift.xcframework
 xcrun xcodebuild -quiet -create-xcframework \
 	-framework "${OUTPUT_DIR}/iphoneos/CryptoSwift.framework" \
 	-framework "${OUTPUT_DIR}/iphonesimulator/CryptoSwift.framework" \
@@ -105,13 +106,14 @@ xcrun xcodebuild -quiet -create-xcframework \
 	-framework "${OUTPUT_DIR}/watchsimulator/CryptoSwift.framework" \
 	-framework "${OUTPUT_DIR}/macos/CryptoSwift.framework" \
 	-framework "${OUTPUT_DIR}/maccatalyst/CryptoSwift.framework" \
-	-output ${OUTPUT_DIR}/CryptoSwift.xcframework
+	-output ${SCRIPT_DIR}/../CryptoSwift.xcframework
 
-pushd ${OUTPUT_DIR}/CryptoSwift.xcframework
-xcrun zip --symlinks -r -o ${BASE_PWD}/CryptoSwift.xcframework.zip .
-popd
+# pushd ${OUTPUT_DIR}
+# xcrun zip --symlinks -r -o ${BASE_PWD}/CryptoSwift.xcframework.zip CryptoSwift.xcframework
+# popd
 
 echo "✔️ CryptoSwift.xcframework"
+echo ${OUTPUT_DIR}
 
 rm -rf ${OUTPUT_DIR}
 cd ${BASE_PWD}

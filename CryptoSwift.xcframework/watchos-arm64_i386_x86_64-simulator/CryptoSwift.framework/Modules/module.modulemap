@@ -1,0 +1,11 @@
+framework module CryptoSwift {
+  umbrella header "CryptoSwift.h"
+
+  export *
+  module * { export * }
+}
+
+module CryptoSwift.Swift {
+    header "CryptoSwift-Swift.h"
+    requires objc
+}

@@ -2,27 +2,6 @@
 
 import PackageDescription
 
-#if os(macOS)
-let package = Package(
-  name: "CryptoSwift",
-  platforms: [
-    .macOS(.v10_12), .iOS(.v9), .tvOS(.v9)
-  ],
-  products: [
-    .library(
-      name: "CryptoSwift",
-      targets: ["CryptoSwift"]
-    )
-  ],
-  targets: [
-    .binaryTarget(
-        name: "CryptoSwift",
-        path: "CryptoSwift.xcframework"
-    ),
-    .testTarget(name: "TestsPerformance", dependencies: ["CryptoSwift"])
-  ]
-)
-#else
 let package = Package(
   name: "CryptoSwift",
   platforms: [
@@ -41,4 +20,3 @@ let package = Package(
   ],
   swiftLanguageVersions: [.v5]
 )
-#endif

@@ -249,13 +249,13 @@ bytes.toBase64()
 Hashing a data or array of bytes (aka `Array<UInt8>`)
 ```swift
 /* Hash struct usage */
-let bytes:Array<UInt8> = [0x01, 0x02, 0x03]
+let bytes: Array<UInt8> = [0x01, 0x02, 0x03]
 let digest = input.md5()
 let digest = Digest.md5(bytes)
 ```
 
 ```swift
-let data = Data( [0x01, 0x02, 0x03])
+let data = Data([0x01, 0x02, 0x03])
 
 let hash = data.md5()
 let hash = data.sha1()
@@ -293,7 +293,7 @@ data.crc32()
 
 ```swift
 // Calculate Message Authentication Code (MAC) for message
-let key:Array<UInt8> = [1,2,3,4,5,6,7,8,9,10,...]
+let key: Array<UInt8> = [1,2,3,4,5,6,7,8,9,10,...]
 
 try Poly1305(key: key).authenticate(bytes)
 try HMAC(key: key, variant: .sha256).authenticate(bytes)
@@ -458,7 +458,7 @@ let encrypted: Array<UInt8> = try! AES(key: Array("secret0key000000".utf8), bloc
 Using convenience extensions
 
 ```swift
-let plain = Data( [0x01, 0x02, 0x03])
+let plain = Data([0x01, 0x02, 0x03])
 let encrypted = try! plain.encrypt(ChaCha20(key: key, iv: iv))
 let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
 ```

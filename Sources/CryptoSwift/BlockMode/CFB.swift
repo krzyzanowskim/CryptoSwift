@@ -76,7 +76,7 @@ struct CFBModeWorker: BlockModeWorker {
       guard let ciphertext = cipherOperation(prev ?? iv) else {
         return Array(plaintext)
       }
-      let result = [plaintext[0] ^ ciphertext[0]]
+      let result = [Array(plaintext)[0] ^ Array(ciphertext)[0]]
       self.prev = Array((prev ?? iv).dropFirst()) + [result[0]]
       return result
     }
@@ -98,8 +98,8 @@ struct CFBModeWorker: BlockModeWorker {
       guard let plaintext = cipherOperation(prev ?? iv) else {
         return Array(ciphertext)
       }
-      self.prev = Array((prev ?? iv).dropFirst()) + [ciphertext[0]]
-      return [ciphertext[0] ^ plaintext[0]]
+      self.prev = Array((prev ?? iv).dropFirst()) + [Array(ciphertext)[0]]
+      return [Array(ciphertext)[0] ^ Array(plaintext)[0]]
     }
     return Array(ciphertext) // Unsupported segment size
   }

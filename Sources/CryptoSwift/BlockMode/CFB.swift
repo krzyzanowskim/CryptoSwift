@@ -21,12 +21,19 @@ public struct CFB: BlockMode {
     /// Invalid IV
     case invalidInitializationVector
   }
+    
+  public enum SegmentSize: Int {
+    case cfb8 = 8 // Encrypt byte per byte
+    case cfb128 = 128 // Encrypt 16 bytes per 16 bytes (default)
+  }
 
   public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
   private let iv: Array<UInt8>
+  private let segmentSize: SegmentSize
 
-  public init(iv: Array<UInt8>) {
+  public init(iv: Array<UInt8>, segmentSize: SegmentSize = .cfb128) {
     self.iv = iv
+    self.segmentSize = segmentSize
   }
 
   public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock, encryptionOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
@@ -34,7 +41,7 @@ public struct CFB: BlockMode {
       throw Error.invalidInitializationVector
     }
 
-    return CFBModeWorker(blockSize: blockSize, iv: self.iv.slice, cipherOperation: cipherOperation)
+    return CFBModeWorker(blockSize: blockSize, iv: self.iv.slice, segmentSize: segmentSize, cipherOperation: cipherOperation)
   }
 }
 
@@ -43,28 +50,58 @@ struct CFBModeWorker: BlockModeWorker {
   let blockSize: Int
   let additionalBufferSize: Int = 0
   private let iv: ArraySlice<UInt8>
+  private let segmentSize: CFB.SegmentSize
   private var prev: ArraySlice<UInt8>?
 
-  init(blockSize: Int, iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+  init(blockSize: Int, iv: ArraySlice<UInt8>, segmentSize: CFB.SegmentSize, cipherOperation: @escaping CipherOperationOnBlock) {
     self.blockSize = blockSize
     self.iv = iv
+    self.segmentSize = segmentSize
     self.cipherOperation = cipherOperation
   }
 
   mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
-    guard let ciphertext = cipherOperation(prev ?? iv) else {
-      return Array(plaintext)
+    // CFB128
+    if segmentSize == .cfb128 {
+      guard let ciphertext = cipherOperation(prev ?? iv) else {
+        return Array(plaintext)
+      }
+      self.prev = xor(plaintext, ciphertext.slice)
+      return Array(self.prev ?? [])
     }
-    self.prev = xor(plaintext, ciphertext.slice)
-    return Array(self.prev ?? [])
+    // CFB8
+    else if segmentSize == .cfb8 {
+      for i in 0 ..< plaintext.count {
+        guard let ciphertext = cipherOperation(prev ?? iv) else {
+          return Array(plaintext)
+        }
+        self.prev = (prev ?? iv)[1...] + [plaintext[i] ^ ciphertext[0]]
+      }
+      return Array(self.prev ?? [])
+    }
   }
 
   mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
-    guard let plaintext = cipherOperation(prev ?? iv) else {
-      return Array(ciphertext)
+    // CFB128
+    if segmentSize == .cfb128 {
+      guard let plaintext = cipherOperation(prev ?? iv) else {
+        return Array(ciphertext)
+      }
+      let result: Array<UInt8> = xor(plaintext, ciphertext)
+      prev = ciphertext
+      return result
     }
-    let result: Array<UInt8> = xor(plaintext, ciphertext)
-    prev = ciphertext
-    return result
+    // CFB8
+    else if segmentSize == .cfb8 {
+      let result: Array<UInt8> = []
+      for i in 0 ..< ciphertext.count {
+        guard let plaintext = cipherOperation(prev ?? iv) else {
+          return Array(ciphertext)
+        }
+        self.prev = (prev ?? iv)[1...] + [ciphertext[i]]
+        result.append(ciphertext[i] ^ plaintext[0])
+      }
+      return result
+    }
   }
 }

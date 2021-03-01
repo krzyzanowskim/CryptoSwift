@@ -17,19 +17,21 @@
 
 extension AES: Cryptors {
   public func makeEncryptor() throws -> Cryptor & Updatable {
-    let worker = try blockMode.worker(blockSize: AES.blockSize, cipherOperation: encrypt, encryptionOperation: encrypt)
+    let blockSize = blockMode.customBlockSize ?? AES.blockSize
+    let worker = try blockMode.worker(blockSize: blockSize, cipherOperation: encrypt, encryptionOperation: encrypt)
     if worker is StreamModeWorker {
-      return try StreamEncryptor(blockSize: AES.blockSize, padding: padding, worker)
+      return try StreamEncryptor(blockSize: blockSize, padding: padding, worker)
     }
-    return try BlockEncryptor(blockSize: AES.blockSize, padding: padding, worker)
+    return try BlockEncryptor(blockSize: blockSize, padding: padding, worker)
   }
 
   public func makeDecryptor() throws -> Cryptor & Updatable {
+    let blockSize = blockMode.customBlockSize ?? AES.blockSize
     let cipherOperation: CipherOperationOnBlock = blockMode.options.contains(.useEncryptToDecrypt) == true ? encrypt : decrypt
-    let worker = try blockMode.worker(blockSize: AES.blockSize, cipherOperation: cipherOperation, encryptionOperation: encrypt)
+    let worker = try blockMode.worker(blockSize: blockSize, cipherOperation: cipherOperation, encryptionOperation: encrypt)
     if worker is StreamModeWorker {
-      return try StreamDecryptor(blockSize: AES.blockSize, padding: padding, worker)
+      return try StreamDecryptor(blockSize: blockSize, padding: padding, worker)
     }
-    return try BlockDecryptor(blockSize: AES.blockSize, padding: padding, worker)
+    return try BlockDecryptor(blockSize: blockSize, padding: padding, worker)
   }
 }

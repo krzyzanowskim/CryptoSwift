@@ -24,6 +24,7 @@ public struct OFB: BlockMode {
 
   public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
   private let iv: Array<UInt8>
+  public let customBlockSize: Int? = nil
 
   public init(iv: Array<UInt8>) {
     self.iv = iv

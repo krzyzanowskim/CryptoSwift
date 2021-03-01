@@ -23,21 +23,23 @@ public struct CFB: BlockMode {
   }
     
   public enum SegmentSize: Int {
-    case cfb8 = 8 // Encrypt byte per byte
-    case cfb128 = 128 // Encrypt 16 bytes per 16 bytes (default)
+    case cfb8 = 1 // Encrypt byte per byte
+    case cfb128 = 16 // Encrypt 16 bytes per 16 bytes (default)
   }
 
   public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
   private let iv: Array<UInt8>
   private let segmentSize: SegmentSize
+  public let customBlockSize: Int?
 
   public init(iv: Array<UInt8>, segmentSize: SegmentSize = .cfb128) {
     self.iv = iv
     self.segmentSize = segmentSize
+    self.customBlockSize = segmentSize.rawValue
   }
 
   public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock, encryptionOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
-    if self.iv.count != blockSize {
+    if self.iv.count != AES.blockSize {
       throw Error.invalidInitializationVector
     }
 
@@ -71,13 +73,12 @@ struct CFBModeWorker: BlockModeWorker {
     }
     // CFB8
     else if segmentSize == .cfb8 {
-      for i in 0 ..< plaintext.count {
-        guard let ciphertext = cipherOperation(prev ?? iv) else {
-          return Array(plaintext)
-        }
-        self.prev = Array((prev ?? iv).dropFirst()) + [plaintext[i] ^ ciphertext[0]]
+      guard let ciphertext = cipherOperation(prev ?? iv) else {
+        return Array(plaintext)
       }
-      return Array(self.prev ?? [])
+      let result = [plaintext[0] ^ ciphertext[0]]
+      self.prev = (prev ?? iv).dropFirst() + result
+      return result
     }
     return Array(plaintext) // Unsupported segment size
   }
@@ -94,15 +95,11 @@ struct CFBModeWorker: BlockModeWorker {
     }
     // CFB8
     else if segmentSize == .cfb8 {
-      var result: Array<UInt8> = []
-      for i in 0 ..< ciphertext.count {
-        guard let plaintext = cipherOperation(prev ?? iv) else {
-          return Array(ciphertext)
-        }
-        self.prev = Array((prev ?? iv).dropFirst()) + [ciphertext[i]]
-        result.append(ciphertext[i] ^ plaintext[0])
+      guard let plaintext = cipherOperation(prev ?? iv) else {
+        return Array(ciphertext)
       }
-      return result
+      self.prev = (prev ?? iv).dropFirst() + [ciphertext[0]]
+      return [ciphertext[0] ^ plaintext[0]]
     }
     return Array(ciphertext) // Unsupported segment size
   }

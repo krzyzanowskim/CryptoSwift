@@ -18,6 +18,7 @@
 
 public struct ECB: BlockMode {
   public let options: BlockModeOption = .paddingRequired
+  public let customBlockSize: Int? = nil
 
   public init() {
   }

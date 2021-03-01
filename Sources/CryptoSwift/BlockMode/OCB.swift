@@ -36,6 +36,7 @@ public final class OCB: BlockMode {
   private let N: Array<UInt8>
   private let additionalAuthenticatedData: Array<UInt8>?
   private let mode: Mode
+  public let customBlockSize: Int? = nil
 
   /// Length of authentication tag, in bytes.
   /// For encryption, the value is given as init parameter.

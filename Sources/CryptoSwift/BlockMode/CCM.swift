@@ -38,6 +38,7 @@ public struct CCM: StreamMode {
   private let additionalAuthenticatedData: Array<UInt8>?
   private let tagLength: Int
   private let messageLength: Int // total message length. need to know in advance
+  public let customBlockSize: Int? = nil
 
   // `authenticationTag` nil for encryption, known tag for decryption
   /// For encryption, the value is set at the end of the encryption.

@@ -79,6 +79,7 @@ struct CFBModeWorker: BlockModeWorker {
       }
       return Array(self.prev ?? [])
     }
+    return Array(plaintext) // Unsupported segment size
   }
 
   mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
@@ -93,7 +94,7 @@ struct CFBModeWorker: BlockModeWorker {
     }
     // CFB8
     else if segmentSize == .cfb8 {
-      let result: Array<UInt8> = []
+      var result: Array<UInt8> = []
       for i in 0 ..< ciphertext.count {
         guard let plaintext = cipherOperation(prev ?? iv) else {
           return Array(ciphertext)
@@ -103,5 +104,6 @@ struct CFBModeWorker: BlockModeWorker {
       }
       return result
     }
+    return Array(ciphertext) // Unsupported segment size
   }
 }

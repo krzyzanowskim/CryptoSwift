@@ -75,7 +75,7 @@ struct CFBModeWorker: BlockModeWorker {
         guard let ciphertext = cipherOperation(prev ?? iv) else {
           return Array(plaintext)
         }
-        self.prev = (prev ?? iv)[1...] + [plaintext[i] ^ ciphertext[0]]
+        self.prev = Array((prev ?? iv).dropFirst()) + [plaintext[i] ^ ciphertext[0]]
       }
       return Array(self.prev ?? [])
     }
@@ -99,7 +99,7 @@ struct CFBModeWorker: BlockModeWorker {
         guard let plaintext = cipherOperation(prev ?? iv) else {
           return Array(ciphertext)
         }
-        self.prev = (prev ?? iv)[1...] + [ciphertext[i]]
+        self.prev = Array((prev ?? iv).dropFirst()) + [ciphertext[i]]
         result.append(ciphertext[i] ^ plaintext[0])
       }
       return result

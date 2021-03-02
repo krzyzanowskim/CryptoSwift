@@ -39,7 +39,7 @@ public struct CFB: BlockMode {
   }
 
   public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock, encryptionOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker {
-    if self.iv.count != AES.blockSize {
+    if !(self.iv.count == blockSize || (segmentSize == .cfb8 && self.iv.count == AES.blockSize)) {
       throw Error.invalidInitializationVector
     }
 

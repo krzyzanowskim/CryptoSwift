@@ -68,6 +68,7 @@ organizations who have contributed source code to CryptoSwift.
 - Michael Redig <mredig@gmail.com>
 - Mo Ramezanpoor <me@mohsenr.com>
 - Nate West <nwest@detroitlabs.com>
+- Nathan Fallet <contact@nathanfallet.me>
 - Nicholas Maccharoli <nicko@screaming-cactus.com>
 - Nobutaka Yuasa <nobutaka.yuasa@gmail.com>
 - Oscar De Moya <oscar.demoya@koombea.com>

@@ -63,16 +63,14 @@ struct CFBModeWorker: BlockModeWorker {
   }
 
   mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
-    // CFB128
-    if segmentSize == .cfb128 {
+    switch segmentSize {
+    case .cfb128:
       guard let ciphertext = cipherOperation(prev ?? iv) else {
         return Array(plaintext)
       }
       self.prev = xor(plaintext, ciphertext.slice)
       return Array(self.prev ?? [])
-    }
-    // CFB8
-    else if segmentSize == .cfb8 {
+    case .cfb8:
       guard let ciphertext = cipherOperation(prev ?? iv) else {
         return Array(plaintext)
       }
@@ -80,27 +78,23 @@ struct CFBModeWorker: BlockModeWorker {
       self.prev = Array((prev ?? iv).dropFirst()) + [result[0]]
       return result
     }
-    return Array(plaintext) // Unsupported segment size
   }
 
   mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
-    // CFB128
-    if segmentSize == .cfb128 {
+    switch segmentSize {
+    case .cfb128:
       guard let plaintext = cipherOperation(prev ?? iv) else {
         return Array(ciphertext)
       }
       let result: Array<UInt8> = xor(plaintext, ciphertext)
       prev = ciphertext
       return result
-    }
-    // CFB8
-    else if segmentSize == .cfb8 {
+    case .cfb8:
       guard let plaintext = cipherOperation(prev ?? iv) else {
         return Array(ciphertext)
       }
       self.prev = Array((prev ?? iv).dropFirst()) + [Array(ciphertext)[0]]
       return [Array(ciphertext)[0] ^ Array(plaintext)[0]]
     }
-    return Array(ciphertext) // Unsupported segment size
   }
 }

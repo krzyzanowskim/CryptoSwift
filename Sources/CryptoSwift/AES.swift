@@ -496,7 +496,8 @@ private extension AES {
 
 extension AES: Cipher {
   public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
-    let chunks = bytes.batched(by: AES.blockSize)
+    let blockSize = self.blockMode.customBlockSize ?? AES.blockSize
+    let chunks = bytes.batched(by: blockSize)
 
     var oneTimeCryptor = try makeEncryptor()
     var out = Array<UInt8>(reserveCapacity: bytes.count)

@@ -24,6 +24,7 @@ public struct CTR: StreamMode {
   public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
   private let iv: Array<UInt8>
   private let counter: Int
+  public let customBlockSize: Int? = nil
 
   public init(iv: Array<UInt8>, counter: Int = 0) {
     self.iv = iv

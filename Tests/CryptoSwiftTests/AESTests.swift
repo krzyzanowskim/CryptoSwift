@@ -161,6 +161,20 @@ final class AESTests: XCTestCase {
     let decrypted: Array<UInt8> = try! AES(key: key, blockMode: CFB(iv: iv)).decrypt(encrypted)
     XCTAssert(decrypted == plaintext, "decryption failed")
   }
+    
+  // https://github.com/krzyzanowskim/CryptoSwift/issues/500
+  func testAESEncryptCFB8() {
+    let key: Array<UInt8> = [0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c]
+    let iv: Array<UInt8> = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f]
+    let plaintext: Array<UInt8> = [0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a, 0xae, 0x2d]
+    let expected: Array<UInt8> = [0x3b, 0x79, 0x42, 0x4c, 0x9c, 0x0d, 0xd4, 0x36, 0xba, 0xce, 0x9e, 0x0e, 0xd4, 0x58, 0x6a, 0x4f, 0x32, 0xb9]
+
+    let aes = try! AES(key: key, blockMode: CFB(iv: iv, segmentSize: .cfb8), padding: .noPadding)
+    let encrypted = try! aes.encrypt(plaintext)
+    XCTAssertEqual(encrypted, expected, "encryption failed")
+    let decrypted = try! aes.decrypt(encrypted)
+    XCTAssertEqual(decrypted, plaintext, "decryption failed")
+  }
 
   func testAESEncryptOFB128() {
     let key: Array<UInt8> = [0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c]
@@ -654,6 +668,7 @@ extension AESTests {
       ("testAESDecryptCBCWithPaddingPartial", testAESDecryptCBCWithPaddingPartial),
       ("testAESEncryptCFB", testAESEncryptCFB),
       ("testAESEncryptCFBLong", testAESEncryptCFBLong),
+      ("testAESEncryptCFB8", testAESEncryptCFB8),
       ("testAESEncryptOFB128", testAESEncryptOFB128),
       ("testAESEncryptOFB256", testAESEncryptOFB256),
       ("testAESEncryptPCBC256", testAESEncryptPCBC256),

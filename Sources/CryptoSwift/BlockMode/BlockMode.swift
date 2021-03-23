@@ -19,6 +19,8 @@ public protocol BlockMode {
   var options: BlockModeOption { get }
   //TODO: doesn't have to be public
   func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock, encryptionOperation: @escaping CipherOperationOnBlock) throws -> CipherModeWorker
+
+  var customBlockSize: Int? { get }
 }
 
 typealias StreamMode = BlockMode

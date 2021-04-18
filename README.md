@@ -152,7 +152,7 @@ Run `carthage` to build the framework and drag the built CryptoSwift.framework i
 #### XCFramework
 
 XCFrameworks require Xcode 11 or later and they can be integrated similarly to how we’re used to integrating the `.framework` format.
-Please us a script [scripts/build-framework.sh](scripts/build-framework.sh) to generate binary `CryptoSwift.xcframework` archive that you can use as a dependency in Xcode.
+Please use script [scripts/build-framework.sh](scripts/build-framework.sh) to generate binary `CryptoSwift.xcframework` archive that you can use as a dependency in Xcode.
 
 CryptoSwift.xcframework is a Release (Optimized) binary that offer best available Swift code performance.
 

@@ -12,14 +12,25 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+@usableFromInline
 final class StreamDecryptor: Cryptor, Updatable {
-  private let blockSize: Int
-  private var worker: CipherModeWorker
-  private let padding: Padding
-  private var accumulated = Array<UInt8>()
 
-  private var lastBlockRemainder = 0
+  @usableFromInline
+  internal let blockSize: Int
 
+  @usableFromInline
+  internal var worker: CipherModeWorker
+
+  @usableFromInline
+  internal let padding: Padding
+
+  @usableFromInline
+  internal var accumulated = Array<UInt8>()
+
+  @usableFromInline
+  internal var lastBlockRemainder = 0
+
+  @usableFromInline
   init(blockSize: Int, padding: Padding, _ worker: CipherModeWorker) throws {
     self.blockSize = blockSize
     self.padding = padding
@@ -28,6 +39,7 @@ final class StreamDecryptor: Cryptor, Updatable {
 
   // MARK: Updatable
 
+  @inlinable
   public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8> {
     self.accumulated += bytes
 
@@ -68,6 +80,7 @@ final class StreamDecryptor: Cryptor, Updatable {
     return plaintext
   }
 
+  @inlinable
   public func seek(to position: Int) throws {
     guard var worker = self.worker as? SeekableModeWorker else {
       fatalError("Not supported")

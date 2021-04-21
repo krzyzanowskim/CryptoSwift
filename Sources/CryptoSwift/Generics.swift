@@ -25,6 +25,7 @@
 @_specialize(where T == UInt16)
 @_specialize(where T == UInt32)
 @_specialize(where T == UInt64)
+@inlinable
 func arrayOfBytes<T: FixedWidthInteger>(value: T, length totalBytes: Int = MemoryLayout<T>.size) -> Array<UInt8> {
   let valuePointer = UnsafeMutablePointer<T>.allocate(capacity: 1)
   valuePointer.pointee = value

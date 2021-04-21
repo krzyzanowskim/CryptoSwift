@@ -13,42 +13,42 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-@_transparent
+@inlinable
 func rotateLeft(_ value: UInt8, by: UInt8) -> UInt8 {
   ((value << by) & 0xff) | (value >> (8 - by))
 }
 
-@_transparent
+@inlinable
 func rotateLeft(_ value: UInt16, by: UInt16) -> UInt16 {
   ((value << by) & 0xffff) | (value >> (16 - by))
 }
 
-@_transparent
+@inlinable
 func rotateLeft(_ value: UInt32, by: UInt32) -> UInt32 {
   ((value << by) & 0xffffffff) | (value >> (32 - by))
 }
 
-@_transparent
+@inlinable
 func rotateLeft(_ value: UInt64, by: UInt64) -> UInt64 {
   (value << by) | (value >> (64 - by))
 }
 
-@_transparent
+@inlinable
 func rotateRight(_ value: UInt16, by: UInt16) -> UInt16 {
   (value >> by) | (value << (16 - by))
 }
 
-@_transparent
+@inlinable
 func rotateRight(_ value: UInt32, by: UInt32) -> UInt32 {
   (value >> by) | (value << (32 - by))
 }
 
-@_transparent
+@inlinable
 func rotateRight(_ value: UInt64, by: UInt64) -> UInt64 {
   ((value >> by) | (value << (64 - by)))
 }
 
-@_transparent
+@inlinable
 func reversed(_ uint8: UInt8) -> UInt8 {
   var v = uint8
   v = (v & 0xf0) >> 4 | (v & 0x0f) << 4
@@ -57,7 +57,7 @@ func reversed(_ uint8: UInt8) -> UInt8 {
   return v
 }
 
-@_transparent
+@inlinable
 func reversed(_ uint32: UInt32) -> UInt32 {
   var v = uint32
   v = ((v >> 1) & 0x55555555) | ((v & 0x55555555) << 1)
@@ -68,10 +68,12 @@ func reversed(_ uint32: UInt32) -> UInt32 {
   return v
 }
 
+@inlinable
 func xor<T, V>(_ left: T, _ right: V) -> ArraySlice<UInt8> where T: RandomAccessCollection, V: RandomAccessCollection, T.Element == UInt8, T.Index == Int, V.Element == UInt8, V.Index == Int {
   return xor(left, right).slice
 }
 
+@inlinable
 func xor<T, V>(_ left: T, _ right: V) -> Array<UInt8> where T: RandomAccessCollection, V: RandomAccessCollection, T.Element == UInt8, T.Index == Int, V.Element == UInt8, V.Index == Int {
   let length = Swift.min(left.count, right.count)
 
@@ -98,7 +100,7 @@ func xor<T, V>(_ left: T, _ right: V) -> Array<UInt8> where T: RandomAccessColle
  - blockSize: Padding size in bytes.
  - allowance: Excluded trailing number of bytes.
  */
-@inline(__always)
+@inline(__always) @inlinable
 func bitPadding(to data: inout Array<UInt8>, blockSize: Int, allowance: Int = 0) {
   let msgLength = data.count
   // Step 1. Append Padding Bits

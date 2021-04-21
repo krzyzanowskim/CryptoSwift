@@ -19,6 +19,7 @@ struct ZeroPadding: PaddingProtocol {
   init() {
   }
 
+  @inlinable
   func add(to bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
     let paddingCount = blockSize - (bytes.count % blockSize)
     if paddingCount > 0 {
@@ -27,6 +28,7 @@ struct ZeroPadding: PaddingProtocol {
     return bytes
   }
 
+  @inlinable
   func remove(from bytes: Array<UInt8>, blockSize _: Int?) -> Array<UInt8> {
     for (idx, value) in bytes.reversed().enumerated() {
       if value != 0 {

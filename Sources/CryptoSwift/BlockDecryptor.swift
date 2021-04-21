@@ -13,17 +13,26 @@
 //
 
 public class BlockDecryptor: Cryptor, Updatable {
-  private let blockSize: Int
-  private let padding: Padding
-  private var worker: CipherModeWorker
-  private var accumulated = Array<UInt8>()
+  @usableFromInline
+  let blockSize: Int
 
+  @usableFromInline
+  let padding: Padding
+
+  @usableFromInline
+  var worker: CipherModeWorker
+
+  @usableFromInline
+  var accumulated = Array<UInt8>()
+
+  @usableFromInline
   init(blockSize: Int, padding: Padding, _ worker: CipherModeWorker) throws {
     self.blockSize = blockSize
     self.padding = padding
     self.worker = worker
   }
 
+  @inlinable
   public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
     self.accumulated += bytes
 

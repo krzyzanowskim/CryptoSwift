@@ -14,17 +14,29 @@
 //
 
 public final class SHA1: DigestType {
-  static let digestLength: Int = 20 // 160 / 8
-  static let blockSize: Int = 64
-  fileprivate static let hashInitialValue: ContiguousArray<UInt32> = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0]
 
-  fileprivate var accumulated = Array<UInt8>()
-  fileprivate var processedBytesTotalCount: Int = 0
-  fileprivate var accumulatedHash: ContiguousArray<UInt32> = SHA1.hashInitialValue
+  @usableFromInline
+  static let digestLength: Int = 20 // 160 / 8
+
+  @usableFromInline
+  static let blockSize: Int = 64
+
+  @usableFromInline
+  static let hashInitialValue: ContiguousArray<UInt32> = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0]
+
+  @usableFromInline
+  var accumulated = Array<UInt8>()
+
+  @usableFromInline
+  var processedBytesTotalCount: Int = 0
+
+  @usableFromInline
+  var accumulatedHash: ContiguousArray<UInt32> = SHA1.hashInitialValue
 
   public init() {
   }
 
+  @inlinable
   public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
     do {
       return try update(withBytes: bytes.slice, isLast: true)
@@ -33,7 +45,8 @@ public final class SHA1: DigestType {
     }
   }
 
-  fileprivate func process(block chunk: ArraySlice<UInt8>, currentHash hh: inout ContiguousArray<UInt32>) {
+  @usableFromInline
+  func process(block chunk: ArraySlice<UInt8>, currentHash hh: inout ContiguousArray<UInt32>) {
     // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
     // Extend the sixteen 32-bit words into eighty 32-bit words:
     let M = UnsafeMutablePointer<UInt32>.allocate(capacity: 80)
@@ -98,7 +111,7 @@ public final class SHA1: DigestType {
 }
 
 extension SHA1: Updatable {
-  @discardableResult
+  @discardableResult @inlinable
   public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
     self.accumulated += bytes
 

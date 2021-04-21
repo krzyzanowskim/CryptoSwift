@@ -46,12 +46,14 @@ struct PCBCModeWorker: BlockModeWorker {
   private let iv: ArraySlice<UInt8>
   private var prev: ArraySlice<UInt8>?
 
+  @inlinable
   init(blockSize: Int, iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
     self.blockSize = blockSize
     self.iv = iv
     self.cipherOperation = cipherOperation
   }
 
+  @inlinable
   mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
     guard let ciphertext = cipherOperation(xor(prev ?? iv, plaintext)) else {
       return Array(plaintext)
@@ -60,6 +62,7 @@ struct PCBCModeWorker: BlockModeWorker {
     return ciphertext
   }
 
+  @inlinable
   mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
     guard let plaintext = cipherOperation(ciphertext) else {
       return Array(ciphertext)

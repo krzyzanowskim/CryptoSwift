@@ -23,7 +23,7 @@ import ucrt
 #endif
 
 extension FixedWidthInteger {
-  @_transparent
+  @inlinable
   func bytes(totalBytes: Int = MemoryLayout<Self>.size) -> Array<UInt8> {
     arrayOfBytes(value: self.littleEndian, length: totalBytes)
     // TODO: adjust bytes order

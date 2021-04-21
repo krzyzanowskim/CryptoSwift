@@ -11,6 +11,8 @@
 //  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
+
+@usableFromInline
 final class BlockEncryptor: Cryptor, Updatable {
   private let blockSize: Int
   private var worker: CipherModeWorker
@@ -20,6 +22,7 @@ final class BlockEncryptor: Cryptor, Updatable {
 
   private var lastBlockRemainder = 0
 
+  @usableFromInline
   init(blockSize: Int, padding: Padding, _ worker: CipherModeWorker) throws {
     self.blockSize = blockSize
     self.padding = padding
@@ -52,6 +55,7 @@ final class BlockEncryptor: Cryptor, Updatable {
     return encrypted
   }
 
+  @usableFromInline
   func seek(to: Int) throws {
     fatalError("Not supported")
   }

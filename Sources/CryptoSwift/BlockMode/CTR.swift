@@ -53,6 +53,7 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
       self.constPrefix + self.value.bytes()
     }
 
+    @inlinable
     init(_ initialValue: Array<UInt8>) {
       let halfIndex = initialValue.startIndex.advanced(by: initialValue.count / 2)
       self.constPrefix = Array(initialValue[initialValue.startIndex..<halfIndex])
@@ -92,6 +93,7 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
     self.keystream = Array(cipherOperation(self.counter.bytes.slice)!)
   }
 
+  @inlinable
   mutating func seek(to position: Int) throws {
     let offset = position % self.blockSize
     self.counter = CTRCounter(nonce: self.iv, startAt: position / self.blockSize)
@@ -100,6 +102,7 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
   }
 
   // plaintext is at most blockSize long
+  @inlinable
   mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
     var result = Array<UInt8>(reserveCapacity: plaintext.count)
 

@@ -15,7 +15,9 @@
 
 /// CRC - cyclic redundancy check code.
 public final class Checksum {
-  private static let table32: Array<UInt32> = [
+
+  @usableFromInline
+  static let table32: Array<UInt32> = [
     0x0000_0000, 0x7707_3096, 0xEE0E_612C, 0x9909_51BA, 0x076D_C419, 0x706A_F48F, 0xE963_A535, 0x9E64_95A3,
     0x0EDB_8832, 0x79DC_B8A4, 0xE0D5_E91E, 0x97D2_D988, 0x09B6_4C2B, 0x7EB1_7CBD, 0xE7B8_2D07, 0x90BF_1D91,
     0x1DB7_1064, 0x6AB0_20F2, 0xF3B9_7148, 0x84BE_41DE, 0x1ADA_D47D, 0x6DDD_E4EB, 0xF4D4_B551, 0x83D3_85C7,
@@ -50,7 +52,8 @@ public final class Checksum {
     0xB366_7A2E, 0xC461_4AB8, 0x5D68_1B02, 0x2A6F_2B94, 0xB40B_BE37, 0xC30C_8EA1, 0x5A05_DF1B, 0x2D02_EF8D
   ]
 
-  private static let table32c: Array<UInt32> = [
+  @usableFromInline
+  static let table32c: Array<UInt32> = [
     0x0000_0000, 0xF26B_8303, 0xE13B_70F7, 0x1350_F3F4, 0xC79A_971F, 0x35F1_141C, 0x26A1_E7E8, 0xD4CA_64EB,
     0x8AD9_58CF, 0x78B2_DBCC, 0x6BE2_2838, 0x9989_AB3B, 0x4D43_CFD0, 0xBF28_4CD3, 0xAC78_BF27, 0x5E13_3C24,
     0x105E_C76F, 0xE235_446C, 0xF165_B798, 0x030E_349B, 0xD7C4_5070, 0x25AF_D373, 0x36FF_2087, 0xC494_A384,
@@ -85,7 +88,8 @@ public final class Checksum {
     0x79B7_37BA, 0x8BDC_B4B9, 0x988C_474D, 0x6AE7_C44E, 0xBE2D_A0A5, 0x4C46_23A6, 0x5F16_D052, 0xAD7D_5351
   ]
 
-  private static let table16: Array<UInt16> = [
+  @usableFromInline
+  static let table16: Array<UInt16> = [
     0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
     0xC601, 0x06C0, 0x0780, 0xC741, 0x0500, 0xC5C1, 0xC481, 0x0440,
     0xCC01, 0x0CC0, 0x0D80, 0xCD41, 0x0F00, 0xCFC1, 0xCE81, 0x0E40,
@@ -120,7 +124,13 @@ public final class Checksum {
     0x8201, 0x42C0, 0x4380, 0x8341, 0x4100, 0x81C1, 0x8081, 0x4040
   ]
 
+  @usableFromInline
+  init() {
+    //
+  }
+
   /// Polynomial: 0xEDB88320 (Reversed) - IEEE
+  @inlinable
   func crc32(_ message: Array<UInt8>, seed: UInt32? = nil, reflect: Bool = true) -> UInt32 {
     var crc: UInt32 = seed != nil ? seed! : 0xFFFF_FFFF
     for chunk in message.batched(by: 256) {
@@ -133,6 +143,7 @@ public final class Checksum {
   }
 
   /// Polynomial: 0x82F63B78 (Reversed) - Castagnoli
+  @inlinable
   func crc32c(_ message: Array<UInt8>, seed: UInt32? = nil, reflect: Bool = true) -> UInt32 {
     var crc: UInt32 = seed != nil ? seed! : 0xFFFF_FFFF
     for chunk in message.batched(by: 256) {
@@ -145,6 +156,7 @@ public final class Checksum {
   }
 
   /// Polynomial: 0xA001 (Reversed) - IBM
+  @inlinable
   func crc16(_ message: Array<UInt8>, seed: UInt16? = nil) -> UInt16 {
     var crc: UInt16 = seed != nil ? seed! : 0x0000
     for chunk in message.batched(by: 256) {
@@ -166,6 +178,7 @@ public extension Checksum {
   /// - parameter reflect: is reflect (default true)
   ///
   /// - returns: Calculated code
+  @inlinable
   static func crc32(_ message: Array<UInt8>, seed: UInt32? = nil, reflect: Bool = true) -> UInt32 {
     Checksum().crc32(message, seed: seed, reflect: reflect)
   }
@@ -177,6 +190,7 @@ public extension Checksum {
   /// - parameter reflect: is reflect (default true)
   ///
   /// - returns: Calculated code
+  @inlinable
   static func crc32c(_ message: Array<UInt8>, seed: UInt32? = nil, reflect: Bool = true) -> UInt32 {
     Checksum().crc32c(message, seed: seed, reflect: reflect)
   }
@@ -187,6 +201,7 @@ public extension Checksum {
   /// - parameter seed:    Seed value (Optional)
   ///
   /// - returns: Calculated code
+  @inlinable
   static func crc16(_ message: Array<UInt8>, seed: UInt16? = nil) -> UInt16 {
     Checksum().crc16(message, seed: seed)
   }

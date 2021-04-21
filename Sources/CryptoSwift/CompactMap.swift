@@ -16,6 +16,7 @@
 // TODO: remove this file when Xcode 9.2 is no longer used
 #else
   extension Sequence {
+    @inlinable
     public func compactMap<ElementOfResult>(_ transform: (Element) throws -> ElementOfResult?) rethrows -> [ElementOfResult] {
       try flatMap(transform)
     }

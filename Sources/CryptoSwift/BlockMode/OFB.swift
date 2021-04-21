@@ -52,6 +52,7 @@ struct OFBModeWorker: BlockModeWorker {
     self.cipherOperation = cipherOperation
   }
 
+  @inlinable
   mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
     guard let ciphertext = cipherOperation(prev ?? iv) else {
       return Array(plaintext)
@@ -60,6 +61,7 @@ struct OFBModeWorker: BlockModeWorker {
     return xor(plaintext, ciphertext)
   }
 
+  @inlinable
   mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
     guard let decrypted = cipherOperation(prev ?? iv) else {
       return Array(ciphertext)

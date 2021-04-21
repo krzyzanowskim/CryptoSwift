@@ -34,6 +34,7 @@ public protocol Updatable {
 }
 
 extension Updatable {
+  @inlinable
   public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false, output: (_ bytes: Array<UInt8>) -> Void) throws {
     let processed = try update(withBytes: bytes, isLast: isLast)
     if !processed.isEmpty {
@@ -41,14 +42,17 @@ extension Updatable {
     }
   }
 
+  @inlinable
   public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
     try self.update(withBytes: bytes, isLast: isLast)
   }
 
+  @inlinable
   public mutating func update(withBytes bytes: Array<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
     try self.update(withBytes: bytes.slice, isLast: isLast)
   }
 
+  @inlinable
   public mutating func update(withBytes bytes: Array<UInt8>, isLast: Bool = false, output: (_ bytes: Array<UInt8>) -> Void) throws {
     try self.update(withBytes: bytes.slice, isLast: isLast, output: output)
   }
@@ -56,10 +60,12 @@ extension Updatable {
   /// Finish updates. This may apply padding.
   /// - parameter bytes: Bytes to process
   /// - returns: Processed data.
+  @inlinable
   public mutating func finish(withBytes bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
     try self.update(withBytes: bytes, isLast: true)
   }
 
+  @inlinable
   public mutating func finish(withBytes bytes: Array<UInt8>) throws -> Array<UInt8> {
     try self.finish(withBytes: bytes.slice)
   }
@@ -68,6 +74,7 @@ extension Updatable {
   ///
   /// - Returns: Processed data
   /// - Throws: Error
+  @inlinable
   public mutating func finish() throws -> Array<UInt8> {
     try self.update(withBytes: [], isLast: true)
   }
@@ -76,6 +83,7 @@ extension Updatable {
   /// - parameter bytes: Bytes to process
   /// - parameter output: Resulting data
   /// - returns: Processed data.
+  @inlinable
   public mutating func finish(withBytes bytes: ArraySlice<UInt8>, output: (_ bytes: Array<UInt8>) -> Void) throws {
     let processed = try update(withBytes: bytes, isLast: true)
     if !processed.isEmpty {
@@ -83,6 +91,7 @@ extension Updatable {
     }
   }
 
+  @inlinable
   public mutating func finish(withBytes bytes: Array<UInt8>, output: (_ bytes: Array<UInt8>) -> Void) throws {
     try self.finish(withBytes: bytes.slice, output: output)
   }
@@ -91,6 +100,7 @@ extension Updatable {
   ///
   /// - Parameter output: Processed data
   /// - Throws: Error
+  @inlinable
   public mutating func finish(output: (Array<UInt8>) -> Void) throws {
     try self.finish(withBytes: [], output: output)
   }

@@ -156,6 +156,7 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     return Array(ciphertext)
   }
 
+  @inlinable
   func finalize(encrypt ciphertext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
     // Calculate MAC tag.
     let ghash = self.gf.ghashFinish()
@@ -172,6 +173,7 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     }
   }
 
+  @inlinable
   func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
     self.counter = incrementCounter(self.counter)
 
@@ -203,6 +205,7 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     }
   }
 
+  @inlinable
   func didDecryptLast(bytes plaintext: ArraySlice<UInt8>) throws -> ArraySlice<UInt8> {
     // Calculate MAC tag.
     let ghash = self.gf.ghashFinish()

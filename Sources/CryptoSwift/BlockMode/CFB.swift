@@ -62,6 +62,7 @@ struct CFBModeWorker: BlockModeWorker {
     self.cipherOperation = cipherOperation
   }
 
+  @inlinable
   mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
     switch segmentSize {
     case .cfb128:
@@ -80,6 +81,7 @@ struct CFBModeWorker: BlockModeWorker {
     }
   }
 
+  @inlinable
   mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
     switch segmentSize {
     case .cfb128:

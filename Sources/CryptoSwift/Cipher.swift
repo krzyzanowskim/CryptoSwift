@@ -18,7 +18,7 @@ public enum CipherError: Error {
   case decrypt
 }
 
-public protocol Cipher: class {
+public protocol Cipher: AnyObject {
   var keySize: Int { get }
 
   /// Encrypt given bytes at once

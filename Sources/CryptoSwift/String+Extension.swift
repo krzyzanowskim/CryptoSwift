@@ -81,7 +81,7 @@ extension String {
   /// - parameter cipher: Instance of `Cipher`
   /// - returns: base64 encoded string of encrypted bytes
   @inlinable
-  public func encryptToBase64(cipher: Cipher) throws -> String? {
+  public func encryptToBase64(cipher: Cipher) throws -> String {
     try self.bytes.encrypt(cipher: cipher).toBase64()
   }
 

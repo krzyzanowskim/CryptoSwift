@@ -81,6 +81,7 @@ Good mood
 | [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
 | [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
 | [ISO78164](http://www.embedx.com/pdfs/ISO_STD_7816/info_isoiec7816-4%7Bed21.0%7Den.pdf)
+| [ISO10126](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO_10126)
 | No padding
 
 #### Authenticated Encryption with Associated Data (AEAD)

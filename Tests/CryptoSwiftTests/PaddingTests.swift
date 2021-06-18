@@ -87,6 +87,36 @@ final class PaddingTests: XCTestCase {
     XCTAssertEqual(clean, input, "ISO78164 failed")
   }
 
+  func testISO10126_0() {
+    let input: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3]
+    let padded = ISO10126Padding().add(to: input, blockSize: 16)
+    XCTAssertTrue(padded.starts(with: input), "ISO10126 failed")
+    XCTAssertEqual(padded.last, 3, "ISO10126 failed")
+    XCTAssertEqual(padded.count, 16)
+    let clean = ISO10126Padding().remove(from: padded, blockSize: nil)
+    XCTAssertEqual(clean, input, "ISO10126 failed")
+  }
+
+  func testISO10126_1() {
+    let input: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6]
+    let padded = ISO10126Padding().add(to: input, blockSize: 16)
+    XCTAssertTrue(padded.starts(with: input), "ISO10126 failed")
+    XCTAssertEqual(padded.last, 16, "ISO10126 failed")
+    XCTAssertEqual(padded.count, 32)
+    let clean = ISO10126Padding().remove(from: padded, blockSize: nil)
+    XCTAssertEqual(clean, input, "ISO10126 failed")
+  }
+
+  func testISO10126_2() {
+    let input: Array<UInt8> = []
+    let padded = ISO10126Padding().add(to: input, blockSize: 16)
+    XCTAssertTrue(padded.starts(with: input), "ISO10126 failed")
+    XCTAssertEqual(padded.last, 16, "ISO10126 failed")
+    XCTAssertEqual(padded.count, 16)
+    let clean = ISO10126Padding().remove(from: padded, blockSize: nil)
+    XCTAssertEqual(clean, input, "ISO10126 failed")
+  }
+
   static let allTests = [
     ("testPKCS7_0", testPKCS7_0),
     ("testPKCS7_1", testPKCS7_1),
@@ -95,6 +125,9 @@ final class PaddingTests: XCTestCase {
     ("testZeroPadding2", testZeroPadding2),
     ("testISO78164_0", testISO78164_0),
     ("testISO78164_1", testISO78164_1),
-    ("testISO78164_2", testISO78164_2)
+    ("testISO78164_2", testISO78164_2),
+    ("testISO10126_0", testISO10126_0),
+    ("testISO10126_1", testISO10126_1),
+    ("testISO10126_2", testISO10126_2)
   ]
 }

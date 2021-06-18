@@ -13,6 +13,7 @@
 		14156CE52011422400DDCFBC /* ChaCha20Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14156CE42011422400DDCFBC /* ChaCha20Poly1305Tests.swift */; };
 		1467460F2017BB3600DF04ED /* AEAD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1467460E2017BB3600DF04ED /* AEAD.swift */; };
 		35F3E51C23BF9A6700A024A1 /* OCB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F3E51B23BF9A6700A024A1 /* OCB.swift */; };
+		42012783267A6F1C00F82506 /* ISO10126Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42012782267A6F1C00F82506 /* ISO10126Padding.swift */; };
 		674A736F1BF5D85B00866C5B /* RabbitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674A736E1BF5D85B00866C5B /* RabbitTests.swift */; };
 		750509991F6BEF2A00394A1B /* PKCS7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750509981F6BEF2A00394A1B /* PKCS7.swift */; };
 		750CC3EB1DC0CACE0096BE6E /* BlowfishTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */; };
@@ -204,6 +205,7 @@
 		1467460E2017BB3600DF04ED /* AEAD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEAD.swift; sourceTree = "<group>"; };
 		35F3E51B23BF9A6700A024A1 /* OCB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OCB.swift; sourceTree = "<group>"; };
 		35F3E51D23BF9AD300A024A1 /* AESOCBTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AESOCBTests.swift; sourceTree = "<group>"; };
+		42012782267A6F1C00F82506 /* ISO10126Padding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISO10126Padding.swift; sourceTree = "<group>"; };
 		674A736E1BF5D85B00866C5B /* RabbitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RabbitTests.swift; sourceTree = "<group>"; };
 		750509981F6BEF2A00394A1B /* PKCS7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7.swift; sourceTree = "<group>"; };
 		750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlowfishTests.swift; sourceTree = "<group>"; };
@@ -509,6 +511,7 @@
 			isa = PBXGroup;
 			children = (
 				0AF023D4230F2B0F008E4E68 /* ISO78164Padding.swift */,
+				42012782267A6F1C00F82506 /* ISO10126Padding.swift */,
 				7529366820683DFC00195874 /* AEAD */,
 				75EC52381EE8B6CA0048EB3B /* AES.swift */,
 				751EE9771F93996100161FFC /* AES.Cryptors.swift */,
@@ -831,6 +834,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42012783267A6F1C00F82506 /* ISO10126Padding.swift in Sources */,
 				0AF023D5230F2B0F008E4E68 /* ISO78164Padding.swift in Sources */,
 				75EC52861EE8B8170048EB3B /* CFB.swift in Sources */,
 				75EC52901EE8B81A0048EB3B /* Collection+Extension.swift in Sources */,

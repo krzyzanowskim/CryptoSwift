@@ -27,7 +27,7 @@ struct ISO10126Padding: PaddingProtocol {
     let padding = UInt8(blockSize - (bytes.count % blockSize))
     var withPadding = bytes
     if padding > 0 {
-      withPadding += (0..<(padding - 1)).map { _ in UInt8(arc4random() % 254 + 1) } + [padding]
+      withPadding += (0..<(padding - 1)).map { _ in UInt8.random(in: 0...255) } + [padding]
     }
     return withPadding
   }

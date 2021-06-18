@@ -78,6 +78,7 @@ VERSIONING_SYSTEM = apple-generic
 CURRENT_PROJECT_VERSION = 1
 
 // XCFramework
+// Swift have (at least) 2 language dialects: With and without Library Evolution behave differently regarding enums.
 BUILD_LIBRARY_FOR_DISTRIBUTION = YES
 
 // Catalyst

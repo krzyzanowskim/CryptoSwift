@@ -28,10 +28,12 @@ organizations who have contributed source code to CryptoSwift.
 - Chris Amanse <chris@chrisamanse.xyz>
 - Christian Steffens <cs@hibento.de>
 - Cihat Gündüz <github@cihatguenduez.de>
+- Cosmin Baies <cbaies@blockchain.com>
 - Dave Wood <dave@cerebralgardens.com>
 - Dima Kalachov <dima.kalachov@gmail.com>
 - Dusan Klinec <dusan.klinec@gmail.com>
 - Eneko Alonso <eneko.alonso@gmail.com>
+- Eugene Berdnikov <eberdnikov@outlook.com>
 - Evan Maloney <emaloney@gilt.com>
 - Evin Ugur <evinoog96@gmail.com>
 - Frank Langel <frank@frankjlangel.com>
@@ -47,6 +49,7 @@ organizations who have contributed source code to CryptoSwift.
 - Javier Soto <javiers@twitter.com>
 - Jeremy Greenwood <jeremy@mobelux.com>
 - John Hammerlund <johnhammerlund@gmail.com>
+- Jonas Obrist <ojiidotch@gmail.com>
 - K.K. POON <noopkk@gmail.com>
 - Keith Smiley <keithbsmiley@gmail.com>
 - Koray Koska <koray@koska.at>

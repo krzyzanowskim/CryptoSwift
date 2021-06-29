@@ -365,10 +365,10 @@ extension AES {
     for r in 1..<rounds {
       for i in 0..<4 {
         let w = rk2[r][i]
-        let u1 = AES.U1[Int(B0(w))]
-        let u2 = AES.U2[Int(B1(w))]
-        let u3 = AES.U3[Int(B2(w))]
-        let u4 = AES.U4[Int(B3(w))]
+        let u1 = AES.U1[Int(self.B0(w))]
+        let u2 = AES.U2[Int(self.B1(w))]
+        let u3 = AES.U3[Int(self.B2(w))]
+        let u4 = AES.U4[Int(self.B3(w))]
         rk2[r][i] = u1 ^ u2 ^ u3 ^ u4
       }
     }
@@ -429,14 +429,14 @@ extension AES {
       }
       if (i % self.variantNk) == 0 {
         tmp = subWord(rotateLeft(UInt32(bytes: tmp), by: 8).bytes(totalBytes: 4))
-        tmp[0] = tmp.first! ^ AES.Rcon[i / variantNk]
+        tmp[0] = tmp.first! ^ AES.Rcon[i / self.variantNk]
       } else if self.variantNk > 6 && (i % self.variantNk) == 4 {
         subWordInPlace(&tmp)
       }
 
       // xor array of bytes
       for wordIdx in 0..<4 {
-        w[4 * i + wordIdx] = w[4 * (i - variantNk) + wordIdx] ^ tmp[wordIdx]
+        w[4 * i + wordIdx] = w[4 * (i - self.variantNk) + wordIdx] ^ tmp[wordIdx]
       }
     }
     return convertExpandedKey(Array(UnsafeBufferPointer(start: w, count: wLength)))

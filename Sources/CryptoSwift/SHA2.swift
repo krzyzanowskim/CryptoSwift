@@ -317,7 +317,7 @@ extension SHA2: Updatable {
             self.process32(block: chunk, currentHash: &self.accumulatedHash32)
           case .sha384, .sha512:
             self.process64(block: chunk, currentHash: &self.accumulatedHash64)
-          }
+        }
         processedBytes += chunk.count
       }
     }

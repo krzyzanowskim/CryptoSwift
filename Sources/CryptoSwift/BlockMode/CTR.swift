@@ -115,8 +115,8 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
         self.keystreamPosIdx = 0
       }
 
-      let xored: Array<UInt8> = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...])
-      keystreamPosIdx += xored.count
+      let xored: Array<UInt8> = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], self.keystream[self.keystreamPosIdx...])
+      self.keystreamPosIdx += xored.count
       processed += xored.count
       result += xored
     }

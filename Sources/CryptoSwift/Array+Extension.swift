@@ -22,7 +22,7 @@ extension Array {
 
   @inlinable
   var slice: ArraySlice<Element> {
-    self[self.startIndex ..< self.endIndex]
+    self[self.startIndex..<self.endIndex]
   }
 }
 
@@ -83,7 +83,7 @@ extension Array where Element == UInt8 {
     var words = Array<Array<Element>>()
     words.reserveCapacity(count / chunksize)
     for idx in stride(from: chunksize, through: count, by: chunksize) {
-      words.append(Array(self[idx - chunksize ..< idx])) // slow for large table
+      words.append(Array(self[idx - chunksize..<idx])) // slow for large table
     }
     let remainder = suffix(count % chunksize)
     if !remainder.isEmpty {

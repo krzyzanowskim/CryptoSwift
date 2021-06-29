@@ -25,7 +25,7 @@ struct UInt128: Equatable, ExpressibleByIntegerLiteral {
   }
 
   init(_ raw: Array<UInt8>) {
-    self = raw.prefix(MemoryLayout<UInt128>.stride).withUnsafeBytes({ (rawBufferPointer) -> UInt128 in
+    self = raw.prefix(MemoryLayout<UInt128>.stride).withUnsafeBytes({ rawBufferPointer -> UInt128 in
       let arr = rawBufferPointer.bindMemory(to: UInt64.self)
       return UInt128((arr[0].bigEndian, arr[1].bigEndian))
     })

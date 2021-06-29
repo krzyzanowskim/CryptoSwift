@@ -45,7 +45,7 @@ func rotateRight(_ value: UInt32, by: UInt32) -> UInt32 {
 
 @inlinable
 func rotateRight(_ value: UInt64, by: UInt64) -> UInt64 {
-  ((value >> by) | (value << (64 - by)))
+  (value >> by) | (value << (64 - by))
 }
 
 @inlinable

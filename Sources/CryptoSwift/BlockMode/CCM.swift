@@ -17,11 +17,11 @@
 // https://csrc.nist.gov/publications/detail/sp/800-38c/final
 
 #if canImport(Darwin)
-import Darwin
+  import Darwin
 #elseif canImport(Glibc)
-import Glibc
+  import Glibc
 #elseif canImport(ucrt)
-import ucrt
+  import ucrt
 #endif
 
 /// Counter with Cipher Block Chaining-Message Authentication Code
@@ -168,8 +168,8 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
         self.keystreamPosIdx = 0
       }
 
-      let xored: Array<UInt8> = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...])
-      keystreamPosIdx += xored.count
+      let xored: Array<UInt8> = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], self.keystream[self.keystreamPosIdx...])
+      self.keystreamPosIdx += xored.count
       processed += xored.count
       result += xored
     }
@@ -205,8 +205,8 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
           self.keystreamPosIdx = 0
         }
 
-        let xored: Array<UInt8> = xor(ciphertext[ciphertext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...]) // plaintext
-        keystreamPosIdx += xored.count
+        let xored: Array<UInt8> = xor(ciphertext[ciphertext.startIndex.advanced(by: processed)...], self.keystream[self.keystreamPosIdx...]) // plaintext
+        self.keystreamPosIdx += xored.count
         processed += xored.count
         output += xored
         self.counter = currentCounter
@@ -240,7 +240,7 @@ class CCMModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker, Fi
     // overwrite expectedTag property used later for verification
     guard let S0 = try? S(i: 0) else { return ciphertext }
     self.expectedTag = xor(ciphertext.suffix(self.tagLength), S0) as [UInt8]
-    return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(tagLength, ciphertext.count))]
+    return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(self.tagLength, ciphertext.count))]
   }
 
   @inlinable

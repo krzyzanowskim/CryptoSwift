@@ -56,6 +56,6 @@ extension Collection where Self.Element == UInt8, Self.Index == Int {
 
 @usableFromInline
 func strideCount(from: Int, to: Int, by: Int) -> Int {
-    let count = to - from
-    return count / by + (count % by > 0 ? 1 : 0)
+  let count = to - from
+  return count / by + (count % by > 0 ? 1 : 0)
 }

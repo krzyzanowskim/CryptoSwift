@@ -23,7 +23,7 @@ public struct CBC: BlockMode {
   }
 
   public let options: BlockModeOption = [.initializationVectorRequired, .paddingRequired]
-  
+
   private let iv: Array<UInt8>
 
   public let customBlockSize: Int? = nil

@@ -20,7 +20,7 @@ import XCTest
 final class SHATestsPerf: XCTestCase {
 
   static let len = 100000
-    let a = [UInt8](unsafeUninitializedCapacity: SHATestsPerf.len) { buf, count in
+  let a = [UInt8](unsafeUninitializedCapacity: SHATestsPerf.len) { buf, count in
     for i in 0..<len {
       buf[i] = UInt8.random(in: 0...UInt8.max)
     }
@@ -104,5 +104,4 @@ final class SHATestsPerf: XCTestCase {
       _ = a.sha3(.keccak512)
     }
   }
-
 }

@@ -144,7 +144,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     var nonce = Array<UInt8>(repeating: 0, count: blockSize)
     nonce[(nonce.count - N.count)...] = N
     nonce[0] = UInt8(tagLength) << 4
-    nonce[blockSize - 1 - N.count] |= 1
+    nonce[self.blockSize - 1 - N.count] |= 1
 
     /// bottom = str2num(Nonce[123..128])
     let bottom = nonce[15] & 0x3F
@@ -161,7 +161,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     let bits = bottom % 8
     let bytes = Int(bottom / 8)
     if bits == 0 {
-      offsetMAIN_0[0..<blockSize] = Stretch[bytes..<(bytes + blockSize)]
+      offsetMAIN_0[0..<self.blockSize] = Stretch[bytes..<(bytes + self.blockSize)]
     } else {
       for i in 0..<self.blockSize {
         let b1 = Stretch[bytes + i]
@@ -331,7 +331,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
       case .combined:
         // overwrite expectedTag property used later for verification
         self.expectedTag = Array(ciphertext.suffix(self.tagLength))
-        return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(tagLength, ciphertext.count))]
+        return ciphertext[ciphertext.startIndex..<ciphertext.endIndex.advanced(by: -Swift.min(self.tagLength, ciphertext.count))]
       case .detached:
         return ciphertext
     }

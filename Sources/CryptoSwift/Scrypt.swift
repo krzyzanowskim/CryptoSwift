@@ -90,7 +90,7 @@ public final class Scrypt {
 
     /* 2: for i = 0 to p - 1 do */
     // do the mixing
-    for i in 0 ..< self.p {
+    for i in 0..<self.p {
       /* 3: B_i <-- MF(B_i, N) */
       smix(B + i * 128 * self.r, V.assumingMemoryBound(to: UInt32.self), XY.assumingMemoryBound(to: UInt32.self))
     }
@@ -155,7 +155,7 @@ private extension Scrypt {
     }
 
     /* 10: B' <-- X */
-    for k in 0 ..< 32 * self.r {
+    for k in 0..<32 * self.r {
       UnsafeMutableRawPointer(block + 4 * k).storeBytes(of: X[k], as: UInt32.self)
     }
   }
@@ -239,7 +239,7 @@ private extension Scrypt {
       salsaBlockTyped[14] ^= rotateLeft(salsaBlockTyped[13] &+ salsaBlockTyped[12], by: 13)
       salsaBlockTyped[15] ^= rotateLeft(salsaBlockTyped[14] &+ salsaBlockTyped[13], by: 18)
     }
-    for i in 0 ..< 16 {
+    for i in 0..<16 {
       block[i] = block[i] &+ salsaBlockTyped[i]
     }
   }
@@ -249,7 +249,7 @@ private extension Scrypt {
     let S = src.assumingMemoryBound(to: UInt64.self)
     let L = len / MemoryLayout<UInt64>.size
 
-    for i in 0 ..< L {
+    for i in 0..<L {
       D[i] ^= S[i]
     }
   }

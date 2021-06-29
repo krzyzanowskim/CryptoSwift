@@ -65,8 +65,7 @@ class Access: XCTestCase {
     _ = array.crc16()
 
     do {
-      _ = try array.encrypt(cipher: self.cipher)
-      _ = try array.decrypt(cipher: self.cipher)
+      _ = try array.encrypt(cipher: self.cipher).decrypt(cipher: self.cipher)
       _ = try array.authenticate(with: self.authenticator)
     } catch {
       XCTFail(error.localizedDescription)
@@ -146,30 +145,29 @@ class Access: XCTestCase {
     _ = data.toHexString()
 
     do {
-      _ = try data.encrypt(cipher: self.cipher)
-      _ = try data.decrypt(cipher: self.cipher)
+      _ = try data.encrypt(cipher: self.cipher).decrypt(cipher: self.cipher)
       _ = try data.authenticate(with: self.authenticator)
     } catch {
       XCTFail(error.localizedDescription)
     }
   }
 
-  func testPadding() {
+  func testPadding() throws {
     // PKCS7
     _ = Padding.pkcs7.add(to: [1, 2, 3], blockSize: 16)
-    _ = Padding.pkcs7.remove(from: [1, 2, 3], blockSize: 16)
+    _ = try Padding.pkcs7.remove(from: [1, 2, 3, 2, 2], blockSize: 16)
 
     // PKCS5
     _ = Padding.pkcs5.add(to: [1, 2, 3], blockSize: 16)
-    _ = Padding.pkcs5.remove(from: [1, 2, 3], blockSize: 16)
+    _ = try Padding.pkcs5.remove(from: [1, 2, 3, 3, 3, 3], blockSize: 16)
 
     // NoPadding
     _ = Padding.noPadding.add(to: [1, 2, 3], blockSize: 16)
-    _ = Padding.noPadding.remove(from: [1, 2, 3], blockSize: 16)
+    _ = try Padding.noPadding.remove(from: [1, 2, 3], blockSize: 16)
 
     // ZeroPadding
     _ = Padding.zeroPadding.add(to: [1, 2, 3], blockSize: 16)
-    _ = Padding.zeroPadding.remove(from: [1, 2, 3], blockSize: 16)
+    _ = try Padding.zeroPadding.remove(from: [1, 2, 3], blockSize: 16)
   }
 
   func testPBKDF() {

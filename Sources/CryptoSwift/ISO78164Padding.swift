@@ -34,7 +34,7 @@ struct ISO78164Padding: PaddingProtocol {
   }
 
   @inlinable
-  func remove(from bytes: Array<UInt8>, blockSize _: Int?) -> Array<UInt8> {
+  func remove(from bytes: Array<UInt8>, blockSize _: Int?) throws -> Array<UInt8> {
     if let idx = bytes.lastIndex(of: 0x80) {
       return Array(bytes[..<idx])
     } else {

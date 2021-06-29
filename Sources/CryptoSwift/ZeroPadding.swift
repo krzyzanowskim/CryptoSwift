@@ -29,7 +29,7 @@ struct ZeroPadding: PaddingProtocol {
   }
 
   @inlinable
-  func remove(from bytes: Array<UInt8>, blockSize _: Int?) -> Array<UInt8> {
+  func remove(from bytes: Array<UInt8>, blockSize _: Int?) throws -> Array<UInt8> {
     for (idx, value) in bytes.reversed().enumerated() {
       if value != 0 {
         return Array(bytes[0..<bytes.count - idx])

@@ -68,7 +68,7 @@ final class StreamDecryptor: Cryptor, Updatable {
 
     if isLast {
       // CTR doesn't need padding. Really. Add padding to the last block if really want. but... don't.
-      plaintext = self.padding.remove(from: plaintext, blockSize: self.blockSize - self.lastBlockRemainder)
+      plaintext = try self.padding.remove(from: plaintext, blockSize: self.blockSize - self.lastBlockRemainder)
     }
 
     self.accumulated.removeFirst(processedBytesCount) // super-slow

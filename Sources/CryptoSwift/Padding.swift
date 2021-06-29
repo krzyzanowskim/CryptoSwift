@@ -15,7 +15,7 @@
 
 public protocol PaddingProtocol {
   func add(to: Array<UInt8>, blockSize: Int) -> Array<UInt8>
-  func remove(from: Array<UInt8>, blockSize: Int?) -> Array<UInt8>
+  func remove(from: Array<UInt8>, blockSize: Int?) throws -> Array<UInt8>
 }
 
 public enum Padding: PaddingProtocol {
@@ -38,20 +38,20 @@ public enum Padding: PaddingProtocol {
     }
   }
 
-  public func remove(from: Array<UInt8>, blockSize: Int?) -> Array<UInt8> {
+  public func remove(from: Array<UInt8>, blockSize: Int?) throws -> Array<UInt8> {
     switch self {
       case .noPadding:
         return from //NoPadding().remove(from: from, blockSize: blockSize)
       case .zeroPadding:
-        return ZeroPadding().remove(from: from, blockSize: blockSize)
+        return try ZeroPadding().remove(from: from, blockSize: blockSize)
       case .pkcs7:
-        return PKCS7.Padding().remove(from: from, blockSize: blockSize)
+        return try PKCS7.Padding().remove(from: from, blockSize: blockSize)
       case .pkcs5:
-        return PKCS5.Padding().remove(from: from, blockSize: blockSize)
+        return try PKCS5.Padding().remove(from: from, blockSize: blockSize)
       case .iso78164:
-        return ISO78164Padding().remove(from: from, blockSize: blockSize)
+        return try ISO78164Padding().remove(from: from, blockSize: blockSize)
       case .iso10126:
-        return ISO10126Padding().remove(from: from, blockSize: blockSize)
+        return try ISO10126Padding().remove(from: from, blockSize: blockSize)
     }
   }
 }

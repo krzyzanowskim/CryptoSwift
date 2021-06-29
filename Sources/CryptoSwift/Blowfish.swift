@@ -530,7 +530,7 @@ extension Blowfish: Cipher {
       out += self.decryptWorker.decrypt(block: chunk) // FIXME: copying here is innefective
     }
 
-    out = self.padding.remove(from: out, blockSize: Blowfish.blockSize)
+    out = try self.padding.remove(from: out, blockSize: Blowfish.blockSize)
 
     return out
   }

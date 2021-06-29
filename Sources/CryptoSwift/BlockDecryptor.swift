@@ -79,7 +79,7 @@ public class BlockDecryptor: Cryptor, Updatable {
         try finalizingWorker.willDecryptLast(bytes: self.accumulated.suffix(self.worker.additionalBufferSize))
         plaintext = Array(try finalizingWorker.didDecryptLast(bytes: plaintext.slice))
       }
-      plaintext = self.padding.remove(from: plaintext, blockSize: self.blockSize)
+      plaintext = try self.padding.remove(from: plaintext, blockSize: self.blockSize)
     }
 
     return plaintext

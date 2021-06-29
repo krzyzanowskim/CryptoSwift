@@ -354,8 +354,7 @@ final class AESTests: XCTestCase {
     let aes = try! AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7)
     let aes2 = try! AES(key: key2, blockMode: CBC(iv: iv), padding: .pkcs7)
     let encrypted = try! aes.encrypt(plaintext)
-    let decrypted = try? aes2.decrypt(encrypted)
-    XCTAssertTrue(decrypted! != plaintext, "failed")
+    XCTAssertThrowsError(try aes2.decrypt(encrypted))
   }
 
   // https://github.com/krzyzanowskim/CryptoSwift/issues/298

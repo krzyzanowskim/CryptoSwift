@@ -40,23 +40,22 @@ struct PKCS7Padding: PaddingProtocol {
   }
 
   @inlinable
-  func remove(from bytes: Array<UInt8>, blockSize _: Int?) -> Array<UInt8> {
+  func remove(from bytes: Array<UInt8>, blockSize _: Int?) throws -> Array<UInt8> {
     guard !bytes.isEmpty, let lastByte = bytes.last else {
       return bytes
     }
 
-    assert(!bytes.isEmpty, "Need bytes to remove padding")
-
     let padding = Int(lastByte) // last byte
     let finalLength = bytes.count - padding
 
-    if finalLength < 0 {
-      return bytes
+    if finalLength < 0 || padding == 0 {
+      throw Error.invalidPaddingValue
     }
 
-    if padding >= 1 {
-      return Array(bytes[0..<finalLength])
+    if bytes[finalLength..<finalLength+padding].contains(where: { $0 != padding }) {
+      throw Error.invalidPaddingValue
     }
-    return bytes
+
+    return Array(bytes[0..<finalLength])
   }
 }

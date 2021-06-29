@@ -52,7 +52,7 @@ struct PKCS7Padding: PaddingProtocol {
       throw Error.invalidPaddingValue
     }
 
-    if bytes[finalLength..<finalLength+padding].contains(where: { $0 != padding }) {
+    if bytes[finalLength..<finalLength + padding].contains(where: { $0 != padding }) {
       throw Error.invalidPaddingValue
     }
 

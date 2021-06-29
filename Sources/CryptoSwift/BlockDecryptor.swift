@@ -54,15 +54,15 @@ public class BlockDecryptor: Cryptor, Updatable {
     var plaintext = Array<UInt8>(reserveCapacity: accumulatedWithoutSuffix.count)
     // Processing in a block-size manner. It's good for block modes, but bad for stream modes.
     for var chunk in accumulatedWithoutSuffix.batched(by: self.blockSize) {
-      if isLast || (accumulatedWithoutSuffix.count - processedBytesCount) >= blockSize {
+      if isLast || (accumulatedWithoutSuffix.count - processedBytesCount) >= self.blockSize {
         let isLastChunk = processedBytesCount + chunk.count == accumulatedWithoutSuffix.count
 
         if isLast, isLastChunk, var finalizingWorker = worker as? FinalizingDecryptModeWorker {
-          chunk = try finalizingWorker.willDecryptLast(bytes: chunk + accumulated.suffix(worker.additionalBufferSize)) // tag size
+          chunk = try finalizingWorker.willDecryptLast(bytes: chunk + self.accumulated.suffix(self.worker.additionalBufferSize)) // tag size
         }
 
         if !chunk.isEmpty {
-          plaintext += worker.decrypt(block: chunk)
+          plaintext += self.worker.decrypt(block: chunk)
         }
 
         if isLast, isLastChunk, var finalizingWorker = worker as? FinalizingDecryptModeWorker {
@@ -72,7 +72,7 @@ public class BlockDecryptor: Cryptor, Updatable {
         processedBytesCount += chunk.count
       }
     }
-    accumulated.removeFirst(processedBytesCount) // super-slow
+    self.accumulated.removeFirst(processedBytesCount) // super-slow
 
     if isLast {
       if accumulatedWithoutSuffix.isEmpty, var finalizingWorker = worker as? FinalizingDecryptModeWorker {
@@ -93,6 +93,6 @@ public class BlockDecryptor: Cryptor, Updatable {
     try worker.seek(to: position)
     self.worker = worker
 
-    accumulated = []
+    self.accumulated = []
   }
 }

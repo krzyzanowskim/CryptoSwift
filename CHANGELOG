@@ -1,3 +1,8 @@
+1.4.1
+- Introduce ISO 10126 padding
+- fix various compiler warnings
+- Revert Xcode project deployment target
+
 1.4.0
 - Customize CFB segment size (cfb8, cfb128).
 - Adapt Swift @inlineable for better code optimization

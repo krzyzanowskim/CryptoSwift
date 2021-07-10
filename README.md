@@ -36,10 +36,10 @@ Good mood
 #### Hash (Digest)
   [MD5](http://tools.ietf.org/html/rfc1321)
 | [SHA1](http://tools.ietf.org/html/rfc3174)
-| [SHA224](http://tools.ietf.org/html/rfc6234)
-| [SHA256](http://tools.ietf.org/html/rfc6234)
-| [SHA384](http://tools.ietf.org/html/rfc6234)
-| [SHA512](http://tools.ietf.org/html/rfc6234)
+| [SHA2-224](http://tools.ietf.org/html/rfc6234)
+| [SHA2-256](http://tools.ietf.org/html/rfc6234)
+| [SHA2-384](http://tools.ietf.org/html/rfc6234)
+| [SHA2-512](http://tools.ietf.org/html/rfc6234)
 | [SHA3](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
 
 #### Cyclic Redundancy Check (CRC)
@@ -122,7 +122,7 @@ It is recommended to enable [Whole-Module Optimization](https://swift.org/blog/w
 You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding this:
 
 ```swift
-.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.4.0"))
+.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "1.4.1"))
 ```
 
 See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
@@ -134,7 +134,7 @@ Notice: Swift Package Manager uses debug configuration for debug Xcode build, th
 You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
 
 ```ruby
-pod 'CryptoSwift', '~> 1.4.0'
+pod 'CryptoSwift', '~> 1.4.1'
 ```
 
 Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.

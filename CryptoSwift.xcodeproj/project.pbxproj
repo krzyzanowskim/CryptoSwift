@@ -15,6 +15,9 @@
 		35F3E51C23BF9A6700A024A1 /* OCB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F3E51B23BF9A6700A024A1 /* OCB.swift */; };
 		42012783267A6F1C00F82506 /* ISO10126Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42012782267A6F1C00F82506 /* ISO10126Padding.swift */; };
 		674A736F1BF5D85B00866C5B /* RabbitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674A736E1BF5D85B00866C5B /* RabbitTests.swift */; };
+		6A072FF726CAB3F900F4E94F /* RSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A072FF626CAB3F900F4E94F /* RSA.swift */; };
+		6ADC6EEF26CBAC0C00AFBF4E /* GiantUInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC6EEE26CBAC0C00AFBF4E /* GiantUInt.swift */; };
+		6ADC6EF226CBAFC600AFBF4E /* GiantUIntTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADC6EF026CBAF9F00AFBF4E /* GiantUIntTests.swift */; };
 		750509991F6BEF2A00394A1B /* PKCS7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750509981F6BEF2A00394A1B /* PKCS7.swift */; };
 		750CC3EB1DC0CACE0096BE6E /* BlowfishTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */; };
 		75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */; };
@@ -207,6 +210,9 @@
 		35F3E51D23BF9AD300A024A1 /* AESOCBTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AESOCBTests.swift; sourceTree = "<group>"; };
 		42012782267A6F1C00F82506 /* ISO10126Padding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISO10126Padding.swift; sourceTree = "<group>"; };
 		674A736E1BF5D85B00866C5B /* RabbitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RabbitTests.swift; sourceTree = "<group>"; };
+		6A072FF626CAB3F900F4E94F /* RSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSA.swift; sourceTree = "<group>"; };
+		6ADC6EEE26CBAC0C00AFBF4E /* GiantUInt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiantUInt.swift; sourceTree = "<group>"; };
+		6ADC6EF026CBAF9F00AFBF4E /* GiantUIntTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiantUIntTests.swift; sourceTree = "<group>"; };
 		750509981F6BEF2A00394A1B /* PKCS7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKCS7.swift; sourceTree = "<group>"; };
 		750CC3EA1DC0CACE0096BE6E /* BlowfishTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlowfishTests.swift; sourceTree = "<group>"; };
 		75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Poly1305Tests.swift; sourceTree = "<group>"; };
@@ -435,6 +441,7 @@
 				E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */,
 				754BE46719693E190098E6F3 /* DigestTests.swift */,
 				7576F6EB20726319006688F8 /* DigestTestsPerf.swift */,
+				6ADC6EF026CBAF9F00AFBF4E /* GiantUIntTests.swift */,
 				75100F8E19B0BC890005C5F5 /* Poly1305Tests.swift */,
 				758A94271A65C59200E46135 /* HMACTests.swift */,
 				0EE73E72204D599C00110E11 /* CMACTests.swift */,
@@ -555,12 +562,14 @@
 				75EC52741EE8B6CA0048EB3B /* UInt32+Extension.swift */,
 				75EC52751EE8B6CA0048EB3B /* UInt64+Extension.swift */,
 				75D7AF37208BFB1600D22BEB /* UInt128.swift */,
+				6ADC6EEE26CBAC0C00AFBF4E /* GiantUInt.swift */,
 				75EC52771EE8B6CA0048EB3B /* Updatable.swift */,
 				75EC52781EE8B6CA0048EB3B /* Utils.swift */,
 				75EC52791EE8B6CA0048EB3B /* ZeroPadding.swift */,
 				754310432050111A003FB1DF /* CompactMap.swift */,
 				75B3ED76210F9DF7005D4ADA /* BlockDecryptor.swift */,
 				75B3ED78210FA016005D4ADA /* BlockEncryptor.swift */,
+				6A072FF626CAB3F900F4E94F /* RSA.swift */,
 				753674062175D012003E32A6 /* StreamDecryptor.swift */,
 				756A64C52111083B00BE8805 /* StreamEncryptor.swift */,
 			);
@@ -864,6 +873,7 @@
 				75EC529B1EE8B8200048EB3B /* Rabbit+Foundation.swift in Sources */,
 				756A64C62111083B00BE8805 /* StreamEncryptor.swift in Sources */,
 				75EC52A61EE8B8390048EB3B /* PBKDF1.swift in Sources */,
+				6ADC6EEF26CBAC0C00AFBF4E /* GiantUInt.swift in Sources */,
 				75EC52B41EE8B83D0048EB3B /* UInt32+Extension.swift in Sources */,
 				75EC52911EE8B81A0048EB3B /* Cryptors.swift in Sources */,
 				75EC52881EE8B8170048EB3B /* ECB.swift in Sources */,
@@ -896,6 +906,7 @@
 				75EC52A81EE8B8390048EB3B /* PKCS5.swift in Sources */,
 				1467460F2017BB3600DF04ED /* AEAD.swift in Sources */,
 				35F3E51C23BF9A6700A024A1 /* OCB.swift in Sources */,
+				6A072FF726CAB3F900F4E94F /* RSA.swift in Sources */,
 				75EC528A1EE8B8170048EB3B /* PCBC.swift in Sources */,
 				75EC528D1EE8B81A0048EB3B /* ChaCha20.swift in Sources */,
 				75EC52851EE8B8170048EB3B /* CBC.swift in Sources */,
@@ -924,6 +935,7 @@
 				758A94291A65C67400E46135 /* HMACTests.swift in Sources */,
 				75100F8F19B0BC890005C5F5 /* Poly1305Tests.swift in Sources */,
 				E6200E171FB9B68C00258382 /* HKDFTests.swift in Sources */,
+				6ADC6EF226CBAFC600AFBF4E /* GiantUIntTests.swift in Sources */,
 				754BE46819693E190098E6F3 /* DigestTests.swift in Sources */,
 				E3FD2D531D6B81CE00A9F35F /* Error+Extension.swift in Sources */,
 				757DA2591A4ED4D7002BA3EF /* ChaCha20Tests.swift in Sources */,

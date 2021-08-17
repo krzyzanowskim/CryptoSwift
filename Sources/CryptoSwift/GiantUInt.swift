@@ -30,22 +30,20 @@ struct GiantUInt: Equatable {
   // Operations
   
   static func + (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
-    var newBytes = [UInt8]()
-    
+    var bytes = [UInt8]()
     var r: UInt8 = 0
     
     for i in 0 ..< max(rhs.bytes.count, lhs.bytes.count) {
-      let res1 = (rhs.bytes[safe: i] ?? 0).addingReportingOverflow(lhs.bytes[safe: i] ?? 0)
-      let res2 = res1.partialValue.addingReportingOverflow(r)
-      newBytes.append(res2.partialValue)
-      r = (res1.overflow ? 1 : 0) + (res2.overflow ? 1 : 0)
+      let res = UInt16(rhs.bytes[safe: i] ?? 0) + UInt16(lhs.bytes[safe: i] ?? 0) + UInt16(r)
+      r = UInt8(res >> 8)
+      bytes.append(UInt8(res & 0xff))
     }
     
     if r != 0 {
-      newBytes.append(r)
+      bytes.append(r)
     }
     
-    return GiantUInt(newBytes)
+    return GiantUInt(bytes)
   }
   
   static func * (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {

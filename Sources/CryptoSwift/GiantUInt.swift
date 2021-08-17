@@ -13,12 +13,21 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+precedencegroup PowerPrecedence { higherThan: MultiplicationPrecedence }
+infix operator ^^ : PowerPrecedence
+
 struct GiantUInt: Equatable {
   
   let bytes: Array<UInt8>
   
   init(_ raw: Array<UInt8>) {
-    self.bytes = raw
+    var bytes = raw
+    
+    while bytes.last == 0 {
+      bytes.removeLast()
+    }
+    
+    self.bytes = bytes
   }
     
   // Equatable
@@ -69,6 +78,25 @@ struct GiantUInt: Equatable {
     }
     
     return sum.reduce(GiantUInt([]), +)
+  }
+  
+  static func ^^ (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
+    let count = lhs.bytes.count
+    var result = GiantUInt([1])
+    
+    for iByte in 0 ..< count {
+      let byte = lhs.bytes[iByte]
+      for i in 0 ..< 8 {
+        if iByte != count - 1 || byte >> i > 0 {
+          result = result * result
+          if (byte >> i) & 1 == 1 {
+            result = result * rhs
+          }
+        }
+      }
+    }
+    
+    return result
   }
   
 }

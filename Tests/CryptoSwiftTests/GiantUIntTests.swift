@@ -19,6 +19,12 @@ import XCTest
 
 final class GiantUIntTests: XCTestCase {
   
+  func testComparable() {
+    XCTAssertTrue(GiantUInt([1, 2, 3]) == GiantUInt([1, 2, 3]), "equality check failed")
+    XCTAssertTrue(GiantUInt([1, 2, 3]) > GiantUInt([1, 3, 2]), "greater than check failed")
+    XCTAssertTrue(GiantUInt([1, 3, 2]) < GiantUInt([1, 2, 3]), "lower than check failed")
+  }
+  
   func testAddition() {
     let a = GiantUInt([1]) + GiantUInt([1])
     XCTAssertEqual(a, GiantUInt([2]), "simple addition failed")
@@ -51,6 +57,7 @@ final class GiantUIntTests: XCTestCase {
 extension GiantUIntTests {
   static func allTests() -> [(String, (GiantUIntTests) -> () -> Void)] {
     let tests = [
+      ("testComparable", testComparable),
       ("testAddition", testAddition),
       ("testMultiplication", testMultiplication),
       ("testExponentiation", testExponentiation)

@@ -16,9 +16,13 @@
 precedencegroup PowerPrecedence { higherThan: MultiplicationPrecedence }
 infix operator ^^ : PowerPrecedence
 
-struct GiantUInt: Equatable {
+struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral {
+  
+  // Properties
   
   let bytes: Array<UInt8>
+  
+  // Initialization
   
   init(_ raw: Array<UInt8>) {
     var bytes = raw
@@ -29,11 +33,35 @@ struct GiantUInt: Equatable {
     
     self.bytes = bytes
   }
+  
+  // ExpressibleByIntegerLiteral
+  
+  typealias IntegerLiteralType = UInt8
+  
+  init(integerLiteral value: UInt8) {
+    self = GiantUInt([value])
+  }
     
   // Equatable
   
   static func == (lhs: GiantUInt, rhs: GiantUInt) -> Bool {
     lhs.bytes == rhs.bytes
+  }
+  
+  // Comparable
+  
+  static func < (rhs: GiantUInt, lhs: GiantUInt) -> Bool {
+    for i in (0 ..< max(rhs.bytes.count, lhs.bytes.count)).reversed() {
+      let r = rhs.bytes[safe: i] ?? 0
+      let l = lhs.bytes[safe: i] ?? 0
+      if r < l {
+        return true
+      } else if r > l {
+        return false
+      }
+    }
+    
+    return false
   }
   
   // Operations

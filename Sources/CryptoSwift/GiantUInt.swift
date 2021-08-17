@@ -83,6 +83,25 @@ struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral {
     return GiantUInt(bytes)
   }
   
+  static func - (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
+    var bytes = [UInt8]()
+    var r: UInt8 = 0
+    
+    for i in 0 ..< max(rhs.bytes.count, lhs.bytes.count) {
+      let rhsb = UInt16(rhs.bytes[safe: i] ?? 0)
+      let lhsb = UInt16(lhs.bytes[safe: i] ?? 0) + UInt16(r)
+      r = UInt8(rhsb < lhsb ? 1 : 0)
+      let res = (UInt16(r) << 8) + rhsb - lhsb
+      bytes.append(UInt8(res & 0xff))
+    }
+    
+    if r != 0 {
+      bytes.append(r)
+    }
+    
+    return GiantUInt(bytes)
+  }
+  
   static func * (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
     var offset = 0
     var sum = [GiantUInt]()
@@ -105,7 +124,18 @@ struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral {
       offset += 1
     }
     
-    return sum.reduce(GiantUInt([]), +)
+    return sum.reduce(0, +)
+  }
+  
+  static func % (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
+    var remainder = rhs
+    
+    // This needs serious optimization (but works)
+    while remainder >= lhs {
+      remainder = remainder - lhs
+    }
+  
+    return remainder
   }
   
   static func ^^ (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
@@ -119,6 +149,25 @@ struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral {
           result = result * result
           if (byte >> i) & 1 == 1 {
             result = result * rhs
+          }
+        }
+      }
+    }
+    
+    return result
+  }
+  
+  static func exponentiateWithModulus(rhs: GiantUInt, lhs: GiantUInt, modulus: GiantUInt) -> GiantUInt {
+    let count = lhs.bytes.count
+    var result = GiantUInt([1])
+    
+    for iByte in 0 ..< count {
+      let byte = lhs.bytes[iByte]
+      for i in 0 ..< 8 {
+        if iByte != count - 1 || byte >> i > 0 {
+          result = (result * result) % modulus
+          if (byte >> i) & 1 == 1 {
+            result = (result * rhs) % modulus
           }
         }
       }

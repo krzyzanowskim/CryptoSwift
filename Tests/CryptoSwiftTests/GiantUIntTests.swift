@@ -36,6 +36,14 @@ final class GiantUIntTests: XCTestCase {
     XCTAssertEqual(c, GiantUInt([144, 145, 1]), "addition with double retenue failed")
   }
   
+  func testSubtraction() {
+    let a = GiantUInt([2]) - GiantUInt([1])
+    XCTAssertEqual(a, GiantUInt([1]), "simple subtraction failed")
+    
+    let b = GiantUInt([0, 1]) - GiantUInt([255])
+    XCTAssertEqual(b, GiantUInt([1]), "subtraction with retenue failed")
+  }
+  
   func testMultiplication() {
     let a = GiantUInt([2]) * GiantUInt([2])
     XCTAssertEqual(a, GiantUInt([4]), "simple multiplication failed")
@@ -52,6 +60,16 @@ final class GiantUIntTests: XCTestCase {
     XCTAssertEqual(a, GiantUInt([139, 8]), "simple exponentiation failed")
   }
   
+  func testModulus() {
+    let a = GiantUInt([10]) % GiantUInt([3])
+    XCTAssertEqual(a, GiantUInt([1]), "simple modulus failed")
+  }
+  
+  func testExponentiationWithModulus() {
+    let a = GiantUInt.exponentiateWithModulus(rhs: GiantUInt([3]), lhs: GiantUInt([7]), modulus: GiantUInt([0, 1]))
+    XCTAssertEqual(a, GiantUInt([139]), "simple exponentiation with modulus failed")
+  }
+  
 }
 
 extension GiantUIntTests {
@@ -59,8 +77,11 @@ extension GiantUIntTests {
     let tests = [
       ("testComparable", testComparable),
       ("testAddition", testAddition),
+      ("testSubtraction", testSubtraction),
       ("testMultiplication", testMultiplication),
-      ("testExponentiation", testExponentiation)
+      ("testExponentiation", testExponentiation),
+      ("testModulus", testModulus),
+      ("testExponentiationWithModulus", testExponentiationWithModulus)
     ]
 
     return tests

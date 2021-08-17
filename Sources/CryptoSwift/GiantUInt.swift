@@ -48,6 +48,29 @@ struct GiantUInt: Equatable {
     return GiantUInt(newBytes)
   }
   
-  
+  static func * (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
+    var offset = 0
+    var sum = [GiantUInt]()
+    
+    for rbyte in rhs.bytes {
+      var bytes = [UInt8](repeating: 0, count: offset)
+      var r: UInt8 = 0
+      
+      for lbyte in lhs.bytes {
+        let res = UInt16(rbyte) * UInt16(lbyte) + UInt16(r)
+        r = UInt8(res >> 8)
+        bytes.append(UInt8(res & 0xff))
+      }
+      
+      if r != 0 {
+        bytes.append(r)
+      }
+      
+      sum.append(GiantUInt(bytes))
+      offset += 1
+    }
+    
+    return sum.reduce(GiantUInt([]), +)
+  }
   
 }

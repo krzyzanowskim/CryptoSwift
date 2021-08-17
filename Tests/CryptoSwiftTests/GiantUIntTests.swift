@@ -30,12 +30,24 @@ final class GiantUIntTests: XCTestCase {
     XCTAssertEqual(c, GiantUInt([144, 145, 1]), "addition with double retenue failed")
   }
   
+  func testMultiplication() {
+    let a = GiantUInt([2]) * GiantUInt([2])
+    XCTAssertEqual(a, GiantUInt([4]), "simple multiplication failed")
+    
+    let b = GiantUInt([200]) * GiantUInt([200])
+    XCTAssertEqual(b, GiantUInt([64, 156]), "multiplication with retenue failed")
+    
+    let c = GiantUInt([200, 200]) * GiantUInt([200, 200])
+    XCTAssertEqual(c, GiantUInt([64, 28, 121, 157]), "multiplication with double retenue failed")
+  }
+  
 }
 
 extension GiantUIntTests {
   static func allTests() -> [(String, (GiantUIntTests) -> () -> Void)] {
     let tests = [
-      ("testAddition", testAddition)
+      ("testAddition", testAddition),
+      ("testMultiplication", testMultiplication)
     ]
 
     return tests

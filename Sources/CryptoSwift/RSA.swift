@@ -16,32 +16,51 @@
 public final class RSA {
   
   public enum Error: Swift.Error {
-    /// Invalid key
-    case invalidKey
+    /// No private key specified
+    case noPrivateKey
   }
   
-  let publicKey: Key?
-  let privateKey: Key?
+  /// RSA Modulus
+  public let n: GiantUInt
   
-  public var keySize: Int = 0
+  /// RSA Public Exponent
+  public let e: GiantUInt
   
-  public init(publicKey: Array<UInt8>?, privateKey: Array<UInt8>?) throws {
-    if let publicKey = publicKey {
-      self.publicKey = Key(bytes: publicKey)
-      self.keySize = self.publicKey!.count
+  /// RSA Private Exponent
+  public let d: GiantUInt?
+  
+  /// The size of the modulus, in bits
+  public let keySize: Int
+  
+  /// Initialize with RSA parameters
+  /// - Parameters:
+  ///   - n: The RSA Modulus
+  ///   - e: The RSA Public Exponent
+  ///   - d: The RSA Private Exponent (or nil if unknown, e.g. if only public key is known)
+  public init(n: GiantUInt, e: GiantUInt, d: GiantUInt? = nil) {
+    self.n = n
+    self.e = e
+    self.d = d
+    
+    self.keySize = n.bytes.count * 8
+  }
+  
+  /// Initialize with RSA parameters
+  /// - Parameters:
+  ///   - n: The RSA Modulus
+  ///   - e: The RSA Public Exponent
+  ///   - d: The RSA Private Exponent (or nil if unknown, e.g. if only public key is known)
+  public convenience init(n: Array<UInt8>, e: Array<UInt8>, d: Array<UInt8>? = nil) {
+    if let d = d {
+      self.init(n: GiantUInt(n), e: GiantUInt(e), d: GiantUInt(d))
     } else {
-      self.publicKey = nil
-    }
-    if let privateKey = privateKey {
-      self.privateKey = Key(bytes: privateKey)
-      self.keySize = self.privateKey!.count
-    } else {
-      self.privateKey = nil
-    }
-    if keySize == 0 {
-      throw RSA.Error.invalidKey
+      self.init(n: GiantUInt(n), e: GiantUInt(e))
     }
   }
+  
+  // TODO: Add initializer from PEM (ASN.1 with DER header)
+  
+  // TODO: Add export to PEM (ASN.1 with DER header)
   
 }
 
@@ -51,14 +70,19 @@ extension RSA: Cipher {
   
   @inlinable
   public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
-    // TODO
-    return []
+    // Calculate encrypted data
+    return GiantUInt.exponentiateWithModulus(rhs: GiantUInt(Array(bytes)), lhs: e, modulus: n).bytes
   }
 
   @inlinable
   public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
-    // TODO
-    return []
+    // Check for Private Exponent presence
+    guard let d = d else {
+      throw RSA.Error.noPrivateKey
+    }
+    
+    // Calculate decrypted data
+    return GiantUInt.exponentiateWithModulus(rhs: GiantUInt(Array(bytes)), lhs: d, modulus: n).bytes
   }
   
 }

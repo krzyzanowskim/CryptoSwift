@@ -16,15 +16,15 @@
 precedencegroup PowerPrecedence { higherThan: MultiplicationPrecedence }
 infix operator ^^ : PowerPrecedence
 
-struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral {
+public struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral, ExpressibleByArrayLiteral {
   
   // Properties
   
-  let bytes: Array<UInt8>
+  public let bytes: Array<UInt8>
   
   // Initialization
   
-  init(_ raw: Array<UInt8>) {
+  public init(_ raw: Array<UInt8>) {
     var bytes = raw
     
     while bytes.last == 0 {
@@ -36,21 +36,29 @@ struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral {
   
   // ExpressibleByIntegerLiteral
   
-  typealias IntegerLiteralType = UInt8
+  public typealias IntegerLiteralType = UInt8
   
-  init(integerLiteral value: UInt8) {
+  public init(integerLiteral value: UInt8) {
     self = GiantUInt([value])
+  }
+  
+  // ExpressibleByArrayLiteral
+  
+  public typealias ArrayLiteralElement = UInt8
+  
+  public init(arrayLiteral elements: UInt8...) {
+    self = GiantUInt(elements)
   }
     
   // Equatable
   
-  static func == (lhs: GiantUInt, rhs: GiantUInt) -> Bool {
+  public static func == (lhs: GiantUInt, rhs: GiantUInt) -> Bool {
     lhs.bytes == rhs.bytes
   }
   
   // Comparable
   
-  static func < (rhs: GiantUInt, lhs: GiantUInt) -> Bool {
+  public static func < (rhs: GiantUInt, lhs: GiantUInt) -> Bool {
     for i in (0 ..< max(rhs.bytes.count, lhs.bytes.count)).reversed() {
       let r = rhs.bytes[safe: i] ?? 0
       let l = lhs.bytes[safe: i] ?? 0
@@ -66,7 +74,7 @@ struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral {
   
   // Operations
   
-  static func + (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
+  public static func + (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
     var bytes = [UInt8]()
     var r: UInt8 = 0
     
@@ -83,7 +91,7 @@ struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral {
     return GiantUInt(bytes)
   }
   
-  static func - (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
+  public static func - (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
     var bytes = [UInt8]()
     var r: UInt8 = 0
     
@@ -102,7 +110,7 @@ struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral {
     return GiantUInt(bytes)
   }
   
-  static func * (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
+  public static func * (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
     var offset = 0
     var sum = [GiantUInt]()
     
@@ -127,7 +135,7 @@ struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral {
     return sum.reduce(0, +)
   }
   
-  static func % (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
+  public static func % (rhs: GiantUInt, lhs: GiantUInt) -> GiantUInt {
     var remainder = rhs
     
     // This needs serious optimization (but works)
@@ -157,7 +165,7 @@ struct GiantUInt: Equatable, Comparable, ExpressibleByIntegerLiteral {
     return result
   }
   
-  static func exponentiateWithModulus(rhs: GiantUInt, lhs: GiantUInt, modulus: GiantUInt) -> GiantUInt {
+  public static func exponentiateWithModulus(rhs: GiantUInt, lhs: GiantUInt, modulus: GiantUInt) -> GiantUInt {
     let count = lhs.bytes.count
     var result = GiantUInt([1])
     

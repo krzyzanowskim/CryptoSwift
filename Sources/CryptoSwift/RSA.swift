@@ -13,6 +13,13 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+// Foundation is required for `Data` to be found
+import Foundation
+
+// This is https://github.com/attaswift/BigInt
+// It allows fast calculation for RSA big numbers
+import BigInt
+
 public final class RSA {
   
   public enum Error: Swift.Error {
@@ -21,13 +28,13 @@ public final class RSA {
   }
   
   /// RSA Modulus
-  public let n: GiantUInt
+  public let n: BigUInt
   
   /// RSA Public Exponent
-  public let e: GiantUInt
+  public let e: BigUInt
   
   /// RSA Private Exponent
-  public let d: GiantUInt?
+  public let d: BigUInt?
   
   /// The size of the modulus, in bits
   public let keySize: Int
@@ -37,12 +44,12 @@ public final class RSA {
   ///   - n: The RSA Modulus
   ///   - e: The RSA Public Exponent
   ///   - d: The RSA Private Exponent (or nil if unknown, e.g. if only public key is known)
-  public init(n: GiantUInt, e: GiantUInt, d: GiantUInt? = nil) {
+  public init(n: BigUInt, e: BigUInt, d: BigUInt? = nil) {
     self.n = n
     self.e = e
     self.d = d
     
-    self.keySize = n.bytes.count * 8
+    self.keySize = n.bitWidth
   }
   
   /// Initialize with RSA parameters
@@ -52,9 +59,9 @@ public final class RSA {
   ///   - d: The RSA Private Exponent (or nil if unknown, e.g. if only public key is known)
   public convenience init(n: Array<UInt8>, e: Array<UInt8>, d: Array<UInt8>? = nil) {
     if let d = d {
-      self.init(n: GiantUInt(n), e: GiantUInt(e), d: GiantUInt(d))
+      self.init(n: BigUInt(Data(n)), e: BigUInt(Data(e)), d: BigUInt(Data(d)))
     } else {
-      self.init(n: GiantUInt(n), e: GiantUInt(e))
+      self.init(n: BigUInt(Data(n)), e: BigUInt(Data(e)))
     }
   }
   
@@ -71,7 +78,7 @@ extension RSA: Cipher {
   @inlinable
   public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
     // Calculate encrypted data
-    return GiantUInt.exponentiateWithModulus(rhs: GiantUInt(Array(bytes)), lhs: e, modulus: n).bytes
+    return BigUInt(Data(bytes)).power(e, modulus: n).serialize().bytes
   }
 
   @inlinable
@@ -82,7 +89,7 @@ extension RSA: Cipher {
     }
     
     // Calculate decrypted data
-    return GiantUInt.exponentiateWithModulus(rhs: GiantUInt(Array(bytes)), lhs: d, modulus: n).bytes
+    return BigUInt(Data(bytes)).power(d, modulus: n).serialize().bytes
   }
   
 }

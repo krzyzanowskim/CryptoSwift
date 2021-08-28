@@ -16,4 +16,6 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = "9.0"
   s.source_files  = "Sources/CryptoSwift/**/*.swift"
   s.requires_arc = true
+  
+  s.dependency 'BigInt', '~> 5.2'
 end

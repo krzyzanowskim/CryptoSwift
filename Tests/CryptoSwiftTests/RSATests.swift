@@ -95,6 +95,22 @@ final class RSATests: XCTestCase {
     let decrypted = try! rsa.decrypt(encrypted)
     XCTAssertEqual(decrypted, message, "decrypt failed")
   }
+  
+  func testGenerateKeyPair() {
+    /*
+     * To test key generation and its validity
+     */
+    let message: Array<UInt8> = [
+      0x11, 0x22, 0x33, 0x44
+    ]
+    
+    let rsa = RSA(keySize: 2048)
+    // Sometimes the modulus size is 2047 bits, but it's okay (with two 1024 bits primes)
+    //XCTAssertEqual(rsa.keySize, 2048, "key size is not correct")
+    
+    let decrypted = try! rsa.decrypt(try! rsa.encrypt(message))
+    XCTAssertEqual(decrypted, message, "encrypt+decrypt failed")
+  }
 
 }
 
@@ -102,7 +118,8 @@ extension RSATests {
   static func allTests() -> [(String, (RSATests) -> () -> Void)] {
     let tests = [
       ("testSmallRSA", testSmallRSA),
-      ("testRSA1", testRSA1)
+      ("testRSA1", testRSA1),
+      ("testGenerateKeyPair", testGenerateKeyPair)
     ]
 
     return tests

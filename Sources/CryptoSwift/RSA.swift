@@ -65,6 +65,25 @@ public final class RSA {
     }
   }
   
+  /// Initialize with a generated key pair
+  /// - Parameter keySize: The size of the modulus
+  public convenience init(keySize: Int) {
+    // Generate prime numbers
+    let p = BigUInt.generatePrime(keySize / 2)
+    let q = BigUInt.generatePrime(keySize / 2)
+    
+    // Calculate modulus
+    let n = p * q
+    
+    // Calculate public and private exponent
+    let e: BigUInt = 65537
+    let phi = (p - 1) * (q - 1)
+    let d = e.inverse(phi)
+    
+    // Initialize
+    self.init(n: n, e: e, d: d)
+  }
+  
   // TODO: Add initializer from PEM (ASN.1 with DER header)
   
   // TODO: Add export to PEM (ASN.1 with DER header)
@@ -90,6 +109,23 @@ extension RSA: Cipher {
     
     // Calculate decrypted data
     return BigUInt(Data(bytes)).power(d, modulus: n).serialize().bytes
+  }
+  
+}
+
+// MARK: BigUInt extension
+
+extension BigUInt {
+  
+  public static func generatePrime(_ width: Int) -> BigUInt {
+    // Note: Need to find a better way to generate prime numbers
+    while true {
+      var random = BigUInt.randomInteger(withExactWidth: width)
+      random |= BigUInt(1)
+      if random.isPrime() {
+        return random
+      }
+    }
   }
   
 }

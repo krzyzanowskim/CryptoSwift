@@ -16,9 +16,9 @@
 // Foundation is required for `Data` to be found
 import Foundation
 
-// This is https://github.com/attaswift/BigInt
+// Note: The `BigUInt` struct was copied from:
+// https://github.com/attaswift/BigInt
 // It allows fast calculation for RSA big numbers
-import BigInt
 
 public final class RSA {
   

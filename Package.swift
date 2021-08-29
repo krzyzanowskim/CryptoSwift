@@ -13,11 +13,8 @@ let package = Package(
       targets: ["CryptoSwift"]
     )
   ],
-  dependencies: [
-    .package(url: "https://github.com/attaswift/BigInt.git", from: "5.2.1")
-  ],
   targets: [
-    .target(name: "CryptoSwift", dependencies: ["BigInt"]),
+    .target(name: "CryptoSwift"),
     .testTarget(name: "CryptoSwiftTests", dependencies: ["CryptoSwift"]),
     .testTarget(name: "TestsPerformance", dependencies: ["CryptoSwift"])
   ],

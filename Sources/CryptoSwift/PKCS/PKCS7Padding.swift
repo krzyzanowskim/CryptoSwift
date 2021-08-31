@@ -34,7 +34,7 @@ struct PKCS7Padding: PaddingProtocol {
       withPadding += Array<UInt8>(repeating: UInt8(blockSize), count: Int(blockSize))
     } else {
       // The value of each added byte is the number of bytes that are added
-      withPadding += Array<UInt8>(repeating: padding, count: Int(padding))
+      withPadding += Array<UInt8>(repeating: padding-1, count: Int(padding))
     }
     return withPadding
   }
@@ -48,7 +48,7 @@ struct PKCS7Padding: PaddingProtocol {
     assert(!bytes.isEmpty, "Need bytes to remove padding")
 
     let padding = Int(lastByte) // last byte
-    let finalLength = bytes.count - padding
+    let finalLength = bytes.count - (padding + 1)
 
     if finalLength < 0 {
       return bytes

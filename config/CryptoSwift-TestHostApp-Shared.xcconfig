@@ -62,3 +62,5 @@ PRODUCT_BUNDLE_IDENTIFIER = CryptoSwiftTestHostApp
 // setting.
 
 SDKROOT = iphoneos
+
+COPY_PHASE_STRIP = NO

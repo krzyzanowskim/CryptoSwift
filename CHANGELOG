@@ -1,3 +1,8 @@
+1.4.2
+- Update Xcode project to Xcode 13
+- Add SHA3 support for HMAC
+- Update HMAC.Variant API (deprecate current cases)
+
 1.4.1
 - Introduce ISO 10126 padding
 - fix various compiler warnings

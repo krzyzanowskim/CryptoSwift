@@ -20,7 +20,7 @@ public final class HMAC: Authenticator {
   }
 
   public enum Variant {
-    case sha1, sha256, sha384, sha512, md5
+    case sha1, sha256, sha384, sha512, sha3_224, sha3_256, sha3_384, sha3_512, md5
 
     var digestLength: Int {
       switch self {
@@ -32,6 +32,14 @@ public final class HMAC: Authenticator {
           return SHA2.Variant.sha384.digestLength
         case .sha512:
           return SHA2.Variant.sha512.digestLength
+        case .sha3_224:
+            return SHA3.Variant.sha224.digestLength
+        case .sha3_256:
+            return SHA3.Variant.sha256.digestLength
+        case .sha3_384:
+            return SHA3.Variant.sha384.digestLength
+        case .sha3_512:
+            return SHA3.Variant.sha512.digestLength
         case .md5:
           return MD5.digestLength
       }
@@ -47,6 +55,14 @@ public final class HMAC: Authenticator {
           return Digest.sha384(bytes)
         case .sha512:
           return Digest.sha512(bytes)
+        case .sha3_224:
+            return Digest.sha3(bytes, variant: .sha224)
+        case .sha3_256:
+            return Digest.sha3(bytes, variant: .sha256)
+        case .sha3_384:
+            return Digest.sha3(bytes, variant: .sha384)
+        case .sha3_512:
+            return Digest.sha3(bytes, variant: .sha512)
         case .md5:
           return Digest.md5(bytes)
       }
@@ -60,6 +76,14 @@ public final class HMAC: Authenticator {
           return 64
         case .sha384, .sha512:
           return 128
+        case .sha3_224:
+            return SHA3.Variant.sha224.blockSize
+        case .sha3_256:
+            return SHA3.Variant.sha256.blockSize
+        case .sha3_384:
+            return SHA3.Variant.sha384.blockSize
+        case .sha3_512:
+            return SHA3.Variant.sha512.blockSize
       }
     }
   }

@@ -44,7 +44,7 @@ public struct HKDF {
   ///   - salt: optional salt (if not provided, it is set to a sequence of variant.digestLength zeros)
   ///   - info: optional context and application specific information
   ///   - keyLength: intended length of derived key
-  public init(password: Array<UInt8>, salt: Array<UInt8>? = nil, info: Array<UInt8>? = nil, keyLength: Int? = nil /* dkLen */, variant: HMAC.Variant = .sha256) throws {
+  public init(password: Array<UInt8>, salt: Array<UInt8>? = nil, info: Array<UInt8>? = nil, keyLength: Int? = nil /* dkLen */, variant: HMAC.Variant = .sha2(.sha256)) throws {
     guard !password.isEmpty else {
       throw Error.invalidInput
     }

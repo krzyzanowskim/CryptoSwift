@@ -20,7 +20,13 @@ public final class HMAC: Authenticator {
   }
 
   public enum Variant {
-    case sha1, sha256, sha384, sha512, sha3(SHA3.Variant), md5
+    case md5
+    case sha1
+    case sha2(SHA2.Variant)
+    case sha3(SHA3.Variant)
+
+    @available(*, deprecated, message: "Use sha2(variant) instead.")
+    case sha256, sha384, sha512
 
     var digestLength: Int {
       switch self {
@@ -32,6 +38,8 @@ public final class HMAC: Authenticator {
           return SHA2.Variant.sha384.digestLength
         case .sha512:
           return SHA2.Variant.sha512.digestLength
+        case .sha2(let variant):
+          return variant.digestLength
         case .sha3(let variant):
             return variant.digestLength
         case .md5:
@@ -49,6 +57,8 @@ public final class HMAC: Authenticator {
           return Digest.sha384(bytes)
         case .sha512:
           return Digest.sha512(bytes)
+        case .sha2(let variant):
+          return Digest.sha2(bytes, variant: variant)
         case .sha3(let variant):
           return Digest.sha3(bytes, variant: variant)
         case .md5:
@@ -60,10 +70,16 @@ public final class HMAC: Authenticator {
       switch self {
         case .md5:
           return MD5.blockSize
-        case .sha1, .sha256:
-          return 64
-        case .sha384, .sha512:
-          return 128
+        case .sha1:
+          return SHA1.blockSize
+        case .sha256:
+          return SHA2.Variant.sha256.blockSize
+        case .sha384:
+          return SHA2.Variant.sha384.blockSize
+        case .sha512:
+          return SHA2.Variant.sha512.blockSize
+        case .sha2(let variant):
+          return variant.blockSize
         case .sha3(let variant):
             return variant.blockSize
       }

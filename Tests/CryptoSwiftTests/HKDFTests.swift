@@ -25,7 +25,7 @@ class HKDFTests: XCTestCase {
     let salt = Array<UInt8>(hex: "0x000102030405060708090a0b0c")
     let info = Array<UInt8>(hex: "0xf0f1f2f3f4f5f6f7f8f9")
     let keyLength = 42
-    let variant = HMAC.Variant.sha256
+    let variant = HMAC.Variant.sha2(.sha256)
     let reference = Array<UInt8>(hex: "0x3cb25f25faacd57a90434f64d0362f2a2d2d0a90cf1a5a4c5db02d56ecc4c5bf34007208d5b887185865")
 
     XCTAssertEqual(reference, try HKDF(password: password, salt: salt, info: info, keyLength: keyLength, variant: variant).calculate())
@@ -36,7 +36,7 @@ class HKDFTests: XCTestCase {
     let salt = Array<UInt8>(hex: "0x606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeaf")
     let info = Array<UInt8>(hex: "0xb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff")
     let keyLength = 82
-    let variant = HMAC.Variant.sha256
+    let variant = HMAC.Variant.sha2(.sha256)
     let reference = Array<UInt8>(hex: "0xb11e398dc80327a1c8e7f78c596a49344f012eda2d4efad8a050cc4c19afa97c59045a99cac7827271cb41c65e590e09da3275600c2f09b8367793a9aca3db71cc30c58179ec3e87c14c01d5c1f3434f1d87")
 
     XCTAssertEqual(reference, try HKDF(password: password, salt: salt, info: info, keyLength: keyLength, variant: variant).calculate())
@@ -45,7 +45,7 @@ class HKDFTests: XCTestCase {
   func testHKDF3() {
     let password = Array<UInt8>(hex: "0x0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b")
     let keyLength = 42
-    let variant = HMAC.Variant.sha256
+    let variant = HMAC.Variant.sha2(.sha256)
     let reference = Array<UInt8>(hex: "0x8da4e775a563c18f715f802a063c5a31b8a11f5c5ee1879ec3454e5f3c738d2d9d201395faa4b61a96c8")
 
     XCTAssertEqual(reference, try HKDF(password: password, keyLength: keyLength, variant: variant).calculate())

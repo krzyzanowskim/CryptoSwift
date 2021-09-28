@@ -62,5 +62,7 @@ PRODUCT_BUNDLE_IDENTIFIER = test.CryptoSwiftTestHostApp
 // setting.
 
 SDKROOT = iphoneos
+SUPPORTED_PLATFORMS = iphonesimulator iphoneos
 
 COPY_PHASE_STRIP = NO
+ONLY_ACTIVE_ARCH = YES

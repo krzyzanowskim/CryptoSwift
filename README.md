@@ -522,6 +522,33 @@ let encrypt = try AEADChaCha20Poly1305.encrypt(plaintext, key: key, iv: nonce, a
 let decrypt = try AEADChaCha20Poly1305.decrypt(ciphertext, key: key, iv: nonce, authenticationHeader: header, authenticationTag: tagArr: tag)
 ```
 
+##### RSA
+
+RSA initialization from parameters
+
+```swift
+let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]
+
+let n: Array<UInt8> = // RSA modulus
+let e: Array<UInt8> = // RSA public exponent
+let d: Array<UInt8> = // RSA private exponent
+
+let rsa = RSA(n: n, e: e, d: d)
+
+do {
+    let encrypted = try rsa.encrypt(input)
+    let decrypted = try rsa.decrypt(encrypted)
+} catch {
+    print(error)
+}
+```
+
+RSA key generation
+
+```swift
+let rsa = RSA(keySize: 2048) // This generates a modulus, public exponent and private exponent with the given size
+```
+
 ## Author
 
 CryptoSwift is owned and maintained by [Marcin Krzyżanowski](http://www.krzyzanowskim.com)

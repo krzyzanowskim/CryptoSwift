@@ -84,9 +84,9 @@ public final class RSA {
     self.init(n: n, e: e, d: d)
   }
   
-  // TODO: Add initializer from PEM (ASN.1 with DER header)
+  // TODO: Add initializer from PEM (ASN.1 with DER header) (See #892)
   
-  // TODO: Add export to PEM (ASN.1 with DER header)
+  // TODO: Add export to PEM (ASN.1 with DER header) (See #892)
   
 }
 

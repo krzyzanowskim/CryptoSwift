@@ -389,7 +389,7 @@ let key = try PKCS5.PBKDF2(
 ).calculate()
 
 /* Generate random IV value. IV is public value. Either need to generate, or get it from elsewhere */
-let iv = AES.randomIV(AES.blockSize)
+let iv = AES.randomIV()
 
 /* AES cryptor instance */
 let aes = try AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7)

@@ -1,3 +1,6 @@
+1.4.3
+- Fix PCBC mode.
+
 1.4.2
 - Update Xcode project to Xcode 13
 - Add SHA3 support for HMAC

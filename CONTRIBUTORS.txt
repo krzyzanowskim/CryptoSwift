@@ -48,6 +48,7 @@ organizations who have contributed source code to CryptoSwift.
 - Igor Camilo <igor.rcamilo@gmail.com>
 - Javier Soto <javiers@twitter.com>
 - Jeremy Greenwood <jeremy@mobelux.com>
+- Jimmie Johansson <jim@svep.se>
 - John Hammerlund <johnhammerlund@gmail.com>
 - Jonas Obrist <ojiidotch@gmail.com>
 - K.K. POON <noopkk@gmail.com>
@@ -81,6 +82,7 @@ organizations who have contributed source code to CryptoSwift.
 - Pedro Silva <pjlsilva@gmail.com>
 - Pierpaolo Frasa <pfrasa@chegg.com>
 - Quinn McHenry <quinn@jqm.us>
+- R4v3nPr0 <m_117@outlook.com>
 - Rich Lowenberg <me@richlowenberg.com>
 - Roman Podymov <podymfrombryansk@yandex.ru>
 - Ronald Mannak <ronaldmannak@me.com>

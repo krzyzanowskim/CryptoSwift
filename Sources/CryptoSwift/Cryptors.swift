@@ -32,7 +32,15 @@ public protocol Cryptors: AnyObject {
 }
 
 public extension Cryptors where Self: BlockCipher {
-  /// Generates array of random bytes. `blockSize` is used as length of the result array.
+  /// Generates array of random bytes.
+  /// Convenience helper that uses `Swift.SystemRandomNumberGenerator`.
+  /// - Parameter count: Length of the result array
+  @available(*, deprecated, message: "Please use `randomIV()`, which returns number of bytes equal to Self.blockSize.")
+  static func randomIV(_ count: Int) -> [UInt8] {
+    (0..<count).map({ _ in UInt8.random(in: 0...UInt8.max) })
+  }
+
+  /// Generates array of random bytes. `Self.blockSize` is used as length of the result array.
   /// Convenience helper that uses `Swift.SystemRandomNumberGenerator`.
   static func randomIV() -> [UInt8] {
     (0..<Self.blockSize).map({ _ in UInt8.random(in: 0...UInt8.max) })

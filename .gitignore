@@ -16,6 +16,7 @@ DerivedData
 *.xcuserstate
 timeline.xctimeline
 .swiftpm/xcode
+CryptoSwift.xcframework
 
 /Framework
 .DS_Store

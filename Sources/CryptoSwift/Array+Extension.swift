@@ -24,6 +24,11 @@ extension Array {
   var slice: ArraySlice<Element> {
     self[self.startIndex ..< self.endIndex]
   }
+  
+  @inlinable
+  subscript (safe index: Index) -> Element? {
+    return indices.contains(index) ? self[index] : nil
+  }
 }
 
 extension Array where Element == UInt8 {

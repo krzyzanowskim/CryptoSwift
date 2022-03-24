@@ -545,7 +545,6 @@
 				75F4E437216C9B5D00F09710 /* CHANGELOG */,
 			);
 			name = "Supporting Files";
-			path = CryptoSwiftTests;
 			sourceTree = "<group>";
 		};
 		75843E9A2072457A0050583A /* config */ = {
@@ -812,7 +811,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 1320;
+				LastUpgradeCheck = 1330;
 				ORGANIZATIONNAME = "Marcin Krzyzanowski";
 				TargetAttributes = {
 					75211F91207249D8004E41F8 = {

@@ -731,9 +731,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 754BE46B19693E190098E6F3 /* Build configuration list for PBXNativeTarget "CryptoSwift" */;
 			buildPhases = (
+				754BE45219693E190098E6F3 /* Headers */,
 				754BE45019693E190098E6F3 /* Sources */,
 				754BE45119693E190098E6F3 /* Frameworks */,
-				754BE45219693E190098E6F3 /* Headers */,
 				754BE45319693E190098E6F3 /* Resources */,
 				75B601E0197D69770009B53D /* CopyFiles */,
 			);

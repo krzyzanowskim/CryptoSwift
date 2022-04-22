@@ -70,6 +70,7 @@ organizations who have contributed source code to CryptoSwift.
 - Matthew Chung <matthewchung74@gmail.com>
 - Michael Ledin <m.ledin@appheads.ru>
 - Michael Redig <mredig@gmail.com>
+- Mikael LE GOFF <mikael@mercari.com>
 - Mo Ramezanpoor <me@mohsenr.com>
 - Nate West <nwest@detroitlabs.com>
 - Nathan Fallet <contact@nathanfallet.me>

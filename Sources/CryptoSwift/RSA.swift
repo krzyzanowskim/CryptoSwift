@@ -28,13 +28,13 @@ public final class RSA {
   }
   
   /// RSA Modulus
-  public let n: CS.BigUInt
+  public let n: BigUInteger
   
   /// RSA Public Exponent
-  public let e: CS.BigUInt
+  public let e: BigUInteger
   
   /// RSA Private Exponent
-  public let d: CS.BigUInt?
+  public let d: BigUInteger?
   
   /// The size of the modulus, in bits
   public let keySize: Int
@@ -44,7 +44,7 @@ public final class RSA {
   ///   - n: The RSA Modulus
   ///   - e: The RSA Public Exponent
   ///   - d: The RSA Private Exponent (or nil if unknown, e.g. if only public key is known)
-  public init(n: CS.BigUInt, e: CS.BigUInt, d: CS.BigUInt? = nil) {
+  public init(n: BigUInteger, e: BigUInteger, d: BigUInteger? = nil) {
     self.n = n
     self.e = e
     self.d = d
@@ -59,9 +59,9 @@ public final class RSA {
   ///   - d: The RSA Private Exponent (or nil if unknown, e.g. if only public key is known)
   public convenience init(n: Array<UInt8>, e: Array<UInt8>, d: Array<UInt8>? = nil) {
     if let d = d {
-      self.init(n: CS.BigUInt(Data(n)), e: CS.BigUInt(Data(e)), d: CS.BigUInt(Data(d)))
+      self.init(n: BigUInteger(Data(n)), e: BigUInteger(Data(e)), d: BigUInteger(Data(d)))
     } else {
-      self.init(n: CS.BigUInt(Data(n)), e: CS.BigUInt(Data(e)))
+      self.init(n: BigUInteger(Data(n)), e: BigUInteger(Data(e)))
     }
   }
   
@@ -69,14 +69,14 @@ public final class RSA {
   /// - Parameter keySize: The size of the modulus
   public convenience init(keySize: Int) {
     // Generate prime numbers
-    let p = CS.BigUInt.generatePrime(keySize / 2)
-    let q = CS.BigUInt.generatePrime(keySize / 2)
+    let p = BigUInteger.generatePrime(keySize / 2)
+    let q = BigUInteger.generatePrime(keySize / 2)
     
     // Calculate modulus
     let n = p * q
     
     // Calculate public and private exponent
-    let e: CS.BigUInt = 65537
+    let e: BigUInteger = 65537
     let phi = (p - 1) * (q - 1)
     let d = e.inverse(phi)
     
@@ -97,7 +97,7 @@ extension RSA: Cipher {
   @inlinable
   public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
     // Calculate encrypted data
-    return CS.BigUInt(Data(bytes)).power(e, modulus: n).serialize().bytes
+    return BigUInteger(Data(bytes)).power(e, modulus: n).serialize().bytes
   }
 
   @inlinable
@@ -108,20 +108,20 @@ extension RSA: Cipher {
     }
     
     // Calculate decrypted data
-    return CS.BigUInt(Data(bytes)).power(d, modulus: n).serialize().bytes
+    return BigUInteger(Data(bytes)).power(d, modulus: n).serialize().bytes
   }
   
 }
 
 // MARK: CS.BigUInt extension
 
-extension CS.BigUInt {
+extension BigUInteger {
   
-  public static func generatePrime(_ width: Int) -> CS.BigUInt {
+  public static func generatePrime(_ width: Int) -> BigUInteger {
     // Note: Need to find a better way to generate prime numbers
     while true {
-      var random = CS.BigUInt.randomInteger(withExactWidth: width)
-      random |= CS.BigUInt(1)
+      var random = BigUInteger.randomInteger(withExactWidth: width)
+      random |= BigUInteger(1)
       if random.isPrime() {
         return random
       }

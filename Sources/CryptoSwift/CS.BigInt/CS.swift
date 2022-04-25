@@ -12,7 +12,12 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-import Foundation
+// To avoid name conflict with BigInt library, I choose to rename
+// BigInt -> BigInteger
+// BigUInt -> BigUInteger
+
+public typealias BigInteger = CS.BigInt
+public typealias BigUInteger = CS.BigUInt
 
 public enum CS {
   // namespace

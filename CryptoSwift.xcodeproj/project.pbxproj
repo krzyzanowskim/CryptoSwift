@@ -429,7 +429,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		6AC893DF26DB94F700F7E787 /* CS.BigInt */ = {
+		6AC893DF26DB94F700F7E787 /* CS_BigInt */ = {
 			isa = PBXGroup;
 			children = (
 				6AC893E026DB950C00F7E787 /* Addition.swift */,
@@ -456,7 +456,7 @@
 				6AC893E926DB950D00F7E787 /* Words and Bits.swift */,
 				7571938D2816BFE3001C3AC0 /* CS.swift */,
 			);
-			path = CS.BigInt;
+			path = CS_BigInt;
 			sourceTree = "<group>";
 		};
 		75211F93207249D8004E41F8 /* CryptoSwift-TestHostApp */ = {
@@ -598,7 +598,7 @@
 				75EC52391EE8B6CA0048EB3B /* Array+Extension.swift */,
 				75EC523A1EE8B6CA0048EB3B /* Authenticator.swift */,
 				75EC523B1EE8B6CA0048EB3B /* BatchedCollection.swift */,
-				6AC893DF26DB94F700F7E787 /* CS.BigInt */,
+				6AC893DF26DB94F700F7E787 /* CS_BigInt */,
 				75EC523C1EE8B6CA0048EB3B /* Bit.swift */,
 				75EC523D1EE8B6CA0048EB3B /* BlockCipher.swift */,
 				75EC523E1EE8B6CA0048EB3B /* BlockMode */,

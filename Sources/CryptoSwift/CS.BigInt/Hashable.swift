@@ -6,7 +6,7 @@
 //  Copyright © 2016-2017 Károly Lőrentey.
 //
 
-extension BigUInt: Hashable {
+extension CS.BigUInt: Hashable {
     //MARK: Hashing
 
     /// Append this `BigUInt` to the specified hasher.
@@ -17,7 +17,7 @@ extension BigUInt: Hashable {
     }
 }
 
-extension BigInt: Hashable {
+extension CS.BigInt: Hashable {
     /// Append this `BigInt` to the specified hasher.
     public func hash(into hasher: inout Hasher) {
         hasher.combine(sign)

@@ -1,6 +1,6 @@
 //
 //  Words and Bits.swift
-//  BigInt
+//  CS.BigInt
 //
 //  Created by Károly Lőrentey on 2017-08-11.
 //  Copyright © 2016-2017 Károly Lőrentey.
@@ -20,7 +20,7 @@ extension Array where Element == UInt {
     }
 }
 
-extension BigUInt {
+extension CS.BigUInt {
     public subscript(bitAt index: Int) -> Bool {
         get {
             precondition(index >= 0)
@@ -40,7 +40,7 @@ extension BigUInt {
     }
 }
 
-extension BigUInt {
+extension CS.BigUInt {
     /// The minimum number of bits required to represent this integer in binary.
     ///
     /// - Returns: floor(log2(2 * self + 1))
@@ -74,7 +74,7 @@ extension BigUInt {
     }
 }
 
-extension BigInt {
+extension CS.BigInt {
     public var bitWidth: Int {
         guard !magnitude.isZero else { return 0 }
         return magnitude.bitWidth + 1
@@ -86,11 +86,11 @@ extension BigInt {
     }
 }
 
-extension BigUInt {
+extension CS.BigUInt {
     public struct Words: RandomAccessCollection {
-        private let value: BigUInt
+        private let value: CS.BigUInt
 
-        fileprivate init(_ value: BigUInt) { self.value = value }
+        fileprivate init(_ value: CS.BigUInt) { self.value = value }
 
         public var startIndex: Int { return 0 }
         public var endIndex: Int { return value.count }
@@ -135,14 +135,14 @@ extension BigUInt {
     }
 }
 
-extension BigInt {
+extension CS.BigInt {
     public struct Words: RandomAccessCollection {
         public typealias Indices = CountableRange<Int>
 
-        private let value: BigInt
+        private let value: CS.BigInt
         private let decrementLimit: Int
 
-        fileprivate init(_ value: BigInt) {
+        fileprivate init(_ value: CS.BigInt) {
             self.value = value
             switch value.sign {
             case .plus:
@@ -192,11 +192,11 @@ extension BigInt {
     public init<S: Sequence>(words: S) where S.Element == Word {
         var words = Array(words)
         if (words.last ?? 0) >> (Word.bitWidth - 1) == 0 {
-            self.init(sign: .plus, magnitude: BigUInt(words: words))
+            self.init(sign: .plus, magnitude: CS.BigUInt(words: words))
         }
         else {
             words.twosComplement()
-            self.init(sign: .minus, magnitude: BigUInt(words: words))
+            self.init(sign: .minus, magnitude: CS.BigUInt(words: words))
         }
     }
 }

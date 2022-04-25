@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension BigUInt {
+extension CS.BigUInt {
     //MARK: NSData Conversion
 
     /// Initialize a BigInt from bytes accessed from an UnsafeRawBufferPointer
@@ -109,7 +109,7 @@ extension BigUInt {
     }
 }
 
-extension BigInt {
+extension CS.BigInt {
     
     /// Initialize a BigInt from bytes accessed from an UnsafeRawBufferPointer,
     /// where the first byte indicates sign (0 for positive, 1 for negative)
@@ -131,7 +131,7 @@ extension BigInt {
         // to this byte in the future.
         self.sign = firstByte & 0b1 == 0 ? .plus : .minus
 
-        self.magnitude = BigUInt(UnsafeRawBufferPointer(rebasing: buffer.dropFirst(1)))
+        self.magnitude = CS.BigUInt(UnsafeRawBufferPointer(rebasing: buffer.dropFirst(1)))
     }
     
     /// Initializes an integer from the bits stored inside a piece of `Data`.
@@ -139,7 +139,7 @@ extension BigInt {
     /// byte to represent the sign (0 for positive, 1 for negative)
     public init(_ data: Data) {
         // This assumes Word is binary.
-        // This is the same assumption made when initializing BigUInt from Data
+        // This is the same assumption made when initializing CS.BigUInt from Data
         precondition(Word.bitWidth % 8 == 0)
 
         self.init()
@@ -155,7 +155,7 @@ extension BigInt {
         self.sign = firstByte & 0b1 == 0 ? .plus : .minus
         
         // The remaining bytes are read and stored as the magnitude
-        self.magnitude = BigUInt(data.dropFirst(1))
+        self.magnitude = CS.BigUInt(data.dropFirst(1))
     }
     
     /// Return a `Data` value that contains the base-256 representation of this integer, in network (big-endian) byte order and a prepended byte to indicate the sign (0 for positive, 1 for negative)
@@ -163,7 +163,7 @@ extension BigInt {
         // Create a data object for the magnitude portion of the BigInt
         let magnitudeData = self.magnitude.serialize()
         
-        // Similar to BigUInt, a value of 0 should return an initialized, empty Data struct
+        // Similar to CS.BigUInt, a value of 0 should return an initialized, empty Data struct
         guard magnitudeData.count > 0 else { return magnitudeData }
         
         // Create a new Data struct for the signed BigInt value

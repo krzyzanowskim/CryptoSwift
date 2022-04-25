@@ -1,12 +1,12 @@
 //
 //  String Conversion.swift
-//  BigInt
+//  CS.BigInt
 //
 //  Created by Károly Lőrentey on 2016-01-03.
 //  Copyright © 2016-2017 Károly Lőrentey.
 //
 
-extension BigUInt {
+extension CS.BigUInt {
 
     //MARK: String Conversion
 
@@ -38,7 +38,7 @@ extension BigUInt {
     /// - Returns: The integer represented by `text`, or nil if `text` contains a character that does not represent a numeral in `radix`.
     public init?<S: StringProtocol>(_ text: S, radix: Int = 10) {
         precondition(radix > 1)
-        let (charsPerWord, power) = BigUInt.charsPerWord(forRadix: radix)
+        let (charsPerWord, power) = CS.BigUInt.charsPerWord(forRadix: radix)
 
         var words: [Word] = []
         var end = text.endIndex
@@ -72,7 +72,7 @@ extension BigUInt {
     }
 }
 
-extension BigInt {
+extension CS.BigInt {
     /// Initialize a big integer from an ASCII representation in a given radix. Numerals above `9` are represented by
     /// letters from the English alphabet.
     ///
@@ -81,19 +81,19 @@ extension BigInt {
     /// - Parameter `radix`: The base of the number system to use, or 10 if unspecified.
     /// - Returns: The integer represented by `text`, or nil if `text` contains a character that does not represent a numeral in `radix`.
     public init?<S: StringProtocol>(_ text: S, radix: Int = 10) {
-        var magnitude: BigUInt?
+        var magnitude: CS.BigUInt?
         var sign: Sign = .plus
         if text.first == "-" {
             sign = .minus
             let text = text.dropFirst()
-            magnitude = BigUInt(text, radix: radix)
+            magnitude = CS.BigUInt(text, radix: radix)
         }
         else if text.first == "+" {
             let text = text.dropFirst()
-            magnitude = BigUInt(text, radix: radix)
+            magnitude = CS.BigUInt(text, radix: radix)
         }
         else {
-            magnitude = BigUInt(text, radix: radix)
+            magnitude = CS.BigUInt(text, radix: radix)
         }
         guard let m = magnitude else { return nil }
         self.magnitude = m
@@ -105,7 +105,7 @@ extension String {
     /// Initialize a new string with the base-10 representation of an unsigned big integer.
     ///
     /// - Complexity: O(v.count^2)
-    public init(_ v: BigUInt) { self.init(v, radix: 10, uppercase: false) }
+    public init(_ v: CS.BigUInt) { self.init(v, radix: 10, uppercase: false) }
 
     /// Initialize a new string representing an unsigned big integer in the given radix (base).
     ///
@@ -114,9 +114,9 @@ extension String {
     ///
     /// - Requires: radix > 1 && radix <= 36
     /// - Complexity: O(count) when radix is a power of two; otherwise O(count^2).
-    public init(_ v: BigUInt, radix: Int, uppercase: Bool = false) {
+    public init(_ v: CS.BigUInt, radix: Int, uppercase: Bool = false) {
         precondition(radix > 1)
-        let (charsPerWord, power) = BigUInt.charsPerWord(forRadix: radix)
+        let (charsPerWord, power) = CS.BigUInt.charsPerWord(forRadix: radix)
 
         guard !v.isZero else { self = "0"; return }
 
@@ -155,7 +155,7 @@ extension String {
     ///
     /// - Requires: radix > 1 && radix <= 36
     /// - Complexity: O(count) when radix is a power of two; otherwise O(count^2).
-    public init(_ value: BigInt, radix: Int = 10, uppercase: Bool = false) {
+    public init(_ value: CS.BigInt, radix: Int = 10, uppercase: Bool = false) {
         self = String(value.magnitude, radix: radix, uppercase: uppercase)
         if value.sign == .minus {
             self = "-" + self
@@ -163,61 +163,61 @@ extension String {
     }
 }
 
-extension BigUInt: ExpressibleByStringLiteral {
+extension CS.BigUInt: ExpressibleByStringLiteral {
     /// Initialize a new big integer from a Unicode scalar.
     /// The scalar must represent a decimal digit.
     public init(unicodeScalarLiteral value: UnicodeScalar) {
-        self = BigUInt(String(value), radix: 10)!
+        self = CS.BigUInt(String(value), radix: 10)!
     }
 
     /// Initialize a new big integer from an extended grapheme cluster.
     /// The cluster must consist of a decimal digit.
     public init(extendedGraphemeClusterLiteral value: String) {
-        self = BigUInt(value, radix: 10)!
+        self = CS.BigUInt(value, radix: 10)!
     }
 
     /// Initialize a new big integer from a decimal number represented by a string literal of arbitrary length.
     /// The string must contain only decimal digits.
     public init(stringLiteral value: StringLiteralType) {
-        self = BigUInt(value, radix: 10)!
+        self = CS.BigUInt(value, radix: 10)!
     }
 }
 
-extension BigInt: ExpressibleByStringLiteral {
+extension CS.BigInt: ExpressibleByStringLiteral {
     /// Initialize a new big integer from a Unicode scalar.
     /// The scalar must represent a decimal digit.
     public init(unicodeScalarLiteral value: UnicodeScalar) {
-        self = BigInt(String(value), radix: 10)!
+        self = CS.BigInt(String(value), radix: 10)!
     }
 
     /// Initialize a new big integer from an extended grapheme cluster.
     /// The cluster must consist of a decimal digit.
     public init(extendedGraphemeClusterLiteral value: String) {
-        self = BigInt(value, radix: 10)!
+        self = CS.BigInt(value, radix: 10)!
     }
 
     /// Initialize a new big integer from a decimal number represented by a string literal of arbitrary length.
     /// The string must contain only decimal digits.
     public init(stringLiteral value: StringLiteralType) {
-        self = BigInt(value, radix: 10)!
+        self = CS.BigInt(value, radix: 10)!
     }
 }
 
-extension BigUInt: CustomStringConvertible {
+extension CS.BigUInt: CustomStringConvertible {
     /// Return the decimal representation of this integer.
     public var description: String {
         return String(self, radix: 10)
     }
 }
 
-extension BigInt: CustomStringConvertible {
+extension CS.BigInt: CustomStringConvertible {
     /// Return the decimal representation of this integer.
     public var description: String {
         return String(self, radix: 10)
     }
 }
 
-extension BigUInt: CustomPlaygroundDisplayConvertible {
+extension CS.BigUInt: CustomPlaygroundDisplayConvertible {
 
     /// Return the playground quick look representation of this integer.
     public var playgroundDescription: Any {
@@ -226,7 +226,7 @@ extension BigUInt: CustomPlaygroundDisplayConvertible {
     }
 }
 
-extension BigInt: CustomPlaygroundDisplayConvertible {
+extension CS.BigInt: CustomPlaygroundDisplayConvertible {
 
     /// Return the playground quick look representation of this integer.
     public var playgroundDescription: Any {

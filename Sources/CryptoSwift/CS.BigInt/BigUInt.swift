@@ -6,61 +6,65 @@
 //  Copyright © 2016-2017 Károly Lőrentey.
 //
 
-/// An arbitary precision unsigned integer type, also known as a "big integer".
-///
-/// Operations on big integers never overflow, but they may take a long time to execute.
-/// The amount of memory (and address space) available is the only constraint to the magnitude of these numbers.
-///
-/// This particular big integer type uses base-2^64 digits to represent integers; you can think of it as a wrapper
-/// around `Array<UInt64>`. (In fact, `BigUInt` only uses an array if there are more than two digits.)
-public struct BigUInt: UnsignedInteger {
-    /// The type representing a digit in `BigUInt`'s underlying number system.
-    public typealias Word = UInt
+extension CS {
 
-    /// The storage variants of a `BigUInt`.
-    enum Kind {
-        /// Value consists of the two specified words (low and high). Either or both words may be zero.
-        case inline(Word, Word)
-        /// Words are stored in a slice of the storage array.
-        case slice(from: Int, to: Int)
-        /// Words are stored in the storage array.
-        case array
-    }
+  /// An arbitary precision unsigned integer type, also known as a "big integer".
+  ///
+  /// Operations on big integers never overflow, but they may take a long time to execute.
+  /// The amount of memory (and address space) available is the only constraint to the magnitude of these numbers.
+  ///
+  /// This particular big integer type uses base-2^64 digits to represent integers; you can think of it as a wrapper
+  /// around `Array<UInt64>`. (In fact, `BigUInt` only uses an array if there are more than two digits.)
+  public struct BigUInt: UnsignedInteger {
+      /// The type representing a digit in `BigUInt`'s underlying number system.
+      public typealias Word = UInt
 
-    internal fileprivate (set) var kind: Kind // Internal for testing only
-    internal fileprivate (set) var storage: [Word] // Internal for testing only; stored separately to prevent COW copies
+      /// The storage variants of a `BigUInt`.
+      enum Kind {
+          /// Value consists of the two specified words (low and high). Either or both words may be zero.
+          case inline(Word, Word)
+          /// Words are stored in a slice of the storage array.
+          case slice(from: Int, to: Int)
+          /// Words are stored in the storage array.
+          case array
+      }
 
-    /// Initializes a new BigUInt with value 0.
-    public init() {
-        self.kind = .inline(0, 0)
-        self.storage = []
-    }
+      internal fileprivate (set) var kind: Kind // Internal for testing only
+      internal fileprivate (set) var storage: [Word] // Internal for testing only; stored separately to prevent COW copies
 
-    internal init(word: Word) {
-        self.kind = .inline(word, 0)
-        self.storage = []
-    }
+      /// Initializes a new BigUInt with value 0.
+      public init() {
+          self.kind = .inline(0, 0)
+          self.storage = []
+      }
 
-    internal init(low: Word, high: Word) {
-        self.kind = .inline(low, high)
-        self.storage = []
-    }
+      internal init(word: Word) {
+          self.kind = .inline(word, 0)
+          self.storage = []
+      }
 
-    /// Initializes a new BigUInt with the specified digits. The digits are ordered from least to most significant.
-    public init(words: [Word]) {
-        self.kind = .array
-        self.storage = words
-        normalize()
-    }
+      internal init(low: Word, high: Word) {
+          self.kind = .inline(low, high)
+          self.storage = []
+      }
 
-    internal init(words: [Word], from startIndex: Int, to endIndex: Int) {
-        self.kind = .slice(from: startIndex, to: endIndex)
-        self.storage = words
-        normalize()
-    }
+      /// Initializes a new BigUInt with the specified digits. The digits are ordered from least to most significant.
+      public init(words: [Word]) {
+          self.kind = .array
+          self.storage = words
+          normalize()
+      }
+
+      internal init(words: [Word], from startIndex: Int, to endIndex: Int) {
+          self.kind = .slice(from: startIndex, to: endIndex)
+          self.storage = words
+          normalize()
+      }
+  }
+
 }
 
-extension BigUInt {
+extension CS.BigUInt {
     public static var isSigned: Bool {
         return false
     }
@@ -80,12 +84,12 @@ extension BigUInt {
     /// Returns `1` if this value is, positive; otherwise, `0`.
     ///
     /// - Returns: The sign of this number, expressed as an integer of the same type.
-    public func signum() -> BigUInt {
+    public func signum() -> CS.BigUInt {
         return isZero ? 0 : 1
     }
 }
 
-extension BigUInt {
+extension CS.BigUInt {
     mutating func ensureArray() {
         switch kind {
         case let .inline(w0, w1):
@@ -168,7 +172,7 @@ extension BigUInt {
     }
 
     /// Set this integer to `value` by copying its digits without releasing allocated storage capacity (if any).
-    mutating func load(_ value: BigUInt) {
+    mutating func load(_ value: CS.BigUInt) {
         switch kind {
         case .inline, .slice:
             self = value
@@ -179,7 +183,7 @@ extension BigUInt {
     }
 }
 
-extension BigUInt {
+extension CS.BigUInt {
     //MARK: Collection-like members
 
     /// The number of digits in this integer, excluding leading zero digits.
@@ -255,38 +259,38 @@ extension BigUInt {
     }
 
     /// Returns an integer built from the digits of this integer in the given range.
-    internal func extract(_ bounds: Range<Int>) -> BigUInt {
+    internal func extract(_ bounds: Range<Int>) -> CS.BigUInt {
         switch kind {
         case let .inline(w0, w1):
             let bounds = bounds.clamped(to: 0 ..< 2)
             if bounds == 0 ..< 2 {
-                return BigUInt(low: w0, high: w1)
+                return CS.BigUInt(low: w0, high: w1)
             }
             else if bounds == 0 ..< 1 {
-                return BigUInt(word: w0)
+                return CS.BigUInt(word: w0)
             }
             else if bounds == 1 ..< 2 {
-                return BigUInt(word: w1)
+                return CS.BigUInt(word: w1)
             }
             else {
-                return BigUInt()
+                return CS.BigUInt()
             }
         case let .slice(from: start, to: end):
             let s = Swift.min(end, start + Swift.max(bounds.lowerBound, 0))
             let e = Swift.max(s, (bounds.upperBound > end - start ? end : start + bounds.upperBound))
-            return BigUInt(words: storage, from: s, to: e)
+            return CS.BigUInt(words: storage, from: s, to: e)
         case .array:
             let b = bounds.clamped(to: storage.startIndex ..< storage.endIndex)
-            return BigUInt(words: storage, from: b.lowerBound, to: b.upperBound)
+            return CS.BigUInt(words: storage, from: b.lowerBound, to: b.upperBound)
         }
     }
 
-    internal func extract<Bounds: RangeExpression>(_ bounds: Bounds) -> BigUInt where Bounds.Bound == Int {
+    internal func extract<Bounds: RangeExpression>(_ bounds: Bounds) -> CS.BigUInt where Bounds.Bound == Int {
         return self.extract(bounds.relative(to: 0 ..< Int.max))
     }
 }
 
-extension BigUInt {
+extension CS.BigUInt {
     internal mutating func shiftRight(byWords amount: Int) {
         assert(amount >= 0)
         guard amount > 0 else { return }
@@ -343,18 +347,18 @@ extension BigUInt {
     }
 }
 
-extension BigUInt {
+extension CS.BigUInt {
     //MARK: Low and High
-    
+
     /// Split this integer into a high-order and a low-order part.
     ///
     /// - Requires: count > 1
-    /// - Returns: `(low, high)` such that 
+    /// - Returns: `(low, high)` such that
     ///   - `self == low.add(high, shiftedBy: middleIndex)`
     ///   - `high.width <= floor(width / 2)`
     ///   - `low.width <= ceil(width / 2)`
     /// - Complexity: Typically O(1), but O(count) in the worst case, because high-order zero digits need to be removed after the split.
-    internal var split: (high: BigUInt, low: BigUInt) {
+    internal var split: (high: CS.BigUInt, low: CS.BigUInt) {
         precondition(count > 1)
         let mid = middleIndex
         return (self.extract(mid...), self.extract(..<mid))
@@ -367,20 +371,19 @@ extension BigUInt {
         return (count + 1) / 2
     }
 
-    /// The low-order half of this BigUInt.
+    /// The low-order half of this CS.BigUInt.
     ///
     /// - Returns: `self[0 ..< middleIndex]`
     /// - Requires: count > 1
-    internal var low: BigUInt {
+    internal var low: CS.BigUInt {
         return self.extract(0 ..< middleIndex)
     }
 
-    /// The high-order half of this BigUInt.
+    /// The high-order half of this CS.BigUInt.
     ///
     /// - Returns: `self[middleIndex ..< count]`
     /// - Requires: count > 1
-    internal var high: BigUInt {
+    internal var high: CS.BigUInt {
         return self.extract(middleIndex ..< count)
     }
 }
-

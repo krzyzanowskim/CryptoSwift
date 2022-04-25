@@ -1,12 +1,12 @@
 //
 //  Floating Point Conversion.swift
-//  BigInt
+//  CS.BigInt
 //
 //  Created by Károly Lőrentey on 2017-08-11.
 //  Copyright © 2016-2017 Károly Lőrentey.
 //
 
-extension BigUInt {
+extension CS.BigUInt {
     public init?<T: BinaryFloatingPoint>(exactly source: T) {
         guard source.isFinite else { return nil }
         guard !source.isZero else { self = 0; return }
@@ -16,7 +16,7 @@ extension BigUInt {
         assert(value.floatingPointClass == .positiveNormal)
         assert(value.exponent >= 0)
         let significand = value.significandBitPattern
-        self = (BigUInt(1) << value.exponent) + BigUInt(significand) >> (T.significandBitCount - Int(value.exponent))
+        self = (CS.BigUInt(1) << value.exponent) + CS.BigUInt(significand) >> (T.significandBitCount - Int(value.exponent))
     }
 
     public init<T: BinaryFloatingPoint>(_ source: T) {
@@ -24,15 +24,15 @@ extension BigUInt {
     }
 }
 
-extension BigInt {
+extension CS.BigInt {
     public init?<T: BinaryFloatingPoint>(exactly source: T) {
         switch source.sign{
         case .plus:
-            guard let magnitude = BigUInt(exactly: source) else { return nil }
-            self = BigInt(sign: .plus, magnitude: magnitude)
+            guard let magnitude = CS.BigUInt(exactly: source) else { return nil }
+            self = CS.BigInt(sign: .plus, magnitude: magnitude)
         case .minus:
-            guard let magnitude = BigUInt(exactly: -source) else { return nil }
-            self = BigInt(sign: .minus, magnitude: magnitude)
+            guard let magnitude = CS.BigUInt(exactly: -source) else { return nil }
+            self = CS.BigInt(sign: .minus, magnitude: magnitude)
         }
     }
 
@@ -42,7 +42,7 @@ extension BigInt {
 }
 
 extension BinaryFloatingPoint where RawExponent: FixedWidthInteger, RawSignificand: FixedWidthInteger {
-    public init(_ value: BigInt) {
+    public init(_ value: CS.BigInt) {
         guard !value.isZero else { self = 0; return }
         let v = value.magnitude
         let bitWidth = v.bitWidth
@@ -67,7 +67,7 @@ extension BinaryFloatingPoint where RawExponent: FixedWidthInteger, RawSignifica
                          significandBitPattern: RawSignificand(significand))
     }
 
-    public init(_ value: BigUInt) {
-        self.init(BigInt(sign: .plus, magnitude: value))
+    public init(_ value: CS.BigUInt) {
+        self.init(CS.BigInt(sign: .plus, magnitude: value))
     }
 }

@@ -1,12 +1,12 @@
 //
 //  Multiplication.swift
-//  BigInt
+//  CS.BigInt
 //
 //  Created by Károly Lőrentey on 2016-01-03.
 //  Copyright © 2016-2017 Károly Lőrentey.
 //
 
-extension BigUInt {
+extension CS.BigUInt {
 
     //MARK: Multiplication
 
@@ -30,7 +30,7 @@ extension BigUInt {
     /// Multiply this big integer by a single Word, and return the result.
     ///
     /// - Complexity: O(count)
-    public func multiplied(byWord y: Word) -> BigUInt {
+    public func multiplied(byWord y: Word) -> CS.BigUInt {
         var r = self
         r.multiply(byWord: y)
         return r
@@ -42,7 +42,7 @@ extension BigUInt {
     ///   individually. (The fused operation doesn't need to allocate space for temporary big integers.)
     /// - Returns: `self` is set to `self + (x * y) << (shift * 2^Word.bitWidth)`
     /// - Complexity: O(count)
-    public mutating func multiplyAndAdd(_ x: BigUInt, _ y: Word, shiftedBy shift: Int = 0) {
+    public mutating func multiplyAndAdd(_ x: CS.BigUInt, _ y: Word, shiftedBy shift: Int = 0) {
         precondition(shift >= 0)
         guard y != 0 && x.count > 0 else { return }
         guard y != 1 else { self.add(x, shiftedBy: shift); return }
@@ -75,7 +75,7 @@ extension BigUInt {
     /// - Note: This uses the naive O(n^2) multiplication algorithm unless both arguments have more than
     ///   `BigUInt.directMultiplicationLimit` words.
     /// - Complexity: O(n^log2(3))
-    public func multiplied(by y: BigUInt) -> BigUInt {
+    public func multiplied(by y: CS.BigUInt) -> CS.BigUInt {
         // This method is mostly defined for symmetry with the rest of the arithmetic operations.
         return self * y
     }
@@ -88,19 +88,19 @@ extension BigUInt {
     /// - Note: This uses the naive O(n^2) multiplication algorithm unless both arguments have more than
     ///   `BigUInt.directMultiplicationLimit` words.
     /// - Complexity: O(n^log2(3))
-    public static func *(x: BigUInt, y: BigUInt) -> BigUInt {
+    public static func *(x: CS.BigUInt, y: CS.BigUInt) -> CS.BigUInt {
         let xc = x.count
         let yc = y.count
-        if xc == 0 { return BigUInt() }
-        if yc == 0 { return BigUInt() }
+        if xc == 0 { return CS.BigUInt() }
+        if yc == 0 { return CS.BigUInt() }
         if yc == 1 { return x.multiplied(byWord: y[0]) }
         if xc == 1 { return y.multiplied(byWord: x[0]) }
 
-        if Swift.min(xc, yc) <= BigUInt.directMultiplicationLimit {
+        if Swift.min(xc, yc) <= CS.BigUInt.directMultiplicationLimit {
             // Long multiplication.
             let left = (xc < yc ? y : x)
             let right = (xc < yc ? x : y)
-            var result = BigUInt()
+            var result = CS.BigUInt()
             for i in (0 ..< right.count).reversed() {
                 result.multiplyAndAdd(left, right[i], shiftedBy: i)
             }
@@ -149,17 +149,17 @@ extension BigUInt {
     }
 
     /// Multiply `a` by `b` and store the result in `a`.
-    public static func *=(a: inout BigUInt, b: BigUInt) {
+    public static func *=(a: inout CS.BigUInt, b: CS.BigUInt) {
         a = a * b
     }
 }
 
-extension BigInt {
+extension CS.BigInt {
     /// Multiply `a` with `b` and return the result.
-    public static func *(a: BigInt, b: BigInt) -> BigInt {
-        return BigInt(sign: a.sign == b.sign ? .plus : .minus, magnitude: a.magnitude * b.magnitude)
+    public static func *(a: CS.BigInt, b: CS.BigInt) -> CS.BigInt {
+        return CS.BigInt(sign: a.sign == b.sign ? .plus : .minus, magnitude: a.magnitude * b.magnitude)
     }
 
     /// Multiply `a` with `b` in place.
-    public static func *=(a: inout BigInt, b: BigInt) { a = a * b }
+    public static func *=(a: inout CS.BigInt, b: CS.BigInt) { a = a * b }
 }

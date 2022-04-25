@@ -1,12 +1,12 @@
 //
 //  Integer Conversion.swift
-//  BigInt
+//  CS.BigInt
 //
 //  Created by Károly Lőrentey on 2017-08-11.
 //  Copyright © 2016-2017 Károly Lőrentey.
 //
 
-extension BigUInt {
+extension CS.BigUInt {
     public init?<T: BinaryInteger>(exactly source: T) {
         guard source >= (0 as T) else { return nil }
         if source.bitWidth <= 2 * Word.bitWidth {
@@ -38,25 +38,25 @@ extension BigUInt {
     }
 }
 
-extension BigInt {
+extension CS.BigInt {
     public init() {
         self.init(sign: .plus, magnitude: 0)
     }
 
     /// Initializes a new signed big integer with the same value as the specified unsigned big integer.
-    public init(_ integer: BigUInt) {
+    public init(_ integer: CS.BigUInt) {
         self.magnitude = integer
         self.sign = .plus
     }
 
     public init<T>(_ source: T) where T : BinaryInteger {
         if source >= (0 as T) {
-            self.init(sign: .plus, magnitude: BigUInt(source))
+            self.init(sign: .plus, magnitude: CS.BigUInt(source))
         }
         else {
             var words = Array(source.words)
             words.twosComplement()
-            self.init(sign: .minus, magnitude: BigUInt(words: words))
+            self.init(sign: .minus, magnitude: CS.BigUInt(words: words))
         }
     }
 
@@ -73,14 +73,14 @@ extension BigInt {
     }
 }
 
-extension BigUInt: ExpressibleByIntegerLiteral {
+extension CS.BigUInt: ExpressibleByIntegerLiteral {
     /// Initialize a new big integer from an integer literal.
     public init(integerLiteral value: UInt64) {
         self.init(value)
     }
 }
 
-extension BigInt: ExpressibleByIntegerLiteral {
+extension CS.BigInt: ExpressibleByIntegerLiteral {
     /// Initialize a new big integer from an integer literal.
     public init(integerLiteral value: Int64) {
         self.init(value)

@@ -21,28 +21,28 @@ import Foundation
 // It allows fast calculation for RSA big numbers
 
 public final class RSA {
-  
+
   public enum Error: Swift.Error {
     /// No private key specified
     case noPrivateKey
     /// Failed to calculate the inverse e and phi
     case invalidInverseNotCoprimes
   }
-  
+
   /// RSA Modulus
   public let n: BigUInteger
-  
+
   /// RSA Public Exponent
   public let e: BigUInteger
-  
+
   /// RSA Private Exponent
   public let d: BigUInteger?
-  
+
   /// The size of the modulus, in bits
   public let keySize: Int
-  
+
   /// The underlying primes used to generate the Private Exponent
-  private let primes:(p:BigUInteger, q:BigUInteger)?
+  private let primes: (p: BigUInteger, q: BigUInteger)?
 
   /// Initialize with RSA parameters
   /// - Parameters:
@@ -57,7 +57,7 @@ public final class RSA {
 
     self.keySize = n.bitWidth
   }
-  
+
   /// Initialize with RSA parameters
   /// - Parameters:
   ///   - n: The RSA Modulus
@@ -70,7 +70,7 @@ public final class RSA {
       self.init(n: BigUInteger(Data(n)), e: BigUInteger(Data(e)))
     }
   }
-  
+
   /// Initialize with a generated key pair
   /// - Parameter keySize: The size of the modulus
   public convenience init(keySize: Int) throws {
@@ -107,21 +107,20 @@ public final class RSA {
 
     self.keySize = n.bitWidth
   }
-  
+
   // TODO: Add initializer from PEM (ASN.1 with DER header) (See #892)
-  
+
   // TODO: Add export to PEM (ASN.1 with DER header) (See #892)
-  
 }
 
 // MARK: Cipher
 
 extension RSA: Cipher {
-  
+
   @inlinable
   public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
     // Calculate encrypted data
-    return BigUInteger(Data(bytes)).power(e, modulus: n).serialize().bytes
+    return BigUInteger(Data(bytes)).power(self.e, modulus: self.n).serialize().bytes
   }
 
   @inlinable
@@ -130,17 +129,16 @@ extension RSA: Cipher {
     guard let d = d else {
       throw RSA.Error.noPrivateKey
     }
-    
+
     // Calculate decrypted data
-    return BigUInteger(Data(bytes)).power(d, modulus: n).serialize().bytes
+    return BigUInteger(Data(bytes)).power(d, modulus: self.n).serialize().bytes
   }
-  
 }
 
 // MARK: CS.BigUInt extension
 
 extension BigUInteger {
-  
+
   public static func generatePrime(_ width: Int) -> BigUInteger {
     // Note: Need to find a better way to generate prime numbers
     while true {
@@ -151,5 +149,4 @@ extension BigUInteger {
       }
     }
   }
-  
 }

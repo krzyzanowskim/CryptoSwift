@@ -182,12 +182,16 @@ final class RSATests: XCTestCase {
       0x11, 0x22, 0x33, 0x44
     ]
     
-    let rsa = RSA(keySize: 2048)
-    // Sometimes the modulus size is 2047 bits, but it's okay (with two 1024 bits primes)
-    //XCTAssertEqual(rsa.keySize, 2048, "key size is not correct")
+    do {
+      let rsa = try RSA(keySize: 2048)
+      // Sometimes the modulus size is 2047 bits, but it's okay (with two 1024 bits primes)
+      //XCTAssertEqual(rsa.keySize, 2048, "key size is not correct")
     
-    let decrypted = try! rsa.decrypt(try! rsa.encrypt(message))
-    XCTAssertEqual(decrypted, message, "encrypt+decrypt failed")
+      let decrypted = try rsa.decrypt(rsa.encrypt(message))
+      XCTAssertEqual(decrypted, message, "encrypt+decrypt failed")
+    } catch {
+      XCTFail(error.localizedDescription)
+    }
   }
 
 }

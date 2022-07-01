@@ -25,6 +25,8 @@ public final class RSA {
   public enum Error: Swift.Error {
     /// No private key specified
     case noPrivateKey
+    /// Failed to calculate the inverse e and phi
+    case invalidInverseNotCoprimes
   }
   
   /// RSA Modulus
@@ -39,6 +41,9 @@ public final class RSA {
   /// The size of the modulus, in bits
   public let keySize: Int
   
+  /// The underlying primes used to generate the Private Exponent
+  private let primes:(p:BigUInteger, q:BigUInteger)?
+
   /// Initialize with RSA parameters
   /// - Parameters:
   ///   - n: The RSA Modulus
@@ -48,7 +53,8 @@ public final class RSA {
     self.n = n
     self.e = e
     self.d = d
-    
+    self.primes = nil
+
     self.keySize = n.bitWidth
   }
   
@@ -67,21 +73,39 @@ public final class RSA {
   
   /// Initialize with a generated key pair
   /// - Parameter keySize: The size of the modulus
-  public convenience init(keySize: Int) {
+  public convenience init(keySize: Int) throws {
     // Generate prime numbers
     let p = BigUInteger.generatePrime(keySize / 2)
     let q = BigUInteger.generatePrime(keySize / 2)
-    
+
     // Calculate modulus
     let n = p * q
-    
+
     // Calculate public and private exponent
     let e: BigUInteger = 65537
     let phi = (p - 1) * (q - 1)
-    let d = e.inverse(phi)
-    
+    guard let d = e.inverse(phi) else {
+      throw RSA.Error.invalidInverseNotCoprimes
+    }
+
     // Initialize
-    self.init(n: n, e: e, d: d)
+    self.init(n: n, e: e, d: d, p: p, q: q)
+  }
+
+  /// Initialize with RSA parameters
+  /// - Parameters:
+  ///   - n: The RSA Modulus
+  ///   - e: The RSA Public Exponent
+  ///   - d: The RSA Private Exponent
+  ///   - p: The 1st Prime used to generate the Private Exponent
+  ///   - q: The 2nd Prime used to generate the Private Exponent
+  private init(n: BigUInteger, e: BigUInteger, d: BigUInteger, p: BigUInteger, q: BigUInteger) {
+    self.n = n
+    self.e = e
+    self.d = d
+    self.primes = (p, q)
+
+    self.keySize = n.bitWidth
   }
   
   // TODO: Add initializer from PEM (ASN.1 with DER header) (See #892)

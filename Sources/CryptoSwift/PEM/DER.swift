@@ -16,10 +16,10 @@
 import Foundation
 
 /// Conform to this protocol if your type can both be instantiated and expressed as an ASN1 DER representation.
-public protocol DERCodable: DERDecodable, DEREncodable { }
+internal protocol DERCodable: DERDecodable, DEREncodable { }
 
 /// Conform to this protocol if your type can be instantiated from a ASN1 DER representation
-public protocol DERDecodable {
+internal protocol DERDecodable {
   /// The keys primary ASN1 object identifier (ex: for RSA Keys --> 'rsaEncryption' --> [0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01])
   static var primaryObjectIdentifier: Array<UInt8> { get }
   /// The keys secondary ASN1 object identifier (ex: for RSA Keys --> 'null' --> nil)
@@ -32,7 +32,7 @@ public protocol DERDecodable {
 }
 
 /// Conform to this protocol if your type can be described in an ASN1 DER representation
-public protocol DEREncodable {
+internal protocol DEREncodable {
   /// The keys primary ASN1 object identifier (ex: for RSA Keys --> 'rsaEncryption' --> [0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01])
   static var primaryObjectIdentifier: Array<UInt8> { get }
   /// The keys secondary ASN1 object identifier (ex: for RSA Keys --> 'null' --> nil)
@@ -53,13 +53,13 @@ public protocol DEREncodable {
 }
 
 extension DEREncodable {
-  func externalRepresentation() throws -> Data {
+  public func externalRepresentation() throws -> Data {
     do { return try Data(self.privateKeyDER()) } catch {
       return try Data(self.publicKeyDER())
     }
   }
 
-  func publicKeyExternalRepresentation() throws -> Data {
+  public func publicKeyExternalRepresentation() throws -> Data {
     try Data(self.publicKeyDER())
   }
 }

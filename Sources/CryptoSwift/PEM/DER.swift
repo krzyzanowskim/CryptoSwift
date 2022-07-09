@@ -29,7 +29,7 @@ internal protocol DERDecodable {
   init(publicDER: Array<UInt8>) throws
   /// Attempts to instantiate an instance of your Private Key when given a DER representation of your Private Key
   init(privateDER: Array<UInt8>) throws
-  
+
   /// Attempts to instantiate a Key when given the ASN1 DER encoded external representation of the Key
   ///
   /// An example of importing a SecKey RSA key (from Apple's `Security` framework) for use within CryptoSwift
@@ -57,7 +57,7 @@ internal protocol DERDecodable {
 }
 
 extension DERDecodable {
-  public init(rawRepresentation raw:Data) throws {
+  public init(rawRepresentation raw: Data) throws {
     /// The default implementation that makes the original internal initializer publicly available
     do { try self.init(privateDER: raw.bytes) } catch {
       try self.init(publicDER: raw.bytes)

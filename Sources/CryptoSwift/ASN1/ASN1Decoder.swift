@@ -49,58 +49,58 @@ extension ASN1 {
       let firstByte = try scanner.consume(length: 1).firstByte
 
       switch firstByte {
-      case IDENTIFIERS.SEQUENCE.rawValue:
-        let length = try scanner.consumeLength()
-        let data = try scanner.consume(length: length)
-        let nodes = try decodeSequence(data: data)
-        return .sequence(nodes: nodes)
-        
-      case IDENTIFIERS.INTERGER.rawValue:
-        let length = try scanner.consumeLength()
-        let data = try scanner.consume(length: length)
-        return .integer(data: data)
-        
-      case IDENTIFIERS.OBJECTID.rawValue:
-        let length = try scanner.consumeLength()
-        let data = try scanner.consume(length: length)
-        return .objectIdentifier(data: data)
-        
-      case IDENTIFIERS.NULL.rawValue:
-        _ = try scanner.consume(length: 1)
-        return .null
-        
-      case IDENTIFIERS.BITSTRING.rawValue:
-        let length = try scanner.consumeLength()
+        case IDENTIFIERS.SEQUENCE.rawValue:
+          let length = try scanner.consumeLength()
+          let data = try scanner.consume(length: length)
+          let nodes = try decodeSequence(data: data)
+          return .sequence(nodes: nodes)
 
-        // There's an extra byte (0x00) after the bit string length in all the keys I've encountered.
-        // I couldn't find a specification that referenced this extra byte, but let's consume it and discard it.
-        _ = try scanner.consume(length: 1)
+        case IDENTIFIERS.INTERGER.rawValue:
+          let length = try scanner.consumeLength()
+          let data = try scanner.consume(length: length)
+          return .integer(data: data)
 
-        let data = try scanner.consume(length: length - 1)
-        return .bitString(data: data)
-      
-      case IDENTIFIERS.OCTETSTRING.rawValue:
-        let length = try scanner.consumeLength()
-        let data = try scanner.consume(length: length)
-        return .octetString(data: data)
-        
-      case IDENTIFIERS.EC_OBJECT.rawValue:
-        let length = try scanner.consumeLength()
-        let data = try scanner.consume(length: length)
-        return .objectIdentifier(data: data)
-        
-      case IDENTIFIERS.EC_BITS.rawValue:
-        let length = try scanner.consumeLength()
+        case IDENTIFIERS.OBJECTID.rawValue:
+          let length = try scanner.consumeLength()
+          let data = try scanner.consume(length: length)
+          return .objectIdentifier(data: data)
 
-        // There's an extra byte (0x00) after the bit string length in all the keys I've encountered.
-        // I couldn't find a specification that referenced this extra byte, but let's consume it and discard it.
-        _ = try scanner.consume(length: 1)
+        case IDENTIFIERS.NULL.rawValue:
+          _ = try scanner.consume(length: 1)
+          return .null
 
-        let data = try scanner.consume(length: length - 1)
-        return .ecBits(data: data)
-        
-      default:
-        throw DecodingError.invalidType(value: firstByte)
+        case IDENTIFIERS.BITSTRING.rawValue:
+          let length = try scanner.consumeLength()
+
+          // There's an extra byte (0x00) after the bit string length in all the keys I've encountered.
+          // I couldn't find a specification that referenced this extra byte, but let's consume it and discard it.
+          _ = try scanner.consume(length: 1)
+
+          let data = try scanner.consume(length: length - 1)
+          return .bitString(data: data)
+
+        case IDENTIFIERS.OCTETSTRING.rawValue:
+          let length = try scanner.consumeLength()
+          let data = try scanner.consume(length: length)
+          return .octetString(data: data)
+
+        case IDENTIFIERS.EC_OBJECT.rawValue:
+          let length = try scanner.consumeLength()
+          let data = try scanner.consume(length: length)
+          return .objectIdentifier(data: data)
+
+        case IDENTIFIERS.EC_BITS.rawValue:
+          let length = try scanner.consumeLength()
+
+          // There's an extra byte (0x00) after the bit string length in all the keys I've encountered.
+          // I couldn't find a specification that referenced this extra byte, but let's consume it and discard it.
+          _ = try scanner.consume(length: 1)
+
+          let data = try scanner.consume(length: length - 1)
+          return .ecBits(data: data)
+
+        default:
+          throw DecodingError.invalidType(value: firstByte)
       }
     }
 

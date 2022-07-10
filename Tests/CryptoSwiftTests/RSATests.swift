@@ -18,26 +18,26 @@ import XCTest
 @testable import CryptoSwift
 
 final class RSATests: XCTestCase {
-  
+
   func testSmallRSA() {
     /*
      * Example taken from the book "Understanding Cryptography"
      *
      * p = 3; q = 11; n = pq = 33; e = 3; d = 7
      */
-    
+
     let n: Array<UInt8> = [33]
     let e: Array<UInt8> = [3]
     let d: Array<UInt8> = [7]
     let message: Array<UInt8> = [4]
     let expected: Array<UInt8> = [31]
-    
+
     let rsa = RSA(n: n, e: e, d: d)
     XCTAssertEqual(rsa.keySize, 6, "key size is not correct")
-    
+
     let encrypted = try! rsa.encrypt(message)
     XCTAssertEqual(encrypted, expected, "small encrypt failed")
-    
+
     let decrypted = try! rsa.decrypt(encrypted)
     XCTAssertEqual(decrypted, message, "small decrypt failed")
   }
@@ -48,7 +48,7 @@ final class RSATests: XCTestCase {
      *
      * 1. 1024-bit RSA bare exponentiation
      */
-    
+
     let n: Array<UInt8> = [
       0xF0, 0xC4, 0x2D, 0xB8, 0x48, 0x6F, 0xEB, 0x95, 0x95, 0xD8, 0xC7, 0x8F, 0x90, 0x8D, 0x04, 0xA9,
       0xB6, 0xC8, 0xC7, 0x7A, 0x36, 0x10, 0x5B, 0x1B, 0xF2, 0x75, 0x53, 0x77, 0xA6, 0x89, 0x3D, 0xC4,
@@ -85,24 +85,24 @@ final class RSATests: XCTestCase {
       0x06, 0x1C, 0xB0, 0xA2, 0x1C, 0xA3, 0xA5, 0x24, 0xB4, 0x07, 0xE9, 0xFF, 0xBA, 0x87, 0xFC, 0x96,
       0x6B, 0x3B, 0xA9, 0x45, 0x90, 0x84, 0x9A, 0xEB, 0x90, 0x8A, 0xAF, 0xF4, 0xC7, 0x19, 0xC2, 0xE4
     ]
-    
+
     let rsa = RSA(n: n, e: e, d: d)
     XCTAssertEqual(rsa.keySize, 1024, "key size is not correct")
-    
+
     let encrypted = try! rsa.encrypt(message)
     XCTAssertEqual(encrypted, expected, "encrypt failed")
-    
+
     let decrypted = try! rsa.decrypt(encrypted)
     XCTAssertEqual(decrypted, message, "decrypt failed")
   }
-  
+
   func testRSA2() {
     /*
      * Taken from http://cryptomanager.com/tv.html
      *
      * 2. 2048-bit PKCS V. 1.5 enciphering.
      */
-    
+
     let n: Array<UInt8> = [
       0xF7, 0x48, 0xD8, 0xD9, 0x8E, 0xD0, 0x57, 0xCF, 0x39, 0x8C, 0x43, 0x7F, 0xEF, 0xC6, 0x15, 0xD7,
       0x57, 0xD3, 0xF8, 0xEC, 0xE6, 0xF2, 0xC5, 0x80, 0xAE, 0x07, 0x80, 0x76, 0x8F, 0x9E, 0xC8, 0x3A,
@@ -163,17 +163,17 @@ final class RSATests: XCTestCase {
       0x15, 0x59, 0x23, 0x5E, 0x99, 0xC3, 0x2A, 0xBE, 0xF3, 0x3D, 0x95, 0xE2, 0x8E, 0x18, 0xCC, 0xA3,
       0x44, 0x2E, 0x6E, 0x3A, 0x43, 0x2F, 0xFF, 0xEA, 0x10, 0x10, 0x4A, 0x8E, 0xEE, 0x94, 0xC3, 0x62
     ]
-    
+
     let rsa = RSA(n: n, e: e, d: d)
     XCTAssertEqual(rsa.keySize, 2048, "key size is not correct")
-    
+
     let encrypted = try! rsa.encrypt(message)
     XCTAssertEqual(encrypted, expected, "encrypt failed")
-    
+
     let decrypted = try! rsa.decrypt(encrypted)
     XCTAssertEqual(decrypted, message, "decrypt failed")
   }
-  
+
   func testGenerateKeyPair() {
     /*
      * To test key generation and its validity
@@ -181,15 +181,106 @@ final class RSATests: XCTestCase {
     let message: Array<UInt8> = [
       0x11, 0x22, 0x33, 0x44
     ]
-    
-    let rsa = RSA(keySize: 2048)
+
+    let rsa = try! RSA(keySize: 2048)
     // Sometimes the modulus size is 2047 bits, but it's okay (with two 1024 bits primes)
     //XCTAssertEqual(rsa.keySize, 2048, "key size is not correct")
-    
+
     let decrypted = try! rsa.decrypt(try! rsa.encrypt(message))
     XCTAssertEqual(decrypted, message, "encrypt+decrypt failed")
   }
 
+  func testRSAKeys() {
+
+    let fixtures = [TestFixtures.RSA_1024, TestFixtures.RSA_2048, TestFixtures.RSA_3072, TestFixtures.RSA_4096]
+
+    do {
+      /// Public Key Functionality
+      for fixture in fixtures {
+        print("Testing RSA<\(fixture.keySize)>:Public Key Fixture")
+
+        let tic = DispatchTime.now().uptimeNanoseconds
+
+        guard let publicDERData = Data(base64Encoded: fixture.publicDER) else {
+          XCTFail("Invalid Base64String Public DER")
+          return
+        }
+
+        // Import RSA Key
+        let rsa = try RSA(rawRepresentation: publicDERData)
+
+        // Ensure that we do not have a private key by checking the private exponent
+        XCTAssertNil(rsa.d)
+
+        // Ensure the public external representation matches the fixture
+        XCTAssertEqual(try rsa.publicKeyExternalRepresentation(), Data(base64Encoded: fixture.publicDER))
+
+        // Ensure externalRepresentation results in the publicDER
+        XCTAssertEqual(try rsa.externalRepresentation(), Data(base64Encoded: fixture.publicDER))
+
+        // Encrypt the plaintext message and ensure it matches the fixture
+        let encrypted = try rsa.encrypt(fixture.rawMessage.bytes)
+        XCTAssertEqual(encrypted, Data(base64Encoded: fixture.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes)
+
+        // Decryption requires access to the Private Key, therefor this should throw and error
+        XCTAssertThrowsError(try rsa.decrypt(Data(base64Encoded: fixture.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes))
+
+        // TODO: Ensure each encryption algo matches the fixture
+        // for encryption in fixture.encryptedMessage {
+        //   let encrypted = try rsa.encrypt(fixture.rawMessage.bytes)
+        //   XCTAssertEqual(encrypted, Data(base64Encoded: encryption.value)?.bytes)
+        // }
+
+        // TODO: Add Signature Tests Here...
+
+        print("RSA<\(fixture.keySize)>Public Test took \(DispatchTime.now().uptimeNanoseconds - tic)ns")
+      }
+
+      /// Private Key Functionality
+      for fixture in fixtures {
+        print("Testing RSA<\(fixture.keySize)>:Private Key Fixture")
+
+        let tic = DispatchTime.now().uptimeNanoseconds
+
+        guard let privateDERData = Data(base64Encoded: fixture.privateDER) else {
+          XCTFail("Invalid Base64String Private DER")
+          return
+        }
+
+        // Import RSA Key
+        let rsa = try RSA(rawRepresentation: privateDERData)
+
+        // Ensure that we have a private key by checking the private exponent
+        XCTAssertNotNil(rsa.d)
+
+        // Ensure the public external representation matches the fixture
+        XCTAssertEqual(try rsa.publicKeyExternalRepresentation(), Data(base64Encoded: fixture.publicDER))
+
+        // Ensure the private external representation matches the fixture
+        XCTAssertEqual(try rsa.externalRepresentation(), Data(base64Encoded: fixture.privateDER))
+
+        // Encrypt the plaintext message and ensure it matches the fixture
+        let encrypted = try rsa.encrypt(fixture.rawMessage.bytes)
+        XCTAssertEqual(encrypted, Data(base64Encoded: fixture.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes)
+
+        // Decrypt the fixtures encrypted message and ensure it matches the plaintext message
+        let decrypted = try rsa.decrypt(Data(base64Encoded: fixture.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes)
+        XCTAssertEqual(String(data: Data(decrypted), encoding: .utf8), fixture.rawMessage)
+
+        // TODO: Ensure each encryption algo matches the fixture
+        // for encryption in fixture.encryptedMessage {
+        //   let encrypted = try rsa.encrypt(fixture.rawMessage.bytes)
+        //   XCTAssertEqual(encrypted, Data(base64Encoded: encryption.value)?.bytes)
+        // }
+
+        // TODO: Add Signature Tests Here...
+
+        print("RSA<\(fixture.keySize)>Private Test took \(DispatchTime.now().uptimeNanoseconds - tic)ns")
+      }
+    } catch {
+      XCTFail(error.localizedDescription)
+    }
+  }
 }
 
 extension RSATests {
@@ -198,9 +289,83 @@ extension RSATests {
       ("testSmallRSA", testSmallRSA),
       ("testRSA1", testRSA1),
       ("testRSA2", testRSA2),
-      ("testGenerateKeyPair", testGenerateKeyPair)
+      ("testGenerateKeyPair", testGenerateKeyPair),
+      ("testRSAKeys", testRSAKeys)
     ]
 
     return tests
   }
+}
+
+/// RSA Test Fixtures
+///
+/// - Note: These fixtures were generated using Apple's `Security` framework (we assume they got it right)
+struct TestFixtures {
+  struct Fixture {
+    let keySize: Int
+    let publicDER: String
+    let privateDER: String
+    let rawMessage: String
+    let encryptedMessage: [String: String]
+  }
+
+  static let RSA_1024 = Fixture(
+    keySize: 1024,
+    publicDER: """
+    MIGJAoGBAMGeZvIG84vyKAATwKkKz2g+PeNaZ63rxk/zEnLGxkMCVKnUZ6jPAtzYOKM24949yIhfxYBC/bOCPwRK4wbr4YyIx3WB2v+Zcqe8pRM/BThUpNIx3K2+jbJBhAopf1GXJ3i31RuiLMh9HWhxzkVamz1KnDjCuTZguCRRHIv+r3XTAgMBAAE=
+    """,
+    privateDER: """
+    MIICXQIBAAKBgQDBnmbyBvOL8igAE8CpCs9oPj3jWmet68ZP8xJyxsZDAlSp1GeozwLc2DijNuPePciIX8WAQv2zgj8ESuMG6+GMiMd1gdr/mXKnvKUTPwU4VKTSMdytvo2yQYQKKX9Rlyd4t9UboizIfR1occ5FWps9Spw4wrk2YLgkURyL/q910wIDAQABAoGAGJkNLxZe/pqHJmtcAJ3U98NgjW/A2EGp8iJJZ7eFHKJBK0pG2RVjobb+iw3AKU3kGh9AsijQnmufoeX5rblt7/ojgpfVhS7NHsKCi8Nx7U92bNnP0RP4mogpvzGWVknUdv6jW7dX83FKgEywbNKa5CPQk1XinqXL33gNjWdOh/ECQQDjdE4kNdVwKA59ddWRShvJiOMOG8+TjE5HvcZzKQ+UMlBwbknL5tIJE7KnN9ZEfNihVmyrMAzJAfe2PCyZAip/AkEA2esFkG+ScgeVYlGrUqrqUkvzj1j6F8R+8rGvCjq2WnDL8TzO7NoT7qivW/+6E9osX1WwWAtj/84eN7dvLLxCrQJBAN7GomZq58MzKIYPLH9iI3cwAJtn99ZfHKi9oipW9DBFW23TR6pTSDKlvVx0nwNzeEYFPOgqZstVhwZRR6kRawcCQHx/u0QTmjUvg/cR9bFbGFhAMDxbdzaQ+n4paXmMpZXyD3IZbZb/2JdnJBiJd4PUB7nHuOH0UANbfQQT9p42SFkCQQCcdFRTZEZv5TjmcUn0GBUzRmnswiRc1YEg81DSDlvD3dEIVSl6PLkzcNNItrgD5SfC5MxCv6PIUlJVhnkavEjS
+    """,
+    rawMessage: "CryptoSwift RSA Keys!",
+    encryptedMessage: [
+      "algid:encrypt:RSA:raw": "UzG6FLxGjtlqXWxC16gKW4KX/26rIt4IekwYoI6sbYK1aacHsyPkg5/OEk3on1RQldvyijc6vccFumUVY4ig37noE7r39KTJocSPEJoDiDiBUvu66BkZOIKYy7Z3bkJY7nAppbze7vjTmC/j9IV4aNFL45P+ghGjQIyoP9eKTco=",
+      "algid:encrypt:RSA:PKCS1": "VMLV+4uRTEJI5ST6jKt84IEKIW4KbS/JzlhUMYuB3jeXJufwHvDZW5aGk+JYUCwYVkFckyBRZl3PP8hSTyQ7lvnNckm218nEPzEvZJebxnQjuaD7ncSl++j0XVoXQNPrqkIbo+mYJVL/SMM4J0FDXkmXmzc3e+ylQt7tQChGvFE="
+    ]
+  )
+
+  static let RSA_2048 = Fixture(
+    keySize: 2048,
+    publicDER: """
+    MIIBCgKCAQEAoucLcSqXFjsHkanA/UAdSllXb2f2Seh4sJ/QiK1lHXYq822mruYzKysHH6wLet+c/VaOJNNHMSRCaNxKiFKUH7yH/rTzjcxxDTB/4PboLm+SMBCiChv/EdOrLM/xBnP5aUC2urx3sVbFc2s+3u9fWlXcdxTFvY7WKP0YL+t1ls+N+vGP9Lq2deXB1DM8CkDIRgtgKoJBp6dW1X5qO5jf9XBWRubWaOD14XSmExF4HKGHAc1VFcMDv3rxkzOyVRUIHC7odzDqYPRDOWDtBvGogkR3LXImbrJsrkoWz4tQh4BTTIggqfKcyKELdGrrD3B42vcYsqols4kKtbVHBGBqHwIDAQAB
+    """,
+    privateDER: """
+    MIIEpAIBAAKCAQEAoucLcSqXFjsHkanA/UAdSllXb2f2Seh4sJ/QiK1lHXYq822mruYzKysHH6wLet+c/VaOJNNHMSRCaNxKiFKUH7yH/rTzjcxxDTB/4PboLm+SMBCiChv/EdOrLM/xBnP5aUC2urx3sVbFc2s+3u9fWlXcdxTFvY7WKP0YL+t1ls+N+vGP9Lq2deXB1DM8CkDIRgtgKoJBp6dW1X5qO5jf9XBWRubWaOD14XSmExF4HKGHAc1VFcMDv3rxkzOyVRUIHC7odzDqYPRDOWDtBvGogkR3LXImbrJsrkoWz4tQh4BTTIggqfKcyKELdGrrD3B42vcYsqols4kKtbVHBGBqHwIDAQABAoIBAHte4VJ+P9hNMklFt2vUf5pMGSS9JlAI6EZTclngf8CVOqgK9f5lRoE93/JDmJog+cL/Jz2KaNM1s7m4hBXD/HwgixoCLqXIHCIyBdb5BxQL2Tnfjuh7FWyJ0oxomxAZCt2Ebh70Fu3OWlEz+nRZ8uv2NLZWm/8YSubV7thzySVBq85ElJVfhwBFdNUm6V3D7w6HxseaDY04RmrCNnqaU6j0U913zMTAfdVchTZIU40Z+MW8R2+PYxhg3UPrO7elcC/ujmrLxGRKDd5MXEPUbhJkv74RaY0ejGkz0Kh6Ad75O8krYnw0sgmXR/yjvRNz4grsIhxUkCQNdMTggW1qemkCgYEA0PF1xCCpJChiZ1b0i7RRxMWbr7P8+tbeocrfz2B3UGcwCK2Qwqim53MngWZVmox2TYz/vetdhWWuOd7RcQfXArrkO0lMrVQdr1hHl3r8N3wAM5lk4ONGLlgIwnrSofMb6YMfOt3/aJtVp/W7ngE+AzwnNErXb0iBBpefKlEqIQMCgYEAx5cgb5HsdsQZqHkRfjP1EJRjQy50tCE7ZjLCidn6C4iebghbEEbcbDjdNakcObdm6BunhkzcuCAKzKbczCBJGyo4+mKrxO8DXiCfOV+eQ42/wgTeb2M40nOHsEC3PwvVDUICiq4Ya/KHhBfKxJ+7QO297AwPslhp3JC6iwbssbUCgYEAzFosJPsQklWREKMCIBTnGD1wrCKsHSTDr5e815TwfMm/N+2RNGFAhAOjMrLErJgOKIDrq3MkD5DIGr9rNlJFntzs1XM2NBudwN3lfykAvr9fbxfqiuydujvNrW/0zAH6XaMpiyiOYV/zIYd7zOhIH1/YtBMyqxtNXgYy3G9vdcMCgYBG7oulewu5jam8uQIhgt+WO9YnGwx4s9LDWEjQ6vm1PaFoY2nRmA1gHLlpB6ezT12wIZvg29IZUbHk12xi0xqIH/JN8eEvxO3Cdv9/SV8ajPbYQhi3J2EbUdmoJue47UCTTKFQndyqCHBm3nm+dTH8OkGj8QlnDYrZy0mwfQ6DfQKBgQDG0snESZKRg6cHxty0Zd+EKjKuWlRRAG3GOt9rVAmaT5iNvckwNcXy8ujKibpkMLzK1Zh0GN5R/vVWzJOIxDfgEXn83HKMtjRlyCWVP+9W/q/fNraGK0BpibhJyNW+D//xMwLSHjrqVSViCXYkKNgLH51VcZyio0rzyg8Hk/ynPQ==
+    """,
+    rawMessage: "CryptoSwift RSA Keys!",
+    encryptedMessage: [
+      "algid:encrypt:RSA:raw": "DHAjkUdfJgiqBO36LLMRBb6OuAoM37g+xVRZcJ2LzgeuyoF/022sL/f2mgfxYb9u4myu2nQ4VhNnfoXl1LZFESky4vXJVygtQS85/+UugydDCHuaX4vh0aE5V3H0hJnnQQgSQ9oX/JVvvsyxccK81bcozUClm7a5nAydnAOnKKenYhX9Ej9W+ftU1Dr305UbOC/Tl/O3t9wGfb0KTkZfHe0lIJdYt6IxjLgqEFzCuAUm+cbLTWQjT0ecUUdr9U1RTq0p8uoa2HwqBrCyAvaxOnpIqRDVAkVghQWKHWpCHXgC0lCcpuzchSvZSK8Fp+ooKXC44EULk4w/wFGkOFJOMQ==",
+      "algid:encrypt:RSA:PKCS1": "BSuDa5ssKbVeUVj6eVpmKJKXyFylrpPOqFe7L40CE5XS90O38D/NOhUwObGUk4VL1nf2Z63MBQ2mu/i93fBwEs4h8K+DBZ6LkS1pucnqtHLrCnCLBFlJI1xHGHzaH7VAgefmCmJ/wgVURsGyKadee0KCDIlWpbxeJEUE4I7VAT2dumSYtru/kKqo3VmPkjWq6MTuidU/GaCUkAJ4JfcOF7lcbJVwhNEAcXa/QWgb+CAYXiJMBHxVUkNAR1g/tOb1ff26CMMP2dtj818lSwn03mxSGxffa3WW+gyIDF3U/hl1qmMTiMCqbcHZnvb6/XVhYAR78nAGLYP7S7aRkrWHVg=="
+    ]
+  )
+
+  static let RSA_3072 = Fixture(
+    keySize: 3072,
+    publicDER: """
+    MIIBigKCAYEAmgiHcGl9/MdiezLUTwcrr0usSAyOagtzl5bP/XGhROk+tzjbXpbFyTJl27j+dHouFfa7lQAN0e6PE5MllEKBSyCb515Fz2kFZ2OEdU6M5E1YedDKCvBNXre4uG4WpaSZCorREVCenmwtq8fCrN43OqkJPQrgSFSi2uz+8dxkoG7P3zo3RxMHr8Y4HVOOY61F2dlJFIvPRTo3nD5KtJPkE3orDUDCWG+hg1bzNLrLkNG9icZF5ocQlqZGXwuYTYfPqMFzThUA8vdrNAO4kkcaYAZawp8PXveh3ZTfUmQ8muuy7uRadAJ4h7gfb2oPqGIb036ldTPVvXC1hJOHApt4u6atRIUR5Og7R6IxwpGCbXVxLALhZC5s00ddwmHatRo2Q0Sqa8gM2YLJVxDZLjpcZxQKs9UzkIWBK7fALRxCDlP6rbJ74unufO4v/z0iHumlsZSlStFQ4EP5F/uop6R24Vr1JShFWS+gi1KbIPHokg2QPZ8L5Z18uwN0nsFkb3A7AgMBAAE=
+    """,
+    privateDER: """
+    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
+    """,
+    rawMessage: "CryptoSwift RSA Keys!",
+    encryptedMessage: [
+      "algid:encrypt:RSA:raw": "JuQvlWxXLyPQnhw3CZ1BYofKIltRt23lgG38zdMc49RAZIHJhV10hvgZi18vGzjI8c9nl+Gc1UqswzW/VeLJ4NJmWmGcJ4lfqUMSKIixYWbBSAjZGb7TmxJ81Pf8we3OI1ht5s7xjJzWW1B/QAiG75Jdp4uOVEpgXc5zUzGtn3x4Ya3hNCGTPVRckM5BzhVGK3Jmfli8uOZcMWlyg1e/iidMBWf90VETOa2vKXOBZbIgZLwDfR0qXobSdJ9JokkxIJTYLt29Y03KEcewvLoBqP/7qHazjs9g/OmVPc00MffByMplBHtU+PF4/8b5GOrKA1slnH2qxaxsIzEa/iXwxlCM9pUo7SQD72x0a9S55FGmHc4F1bl4/5xV7T92Tl1k0p+lYLkLFNFX2Ho7+4t/dttq8aojOS7BrYwducHoArS6wQLx8LRRBVIjDghQ+zCCLyed+nV3ybZ+YvvYbg3xXsDMayTCbkZgUCZHpfp+/HMnMY7VBBZU4BdKN7/swnDo",
+      "algid:encrypt:RSA:PKCS1": "BP4w+TXwb+9Us8AuJ+wMQnBvXoDvlQ0yagcIX5kgXSCn1+32gfo0hd/4iR/TUmLdHvrv7/w9nFci2EI9E+XpZXRmw07XfoD1OWdTMdUVwxgeq6h/woGl7JcgK1MO3YPGwWKd2rNNK+WW3Yrc+ZzzH+CumRSdUpZDPIEcBRi2IR1lrtTzCjpD2pkQSo/pP+n7lhSdO9c+XJuQ6YpkP+63R4gsirgX0TIPp7I2tJM+p9pk6u+8CMI4K1fkqoWfreCi7U7wH+qOXk4/pcK69AtgQovOOxrN37478B7O7FDNmyD4VR0YtojJk4aCQTTkTa/aUbOEgkWM6X02deEyOY3RxNfe0ORwQt7gqdI2y1if2O7xx03SS7XJg8RZr8J04Q50KlmRtAuLCeSluASFKBO/54lLtmoGvehtZhV/Y6hsRguOTSCLS+rOQV/z2sTGOgzSbTusATsyinMsfOa/AB6EXeaLajmiLcASm9YWV2JTOobYxbNdbRTPesO61YWBsyqw"
+    ]
+  )
+
+  static let RSA_4096 = Fixture(
+    keySize: 4096,
+    publicDER: """
+    MIICCgKCAgEA1nWM2B1i1FJZ/I+7qFc5SSlP0/Yz7CPksUWeVauBaRvT/6SRzbHoC9bbN0xwmZmyEwBzHukiY5QCdwvdi4OGbPQqACpZxinsPwGM1ZKIGCdoDQmPS8rS5kYayo3+wLYSjxhenw/iQCf4FTMJWRIjmE+2xHFBS5urjdF0K4DwJ7k5s1tFH77VSmq66HNULNlWWomZIQDLMziz8oK+CkAHQqiMFHucfN9sRHu3Kj3nWStuw3acy6QZnmSPCETwMZQkAkpVmJF2cZFpcrsCK/1lFS8VpsDmr2dWwJCF473FcBCG647pRM8EPn/Mg73vxtyN4yKpz5CLmt5aY1dn/wvET8oziFVMU156OJV+6LDVhS7IG8UmMjSvwZ07STg6y8Co24aAcRrwftsBtcVrBryA8kYd4iXMbPHW++dnY6sMek5ebyj5mIfeOO7IgEl53SYK7PrOlTagMqvR1/WdajcOcYWGOFyubcwRTDk/eFJ9kBP1CuSjBS5DC88LtAeAtMUfbpAIAZKRHYhKS/+BbWbJXG2B3/4fJT8PP0LrzDFx6QxVNVt3db5MdGRg8FDowSzWGqsIMXKcYFdY8yquaOo7XVEXiqgVOMlSa7Ui7nXzIn32iwAuAR4zfbYEDpM5qyunIOZA95Ab8IZH5RnPO9RITQFX/5T704SN5KZBxbKNGmcCAwEAAQ==
+    """,
+    privateDER: """
+    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
+    """,
+    rawMessage: "CryptoSwift RSA Keys!",
+    encryptedMessage: [
+      "algid:encrypt:RSA:raw": "JpQpn5D6/kBPI0SFXlX2thIjSIwZTcPuT752JJaIUic35rXc3V13GumpXxIe6uZsksLPgDWIuzzYjWmbQOdc7qgjnUZLJT1thjMxW9Icy/P4heGOIMcat2cg0MU0JJlgcr3vgt14AsCL7K2LFTskwy3vV4k2tLwD25NY4lLTMGcnq2iQ60Nkg1tXkUD5QqE1mQBasc1vIlRpobWlaICL9WW/wC+qjpPM7lOzp+Dqw1X/LG/JnHZjXyclQdnN7/07uioqhKGeqLQtFwSyORPdM/FAp/o+k9NSUiKtpjCuvnaBiJEY18E7PbuLbH76FtaPfMjFN/f7mC4eHZCqUEWvim3Uu1JmLIgcQETVCMHtISODBsVKST8mcKYZqoaxGsMHwDgSs1bCscSYijWHRgGXmabi7KF0qqLKLYqDlXKBKgloggkPqF+3joh0tunhZ90/0kks0jLPmurhZyBKUoTU1lAM6QtzN+/iQ7hr6/yPNAtpS5P7K/GQM4sK+f7JM6Y378yH659JgAstHlqP7XPZJok78bg3jdn7rOByeNXPr+T3u5vocEcoC0VieulKiI2ogE3S+QBFXr18fWa2vwMayP4VECfnFQeO6gZcyDWfE66FBBLttfFBDRIq6QO3FlMCM77w3ELTIS7Ytp9NAZam7H2OAw7iY+mK9SJ7dgqoUdM=",
+      "algid:encrypt:RSA:PKCS1": "rlSXp5pvs+D6vNfkLHrlI2tQ0FVTwrsXHK3tyHnoeoWR9dD2APDIEk95sHt36l9zg9MlrK33HqjlGYSlRuFrf/Dhbr3cCz7SbvoAgCw86dMcEzmWs9PQYuDTDgLzIaemlXbA4FRkLEM32TeUNMqV9LafHjH/MVAx2tL0Yt0/Ges20F6WUpdQwxDq6ESNWcCtet78bot2TEceMOLpLo+yhhQAwW7xlfpKQy4Jpg15U3CNiax2k+54U0D632xOlWkaIZy9PS6Mwx0im79gQlZLTLLBaHhEwffVV+WfFUhSye9rDu3jyeenLIZ9Zmsr7SEwpgdg+0bGGbfZjGWi0ek36KOBP2g9qDEz6w0gzyLfBgndrpEk2kiZU56Wu27tYSUr5M/nUgImGnzH0jViaBNaZgei+VS8mlnxQNkNzgTY8by779ijp0nmsmnMJkjtJbcLNwXqGfM9NsMOGolU6ilGXLWw7dFwz4qCKueCVPxn5+4zAwL1zbT0zZgBGxE1xFWeiNldW2bSZ1tohfN1yQ53lw6K3zJitaFdpYzVr3TwSeALpHx9ne95lsXc2kKhXYIGsfIBSfsyF4/+nm4VNBSpb3MuynZOlAjI8N/FdtHRm2Q8UDr7KiPrfB0+SPHJcuQY2jpHkrzuNeemkbBi5BGH94IHNwM0zCCCl12d1KkaqpY="
+    ]
+  )
 }

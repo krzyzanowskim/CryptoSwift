@@ -18,26 +18,26 @@ import XCTest
 @testable import CryptoSwift
 
 final class RSATests: XCTestCase {
-  
+
   func testSmallRSA() {
     /*
      * Example taken from the book "Understanding Cryptography"
      *
      * p = 3; q = 11; n = pq = 33; e = 3; d = 7
      */
-    
+
     let n: Array<UInt8> = [33]
     let e: Array<UInt8> = [3]
     let d: Array<UInt8> = [7]
     let message: Array<UInt8> = [4]
     let expected: Array<UInt8> = [31]
-    
+
     let rsa = RSA(n: n, e: e, d: d)
     XCTAssertEqual(rsa.keySize, 6, "key size is not correct")
-    
+
     let encrypted = try! rsa.encrypt(message)
     XCTAssertEqual(encrypted, expected, "small encrypt failed")
-    
+
     let decrypted = try! rsa.decrypt(encrypted)
     XCTAssertEqual(decrypted, message, "small decrypt failed")
   }
@@ -48,7 +48,7 @@ final class RSATests: XCTestCase {
      *
      * 1. 1024-bit RSA bare exponentiation
      */
-    
+
     let n: Array<UInt8> = [
       0xF0, 0xC4, 0x2D, 0xB8, 0x48, 0x6F, 0xEB, 0x95, 0x95, 0xD8, 0xC7, 0x8F, 0x90, 0x8D, 0x04, 0xA9,
       0xB6, 0xC8, 0xC7, 0x7A, 0x36, 0x10, 0x5B, 0x1B, 0xF2, 0x75, 0x53, 0x77, 0xA6, 0x89, 0x3D, 0xC4,
@@ -85,24 +85,24 @@ final class RSATests: XCTestCase {
       0x06, 0x1C, 0xB0, 0xA2, 0x1C, 0xA3, 0xA5, 0x24, 0xB4, 0x07, 0xE9, 0xFF, 0xBA, 0x87, 0xFC, 0x96,
       0x6B, 0x3B, 0xA9, 0x45, 0x90, 0x84, 0x9A, 0xEB, 0x90, 0x8A, 0xAF, 0xF4, 0xC7, 0x19, 0xC2, 0xE4
     ]
-    
+
     let rsa = RSA(n: n, e: e, d: d)
     XCTAssertEqual(rsa.keySize, 1024, "key size is not correct")
-    
+
     let encrypted = try! rsa.encrypt(message)
     XCTAssertEqual(encrypted, expected, "encrypt failed")
-    
+
     let decrypted = try! rsa.decrypt(encrypted)
     XCTAssertEqual(decrypted, message, "decrypt failed")
   }
-  
+
   func testRSA2() {
     /*
      * Taken from http://cryptomanager.com/tv.html
      *
      * 2. 2048-bit PKCS V. 1.5 enciphering.
      */
-    
+
     let n: Array<UInt8> = [
       0xF7, 0x48, 0xD8, 0xD9, 0x8E, 0xD0, 0x57, 0xCF, 0x39, 0x8C, 0x43, 0x7F, 0xEF, 0xC6, 0x15, 0xD7,
       0x57, 0xD3, 0xF8, 0xEC, 0xE6, 0xF2, 0xC5, 0x80, 0xAE, 0x07, 0x80, 0x76, 0x8F, 0x9E, 0xC8, 0x3A,
@@ -163,17 +163,17 @@ final class RSATests: XCTestCase {
       0x15, 0x59, 0x23, 0x5E, 0x99, 0xC3, 0x2A, 0xBE, 0xF3, 0x3D, 0x95, 0xE2, 0x8E, 0x18, 0xCC, 0xA3,
       0x44, 0x2E, 0x6E, 0x3A, 0x43, 0x2F, 0xFF, 0xEA, 0x10, 0x10, 0x4A, 0x8E, 0xEE, 0x94, 0xC3, 0x62
     ]
-    
+
     let rsa = RSA(n: n, e: e, d: d)
     XCTAssertEqual(rsa.keySize, 2048, "key size is not correct")
-    
+
     let encrypted = try! rsa.encrypt(message)
     XCTAssertEqual(encrypted, expected, "encrypt failed")
-    
+
     let decrypted = try! rsa.decrypt(encrypted)
     XCTAssertEqual(decrypted, message, "decrypt failed")
   }
-  
+
   func testGenerateKeyPair() {
     /*
      * To test key generation and its validity
@@ -181,15 +181,18 @@ final class RSATests: XCTestCase {
     let message: Array<UInt8> = [
       0x11, 0x22, 0x33, 0x44
     ]
-    
-    let rsa = RSA(keySize: 2048)
-    // Sometimes the modulus size is 2047 bits, but it's okay (with two 1024 bits primes)
-    //XCTAssertEqual(rsa.keySize, 2048, "key size is not correct")
-    
-    let decrypted = try! rsa.decrypt(try! rsa.encrypt(message))
-    XCTAssertEqual(decrypted, message, "encrypt+decrypt failed")
-  }
 
+    do {
+      let rsa = try RSA(keySize: 2048)
+      // Sometimes the modulus size is 2047 bits, but it's okay (with two 1024 bits primes)
+      //XCTAssertEqual(rsa.keySize, 2048, "key size is not correct")
+
+      let decrypted = try rsa.decrypt(rsa.encrypt(message))
+      XCTAssertEqual(decrypted, message, "encrypt+decrypt failed")
+    } catch {
+      XCTFail(error.localizedDescription)
+    }
+  }
 }
 
 extension RSATests {

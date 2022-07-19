@@ -546,7 +546,7 @@ do {
 RSA key generation
 
 ```swift
-let rsa = RSA(keySize: 2048) // This generates a modulus, public exponent and private exponent with the given size
+let rsa = try RSA(keySize: 2048) // This generates a modulus, public exponent and private exponent with the given size
 ```
 
 ## Author

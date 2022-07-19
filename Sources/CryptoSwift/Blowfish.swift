@@ -329,12 +329,20 @@ public final class Blowfish {
   }
 
   private func setupBlockModeWorkers() throws {
-    self.encryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: self.encrypt, encryptionOperation: self.encrypt)
+    let decryptBlock = { [weak self] (block: ArraySlice<UInt8>) -> Array<UInt8>? in
+      self?.decrypt(block: block)
+    }
+
+    let encryptBlock = { [weak self] (block: ArraySlice<UInt8>) -> Array<UInt8>? in
+      self?.encrypt(block: block)
+    }
+
+    self.encryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: encryptBlock, encryptionOperation: encryptBlock)
 
     if self.blockMode.options.contains(.useEncryptToDecrypt) {
-      self.decryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: self.encrypt, encryptionOperation: self.encrypt)
+      self.decryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: encryptBlock, encryptionOperation: encryptBlock)
     } else {
-      self.decryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: self.decrypt, encryptionOperation: self.encrypt)
+      self.decryptWorker = try self.blockMode.worker(blockSize: Blowfish.blockSize, cipherOperation: decryptBlock, encryptionOperation: encryptBlock)
     }
   }
 
@@ -376,13 +384,13 @@ public final class Blowfish {
     }
   }
 
-  fileprivate func encrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
+  private func encrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
     var result = Array<UInt8>()
 
     var l = UInt32(bytes: block[block.startIndex..<block.startIndex.advanced(by: 4)])
     var r = UInt32(bytes: block[block.startIndex.advanced(by: 4)..<block.startIndex.advanced(by: 8)])
 
-    encryptBlowfishBlock(l: &l, r: &r)
+    self.encryptBlowfishBlock(l: &l, r: &r)
 
     // because everything is too complex to be solved in reasonable time o_O
     result += [
@@ -405,13 +413,13 @@ public final class Blowfish {
     return result
   }
 
-  fileprivate func decrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
+  private func decrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
     var result = Array<UInt8>()
 
     var l = UInt32(bytes: block[block.startIndex..<block.startIndex.advanced(by: 4)])
     var r = UInt32(bytes: block[block.startIndex.advanced(by: 4)..<block.startIndex.advanced(by: 8)])
 
-    decryptBlowfishBlock(l: &l, r: &r)
+    self.decryptBlowfishBlock(l: &l, r: &r)
 
     // because everything is too complex to be solved in reasonable time o_O
     result += [

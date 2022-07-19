@@ -18,6 +18,7 @@ organizations who have contributed source code to CryptoSwift.
 - Bart Cone <cone.bart@gmail.com>
 - Bing Cheung <32565605+eungch@users.noreply.github.com>
 - Bogdan Bystritskiy <q80061@gmail.com>
+- Brandon Toms <btoms.20@gmail.com>
 - Brice Cesarin <bc@dejamobile.com>
 - Bruce Geerdes <bruce@vdub.software>
 - Bryan Chen <xlchen1291@gmail.com>
@@ -32,6 +33,7 @@ organizations who have contributed source code to CryptoSwift.
 - Dave Wood <dave@cerebralgardens.com>
 - Dima Kalachov <dima.kalachov@gmail.com>
 - Dusan Klinec <dusan.klinec@gmail.com>
+- Elaine Lyons <e.lyons@fetchrewards.com>
 - Eneko Alonso <eneko.alonso@gmail.com>
 - Eugene Berdnikov <eberdnikov@outlook.com>
 - Evan Maloney <emaloney@gilt.com>

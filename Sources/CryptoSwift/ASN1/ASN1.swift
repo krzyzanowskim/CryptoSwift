@@ -16,6 +16,10 @@
 
 import Foundation
 
+/// A Partial ASN.1 (Abstract Syntax Notation 1) Encoder & Decoder Implementation.
+///
+/// - Note: This implementation is limited to a few core types and is not an exhaustive / complete ASN1 implementation
+/// - Warning: This implementation has been developed for encoding and decoding DER & PEM files specifically. If you're using this Encoder/Decoder on other ASN1 structures, make sure you test the expected behavior appropriately.
 enum ASN1 {
   internal enum IDENTIFIERS: UInt8, Equatable {
     case SEQUENCE = 0x30

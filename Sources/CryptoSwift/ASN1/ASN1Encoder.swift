@@ -34,10 +34,6 @@ extension ASN1 {
           return IDENTIFIERS.NULL.bytes
         case .objectIdentifier(let oid):
           return IDENTIFIERS.OBJECTID.bytes + self.asn1LengthPrefixed(oid.bytes)
-        case .ecObject(let ecObj):
-          return IDENTIFIERS.EC_OBJECT.bytes + self.asn1LengthPrefixed(ecObj.bytes)
-        case .ecBits(let ecBits):
-          return IDENTIFIERS.EC_BITS.bytes + self.asn1LengthPrefixed(ecBits.bytes)
         case .sequence(let nodes):
           return IDENTIFIERS.SEQUENCE.bytes + self.asn1LengthPrefixed( nodes.reduce(into: Array<UInt8>(), { partialResult, node in
             partialResult += encode(node)

@@ -24,8 +24,6 @@ enum ASN1 {
     case NULL = 0x05
     case BITSTRING = 0x03
     case OCTETSTRING = 0x04
-    case EC_OBJECT = 0xA0
-    case EC_BITS = 0xA1
 
     static func == (lhs: UInt8, rhs: IDENTIFIERS) -> Bool {
       lhs == rhs.rawValue
@@ -46,6 +44,7 @@ enum ASN1 {
     /// An array of more `ASN1.Node`s
     case sequence(nodes: [Node])
     /// An integer
+    /// - Note: This ASN1 Encoder makes no assumptions about the sign and bit order of the integers passed in. The conversion from Integer to Data is your responsiblity.
     case integer(data: Data)
     /// An objectIdentifier
     case objectIdentifier(data: Data)
@@ -55,13 +54,6 @@ enum ASN1 {
     case bitString(data: Data)
     /// An octetString
     case octetString(data: Data)
-
-    //Exteneded Params
-
-    /// Elliptic Curve specific objectIdentifier
-    case ecObject(data: Data)
-    /// Elliptic Curve specific bitString
-    case ecBits(data: Data)
 
     var description: String {
       ASN1.printNode(self, level: 0)
@@ -82,10 +74,6 @@ enum ASN1 {
         str.append("\(prefix)ObjectID: \(oid.toHexString())")
       case .octetString(let os):
         str.append("\(prefix)OctetString: \(os.toHexString())")
-      case .ecObject(let ecObj):
-        str.append("\(prefix)EC Object: \(ecObj.toHexString())")
-      case .ecBits(let ecBits):
-        str.append("\(prefix)EC Bits: \(ecBits.toHexString())")
       case .sequence(let nodes):
         str.append("\(prefix)Sequence:")
         nodes.forEach { str.append(printNode($0, level: level + 1)) }

@@ -84,21 +84,6 @@ extension ASN1 {
           let data = try scanner.consume(length: length)
           return .octetString(data: data)
 
-        case IDENTIFIERS.EC_OBJECT.rawValue:
-          let length = try scanner.consumeLength()
-          let data = try scanner.consume(length: length)
-          return .objectIdentifier(data: data)
-
-        case IDENTIFIERS.EC_BITS.rawValue:
-          let length = try scanner.consumeLength()
-
-          // There's an extra byte (0x00) after the bit string length in all the keys I've encountered.
-          // I couldn't find a specification that referenced this extra byte, but let's consume it and discard it.
-          _ = try scanner.consume(length: 1)
-
-          let data = try scanner.consume(length: length - 1)
-          return .ecBits(data: data)
-
         default:
           throw DecodingError.invalidType(value: firstByte)
       }

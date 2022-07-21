@@ -22,6 +22,9 @@ extension ASN1 {
     ///
     /// - Parameter node: The Node to encode
     /// - Returns: The encoded bytes as a UInt8 array
+    ///
+    /// - Warning: This ASN.1 encoder has only been tested to work on certain ASN.1 data structures such as DER and PEM files. Before using this encoder for another application, ensure you test it's behavior accordingly.
+    /// - Warning: This encoder makes no assumptions regarding Integer bit layout and signage. The proper serialization of Integers is left up to the user.
     public static func encode(_ node: ASN1.Node) -> [UInt8] {
       switch node {
         case .integer(let integer):
@@ -34,10 +37,6 @@ extension ASN1 {
           return IDENTIFIERS.NULL.bytes
         case .objectIdentifier(let oid):
           return IDENTIFIERS.OBJECTID.bytes + self.asn1LengthPrefixed(oid.bytes)
-        case .ecObject(let ecObj):
-          return IDENTIFIERS.EC_OBJECT.bytes + self.asn1LengthPrefixed(ecObj.bytes)
-        case .ecBits(let ecBits):
-          return IDENTIFIERS.EC_BITS.bytes + self.asn1LengthPrefixed(ecBits.bytes)
         case .sequence(let nodes):
           return IDENTIFIERS.SEQUENCE.bytes + self.asn1LengthPrefixed( nodes.reduce(into: Array<UInt8>(), { partialResult, node in
             partialResult += encode(node)
@@ -46,6 +45,9 @@ extension ASN1 {
     }
 
     /// Calculates and returns the ASN.1 length Prefix for a chunk of data
+    ///
+    /// - Parameter bytes: The bytes to be length prefixed
+    /// - Returns: The ASN.1 length Prefix for this chuck of data (excluding the passed in data)
     private static func asn1LengthPrefix(_ bytes: [UInt8]) -> [UInt8] {
       if bytes.count >= 0x80 {
         var lengthAsBytes = withUnsafeBytes(of: bytes.count.bigEndian, Array<UInt8>.init)
@@ -56,7 +58,10 @@ extension ASN1 {
       }
     }
 
-    /// Returns the provided bytes with the appropriate ASN.1 length prefix prepended
+    /// Prefixes the provided bytes with the appropriate ASN.1 length prefix
+    ///
+    /// - Parameter bytes: The bytes to be length prefixed
+    /// - Returns: The provided bytes with the appropriate ASN.1 length prefix prepended
     private static func asn1LengthPrefixed(_ bytes: [UInt8]) -> [UInt8] {
       self.asn1LengthPrefix(bytes) + bytes
     }

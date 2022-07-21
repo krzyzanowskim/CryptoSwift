@@ -24,7 +24,7 @@ extension ASN1 {
     /// - Returns: The encoded bytes as a UInt8 array
     ///
     /// - Warning: This ASN.1 encoder has only been tested to work on certain ASN.1 data structures such as DER and PEM files. Before using this encoder for another application, ensure you test it's behavior accordingly.
-    /// - Warning: This encoder makes no assumptions regarding Integer bit layout and signage. The proper serialization of your Integers is left up to the user.
+    /// - Warning: This encoder makes no assumptions regarding Integer bit layout and signage. The proper serialization of Integers is left up to the user.
     public static func encode(_ node: ASN1.Node) -> [UInt8] {
       switch node {
         case .integer(let integer):

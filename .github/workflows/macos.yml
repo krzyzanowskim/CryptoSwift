@@ -2,9 +2,9 @@ name: macOS
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer

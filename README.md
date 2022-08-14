@@ -98,8 +98,8 @@ You want to help, great! Go ahead and fork our repo, make your changes and send 
 
 Check out [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to help with CryptoSwift.
 
-- If you found a bug, [open an issue](https://github.com/krzyzanowskim/CryptoSwift/issues).
-- If you have a feature request, [open an issue](https://github.com/krzyzanowskim/CryptoSwift/issues).
+- If you found a bug, [open a discussion](https://github.com/krzyzanowskim/CryptoSwift/discussions).
+- If you have a feature request, [open a discussion](https://github.com/krzyzanowskim/CryptoSwift/discussions).
 
 ## Installation
 

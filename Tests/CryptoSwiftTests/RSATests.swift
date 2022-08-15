@@ -337,7 +337,7 @@ final class RSATests: XCTestCase {
   ///   - Ensure that we can export the public key in it's DER representation and that it matches the expected data
   ///   - Ensure that we are able to encrypt the messages and that we receive the same data when testing deterministic encryption variants
   ///   - Ensure that attempting to decrypt a message without a private key throws and error
-  ///   - Ensure that attempting to sign data withough a private key throws an error
+  ///   - Ensure that attempting to sign data without a private key throws an error
   ///   - Ensure that we can verify that the signed data was in fact signed with this public keys corresponding private key
   /// 2) Importing the RSA Private DER Representation
   ///   - Ensure the key was imported correctly

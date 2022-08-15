@@ -39,6 +39,14 @@ public final class RSA: DERCodable {
     case noPrimes
     /// Unable to calculate the coefficient during a private key DER export
     case unableToCalculateCoefficient
+    /// The signature to verify is of an invalid length
+    case invalidSignatureLength
+    /// The message to be signed is of an invalid length
+    case invalidMessageLengthForSigning
+    /// The message to be encrypted is of an invalid length
+    case invalidMessageLengthForEncryption
+    /// The error thrown when Decryption fails
+    case invalidDecryption
   }
 
   /// RSA Modulus
@@ -212,22 +220,20 @@ extension RSA {
     // Proceed with regular initialization
     self.init(n: BigUInteger(modulus), e: BigUInteger(publicExponent), d: BigUInteger(privateExponent), p: BigUInteger(prime1), q: BigUInteger(prime2))
   }
-}
 
-// MARK: CS.BigUInt extension
-
-extension BigUInteger {
-
-  public static func generatePrime(_ width: Int) -> BigUInteger {
-    // Note: Need to find a better way to generate prime numbers
-    while true {
-      var random = BigUInteger.randomInteger(withExactWidth: width)
-      random |= BigUInteger(1)
-      if random.isPrime() {
-        return random
-      }
-    }
-  }
+  /// Conveniece init that attempts to classify a DER encoded RSA Key and instantiate it
+//  public convenience init(rawRepresentation raw: Data) throws {
+//    let asn = try ASN1.Decoder.decode(data: Data(raw))
+//    guard case .sequence(let params) = asn else { throw Error.invalidDERFormat }
+//    switch params.count {
+//      case 2:
+//        try self.init(publicDER: raw.bytes)
+//      case 9...:
+//        try self.init(privateDER: raw.bytes)
+//      default:
+//        throw Error.invalidDERFormat
+//    }
+//  }
 }
 
 // MARK: DER Exports (See #892)
@@ -358,6 +364,22 @@ extension RSA {
       return try Data(self.privateKeyDER())
     } else {
       return try Data(self.publicKeyDER())
+    }
+  }
+}
+
+// MARK: CS.BigUInt extension
+
+extension BigUInteger {
+
+  public static func generatePrime(_ width: Int) -> BigUInteger {
+    // Note: Need to find a better way to generate prime numbers
+    while true {
+      var random = BigUInteger.randomInteger(withExactWidth: width)
+      random |= BigUInteger(1)
+      if random.isPrime() {
+        return random
+      }
     }
   }
 }

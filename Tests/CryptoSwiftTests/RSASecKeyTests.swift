@@ -53,7 +53,7 @@
       XCTAssertEqual(rsaSecKeyRawRep, Data(rsaCryptoSwiftRawRep))
       XCTAssertEqual(rsaSecKeyRawRep, try rsaCryptoSwift.publicKeyExternalRepresentation())
     }
-    
+
     /// From CryptoSwift RSA -> External Representation -> SecKey
     ///
     /// This test enforces that
@@ -133,7 +133,7 @@
       XCTAssertNil(rsaCryptoSwift.d)
       XCTAssertEqual(rsaSecKeyRawRep, try rsaCryptoSwift.externalRepresentation())
     }
-    
+
     /// From SecKey -> External Representation -> CryptoSwift RSA
     ///
     /// This test enforces that

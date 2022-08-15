@@ -76,50 +76,50 @@ extension RSA {
     @inlinable
     internal func prepare(_ bytes: Array<UInt8>, blockSize: Int) throws -> Array<UInt8> {
       switch self {
-      case .unsafe:
-        return bytes
-      case .raw:
-        // We need at least 11 bytes of random padding in order to safely encrypt messages
-        guard blockSize >= bytes.count + 11 else { throw RSA.Error.invalidMessageLengthForEncryption }
-        return Array(repeating: 0x00, count: blockSize - bytes.count) + bytes
-      case .pksc1v15:
-        guard !bytes.isEmpty else { throw RSA.Error.invalidMessageLengthForEncryption }
-        // We need at least 11 bytes of random padding in order to safely encrypt messages
-        guard blockSize >= bytes.count + 11 else { throw RSA.Error.invalidMessageLengthForEncryption }
-        return Padding.eme_pkcs1v15.add(to: bytes, blockSize: blockSize)
+        case .unsafe:
+          return bytes
+        case .raw:
+          // We need at least 11 bytes of random padding in order to safely encrypt messages
+          guard blockSize >= bytes.count + 11 else { throw RSA.Error.invalidMessageLengthForEncryption }
+          return Array(repeating: 0x00, count: blockSize - bytes.count) + bytes
+        case .pksc1v15:
+          guard !bytes.isEmpty else { throw RSA.Error.invalidMessageLengthForEncryption }
+          // We need at least 11 bytes of random padding in order to safely encrypt messages
+          guard blockSize >= bytes.count + 11 else { throw RSA.Error.invalidMessageLengthForEncryption }
+          return Padding.eme_pkcs1v15.add(to: bytes, blockSize: blockSize)
       }
     }
-    
+
     @inlinable
-    internal func formatEncryptedBytes(_ bytes:Array<UInt8>, blockSize: Int) -> Array<UInt8> {
+    internal func formatEncryptedBytes(_ bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
       switch self {
-      case .unsafe:
-        return bytes
-      case .raw, .pksc1v15:
-        // Format the encrypted bytes before returning
-        var bytes = bytes
-        if bytes.isEmpty {
-          // Instead of returning an empty byte array, we return an array of zero's of length keySize bytes
-          // This functionality matches that of Apple's `Security` framework
-          return Array<UInt8>(repeating: 0, count: blockSize)
-        } else {
-          while bytes.count % 4 != 0 { bytes.insert(0x00, at: 0) }
+        case .unsafe:
           return bytes
-        }
+        case .raw, .pksc1v15:
+          // Format the encrypted bytes before returning
+          var bytes = bytes
+          if bytes.isEmpty {
+            // Instead of returning an empty byte array, we return an array of zero's of length keySize bytes
+            // This functionality matches that of Apple's `Security` framework
+            return Array<UInt8>(repeating: 0, count: blockSize)
+          } else {
+            while bytes.count % 4 != 0 { bytes.insert(0x00, at: 0) }
+            return bytes
+          }
       }
     }
 
     @inlinable
     internal func removePadding(_ bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
       switch self {
-      case .unsafe:
-        return bytes
-      case .raw:
-        return bytes
-      case .pksc1v15:
-        // Convert the Octet String into an Integer Primitive using the BigInteger `serialize` method
-        // (this effectively just prefixes the data with a 0x00 byte indicating that its a positive integer)
-        return Padding.eme_pkcs1v15.remove(from: [0x00] + bytes, blockSize: blockSize)
+        case .unsafe:
+          return bytes
+        case .raw:
+          return bytes
+        case .pksc1v15:
+          // Convert the Octet String into an Integer Primitive using the BigInteger `serialize` method
+          // (this effectively just prefixes the data with a 0x00 byte indicating that its a positive integer)
+          return Padding.eme_pkcs1v15.remove(from: [0x00] + bytes, blockSize: blockSize)
       }
     }
   }

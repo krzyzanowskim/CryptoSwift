@@ -13,7 +13,7 @@ extension RSA: Signature {
   public func sign(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
     try self.sign(Array(bytes), variant: .message_pkcs1v15_SHA512_256)
   }
-  
+
   public func sign(_ bytes: Array<UInt8>, variant: SignatureVariant) throws -> Array<UInt8> {
     // Check for Private Exponent presence
     guard let d = d else {
@@ -32,7 +32,7 @@ extension RSA: Signature {
   public func verify(signature: ArraySlice<UInt8>, for expectedData: ArraySlice<UInt8>) throws -> Bool {
     try self.verify(signature: Array(signature), for: Array(expectedData), variant: .message_pkcs1v15_SHA512_256)
   }
-  
+
   /// https://datatracker.ietf.org/doc/html/rfc8017#section-8.2.2
   public func verify(signature: Array<UInt8>, for bytes: Array<UInt8>, variant: SignatureVariant = .message_pkcs1v15_SHA256) throws -> Bool {
     /// Step 1: Ensure the signature is the same length as the key's modulus

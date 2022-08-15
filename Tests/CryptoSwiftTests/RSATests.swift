@@ -331,6 +331,8 @@ final class RSATests: XCTestCase {
 
   /// This test uses the Fixtures (generated using Apple's `Security` framework) to test the entirety of an RSA keys functionality
   ///
+  /// - Note: These Fixtures were generated using the `testCreateTestFixture` function in `RSASecKeyTests` file.
+  ///
   /// For each fixture in the `fixtures` array, we test...
   /// 1) Importing the RSA Public DER Representation
   ///   - Ensure the key was imported correctly
@@ -348,8 +350,8 @@ final class RSATests: XCTestCase {
   ///   - Ensure that we are able to sign the plaintext messages and that it produces the expected data
   ///   - Ensure that we can verify that the signed data was in fact signed with this public keys corresponding private key
   func testRSAKeys() {
-
-    let fixtures = [TestFixtures.RSA_1024, TestFixtures.RSA_1056] //, TestFixtures.RSA_2048] //, TestFixtures.RSA_3072, TestFixtures.RSA_4096]
+    // These tests can take a very long time. Therefore the larger keys have been commented out in order to make the tests complete a little quicker.
+    let fixtures = [TestFixtures.RSA_1024, TestFixtures.RSA_1056, TestFixtures.RSA_2048] //, TestFixtures.RSA_3072, TestFixtures.RSA_4096]
 
     do {
       /// Public Key Functionality

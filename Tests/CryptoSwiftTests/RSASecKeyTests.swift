@@ -369,7 +369,7 @@
         return
       }
 
-      /// Lets grab the external representation of the public key
+      /// Lets grab the external representation of the private key
       var privateExternalRepError: Unmanaged<CFError>?
       guard let privateRSASecKeyRawRep = SecKeyCopyExternalRepresentation(rsaSecKey, &privateExternalRepError) as? Data else {
         XCTFail("Failed to copy external representation for RSA SecKey")

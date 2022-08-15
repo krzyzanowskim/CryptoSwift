@@ -27,6 +27,8 @@
 /// EM = 0x00 || 0x01 || PS || 0x00 || M.
 /// ```
 /// - Note: This Padding scheme is intended to be used for encoding RSA Signatures
+///
+/// [EMSA-PKCS1v1_5 IETF Spec](https://datatracker.ietf.org/doc/html/rfc8017#section-9.2)
 struct EMSAPKCS1v15Padding: PaddingProtocol {
 
   init() {
@@ -64,6 +66,8 @@ struct EMSAPKCS1v15Padding: PaddingProtocol {
 /// EM = 0x00 || 0x02 || PS || 0x00 || M.
 /// ```
 /// - Note: This Padding scheme is intended to be used for encoding messages before RSA Encryption
+///
+/// [EME-PKCS1v1_5 IETF Spec](https://datatracker.ietf.org/doc/html/rfc8017#section-7.2.1)
 struct EMEPKCS1v15Padding: PaddingProtocol {
 
   init() {

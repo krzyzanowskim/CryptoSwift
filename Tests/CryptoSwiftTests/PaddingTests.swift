@@ -146,7 +146,7 @@ final class PaddingTests: XCTestCase {
     let clean = EMSAPKCS1v15Padding().remove(from: padded, blockSize: nil)
     XCTAssertEqual(clean, input, "EMSAPKCS1v15 failed")
   }
-  
+
   func testEMSAPKCS1v15_4() {
     let input: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3]
     let padded = EMSAPKCS1v15Padding().add(to: input, blockSize: 16)
@@ -156,7 +156,7 @@ final class PaddingTests: XCTestCase {
     let clean = EMSAPKCS1v15Padding().remove(from: padded, blockSize: nil)
     XCTAssertEqual(clean, input, "EMSAPKCS1v15 failed")
   }
-  
+
   func testEMSAPKCS1v15_5() {
     let input: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2]
     let padded = EMSAPKCS1v15Padding().add(to: input, blockSize: 16)
@@ -196,7 +196,7 @@ final class PaddingTests: XCTestCase {
     let clean = EMEPKCS1v15Padding().remove(from: padded, blockSize: nil)
     XCTAssertEqual(clean, input, "EMEPKCS1v15 failed")
   }
-  
+
   func testEMEPKCS1v15_4() {
     let input: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3]
     let padded = EMEPKCS1v15Padding().add(to: input, blockSize: 16)
@@ -206,7 +206,7 @@ final class PaddingTests: XCTestCase {
     let clean = EMEPKCS1v15Padding().remove(from: padded, blockSize: nil)
     XCTAssertEqual(clean, input, "EMEPKCS1v15 failed")
   }
-  
+
   func testEMEPKCS1v15_5() {
     let input: Array<UInt8> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2]
     let padded = EMEPKCS1v15Padding().add(to: input, blockSize: 16)

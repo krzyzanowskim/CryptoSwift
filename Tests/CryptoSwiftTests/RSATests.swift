@@ -221,7 +221,7 @@ final class RSATests: XCTestCase {
     XCTAssertEqual(expectedMessage, String(data: Data(unpadded), encoding: .utf8), "Failed to decrypt the message")
   }
 
-  /// This test focuses on ensureing that the encryption & decryption round trip works as expected.
+  /// This test focuses on ensuring that the encryption & decryption round trip works as expected.
   ///
   /// This test enforces that
   /// 1) We can encrypt and then decrypt a random integer

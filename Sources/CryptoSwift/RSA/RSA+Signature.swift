@@ -22,11 +22,14 @@ extension RSA: Signature {
     try self.sign(Array(bytes), variant: .message_pkcs1v15_SHA256)
   }
 
+  /// Signs the data using the Private key and the specified signature variant
+  /// - Parameters:
+  ///   - bytes: The data to be signed
+  ///   - variant: The variant to use (`digest` variants expect a pre-hashed digest matching that of the specified hash function, `message` variants will hash the data using the specified hash function before signing it)
+  /// - Returns: The signature of the data
   public func sign(_ bytes: Array<UInt8>, variant: SignatureVariant) throws -> Array<UInt8> {
     // Check for Private Exponent presence
-    guard let d = d else {
-      throw RSA.Error.noPrivateKey
-    }
+    guard let d = d else { throw RSA.Error.noPrivateKey }
 
     // Hash & Encode Message
     let hashedAndEncoded = try RSA.hashedAndEncoded(bytes, variant: variant, keySizeInBytes: self.keySize / 8)
@@ -41,7 +44,14 @@ extension RSA: Signature {
     try self.verify(signature: Array(signature), for: Array(expectedData), variant: .message_pkcs1v15_SHA256)
   }
 
-  /// https://datatracker.ietf.org/doc/html/rfc8017#section-8.2.2
+  /// Verifies whether a Signature is valid for the provided data
+  /// - Parameters:
+  ///   - signature: The signature to verify
+  ///   - expectedData: The original data that you expected to have been signed
+  ///   - variant: The variant used to sign the data
+  /// - Returns: `True` when the signature is valid for the expected data, `False` otherwise.
+  ///
+  /// [IETF Verification Spec](https://datatracker.ietf.org/doc/html/rfc8017#section-8.2.2)
   public func verify(signature: Array<UInt8>, for bytes: Array<UInt8>, variant: SignatureVariant) throws -> Bool {
     /// Step 1: Ensure the signature is the same length as the key's modulus
     guard signature.count == (self.keySize / 8) || (signature.count - 1) == (self.keySize / 8) else { throw Error.invalidSignatureLength }
@@ -98,25 +108,42 @@ extension RSA: Signature {
 
 extension RSA {
   public enum SignatureVariant {
+    /// Hashes the raw message using MD5 before signing the data
     case message_pkcs1v15_MD5
+    /// Hashes the raw message using SHA1 before signing the data
     case message_pkcs1v15_SHA1
+    /// Hashes the raw message using SHA224 before signing the data
     case message_pkcs1v15_SHA224
+    /// Hashes the raw message using SHA256 before signing the data
     case message_pkcs1v15_SHA256
+    /// Hashes the raw message using SHA384 before signing the data
     case message_pkcs1v15_SHA384
+    /// Hashes the raw message using SHA512 before signing the data
     case message_pkcs1v15_SHA512
+    /// Hashes the raw message using SHA512-224 before signing the data
     case message_pkcs1v15_SHA512_224
+    /// Hashes the raw message using SHA512-256 before signing the data
     case message_pkcs1v15_SHA512_256
+    /// This variant isn't supported yet
     case digest_pkcs1v15_RAW
+    /// This variant expects that the data to be signed is a valid MD5 Hash Digest
     case digest_pkcs1v15_MD5
+    /// This variant expects that the data to be signed is a valid SHA1 Hash Digest
     case digest_pkcs1v15_SHA1
+    /// This variant expects that the data to be signed is a valid SHA224 Hash Digest
     case digest_pkcs1v15_SHA224
+    /// This variant expects that the data to be signed is a valid SHA256 Hash Digest
     case digest_pkcs1v15_SHA256
+    /// This variant expects that the data to be signed is a valid SHA384 Hash Digest
     case digest_pkcs1v15_SHA384
+    /// This variant expects that the data to be signed is a valid SHA512 Hash Digest
     case digest_pkcs1v15_SHA512
+    /// This variant expects that the data to be signed is a valid SHA512-224 Hash Digest
     case digest_pkcs1v15_SHA512_224
+    /// This variant expects that the data to be signed is a valid SHA512-256 Hash Digest
     case digest_pkcs1v15_SHA512_256
 
-    var identifier: Array<UInt8> {
+    internal var identifier: Array<UInt8> {
       switch self {
         case .digest_pkcs1v15_RAW: return []
         case .message_pkcs1v15_MD5, .digest_pkcs1v15_MD5: return Array<UInt8>(arrayLiteral: 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x02, 0x05)
@@ -130,7 +157,7 @@ extension RSA {
       }
     }
 
-    func calculateHash(_ bytes: Array<UInt8>) -> Array<UInt8> {
+    internal func calculateHash(_ bytes: Array<UInt8>) -> Array<UInt8> {
       switch self {
         case .message_pkcs1v15_MD5:
           return Digest.md5(bytes)
@@ -161,7 +188,7 @@ extension RSA {
       }
     }
 
-    func enforceLength(_ bytes: Array<UInt8>) -> Bool {
+    internal func enforceLength(_ bytes: Array<UInt8>) -> Bool {
       switch self {
         case .digest_pkcs1v15_MD5:
           return bytes.count <= 16
@@ -194,7 +221,7 @@ extension RSA {
     }
 
     /// Right now the only Padding Scheme supported is [EMCS-PKCS1v15](https://www.rfc-editor.org/rfc/rfc8017#section-9.2) (others include [EMSA-PSS](https://www.rfc-editor.org/rfc/rfc8017#section-9.1))
-    func pad(bytes: Array<UInt8>, to blockSize: Int) -> Array<UInt8> {
+    internal func pad(bytes: Array<UInt8>, to blockSize: Int) -> Array<UInt8> {
       return Padding.emsa_pkcs1v15.add(to: bytes, blockSize: blockSize)
     }
   }

@@ -128,7 +128,7 @@
         return
       }
 
-      // Lets grab the external representation of the public key
+      // Let's grab the external representation of the public key
       var externalRepError: Unmanaged<CFError>?
       guard let rsaSecKeyRawRep = SecKeyCopyExternalRepresentation(rsaSecKeyPublic, &externalRepError) as? Data else {
         XCTFail("Failed to copy external representation for RSA SecKey")
@@ -163,7 +163,7 @@
         return
       }
 
-      // Lets grab the external representation
+      // Let's grab the external representation
       var externalRepError: Unmanaged<CFError>?
       guard let rsaSecKeyRawRep = SecKeyCopyExternalRepresentation(rsaSecKey, &externalRepError) as? Data else {
         XCTFail("Failed to copy external representation for RSA SecKey")
@@ -205,7 +205,7 @@
           break
         }
 
-        // Lets grab the external representation
+        // Let's grab the external representation
         var externalRepError: Unmanaged<CFError>?
         guard let rsaSecKeyRawRep = SecKeyCopyExternalRepresentation(rsaSecKey, &externalRepError) as? Data else {
           XCTFail("Failed to copy external representation for RSA SecKey")
@@ -215,13 +215,14 @@
         // Ensure we can import the private RSA key into CryptoSwift
         let rsaCryptoSwift = try RSA(rawRepresentation: rsaSecKeyRawRep)
 
-        // Sign the message with both keys and ensure their the same
+        // Sign the message with both keys and ensure they're the same (the pkcs1v15 signature variant is deterministic)
         let csSignature = try rsaCryptoSwift.sign(messageToSign.bytes, variant: .message_pkcs1v15_SHA256)
 
         let skSignature = try secKeySign(messageToSign.bytes, variant: .rsaSignatureMessagePKCS1v15SHA256, withKey: rsaSecKey)
 
-        XCTAssertEqual(csSignature, skSignature.bytes, "Signature don't match!")
+        XCTAssertEqual(csSignature, skSignature.bytes, "Signatures don't match!")
 
+        // Ensure we can verify each signature using the opposite library
         XCTAssertTrue(try rsaCryptoSwift.verify(signature: skSignature.bytes, for: messageToSign.bytes, variant: .message_pkcs1v15_SHA256))
         XCTAssertTrue(try self.secKeyVerify(csSignature, forBytes: messageToSign.bytes, usingVariant: .rsaSignatureMessagePKCS1v15SHA256, withKey: rsaSecKey))
 
@@ -362,14 +363,14 @@
         return
       }
 
-      /// Lets grab the external representation of the public key
+      /// Let's grab the external representation of the public key
       var publicExternalRepError: Unmanaged<CFError>?
       guard let publicRSASecKeyRawRep = SecKeyCopyExternalRepresentation(rsaSecKeyPublic, &publicExternalRepError) as? Data else {
         XCTFail("Failed to copy external representation for RSA SecKey")
         return
       }
 
-      /// Lets grab the external representation of the private key
+      /// Let's grab the external representation of the private key
       var privateExternalRepError: Unmanaged<CFError>?
       guard let privateRSASecKeyRawRep = SecKeyCopyExternalRepresentation(rsaSecKey, &privateExternalRepError) as? Data else {
         XCTFail("Failed to copy external representation for RSA SecKey")
@@ -398,7 +399,7 @@
       template = template.replacingOccurrences(of: "{{MESSAGE_TEMPLATES}}", with: "\(messageEntries.joined(separator: ",\n\t"))")
 
       print("\n**************************")
-      print("   Test Fixture Output")
+      print("   Test Fixture Output      ")
       print("**************************\n")
       print(template)
       print("\n**************************")

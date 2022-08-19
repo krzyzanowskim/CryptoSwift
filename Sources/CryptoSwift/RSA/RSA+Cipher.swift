@@ -87,7 +87,7 @@ extension RSA {
         case .unsafe:
           return bytes
         case .raw:
-          // We need at least 11 bytes of random padding in order to safely encrypt messages
+          // We need at least 11 bytes of padding in order to safely encrypt messages
           guard blockSize >= bytes.count + 11 else { throw RSA.Error.invalidMessageLengthForEncryption }
           return Array(repeating: 0x00, count: blockSize - bytes.count) + bytes
         case .pksc1v15:

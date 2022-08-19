@@ -229,10 +229,10 @@
         // Encrypt with SecKey
         let skEncryption = try secKeyEncrypt(messageToSign.bytes, usingVariant: .rsaEncryptionRaw, withKey: rsaSecKey)
         // Decrypt with CryptoSwift Key
-        XCTAssertEqual(try rsaCryptoSwift.decrypt(skEncryption.bytes, variant: .unsafe), messageToSign.bytes, "CryptoSwift Decryption of SecKey Encryption Failed")
+        XCTAssertEqual(try rsaCryptoSwift.decrypt(skEncryption.bytes, variant: .raw), messageToSign.bytes, "CryptoSwift Decryption of SecKey Encryption Failed")
 
         // Encrypt with CryptoSwift
-        let csEncryption = try rsaCryptoSwift.encrypt(messageToSign.bytes, variant: .unsafe)
+        let csEncryption = try rsaCryptoSwift.encrypt(messageToSign.bytes, variant: .raw)
         // Decrypt with SecKey
         XCTAssertEqual(try self.secKeyDecrypt(csEncryption, usingVariant: .rsaEncryptionRaw, withKey: rsaSecKey).bytes, messageToSign.bytes, "SecKey Decryption of CryptoSwift Encryption Failed")
 

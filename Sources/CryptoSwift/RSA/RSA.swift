@@ -24,7 +24,7 @@ public final class RSA: DERCodable {
   /// RSA Object Identifier Bytes (rsaEncryption)
   static var primaryObjectIdentifier: Array<UInt8> = Array<UInt8>(arrayLiteral: 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01)
   /// RSA Secondary Object Identifier Bytes (null)
-  static var secondaryObjectIdentifier: Array<UInt8>?
+  static var secondaryObjectIdentifier: Array<UInt8>? = nil
 
   public enum Error: Swift.Error {
     /// No private key specified
@@ -220,20 +220,6 @@ extension RSA {
     // Proceed with regular initialization
     self.init(n: BigUInteger(modulus), e: BigUInteger(publicExponent), d: BigUInteger(privateExponent), p: BigUInteger(prime1), q: BigUInteger(prime2))
   }
-
-  /// Conveniece init that attempts to classify a DER encoded RSA Key and instantiate it
-//  public convenience init(rawRepresentation raw: Data) throws {
-//    let asn = try ASN1.Decoder.decode(data: Data(raw))
-//    guard case .sequence(let params) = asn else { throw Error.invalidDERFormat }
-//    switch params.count {
-//      case 2:
-//        try self.init(publicDER: raw.bytes)
-//      case 9...:
-//        try self.init(privateDER: raw.bytes)
-//      default:
-//        throw Error.invalidDERFormat
-//    }
-//  }
 }
 
 // MARK: DER Exports (See #892)

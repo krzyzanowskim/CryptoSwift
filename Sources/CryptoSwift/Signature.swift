@@ -23,24 +23,43 @@ public protocol Signature: AnyObject {
 
   /// Sign the given bytes at once
   ///
-  /// - parameter bytes: Plaintext data
-  /// - returns: Encrypted data
+  /// - parameter bytes: Plaintext data to be signed
+  /// - returns: The signed data
   func sign(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8>
+  /// Sign the given bytes at once
+  ///
+  /// - parameter bytes: Plaintext data to be signed
+  /// - returns: The signed data
   func sign(_ bytes: Array<UInt8>) throws -> Array<UInt8>
 
   /// Verify the given bytes against the expected data
   ///
-  /// - parameter bytes: Signature data
-  /// - returns: Plaintext data
+  /// - parameter signature: Signature data
+  /// - parameter expectedData: The original data that you expected to be signed
+  /// - returns: `True` when the signature is valid for the expected data, `False` otherwise.
   func verify(signature: ArraySlice<UInt8>, for expectedData: ArraySlice<UInt8>) throws -> Bool
+  /// Verify the given bytes against the expected data
+  ///
+  /// - parameter signature: Signature data
+  /// - parameter expectedData: The original data that you expected to be signed
+  /// - returns: `True` when the signature is valid for the expected data, `False` otherwise.
   func verify(signature: Array<UInt8>, for expectedData: Array<UInt8>) throws -> Bool
 }
 
 extension Signature {
+  /// Sign the given bytes at once
+  ///
+  /// - parameter bytes: Plaintext data to be signed
+  /// - returns: The signed data
   public func sign(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
     try self.sign(bytes.slice)
   }
 
+  /// Verify the given bytes against the expected data
+  ///
+  /// - parameter signature: Signature data
+  /// - parameter expectedData: The original data that you expected to be signed
+  /// - returns: `True` when the signature is valid for the expected data, `False` otherwise.
   public func verify(signature: Array<UInt8>, for expectedData: Array<UInt8>) throws -> Bool {
     try self.verify(signature: signature.slice, for: expectedData.slice)
   }

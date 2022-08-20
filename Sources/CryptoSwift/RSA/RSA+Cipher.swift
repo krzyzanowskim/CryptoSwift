@@ -76,7 +76,7 @@ extension RSA {
     ///
     /// - Warning: This is also considered to be an unsafe method of encryption, but matches the `Security` frameworks functionality.
     case raw
-    /// The `pkcs1v15` encryption variant formats the inbound data with a non deterministic psuedo random padding scheme.
+    /// The `pkcs1v15` encryption variant formats the inbound data with a non deterministic pseudo random padding scheme.
     ///
     /// [EME PKCS1v1.5 Padding Scheme Spec](https://datatracker.ietf.org/doc/html/rfc2313#section-8.1)
     case pksc1v15

@@ -67,6 +67,8 @@ extension RSA: Cipher {
 }
 
 extension RSA {
+  /// RSA Encryption Block Types
+  /// - [RFC2313 8.1 - Encryption block formatting](https://datatracker.ietf.org/doc/html/rfc2313#section-8.1)
   public enum RSAEncryptionVariant {
     /// The `unsafe` encryption variant, is fully deterministic and doesn't format the inbound data in any way.
     ///
@@ -88,11 +90,13 @@ extension RSA {
           return bytes
         case .raw:
           // We need at least 11 bytes of padding in order to safely encrypt messages
+          // - block types 1 and 2 have this minimum padding requirement, block type 0 isn't specified, but we enforce the minimum padding length here to be safe.
           guard blockSize >= bytes.count + 11 else { throw RSA.Error.invalidMessageLengthForEncryption }
           return Array(repeating: 0x00, count: blockSize - bytes.count) + bytes
         case .pksc1v15:
+          // The `Security` framework refuses to encrypt a zero byte message using the pkcs1v15 padding scheme, so we do the same
           guard !bytes.isEmpty else { throw RSA.Error.invalidMessageLengthForEncryption }
-          // We need at least 11 bytes of random padding in order to safely encrypt messages
+          // We need at least 11 bytes of random padding in order to safely encrypt messages (RFC2313 Section 8.1 - Note 6)
           guard blockSize >= bytes.count + 11 else { throw RSA.Error.invalidMessageLengthForEncryption }
           return Padding.eme_pkcs1v15.add(to: bytes, blockSize: blockSize)
       }

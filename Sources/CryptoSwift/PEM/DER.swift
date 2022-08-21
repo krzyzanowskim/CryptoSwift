@@ -91,6 +91,11 @@ extension DEREncodable {
 }
 
 struct DER {
+  internal enum Error:Swift.Error {
+    /// We were provided invalid DER data
+    case invalidDERFormat
+  }
+  
   /// Integer to Octet String Primitive
   /// - Parameters:
   ///   - x: nonnegative integer to be converted

@@ -21,11 +21,6 @@ import Foundation
 // It allows fast calculation for RSA big numbers
 
 public final class RSA: DERCodable {
-  /// RSA Object Identifier Bytes (rsaEncryption)
-  static var primaryObjectIdentifier: Array<UInt8> = Array<UInt8>(arrayLiteral: 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01)
-  /// RSA Secondary Object Identifier Bytes (null)
-  static var secondaryObjectIdentifier: Array<UInt8>? = nil
-
   public enum Error: Swift.Error {
     /// No private key specified
     case noPrivateKey

@@ -21,20 +21,19 @@ import Foundation
 // It allows fast calculation for RSA big numbers
 
 public final class RSA: DERCodable {
+  /// RSA Key Errors
   public enum Error: Swift.Error {
     /// No private key specified
     case noPrivateKey
     /// Failed to calculate the inverse e and phi
     case invalidInverseNotCoprimes
-    /// We were provided invalid DER data
-    case invalidDERFormat
     /// We only support Version 0 RSA keys (we don't support Version 1 introduced in RFC 3447)
     case unsupportedRSAVersion
-    /// Failed to verify primes during DER initialiization (the provided primes don't reproduce the provided private exponent)
+    /// Failed to verify primes during initialiization (the provided primes don't reproduce the provided private exponent)
     case invalidPrimes
     /// We attempted to export a private key without our underlying primes
     case noPrimes
-    /// Unable to calculate the coefficient during a private key DER export
+    /// Unable to calculate the coefficient during a private key import / export
     case unableToCalculateCoefficient
     /// The signature to verify is of an invalid length
     case invalidSignatureLength
@@ -146,11 +145,11 @@ extension RSA {
     let asn = try ASN1.Decoder.decode(data: Data(der))
 
     // Enforce the above ASN Structure
-    guard case .sequence(let params) = asn else { throw Error.invalidDERFormat }
-    guard params.count == 2 else { throw Error.invalidDERFormat }
+    guard case .sequence(let params) = asn else { throw DER.Error.invalidDERFormat }
+    guard params.count == 2 else { throw DER.Error.invalidDERFormat }
 
-    guard case .integer(let modulus) = params[0] else { throw Error.invalidDERFormat }
-    guard case .integer(let publicExponent) = params[1] else { throw Error.invalidDERFormat }
+    guard case .integer(let modulus) = params[0] else { throw DER.Error.invalidDERFormat }
+    guard case .integer(let publicExponent) = params[1] else { throw DER.Error.invalidDERFormat }
 
     self.init(n: BigUInteger(modulus), e: BigUInteger(publicExponent))
   }
@@ -179,17 +178,17 @@ extension RSA {
     let asn = try ASN1.Decoder.decode(data: Data(der))
 
     // Enforce the above ASN Structure (do we need to extract and verify the eponents and coefficients?)
-    guard case .sequence(let params) = asn else { throw Error.invalidDERFormat }
-    guard params.count == 9 else { throw Error.invalidDERFormat }
-    guard case .integer(let version) = params[0] else { throw Error.invalidDERFormat }
-    guard case .integer(let modulus) = params[1] else { throw Error.invalidDERFormat }
-    guard case .integer(let publicExponent) = params[2] else { throw Error.invalidDERFormat }
-    guard case .integer(let privateExponent) = params[3] else { throw Error.invalidDERFormat }
-    guard case .integer(let prime1) = params[4] else { throw Error.invalidDERFormat }
-    guard case .integer(let prime2) = params[5] else { throw Error.invalidDERFormat }
-    guard case .integer(let exponent1) = params[6] else { throw Error.invalidDERFormat }
-    guard case .integer(let exponent2) = params[7] else { throw Error.invalidDERFormat }
-    guard case .integer(let coefficient) = params[8] else { throw Error.invalidDERFormat }
+    guard case .sequence(let params) = asn else { throw DER.Error.invalidDERFormat }
+    guard params.count == 9 else { throw DER.Error.invalidDERFormat }
+    guard case .integer(let version) = params[0] else { throw DER.Error.invalidDERFormat }
+    guard case .integer(let modulus) = params[1] else { throw DER.Error.invalidDERFormat }
+    guard case .integer(let publicExponent) = params[2] else { throw DER.Error.invalidDERFormat }
+    guard case .integer(let privateExponent) = params[3] else { throw DER.Error.invalidDERFormat }
+    guard case .integer(let prime1) = params[4] else { throw DER.Error.invalidDERFormat }
+    guard case .integer(let prime2) = params[5] else { throw DER.Error.invalidDERFormat }
+    guard case .integer(let exponent1) = params[6] else { throw DER.Error.invalidDERFormat }
+    guard case .integer(let exponent2) = params[7] else { throw DER.Error.invalidDERFormat }
+    guard case .integer(let coefficient) = params[8] else { throw DER.Error.invalidDERFormat }
 
     // We only support version 0x00 == RFC2313 at the moment
     // - TODO: Support multiple primes 0x01 version defined in [RFC3447](https://www.rfc-editor.org/rfc/rfc3447#appendix-A.1.2)
@@ -273,7 +272,7 @@ extension RSA {
 
     let bitWidth = self.keySize / 8
     let paramWidth = bitWidth / 2
-    // Structure the data
+    // Structure the data (according to RFC2313, version 0x00 RSA Private Key Syntax)
     let mod = self.n.serialize()
     let privateKeyAsnNode: ASN1.Node =
       .sequence(nodes: [

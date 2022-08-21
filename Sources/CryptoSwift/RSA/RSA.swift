@@ -33,6 +33,8 @@ public final class RSA: DERCodable {
     case invalidInverseNotCoprimes
     /// We were provided invalid DER data
     case invalidDERFormat
+    /// We only support Version 0 RSA keys (we don't support Version 1 introduced in RFC 3447)
+    case unsupportedRSAVersion
     /// Failed to verify primes during DER initialiization (the provided primes don't reproduce the provided private exponent)
     case invalidPrimes
     /// We attempted to export a private key without our underlying primes
@@ -176,7 +178,6 @@ extension RSA {
   ///   exponent1         INTEGER,  -- d mod (p-1)
   ///   exponent2         INTEGER,  -- d mod (q-1)
   ///   coefficient       INTEGER,  -- (inverse of q) mod p
-  ///   otherPrimeInfos   OtherPrimeInfos OPTIONAL
   /// }
   /// ```
   internal convenience init(privateDER der: Array<UInt8>) throws {
@@ -184,7 +185,7 @@ extension RSA {
 
     // Enforce the above ASN Structure (do we need to extract and verify the eponents and coefficients?)
     guard case .sequence(let params) = asn else { throw Error.invalidDERFormat }
-    guard params.count >= 9 else { throw Error.invalidDERFormat }
+    guard params.count == 9 else { throw Error.invalidDERFormat }
     guard case .integer(let version) = params[0] else { throw Error.invalidDERFormat }
     guard case .integer(let modulus) = params[1] else { throw Error.invalidDERFormat }
     guard case .integer(let publicExponent) = params[2] else { throw Error.invalidDERFormat }
@@ -195,8 +196,9 @@ extension RSA {
     guard case .integer(let exponent2) = params[7] else { throw Error.invalidDERFormat }
     guard case .integer(let coefficient) = params[8] else { throw Error.invalidDERFormat }
 
-    // Are there other versions out there? Is this even the version?
-    guard version == Data(hex: "0x00") else { throw Error.invalidDERFormat }
+    // We only support version 0x00 == RFC2313 at the moment
+    // - TODO: Support multiple primes 0x01 version defined in [RFC3447](https://www.rfc-editor.org/rfc/rfc3447#appendix-A.1.2)
+    guard version == Data(hex: "0x00") else { throw Error.unsupportedRSAVersion }
 
     // Ensure the supplied parameters are correct...
     // Calculate modulus
@@ -208,12 +210,10 @@ extension RSA {
     guard BigUInteger(privateExponent) == d else { throw Error.invalidPrimes }
 
     // Ensure the provided coefficient is correct (derived from the primes)
-    // - Note: this might be overkill, cause we don't store the coefficient, but the extra check probably isn't the worse thing
     guard let calculatedCoefficient = BigUInteger(prime2).inverse(BigUInteger(prime1)) else { throw RSA.Error.unableToCalculateCoefficient }
     guard calculatedCoefficient == BigUInteger(coefficient) else { throw RSA.Error.invalidPrimes }
 
     // Ensure the provided exponents are correct as well
-    // - Note: this might be overkill, cause we don't store them, but the extra check probably isn't the worse thing
     guard (d % (BigUInteger(prime1) - 1)) == BigUInteger(exponent1) else { throw RSA.Error.invalidPrimes }
     guard (d % (BigUInteger(prime2) - 1)) == BigUInteger(exponent2) else { throw RSA.Error.invalidPrimes }
 
@@ -266,7 +266,6 @@ extension RSA {
   ///   exponent1         INTEGER,  -- d mod (p-1)
   ///   exponent2         INTEGER,  -- d mod (q-1)
   ///   coefficient       INTEGER,  -- (inverse of q) mod p
-  ///   otherPrimeInfos   OtherPrimeInfos OPTIONAL
   /// }
   /// ```
   func privateKeyDER() throws -> Array<UInt8> {

@@ -20,11 +20,6 @@ internal protocol DERCodable: DERDecodable, DEREncodable { }
 
 /// Conform to this protocol if your type can be instantiated from a ASN1 DER representation
 internal protocol DERDecodable {
-  /// The keys primary ASN1 object identifier (ex: for RSA Keys --> 'rsaEncryption' --> [0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01])
-  static var primaryObjectIdentifier: Array<UInt8> { get }
-  /// The keys secondary ASN1 object identifier (ex: for RSA Keys --> 'null' --> nil)
-  static var secondaryObjectIdentifier: Array<UInt8>? { get }
-
   /// Attempts to instantiate an instance of your Public Key when given a DER representation of your Public Key
   init(publicDER: Array<UInt8>) throws
   /// Attempts to instantiate an instance of your Private Key when given a DER representation of your Private Key
@@ -67,11 +62,6 @@ extension DERDecodable {
 
 /// Conform to this protocol if your type can be described in an ASN1 DER representation
 internal protocol DEREncodable {
-  /// The keys primary ASN1 object identifier (ex: for RSA Keys --> 'rsaEncryption' --> [0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01])
-  static var primaryObjectIdentifier: Array<UInt8> { get }
-  /// The keys secondary ASN1 object identifier (ex: for RSA Keys --> 'null' --> nil)
-  static var secondaryObjectIdentifier: Array<UInt8>? { get }
-
   /// Returns the DER encoded representation of the Public Key
   func publicKeyDER() throws -> Array<UInt8>
   /// Returns the DER encoded representation of the Private Key
@@ -101,6 +91,11 @@ extension DEREncodable {
 }
 
 struct DER {
+  internal enum Error:Swift.Error {
+    /// We were provided invalid DER data
+    case invalidDERFormat
+  }
+  
   /// Integer to Octet String Primitive
   /// - Parameters:
   ///   - x: nonnegative integer to be converted

@@ -109,15 +109,20 @@ extension RSA {
           return bytes
         case .raw, .pksc1v15:
           // Format the encrypted bytes before returning
+          //var bytes = bytes
+//          if bytes.isEmpty {
+//            // Instead of returning an empty byte array, we return an array of zero's of length keySize bytes
+//            // This functionality matches that of Apple's `Security` framework
+//            return Array<UInt8>(repeating: 0, count: blockSize)
+//          } else {
+//            while bytes.count % 4 != 0 { bytes.insert(0x00, at: 0) }
+//            return bytes
+//          }
           var bytes = bytes
-          if bytes.isEmpty {
-            // Instead of returning an empty byte array, we return an array of zero's of length keySize bytes
-            // This functionality matches that of Apple's `Security` framework
-            return Array<UInt8>(repeating: 0, count: blockSize)
-          } else {
-            while bytes.count % 4 != 0 { bytes.insert(0x00, at: 0) }
-            return bytes
+          while bytes.count != blockSize {
+            bytes.insert(0x00, at: 0)
           }
+          return bytes
       }
     }
 

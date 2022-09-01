@@ -32,12 +32,12 @@ extension RSA: Signature {
     guard let d = d else { throw RSA.Error.noPrivateKey }
 
     // Hash & Encode Message
-    let hashedAndEncoded = try RSA.hashedAndEncoded(bytes, variant: variant, keySizeInBytes: self.keySize / 8)
+    let hashedAndEncoded = try RSA.hashedAndEncoded(bytes, variant: variant, keySizeInBytes: self.keySizeBytes)
 
     /// Calculate the Signature
     let signedData = BigUInteger(Data(hashedAndEncoded)).power(d, modulus: self.n).serialize().bytes
 
-    return variant.formatSignedBytes(signedData, blockSize: self.keySize / 8)
+    return variant.formatSignedBytes(signedData, blockSize: self.keySizeBytes)
   }
 
   public func verify(signature: ArraySlice<UInt8>, for expectedData: ArraySlice<UInt8>) throws -> Bool {
@@ -54,15 +54,11 @@ extension RSA: Signature {
   /// [IETF Verification Spec](https://datatracker.ietf.org/doc/html/rfc8017#section-8.2.2)
   public func verify(signature: Array<UInt8>, for bytes: Array<UInt8>, variant: SignatureVariant) throws -> Bool {
     /// Step 1: Ensure the signature is the same length as the key's modulus
-    guard signature.count == (self.keySize / 8) || (signature.count - 1) == (self.keySize / 8) else { throw Error.invalidSignatureLength }
+    guard signature.count == self.keySizeBytes else { throw Error.invalidSignatureLength }
 
-    //print(try Array<UInt8>(RSA.hashedAndEncoded(bytes, variant: variant, keySizeInBytes: self.keySize / 8)))
-    //print(try Array<UInt8>(RSA.hashedAndEncoded(bytes, variant: variant, keySizeInBytes: self.keySize / 8)).count)
-    var expectedData = try RSA.hashedAndEncoded(bytes, variant: variant, keySizeInBytes: self.keySize / 8)
-    if expectedData.count == self.keySize / 8 && expectedData.prefix(1) == [0x00] { expectedData = Array(expectedData.dropFirst()) }
-    //print(expectedData)
-    //print(expectedData.count)
-    //let expectedData = try Array<UInt8>(RSA.hashedAndEncoded(bytes, variant: variant, keySizeInBytes: self.keySize / 8))
+    /// Prepare the expected message for signature comparison
+    var expectedData = try RSA.hashedAndEncoded(bytes, variant: variant, keySizeInBytes: self.keySizeBytes)
+    if expectedData.count == self.keySizeBytes && expectedData.prefix(1) == [0x00] { expectedData = Array(expectedData.dropFirst()) }
 
     /// Step 2: 'Decrypt' the signature
     let signatureResult = BigUInteger(Data(signature)).power(self.e, modulus: self.n).serialize().bytes
@@ -81,24 +77,14 @@ extension RSA: Signature {
     let hashedMessage = variant.calculateHash(bytes)
 
     guard variant.enforceLength(hashedMessage, keySizeInBytes: keySizeInBytes) else { throw RSA.Error.invalidMessageLengthForSigning }
-    
+
     /// 2. Encode the algorithm ID for the hash function and the hash value into an ASN.1 value of type DigestInfo
     /// PKCS#1_15 DER Structure (OID == sha256WithRSAEncryption)
-//    let asn: ASN1.Node = .sequence(nodes: [
-//      .sequence(nodes: [
-//        .objectIdentifier(data: Data(variant.identifier)),
-//        .null
-//      ]),
-//      .octetString(data: Data(hashedMessage))
-//    ])
-//
-//    let t = ASN1.Encoder.encode(asn)
     let t = variant.encode(hashedMessage)
 
     if case .raw = variant { return t }
-    
+
     /// 3.  If emLen < tLen + 11, output "intended encoded message length too short" and stop
-    //print("Checking Key Size: \(keySizeInBytes) < \(t.count + 11)")
     if keySizeInBytes < t.count + 11 { throw RSA.Error.invalidMessageLengthForSigning }
 
     /// 4.  Generate an octet string PS consisting of emLen - tLen - 3
@@ -200,10 +186,10 @@ extension RSA {
       }
     }
 
-    internal func enforceLength(_ bytes: Array<UInt8>, keySizeInBytes:Int) -> Bool {
+    internal func enforceLength(_ bytes: Array<UInt8>, keySizeInBytes: Int) -> Bool {
       switch self {
         case .raw, .digest_pkcs1v15_RAW:
-          return bytes.count <= (keySizeInBytes)
+          return bytes.count <= keySizeInBytes
         case .digest_pkcs1v15_MD5:
           return bytes.count <= 16
         case .digest_pkcs1v15_SHA1:
@@ -231,36 +217,35 @@ extension RSA {
           return true
       }
     }
-    
-    internal func encode(_ bytes:Array<UInt8>) -> Array<UInt8> {
-      switch self {
-      case .raw, .digest_pkcs1v15_RAW:
-        return bytes
-        
-      default:
-        let asn: ASN1.Node = .sequence(nodes: [
-          .sequence(nodes: [
-            .objectIdentifier(data: Data(self.identifier)),
-            .null
-          ]),
-          .octetString(data: Data(bytes))
-        ])
 
-        return ASN1.Encoder.encode(asn)
+    internal func encode(_ bytes: Array<UInt8>) -> Array<UInt8> {
+      switch self {
+        case .raw, .digest_pkcs1v15_RAW:
+          return bytes
+
+        default:
+          let asn: ASN1.Node = .sequence(nodes: [
+            .sequence(nodes: [
+              .objectIdentifier(data: Data(self.identifier)),
+              .null
+            ]),
+            .octetString(data: Data(bytes))
+          ])
+
+          return ASN1.Encoder.encode(asn)
       }
-      
     }
 
     /// Right now the only Padding Scheme supported is [EMCS-PKCS1v15](https://www.rfc-editor.org/rfc/rfc8017#section-9.2) (others include [EMSA-PSS](https://www.rfc-editor.org/rfc/rfc8017#section-9.1))
     internal func pad(bytes: Array<UInt8>, to blockSize: Int) -> Array<UInt8> {
       switch self {
-      case .raw:
-        return bytes
-      default:
-        return Padding.emsa_pkcs1v15.add(to: bytes, blockSize: blockSize)
+        case .raw:
+          return bytes
+        default:
+          return Padding.emsa_pkcs1v15.add(to: bytes, blockSize: blockSize)
       }
     }
-    
+
     /// Zero pads a signature to the specified block size
     /// - Parameters:
     ///   - bytes: The signed bytes

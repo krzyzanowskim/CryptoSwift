@@ -253,15 +253,9 @@ extension RSA {
     /// - Returns: A zero padded (prepended) bytes array of length blockSize
     internal func formatSignedBytes(_ bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
       switch self {
-      //case .raw:
-      
-      default:
-        // Format the encrypted bytes before returning
-        var bytes = bytes
-        while bytes.count != blockSize {
-          bytes.insert(0x00, at: 0)
-        }
-        return bytes
+        default:
+          // Format the encrypted bytes before returning
+          return Array<UInt8>(repeating: 0x00, count: blockSize - bytes.count) + bytes
       }
     }
   }

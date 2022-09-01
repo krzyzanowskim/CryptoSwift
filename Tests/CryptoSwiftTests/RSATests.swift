@@ -240,7 +240,7 @@ final class RSATests: XCTestCase {
       XCTFail("\(error)")
     }
   }
-  
+
   /// This test focuses on ensuring that the signature & signature verification works as expected.
   ///
   /// This test enforces that
@@ -374,7 +374,7 @@ final class RSATests: XCTestCase {
   ///   - Ensure that we can verify that the signed data was in fact signed with this public keys corresponding private key
   func testRSAKeys() {
     // These tests can take a very long time. Therefore the larger keys have been commented out in order to make the tests complete a little quicker.
-    let fixtures = [TestFixtures.RSA_1023, TestFixtures.RSA_1024, TestFixtures.RSA_1056, TestFixtures.RSA_2048]//, TestFixtures.RSA_3072, TestFixtures.RSA_4096]
+    let fixtures = [TestFixtures.RSA_1023, TestFixtures.RSA_1024, TestFixtures.RSA_1056, TestFixtures.RSA_2048] //, TestFixtures.RSA_3072, TestFixtures.RSA_4096]
 
     do {
       /// Public Key Functionality
@@ -410,8 +410,6 @@ final class RSATests: XCTestCase {
               print("Warning::RSA<\(fixture.keySize)>::Skipping Encryption Algorithm \(test.key)")
               continue
             }
-            
-            //print("Testing \(rsa) Encryption<\(variant)> - Encrypting Message `\(message.key)`")
 
             if variant == .raw {
               if test.value == "" {
@@ -445,7 +443,7 @@ final class RSATests: XCTestCase {
               print("Warning::RSA<\(fixture.keySize)>::Skipping Signature Algorithm \(test.key)")
               continue
             }
-            
+
             // Signing data requires access to the private key, therefore this should throw an error when called on a public key
             XCTAssertThrowsError(try rsa.sign(message.key.bytes, variant: variant), "Signature<\(test.key)>::Did not throw error")
 
@@ -505,7 +503,7 @@ final class RSATests: XCTestCase {
             }
 
             //print("Testing \(rsa) Encryption<\(variant)> - Encrypting Message `\(message.key)`")
-            
+
             if variant == .raw {
               if test.value == "" {
                 XCTAssertThrowsError(try rsa.encrypt(message.key.bytes, variant: variant))
@@ -651,7 +649,7 @@ extension RSATests {
       let privateDER: String
       let messages: [String: (encryptedMessage: [String: String], signedMessage: [String: String])]
     }
-    
+
     // An example of a 1024 bit RSA Key that's actually only 1023 bits
     static let RSA_1023 = Fixture(
       keySize: 1023,
@@ -764,7 +762,7 @@ extension RSATests {
         )
       ]
     )
-    
+
     static let RSA_1024 = Fixture(
       keySize: 1024,
       publicDER: """

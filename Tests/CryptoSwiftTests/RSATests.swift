@@ -298,14 +298,14 @@ final class RSATests: XCTestCase {
     let t = ASN1.Encoder.encode(asn)
 
     /// 3.  If emLen < tLen + 11, output "intended encoded message length too short" and stop
-    if rsa.keySize < t.count + 11 { throw RSA.Error.invalidMessageLengthForSigning }
+    if rsa.keySizeBytes < t.count + 11 { throw RSA.Error.invalidMessageLengthForSigning }
 
     /// 4.  Generate an octet string PS consisting of emLen - tLen - 3
     /// octets with hexadecimal value 0xff. The length of PS will be
     /// at least 8 octets.
     /// 5.  Concatenate PS, the DER encoding T, and other padding to form
     /// the encoded message EM as EM = 0x00 || 0x01 || PS || 0x00 || T.
-    let padded = EMSAPKCS1v15Padding().add(to: t, blockSize: rsa.keySize / 8)
+    let padded = EMSAPKCS1v15Padding().add(to: t, blockSize: rsa.keySizeBytes)
 
     // Sign the data
     let signedData = BigUInteger(Data(padded)).power(rsa.d!, modulus: rsa.n).serialize().bytes

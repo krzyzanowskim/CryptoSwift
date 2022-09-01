@@ -374,7 +374,7 @@ final class RSATests: XCTestCase {
   ///   - Ensure that we can verify that the signed data was in fact signed with this public keys corresponding private key
   func testRSAKeys() {
     // These tests can take a very long time. Therefore the larger keys have been commented out in order to make the tests complete a little quicker.
-    let fixtures = [TestFixtures.RSA_1024, TestFixtures.RSA_1056, TestFixtures.RSA_2048]//, TestFixtures.RSA_3072, TestFixtures.RSA_4096]
+    let fixtures = [TestFixtures.RSA_1023, TestFixtures.RSA_1024, TestFixtures.RSA_1056, TestFixtures.RSA_2048]//, TestFixtures.RSA_3072, TestFixtures.RSA_4096]
 
     do {
       /// Public Key Functionality

@@ -56,7 +56,7 @@ public final class RSA: DERCodable {
 
   /// The size of the modulus, in bits
   public let keySize: Int
-  
+
   /// The size of the modulus, in bytes (rounded up to the nearest full byte)
   public let keySizeBytes: Int
 
@@ -134,7 +134,7 @@ public final class RSA: DERCodable {
 
 internal extension CS.BigUInt {
   /// The minimum number of bytes required to represent this integer in binary.
-  var byteWidth:Int {
+  var byteWidth: Int {
     let bytes = self.bitWidth / 8
     return self.bitWidth % 8 == 0 ? bytes : bytes + 1
   }
@@ -291,9 +291,9 @@ extension RSA {
     let privateKeyAsnNode: ASN1.Node =
       .sequence(nodes: [
         .integer(data: Data(hex: "0x00")),
-        .integer(data: DER.i2ospData(x: mod.bytes, size: keySizeBytes)),
-        .integer(data: DER.i2ospData(x: e.serialize().bytes, size: 3)),
-        .integer(data: DER.i2ospData(x: d.serialize().bytes, size: keySizeBytes)),
+        .integer(data: DER.i2ospData(x: mod.bytes, size: self.keySizeBytes)),
+        .integer(data: DER.i2ospData(x: self.e.serialize().bytes, size: 3)),
+        .integer(data: DER.i2ospData(x: d.serialize().bytes, size: self.keySizeBytes)),
         .integer(data: DER.i2ospData(x: primes.p.serialize().bytes, size: paramWidth)),
         .integer(data: DER.i2ospData(x: primes.q.serialize().bytes, size: paramWidth)),
         .integer(data: DER.i2ospData(x: (d % (primes.p - 1)).serialize().bytes, size: paramWidth)),

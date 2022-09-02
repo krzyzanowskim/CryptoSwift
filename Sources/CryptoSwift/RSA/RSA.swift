@@ -57,6 +57,9 @@ public final class RSA: DERCodable {
   /// The size of the modulus, in bits
   public let keySize: Int
 
+  /// The size of the modulus, in bytes (rounded up to the nearest full byte)
+  public let keySizeBytes: Int
+
   /// The underlying primes used to generate the Private Exponent
   private let primes: (p: BigUInteger, q: BigUInteger)?
 
@@ -72,6 +75,7 @@ public final class RSA: DERCodable {
     self.primes = nil
 
     self.keySize = n.bitWidth
+    self.keySizeBytes = n.byteWidth
   }
 
   /// Initialize with RSA parameters
@@ -122,6 +126,17 @@ public final class RSA: DERCodable {
     self.primes = (p, q)
 
     self.keySize = n.bitWidth
+    self.keySizeBytes = n.byteWidth
+  }
+}
+
+// MARK: BigUInt Extension
+
+internal extension CS.BigUInt {
+  /// The minimum number of bytes required to represent this integer in binary.
+  var byteWidth: Int {
+    let bytes = self.bitWidth / 8
+    return self.bitWidth % 8 == 0 ? bytes : bytes + 1
   }
 }
 
@@ -236,7 +251,7 @@ extension RSA {
     let mod = self.n.serialize()
     let pubKeyAsnNode: ASN1.Node =
       .sequence(nodes: [
-        .integer(data: DER.i2ospData(x: mod.bytes, size: self.keySize / 8)),
+        .integer(data: DER.i2ospData(x: mod.bytes, size: self.keySizeBytes)),
         .integer(data: DER.i2ospData(x: self.e.serialize().bytes, size: 3))
       ])
     return ASN1.Encoder.encode(pubKeyAsnNode)
@@ -270,16 +285,15 @@ extension RSA {
     // Make sure we can calculate our coefficient (inverse of q mod p)
     guard let coefficient = primes.q.inverse(primes.p) else { throw RSA.Error.unableToCalculateCoefficient }
 
-    let bitWidth = self.keySize / 8
-    let paramWidth = bitWidth / 2
+    let paramWidth = self.keySizeBytes / 2
     // Structure the data (according to RFC2313, version 0x00 RSA Private Key Syntax)
     let mod = self.n.serialize()
     let privateKeyAsnNode: ASN1.Node =
       .sequence(nodes: [
         .integer(data: Data(hex: "0x00")),
-        .integer(data: DER.i2ospData(x: mod.bytes, size: bitWidth)),
+        .integer(data: DER.i2ospData(x: mod.bytes, size: self.keySizeBytes)),
         .integer(data: DER.i2ospData(x: self.e.serialize().bytes, size: 3)),
-        .integer(data: DER.i2ospData(x: d.serialize().bytes, size: bitWidth)),
+        .integer(data: DER.i2ospData(x: d.serialize().bytes, size: self.keySizeBytes)),
         .integer(data: DER.i2ospData(x: primes.p.serialize().bytes, size: paramWidth)),
         .integer(data: DER.i2ospData(x: primes.q.serialize().bytes, size: paramWidth)),
         .integer(data: DER.i2ospData(x: (d % (primes.p - 1)).serialize().bytes, size: paramWidth)),

@@ -27,17 +27,14 @@ extension RSA: Cipher {
   @inlinable
   public func encrypt(_ bytes: Array<UInt8>, variant: RSAEncryptionVariant) throws -> Array<UInt8> {
     // Prepare the data for the specified variant
-    let preparedData = try variant.prepare(bytes, blockSize: self.keySize / 8)
+    let preparedData = try variant.prepare(bytes, blockSize: self.keySizeBytes)
 
     // Encrypt the prepared data
-    return try variant.formatEncryptedBytes(self.encryptPreparedBytes(preparedData), blockSize: self.keySize / 8)
+    return try variant.formatEncryptedBytes(self.encryptPreparedBytes(preparedData), blockSize: self.keySizeBytes)
   }
 
   @inlinable
   internal func encryptPreparedBytes(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
-    // Ensure our Key is large enough to safely encrypt the data
-    //guard (self.keySize / 8) >= bytes.count else { throw RSA.Error.invalidMessageLengthForEncryption }
-
     // Calculate encrypted data
     return BigUInteger(Data(bytes)).power(self.e, modulus: self.n).serialize().bytes
   }
@@ -53,7 +50,7 @@ extension RSA: Cipher {
     let decrypted = try self.decryptPreparedBytes(bytes)
 
     // Remove padding / unstructure data and return the raw plaintext
-    return variant.removePadding(decrypted, blockSize: self.keySize / 8)
+    return variant.removePadding(decrypted, blockSize: self.keySizeBytes)
   }
 
   @inlinable
@@ -109,15 +106,7 @@ extension RSA {
           return bytes
         case .raw, .pksc1v15:
           // Format the encrypted bytes before returning
-          var bytes = bytes
-          if bytes.isEmpty {
-            // Instead of returning an empty byte array, we return an array of zero's of length keySize bytes
-            // This functionality matches that of Apple's `Security` framework
-            return Array<UInt8>(repeating: 0, count: blockSize)
-          } else {
-            while bytes.count % 4 != 0 { bytes.insert(0x00, at: 0) }
-            return bytes
-          }
+          return Array<UInt8>(repeating: 0x00, count: blockSize - bytes.count) + bytes
       }
     }
 

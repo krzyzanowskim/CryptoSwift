@@ -241,6 +241,29 @@ final class RSATests: XCTestCase {
     }
   }
 
+  /// This test focuses on ensuring that the signature & signature verification works as expected.
+  ///
+  /// This test enforces that
+  /// 1) We can sign and then verify a random integer
+  /// 2) if we modify the signature or the message in any way, the verify function returns false or throws an error.
+  func testSignatureVerificationRandomIntegers() {
+    do {
+      let rsa = try RSA(keySize: 1024)
+
+      for _ in 0..<5 {
+        let message = BigUInteger.randomInteger(withMaximumWidth: 256).serialize().bytes
+
+        let signature = try rsa.sign(message, variant: .message_pkcs1v15_SHA256)
+        XCTAssertTrue(try rsa.verify(signature: signature, for: message, variant: .message_pkcs1v15_SHA256), "Failed to Verify Signature for `\(message)`")
+        XCTAssertFalse(try rsa.verify(signature: signature, for: message.shuffled()))
+        XCTAssertFalse(try rsa.verify(signature: signature.shuffled(), for: message))
+        XCTAssertThrowsError(try rsa.verify(signature: signature.dropLast(), for: message))
+      }
+    } catch {
+      XCTFail("\(error)")
+    }
+  }
+
   /// This test walks through the PKCS1 Signature scheme manually
   ///
   /// This test enforces that
@@ -275,14 +298,14 @@ final class RSATests: XCTestCase {
     let t = ASN1.Encoder.encode(asn)
 
     /// 3.  If emLen < tLen + 11, output "intended encoded message length too short" and stop
-    if rsa.keySize < t.count + 11 { throw RSA.Error.invalidMessageLengthForSigning }
+    if rsa.keySizeBytes < t.count + 11 { throw RSA.Error.invalidMessageLengthForSigning }
 
     /// 4.  Generate an octet string PS consisting of emLen - tLen - 3
     /// octets with hexadecimal value 0xff. The length of PS will be
     /// at least 8 octets.
     /// 5.  Concatenate PS, the DER encoding T, and other padding to form
     /// the encoded message EM as EM = 0x00 || 0x01 || PS || 0x00 || T.
-    let padded = EMSAPKCS1v15Padding().add(to: t, blockSize: rsa.keySize / 8)
+    let padded = EMSAPKCS1v15Padding().add(to: t, blockSize: rsa.keySizeBytes)
 
     // Sign the data
     let signedData = BigUInteger(Data(padded)).power(rsa.d!, modulus: rsa.n).serialize().bytes
@@ -351,7 +374,7 @@ final class RSATests: XCTestCase {
   ///   - Ensure that we can verify that the signed data was in fact signed with this public keys corresponding private key
   func testRSAKeys() {
     // These tests can take a very long time. Therefore the larger keys have been commented out in order to make the tests complete a little quicker.
-    let fixtures = [TestFixtures.RSA_1024, TestFixtures.RSA_1056, TestFixtures.RSA_2048] //, TestFixtures.RSA_3072, TestFixtures.RSA_4096]
+    let fixtures = [TestFixtures.RSA_1023, TestFixtures.RSA_1024, TestFixtures.RSA_1056, TestFixtures.RSA_2048] //, TestFixtures.RSA_3072, TestFixtures.RSA_4096]
 
     do {
       /// Public Key Functionality
@@ -369,16 +392,16 @@ final class RSATests: XCTestCase {
         let rsa = try RSA(rawRepresentation: publicDERData)
 
         // Ensure that the Key Size is correct
-        XCTAssertEqual(rsa.keySize, fixture.keySize, "Invalid key size after import")
+        XCTAssertEqual(rsa.keySize, fixture.keySize, "\(rsa)::Invalid Key Size after import")
 
         // Ensure that we do not have a private key by checking the private exponent
-        XCTAssertNil(rsa.d)
+        XCTAssertNil(rsa.d, "\(rsa)::Private exponent not nil ")
 
         // Ensure the public external representation matches the fixture
-        XCTAssertEqual(try rsa.publicKeyExternalRepresentation(), Data(base64Encoded: fixture.publicDER))
+        XCTAssertEqual(try rsa.publicKeyExternalRepresentation(), Data(base64Encoded: fixture.publicDER), "\(rsa)::Public Key external Representation doesn't match fixture")
 
         // Ensure externalRepresentation results in the publicDER
-        XCTAssertEqual(try rsa.externalRepresentation(), Data(base64Encoded: fixture.publicDER))
+        XCTAssertEqual(try rsa.externalRepresentation(), Data(base64Encoded: fixture.publicDER), "\(rsa)::Public Key external Representation doesn't match fixture")
 
         for message in fixture.messages {
           // Ensure each encryption algo matches the fixture
@@ -390,26 +413,26 @@ final class RSATests: XCTestCase {
 
             if variant == .raw {
               if test.value == "" {
-                XCTAssertThrowsError(try rsa.encrypt(message.key.bytes, variant: variant))
+                XCTAssertThrowsError(try rsa.encrypt(message.key.bytes, variant: variant), "Encryption<\(test.key)>::Did not throw error while encrypting `\(message.key)`")
               } else {
                 // The Raw encryption method is deterministic so we can test that encrypting the message matches the data in the test fixture...
                 let encrypted = try rsa.encrypt(message.key.bytes, variant: variant)
                 XCTAssertEqual(encrypted.toHexString(), Data(base64Encoded: message.value.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes.toHexString(), "Encryption<\(test.key)>::Failed to encrypt the message `\(message.key)`")
 
                 // Decryption requires access to the Private Key, therefore attempting to decrpyt with only a public key should throw an error
-                XCTAssertThrowsError(try rsa.decrypt(Data(base64Encoded: message.value.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes))
+                XCTAssertThrowsError(try rsa.decrypt(Data(base64Encoded: message.value.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes), "Encryption<\(test.key)>::Did not throw error while decrypting `\(message.key)`")
               }
             } else {
               // Sometimes the message is too long to be safely encrypted by our key. When this happens we should encouter an error and our test value should be empty.
               if test.value == "" {
-                XCTAssertThrowsError(try rsa.encrypt(message.key.bytes, variant: variant))
+                XCTAssertThrowsError(try rsa.encrypt(message.key.bytes, variant: variant), "Encryption<\(test.key)>::Did not throw error while encrypting `\(message.key)`")
               } else {
                 // We should be able to encrypt the data using just the public key
                 let encrypted = try rsa.encrypt(test.key.bytes, variant: variant)
                 XCTAssertNotEqual(encrypted, test.key.bytes)
 
                 // Decryption requires a private key, so this should throw an error
-                XCTAssertThrowsError(try rsa.decrypt(encrypted, variant: variant))
+                XCTAssertThrowsError(try rsa.decrypt(encrypted, variant: variant), "Encryption<\(test.key)>::Did not throw error while decrypting `\(message.key)`")
               }
             }
           }
@@ -422,21 +445,21 @@ final class RSATests: XCTestCase {
             }
 
             // Signing data requires access to the private key, therefore this should throw an error when called on a public key
-            XCTAssertThrowsError(try rsa.sign(message.key.bytes, variant: variant))
+            XCTAssertThrowsError(try rsa.sign(message.key.bytes, variant: variant), "Signature<\(test.key)>::Did not throw error")
 
             // Sometimes the message is too long to be safely signed by our key. When this happens we should encouter an error and our test value should be empty.
             if test.value == "" {
-              XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes, variant: variant))
+              XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Did not throw error")
             } else {
               // Ensure the signature is valid for the test fixtures rawMessage
               XCTAssertTrue(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verification Failed")
               // Ensure a modifed message results in a false / invalid signature verification
-              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes + [0x00], variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
+              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes + [0x00], variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               if !message.key.bytes.isEmpty {
-                XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes.dropLast(), variant: variant))
+                XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes.dropLast(), variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               }
-              // Ensure a modifed signature results in a false / invalid signature verification
-              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.shuffled(), for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
+              // Ensure a modifed signature results in a false / invalid signature verification (we replace the last element with a 1 in case the signature is all 0's)
+              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.shuffled().dropLast() + [0x01], for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
               // Ensure an invalid signature results in an error being thrown
               XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.dropLast(), for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
             }
@@ -460,16 +483,16 @@ final class RSATests: XCTestCase {
         let rsa = try RSA(rawRepresentation: privateDERData)
 
         // Ensure that the Key Size is correct
-        XCTAssertEqual(rsa.keySize, fixture.keySize, "Invalid Key Size after import")
+        XCTAssertEqual(rsa.keySize, fixture.keySize, "\(rsa)::Invalid Key Size after import")
 
         // Ensure that we have a private key by checking the private exponent
-        XCTAssertNotNil(rsa.d)
+        XCTAssertNotNil(rsa.d, "\(rsa)::Failed to import private exponent from Private Key external representation")
 
         // Ensure the public external representation matches the fixture
-        XCTAssertEqual(try rsa.publicKeyExternalRepresentation(), Data(base64Encoded: fixture.publicDER))
+        XCTAssertEqual(try rsa.publicKeyExternalRepresentation(), Data(base64Encoded: fixture.publicDER), "\(rsa)::Public Key external Representation doesn't match fixture")
 
         // Ensure the private external representation matches the fixture
-        XCTAssertEqual(try rsa.externalRepresentation(), Data(base64Encoded: fixture.privateDER))
+        XCTAssertEqual(try rsa.externalRepresentation(), Data(base64Encoded: fixture.privateDER), "\(rsa)::Private Key external representation doesn't match fixture")
 
         for message in fixture.messages {
           // Ensure each encryption algo matches the fixture
@@ -478,6 +501,8 @@ final class RSATests: XCTestCase {
               print("Warning::RSA<\(fixture.keySize)>::Skipping Encryption Algorithm \(test.key)")
               continue
             }
+
+            //print("Testing \(rsa) Encryption<\(variant)> - Encrypting Message `\(message.key)`")
 
             if variant == .raw {
               if test.value == "" {
@@ -517,26 +542,24 @@ final class RSATests: XCTestCase {
               continue
             }
 
-            print("Testing \(rsa) Signature<\(variant)>")
-
             // Our Message is too long for some of our hashing / padding schemes. When this happens we should encouter an error and our test value should be empty.
             if test.value == "" {
-              XCTAssertThrowsError(try rsa.sign(message.key.bytes, variant: variant))
+              XCTAssertThrowsError(try rsa.sign(message.key.bytes, variant: variant), "Signature<\(test.key)>::Did not throw error")
             } else {
               let signature = try rsa.sign(message.key.bytes, variant: variant)
-              XCTAssertEqual(signature, Data(base64Encoded: test.value)?.bytes)
+              XCTAssertEqual(signature, Data(base64Encoded: test.value)?.bytes, "Signature<\(test.key)>::Signature does not match fixture")
 
               // Ensure the signature is valid for the test fixtures rawMessage
-              XCTAssertTrue(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes, variant: variant))
+              XCTAssertTrue(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verification Failed")
               // Ensure a modifed message results in a false / invalid signature verification
-              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes + [0x00], variant: variant))
+              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes + [0x00], variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               if !message.key.bytes.isEmpty {
-                XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes.dropLast(), variant: variant))
+                XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes.dropLast(), variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               }
-              // Ensure a modifed signature results in a false / invalid signature verification
-              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.shuffled(), for: message.key.bytes, variant: variant))
+              // Ensure a modifed signature results in a false / invalid signature verification (we replace the last element with a 1 in case the signature is all 0's)
+              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.shuffled().dropLast() + [0x01], for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
               // Ensure an invalid signature results in an error being thrown
-              XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.dropLast(), for: message.key.bytes, variant: variant))
+              XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.dropLast(), for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
             }
           }
         }
@@ -552,9 +575,9 @@ final class RSATests: XCTestCase {
   private func signatureAlgoToVariant(_ algoString: String) -> RSA.SignatureVariant? {
     switch algoString {
       case "algid:sign:RSA:raw":
-        return nil
+        return .raw
       case "algid:sign:RSA:digest-PKCS1v15":
-        return nil // No Object Identifier
+        return .digest_pkcs1v15_RAW
       case "algid:sign:RSA:digest-PKCS1v15:SHA1":
         return .digest_pkcs1v15_SHA1
       case "algid:sign:RSA:digest-PKCS1v15:SHA224":
@@ -626,6 +649,119 @@ extension RSATests {
       let privateDER: String
       let messages: [String: (encryptedMessage: [String: String], signedMessage: [String: String])]
     }
+
+    // An example of a 1024 bit RSA Key that's actually only 1023 bits
+    static let RSA_1023 = Fixture(
+      keySize: 1023,
+      publicDER: """
+      MIGIAoGAWLOVh+J+wTEgOLuM+vWMeBZJTH9M5j9QgwmiC2BaVNeoUyvyw0hm/b9mXPvIP209Ml0F7mm1c4iWZX+7WF/YpML3S682IqY3sNbxg3rZRn36FvEnltiL+ZpUStXPe12p397KkdinrHbdVohNt0gXQQjEN6m26xv99nitPU1XcjECAwEAAQ==
+      """,
+      privateDER: """
+      MIICWwIBAAKBgFizlYfifsExIDi7jPr1jHgWSUx/TOY/UIMJogtgWlTXqFMr8sNIZv2/Zlz7yD9tPTJdBe5ptXOIlmV/u1hf2KTC90uvNiKmN7DW8YN62UZ9+hbxJ5bYi/maVErVz3tdqd/eypHYp6x23VaITbdIF0EIxDeptusb/fZ4rT1NV3IxAgMBAAECgYAbtkeCQ53sR6fUcavy/+IZ5oSR9LeWu7MwrULGIR03ooTBL1rR7f3XSwP1CuieAEf9QxjGSppY9RRfs49ZZeBuAqDgPmQ9iukya+e3pm5N444WyR65hxyDUuStMPHmwVtUJg+prMOUXEe43PJfusMtISi8BEiNMY9DacLTCJAeTQJBAIgMqq/Ux7HWyQ0tCisZNPQZqGrlkrw4Nzv2DZmLlYEgea967LmnOoYcASAZODAY/yxj3vnfLX3yvGX+CdlesBcCQQCm6CRzikQfRGtYEB92ddV5xeVgN5r8rnNxvD+kBuMB7qrljta3Ir1JHP3gmA/zz39IvfRf6obdd1Qd1Ym07FT3AkAjFlE3A8N0xBYaBdGnh9q2UZ+z4f1T+ZOVLUIYpX0rTjrT3PoMb2qSh8pqgtaQ4QF+a0toWfybjOy1ySy1GMyFAkBWS1ftVON7twg4870QpkPFPggmAxni4t9VQps010qvSRKatYtWDGQJVS/92yEEUZfhqDSdEsi/4F5hPnKAVGBpAkEAgbpGZ3pPOLjtVgGEkF9srvegUinFd4+s1wL9SVdb3aEk/dqGfScVU9JJqAKHTjD6ULX0qfHGZTrKWQJi3hf/IA==
+      """,
+      messages: [
+        "": (
+          encryptedMessage: [
+            "algid:encrypt:RSA:raw": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+            "algid:encrypt:RSA:PKCS1": "GrwJv13cGvyLbX02dNMEuRYPPGiP7xxNi4kqPs/OHRHkHhA+4WmIZ+aYfOMlFdoNELJdNAr5lBrr6pwiEV8WOyp0Fnqql78qKIj8YvqDiK6ATUUxuZmWBQ9LzxavIulWeZg+/VqJSMKE3FEmpKkXWCkAi3SMo5l0fgE3CTe9luY="
+          ],
+          signedMessage: [
+            "algid:sign:RSA:raw": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+            "algid:sign:RSA:digest-PKCS1v15": "C+S8K4B+W3eM/et63v3nwRsh3ATZJ31bDbl8qhnJ9pdF6So85GzeHPQY64yzRfp4oo+JT4W0WZAhNOi6u9NiBbhdXUPzyj/89rTSYmMEi7tiIhlaoDQV8X+a8gVTJqfM44xAaT82DYLP77TBUjDJEG9WIWKLTBx1EytkvtamRpM=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA1": "Pd0odftcQWd47zlDNmfQHZMdxZPpC9gmivXOfNxOxQ31TXU7g5lglVzUMrykz4YViffJtT6v4MC5J3RRk9a9INJHCpM8hHPx8IgtQiNVN2wHOMB16kFKNuy3d9DO4v1Qklg3MCntzGZUB057UNCwLuvKXc7P5ZwCXPt47Q+P3wc=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA224": "J7/kWa5xUBIKdxLSmsOINlrDTlXLr043xbcH62P8mDNHIff0CHDvZOQHU/r0+lAdtlzB5l9jLOLR+hkyQ8reBL6t2jWyfKPUAVKyUJNT7zZfEfFaGtBi3IK4nS1GQKj7JPJ1d0SCWUCTX4SkLn6pESzR65YI3QIJK/GG/nxmHkk=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA256": "FdkW7WKOlEIBkGSZfzBi9gsS0jFy++MDeZXwe4pWgR6S4J54a33Ws3uwQwnOW+D592IEq1QG4h+4pSmuusNk5tQ7w2qCHbbW7sTZgzWVgpF1HfZ8c0xAkd2oWzw2S8/31iDDromo3OLsaa6C+69bhbqsuNwgkvyKuSxyqziZWA8=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA384": "K5PyLy399mIrI3avLx8T2FwIOKYjy/crsN3VH4GZaFprP4q3xdw9a2ldlngnkfThKTphyS3CCfpACO8V7pZB2Haicre04tgd6uqYwMMBKWTHi4VVIzgwS+SN5L/sC3d4Gwoh6Y9xtUyAbB0Do/s30hbFE8bGC9KV5JbnUairRB4=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA512": "H4sU7sS/hFlrklqN86CWg6FHlF9l/Ll61SpS7wF1Te6Kj78tj1MZd7QMlVKEWGM7RLI1/bkqcTcNzoLGqh1zLI1sg+nUzEqJnx6nCyFT8Qy/V55FqC3wLVpICe99SewDnMsAQiWTwVpiIiwY0vqnS4r+FlCi5Rx/midH0HrzJ3Y=",
+            "algid:sign:RSA:message-PKCS1v15:SHA1": "JEKtxjsHSejtvffWGafUqy3SjH2EVC5rmSSpz5v3IfPjIlVJxiiCRr7gDwaFNgfNiS4ZaVWGpw7hMeduP0RbsrLezS3hKtaRPlpIo89ET6QpDEjYnlDAeyVZQjgO9EOvkCCJ10FotsMRYJWoipePnkqHDlV1bf1wVh599iOMNqs=",
+            "algid:sign:RSA:message-PKCS1v15:SHA224": "IvGyNwD8S9eSJ6TyxYv7Y/g2qOvpbcNem68LI1R6IlqBlTFz7xGpdGriLQOUC4AJL/O6NB1AtME4wJVQ3fKCDlSsASy6EGPtIdwXwdijSb5NkiR2AlxcWCBMFuNHlEpM9OrhhaEows4Y1W1k5l0ws4vbYY4/BrwceIeGSLKDux4=",
+            "algid:sign:RSA:message-PKCS1v15:SHA256": "SavoMjikFHGb/7UOFVI6+FCr2igcsM4esTqvBxeFhHumFGc7Y28fJXIZ1gvw5oqYdj2jCL5okjBUVVnkUkY2TvokN7GHAt0KFdv6F83DdLCwMwaGURgfiAxfPw9kDGoDkqhi9bUdC4FTtOLaK6gVrQzIlqUugGBTBFKySwqdqF8=",
+            "algid:sign:RSA:message-PKCS1v15:SHA384": "URo+XyJE9cFziAeXJliysj0eO629grgTUYXRgrEOA3B6uIOyh0CFZPi/pKpJFhjGJrSAARDzfbH5AbftEo/C3OSOYOVYsgT3ictJBlYk6NsplouCd/CnkdECi3NBe7MIrsp9ekZzkfULyNje5Y8tt1d0PfAgHNV0VHASxqVLJtw=",
+            "algid:sign:RSA:message-PKCS1v15:SHA512": "DslGHod+WHWpUFKLrVU6mdJZh7KPE8E7IMPaBMEs6hPYHdp4Yqmv/2jiPBcnqgIfwTX8A5NVtUJ0EQnjVhFDIqYQXP5AplzaD33dP8IEa8ZhIOrBjfqTZs29ApLrSaPxiT3TRP9Z0FMLXCzU8E5QJuQSomLkpaaHIqyMOzyqWTY="
+          ]
+        ),
+        "👋": (
+          encryptedMessage: [
+            "algid:encrypt:RSA:raw": "HXPOd8MFU57jSnCPj+/mAvzfzjOEgZltWxp3Aek/hhfH31t3wgaB8JQ/A502umjrFlnBupMwQaQr9iJOWYKTFClfDx1T+BFUJfnH28I1etk8DeD3lEiPTMuV/caR3bT0cxDA2TKeMpp4BSOX7iiC9Vd3WaOMH3xbH5UYFUbEdHg=",
+            "algid:encrypt:RSA:PKCS1": "Pi3h0pakf0/QanjJ0mM+AExhqPYnGFX6Z/fji7z8cX1gD8eIUyk26u4opDjyVPb82JOY+ulRBAUlBawcd1M2aiY3O8Bhzpn2awEy9Ps6HWUa9Yp4Un3hLEmySyajb8QdUko0OWzG28cEoInGiOgoU7ko3excvcbHG7O0aJG3FDg="
+          ],
+          signedMessage: [
+            "algid:sign:RSA:raw": "TbQzWXDIIX3vir2A8YPSxBLJsIqc1EfydyhTcwSOvHPtKbkIS10bCbtrN3tcK8W/7Ii1VluZbQmf8rQjUXgVAF9s7LNoDmtrHp3kOBUwSBT5ebbr/OIskwVdt2IHoNyYtOFlx8V86LJc6HSLYAfQplEBQfVd83D8EjK6DHJJRWE=",
+            "algid:sign:RSA:digest-PKCS1v15": "KJNf91GcrEFS6DZrRhqs2WlVJrJl2Rxmuf7OaPT+ymTDyUGMvGsfM3MGlousZAk0Z4HvaoJCKAj/cc2UecKTM0tf0q4RaO12/qSDM242Max5MotBVVY/LihV0Vv5FGLX4AvHkDCC9W9nC/jDSGMfGSzLqbCI/J4ljxcFrJ6zWeI=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA1": "Bfn8f0RrkdJynMUp8dHWzpAqGPxuI5dKySwoXOmXHtGcqypvv6mnBwzURwIXq6dRA5wL8/GcQ6GAUkPLyQ7mbpnjKZEf0/nHfYkgNkihV2Ay/VtQmvpwwnrtlDWmd6s/a3eLACYZqiNOmNQan2jPTNCbQZZ1idP6ilv2GedO4Qw=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA224": "SZN1dw+SCGZUI5Ue6x2rK6giO9JdTJozEkHXu2DsE1d51iVOHD5eo1PXAgmFRpkfV9DTzEckFViVP3G0BE5H3ZPsem+HyB6+nPuAVArqL7T0JBUzHgZ4T+vThfvMJzExcDISLK7gwc9NOTwIKjePWBoeTv9u+CPHVkxFm2uF+lM=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA256": "RghR0cKvs4hWc4XS++IPdAC8K7fri54d8fxeOoWXMPejVh2AZy9dOxKJm7+NBMJxymVODrxa8JbzKmJ4h6agMtCwH2B0f/NJO67FJFbn+RGsxG7MfvVO4z2Ejy+IOQJEOkIRTKxvwtRlUiJBgiQfdmUClPzd7j6Og8fGMumWFSI=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA384": "RUgGeY9N6zWP9AfU3gLz8oiZaoyH5fvKCULX6/HuqDvSa2Y06hayCo7JLoCLDuLVxMvg44DobR7z6j1Ur7v85Wqv5kPTAAIiGNKEnt90Hpqn9f2RzrTToH6fnQC7ZJ9+e5N72p57fqIjZHlEnFk7o3XuEqpivOKZiSCEwo4KDS8=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA512": "E9V2lyhaDyGWFnCKROi3kcPr8QG2AfCYSSa9tyj8mRFUmjnNyghpUW5gPDCy6nACaUnPOxvB0trJUD+irvvYD+7jr+VDnxCeHwe2ZE/ize0vvJFvtLSIAGGUA2aXTU5CohNvNnJs1wYSIWYVrWkaU0yyA8H73kKzsAcAY1+KSnM=",
+            "algid:sign:RSA:message-PKCS1v15:SHA1": "JMui6+GXCll9KJ+G0n3XMv5Sdz0PUQY6hDMlrygCdtFiNgPWfOTko/Q88RVHFJXCw7NHxyae6G+IPzvve2AQOEP7TdrivACM3C7sqchTWKEnGV1DbZ9r0f2EZjQ7VPM90mnmxG2uDPyrXTKUyVvTTH/SlYW+Zt5NO5TNf6KH2GY=",
+            "algid:sign:RSA:message-PKCS1v15:SHA224": "VIP9zszWW0M9IvkCeMaNrgd37kfDI/fKOfSCeK40XvcTYyFuNlSdYhaLzxxK9UHcpD5nQR3UPUMym15FQZb6XvDb3ru5f4/BmeCmMdn3J79izPIZAH5JvyY7o6AjqnW/1SjbIn/0sCVuw815hublKifT6A/kxT21y1KxgUtKAhM=",
+            "algid:sign:RSA:message-PKCS1v15:SHA256": "KE1l25Ld+OvGwxDcww7PUPXWhHszt55YZfSA2jG0x5MCwkQvxkVvUIb3b/fxXH73FJ6stKO7WR47ihnZXzjOv7si/AnxwS/j4r2yHC5bTPz01NqMHbNZ0eAIzyiAl3Lo41njLn/QdopFORE88S+G5OUgCaA0MfmRyncOrC+Qy6E=",
+            "algid:sign:RSA:message-PKCS1v15:SHA384": "NP9G1fQikdVJNqxxsLetyAEEIgiZ0AkOWSulSW3Azrz3koW7YLoDcucP/dj7oBtRNmpQ2YD5J7JLY4Ty0BdxVt5nekBVTgrp9kuChqDKAJALnU1CtpWQIDRzeX7uoEytnjdo2No35v0EaFdy7h6i7c2ipMMB04eSz67X2MsD7Ro=",
+            "algid:sign:RSA:message-PKCS1v15:SHA512": "B3ZgVLml8rkRPyYFbIjZ2ZL4+4/qkGzoHrlOCofM569XLzkoImKSYJ4viCFCRJxMBBg/hxBRLM3sSvOlCXAXdICHegyeJ6glS6bD3lzd5LWXIeGTywLd66tR263D5gFjR1Z8HIPBeZdSlDdLDHTFVa3uclyhIy6zHq/OxN/LMPw="
+          ]
+        ),
+        "RSA Keys": (
+          encryptedMessage: [
+            "algid:encrypt:RSA:raw": "Dwu3Aq+tmYoXh2k9RzP30jU0Q9BgzLHVsJfiuGIi34BG5wqBr5Zow8FS+6IGuTdeS5jXBi5EAY7VbmqfW2/L5oMNQ+C+SYqgaVDBXe9a6xT5f7irgkpm0wa/logz3ybEiH7eqs3VfZgwV688PYUr++aHqrti72gd/nmLWLaHvIw=",
+            "algid:encrypt:RSA:PKCS1": "HY9udxFzq4HnQsThVd+WvJjveDONZ7IYZCBAD7IFDT5o1fTNrGFKtFXfk2P76ha1tz5P2mKHVkDjaPDd1M6x+RvmX9QMMfrYb3sbu5J+/K1+vZ8bSwYgO1ou/IW0T0KhZ7lkuCjZ2GIm+F5YNjlE0CXox5a+DhINF5RJeqD79W8="
+          ],
+          signedMessage: [
+            "algid:sign:RSA:raw": "ItiEkbOcx9MPot85FYOFGyxLA/dyb4Dpf4sv/rFBeCaxSJKIN5JSMMQ5DKy2KKVlQY+Xp99TgInXPu05KalKck3LWjLggdR0b0t0XvEfep8rLzlHkFoaQaVK4y/JDdwVYUoZQ2GYUGCBB1TS0UCfXt1H6HIjy/R/7zVcPpNEanA=",
+            "algid:sign:RSA:digest-PKCS1v15": "LSy4h1tf7CtIZt3YusIwYMgciuRdmsMXZfi3TMwS07xMJWiGH3MAqLjSpoxJxn43hnzqXmIfvUOc6ps1hwoBF2zJKVP6VQUiup01T3uQiH6gjg1kkIzrsAmUhwGHMRkgpjvQgb4PcqUXFV6j5B00rUlMZq5IrJxeFIwdsNep7TE=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA1": "I1+a/1zhnmBWOVkoHeRzKb5a/J6xJN3NhnZLduUStMgS/Nm0SV7kEgalYJbVGMIh/kXDQ8BY5lXuWrfOjjisgmSOo5NxRfOBcXxwpmRKstGi7/lDAs1LryCBWajv2hyPSEAky3nih4+8xEhUrjAoWd4shSd7FonUAU027d/AaHI=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA224": "T8JXiB0JlDUC3K8f7NF/h4t9lpc+QPFUUf2AW1nk/bMb1dbquLe2O8AD8Ylfu39g+ebA3W4w/2hn+tkQuVQGMFkZbhrKUUdx/FVVZJveIYigTHjSavM4zJfkdCyiu45SOaY+x7D1WeJHsTbYLSc29qfVZaac9LYCHan4oShnIBY=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA256": "F1rCz2wqbs2JCBEAr4J6xyX5d/xeXaGbL8G00dpn5Zz7i0a7n7avBdTHTdnvCtxaRa2bQtxSsQ1KsOZT3BrVJCKrtcVYIf6t4OKP9tpjh2BwT/AA5Urvw2DDDqMtlwZdBEJxGYLumbnHxUWrKfBzSHMTK2vbwJ19IY769eLfvCA=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA384": "LPRFTu1T5BxGUp3gLbsR70sANSnY67f6vhGvRIU23KE7dUVlHWkm0rTeZNif+LvNWL1suxBHI6fJPLkHfLRd/CJlBOIOzOvvifu4kEX3VIySybp4/fEdBXlJnpVzTdVzHh2hifkWme+derDBJRcXGVO6IcHpJl0xhXxDaTUfMes=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA512": "FQToDphnuXKEDLtEJU0CSf7DgCivkzJLbNnmxI+jVajklROaM+h/+oQcDPDohDbjZ6fsici/rByLrkjgCAcHYTJ1cRzsGG/QIbXGLwjebl5nBD3NiC50Yu800idYmX3BhMEaYhB7Ce6xukJ82/DmCIq2fdyV/usvUJFU7pnRziA=",
+            "algid:sign:RSA:message-PKCS1v15:SHA1": "UQ73vHah5CXieEVXBmg1SdcVOfO+nj8VyLH8m0b30JCFry9MztxJot5BZZHNGzMbvDHoNRA8ekMgj6bRwrHpr/VwuypJ4IbM8n5C3rWdJSoTfBBPWZeywJkgeo0LzTVTlxjBsCHJQiIBsfIwinQMGARfV/yJMo0Xfk4C32avkP4=",
+            "algid:sign:RSA:message-PKCS1v15:SHA224": "KU2uKP0Y21I6xQZrIOmSvZZJE/YlU1sNis/y0szbqbF6T9gFSlnrT7RIuzfm26uWMH+d9jCuq6wRRMoNolEhLJqUPzq2xuR5OwSm++U6o+d9OW1AqWjkwBqVYeZKa6WmmXKAo4Y+sLPR2iH7oqUTU1Jfzkn/3u16nTYK7WkLJUQ=",
+            "algid:sign:RSA:message-PKCS1v15:SHA256": "F8Sdbd9MXz/nigx+honEk/anKLyuafO0H2+fNmkG9Rb3V9cyh/Iqyo4kN7YGXWYHpzH/JSHiUNOFOlVxsA8vQNqFt+V08z4XSaHsFMmN9gjJBDyMTwMibSxqzJPwqV6cWjzVYj/78RdOt22z7Gst5Vrc0sJIob7Lvz9Q5UteAcs=",
+            "algid:sign:RSA:message-PKCS1v15:SHA384": "B44iwunbuMkEubxni5MM+T40O9/QoY16ykiWIUW5efwpa9WGbEWBVTb10Se4J0qVh0w6J+FG+xt2qaB7DDr2IInbrB5SIKpIngZtNqqE0n0AaD675N9d4nTonf5wWVXvooKOWJf4zaX4qtAvZYKoZs9JiBVbmPXNLvs013/+QVw=",
+            "algid:sign:RSA:message-PKCS1v15:SHA512": "PndOMnWTZ60cGTDbIwgfHtzl+6Nmhu2Ec7KPvRtPnV0UhI2Yoxa7dFLz6NQUMUkf0p1cDFEWYwAhdQrIzUROoTr3p9dCEoxf2eOFV4S3aEdFGDy2nh0WpyQ68PFizAgSTJpT6ePF8u/1d2npPpl2P0fcsdU3MlOwaUVyxkF3ngk="
+          ]
+        ),
+        "CryptoSwift RSA Keys!": (
+          encryptedMessage: [
+            "algid:encrypt:RSA:raw": "ALMTIQ68Jm/8xrjuQE/b0USTShPr1sCX51EVRyheG5gKr8HqZ3BUWADdpB3M5D33A0QCkKqp5NMs3qNvUaGspHTAUnV6BvWuX15kk45P/ibw22n64SP8Y2CU/tGCc6Rf9B5DJ7OsL5n7pZKAbF2sKlPx8VEyFbwXyUPT4cao6bY=",
+            "algid:encrypt:RSA:PKCS1": "Tav12GnF3OKhnAkZgSa1Nso24C/+qwXlXuA8BcXybdWAyr9D7B5ACn/qfYyoDOvUQSnDF8xCPrUTsxaZ8HaKb0u+620QA57ueQdQLSK0MEFmwdOIQaPGKm3KwyIXx6APkeij+RA4yNjmzIgQgKQoQsmoBOa01mMr5teFnVO7c1s="
+          ],
+          signedMessage: [
+            "algid:sign:RSA:raw": "EIu3l9qt9AyHoTSE5oHM4wICOrY5QrGJkLsbwewA0SfwRFEhmwgBD2tbQ0tK6o8Fe5omkPwoh8fOFCPInTD4r9D3bU3mFSFnaEGkDZAQnVL+0WpKUnMJggDBoBY7Fz7PwqTKVFGPw2ixfK4IoHB6t0qfz3Q0eTO5xzRRtj9XZ98=",
+            "algid:sign:RSA:digest-PKCS1v15": "IRFLtTvPhnF/tC7gYCKrhmC0xz9gYRXsBnJtg7yRjv8mRYCDM+xugVDW2GBSRdQRssQBTcXg6mYV6oSR+nlqU4vkf37BVbHSrIfSGWFOZCqkGioMaswjtIEUR10ia9s5YDH5fVk3vsVXJw9s730jAYW8B1T8PIvMAj1Xkzr775U=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA1": "",
+            "algid:sign:RSA:digest-PKCS1v15:SHA224": "DQtXIwKJHPnR7vG+y10hrnAt/C/g5lMoo7pX6Fqeick9mfGU4tCY4/COUdSUOOZYLacA2IhYAbgfNW1P5GRB3zELc3mveHwIVlovyY1FOhEwzbp+S6SRWP9dmBjGlswpmDvvQ7RUrykQabiPYnuqYdR1jhDbdWx4r25vF+fGhn4=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA256": "VeWhPR0yNYwr9ARUgNEdB7nWtYE1ItUTPupPT/1GEkGD4JNTi0wZxcuIN/Day2QhbFxZ/jDR1L6ToX+mcfT2pcpxAIfJsJQmmj5ISvbrp4zr0Q/vnIwv75BqL2geMx34raQOD5If7HNEYJrHBmQFwq4aKih+e5ADdV0Re9hC7Ds=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA384": "C6cOQd0Z5F20L+ZV+r6WdElB05WRBSqh+lFgR9yDt/kAR/5FRNaJ9ZG00+0NiVZRQ4fj4SV+SBrmPzBfk5TYJN8BQW1QPc1GFj798/aem7qYQySAv1Dd2v1CRhAg/nW+UbK3YfE/68P5MsaSX52dhJfV1+DHVufZytdmHlOgcao=",
+            "algid:sign:RSA:digest-PKCS1v15:SHA512": "URJmACamzelP7FmEIZ4nkymu/jF67VBByot5sscDVUGCQdwDntegCqBPrXJFb0bbT+55dmRCo9E402mMRTLEF4y+Gbf+yFpKiPxkHx8jGbs2CwrFUhlKCSOALV9gGz/QkgEm0vWyLNu7a0TL/fEipkHKURE4dcR0AZhj+1UCiYE=",
+            "algid:sign:RSA:message-PKCS1v15:SHA1": "B0hA+iRuN8sVDLYPn2365eCuk5qv/TbfXhqwk4HKHWHDHDu4/f+lSX9AS3//ZfWiJQX1Kz8y6QJbSmafr1LgOxDDLS9VpI4uuLYPcW8HLf54euzHADF5Kh69VAUeEq4f+8yF2su9mut5x9561dRa8iG+5+rIIAJ48RLjAzzV2Lk=",
+            "algid:sign:RSA:message-PKCS1v15:SHA224": "F1B6DPF65vdORuS1mTBRNUW7FkF0pA3iMaU/VTWRomKRG9ztomelprDptADWLbZY6DRMQXSHfZM2wXBLPZGSlF8K3HdDB2xEe5VzZtLyzmY3K118W7jXU2JQ7TUG78aCPFDi76/IOSQV7jwLmMy4/akYILnDVxStIydMzw7uZlA=",
+            "algid:sign:RSA:message-PKCS1v15:SHA256": "E0SQoSKJj1AMlyz9oy5uETbNhnfVqIogvtugXOmD+KouX8KsHZpJBUj9+MSJb2vWuDjF5qGsSaDGHHkOIEZROCxHyStYIOCtofPMIftov/yXJXTFhNcouYgQk9DD8yzeFII0+rf73or7Q4C4SzlPXF3Ds9kut+7Ozw28o1iwT+A=",
+            "algid:sign:RSA:message-PKCS1v15:SHA384": "Fe9Hbg5FhjN9subc+TRovHrq5DHncrZRkSswqy6rVNgoBKPuxQsbEP+QgHZqg3zgTA6mo6R+icMvDYcUQY8X5F0pcx/KqSTCU2n0Ec3VrxtngxXoe96ra04aEfwToIWybFslC8Bhr07fg24PlZEwFNCGm4cVEaQNQD+GeKEiiJs=",
+            "algid:sign:RSA:message-PKCS1v15:SHA512": "S7GstJ9uVW5I1NIgMeF2n6JA+PpGLXFJmLTAqjpnyAK+et+YIRoRA/bYTftnXxMU0wsUansUXxXOs5nBrGf+rdtLLTgzIrt4uHsUB05Cl3sTBVt7p9tK8N2fxpw/4F6Syn9zvxfjBJzKdMYrZw3BtsRHzXO7SfqfayRA8oQfk3I="
+          ]
+        ),
+        "CryptoSwift RSA Keys are really cool! They support encrypting / decrypting messages, signing and verifying signed messages, and importing and exporting encrypted keys for use between sessions 🔐": (
+          encryptedMessage: [
+            "algid:encrypt:RSA:raw": "",
+            "algid:encrypt:RSA:PKCS1": ""
+          ],
+          signedMessage: [
+            "algid:sign:RSA:raw": "",
+            "algid:sign:RSA:digest-PKCS1v15": "",
+            "algid:sign:RSA:digest-PKCS1v15:SHA1": "",
+            "algid:sign:RSA:digest-PKCS1v15:SHA224": "",
+            "algid:sign:RSA:digest-PKCS1v15:SHA256": "",
+            "algid:sign:RSA:digest-PKCS1v15:SHA384": "",
+            "algid:sign:RSA:digest-PKCS1v15:SHA512": "",
+            "algid:sign:RSA:message-PKCS1v15:SHA1": "G5neBQbE/ctrRD7Yr2DIWDSxd39WJkKnym6dEkyFq6pQRsipNdGTCmwnjXXRXcWM6XUJG4htvaEnz+5W8rZzZ3fiMuZgRxlA5FpbRoEwvnArYovxgQFiazgRi0CGu1nUpbfgwkuSTBxERWUc+l4jImcWeqY0YdFEXDcADqp1gmI=",
+            "algid:sign:RSA:message-PKCS1v15:SHA224": "JlmRNo9gevd5XxX8FsnZKSjHeZNxIkPHzKnSMBhFjm15Y6QBtcStIkAjg0wbmcxqX5NX9DAE29t9+4dluK6HXvi87TBBrsrXtMzm1EB247+9224eu2y6kghFuPW5lJFITIUdmxyKT/14zR29OIfEdCpnS9zjmZ2TdOXs7bZlJbg=",
+            "algid:sign:RSA:message-PKCS1v15:SHA256": "Bn06v122hbYHG9Q8egUW7RGV4cDK7jf9EKJXe4ydpjhNs8pKLIhPhnS9ax9wG9IJWR+P8n7xwGxfFNdSmcrWIfSbbYat5/jaO5718voNC7+bq/N5g2mzzz4ugRAFXiDbFlA5pWBaAZTE+XwxH0pSg/5giC4RFi2qN28ihvWHyOY=",
+            "algid:sign:RSA:message-PKCS1v15:SHA384": "NvxOxIy/szgB5p+CY02JqM6ZwJLvCTLYOpn4xkpBO/kxXG9NJX9AheD8T7mwEiMQw8dyQ200oZFkyUDFjBoHNZy8rXRf214INpryypjobte9oUCju70v3g6Z/AMkSetJqBi8hxVpm62op0Co2j91pxUYXvO/XVpvdB/6dY2akO8=",
+            "algid:sign:RSA:message-PKCS1v15:SHA512": "K4vWQj11zTxyMsZG4XKYrMqdxYZ7XxRBNBREeYYlL5xGOnRdmW+m5ZPh0h+vRIa/8IEPoyd2fvCBOUtx1euNQfPD1YT1UzxEr5ua3cQdylCWa8ghfCaOeJuhhMUFAqhjHQfK1NBtEH0bAvvw1XcxLRbTwupdPJjAFGUfmMjfMZw="
+          ]
+        )
+      ]
+    )
 
     static let RSA_1024 = Fixture(
       keySize: 1024,

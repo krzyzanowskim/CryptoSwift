@@ -22,6 +22,8 @@ import Darwin
 import Glibc
 #elseif canImport(ucrt)
 import ucrt
+#elseif canImport(WASILibc)
+import WASILibc
 #endif
 
 /// A key derivation function.

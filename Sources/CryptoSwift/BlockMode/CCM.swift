@@ -23,6 +23,8 @@ import Darwin
 import Glibc
 #elseif canImport(ucrt)
 import ucrt
+#elseif canImport(WASILibc)
+import WASILibc
 #endif
 
 /// Counter with Cipher Block Chaining-Message Authentication Code

@@ -35,6 +35,8 @@ final class SecureBytes {
     self.bytes.withUnsafeBufferPointer { (pointer) -> Void in
       #if os(Windows)
         VirtualLock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
+      #elseif os(WASI)
+        // not supported on WASI
       #else
         mlock(pointer.baseAddress, pointer.count)
       #endif
@@ -45,6 +47,8 @@ final class SecureBytes {
     self.bytes.withUnsafeBufferPointer { (pointer) -> Void in
       #if os(Windows)
         VirtualUnlock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
+      #elseif os(WASI)
+        // not supported on WASI
       #else
         munlock(pointer.baseAddress, pointer.count)
       #endif

@@ -9,11 +9,11 @@ Pod::Spec.new do |s|
   s.authors      = {'Marcin Krzyżanowski' => 'marcin@krzyzanowskim.com'}
   s.social_media_url = "https://twitter.com/krzyzanowskim"
   s.cocoapods_version = '>= 1.10.0'
-  s.swift_version = "5.3"
+  s.swift_version = "5.6"
   s.ios.deployment_target = "11.0"
   s.osx.deployment_target = "10.12"
   s.watchos.deployment_target = "2.0"
-  s.tvos.deployment_target = "9.0"
+  s.tvos.deployment_target = "11.0"
   s.source_files  = "Sources/CryptoSwift/**/*.swift"
   s.requires_arc = true
 end

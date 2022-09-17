@@ -53,6 +53,9 @@ Good mood
 | [Rabbit](https://tools.ietf.org/html/rfc4503)
 | [Blowfish](https://www.schneier.com/academic/blowfish/)
 
+#### RSA (public-key encryption algorithm)
+  [Encryption, Signature](https://github.com/krzyzanowskim/CryptoSwift#rsa)
+
 #### Message authenticators
   [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
 | [HMAC (MD5, SHA1, SHA256)](https://www.ietf.org/rfc/rfc2104.txt)
@@ -122,7 +125,7 @@ It is recommended to enable [Whole-Module Optimization](https://swift.org/blog/w
 You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding this:
 
 ```swift
-.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "1.5.1"))
+.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "1.6.0"))
 ```
 
 See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
@@ -134,7 +137,7 @@ Notice: Swift Package Manager uses debug configuration for debug Xcode build, th
 You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
 
 ```ruby
-pod 'CryptoSwift', '~> 1.4.1'
+pod 'CryptoSwift', '~> 1.6.0'
 ```
 
 Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
@@ -217,7 +220,7 @@ For your convenience, **CryptoSwift** provides two functions to easily convert a
 Data from bytes:
 
 ```swift
-let data = Data( [0x01, 0x02, 0x03])
+let data = Data([0x01, 0x02, 0x03])
 ```
 
 `Data` to `Array<UInt8>`
@@ -655,7 +658,7 @@ This distribution includes cryptographic software. The country in which you curr
 
 ## License
 
-Copyright (C) 2014-2021 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+Copyright (C) 2014-2022 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 This software is provided 'as-is', without any express or implied warranty.
 
 In no event will the authors be held liable for any damages arising from the use of this software.

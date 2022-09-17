@@ -1,3 +1,9 @@
+1.6.0
+- Improve & extend RSA support with DER (see README for details)
+- Fix Blowfish memory leaks
+- Fix PCBC mode
+- SwiftWasm compatibility
+
 1.5.1
 - Resolve type name clash by renaming BigInt -> BigInteger
 

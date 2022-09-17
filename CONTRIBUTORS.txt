@@ -78,6 +78,7 @@ organizations who have contributed source code to CryptoSwift.
 - Nathan Fallet <contact@nathanfallet.me>
 - Nicholas Maccharoli <nicko@screaming-cactus.com>
 - Nobutaka Yuasa <nobutaka.yuasa@gmail.com>
+- Oscar Choi <oscar@goodnotesapp.com>
 - Oscar De Moya <oscar.demoya@koombea.com>
 - Pantelis Zirinis <info@paz-labs.com>
 - Paolo Musolino <info@codeido.com>

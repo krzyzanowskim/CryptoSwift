@@ -229,6 +229,35 @@ extension RSA {
     // Proceed with regular initialization
     self.init(n: BigUInteger(modulus), e: BigUInteger(publicExponent), d: BigUInteger(privateExponent), p: BigUInteger(prime1), q: BigUInteger(prime2))
   }
+
+  /// Attempts to instantiate an RSA Key when given the ASN1 DER encoded external representation of the Key
+  ///
+  /// An example of importing a SecKey RSA key (from Apple's `Security` framework) for use within CryptoSwift
+  /// ```
+  /// /// Starting with a SecKey RSA Key
+  /// let rsaSecKey:SecKey
+  ///
+  /// /// Copy the External Representation
+  /// var externalRepError:Unmanaged<CFError>?
+  /// guard let externalRep = SecKeyCopyExternalRepresentation(rsaSecKey, &externalRepError) as? Data else {
+  ///     /// Failed to copy external representation for RSA SecKey
+  ///     return
+  /// }
+  ///
+  /// /// Instantiate the RSA Key from the raw external representation
+  /// let rsaKey = try RSA(rawRepresentation: externalRep)
+  ///
+  /// /// You now have a CryptoSwift RSA Key
+  /// // rsaKey.encrypt(...)
+  /// // rsaKey.decrypt(...)
+  /// // rsaKey.sign(...)
+  /// // rsaKey.verify(...)
+  /// ```
+  public convenience init(rawRepresentation raw: Data) throws {
+    do { try self.init(privateDER: raw.bytes) } catch {
+      try self.init(publicDER: raw.bytes)
+    }
+  }
 }
 
 // MARK: DER Exports (See #892)
@@ -352,12 +381,16 @@ extension RSA {
   /// /// You now have a CryptoSwift RSA Key
   /// ```
   ///
-  func externalRepresentation() throws -> Data {
+  public func externalRepresentation() throws -> Data {
     if self.primes != nil {
       return try Data(self.privateKeyDER())
     } else {
       return try Data(self.publicKeyDER())
     }
+  }
+
+  public func publicKeyExternalRepresentation() throws -> Data {
+    return try Data(self.publicKeyDER())
   }
 }
 

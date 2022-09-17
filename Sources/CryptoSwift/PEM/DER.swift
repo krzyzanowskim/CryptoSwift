@@ -21,49 +21,27 @@ internal protocol DERCodable: DERDecodable, DEREncodable { }
 /// Conform to this protocol if your type can be instantiated from a ASN1 DER representation
 internal protocol DERDecodable {
   /// Attempts to instantiate an instance of your Public Key when given a DER representation of your Public Key
+  ///
+  /// - Parameter publicDER: The ASN.1 DER representation of your Public Key
   init(publicDER: Array<UInt8>) throws
+
   /// Attempts to instantiate an instance of your Private Key when given a DER representation of your Private Key
+  ///
+  /// - Parameter privateDER: The ASN.1 DER representation of your Private Key
   init(privateDER: Array<UInt8>) throws
 
   /// Attempts to instantiate a Key when given the ASN1 DER encoded external representation of the Key
   ///
-  /// An example of importing a SecKey RSA key (from Apple's `Security` framework) for use within CryptoSwift
-  /// ```
-  /// /// Starting with a SecKey RSA Key
-  /// let rsaSecKey:SecKey
-  ///
-  /// /// Copy the External Representation
-  /// var externalRepError:Unmanaged<CFError>?
-  /// guard let externalRep = SecKeyCopyExternalRepresentation(rsaSecKey, &externalRepError) as? Data else {
-  ///     /// Failed to copy external representation for RSA SecKey
-  ///     return
-  /// }
-  ///
-  /// /// Instantiate the RSA Key from the raw external representation
-  /// let rsaKey = try RSA(rawRepresentation: externalRep)
-  ///
-  /// /// You now have a CryptoSwift RSA Key
-  /// // rsaKey.encrypt(...)
-  /// // rsaKey.decrypt(...)
-  /// // rsaKey.sign(...)
-  /// // rsaKey.verify(...)
-  /// ```
+  /// - Parameter rawRepresentation: The ASN1 DER Encoded external representation (either public or private)
+  /// - Note: The external representation is identical to that of `SecKeyCopyExternalRepresentation` function from Apple's `Security` framework
   init(rawRepresentation: Data) throws
-}
-
-extension DERDecodable {
-  public init(rawRepresentation raw: Data) throws {
-    /// The default implementation that makes the original internal initializer publicly available
-    do { try self.init(privateDER: raw.bytes) } catch {
-      try self.init(publicDER: raw.bytes)
-    }
-  }
 }
 
 /// Conform to this protocol if your type can be described in an ASN1 DER representation
 internal protocol DEREncodable {
   /// Returns the DER encoded representation of the Public Key
   func publicKeyDER() throws -> Array<UInt8>
+
   /// Returns the DER encoded representation of the Private Key
   func privateKeyDER() throws -> Array<UInt8>
 
@@ -71,31 +49,18 @@ internal protocol DEREncodable {
   /// - Note: If called on a Private Key, this method will return the Private Keys DER Representation. Likewise, if called on a Public Key, this method will return the Public Keys DER Representation
   /// - Note: If you'd like to export the Public Keys DER from a Private Key, use the `publicKeyExternalRepresentation()` function
   func externalRepresentation() throws -> Data
+
   /// A semantically similar function that mimics the `SecKeyCopyExternalRepresentation` function from Apple's `Security` framework
   /// - Note: This function only ever exports the Public Key's DER representation. If called on a Private Key, the corresponding Public Key will be extracted and exported.
   func publicKeyExternalRepresentation() throws -> Data
 }
 
-extension DEREncodable {
-  public func externalRepresentation() throws -> Data {
-    // The default implementation that makes the original internal function publicly available
-    do { return try Data(self.privateKeyDER()) } catch {
-      return try Data(self.publicKeyDER())
-    }
-  }
-
-  public func publicKeyExternalRepresentation() throws -> Data {
-    // The default implementation that makes the original internal function publicly available
-    try Data(self.publicKeyDER())
-  }
-}
-
 struct DER {
-  internal enum Error:Swift.Error {
+  internal enum Error: Swift.Error {
     /// We were provided invalid DER data
     case invalidDERFormat
   }
-  
+
   /// Integer to Octet String Primitive
   /// - Parameters:
   ///   - x: nonnegative integer to be converted

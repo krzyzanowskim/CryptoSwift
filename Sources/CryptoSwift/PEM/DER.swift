@@ -37,15 +37,6 @@ internal protocol DERDecodable {
   init(rawRepresentation: Data) throws
 }
 
-extension DERDecodable {
-  public init(rawRepresentation raw: Data) throws {
-    /// The default implementation that makes the original internal initializer publicly available
-    do { try self.init(privateDER: raw.bytes) } catch {
-      try self.init(publicDER: raw.bytes)
-    }
-  }
-}
-
 /// Conform to this protocol if your type can be described in an ASN1 DER representation
 internal protocol DEREncodable {
   /// Returns the DER encoded representation of the Public Key
@@ -62,20 +53,6 @@ internal protocol DEREncodable {
   /// A semantically similar function that mimics the `SecKeyCopyExternalRepresentation` function from Apple's `Security` framework
   /// - Note: This function only ever exports the Public Key's DER representation. If called on a Private Key, the corresponding Public Key will be extracted and exported.
   func publicKeyExternalRepresentation() throws -> Data
-}
-
-extension DEREncodable {
-  public func externalRepresentation() throws -> Data {
-    // The default implementation that makes the original internal function publicly available
-    do { return try Data(self.privateKeyDER()) } catch {
-      return try Data(self.publicKeyDER())
-    }
-  }
-
-  public func publicKeyExternalRepresentation() throws -> Data {
-    // The default implementation that makes the original internal function publicly available
-    try Data(self.publicKeyDER())
-  }
 }
 
 struct DER {

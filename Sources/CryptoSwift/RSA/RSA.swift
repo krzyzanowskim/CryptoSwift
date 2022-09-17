@@ -381,12 +381,16 @@ extension RSA {
   /// /// You now have a CryptoSwift RSA Key
   /// ```
   ///
-  func externalRepresentation() throws -> Data {
+  public func externalRepresentation() throws -> Data {
     if self.primes != nil {
       return try Data(self.privateKeyDER())
     } else {
       return try Data(self.publicKeyDER())
     }
+  }
+
+  public func publicKeyExternalRepresentation() throws -> Data {
+    return try Data(self.publicKeyDER())
   }
 }
 

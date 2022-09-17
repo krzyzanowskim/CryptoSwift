@@ -93,7 +93,7 @@ Good mood
 - [AEAD\_CHACHA20\_POLY1305](https://tools.ietf.org/html/rfc7539#section-2.8)
 
 ## Why
-[Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
+[Why?](https://github.com/krzyzanowskim/CryptoSwift/discussions/982) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/discussions/982#discussioncomment-3669415).
 
 ## How do I get involved?
 
@@ -153,7 +153,7 @@ Specify in Cartfile:
 github "krzyzanowskim/CryptoSwift"
 ```
 
-Run `carthage` to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started). [Common issues](https://github.com/krzyzanowskim/CryptoSwift/issues/492#issuecomment-330822874).
+Run `carthage` to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started). [Common issues](https://github.com/krzyzanowskim/CryptoSwift/discussions/983#discussioncomment-3669433).
 
 #### XCFramework
 

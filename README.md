@@ -80,12 +80,14 @@ Good mood
 - [Scrypt](https://tools.ietf.org/html/rfc7914) (The scrypt Password-Based Key Derivation Function)
 
 #### Data padding
-  PKCS#5
-| [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
-| [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
-| [ISO78164](http://www.embedx.com/pdfs/ISO_STD_7816/info_isoiec7816-4%7Bed21.0%7Den.pdf)
-| [ISO10126](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO_10126)
-| No padding
+- [PKCS#5](https://www.rfc-editor.org/rfc/rfc2898.html)
+- [EMSA-PKCS1-v1_5 (Encoding Method for Signature)](https://www.rfc-editor.org/rfc/rfc3447#section-9.2)
+- [EME-PCKS1-v1_5 (Encoding Method for Encryption)](https://www.rfc-editor.org/rfc/rfc3447)
+- [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
+- [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
+- [ISO78164](http://www.embedx.com/pdfs/ISO_STD_7816/info_isoiec7816-4%7Bed21.0%7Den.pdf)
+- [ISO10126](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO_10126)
+- No padding
 
 #### Authenticated Encryption with Associated Data (AEAD)
 - [AEAD\_CHACHA20\_POLY1305](https://tools.ietf.org/html/rfc7539#section-2.8)

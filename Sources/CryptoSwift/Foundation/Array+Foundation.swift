@@ -23,7 +23,7 @@ public extension Array where Element == UInt8 {
   init(base64: String) {
     self.init()
 
-    guard let decodedData = Data(base64Encoded: base64) else {
+    guard let decodedData = Data(base64Encoded: base64, options: .ignoreUnknownCharacters) else {
       return
     }
 

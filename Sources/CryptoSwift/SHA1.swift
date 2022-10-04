@@ -45,6 +45,10 @@ public final class SHA1: DigestType {
     }
   }
 
+  public func callAsFunction(_ bytes: Array<UInt8>) -> Array<UInt8> {
+    calculate(for: bytes)
+  }
+
   @usableFromInline
   func process(block chunk: ArraySlice<UInt8>, currentHash hh: inout ContiguousArray<UInt32>) {
     // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian

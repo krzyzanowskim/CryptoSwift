@@ -96,6 +96,10 @@ public final class SHA3: DigestType {
     }
   }
 
+  public func callAsFunction(_ bytes: Array<UInt8>) -> Array<UInt8> {
+    calculate(for: bytes)
+  }
+
   ///  1. For all pairs (x,z) such that 0≤x<5 and 0≤z<w, let
   ///     C[x,z]=A[x, 0,z] ⊕ A[x, 1,z] ⊕ A[x, 2,z] ⊕ A[x, 3,z] ⊕ A[x, 4,z].
   ///  2. For all pairs (x, z) such that 0≤x<5 and 0≤z<w let

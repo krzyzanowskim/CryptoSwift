@@ -61,6 +61,11 @@ public final class MD5: DigestType {
     }
   }
 
+  public func callAsFunction(_ bytes: Array<UInt8>) -> Array<UInt8> {
+    calculate(for: bytes)
+  }
+
+
   // mutating currentHash in place is way faster than returning new result
   fileprivate func process(block chunk: ArraySlice<UInt8>, currentHash: inout Array<UInt32>) {
     assert(chunk.count == 16 * 4)

@@ -83,6 +83,10 @@ public extension PKCS5 {
       }
       return Array(ret.prefix(self.dkLen))
     }
+
+    public func callAsFunction() throws -> Array<UInt8> {
+      try calculate()
+    }
   }
 }
 

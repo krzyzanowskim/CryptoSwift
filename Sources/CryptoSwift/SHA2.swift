@@ -169,6 +169,10 @@ public final class SHA2: DigestType {
     }
   }
 
+  public func callAsFunction(_ bytes: Array<UInt8>) -> Array<UInt8> {
+    calculate(for: bytes)
+  }
+
   @usableFromInline
   func process64(block chunk: ArraySlice<UInt8>, currentHash hh: inout Array<UInt64>) {
     // break chunk into sixteen 64-bit words M[j], 0 ≤ j ≤ 15, big-endian

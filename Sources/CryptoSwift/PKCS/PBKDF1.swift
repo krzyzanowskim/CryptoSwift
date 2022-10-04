@@ -93,5 +93,9 @@ public extension PKCS5 {
       }
       return Array(t[0..<self.keyLength])
     }
+
+    public func callAsFunction() -> Array<UInt8> {
+      calculate()
+    }
   }
 }

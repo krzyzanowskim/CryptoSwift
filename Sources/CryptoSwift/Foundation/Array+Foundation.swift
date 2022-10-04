@@ -16,14 +16,14 @@
 import Foundation
 
 public extension Array where Element == UInt8 {
-  func toBase64() -> String {
-    Data(self).base64EncodedString()
+  func toBase64(options: Data.Base64EncodingOptions = []) -> String {
+    Data(self).base64EncodedString(options: options)
   }
 
-  init(base64: String) {
+  init(base64: String, options: Data.Base64DecodingOptions = .ignoreUnknownCharacters) {
     self.init()
 
-    guard let decodedData = Data(base64Encoded: base64, options: .ignoreUnknownCharacters) else {
+    guard let decodedData = Data(base64Encoded: base64, options: options) else {
       return
     }
 

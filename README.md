@@ -563,8 +563,6 @@ let alicesPrivateKey = try RSA(keySize: 1024)
 let alicesPublicKeyData = try alicesPrivateKey.publicKeyDER()
     
 // Bob receives the raw external representation of Alices public key and imports it
-// Use DER encoded format. Use openssl to convert between PEM and DER formats if needed,
-// eg.: `openssl rsa -in <file_with_key> -inform PEM -out <new_der_key_file> -outform DER`
 let bobsImportOfAlicesPublicKey = try RSA(rawRepresentation: Data(alicesPublicKeyData))
     
 // Bob can now encrypt a message for Alice using her public key

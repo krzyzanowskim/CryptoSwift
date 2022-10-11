@@ -66,6 +66,7 @@ extension RSA: Cipher {
 extension RSA {
   /// RSA Encryption Block Types
   /// - [RFC2313 8.1 - Encryption block formatting](https://datatracker.ietf.org/doc/html/rfc2313#section-8.1)
+  @frozen
   public enum RSAEncryptionVariant {
     /// The `unsafe` encryption variant, is fully deterministic and doesn't format the inbound data in any way.
     ///

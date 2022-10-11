@@ -96,9 +96,6 @@ extension RSA {
           // We need at least 11 bytes of random padding in order to safely encrypt messages (RFC2313 Section 8.1 - Note 6)
           guard blockSize >= bytes.count + 11 else { throw RSA.Error.invalidMessageLengthForEncryption }
           return Padding.eme_pkcs1v15.add(to: bytes, blockSize: blockSize)
-      @unknown default:
-        assertionFailure()
-        return [UInt8](repeating: UInt8.random(in: 0..<UInt8.max), count: bytes.count)
       }
     }
 
@@ -110,9 +107,6 @@ extension RSA {
         case .raw, .pksc1v15:
           // Format the encrypted bytes before returning
           return Array<UInt8>(repeating: 0x00, count: blockSize - bytes.count) + bytes
-      @unknown default:
-        assertionFailure()
-        return [UInt8](repeating: UInt8.random(in: 0..<UInt8.max), count: bytes.count)
       }
     }
 
@@ -127,9 +121,6 @@ extension RSA {
           // Convert the Octet String into an Integer Primitive using the BigInteger `serialize` method
           // (this effectively just prefixes the data with a 0x00 byte indicating that its a positive integer)
           return Padding.eme_pkcs1v15.remove(from: [0x00] + bytes, blockSize: blockSize)
-      @unknown default:
-        assertionFailure()
-        return [UInt8](repeating: UInt8.random(in: 0..<UInt8.max), count: bytes.count)
       }
     }
   }

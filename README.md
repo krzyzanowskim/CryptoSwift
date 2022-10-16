@@ -560,7 +560,7 @@ RSA Encryption & Decryption Example
 let alicesPrivateKey = try RSA(keySize: 1024)
     
 // Alice shares her **public** key with Bob
-let alicesPublicKeyData = try alicesPrivateKey.publicKeyDER()
+let alicesPublicKeyData = try alicesPrivateKey.publicKeyExternalRepresentation()
     
 // Bob receives the raw external representation of Alices public key and imports it
 let bobsImportOfAlicesPublicKey = try RSA(rawRepresentation: Data(alicesPublicKeyData))
@@ -591,7 +591,7 @@ let messageAliceSupports = "Hi my name is Alice!"
 let alicesSignature = try alicesPrivateKey.sign(messageAliceSupports.bytes)
     
 // Alice shares her Public key and the signature with Bob
-let alicesPublicKeyData = try alicesPrivateKey.publicKeyDER()
+let alicesPublicKeyData = try alicesPrivateKey.publicKeyExternalRepresentation()
     
 // Bob receives the raw external representation of Alices Public key and imports it!
 let bobsImportOfAlicesPublicKey = try RSA(rawRepresentation: Data(alicesPublicKeyData))

@@ -563,7 +563,7 @@ let alicesPrivateKey = try RSA(keySize: 1024)
 let alicesPublicKeyData = try alicesPrivateKey.publicKeyExternalRepresentation()
     
 // Bob receives the raw external representation of Alices public key and imports it
-let bobsImportOfAlicesPublicKey = try RSA(rawRepresentation: Data(alicesPublicKeyData))
+let bobsImportOfAlicesPublicKey = try RSA(rawRepresentation: alicesPublicKeyData)
     
 // Bob can now encrypt a message for Alice using her public key
 let message = "Hi Alice! This is Bob!"
@@ -594,7 +594,7 @@ let alicesSignature = try alicesPrivateKey.sign(messageAliceSupports.bytes)
 let alicesPublicKeyData = try alicesPrivateKey.publicKeyExternalRepresentation()
     
 // Bob receives the raw external representation of Alices Public key and imports it!
-let bobsImportOfAlicesPublicKey = try RSA(rawRepresentation: Data(alicesPublicKeyData))
+let bobsImportOfAlicesPublicKey = try RSA(rawRepresentation: alicesPublicKeyData)
         
 // Bob can now verify that Alice signed the message using the Private key associated with her shared Public key.
 let verifiedSignature = try bobsImportOfAlicesPublicKey.verify(signature: alicesSignature, for: "Hi my name is Alice!".bytes)

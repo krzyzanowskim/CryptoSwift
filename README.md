@@ -19,7 +19,7 @@ Crypto related functions and helpers for [Swift](https://swift.org) implemented 
 
 It takes some time to keep it all for your convenience, so maybe spare $1, so I can keep working on that. There are more than 8000 clones daily. If I'd get $1/month from each company that uses my work here, I'd say we're even. Hurry up, find the [Sponsorship](https://github.com/users/krzyzanowskim/sponsorship) button, and fulfill your duty.
 
-CryptoSwift isn't backed by any big company and is developer in my spare time that I also use to as a freelancer.
+CryptoSwift isn't backed by any big company and is developed in my spare time that I also use to as a freelancer.
 
 [![Twitter](https://img.shields.io/badge/Twitter-@krzyzanowskim-blue.svg?style=flat)](http://twitter.com/krzyzanowskim)
 

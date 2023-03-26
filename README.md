@@ -166,7 +166,7 @@ CryptoSwift.xcframework is a Release (Optimized) binary that offer best availabl
 
 #### Embedded Framework
 
-Embedded frameworks require a minimum deployment target of iOS 9 or macOS Sierra (10.12). Drag the `CryptoSwift.xcodeproj` file into your Xcode project, and add appropriate framework as a dependency to your target. Now select your App and choose the General tab for the app target. Find *Embedded Binaries* and press "+", then select `CryptoSwift.framework` (iOS, macOS, watchOS or tvOS)
+Embedded frameworks require a minimum deployment target of iOS 11.0 or macOS Sierra (10.13). Drag the `CryptoSwift.xcodeproj` file into your Xcode project, and add appropriate framework as a dependency to your target. Now select your App and choose the General tab for the app target. Find *Embedded Binaries* and press "+", then select `CryptoSwift.framework` (iOS, macOS, watchOS or tvOS)
 
 ![](https://cloud.githubusercontent.com/assets/758033/10834511/25a26852-7e9a-11e5-8c01-6cc8f1838459.png)
 

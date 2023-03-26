@@ -48,6 +48,7 @@ organizations who have contributed source code to CryptoSwift.
 - Howtin <gonghao@ghsky.com>
 - Ibrahim Kteish <ibrahimk@vinelab.com>
 - Igor Camilo <igor.rcamilo@gmail.com>
+- JP Simard <jp@jpsim.com>
 - Javier Soto <javiers@twitter.com>
 - Jeremy Greenwood <jeremy@mobelux.com>
 - Jimmie Johansson <jim@svep.se>

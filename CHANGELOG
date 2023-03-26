@@ -1,3 +1,9 @@
+1.7.0
+- Fix compilation warnings
+- Ignore unknown character for base64 decoding
+- Bump minimum targets (for Xcode)
+- Xcode project disable bitcode (Building with bitcode is deprecated)
+
 1.6.0
 - Improve & extend RSA support with DER (see README for details)
 - Fix Blowfish memory leaks

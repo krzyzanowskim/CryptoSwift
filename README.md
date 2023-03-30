@@ -132,7 +132,7 @@ You can use [Swift Package Manager](https://swift.org/package-manager/) and spec
 
 See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
 
-Notice: Swift Package Manager uses debug configuration for debug Xcode build, that may result in significant (up to x10000) worse performance. Performance characteristic is different in Release build. To overcome this prolem, consider embed `CryptoSwift.xcframework` described below.
+Notice: Swift Package Manager uses debug configuration for debug Xcode build, that may result in significant (up to x10000) worse performance. Performance characteristic is different in Release build. To overcome this problem, consider embed `CryptoSwift.xcframework` described below.
 
 #### CocoaPods
 

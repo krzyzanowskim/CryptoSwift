@@ -121,7 +121,11 @@ private extension Scrypt {
 
     /* 1: X <-- B */
     let typedBlock = block.assumingMemoryBound(to: UInt32.self)
+#if compiler(>=5.8)
+    X.update(from: typedBlock, count: 32 * self.r)
+#else
     X.assign(from: typedBlock, count: 32 * self.r)
+#endif
 
     /* 2: for i = 0 to N - 1 do */
     for i in stride(from: 0, to: self.N, by: 2) {

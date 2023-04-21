@@ -13,6 +13,8 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+import Foundation
+
 /** String extension */
 extension String {
 

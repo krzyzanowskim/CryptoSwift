@@ -3,6 +3,7 @@ organizations who have contributed source code to CryptoSwift.
 
 ### Contributors
 
+- 0xabhisek <128348758+0xabhisek@users.noreply.github.com>
 - Adolfo Martinelli <adolfo@airmap.com>
 - Aidan Woods <aidantwoods@gmail.com>
 - Alejandro Isaza <alejandro.isaza@gmail.com>
@@ -71,10 +72,12 @@ organizations who have contributed source code to CryptoSwift.
 - Matias Cudich <mcudich@gmail.com>
 - Matias Piipari <matias.piipari@gmail.com>
 - Matthew Chung <matthewchung74@gmail.com>
+- Maxence Mottard <mottard.maxence@gmail.com>
 - Michael Ledin <m.ledin@appheads.ru>
 - Michael Redig <mredig@gmail.com>
 - Mikael LE GOFF <mikael@mercari.com>
 - Mo Ramezanpoor <me@mohsenr.com>
+- Nabil Elqatib <nabilelqatib@gmail.com>
 - Nate West <nwest@detroitlabs.com>
 - Nathan Fallet <contact@nathanfallet.me>
 - Nicholas Maccharoli <nicko@screaming-cactus.com>

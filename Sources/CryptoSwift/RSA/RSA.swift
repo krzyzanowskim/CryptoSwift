@@ -119,7 +119,7 @@ public final class RSA: DERCodable {
   ///   - d: The RSA Private Exponent
   ///   - p: The 1st Prime used to generate the Private Exponent
   ///   - q: The 2nd Prime used to generate the Private Exponent
-  private init(n: BigUInteger, e: BigUInteger, d: BigUInteger, p: BigUInteger, q: BigUInteger) {
+  public init(n: BigUInteger, e: BigUInteger, d: BigUInteger, p: BigUInteger, q: BigUInteger) {
     self.n = n
     self.e = e
     self.d = d

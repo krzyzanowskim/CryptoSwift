@@ -109,7 +109,7 @@ public final class RSA: DERCodable {
     }
 
     // Initialize
-    self.init(n: n, e: e, d: d, p: p, q: q)
+    try self.init(n: n, e: e, d: d, p: p, q: q)
   }
 
   /// Initialize with RSA parameters
@@ -119,7 +119,16 @@ public final class RSA: DERCodable {
   ///   - d: The RSA Private Exponent
   ///   - p: The 1st Prime used to generate the Private Exponent
   ///   - q: The 2nd Prime used to generate the Private Exponent
-  private init(n: BigUInteger, e: BigUInteger, d: BigUInteger, p: BigUInteger, q: BigUInteger) {
+  public init(n: BigUInteger, e: BigUInteger, d: BigUInteger, p: BigUInteger, q: BigUInteger) throws {
+    // Ensure the supplied parameters are correct...
+    // Calculate modulus
+    guard n == p * q else { throw Error.invalidPrimes }
+
+    // Calculate public and private exponent
+    let phi = (p - 1) * (q - 1)
+    guard d == e.inverse(phi) else { throw Error.invalidPrimes }
+
+    // Regular initialization
     self.n = n
     self.e = e
     self.d = d
@@ -209,10 +218,6 @@ extension RSA {
     // - TODO: Support multiple primes 0x01 version defined in [RFC3447](https://www.rfc-editor.org/rfc/rfc3447#appendix-A.1.2)
     guard version == Data(hex: "0x00") else { throw Error.unsupportedRSAVersion }
 
-    // Ensure the supplied parameters are correct...
-    // Calculate modulus
-    guard BigUInteger(modulus) == BigUInteger(prime1) * BigUInteger(prime2) else { throw Error.invalidPrimes }
-
     // Calculate public and private exponent
     let phi = (BigUInteger(prime1) - 1) * (BigUInteger(prime2) - 1)
     guard let d = BigUInteger(publicExponent).inverse(phi) else { throw Error.invalidPrimes }
@@ -227,7 +232,7 @@ extension RSA {
     guard (d % (BigUInteger(prime2) - 1)) == BigUInteger(exponent2) else { throw RSA.Error.invalidPrimes }
 
     // Proceed with regular initialization
-    self.init(n: BigUInteger(modulus), e: BigUInteger(publicExponent), d: BigUInteger(privateExponent), p: BigUInteger(prime1), q: BigUInteger(prime2))
+    try self.init(n: BigUInteger(modulus), e: BigUInteger(publicExponent), d: BigUInteger(privateExponent), p: BigUInteger(prime1), q: BigUInteger(prime2))
   }
 
   /// Attempts to instantiate an RSA Key when given the ASN1 DER encoded external representation of the Key

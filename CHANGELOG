@@ -1,3 +1,7 @@
+1.7.2
+- Validate RSA input values
+- Minor updates
+
 1.7.1
 - Address Swift 5.8 warnings
 

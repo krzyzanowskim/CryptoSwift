@@ -9,20 +9,22 @@
 
 Crypto related functions and helpers for [Swift](https://swift.org) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
-**Note**: The `main` branch follows the latest currently released **version of Swift**. If you need an earlier version for an older version of Swift, you can specify its version in your `Podfile` or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
+**Note**: The `main` branch follows the latest currently released **version of Swift**. If you need an earlier version for an older version of Swift, specify its version in your `Podfile` or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
 
 ---
 
 [Requirements](#requirements) | [Features](#features) | [Contribution](#contribution) | [Installation](#installation) | [Swift versions](#swift-versions-support) | [How-to](#how-to) | [Author](#author) | [License](#license) | [Changelog](#changelog)
 
-## Sponsorship
+### Support & Sponsors
 
-It takes some time to keep it all for your convenience, so maybe spare $1, so I can keep working on that. There are more than 8000 clones daily. If I'd get $1/month from each company that uses my work here, I'd say we're even. Hurry up, find the [Sponsorship](https://github.com/users/krzyzanowskim/sponsorship) button, and fulfill your duty.
+The financial sustainability of the project is possible thanks to the ongoing contributions from our [GitHub Sponsors](https://github.com/sponsors/krzyzanowskim)
 
-CryptoSwift isn't backed by any big company and is developed in my spare time that I also use to as a freelancer.
+### Premium Sponsors
 
-[![Twitter](https://img.shields.io/badge/Twitter-@krzyzanowskim-blue.svg?style=flat)](http://twitter.com/krzyzanowskim)
+  [Emerge Tools](https://www.emergetools.com/) is a suite of revolutionary products designed to supercharge mobile apps and the teams that build them.
 
+  ![emerge-tools-black](https://github.com/krzyzanowskim/OpenSSL/assets/758033/a21f5ac1-ef39-4b56-a8d2-575adeb7fe55)
+  
 ## Requirements
 Good mood
 

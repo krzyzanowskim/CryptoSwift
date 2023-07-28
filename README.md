@@ -36,22 +36,22 @@ Good mood
 - iOS, Android, macOS, AppleTV, watchOS, Linux support
 
 #### Hash (Digest)
-  [MD5](http://tools.ietf.org/html/rfc1321)
-| [SHA1](http://tools.ietf.org/html/rfc3174)
-| [SHA2-224](http://tools.ietf.org/html/rfc6234)
-| [SHA2-256](http://tools.ietf.org/html/rfc6234)
-| [SHA2-384](http://tools.ietf.org/html/rfc6234)
-| [SHA2-512](http://tools.ietf.org/html/rfc6234)
-| [SHA3](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
+  [MD5](https://tools.ietf.org/html/rfc1321)
+| [SHA1](https://tools.ietf.org/html/rfc3174)
+| [SHA2-224](https://tools.ietf.org/html/rfc6234)
+| [SHA2-256](https://tools.ietf.org/html/rfc6234)
+| [SHA2-384](https://tools.ietf.org/html/rfc6234)
+| [SHA2-512](https://tools.ietf.org/html/rfc6234)
+| [SHA3](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
 
 #### Cyclic Redundancy Check (CRC)
-  [CRC32](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
-| [CRC32C](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
-| [CRC16](http://en.wikipedia.org/wiki/Cyclic_redundancy_check)
+  [CRC32](https://en.wikipedia.org/wiki/Cyclic_redundancy_check)
+| [CRC32C](https://en.wikipedia.org/wiki/Cyclic_redundancy_check)
+| [CRC16](https://en.wikipedia.org/wiki/Cyclic_redundancy_check)
 
 #### Cipher
-  [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)
-| [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
+  [AES-128, AES-192, AES-256](https://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)
+| [ChaCha20](https://cr.yp.to/chacha/chacha-20080128.pdf)
 | [Rabbit](https://tools.ietf.org/html/rfc4503)
 | [Blowfish](https://www.schneier.com/academic/blowfish/)
 
@@ -59,25 +59,25 @@ Good mood
   [Encryption, Signature](https://github.com/krzyzanowskim/CryptoSwift#rsa)
 
 #### Message authenticators
-  [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
+  [Poly1305](https://cr.yp.to/mac/poly1305-20050329.pdf)
 | [HMAC (MD5, SHA1, SHA256)](https://www.ietf.org/rfc/rfc2104.txt)
 | [CMAC](https://tools.ietf.org/html/rfc4493)
 | [CBC-MAC](https://en.wikipedia.org/wiki/CBC-MAC)
 
 #### Cipher mode of operation
-- Electronic codebook ([ECB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_.28ECB.29))
-- Cipher-block chaining ([CBC](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher-block_chaining_.28CBC.29))
-- Propagating Cipher Block Chaining ([PCBC](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Propagating_Cipher_Block_Chaining_.28PCBC.29))
-- Cipher feedback ([CFB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_feedback_.28CFB.29))
-- Output Feedback ([OFB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Output_Feedback_.28OFB.29))
+- Electronic codebook ([ECB](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_.28ECB.29))
+- Cipher-block chaining ([CBC](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher-block_chaining_.28CBC.29))
+- Propagating Cipher Block Chaining ([PCBC](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Propagating_Cipher_Block_Chaining_.28PCBC.29))
+- Cipher feedback ([CFB](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_feedback_.28CFB.29))
+- Output Feedback ([OFB](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Output_Feedback_.28OFB.29))
 - Counter Mode ([CTR](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Counter_.28CTR.29))
 - Galois/Counter Mode ([GCM](https://csrc.nist.gov/publications/detail/sp/800-38d/final))
 - Counter with Cipher Block Chaining-Message Authentication Code ([CCM](https://csrc.nist.gov/publications/detail/sp/800-38c/final))
 - OCB Authenticated-Encryption Algorithm ([OCB](https://tools.ietf.org/html/rfc7253))
 
 #### Password-Based Key Derivation Function
-- [PBKDF1](http://tools.ietf.org/html/rfc2898#section-5.1) (Password-Based Key Derivation Function 1)
-- [PBKDF2](http://tools.ietf.org/html/rfc2898#section-5.2) (Password-Based Key Derivation Function 2)
+- [PBKDF1](https://tools.ietf.org/html/rfc2898#section-5.1) (Password-Based Key Derivation Function 1)
+- [PBKDF2](https://tools.ietf.org/html/rfc2898#section-5.2) (Password-Based Key Derivation Function 2)
 - [HKDF](https://tools.ietf.org/html/rfc5869) (HMAC-based Extract-and-Expand Key Derivation Function)
 - [Scrypt](https://tools.ietf.org/html/rfc7914) (The scrypt Password-Based Key Derivation Function)
 
@@ -85,9 +85,9 @@ Good mood
 - [PKCS#5](https://www.rfc-editor.org/rfc/rfc2898.html)
 - [EMSA-PKCS1-v1_5 (Encoding Method for Signature)](https://www.rfc-editor.org/rfc/rfc3447#section-9.2)
 - [EME-PCKS1-v1_5 (Encoding Method for Encryption)](https://www.rfc-editor.org/rfc/rfc3447)
-- [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
+- [PKCS#7](https://tools.ietf.org/html/rfc5652#section-6.3)
 - [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
-- [ISO78164](http://www.embedx.com/pdfs/ISO_STD_7816/info_isoiec7816-4%7Bed21.0%7Den.pdf)
+- [ISO78164](https://www.embedx.com/pdfs/ISO_STD_7816/info_isoiec7816-4%7Bed21.0%7Den.pdf)
 - [ISO10126](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO_10126)
 - No padding
 
@@ -132,7 +132,7 @@ You can use [Swift Package Manager](https://swift.org/package-manager/) and spec
 .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "1.7.2"))
 ```
 
-See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
+See: [Package.swift - manual](https://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
 
 Notice: Swift Package Manager uses debug configuration for debug Xcode build, that may result in significant (up to x10000) worse performance. Performance characteristic is different in Release build. To overcome this problem, consider embed `CryptoSwift.xcframework` described below.
 
@@ -652,13 +652,13 @@ let rsaKey = try RSA(rawRepresentation: cfdata as Data)
 
 ## Author
 
-CryptoSwift is owned and maintained by [Marcin Krzyżanowski](http://www.krzyzanowskim.com)
+CryptoSwift is owned and maintained by [Marcin Krzyżanowski](https://www.krzyzanowskim.com)
 
-You can follow me on Twitter at [@krzyzanowskim](http://twitter.com/krzyzanowskim) for project updates and releases.
+You can follow me on Twitter at [@krzyzanowskim](https://twitter.com/krzyzanowskim) for project updates and releases.
 
 # Cryptography Notice
 
-This distribution includes cryptographic software. The country in which you currently reside may have restrictions on the import, possession, use, and/or re-export to another country, of encryption software. BEFORE using any encryption software, please check your country's laws, regulations and policies concerning the import, possession, or use, and re-export of encryption software, to see if this is permitted. See http://www.wassenaar.org/ for more information.
+This distribution includes cryptographic software. The country in which you currently reside may have restrictions on the import, possession, use, and/or re-export to another country, of encryption software. BEFORE using any encryption software, please check your country's laws, regulations and policies concerning the import, possession, or use, and re-export of encryption software, to see if this is permitted. See https://www.wassenaar.org/ for more information.
 
 ## License
 
@@ -672,7 +672,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, **an acknowledgment in the product documentation is required**.
 - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 - This notice may not be removed or altered from any source or binary distribution.
-- Redistributions of any form whatsoever must retain the following acknowledgment: 'This product includes software developed by the "Marcin Krzyzanowski" (http://krzyzanowskim.com/).'
+- Redistributions of any form whatsoever must retain the following acknowledgment: 'This product includes software developed by the "Marcin Krzyzanowski" (https://krzyzanowskim.com/).'
 
 ## Changelog
 

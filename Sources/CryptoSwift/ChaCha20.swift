@@ -28,8 +28,8 @@ public final class ChaCha20: BlockCipher {
   fileprivate let key: Key
   fileprivate var counter: Array<UInt8>
 
-  public init(key: Array<UInt8>, iv nonce: Array<UInt8>) throws {
-    precondition(nonce.count == 12 || nonce.count == 8)
+  public init(key: Array<UInt8>, counter: Array<UInt8> = [0, 0, 0, 0], iv nonce: Array<UInt8>) throws {
+    precondition(counter.count == 4 && (nonce.count == 12 || nonce.count == 8))
 
     if key.count != 32 {
       throw Error.invalidKeyOrInitializationVector
@@ -39,9 +39,11 @@ public final class ChaCha20: BlockCipher {
     self.keySize = self.key.count
 
     if nonce.count == 8 {
-      self.counter = [0, 0, 0, 0, 0, 0, 0, 0] + nonce
+      self.counter = counter + [0, 0, 0, 0] + nonce
+    } else if nonce.count == 12 {
+      self.counter = counter + nonce
     } else {
-      self.counter = [0, 0, 0, 0] + nonce
+      throw Error.invalidKeyOrInitializationVector
     }
 
     assert(self.counter.count == 16)

@@ -50,8 +50,9 @@ Good mood
 | [CRC16](https://en.wikipedia.org/wiki/Cyclic_redundancy_check)
 
 #### Cipher
-  [AES-128, AES-192, AES-256](https://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)
-| [ChaCha20](https://cr.yp.to/chacha/chacha-20080128.pdf)
+  [AES-128, AES-192, AES-256](http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf)
+| [ChaCha20](http://cr.yp.to/chacha/chacha-20080128.pdf)
+| [XChaCha20](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-xchacha)
 | [Rabbit](https://tools.ietf.org/html/rfc4503)
 | [Blowfish](https://www.schneier.com/academic/blowfish/)
 
@@ -93,6 +94,7 @@ Good mood
 
 #### Authenticated Encryption with Associated Data (AEAD)
 - [AEAD\_CHACHA20\_POLY1305](https://tools.ietf.org/html/rfc7539#section-2.8)
+- [AEAD\_XCHACHA20\_POLY1305](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-xchacha#section-2)
 
 ## Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/discussions/982) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/discussions/982#discussioncomment-3669415).

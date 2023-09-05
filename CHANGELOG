@@ -1,3 +1,6 @@
+1.8.0
+- Add XChaCha20 and XChaCha20-Poly1305 (@zssz)
+
 1.7.2
 - Validate RSA input values
 - Minor updates

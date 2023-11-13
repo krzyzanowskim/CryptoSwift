@@ -194,18 +194,18 @@ extension RSA {
         case .message_pkcs1v15_SHA3_512:
           return Digest.sha3(bytes, variant: .sha512)
         case .raw,
-          .digest_pkcs1v15_RAW,
-          .digest_pkcs1v15_MD5,
-          .digest_pkcs1v15_SHA1,
-          .digest_pkcs1v15_SHA224,
-          .digest_pkcs1v15_SHA256,
-          .digest_pkcs1v15_SHA384,
-          .digest_pkcs1v15_SHA512,
-          .digest_pkcs1v15_SHA512_224,
-          .digest_pkcs1v15_SHA512_256,
-          .digest_pkcs1v15_SHA3_256,
-          .digest_pkcs1v15_SHA3_384,
-          .digest_pkcs1v15_SHA3_512:
+            .digest_pkcs1v15_RAW,
+            .digest_pkcs1v15_MD5,
+            .digest_pkcs1v15_SHA1,
+            .digest_pkcs1v15_SHA224,
+            .digest_pkcs1v15_SHA256,
+            .digest_pkcs1v15_SHA384,
+            .digest_pkcs1v15_SHA512,
+            .digest_pkcs1v15_SHA512_224,
+            .digest_pkcs1v15_SHA512_256,
+            .digest_pkcs1v15_SHA3_256,
+            .digest_pkcs1v15_SHA3_384,
+            .digest_pkcs1v15_SHA3_512:
         return bytes
       }
     }
@@ -231,16 +231,16 @@ extension RSA {
         case .digest_pkcs1v15_SHA512_256:
           return bytes.count <= 32
         case .message_pkcs1v15_MD5,
-          .message_pkcs1v15_SHA1,
-          .message_pkcs1v15_SHA224,
-          .message_pkcs1v15_SHA256,
-          .message_pkcs1v15_SHA384,
-          .message_pkcs1v15_SHA512,
-          .message_pkcs1v15_SHA512_224,
-          .message_pkcs1v15_SHA512_256,
-          .message_pkcs1v15_SHA3_256,
-          .message_pkcs1v15_SHA3_384,
-          .message_pkcs1v15_SHA3_512:
+            .message_pkcs1v15_SHA1,
+            .message_pkcs1v15_SHA224,
+            .message_pkcs1v15_SHA256,
+            .message_pkcs1v15_SHA384,
+            .message_pkcs1v15_SHA512,
+            .message_pkcs1v15_SHA512_224,
+            .message_pkcs1v15_SHA512_256,
+            .message_pkcs1v15_SHA3_256,
+            .message_pkcs1v15_SHA3_384,
+            .message_pkcs1v15_SHA3_512:
         return true
       }
     }

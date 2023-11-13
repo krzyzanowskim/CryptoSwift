@@ -121,6 +121,12 @@ extension RSA {
     case message_pkcs1v15_SHA512_224
     /// Hashes the raw message using SHA512-256 before signing the data
     case message_pkcs1v15_SHA512_256
+    /// Hashes the raw message using SHA3_256 before signing the data
+    case message_pkcs1v15_SHA3_256
+    /// Hashes the raw message using SHA3_384 before signing the data
+    case message_pkcs1v15_SHA3_384
+    /// Hashes the raw message using SHA3_512 before signing the data
+    case message_pkcs1v15_SHA3_512
     /// This variant isn't supported yet
     case digest_pkcs1v15_RAW
     /// This variant expects that the data to be signed is a valid MD5 Hash Digest
@@ -157,9 +163,9 @@ extension RSA {
       case .message_pkcs1v15_SHA224, .digest_pkcs1v15_SHA224: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x04)
       case .message_pkcs1v15_SHA512_224, .digest_pkcs1v15_SHA512_224: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x05)
       case .message_pkcs1v15_SHA512_256, .digest_pkcs1v15_SHA512_256: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x06)
-      case .digest_pkcs1v15_SHA3_256: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x08)
-      case .digest_pkcs1v15_SHA3_384: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x09)
-      case .digest_pkcs1v15_SHA3_512: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x0A)
+      case .message_pkcs1v15_SHA3_256, .digest_pkcs1v15_SHA3_256: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x08)
+      case .message_pkcs1v15_SHA3_384, .digest_pkcs1v15_SHA3_384: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x09)
+      case .message_pkcs1v15_SHA3_512, .digest_pkcs1v15_SHA3_512: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x0A)
       }
     }
     
@@ -181,6 +187,12 @@ extension RSA {
         return Digest.sha2(bytes, variant: .sha224)
       case .message_pkcs1v15_SHA512_256:
         return Digest.sha2(bytes, variant: .sha256)
+      case .message_pkcs1v15_SHA3_256:
+        return Digest.sha3(bytes, variant: .sha256)
+      case .message_pkcs1v15_SHA3_384:
+        return Digest.sha3(bytes, variant: .sha384)
+      case .message_pkcs1v15_SHA3_512:
+        return Digest.sha3(bytes, variant: .sha512)
       case .raw,
           .digest_pkcs1v15_RAW,
           .digest_pkcs1v15_MD5,
@@ -225,7 +237,10 @@ extension RSA {
           .message_pkcs1v15_SHA384,
           .message_pkcs1v15_SHA512,
           .message_pkcs1v15_SHA512_224,
-          .message_pkcs1v15_SHA512_256:
+          .message_pkcs1v15_SHA512_256,
+          .message_pkcs1v15_SHA3_256,
+          .message_pkcs1v15_SHA3_384,
+          .message_pkcs1v15_SHA3_512:
         return true
       }
     }

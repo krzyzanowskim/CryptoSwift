@@ -56,6 +56,7 @@ organizations who have contributed source code to CryptoSwift.
 - John Hammerlund <johnhammerlund@gmail.com>
 - Jonas Obrist <ojiidotch@gmail.com>
 - K.K. POON <noopkk@gmail.com>
+- Katrin Annuk <katrin.annuk@lab.mobi>
 - Keith Smiley <keithbsmiley@gmail.com>
 - Koray Koska <koray@koska.at>
 - Kyle Fuller <kyle@fuller.li>
@@ -72,6 +73,7 @@ organizations who have contributed source code to CryptoSwift.
 - Matias Cudich <mcudich@gmail.com>
 - Matias Piipari <matias.piipari@gmail.com>
 - Matthew Chung <matthewchung74@gmail.com>
+- Matthias Geihs <matthias@geihs.de>
 - Maxence Mottard <mottard.maxence@gmail.com>
 - Michael Ledin <m.ledin@appheads.ru>
 - Michael Redig <mredig@gmail.com>
@@ -112,6 +114,8 @@ organizations who have contributed source code to CryptoSwift.
 - Xavier Matos <matos.xav@gmail.com>
 - Yannick Loriot <yannick.loriot@gmail.com>
 - Yury Lapitsky <yury.lapitsky@gmail.com>
+- Zsombor Szabo <zsombor@gmail.com>
+- Zsombor Szabo <zsombor@proxy.com>
 - akreutz <27BBsan08!>
 - jose <nextgenappsllc@gmail.com>
 - mrahmiao <mrahmiao@gmail.com>

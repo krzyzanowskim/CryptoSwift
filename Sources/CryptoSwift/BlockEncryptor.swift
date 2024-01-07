@@ -14,6 +14,11 @@
 
 @usableFromInline
 final class BlockEncryptor: Cryptor, Updatable {
+
+  public enum Error: Swift.Error {
+    case unsupported
+  }
+
   private let blockSize: Int
   private var worker: CipherModeWorker
   private let padding: Padding
@@ -57,6 +62,6 @@ final class BlockEncryptor: Cryptor, Updatable {
 
   @usableFromInline
   func seek(to: Int) throws {
-    fatalError("Not supported")
+    throw Error.unsupported
   }
 }

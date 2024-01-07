@@ -16,6 +16,11 @@
 final class StreamDecryptor: Cryptor, Updatable {
 
   @usableFromInline
+  enum Error: Swift.Error {
+    case unsupported
+  }
+
+  @usableFromInline
   internal let blockSize: Int
 
   @usableFromInline
@@ -83,7 +88,7 @@ final class StreamDecryptor: Cryptor, Updatable {
   @inlinable
   public func seek(to position: Int) throws {
     guard var worker = self.worker as? SeekableModeWorker else {
-      fatalError("Not supported")
+      throw Error.unsupported
     }
 
     try worker.seek(to: position)

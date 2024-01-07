@@ -1,3 +1,10 @@
+1.8.1
+- Update publicKeyDER to support exponent of any byte length
+- Add SHA3 variants for RSA signature verification
+- Throw error on unsupported calls, rather than call fatalError
+- Update PKCS7 padding logic
+- Add SDK Privacy Manifest - PrivacyInfo.xcprivacy
+
 1.8.0
 - Add XChaCha20 and XChaCha20-Poly1305 (@zssz)
 

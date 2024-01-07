@@ -326,6 +326,7 @@
 		75B3ED76210F9DF7005D4ADA /* BlockDecryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockDecryptor.swift; sourceTree = "<group>"; };
 		75B3ED78210FA016005D4ADA /* BlockEncryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockEncryptor.swift; sourceTree = "<group>"; };
 		75C2E76C1D55F097003D2BCA /* Access.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Access.swift; sourceTree = "<group>"; };
+		75C454012B4B6EBC00FC5020 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Sources/CryptoSwift/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		75D7AF37208BFB1600D22BEB /* UInt128.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UInt128.swift; sourceTree = "<group>"; };
 		75EC52381EE8B6CA0048EB3B /* AES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AES.swift; sourceTree = "<group>"; };
 		75EC52391EE8B6CA0048EB3B /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
@@ -530,6 +531,7 @@
 		754BE44B19693E190098E6F3 = {
 			isa = PBXGroup;
 			children = (
+				75C454012B4B6EBC00FC5020 /* PrivacyInfo.xcprivacy */,
 				75843E9A2072457A0050583A /* config */,
 				75EC52361EE8B6CA0048EB3B /* Sources */,
 				754BE46419693E190098E6F3 /* Tests */,

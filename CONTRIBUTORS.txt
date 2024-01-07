@@ -111,6 +111,7 @@ organizations who have contributed source code to CryptoSwift.
 - Tomasz Szulc <mail@szulctomasz.com>
 - Tomasz Wierzbik <twierzbik@msn.com>
 - Valeriy Van <github@w7software.com>
+- WFrost3 <134406901+WFrost3@users.noreply.github.com>
 - Xavier Matos <matos.xav@gmail.com>
 - Yannick Loriot <yannick.loriot@gmail.com>
 - Yury Lapitsky <yury.lapitsky@gmail.com>

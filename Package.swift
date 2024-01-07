@@ -14,7 +14,7 @@ let package = Package(
     )
   ],
   targets: [
-    .target(name: "CryptoSwift"),
+    .target(name: "CryptoSwift", resources: [.copy("PrivacyInfo.xcprivacy")]),
     .testTarget(name: "CryptoSwiftTests", dependencies: ["CryptoSwift"]),
     .testTarget(name: "TestsPerformance", dependencies: ["CryptoSwift"])
   ],

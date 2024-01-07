@@ -341,6 +341,9 @@ final class RSATests: XCTestCase {
     XCTAssertThrowsError(try rsa.sign(message, variant: .digest_pkcs1v15_SHA512))
     XCTAssertThrowsError(try rsa.sign(message, variant: .digest_pkcs1v15_SHA512_224))
     XCTAssertThrowsError(try rsa.sign(message, variant: .digest_pkcs1v15_SHA512_256))
+    XCTAssertThrowsError(try rsa.sign(message, variant: .digest_pkcs1v15_SHA3_256))
+    XCTAssertThrowsError(try rsa.sign(message, variant: .digest_pkcs1v15_SHA3_384))
+    XCTAssertThrowsError(try rsa.sign(message, variant: .digest_pkcs1v15_SHA3_512))
 
     // But if we hash the message first, then the signature works as expected...
     XCTAssertNoThrow(try rsa.sign(message, variant: .message_pkcs1v15_SHA1))
@@ -350,6 +353,9 @@ final class RSATests: XCTestCase {
     XCTAssertNoThrow(try rsa.sign(message, variant: .message_pkcs1v15_SHA512))
     XCTAssertNoThrow(try rsa.sign(message, variant: .message_pkcs1v15_SHA512_224))
     XCTAssertNoThrow(try rsa.sign(message, variant: .message_pkcs1v15_SHA512_256))
+    XCTAssertNoThrow(try rsa.sign(message, variant: .message_pkcs1v15_SHA3_256))
+    XCTAssertNoThrow(try rsa.sign(message, variant: .message_pkcs1v15_SHA3_384))
+    XCTAssertNoThrow(try rsa.sign(message, variant: .message_pkcs1v15_SHA3_512))
   }
 
   /// This test uses the Fixtures (generated using Apple's `Security` framework) to test the entirety of an RSA keys functionality

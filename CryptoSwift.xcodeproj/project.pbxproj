@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0AF023D5230F2B0F008E4E68 /* ISO78164Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF023D4230F2B0F008E4E68 /* ISO78164Padding.swift */; };
+		0DDD2F112B5A23F60097F130 /* XChaCha20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DDD2F102B5A23F60097F130 /* XChaCha20.swift */; };
 		0EE73E71204D598100110E11 /* CMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE73E70204D598100110E11 /* CMAC.swift */; };
 		0EE73E74204D59C200110E11 /* CMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE73E72204D599C00110E11 /* CMACTests.swift */; };
 		14156CE52011422400DDCFBC /* ChaCha20Poly1305Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14156CE42011422400DDCFBC /* ChaCha20Poly1305Tests.swift */; };
@@ -234,6 +235,7 @@
 
 /* Begin PBXFileReference section */
 		0AF023D4230F2B0F008E4E68 /* ISO78164Padding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISO78164Padding.swift; sourceTree = "<group>"; };
+		0DDD2F102B5A23F60097F130 /* XChaCha20.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XChaCha20.swift; sourceTree = "<group>"; };
 		0EE73E70204D598100110E11 /* CMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMAC.swift; sourceTree = "<group>"; };
 		0EE73E72204D599C00110E11 /* CMACTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMACTests.swift; sourceTree = "<group>"; };
 		14156CE42011422400DDCFBC /* ChaCha20Poly1305Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChaCha20Poly1305Tests.swift; sourceTree = "<group>"; };
@@ -693,6 +695,7 @@
 				75D7AF37208BFB1600D22BEB /* UInt128.swift */,
 				75EC52771EE8B6CA0048EB3B /* Updatable.swift */,
 				75EC52781EE8B6CA0048EB3B /* Utils.swift */,
+				0DDD2F102B5A23F60097F130 /* XChaCha20.swift */,
 				75EC52791EE8B6CA0048EB3B /* ZeroPadding.swift */,
 				754310432050111A003FB1DF /* CompactMap.swift */,
 				75B3ED76210F9DF7005D4ADA /* BlockDecryptor.swift */,
@@ -1020,6 +1023,7 @@
 				6AC8940726DB950F00F7E787 /* Exponentiation.swift in Sources */,
 				6AC8940026DB950F00F7E787 /* Subtraction.swift in Sources */,
 				75EC52A61EE8B8390048EB3B /* PBKDF1.swift in Sources */,
+				0DDD2F112B5A23F60097F130 /* XChaCha20.swift in Sources */,
 				6AC893FB26DB950F00F7E787 /* Bitwise Ops.swift in Sources */,
 				75EC52B41EE8B83D0048EB3B /* UInt32+Extension.swift in Sources */,
 				6AC8940526DB950F00F7E787 /* Strideable.swift in Sources */,

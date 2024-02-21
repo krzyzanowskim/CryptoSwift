@@ -159,6 +159,7 @@
 		81F279DF2181F5A000449EDA /* ScryptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F279DE2181F5A000449EDA /* ScryptTests.swift */; };
 		81F279E12181F5C500449EDA /* ScryptTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F279E02181F5C500449EDA /* ScryptTestsPerf.swift */; };
 		81F279E22181F5C500449EDA /* ScryptTestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F279E02181F5C500449EDA /* ScryptTestsPerf.swift */; platformFilter = ios; };
+		AA54CF312B860926006BF411 /* PrivacyInfo.xcprivacy in CopyFiles */ = {isa = PBXBuildFile; fileRef = 75C454012B4B6EBC00FC5020 /* PrivacyInfo.xcprivacy */; };
 		E3FD2D531D6B81CE00A9F35F /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FD2D511D6B813C00A9F35F /* Error+Extension.swift */; };
 		E6200E141FB9A7AE00258382 /* HKDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6200E131FB9A7AE00258382 /* HKDF.swift */; };
 		E6200E171FB9B68C00258382 /* HKDFTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6200E151FB9B67C00258382 /* HKDFTests.swift */; };
@@ -225,8 +226,9 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 10;
+			dstSubfolderSpec = 7;
 			files = (
+				AA54CF312B860926006BF411 /* PrivacyInfo.xcprivacy in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

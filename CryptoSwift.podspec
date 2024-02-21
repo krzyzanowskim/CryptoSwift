@@ -16,4 +16,5 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = "11.0"
   s.source_files  = "Sources/CryptoSwift/**/*.swift"
   s.requires_arc = true
+  s.resource_bundles = {"CryptoSwift" => ["Sources/CryptoSwift/PrivacyInfo.xcprivacy"]}
 end

@@ -13,6 +13,6 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-protocol BlockCipher: Cipher {
+public protocol BlockCipher: Cipher {
   static var blockSize: Int { get }
 }

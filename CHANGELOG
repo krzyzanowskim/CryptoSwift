@@ -1,3 +1,7 @@
+1.8.2
+- Enable VisionOS as supported platform for Xcode project and SwiftPM package
+- Tweak CocoaPods setup for privacy manifest
+
 1.8.1
 - Update publicKeyDER to support exponent of any byte length
 - Add SHA3 variants for RSA signature verification

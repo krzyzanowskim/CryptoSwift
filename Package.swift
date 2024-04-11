@@ -1,11 +1,11 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 
 import PackageDescription
 
 let package = Package(
   name: "CryptoSwift",
   platforms: [
-    .macOS(.v10_13), .iOS(.v11), .tvOS(.v11), .watchOS(.v4)
+    .macOS(.v10_13), .macCatalyst(.v13), .iOS(.v11), .tvOS(.v11), .watchOS(.v4), .custom("visionos", versionString: "1.0")
   ],
   products: [
     .library(
@@ -23,6 +23,6 @@ let package = Package(
 #if swift(>=5.6)
   // Add the documentation compiler plugin if possible
   package.dependencies.append(
-    .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0")
+    .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0")
   )
 #endif

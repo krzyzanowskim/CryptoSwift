@@ -41,8 +41,8 @@ public struct Fernet {
     guard key.count == 32 else { throw KeyError.invalidLength }
     self.makeDate = makeDate
     self.makeIV = makeIV
-    self.signingKey = key.prefix(16)
-    self.encryptionKey = key.suffix(16)
+    signingKey = key.prefix(16)
+    encryptionKey = key.suffix(16)
   }
 
   /// Decode fernet data.
@@ -53,17 +53,17 @@ public struct Fernet {
       throw DecodingError.invalidTokenFormat
     }
     let version = fernetToken[0]
-    let timestamp = fernetToken[1 ..< 9]
-    let iv = fernetToken[9 ..< 25]
-    let ciphertext = fernetToken[25 ..< fernetToken.count - 32]
-    let hmac = fernetToken[fernetToken.count - 32 ..< fernetToken.count]
+    let timestamp = fernetToken[1..<9]
+    let iv = fernetToken[9..<25]
+    let ciphertext = fernetToken[25..<fernetToken.count - 32]
+    let hmac = fernetToken[fernetToken.count - 32..<fernetToken.count]
 
     guard version == 128 else { throw DecodingError.unknownVersion }
-    let plaintext = try decrypt(ciphertext: ciphertext, key: self.encryptionKey, iv: iv)
+    let plaintext = try decrypt(ciphertext: ciphertext, key: encryptionKey, iv: iv)
     let hmacMatches = try verifyHMAC(
       hmac,
       authenticating: Data([version]) + timestamp + iv + ciphertext,
-      using: self.signingKey
+      using: signingKey
     )
 
     return DecodeOutput(data: plaintext, hmacSuccess: hmacMatches)
@@ -76,16 +76,16 @@ public struct Fernet {
       let timestamp = Int(now.timeIntervalSince1970).bigEndian
       return withUnsafeBytes(of: timestamp, Array.init)
     }()
-    guard case let iv = self.makeIV(16), iv.count == 16 else { throw EncodingError.invalidIV }
+    guard case let iv = makeIV(16), iv.count == 16 else { throw EncodingError.invalidIV }
     let ciphertext: [UInt8]
     do {
-      let aes = try AES(key: self.encryptionKey.bytes, blockMode: CBC(iv: iv), padding: .pkcs7)
+      let aes = try AES(key: encryptionKey.bytes, blockMode: CBC(iv: iv), padding: .pkcs7)
       ciphertext = try aes.encrypt(data.bytes)
     } catch {
       throw EncodingError.aesError(error)
     }
     let version: [UInt8] = [0x80]
-    let hmac = try makeVerificationHMAC(data: Data(version + timestamp + iv + ciphertext), key: self.signingKey)
+    let hmac = try makeVerificationHMAC(data: Data(version + timestamp + iv + ciphertext), key: signingKey)
     let fernetToken = (version + timestamp + iv + ciphertext + hmac).base64URLEncodedData()
     return fernetToken
   }
@@ -157,11 +157,10 @@ private func verifyHMAC(_ mac: Data, authenticating data: Data, using key: Data)
 
 // Who knows how the compiler will optimize this but at least try to be constant time.
 private func constantTimeEquals<C1, C2>(_ lhs: C1, _ rhs: C2) -> Bool
-where C1: Collection,
-      C2: Collection,
-      C1.Element == UInt8,
-      C2.Element == UInt8
-{
+  where C1: Collection,
+  C2: Collection,
+  C1.Element == UInt8,
+  C2.Element == UInt8 {
   guard lhs.count == rhs.count else { return false }
   return zip(lhs, rhs).reduce(into: 0) { output, pair in output |= pair.0 ^ pair.1 } == 0
 }
@@ -170,9 +169,9 @@ private extension Data {
   init?(base64URLData base64: Data) {
     var decoded = base64.map { b in
       switch b {
-      case ASCII.dash.rawValue: ASCII.plus.rawValue
-      case ASCII.underscore.rawValue: ASCII.slash.rawValue
-      default: b
+        case ASCII.dash.rawValue: ASCII.plus.rawValue
+        case ASCII.underscore.rawValue: ASCII.slash.rawValue
+        default: b
       }
     }
     while decoded.count % 4 != 0 {
@@ -182,13 +181,13 @@ private extension Data {
   }
 
   func base64URLEncodedData() -> Data {
-    let bytes = self.base64EncodedData()
+    let bytes = base64EncodedData()
       .compactMap { b in
         switch b {
-        case ASCII.plus.rawValue: ASCII.dash.rawValue
-        case ASCII.slash.rawValue: ASCII.underscore.rawValue
-        case ASCII.equals.rawValue: nil
-        default: b
+          case ASCII.plus.rawValue: ASCII.dash.rawValue
+          case ASCII.slash.rawValue: ASCII.underscore.rawValue
+          case ASCII.equals.rawValue: nil
+          default: b
         }
       }
     return Data(bytes)
@@ -202,4 +201,3 @@ private enum ASCII: UInt8 {
   case equals = 61
   case underscore = 95
 }
-

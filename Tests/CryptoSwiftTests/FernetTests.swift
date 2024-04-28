@@ -13,8 +13,8 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-@testable import CryptoSwift
 import XCTest
+@testable import CryptoSwift
 
 final class FernetTests: XCTestCase {
   func testEncode() throws {

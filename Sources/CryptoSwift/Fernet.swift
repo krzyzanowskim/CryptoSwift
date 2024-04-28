@@ -1,3 +1,18 @@
+//
+//  CryptoSwift
+//
+//  Copyright (C) Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  This software is provided 'as-is', without any express or implied warranty.
+//
+//  In no event will the authors be held liable for any damages arising from the use of this software.
+//
+//  Permission is granted to anyone to use this software for any purpose,including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+//
+//  - The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
+//  - Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+//  - This notice may not be removed or altered from any source or binary distribution.
+//
+
 import Foundation
 
 /// Fernet provides support for the [fernet](https://github.com/fernet/spec) encryption format.
@@ -6,7 +21,7 @@ public struct Fernet {
   let makeIV: (Int) -> [UInt8]
   let signingKey: Data
   let encryptionKey: Data
-  
+
   /// Initialize Fernet with a Base64URL encoded key.
   public init(
     encodedKey: Data,
@@ -16,7 +31,7 @@ public struct Fernet {
     guard let fernetKey = Data(base64URLData: encodedKey) else { throw KeyError.invalidFormat }
     try self.init(key: fernetKey, makeDate: makeDate, makeIV: makeIV)
   }
-  
+
   /// Initialize Fernet with raw, unencoded key.
   public init(
     key: Data,
@@ -29,11 +44,11 @@ public struct Fernet {
     self.signingKey = key.prefix(16)
     self.encryptionKey = key.suffix(16)
   }
-  
+
   /// Decode fernet data.
   public func decode(_ encoded: Data) throws -> DecodeOutput {
     guard let fernetToken = Data(base64URLData: encoded) else { throw DecodingError.tokenDecodingFailed }
-    
+
     guard fernetToken.count >= 73 && (fernetToken.count - 57) % 16 == 0 else {
       throw DecodingError.invalidTokenFormat
     }
@@ -42,7 +57,7 @@ public struct Fernet {
     let iv = fernetToken[9 ..< 25]
     let ciphertext = fernetToken[25 ..< fernetToken.count - 32]
     let hmac = fernetToken[fernetToken.count - 32 ..< fernetToken.count]
-    
+
     guard version == 128 else { throw DecodingError.unknownVersion }
     let plaintext = try decrypt(ciphertext: ciphertext, key: self.encryptionKey, iv: iv)
     let hmacMatches = try verifyHMAC(
@@ -50,10 +65,10 @@ public struct Fernet {
       authenticating: Data([version]) + timestamp + iv + ciphertext,
       using: self.signingKey
     )
-    
+
     return DecodeOutput(data: plaintext, hmacSuccess: hmacMatches)
   }
-  
+
   /// Encode data in the fernet format.
   public func encode(_ data: Data) throws -> Data {
     let timestamp: [UInt8] = {
@@ -82,7 +97,7 @@ extension Fernet {
     case invalidFormat
     case invalidLength
   }
-  
+
   /// Errors encountered while decoding data.
   public enum DecodingError: Error {
     case aesError(any Error)
@@ -92,14 +107,14 @@ extension Fernet {
     case tokenDecodingFailed
     case unknownVersion
   }
-  
+
   /// Errors encountered while encoding data.
   public enum EncodingError: Error {
     case aesError(any Error)
     case hmacError(any Error)
     case invalidIV
   }
-  
+
   /// Decoding result.
   public struct DecodeOutput {
     /// Decoded data.
@@ -165,7 +180,7 @@ private extension Data {
     }
     self.init(base64Encoded: Data(decoded))
   }
-  
+
   func base64URLEncodedData() -> Data {
     let bytes = self.base64EncodedData()
       .compactMap { b in

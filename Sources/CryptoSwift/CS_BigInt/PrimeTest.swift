@@ -1,5 +1,5 @@
 //
-//  Prime Test.swift
+//  PrimeTest.swift
 //  CS.BigInt
 //
 //  Created by Károly Lőrentey on 2016-01-04.

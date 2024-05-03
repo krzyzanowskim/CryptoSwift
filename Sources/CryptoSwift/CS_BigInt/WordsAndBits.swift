@@ -1,5 +1,5 @@
 //
-//  Words and Bits.swift
+//  WordsAndBits.swift
 //  CS.BigInt
 //
 //  Created by Károly Lőrentey on 2017-08-11.

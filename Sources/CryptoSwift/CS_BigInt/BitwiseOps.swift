@@ -1,5 +1,5 @@
 //
-//  Bitwise Ops.swift
+//  BitwiseOps.swift
 //  CS.BigInt
 //
 //  Created by Károly Lőrentey on 2016-01-03.

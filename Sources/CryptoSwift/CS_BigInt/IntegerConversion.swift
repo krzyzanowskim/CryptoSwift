@@ -1,5 +1,5 @@
 //
-//  Integer Conversion.swift
+//  IntegerConversion.swift
 //  CS.BigInt
 //
 //  Created by Károly Lőrentey on 2017-08-11.

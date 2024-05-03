@@ -1,5 +1,5 @@
 //
-//  String Conversion.swift
+//  StringConversion.swift
 //  CS.BigInt
 //
 //  Created by Károly Lőrentey on 2016-01-03.

@@ -1,5 +1,5 @@
 //
-//  Floating Point Conversion.swift
+//  FloatingPointConversion.swift
 //  CS.BigInt
 //
 //  Created by Károly Lőrentey on 2017-08-11.

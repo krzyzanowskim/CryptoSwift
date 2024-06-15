@@ -29,16 +29,20 @@ public protocol Cryptors: AnyObject {
 
   /// Cryptor suitable for decryption
   func makeDecryptor() throws -> Cryptor & Updatable
-
-  /// Generate array of random bytes. Helper function.
-  static func randomIV(_ blockSize: Int) -> Array<UInt8>
 }
 
-extension Cryptors {
-  /// Generate array of random values.
-  /// Convenience helper that uses `Swift.RandomNumberGenerator`.
-  /// - Parameter count: Length of array
-  public static func randomIV(_ count: Int) -> Array<UInt8> {
+public extension Cryptors where Self: BlockCipher {
+  /// Generates array of random bytes.
+  /// Convenience helper that uses `Swift.SystemRandomNumberGenerator`.
+  /// - Parameter count: Length of the result array
+  @available(*, deprecated, message: "Please use `randomIV()`, which returns number of bytes equal to Self.blockSize.")
+  static func randomIV(_ count: Int) -> [UInt8] {
     (0..<count).map({ _ in UInt8.random(in: 0...UInt8.max) })
+  }
+
+  /// Generates array of random bytes. `Self.blockSize` is used as length of the result array.
+  /// Convenience helper that uses `Swift.SystemRandomNumberGenerator`.
+  static func randomIV() -> [UInt8] {
+    (0..<Self.blockSize).map({ _ in UInt8.random(in: 0...UInt8.max) })
   }
 }

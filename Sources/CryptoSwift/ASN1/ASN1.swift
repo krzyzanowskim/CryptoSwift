@@ -48,7 +48,7 @@ enum ASN1 {
     /// An array of more `ASN1.Node`s
     case sequence(nodes: [Node])
     /// An integer
-    /// - Note: This ASN1 Encoder makes no assumptions about the sign and bit order of the integers passed in. The conversion from Integer to Data is your responsiblity.
+    /// - Note: This ASN1 Encoder makes no assumptions about the sign and bit order of the integers passed in. The conversion from Integer to Data is your responsibility.
     case integer(data: Data)
     /// An objectIdentifier
     case objectIdentifier(data: Data)

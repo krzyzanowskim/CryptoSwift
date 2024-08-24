@@ -283,7 +283,7 @@ private final class GF {
     self.h = h
     self.x = 0
 
-    // Calculate for AAD at the begining
+    // Calculate for AAD at the beginning
     self.x = GF.calculateX(aad: aad, x: self.x, h: h, blockSize: blockSize)
   }
 

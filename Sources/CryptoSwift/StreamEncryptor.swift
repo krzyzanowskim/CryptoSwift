@@ -54,7 +54,7 @@ final class StreamEncryptor: Cryptor, Updatable {
       encrypted += self.worker.encrypt(block: chunk)
     }
 
-    // omit unecessary calculation if not needed
+    // omit unnecessary calculation if not needed
     if self.padding != .noPadding {
       self.lastBlockRemainder = encrypted.count.quotientAndRemainder(dividingBy: self.blockSize).remainder
     }

@@ -66,7 +66,7 @@ final class StreamDecryptor: Cryptor, Updatable {
       plaintext = Array(try finalizingWorker.didDecryptLast(bytes: plaintext.slice))
     }
 
-    // omit unecessary calculation if not needed
+    // omit unnecessary calculation if not needed
     if self.padding != .noPadding {
       self.lastBlockRemainder = plaintext.count.quotientAndRemainder(dividingBy: self.blockSize).remainder
     }

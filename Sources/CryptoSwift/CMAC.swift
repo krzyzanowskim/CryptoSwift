@@ -86,7 +86,7 @@ public class CMAC: Authenticator {
   // MARK: Helper methods
 
   /**
-   Performs left shift by one bit to the bit string aquired after concatenating al bytes in the byte array
+   Performs left shift by one bit to the bit string acquired after concatenating al bytes in the byte array
    - parameters:
    - bytes: byte array
    - returns: bit shifted bit string split again in array of bytes

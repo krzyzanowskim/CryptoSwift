@@ -4,6 +4,7 @@ organizations who have contributed source code to CryptoSwift.
 ### Contributors
 
 - 0xabhisek <128348758+0xabhisek@users.noreply.github.com>
+- Adin Cebic <cebic.ad@gmail.com>
 - Adolfo Martinelli <adolfo@airmap.com>
 - Aidan Woods <aidantwoods@gmail.com>
 - Alejandro Isaza <alejandro.isaza@gmail.com>
@@ -35,6 +36,7 @@ organizations who have contributed source code to CryptoSwift.
 - Dima Kalachov <dima.kalachov@gmail.com>
 - Dusan Klinec <dusan.klinec@gmail.com>
 - Elaine Lyons <e.lyons@fetchrewards.com>
+- Elias Rad <146735585+nnsW3@users.noreply.github.com>
 - Eneko Alonso <eneko.alonso@gmail.com>
 - Eugene Berdnikov <eberdnikov@outlook.com>
 - Evan Maloney <emaloney@gilt.com>
@@ -58,8 +60,10 @@ organizations who have contributed source code to CryptoSwift.
 - K.K. POON <noopkk@gmail.com>
 - Katrin Annuk <katrin.annuk@lab.mobi>
 - Keith Smiley <keithbsmiley@gmail.com>
+- Kenji Wada <ch3cooh393@gmail.com>
 - Koray Koska <koray@koska.at>
 - Kyle Fuller <kyle@fuller.li>
+- LamTrinh.Dev <me@lamtrinh.dev>
 - Lex Tang <lexrus@gmail.com>
 - Logan Wright <logan.william.wright@gmail.com>
 - Ludo Galabru <ludovic@galabru.com>
@@ -98,6 +102,7 @@ organizations who have contributed source code to CryptoSwift.
 - Ronald Mannak <ronaldmannak@me.com>
 - SLboat <toaier@me.com>
 - Sali0m <jehan.vossen@gmail.com>
+- Sam <sam.a.judd@gmail.com>
 - Sam Soffes <sam@soff.es>
 - Samuel GRAU <samuel.grau@gmail.com>
 - ScottieY <scottieyan@gmail.com>
@@ -114,15 +119,19 @@ organizations who have contributed source code to CryptoSwift.
 - WFrost3 <134406901+WFrost3@users.noreply.github.com>
 - Xavier Matos <matos.xav@gmail.com>
 - Yannick Loriot <yannick.loriot@gmail.com>
+- YinYuGuang <yin.yuguang@immomo.com>
 - Yury Lapitsky <yury.lapitsky@gmail.com>
 - Zsombor Szabo <zsombor@gmail.com>
 - Zsombor Szabo <zsombor@proxy.com>
 - akreutz <27BBsan08!>
+- dropbigfish <fillfish@foxmail.com>
 - jose <nextgenappsllc@gmail.com>
 - mrahmiao <mrahmiao@gmail.com>
+- planetBoy <140164174+Guayaba221@users.noreply.github.com>
 - spatno <seanpatno@gmail.com>
 - sweepty <adie0423@gmail.com>
 - venj <im.venj@gmail.com>
+- Исаев Владислав Игоревич <viisayev@mts.ru>
 
 **Updating this list**
 

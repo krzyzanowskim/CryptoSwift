@@ -15,6 +15,8 @@
 
 #if canImport(Darwin)
 import Darwin
+#elseif canImport(Android)
+import Android
 #elseif canImport(Glibc)
 import Glibc
 #elseif canImport(Musl)
@@ -39,6 +41,8 @@ final class SecureBytes {
         VirtualLock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
       #elseif os(WASI)
         // not supported on WASI
+      #elseif os(Android)
+        mlock(pointer.baseAddress!, pointer.count)
       #else
         mlock(pointer.baseAddress, pointer.count)
       #endif
@@ -51,6 +55,8 @@ final class SecureBytes {
         VirtualUnlock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
       #elseif os(WASI)
         // not supported on WASI
+      #elseif os(Android)
+        munlock(pointer.baseAddress!, pointer.count)
       #else
         munlock(pointer.baseAddress, pointer.count)
       #endif

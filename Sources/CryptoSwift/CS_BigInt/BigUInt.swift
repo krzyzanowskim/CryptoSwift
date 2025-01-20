@@ -8,7 +8,7 @@
 
 extension CS {
 
-  /// An arbitary precision unsigned integer type, also known as a "big integer".
+  /// An arbitrary precision unsigned integer type, also known as a "big integer".
   ///
   /// Operations on big integers never overflow, but they may take a long time to execute.
   /// The amount of memory (and address space) available is the only constraint to the magnitude of these numbers.

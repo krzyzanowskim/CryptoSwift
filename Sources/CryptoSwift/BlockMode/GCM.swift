@@ -128,7 +128,7 @@ final class GCMModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
       self.additionalBufferSize = 0
     }
 
-    // Assume nonce is 12 bytes long, otherwise initial counter would be calulated from GHASH
+    // Assume nonce is 12 bytes long, otherwise initial counter would be calculated from GHASH
     // counter = GF.ghash(aad: [UInt8](), ciphertext: nonce)
     if iv.count == GCMModeWorker.nonceSize {
       self.counter = makeCounter(nonce: Array(self.iv))

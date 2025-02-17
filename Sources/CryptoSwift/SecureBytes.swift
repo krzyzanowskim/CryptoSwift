@@ -1,7 +1,7 @@
 //
 //  CryptoSwift
 //
-//  Copyright (C) 2014-2022 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  Copyright (C) 2014-2025 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 //  This software is provided 'as-is', without any express or implied warranty.
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,6 +15,8 @@
 
 #if canImport(Darwin)
 import Darwin
+#elseif canImport(Android)
+import Android
 #elseif canImport(Glibc)
 import Glibc
 #elseif canImport(Musl)
@@ -39,6 +41,8 @@ final class SecureBytes {
         VirtualLock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
       #elseif os(WASI)
         // not supported on WASI
+      #elseif os(Android)
+        mlock(pointer.baseAddress!, pointer.count)
       #else
         mlock(pointer.baseAddress, pointer.count)
       #endif
@@ -51,6 +55,8 @@ final class SecureBytes {
         VirtualUnlock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
       #elseif os(WASI)
         // not supported on WASI
+      #elseif os(Android)
+        munlock(pointer.baseAddress!, pointer.count)
       #else
         munlock(pointer.baseAddress, pointer.count)
       #endif

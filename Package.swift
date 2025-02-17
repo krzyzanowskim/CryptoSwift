@@ -19,10 +19,3 @@ let package = Package(
   ],
   swiftLanguageVersions: [.v5]
 )
-
-#if swift(>=5.6)
-  // Add the documentation compiler plugin if possible
-  package.dependencies.append(
-    .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.3.0")
-  )
-#endif

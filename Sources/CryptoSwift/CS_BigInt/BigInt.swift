@@ -10,7 +10,7 @@
 
 extension CS {
 
-  /// An arbitary precision signed integer type, also known as a "big integer".
+  /// An arbitrary precision signed integer type, also known as a "big integer".
   ///
   /// Operations on big integers never overflow, but they might take a long time to execute.
   /// The amount of memory (and address space) available is the only constraint to the magnitude of these numbers.

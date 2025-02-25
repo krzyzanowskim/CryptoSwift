@@ -459,12 +459,12 @@ final class RSATests: XCTestCase {
             } else {
               // Ensure the signature is valid for the test fixtures rawMessage
               XCTAssertTrue(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verification Failed")
-              // Ensure a modifed message results in a false / invalid signature verification
+              // Ensure a modified message results in a false / invalid signature verification
               XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes + [0x00], variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               if !message.key.bytes.isEmpty {
                 XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes.dropLast(), variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               }
-              // Ensure a modifed signature results in a false / invalid signature verification (we replace the last element with a 1 in case the signature is all 0's)
+              // Ensure a modified signature results in a false / invalid signature verification (we replace the last element with a 1 in case the signature is all 0's)
               XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.shuffled().dropLast() + [0x01], for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
               // Ensure an invalid signature results in an error being thrown
               XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.dropLast(), for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
@@ -557,12 +557,12 @@ final class RSATests: XCTestCase {
 
               // Ensure the signature is valid for the test fixtures rawMessage
               XCTAssertTrue(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verification Failed")
-              // Ensure a modifed message results in a false / invalid signature verification
+              // Ensure a modified message results in a false / invalid signature verification
               XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes + [0x00], variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               if !message.key.bytes.isEmpty {
                 XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes.dropLast(), variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               }
-              // Ensure a modifed signature results in a false / invalid signature verification (we replace the last element with a 1 in case the signature is all 0's)
+              // Ensure a modified signature results in a false / invalid signature verification (we replace the last element with a 1 in case the signature is all 0's)
               XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.shuffled().dropLast() + [0x01], for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
               // Ensure an invalid signature results in an error being thrown
               XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.dropLast(), for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")

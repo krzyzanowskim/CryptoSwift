@@ -425,11 +425,11 @@ final class RSATests: XCTestCase {
                 let encrypted = try rsa.encrypt(message.key.bytes, variant: variant)
                 XCTAssertEqual(encrypted.toHexString(), Data(base64Encoded: message.value.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes.toHexString(), "Encryption<\(test.key)>::Failed to encrypt the message `\(message.key)`")
 
-                // Decryption requires access to the Private Key, therefore attempting to decrpyt with only a public key should throw an error
+                // Decryption requires access to the Private Key, therefore attempting to decrypt with only a public key should throw an error
                 XCTAssertThrowsError(try rsa.decrypt(Data(base64Encoded: message.value.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes), "Encryption<\(test.key)>::Did not throw error while decrypting `\(message.key)`")
               }
             } else {
-              // Sometimes the message is too long to be safely encrypted by our key. When this happens we should encouter an error and our test value should be empty.
+              // Sometimes the message is too long to be safely encrypted by our key. When this happens we should encounter an error and our test value should be empty.
               if test.value == "" {
                 XCTAssertThrowsError(try rsa.encrypt(message.key.bytes, variant: variant), "Encryption<\(test.key)>::Did not throw error while encrypting `\(message.key)`")
               } else {

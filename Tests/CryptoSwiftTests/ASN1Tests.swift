@@ -140,8 +140,8 @@ final class ASN1Tests: XCTestCase {
   /// This tests decodes an RSA Public Key from a Base64 DER Encoded representation
   ///
   /// This test enforces that
-  /// 1) The decoding process yeilds the expected format.
-  /// 2) The re-encoding of the data yeilds the exact same starting data.
+  /// 1) The decoding process yields the expected format.
+  /// 2) The re-encoding of the data yields the exact same starting data.
   func testANS1DERDecodingPublicKey() throws {
     /// An example of an RSA Public Key ASN1 DER Encoding
     ///
@@ -211,8 +211,8 @@ final class ASN1Tests: XCTestCase {
   /// This tests decodes an RSA Private Key from a Base64 DER Encoded representation
   ///
   /// This test enforces that
-  /// 1) The decoding process yeilds the expected format.
-  /// 2) The re-encoding of the data yeilds the exact same starting data.
+  /// 1) The decoding process yields the expected format.
+  /// 2) The re-encoding of the data yields the exact same starting data.
   func testANS1DERDecodingPrivateKey() throws {
     /// An example of an RSA Private Key ASN1 DER Encoding
     ///
@@ -310,7 +310,7 @@ final class ASN1Tests: XCTestCase {
     }
     XCTAssertEqual(coefficient, Data(hex: "009c74545364466fe538e67149f41815334669ecc2245cd58120f350d20e5bc3ddd10855297a3cb93370d348b6b803e527c2e4cc42bfa3c852525586791abc48d2"))
 
-    // Ensure re-encoding the data yeilds the exact same starting data
+    // Ensure re-encoding the data yields the exact same starting data
     let asn: ASN1.Node = .sequence(nodes: [
       .integer(data: version),
       .integer(data: n),
@@ -335,8 +335,8 @@ final class ASN1Tests: XCTestCase {
   /// This tests decodes an Encrypted RSA Private Key from a Base64 PEM Encoded representation
   ///
   /// This test enforces that
-  /// 1) The decoding process yeilds the expected format.
-  /// 2) The re-encoding of the data yeilds the exact same starting data.
+  /// 1) The decoding process yields the expected format.
+  /// 2) The re-encoding of the data yields the exact same starting data.
   func testASN1DecodingEncryptedPEM() throws {
     /// ==========================
     ///  Encrypted PEM Structure

@@ -61,7 +61,7 @@ public final class RSA: DERCodable {
   public let keySizeBytes: Int
 
   /// The underlying primes used to generate the Private Exponent
-  private let primes: (p: BigUInteger, q: BigUInteger)?
+  public let primes: (p: BigUInteger, q: BigUInteger)?
 
   /// Initialize with RSA parameters
   /// - Parameters:
@@ -388,7 +388,7 @@ extension RSA {
   /// ```
   ///
   public func externalRepresentation() throws -> Data {
-    if self.primes != nil {
+    if self.d != nil {
       return try Data(self.privateKeyDER())
     } else {
       return try Data(self.publicKeyDER())

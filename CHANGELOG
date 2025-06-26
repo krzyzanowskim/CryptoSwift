@@ -1,3 +1,19 @@
+1.8.5
+- Update README.md by @donatik27 in #1059
+- Add Android support by @marcprux in #1065
+- chore: fix some typos in comment by @sunxunle in #1068
+- fix: typos in documentation files by @vtjl10 in #1066
+- fix: typos in documentation files by @kilavvy in #1071
+- docs: fix typos by @RekCuy63 in #1072
+- fix: externalRepresentation condition to validate if key is private should be d not prime by @beatt83 in #1060
+
+1.8.4
+- Docs fix spelling issues by @nnsW3 in #1053
+- chore: fix some comments by @dropbigfish in #1050
+- docs fix spelling issues by @Guayaba221 in #1056
+- Support for Static Linux SDK Based on Musl Instead of Glibc by @AnneBlair in #1058
+- Use .sha2(.sha256) for PBKDF2 in readme by @sjudd in #1061
+
 1.8.3
 - Remove whitespace from the filename to please bezel build system
 - minors

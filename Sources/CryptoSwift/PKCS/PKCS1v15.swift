@@ -58,7 +58,7 @@ struct EMSAPKCS1v15Padding: PaddingProtocol {
 
 /// EME PKCS1 v1.5 Padding Scheme
 ///
-/// The EME Version of the PKCS1 v1.5 padding scheme is **non deterministic** (it pads the messages contents with psuedo-random bytes)
+/// The EME Version of the PKCS1 v1.5 padding scheme is **non deterministic** (it pads the messages contents with pseudo-random bytes)
 /// ```
 /// // The returned structure
 /// // - PS is the applied padding

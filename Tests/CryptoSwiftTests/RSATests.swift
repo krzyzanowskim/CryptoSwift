@@ -453,7 +453,7 @@ final class RSATests: XCTestCase {
             // Signing data requires access to the private key, therefore this should throw an error when called on a public key
             XCTAssertThrowsError(try rsa.sign(message.key.bytes, variant: variant), "Signature<\(test.key)>::Did not throw error")
 
-            // Sometimes the message is too long to be safely signed by our key. When this happens we should encouter an error and our test value should be empty.
+            // Sometimes the message is too long to be safely signed by our key. When this happens we should encounter an error and our test value should be empty.
             if test.value == "" {
               XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Did not throw error")
             } else {

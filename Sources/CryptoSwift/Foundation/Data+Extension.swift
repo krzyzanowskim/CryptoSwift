@@ -25,55 +25,55 @@ extension Data {
   }
 
   public func md5() -> Data {
-    Data( Digest.md5(bytes))
+    Data( Digest.md5(byteArray))
   }
 
   public func sha1() -> Data {
-    Data( Digest.sha1(bytes))
+    Data( Digest.sha1(byteArray))
   }
 
   public func sha224() -> Data {
-    Data( Digest.sha224(bytes))
+    Data( Digest.sha224(byteArray))
   }
 
   public func sha256() -> Data {
-    Data( Digest.sha256(bytes))
+    Data( Digest.sha256(byteArray))
   }
 
   public func sha384() -> Data {
-    Data( Digest.sha384(bytes))
+    Data( Digest.sha384(byteArray))
   }
 
   public func sha512() -> Data {
-    Data( Digest.sha512(bytes))
+    Data( Digest.sha512(byteArray))
   }
 
   public func sha3(_ variant: SHA3.Variant) -> Data {
-    Data( Digest.sha3(bytes, variant: variant))
+    Data( Digest.sha3(byteArray, variant: variant))
   }
 
   public func crc32(seed: UInt32? = nil, reflect: Bool = true) -> Data {
-    Data( Checksum.crc32(bytes, seed: seed, reflect: reflect).bytes())
+    Data( Checksum.crc32(byteArray, seed: seed, reflect: reflect).bytes())
   }
 
   public func crc32c(seed: UInt32? = nil, reflect: Bool = true) -> Data {
-    Data( Checksum.crc32c(bytes, seed: seed, reflect: reflect).bytes())
+    Data( Checksum.crc32c(byteArray, seed: seed, reflect: reflect).bytes())
   }
 
   public func crc16(seed: UInt16? = nil) -> Data {
-    Data( Checksum.crc16(bytes, seed: seed).bytes())
+    Data( Checksum.crc16(byteArray, seed: seed).bytes())
   }
 
   public func encrypt(cipher: Cipher) throws -> Data {
-    Data( try cipher.encrypt(bytes.slice))
+    Data( try cipher.encrypt(byteArray.slice))
   }
 
   public func decrypt(cipher: Cipher) throws -> Data {
-    Data( try cipher.decrypt(bytes.slice))
+    Data( try cipher.decrypt(byteArray.slice))
   }
 
   public func authenticate(with authenticator: Authenticator) throws -> Data {
-    Data( try authenticator.authenticate(bytes))
+    Data( try authenticator.authenticate(byteArray))
   }
 }
 
@@ -82,11 +82,11 @@ extension Data {
     self.init(Array<UInt8>(hex: hex))
   }
 
-  public var bytes: Array<UInt8> {
+  public var byteArray: Array<UInt8> {
     Array(self)
   }
 
   public func toHexString() -> String {
-    self.bytes.toHexString()
+    self.byteArray.toHexString()
   }
 }

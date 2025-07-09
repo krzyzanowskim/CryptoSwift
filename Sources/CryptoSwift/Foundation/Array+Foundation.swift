@@ -27,6 +27,6 @@ public extension Array where Element == UInt8 {
       return
     }
 
-    append(contentsOf: decodedData.bytes)
+    append(contentsOf: decodedData.byteArray)
   }
 }

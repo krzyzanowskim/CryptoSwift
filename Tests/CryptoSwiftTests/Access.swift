@@ -142,7 +142,7 @@ class Access: XCTestCase {
     _ = data.crc32()
     _ = data.crc32c()
 
-    _ = data.bytes
+    _ = data.byteArray
     _ = data.toHexString()
 
     do {

@@ -242,31 +242,31 @@ final class DigestTests: XCTestCase {
       let input = Data(bytes: buf, count: testSize)
 
       // SHA1
-      let sha1Once = SHA1().calculate(for: input.bytes)
+      let sha1Once = SHA1().calculate(for: input.byteArray)
 
       var sha1Partial = SHA1()
       for batch in input.batched(by: 17) {
-        _ = try sha1Partial.update(withBytes: batch.bytes)
+        _ = try sha1Partial.update(withBytes: batch.byteArray)
       }
       let sha1Result = try sha1Partial.finish()
       XCTAssertEqual(sha1Once, sha1Result)
 
       // SHA2
-      let sha2Once = SHA2(variant: .sha224).calculate(for: input.bytes)
+      let sha2Once = SHA2(variant: .sha224).calculate(for: input.byteArray)
 
       var sha2Partial = SHA2(variant: .sha224)
       for batch in input.batched(by: 17) {
-        _ = try sha2Partial.update(withBytes: batch.bytes)
+        _ = try sha2Partial.update(withBytes: batch.byteArray)
       }
       let sha2Result = try sha2Partial.finish()
       XCTAssertEqual(sha2Once, sha2Result)
 
       // SHA3
-      let sha3Once = SHA3(variant: .sha224).calculate(for: input.bytes)
+      let sha3Once = SHA3(variant: .sha224).calculate(for: input.byteArray)
 
       var sha3Partial = SHA3(variant: .sha224)
       for batch in input.batched(by: 17) {
-        _ = try sha3Partial.update(withBytes: batch.bytes)
+        _ = try sha3Partial.update(withBytes: batch.byteArray)
       }
       let sha3Result = try sha3Partial.finish()
       XCTAssertEqual(sha3Once, sha3Result)

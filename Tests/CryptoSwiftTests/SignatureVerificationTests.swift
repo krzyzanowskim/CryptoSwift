@@ -37,7 +37,7 @@ final class SignatureVerificationTests: XCTestCase {
           continue
         }
         
-        let rsa = try RSA(publicDER: publicDerData.bytes)
+        let rsa = try RSA(publicDER: publicDerData.byteArray)
         
         guard
           let signedMessageData = Data(base64Encoded: testVector.signedMessage)
@@ -46,7 +46,7 @@ final class SignatureVerificationTests: XCTestCase {
           continue
         }
         
-        let result = try rsa.verify(signature: signedMessageData.bytes,
+        let result = try rsa.verify(signature: signedMessageData.byteArray,
                                     for: testVector.originalMessage.bytes,
                                     variant: testVector.variant)
         XCTAssertTrue(result, "Verification failed for test vector with id `\(testVector.id)`")

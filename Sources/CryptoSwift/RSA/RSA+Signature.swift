@@ -35,7 +35,7 @@ extension RSA: Signature {
     let hashedAndEncoded = try RSA.hashedAndEncoded(bytes, variant: variant, keySizeInBytes: self.keySizeBytes)
 
     /// Calculate the Signature
-    let signedData = BigUInteger(Data(hashedAndEncoded)).power(d, modulus: self.n).serialize().bytes
+    let signedData = BigUInteger(Data(hashedAndEncoded)).power(d, modulus: self.n).serialize().byteArray
 
     return variant.formatSignedBytes(signedData, blockSize: self.keySizeBytes)
   }
@@ -61,7 +61,7 @@ extension RSA: Signature {
     if expectedData.count == self.keySizeBytes && expectedData.prefix(1) == [0x00] { expectedData = Array(expectedData.dropFirst()) }
 
     /// Step 2: 'Decrypt' the signature
-    let signatureResult = BigUInteger(Data(signature)).power(self.e, modulus: self.n).serialize().bytes
+    let signatureResult = BigUInteger(Data(signature)).power(self.e, modulus: self.n).serialize().byteArray
 
     /// Step 3: Compare the 'decrypted' signature with the prepared / encoded expected message....
     guard signatureResult == expectedData else { return false }

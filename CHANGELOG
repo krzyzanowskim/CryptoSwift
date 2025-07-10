@@ -1,3 +1,6 @@
+1.9.0
+- Renamed bytes to byteArray in Data extension to avoid conflict with Swift 6.2 by @mluisbrown in #1076 and #1077
+
 1.8.5
 - Update README.md by @donatik27 in #1059
 - Add Android support by @marcprux in #1065

@@ -131,7 +131,7 @@ It is recommended to enable [Whole-Module Optimization](https://swift.org/blog/w
 You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding this:
 
 ```swift
-.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.5")
+.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.9.0")
 ```
 
 See: [Package.swift - manual](https://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
@@ -143,7 +143,7 @@ Notice: Swift Package Manager uses debug configuration for debug Xcode build, th
 You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
 
 ```ruby
-pod 'CryptoSwift', '~> 1.8.5'
+pod 'CryptoSwift', '~> 1.9.0'
 ```
 
 Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
@@ -194,7 +194,8 @@ In the project, you'll find [single scheme](https://mxcl.dev/PromiseKit/news/201
 - Swift 4.2, branch [swift42](https://github.com/krzyzanowskim/CryptoSwift/tree/swift42) version <= 0.15.0
 - Swift 5.0, branch [swift5](https://github.com/krzyzanowskim/CryptoSwift/tree/swift5) version <= 1.2.0
 - Swift 5.1, branch [swift5](https://github.com/krzyzanowskim/CryptoSwift/tree/swift51) version <= 1.3.3
-- Swift 5.3 and newer, branch [main](https://github.com/krzyzanowskim/CryptoSwift/tree/main)
+- Swift 5.3, branch [swift53](https://github.com/krzyzanowskim/CryptoSwift/tree/swift53) version <= 1.8.5
+- Swift 6.2 and newer, branch [main](https://github.com/krzyzanowskim/CryptoSwift/tree/main)
 
 ## How-to
 
@@ -232,7 +233,7 @@ let data = Data([0x01, 0x02, 0x03])
 `Data` to `Array<UInt8>`
 
 ```swift
-let bytes = data.bytes                     // [1,2,3]
+let bytes = data.byteArray                // [1,2,3]
 ```
 
 [Hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) encoding:
@@ -405,11 +406,11 @@ let aes = try AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7)
 
 /* Encrypt Data */
 let inputData = Data()
-let encryptedBytes = try aes.encrypt(inputData.bytes)
+let encryptedBytes = try aes.encrypt(inputData.byteArray)
 let encryptedData = Data(encryptedBytes)
 
 /* Decrypt Data */
-let decryptedBytes = try aes.decrypt(encryptedData.bytes)
+let decryptedBytes = try aes.decrypt(encryptedData.byteArray)
 let decryptedData = Data(decryptedBytes)
 ```
 

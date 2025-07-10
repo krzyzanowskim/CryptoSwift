@@ -1,9 +1,9 @@
 [![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20Android%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
 
-[![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0%20%7C%204.1%20%7C%204.2%20%7C%205.0-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
+[![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0%20%7C%204.1%20%7C%204.2%20%7C%205.0%20%7C%206.2-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg?style=flat&colorA=28a745&&colorB=4E4E4E)](https://github.com/swiftlang/swift-package-manager)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods&colorA=28a745&&colorB=4E4E4E)](https://cocoapods.org/pods/CryptoSwift)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat&colorA=28a745&&colorB=4E4E4E)](https://github.com/Carthage/Carthage)
+[![CocoaPods Deprecated](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods&colorA=red&&colorB=4E4E4E)](https://cocoapods.org/pods/CryptoSwift)
 
 # CryptoSwift
 
@@ -138,16 +138,6 @@ See: [Package.swift - manual](https://blog.krzyzanowskim.com/2016/08/09/package-
 
 Notice: Swift Package Manager uses debug configuration for debug Xcode build, that may result in significant (up to x10000) worse performance. Performance characteristic is different in Release build. To overcome this problem, consider embed `CryptoSwift.xcframework` described below.
 
-#### CocoaPods
-
-You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
-
-```ruby
-pod 'CryptoSwift', '~> 1.9.0'
-```
-
-Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
-
 #### Carthage
 
 You can use [Carthage](https://github.com/Carthage/Carthage).
@@ -158,6 +148,18 @@ github "krzyzanowskim/CryptoSwift"
 ```
 
 Run `carthage` to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started). [Common issues](https://github.com/krzyzanowskim/CryptoSwift/discussions/983#discussioncomment-3669433).
+
+#### CocoaPods
+
+> **Note**: CocoaPods is deprecated and no longer recommended for new projects. Use Swift Package Manager or Carthage instead.
+
+You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
+
+```ruby
+pod 'CryptoSwift', '~> 1.8.4'
+```
+
+Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
 
 #### XCFramework
 
@@ -193,7 +195,7 @@ In the project, you'll find [single scheme](https://mxcl.dev/PromiseKit/news/201
 - Swift 4.0, branch [swift4](https://github.com/krzyzanowskim/CryptoSwift/tree/swift4) version <= 0.12.0
 - Swift 4.2, branch [swift42](https://github.com/krzyzanowskim/CryptoSwift/tree/swift42) version <= 0.15.0
 - Swift 5.0, branch [swift5](https://github.com/krzyzanowskim/CryptoSwift/tree/swift5) version <= 1.2.0
-- Swift 5.1, branch [swift5](https://github.com/krzyzanowskim/CryptoSwift/tree/swift51) version <= 1.3.3
+- Swift 5.1, branch [swift51](https://github.com/krzyzanowskim/CryptoSwift/tree/swift51) version <= 1.3.3
 - Swift 5.3, branch [swift53](https://github.com/krzyzanowskim/CryptoSwift/tree/swift53) version <= 1.8.5
 - Swift 6.2 and newer, branch [main](https://github.com/krzyzanowskim/CryptoSwift/tree/main)
 

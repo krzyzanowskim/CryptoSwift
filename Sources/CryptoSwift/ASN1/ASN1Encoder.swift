@@ -28,15 +28,15 @@ extension ASN1 {
     public static func encode(_ node: ASN1.Node) -> [UInt8] {
       switch node {
         case .integer(let integer):
-          return IDENTIFIERS.INTERGER.bytes + self.asn1LengthPrefixed(integer.bytes)
+          return IDENTIFIERS.INTERGER.bytes + self.asn1LengthPrefixed(integer.byteArray)
         case .bitString(let bits):
-          return IDENTIFIERS.BITSTRING.bytes + self.asn1LengthPrefixed([0x00] + bits.bytes)
+          return IDENTIFIERS.BITSTRING.bytes + self.asn1LengthPrefixed([0x00] + bits.byteArray)
         case .octetString(let octet):
-          return IDENTIFIERS.OCTETSTRING.bytes + self.asn1LengthPrefixed(octet.bytes)
+          return IDENTIFIERS.OCTETSTRING.bytes + self.asn1LengthPrefixed(octet.byteArray)
         case .null:
           return IDENTIFIERS.NULL.bytes
         case .objectIdentifier(let oid):
-          return IDENTIFIERS.OBJECTID.bytes + self.asn1LengthPrefixed(oid.bytes)
+          return IDENTIFIERS.OBJECTID.bytes + self.asn1LengthPrefixed(oid.byteArray)
         case .sequence(let nodes):
           return IDENTIFIERS.SEQUENCE.bytes + self.asn1LengthPrefixed( nodes.reduce(into: Array<UInt8>(), { partialResult, node in
             partialResult += encode(node)

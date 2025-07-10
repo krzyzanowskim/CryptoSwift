@@ -58,7 +58,7 @@ struct UInt128: Equatable, ExpressibleByIntegerLiteral {
     var result = Data()
     result.append(ar)
     result.append(br)
-    return result.bytes
+    return result.byteArray
   }
 
   static func ^ (n1: UInt128, n2: UInt128) -> UInt128 {

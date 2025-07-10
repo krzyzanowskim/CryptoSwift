@@ -36,6 +36,6 @@ extension String {
       throw CipherError.decrypt
     }
 
-    return try decodedData.decrypt(cipher: cipher).bytes
+    return try decodedData.decrypt(cipher: cipher).byteArray
   }
 }

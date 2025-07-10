@@ -36,7 +36,7 @@ extension RSA: Cipher {
   @inlinable
   internal func encryptPreparedBytes(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
     // Calculate encrypted data
-    return BigUInteger(Data(bytes)).power(self.e, modulus: self.n).serialize().bytes
+    return BigUInteger(Data(bytes)).power(self.e, modulus: self.n).serialize().byteArray
   }
 
   @inlinable
@@ -59,7 +59,7 @@ extension RSA: Cipher {
     guard let d = d else { throw RSA.Error.noPrivateKey }
 
     // Calculate decrypted data
-    return BigUInteger(Data(bytes)).power(d, modulus: self.n).serialize().bytes
+    return BigUInteger(Data(bytes)).power(d, modulus: self.n).serialize().byteArray
   }
 }
 

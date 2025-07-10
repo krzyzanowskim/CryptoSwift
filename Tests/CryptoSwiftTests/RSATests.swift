@@ -211,10 +211,10 @@ final class RSATests: XCTestCase {
     let rsa = try RSA(rawRepresentation: privateDERData)
 
     let expectedMessage = "RSA Keys"
-    let messageToDecrypt = Data(base64Encoded: fixture.messages[expectedMessage]!.encryptedMessage["algid:encrypt:RSA:PKCS1"]!)!.bytes
+    let messageToDecrypt = Data(base64Encoded: fixture.messages[expectedMessage]!.encryptedMessage["algid:encrypt:RSA:PKCS1"]!)!.byteArray
 
     // Decrypt the data
-    let decrypted = BigUInteger(Data(messageToDecrypt)).power(rsa.d!, modulus: rsa.n).serialize().bytes
+    let decrypted = BigUInteger(Data(messageToDecrypt)).power(rsa.d!, modulus: rsa.n).serialize().byteArray
 
     let unpadded = Padding.eme_pkcs1v15.remove(from: [0x00] + decrypted, blockSize: rsa.keySize)
 
@@ -231,7 +231,7 @@ final class RSATests: XCTestCase {
       let rsa = try RSA(keySize: 1024)
 
       for _ in 0..<5 {
-        let message = BigUInteger.randomInteger(withMaximumWidth: 256).serialize().bytes
+        let message = BigUInteger.randomInteger(withMaximumWidth: 256).serialize().byteArray
 
         let decrypted = try rsa.decrypt(rsa.encrypt(message, variant: .pksc1v15), variant: .pksc1v15)
         XCTAssertEqual(decrypted, message, "encrypt+decrypt failed")
@@ -251,7 +251,7 @@ final class RSATests: XCTestCase {
       let rsa = try RSA(keySize: 1024)
 
       for _ in 0..<5 {
-        let message = BigUInteger.randomInteger(withMaximumWidth: 256).serialize().bytes
+        let message = BigUInteger.randomInteger(withMaximumWidth: 256).serialize().byteArray
 
         let signature = try rsa.sign(message, variant: .message_pkcs1v15_SHA256)
         XCTAssertTrue(try rsa.verify(signature: signature, for: message, variant: .message_pkcs1v15_SHA256), "Failed to Verify Signature for `\(message)`")
@@ -308,7 +308,7 @@ final class RSATests: XCTestCase {
     let padded = EMSAPKCS1v15Padding().add(to: t, blockSize: rsa.keySizeBytes)
 
     // Sign the data
-    let signedData = BigUInteger(Data(padded)).power(rsa.d!, modulus: rsa.n).serialize().bytes
+    let signedData = BigUInteger(Data(padded)).power(rsa.d!, modulus: rsa.n).serialize().byteArray
 
     // Ensure the signed data matches that of our test fixture
     XCTAssertEqual(signedData.toBase64(), fixture.messages[message]!.signedMessage["algid:sign:RSA:message-PKCS1v15:SHA256"], "Failed to correctly sign the data")
@@ -331,7 +331,7 @@ final class RSATests: XCTestCase {
     // Import RSA Key
     let rsa = try RSA(rawRepresentation: privateDERData)
 
-    let message = Data("This is a long message that if not hashed, will be tool large to safely sign / encrypt, therefore it should throw an error instead of resulting in a signature".utf8).bytes
+    let message = Data("This is a long message that if not hashed, will be tool large to safely sign / encrypt, therefore it should throw an error instead of resulting in a signature".utf8).byteArray
 
     // The unhashed message is too long to sign, we expect an error to be thrown...
     XCTAssertThrowsError(try rsa.sign(message, variant: .digest_pkcs1v15_SHA1))
@@ -423,10 +423,10 @@ final class RSATests: XCTestCase {
               } else {
                 // The Raw encryption method is deterministic so we can test that encrypting the message matches the data in the test fixture...
                 let encrypted = try rsa.encrypt(message.key.bytes, variant: variant)
-                XCTAssertEqual(encrypted.toHexString(), Data(base64Encoded: message.value.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes.toHexString(), "Encryption<\(test.key)>::Failed to encrypt the message `\(message.key)`")
+                XCTAssertEqual(encrypted.toHexString(), Data(base64Encoded: message.value.encryptedMessage["algid:encrypt:RSA:raw"]!)!.byteArray.toHexString(), "Encryption<\(test.key)>::Failed to encrypt the message `\(message.key)`")
 
                 // Decryption requires access to the Private Key, therefore attempting to decrypt with only a public key should throw an error
-                XCTAssertThrowsError(try rsa.decrypt(Data(base64Encoded: message.value.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes), "Encryption<\(test.key)>::Did not throw error while decrypting `\(message.key)`")
+                XCTAssertThrowsError(try rsa.decrypt(Data(base64Encoded: message.value.encryptedMessage["algid:encrypt:RSA:raw"]!)!.byteArray), "Encryption<\(test.key)>::Did not throw error while decrypting `\(message.key)`")
               }
             } else {
               // Sometimes the message is too long to be safely encrypted by our key. When this happens we should encounter an error and our test value should be empty.
@@ -455,19 +455,19 @@ final class RSATests: XCTestCase {
 
             // Sometimes the message is too long to be safely signed by our key. When this happens we should encounter an error and our test value should be empty.
             if test.value == "" {
-              XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Did not throw error")
+              XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.byteArray, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Did not throw error")
             } else {
               // Ensure the signature is valid for the test fixtures rawMessage
-              XCTAssertTrue(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verification Failed")
+              XCTAssertTrue(try rsa.verify(signature: Data(base64Encoded: test.value)!.byteArray, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verification Failed")
               // Ensure a modified message results in a false / invalid signature verification
-              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes + [0x00], variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
+              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.byteArray, for: message.key.bytes + [0x00], variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               if !message.key.bytes.isEmpty {
-                XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes.dropLast(), variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
+                XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.byteArray, for: message.key.bytes.dropLast(), variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               }
               // Ensure a modified signature results in a false / invalid signature verification (we replace the last element with a 1 in case the signature is all 0's)
-              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.shuffled().dropLast() + [0x01], for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
+              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.byteArray.shuffled().dropLast() + [0x01], for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
               // Ensure an invalid signature results in an error being thrown
-              XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.dropLast(), for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
+              XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.byteArray.dropLast(), for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
             }
           }
         }
@@ -516,10 +516,10 @@ final class RSATests: XCTestCase {
               } else {
                 // The Raw encryption method is deterministic so we can test that encrypting the message matches the data in the test fixture...
                 let encrypted = try rsa.encrypt(message.key.bytes, variant: variant)
-                XCTAssertEqual(encrypted.toHexString(), Data(base64Encoded: message.value.encryptedMessage["algid:encrypt:RSA:raw"]!)!.bytes.toHexString(), "Encryption<\(test.key)>::Failed to encrypt the message `\(message.key)`")
+                XCTAssertEqual(encrypted.toHexString(), Data(base64Encoded: message.value.encryptedMessage["algid:encrypt:RSA:raw"]!)!.byteArray.toHexString(), "Encryption<\(test.key)>::Failed to encrypt the message `\(message.key)`")
 
                 // Decrypt the fixtures encrypted message and ensure it matches the plaintext message
-                let decrypted = try rsa.decrypt(Data(base64Encoded: test.value)!.bytes, variant: variant)
+                let decrypted = try rsa.decrypt(Data(base64Encoded: test.value)!.byteArray, variant: variant)
                 XCTAssertEqual(String(data: Data(decrypted), encoding: .utf8), message.key, "Encryption<\(test.key)>::Failed to decrypt the message `\(message.key)`")
               }
             } else {
@@ -535,7 +535,7 @@ final class RSATests: XCTestCase {
                 XCTAssertEqual(test.key.bytes, decrypted, "Encryption<\(test.key)>::Failed to decrypt the message `\(message.key)`")
 
                 // Ensure the encrypted fixture can be decrypted and results in the expected raw message
-                let decryptedFixture = try rsa.decrypt(Data(base64Encoded: test.value)!.bytes, variant: variant)
+                let decryptedFixture = try rsa.decrypt(Data(base64Encoded: test.value)!.byteArray, variant: variant)
                 XCTAssertEqual(decryptedFixture, message.key.bytes, "Encryption<\(test.key)>::Failed to decrypt the message `\(message.key)`")
               }
             }
@@ -553,19 +553,19 @@ final class RSATests: XCTestCase {
               XCTAssertThrowsError(try rsa.sign(message.key.bytes, variant: variant), "Signature<\(test.key)>::Did not throw error")
             } else {
               let signature = try rsa.sign(message.key.bytes, variant: variant)
-              XCTAssertEqual(signature, Data(base64Encoded: test.value)?.bytes, "Signature<\(test.key)>::Signature does not match fixture")
+              XCTAssertEqual(signature, Data(base64Encoded: test.value)?.byteArray, "Signature<\(test.key)>::Signature does not match fixture")
 
               // Ensure the signature is valid for the test fixtures rawMessage
-              XCTAssertTrue(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verification Failed")
+              XCTAssertTrue(try rsa.verify(signature: Data(base64Encoded: test.value)!.byteArray, for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verification Failed")
               // Ensure a modified message results in a false / invalid signature verification
-              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes + [0x00], variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
+              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.byteArray, for: message.key.bytes + [0x00], variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               if !message.key.bytes.isEmpty {
-                XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes, for: message.key.bytes.dropLast(), variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
+                XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.byteArray, for: message.key.bytes.dropLast(), variant: variant), "Signature<\(test.key)>::Verified a signature for an incorrect message `\(message.key)`")
               }
               // Ensure a modified signature results in a false / invalid signature verification (we replace the last element with a 1 in case the signature is all 0's)
-              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.shuffled().dropLast() + [0x01], for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
+              XCTAssertFalse(try rsa.verify(signature: Data(base64Encoded: test.value)!.byteArray.shuffled().dropLast() + [0x01], for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
               // Ensure an invalid signature results in an error being thrown
-              XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.bytes.dropLast(), for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
+              XCTAssertThrowsError(try rsa.verify(signature: Data(base64Encoded: test.value)!.byteArray.dropLast(), for: message.key.bytes, variant: variant), "Signature<\(test.key)>::Verified a False signature for message `\(message.key)`")
             }
           }
         }

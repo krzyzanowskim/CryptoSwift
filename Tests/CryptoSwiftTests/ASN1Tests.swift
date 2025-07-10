@@ -204,7 +204,7 @@ final class ASN1Tests: XCTestCase {
 
     // Ensure the re-encoded data matches the original exactly
     XCTAssertEqual(Data(encoded), publicDERData)
-    XCTAssertEqual(encoded, publicDERData.bytes)
+    XCTAssertEqual(encoded, publicDERData.byteArray)
     XCTAssertEqual(encoded.toBase64(), publicDER)
   }
 
@@ -328,7 +328,7 @@ final class ASN1Tests: XCTestCase {
 
     // Ensure the re-encoded data matches the original data exactly
     XCTAssertEqual(Data(encodedData), privateDERData)
-    XCTAssertEqual(encodedData, privateDERData.bytes)
+    XCTAssertEqual(encodedData, privateDERData.byteArray)
     XCTAssertEqual(encodedData.toBase64(), privateDER.replacingOccurrences(of: "\n", with: ""))
   }
 
@@ -506,7 +506,7 @@ final class ASN1Tests: XCTestCase {
 
     // Ensure the re-encoded data matches the original data exactly
     XCTAssertEqual(Data(encodedData), pemData)
-    XCTAssertEqual(encodedData, pemData.bytes)
+    XCTAssertEqual(encodedData, pemData.byteArray)
     XCTAssertEqual(encodedData.toBase64(), encryptedPEMFormat.replacingOccurrences(of: "\n", with: ""))
   }
 

@@ -535,7 +535,7 @@ extension Blowfish: Cipher {
     out.reserveCapacity(bytes.count)
 
     for chunk in Array(bytes).batched(by: Blowfish.blockSize) {
-      out += self.decryptWorker.decrypt(block: chunk) // FIXME: copying here is innefective
+      out += self.decryptWorker.decrypt(block: chunk) // FIXME: copying here is ineffective
     }
 
     out = self.padding.remove(from: out, blockSize: Blowfish.blockSize)

@@ -548,7 +548,7 @@ final class RSATests: XCTestCase {
               continue
             }
 
-            // Our Message is too long for some of our hashing / padding schemes. When this happens we should encouter an error and our test value should be empty.
+            // Our Message is too long for some of our hashing / padding schemes. When this happens we should encounter an error and our test value should be empty.
             if test.value == "" {
               XCTAssertThrowsError(try rsa.sign(message.key.bytes, variant: variant), "Signature<\(test.key)>::Did not throw error")
             } else {

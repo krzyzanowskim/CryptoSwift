@@ -85,7 +85,7 @@ Good mood
 #### Data padding
 - [PKCS#5](https://www.rfc-editor.org/rfc/rfc2898.html)
 - [EMSA-PKCS1-v1_5 (Encoding Method for Signature)](https://www.rfc-editor.org/rfc/rfc3447#section-9.2)
-- [EME-PCKS1-v1_5 (Encoding Method for Encryption)](https://www.rfc-editor.org/rfc/rfc3447)
+- [EME-PKCS1-v1_5 (Encoding Method for Encryption)](https://www.rfc-editor.org/rfc/rfc3447)
 - [PKCS#7](https://tools.ietf.org/html/rfc5652#section-6.3)
 - [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
 - [ISO78164](https://www.embedx.com/pdfs/ISO_STD_7816/info_isoiec7816-4%7Bed21.0%7Den.pdf)
@@ -263,7 +263,7 @@ Hashing a data or array of bytes (aka `Array<UInt8>`)
 ```swift
 /* Hash struct usage */
 let bytes: Array<UInt8> = [0x01, 0x02, 0x03]
-let digest = input.md5()
+let digest = bytes.md5()
 let digest = Digest.md5(bytes)
 ```
 
@@ -478,7 +478,7 @@ let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
 
 ##### AES-GCM
 
-The result of Galois/Counter Mode (GCM) encryption is ciphertext and **authentication tag**, that is later used to decryption.
+The result of Galois/Counter Mode (GCM) encryption is ciphertext and **authentication tag**, that is later used for decryption.
 
 encryption
 
@@ -511,7 +511,7 @@ do {
 
 ##### AES-CCM
 
-The result of Counter with Cipher Block Chaining-Message Authentication Code encryption is ciphertext and **authentication tag**, that is later used to decryption.
+The result of Counter with Cipher Block Chaining-Message Authentication Code encryption is ciphertext and **authentication tag**, that is later used for decryption.
 
 ```swift
 do {
@@ -531,7 +531,7 @@ Check documentation or CCM specification for valid parameters for CCM.
 
 ```swift
 let encrypt = try AEADChaCha20Poly1305.encrypt(plaintext, key: key, iv: nonce, authenticationHeader: header)
-let decrypt = try AEADChaCha20Poly1305.decrypt(ciphertext, key: key, iv: nonce, authenticationHeader: header, authenticationTag: tagArr: tag)
+let decrypt = try AEADChaCha20Poly1305.decrypt(ciphertext, key: key, iv: nonce, authenticationHeader: header, authenticationTag: tag)
 ```
 
 ##### RSA

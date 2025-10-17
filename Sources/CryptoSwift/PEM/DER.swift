@@ -13,7 +13,11 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 /// Conform to this protocol if your type can both be instantiated and expressed as an ASN1 DER representation.
 internal protocol DERCodable: DERDecodable, DEREncodable { }

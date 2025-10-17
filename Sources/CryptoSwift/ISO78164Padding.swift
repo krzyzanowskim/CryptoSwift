@@ -13,7 +13,11 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 // First byte is 0x80, rest is zero padding
 // http://www.crypto-it.net/eng/theory/padding.html

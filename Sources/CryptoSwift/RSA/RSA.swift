@@ -14,7 +14,11 @@
 //
 
 // Foundation is required for `Data` to be found
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 // Note: The `BigUInt` struct was copied from:
 // https://github.com/attaswift/BigInt

@@ -6,7 +6,11 @@
 //  Copyright © 2016-2017 Károly Lőrentey.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 extension CS.BigUInt {
     //MARK: NSData Conversion

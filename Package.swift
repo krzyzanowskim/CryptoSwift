@@ -2,6 +2,25 @@
 
 import PackageDescription
 
+let resources: [Resource]?
+let exclude: [String]
+
+let privacyInfoName = "PrivacyInfo.xcprivacy" 
+
+// Only copy resources on Apple platforms.
+// While it might seem innocent to include the resource on non-Apple platforms
+// it actually causes Swift to automatically link to Foundation even if no explicit
+// `import Foundation` is in any of the swift files.
+// Maybe there's a better way to exclude the resources depending on the target platform
+// but unfortunately I haven't found one.
+#if canImport(Darwin)
+resources = [.copy(privacyInfoName)]
+exclude = []
+#else
+resources = nil
+exclude = [ privacyInfoName ]
+#endif
+
 let package = Package(
   name: "CryptoSwift",
   platforms: [
@@ -14,7 +33,7 @@ let package = Package(
     )
   ],
   targets: [
-    .target(name: "CryptoSwift", resources: [.copy("PrivacyInfo.xcprivacy")]),
+    .target(name: "CryptoSwift", exclude: exclude, resources: resources),
     .testTarget(name: "CryptoSwiftTests", dependencies: ["CryptoSwift"])
   ],
   swiftLanguageVersions: [.v5]

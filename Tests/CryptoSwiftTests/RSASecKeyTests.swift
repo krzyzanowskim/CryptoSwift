@@ -493,7 +493,7 @@
     )
     """
 
-    private func initSecKey(rawRepresentation unsafe: Data) throws -> SecKey {
+    private func initSecKey(rawRepresentation `unsafe`: Data) throws -> SecKey {
       let attributes: [String: Any] = [
         kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
         kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
@@ -502,7 +502,7 @@
       ]
 
       var error: Unmanaged<CFError>?
-      guard let secKey = SecKeyCreateWithData(unsafe as CFData, attributes as CFDictionary, &error) else {
+      guard let secKey = SecKeyCreateWithData(`unsafe` as CFData, attributes as CFDictionary, &error) else {
         throw NSError(domain: "Error constructing SecKey from raw key data: \(error.debugDescription)", code: 0, userInfo: nil)
       }
 

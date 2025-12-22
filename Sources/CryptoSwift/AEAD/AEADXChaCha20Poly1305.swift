@@ -13,7 +13,11 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 /// This class implements the XChaCha20-Poly1305 Authenticated Encryption with
 /// Associated Data (AEAD_XCHACHA20_POLY1305) construction, providing both encryption and authentication.

@@ -14,7 +14,11 @@
 //
 //  ASN1 Code inspired by Asn1Parser.swift from SwiftyRSA
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 /// A Partial ASN.1 (Abstract Syntax Notation 1) Encoder & Decoder Implementation.
 ///

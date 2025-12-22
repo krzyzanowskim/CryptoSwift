@@ -14,8 +14,13 @@
 //
 
 // import without @testable to test public API
-import CryptoSwift
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
+
+import CryptoSwift
 import XCTest
 
 class Access: XCTestCase {

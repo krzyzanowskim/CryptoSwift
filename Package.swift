@@ -14,7 +14,9 @@ let package = Package(
     )
   ],
   targets: [
-    .target(name: "CryptoSwift", resources: [.copy("PrivacyInfo.xcprivacy")]),
+    .target(name: "CryptoSwiftResources", resources: [ Resource.copy("PrivacyInfo.xcprivacy") ]),
+    .target(name: "CryptoSwift",
+            dependencies: [ .target(name: "CryptoSwiftResources", condition: .when(platforms: [ .iOS, .macOS, .tvOS, .watchOS, .macCatalyst, .visionOS ])) ]),
     .testTarget(name: "CryptoSwiftTests", dependencies: ["CryptoSwift"])
   ],
   swiftLanguageVersions: [.v5]

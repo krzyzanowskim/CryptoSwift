@@ -13,7 +13,11 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 /// Padding with random bytes, ending with the number of added bytes.
 /// Read the [Wikipedia](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO_10126)

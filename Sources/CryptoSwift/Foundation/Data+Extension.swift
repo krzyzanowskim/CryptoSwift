@@ -13,7 +13,11 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 extension Data {
   /// Two octet checksum as defined in RFC-4880. Sum of all octets, mod 65536

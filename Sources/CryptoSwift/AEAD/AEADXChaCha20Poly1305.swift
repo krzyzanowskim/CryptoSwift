@@ -24,8 +24,8 @@ public final class AEADXChaCha20Poly1305: AEAD {
   /// The key length (in bytes) required for the XChaCha20 cipher (32 bytes).
   public static let kLen = 32 // key length
 
-  /// The valid range of initialization vector lengths for the XChaCha20 cipher (12 bytes).
-  public static var ivRange = Range<Int>(12...12)
+  /// The valid range of initialization vector lengths for the XChaCha20 cipher (24 bytes). Extended from ChaCha20's 12 bytes.
+  public static var ivRange = Range<Int>(24...24)
 
   /// Encrypts the given plaintext using the XChaCha20 cipher and generates an authentication
   /// tag using the Poly1305 MAC.

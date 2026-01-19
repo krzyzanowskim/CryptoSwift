@@ -67,6 +67,10 @@ public final class Scrypt {
     self.dkLen = dkLen
   }
 
+  deinit {
+    salsaBlock.deallocate()
+  }
+
   /// Runs the key derivation function with a specific password.
   public func calculate() throws -> [UInt8] {
     // Allocate memory (as bytes for now) for further use in mixing steps

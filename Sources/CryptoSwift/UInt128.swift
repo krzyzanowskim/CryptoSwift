@@ -25,10 +25,12 @@ struct UInt128: Equatable, ExpressibleByIntegerLiteral {
   }
 
   init(_ raw: Array<UInt8>) {
-    self = raw.prefix(MemoryLayout<UInt128>.stride).withUnsafeBytes({ (rawBufferPointer) -> UInt128 in
-      let arr = rawBufferPointer.bindMemory(to: UInt64.self)
-      return UInt128((arr[0].bigEndian, arr[1].bigEndian))
-    })
+    precondition(raw.count >= 16, "UInt128 requires at least 16 bytes")
+    let a = UInt64(raw[0]) << 56 | UInt64(raw[1]) << 48 | UInt64(raw[2]) << 40 | UInt64(raw[3]) << 32 |
+            UInt64(raw[4]) << 24 | UInt64(raw[5]) << 16 | UInt64(raw[6]) << 8  | UInt64(raw[7])
+    let b = UInt64(raw[8]) << 56 | UInt64(raw[9]) << 48 | UInt64(raw[10]) << 40 | UInt64(raw[11]) << 32 |
+            UInt64(raw[12]) << 24 | UInt64(raw[13]) << 16 | UInt64(raw[14]) << 8  | UInt64(raw[15])
+    self.init((a, b))
   }
 
   init(_ raw: ArraySlice<UInt8>) {

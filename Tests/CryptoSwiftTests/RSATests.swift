@@ -203,7 +203,7 @@ final class RSATests: XCTestCase {
     let fixture = TestFixtures.RSA_1024
 
     guard let privateDERData = Data(base64Encoded: fixture.privateDER) else {
-      XCTFail("Invalid Base64String Public DER")
+      XCTFail("Invalid Base64String Private DER")
       return
     }
 
@@ -273,7 +273,7 @@ final class RSATests: XCTestCase {
     let fixture = TestFixtures.RSA_1024
 
     guard let privateDERData = Data(base64Encoded: fixture.privateDER) else {
-      XCTFail("Invalid Base64String Public DER")
+      XCTFail("Invalid Base64String Private DER")
       return
     }
 
@@ -324,14 +324,14 @@ final class RSATests: XCTestCase {
     let fixture = TestFixtures.RSA_1024
 
     guard let privateDERData = Data(base64Encoded: fixture.privateDER) else {
-      XCTFail("Invalid Base64String Public DER")
+      XCTFail("Invalid Base64String Private DER")
       return
     }
 
     // Import RSA Key
     let rsa = try RSA(rawRepresentation: privateDERData)
 
-    let message = Data("This is a long message that if not hashed, will be tool large to safely sign / encrypt, therefore it should throw an error instead of resulting in a signature".utf8).byteArray
+    let message = Data("This is a long message that if not hashed, will be too large to safely sign / encrypt, therefore it should throw an error instead of resulting in a signature".utf8).byteArray
 
     // The unhashed message is too long to sign, we expect an error to be thrown...
     XCTAssertThrowsError(try rsa.sign(message, variant: .digest_pkcs1v15_SHA1))
@@ -367,7 +367,7 @@ final class RSATests: XCTestCase {
   ///   - Ensure the key was imported correctly
   ///   - Ensure that we can export the public key in it's DER representation and that it matches the expected data
   ///   - Ensure that we are able to encrypt the messages and that we receive the same data when testing deterministic encryption variants
-  ///   - Ensure that attempting to decrypt a message without a private key throws and error
+  ///   - Ensure that attempting to decrypt a message without a private key throws an error
   ///   - Ensure that attempting to sign data without a private key throws an error
   ///   - Ensure that we can verify that the signed data was in fact signed with this public keys corresponding private key
   /// 2) Importing the RSA Private DER Representation
@@ -548,7 +548,7 @@ final class RSATests: XCTestCase {
               continue
             }
 
-            // Our Message is too long for some of our hashing / padding schemes. When this happens we should encouter an error and our test value should be empty.
+            // Our Message is too long for some of our hashing / padding schemes. When this happens we should encounter an error and our test value should be empty.
             if test.value == "" {
               XCTAssertThrowsError(try rsa.sign(message.key.bytes, variant: variant), "Signature<\(test.key)>::Did not throw error")
             } else {

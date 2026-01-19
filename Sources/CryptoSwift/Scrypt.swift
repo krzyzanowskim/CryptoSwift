@@ -88,8 +88,9 @@ public final class Scrypt {
     /* 1: (B_0 ... B_{p-1}) <-- PBKDF2(P, S, 1, p * MFLen) */
     // Expand the initial key
     let barray = try PKCS5.PBKDF2(password: Array(self.password), salt: Array(self.salt), iterations: 1, keyLength: self.p * 128 * self.r, variant: .sha2(.sha256)).calculate()
-    barray.withUnsafeBytes { p in
-      B.copyMemory(from: p.baseAddress!, byteCount: barray.count)
+    barray.withUnsafeBytes { bufferPointer in
+      guard let baseAddress = bufferPointer.baseAddress else { return }
+      B.copyMemory(from: baseAddress, byteCount: barray.count)
     }
 
     /* 2: for i = 0 to p - 1 do */

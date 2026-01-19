@@ -37,28 +37,30 @@ final class SecureBytes {
     self.bytes = bytes
     self.count = bytes.count
     self.bytes.withUnsafeBufferPointer { (pointer) -> Void in
+      guard let baseAddress = pointer.baseAddress else { return }
       #if os(Windows)
-        VirtualLock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
+        VirtualLock(UnsafeMutableRawPointer(mutating: baseAddress), SIZE_T(pointer.count))
       #elseif os(WASI)
         // not supported on WASI
       #elseif os(Android)
-        mlock(pointer.baseAddress!, pointer.count)
+        mlock(baseAddress, pointer.count)
       #else
-        mlock(pointer.baseAddress, pointer.count)
+        mlock(baseAddress, pointer.count)
       #endif
     }
   }
 
   deinit {
     self.bytes.withUnsafeBufferPointer { (pointer) -> Void in
+      guard let baseAddress = pointer.baseAddress else { return }
       #if os(Windows)
-        VirtualUnlock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
+        VirtualUnlock(UnsafeMutableRawPointer(mutating: baseAddress), SIZE_T(pointer.count))
       #elseif os(WASI)
         // not supported on WASI
       #elseif os(Android)
-        munlock(pointer.baseAddress!, pointer.count)
+        munlock(baseAddress, pointer.count)
       #else
-        munlock(pointer.baseAddress, pointer.count)
+        munlock(baseAddress, pointer.count)
       #endif
     }
   }

@@ -29,8 +29,8 @@ class Access: XCTestCase {
   }
 
   func testRandomIV() {
-    _ = AES.randomIV(AES.blockSize)
-    _ = ChaCha20.randomIV(ChaCha20.blockSize)
+    _ = AES.randomIV()
+    _ = ChaCha20.randomIV()
   }
 
   func testDigest() {

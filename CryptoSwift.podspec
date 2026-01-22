@@ -17,4 +17,5 @@ Pod::Spec.new do |s|
   s.source_files  = "Sources/CryptoSwift/**/*.swift"
   s.requires_arc = true
   s.resource_bundles = {'CryptoSwift' => ['Sources/CryptoSwift/PrivacyInfo.xcprivacy']}
+  s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 end

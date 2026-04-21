@@ -14,7 +14,11 @@
 //
 //  ASN1 Scanner code is from Asn1Parser.swift from SwiftyRSA
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 
 extension ASN1 {
   /// Simple data scanner that consumes bytes from a raw data and keeps an updated position.

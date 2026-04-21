@@ -171,7 +171,7 @@
 
 0.11.0
 - API: Cryptor.seek() is throwable
-- Adds proper stream support for CTR encryption with Updaptable interface.
+- Adds proper stream support for CTR encryption with Updatable interface.
 - Refactor internals for the stream cipher modes.
 - Set minimum deployment target to 8.0 (again).
 
@@ -246,7 +246,7 @@
 - Fix Poly1305
 
 0.6.5
-- Significant performance improvement when processing lange amount of data.
+- Significant performance improvement when processing large amount of data.
 - Degeneric functions and change Sequence -> Collection in generic constraints.
 
 0.6.4
@@ -371,7 +371,7 @@
 - Fix access to AES.Error and ChaCha20.Error
 
 0.1.1
-- Fix Cococapods package (missing Foundation integration)
+- Fix CocoaPods package (missing Foundation integration)
 
 0.1.0
 - Major performance improvements.
@@ -390,7 +390,7 @@
 - Mark as App-Extension-Safe API
 
 0.0.14
-- hexString -> toHextString() #105
+- hexString -> toHexString() #105
 - CTR (Counter mode)
 - Hex string is lowercase now
 - Carthage support

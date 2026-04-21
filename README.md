@@ -85,10 +85,10 @@ Good mood
 #### Data padding
 - [PKCS#5](https://www.rfc-editor.org/rfc/rfc2898.html)
 - [EMSA-PKCS1-v1_5 (Encoding Method for Signature)](https://www.rfc-editor.org/rfc/rfc3447#section-9.2)
-- [EME-PCKS1-v1_5 (Encoding Method for Encryption)](https://www.rfc-editor.org/rfc/rfc3447)
+- [EME-PKCS1-v1_5 (Encoding Method for Encryption)](https://www.rfc-editor.org/rfc/rfc3447)
 - [PKCS#7](https://tools.ietf.org/html/rfc5652#section-6.3)
 - [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
-- [ISO78164](https://www.embedx.com/pdfs/ISO_STD_7816/info_isoiec7816-4%7Bed21.0%7Den.pdf)
+- [ISO/IEC 7816-4](https://www.embedx.com/pdfs/ISO_STD_7816/info_isoiec7816-4%7Bed21.0%7Den.pdf)
 - [ISO10126](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO_10126)
 - No padding
 
@@ -166,7 +166,7 @@ Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimiz
 XCFrameworks require Xcode 11 or later and they can be integrated similarly to how we’re used to integrating the `.framework` format.
 Please use script [scripts/build-framework.sh](scripts/build-framework.sh) to generate binary `CryptoSwift.xcframework` archive that you can use as a dependency in Xcode.
 
-CryptoSwift.xcframework is a Release (Optimized) binary that offer best available Swift code performance.
+CryptoSwift.xcframework is a Release (Optimized) binary that offers the best available Swift code performance.
 
 <img width="320" alt="Screen Shot 2020-10-27 at 00 06 32" src="https://user-images.githubusercontent.com/758033/97240586-f0878280-17ee-11eb-9119-e5a960417d04.png">
 
@@ -478,7 +478,7 @@ let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
 
 ##### AES-GCM
 
-The result of Galois/Counter Mode (GCM) encryption is ciphertext and **authentication tag**, that is later used to decryption.
+The result of Galois/Counter Mode (GCM) encryption is ciphertext and **authentication tag**, which is later used for decryption.
 
 encryption
 
@@ -511,7 +511,7 @@ do {
 
 ##### AES-CCM
 
-The result of Counter with Cipher Block Chaining-Message Authentication Code encryption is ciphertext and **authentication tag**, that is later used to decryption.
+The result of Counter with Cipher Block Chaining-Message Authentication Code encryption is ciphertext and **authentication tag**, which is later used for decryption.
 
 ```swift
 do {
@@ -569,7 +569,7 @@ let alicesPrivateKey = try RSA(keySize: 1024)
 // Alice shares her **public** key with Bob
 let alicesPublicKeyData = try alicesPrivateKey.publicKeyExternalRepresentation()
     
-// Bob receives the raw external representation of Alices public key and imports it
+// Bob receives the raw external representation of Alice's public key and imports it
 let bobsImportOfAlicesPublicKey = try RSA(rawRepresentation: alicesPublicKeyData)
     
 // Bob can now encrypt a message for Alice using her public key
@@ -600,17 +600,17 @@ let alicesSignature = try alicesPrivateKey.sign(messageAliceSupports.bytes)
 // Alice shares her Public key and the signature with Bob
 let alicesPublicKeyData = try alicesPrivateKey.publicKeyExternalRepresentation()
     
-// Bob receives the raw external representation of Alices Public key and imports it!
+// Bob receives the raw external representation of Alice's public key and imports it!
 let bobsImportOfAlicesPublicKey = try RSA(rawRepresentation: alicesPublicKeyData)
         
 // Bob can now verify that Alice signed the message using the Private key associated with her shared Public key.
 let verifiedSignature = try bobsImportOfAlicesPublicKey.verify(signature: alicesSignature, for: "Hi my name is Alice!".bytes)
     
 if verifiedSignature == true {
-  // Bob knows that the signature Alice provided is valid for the message and was signed using the Private key associated with Alices shared Public key.
+  // Bob knows that the signature Alice provided is valid for the message and was signed using the Private key associated with Alice's shared Public key.
 } else {
   // The signature was invalid, so either
-  // - the message Alice signed was different then what we expected.
+  // - the message Alice signed was different than what we expected.
   // - or Alice used a Private key that isn't associated with the shared Public key that Bob has.
 }
 ```

@@ -306,7 +306,7 @@ data.crc32()
 
 ```swift
 // Calculate Message Authentication Code (MAC) for message
-let key: Array<UInt8> = [1,2,3,4,5,6,7,8,9,10,...]
+let key: Array<UInt8> = [1,2,3,4,5,6,7,8,9,10 /* ... */]
 
 try Poly1305(key: key).authenticate(bytes)
 try HMAC(key: key, variant: .sha256).authenticate(bytes)
@@ -382,7 +382,7 @@ Variant of AES encryption (AES-128, AES-192, AES-256) depends on given key lengt
 AES-256 example
 
 ```swift
-let encryptedBytes = try AES(key: [1,2,3,...,32], blockMode: CBC(iv: [1,2,3,...,16]), padding: .pkcs7)
+let encryptedBytes = try AES(key: [1,2,3 /* ... 32 bytes total */], blockMode: CBC(iv: [1,2,3 /* ... 16 bytes total */]), padding: .pkcs7)
 ```
 
 Full example:
@@ -451,7 +451,7 @@ do {
 let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]
 
 let key: Array<UInt8> = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00]
-let iv: Array<UInt8> = // Random bytes of `AES.blockSize` length
+let iv: Array<UInt8> = [] // Random bytes of `AES.blockSize` length
 
 do {
     let encrypted = try AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7).encrypt(input)
@@ -531,7 +531,7 @@ Check documentation or CCM specification for valid parameters for CCM.
 
 ```swift
 let encrypt = try AEADChaCha20Poly1305.encrypt(plaintext, key: key, iv: nonce, authenticationHeader: header)
-let decrypt = try AEADChaCha20Poly1305.decrypt(ciphertext, key: key, iv: nonce, authenticationHeader: header, authenticationTag: tagArr: tag)
+let decrypt = try AEADChaCha20Poly1305.decrypt(ciphertext, key: key, iv: nonce, authenticationHeader: header, authenticationTag: tag)
 ```
 
 ##### RSA
@@ -541,9 +541,9 @@ RSA initialization from parameters
 ```swift
 let input: Array<UInt8> = [0,1,2,3,4,5,6,7,8,9]
 
-let n: Array<UInt8> = // RSA modulus
-let e: Array<UInt8> = // RSA public exponent
-let d: Array<UInt8> = // RSA private exponent
+let n: Array<UInt8> = [] // RSA modulus
+let e: Array<UInt8> = [] // RSA public exponent
+let d: Array<UInt8> = [] // RSA private exponent
 
 let rsa = RSA(n: n, e: e, d: d)
 

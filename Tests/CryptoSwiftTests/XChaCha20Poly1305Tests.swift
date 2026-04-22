@@ -18,6 +18,16 @@ import XCTest
 
 class XChaCha20Poly1305Tests: XCTestCase {
 
+  func testNonceLengthMetadataMatchesXChaCha20() {
+    XCTAssertTrue(AEADXChaCha20Poly1305.ivRange.contains(24))
+    XCTAssertFalse(AEADXChaCha20Poly1305.ivRange.contains(12))
+
+    let key = Array<UInt8>(repeating: 0, count: AEADXChaCha20Poly1305.kLen)
+
+    XCTAssertNoThrow(try XChaCha20(key: key, iv: Array<UInt8>(repeating: 0, count: 24)))
+    XCTAssertThrowsError(try XChaCha20(key: key, iv: Array<UInt8>(repeating: 0, count: 12)))
+  }
+
   /// See: https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-xchacha#appendix-A.3.1
   func testRoundTrip() {
     do {
@@ -73,6 +83,7 @@ class XChaCha20Poly1305Tests: XCTestCase {
   }
 
   static let allTests = [
+    ("XChaCha20-Poly1305 nonce length metadata matches XChaCha20", testNonceLengthMetadataMatchesXChaCha20),
     ("Test Vector for AEAD_XCHACHA20_POLY1305", testRoundTrip)
   ]
 }

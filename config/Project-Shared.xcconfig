@@ -1,4 +1,4 @@
-MARKETING_VERSION = 1.9.0
+MARKETING_VERSION = 1.10.0
 
 SUPPORTED_PLATFORMS = iphonesimulator iphoneos macosx appletvos watchos appletvsimulator watchsimulator xrsimulator xros
 

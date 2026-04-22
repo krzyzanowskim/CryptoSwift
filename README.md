@@ -1,19 +1,19 @@
-[![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20Android%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
+[![Platform](https://img.shields.io/badge/Platforms-Apple%20platforms%20%7C%20Linux%20%7C%20Android-4E4E4E.svg?colorA=28a745)](#requirements)
 
-[![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0%20%7C%204.1%20%7C%204.2%20%7C%205.0%20%7C%206.2-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
+[![Swift support](https://img.shields.io/badge/Swift-5.6%2B-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#requirements)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg?style=flat&colorA=28a745&&colorB=4E4E4E)](https://github.com/swiftlang/swift-package-manager)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat&colorA=28a745&&colorB=4E4E4E)](https://github.com/Carthage/Carthage)
 [![CocoaPods Deprecated](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods&colorA=red&&colorB=4E4E4E)](https://cocoapods.org/pods/CryptoSwift)
 
 # CryptoSwift
 
-Crypto related functions and helpers for [Swift](https://swift.org) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
+Pure Swift cryptographic primitives and utilities for [Swift](https://swift.org). ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
-**Note**: The `main` branch follows the latest currently released **version of Swift**. If you need an earlier version for an older version of Swift, specify its version in your `Podfile` or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
+**Note**: The current release line builds with Swift 5.6 and newer toolchains. If you need an older compiler, use the matching legacy branch listed in [Swift version support](#swift-version-support). Older branches are not actively maintained.
 
 ---
 
-[Requirements](#requirements) | [Features](#features) | [Contribution](#contribution) | [Installation](#installation) | [Swift versions](#swift-versions-support) | [How-to](#how-to) | [Author](#author) | [License](#license) | [Changelog](#changelog)
+[Requirements](#requirements) | [Features](#features) | [Recommended Defaults](#recommended-defaults) | [Contribution](#contribution) | [Installation](#installation) | [Swift Version Support](#swift-version-support) | [How-to](#how-to) | [Author](#author) | [License](#license) | [Changelog](#changelog)
 
 ### Support & Sponsors
 
@@ -26,14 +26,19 @@ The financial sustainability of the project is possible thanks to the ongoing co
   [<img alt="www.emergetools.com/" width="200" src="https://github-production-user-asset-6210df.s3.amazonaws.com/758033/256565082-a21f5ac1-ef39-4b56-a8d2-575adeb7fe55.png" />](https://www.emergetools.com)
 
 ## Requirements
+
 Good mood
+
+- Swift 5.6 or newer
+- Apple deployment targets: iOS 11, macOS 10.13, Mac Catalyst 13, tvOS 11, watchOS 4, visionOS 1
+- Linux and Android are exercised in CI
 
 ## Features
 
-- Easy to use
-- Convenient extensions for String and Data
-- Support for incremental updates (stream, ...)
-- iOS, Android, macOS, AppleTV, watchOS, Linux support
+- Pure Swift implementation
+- Convenient extensions for `String`, `Data`, and `Array<UInt8>`
+- Support for incremental updates and streaming APIs
+- Apple platforms, Linux, and Android support
 
 #### Hash (Digest)
   [MD5](https://tools.ietf.org/html/rfc1321)
@@ -96,6 +101,14 @@ Good mood
 - [AEAD\_CHACHA20\_POLY1305](https://tools.ietf.org/html/rfc7539#section-2.8)
 - [AEAD\_XCHACHA20\_POLY1305](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-xchacha#section-2)
 
+## Recommended Defaults
+
+- Prefer AEAD constructions such as AES-GCM, AES-CCM, ChaCha20-Poly1305, or XChaCha20-Poly1305 for new protocols.
+- Prefer SHA-256, SHA-512, or SHA-3 over MD5 and SHA-1.
+- Use a fresh IV or nonce for every encryption operation.
+- Use RSA keys of at least 2048 bits for new systems.
+- Treat MD5, SHA-1, ECB, CBC-MAC, and PKCS#1 v1.5 compatibility paths as legacy interoperability features.
+
 ## Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/discussions/982) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/discussions/982#discussioncomment-3669415).
 
@@ -112,80 +125,106 @@ Check out [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to help
 
 ## Installation
 
-### Hardened Runtime (macOS) and Xcode
+### Swift Package Manager
 
-Binary CryptoSwift.xcframework (Used by Swift Package Manager package integration) won't load properly in your app if the app uses **Sign to Run Locally**  Signing Certificate with Hardened Runtime enabled. It is possible to setup Xcode like this. To solve the problem you have two options:
-- Use proper Signing Certificate, eg. *Development* <- this is the proper action
-- Use `Disable Library Validation` aka `com.apple.security.cs.disable-library-validation` entitlement
+CryptoSwift is primarily distributed as source through [Swift Package Manager](https://swift.org/package-manager/).
 
-#### Xcode Project
-
-To install CryptoSwift, add it as a submodule to your project (on the top level project directory):
-
-    git submodule add https://github.com/krzyzanowskim/CryptoSwift.git
-
-It is recommended to enable [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) to gain better performance. Non-optimized build results in significantly worse performance.
-
-#### Swift Package Manager
-
-You can use [Swift Package Manager](https://swift.org/package-manager/) and specify dependency in `Package.swift` by adding this:
+Add the package dependency:
 
 ```swift
-.package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.10.0")
+dependencies: [
+  .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.10.0")
+]
 ```
 
-See: [Package.swift - manual](https://blog.krzyzanowskim.com/2016/08/09/package-swift-manual/)
+Then add the product to the target that uses it:
 
-Notice: Swift Package Manager uses debug configuration for debug Xcode build, that may result in significant (up to x10000) worse performance. Performance characteristic is different in Release build. To overcome this problem, consider embed `CryptoSwift.xcframework` described below.
+```swift
+.target(
+  name: "MyTarget",
+  dependencies: [
+    .product(name: "CryptoSwift", package: "CryptoSwift")
+  ]
+)
+```
+
+If you profile crypto-heavy workloads from Xcode, compare Debug and Release builds before drawing conclusions. Debug builds can be dramatically slower than optimized Release builds.
+
+### XCFramework
+
+If you prefer a prebuilt optimized binary for manual Xcode integration, build `CryptoSwift.xcframework` locally:
+
+```sh
+./scripts/build-framework.sh
+```
+
+The generated `CryptoSwift.xcframework` is an alternative to source-based Swift Package Manager integration. It is not used by the package defined in [Package.swift](Package.swift).
+
+<img width="320" alt="Screen Shot 2020-10-27 at 00 06 32" src="https://user-images.githubusercontent.com/758033/97240586-f0878280-17ee-11eb-9119-e5a960417d04.png">
+
+### Hardened Runtime (macOS) and Xcode
+
+If you embed the prebuilt `CryptoSwift.xcframework` in a hardened macOS app, library validation can prevent the binary from loading when the app is signed with `Sign to Run Locally`.
+
+To avoid that, use one of these options:
+- Sign the app with a proper Development certificate.
+- Enable `Disable Library Validation` (`com.apple.security.cs.disable-library-validation`) for the app.
+
+### Xcode Project
+
+To vendor CryptoSwift directly in an Xcode project, add it as a submodule from the top-level project directory:
+
+```sh
+git submodule add https://github.com/krzyzanowskim/CryptoSwift.git
+```
+
+Enable [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) for best performance. Non-optimized builds of crypto-heavy code are significantly slower.
+
+### Legacy Package Managers
 
 #### Carthage
 
-You can use [Carthage](https://github.com/Carthage/Carthage).
-Specify in Cartfile:
+You can use [Carthage](https://github.com/Carthage/Carthage) for existing projects.
+Specify in `Cartfile`:
 
 ```ruby
 github "krzyzanowskim/CryptoSwift"
 ```
 
-Run `carthage` to build the framework and drag the built CryptoSwift.framework into your Xcode project. Follow [build instructions](https://github.com/Carthage/Carthage#getting-started). [Common issues](https://github.com/krzyzanowskim/CryptoSwift/discussions/983#discussioncomment-3669433).
+Run `carthage` to build the framework and drag the built `CryptoSwift.framework` into your Xcode project. Follow the [Carthage getting started guide](https://github.com/Carthage/Carthage#getting-started). See [common issues](https://github.com/krzyzanowskim/CryptoSwift/discussions/983#discussioncomment-3669433) if the build fails.
 
 #### CocoaPods
 
-> **Note**: CocoaPods is deprecated and no longer recommended for new projects. Use Swift Package Manager or Carthage instead.
+> **Note**: CocoaPods is deprecated for new CryptoSwift integrations. Prefer Swift Package Manager. Keep CocoaPods only when you need it for an existing project.
 
-You can use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
+You can still use [CocoaPods](https://cocoapods.org/pods/CryptoSwift).
 
 ```ruby
-pod 'CryptoSwift', '~> 1.8.4'
+pod 'CryptoSwift', '~> 1.10.0'
 ```
 
-Bear in mind that CocoaPods will build CryptoSwift without [Whole-Module Optimization](https://swift.org/blog/whole-module-optimizations/) that may impact performance. You can change it manually after installation, or use [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
+CocoaPods builds may need manual optimization settings if performance matters. You can adjust them after installation, or use the [cocoapods-wholemodule](https://github.com/jedlewison/cocoapods-wholemodule) plugin.
 
-#### XCFramework
+### Embedded Framework
 
-XCFrameworks require Xcode 11 or later and they can be integrated similarly to how we’re used to integrating the `.framework` format.
-Please use script [scripts/build-framework.sh](scripts/build-framework.sh) to generate binary `CryptoSwift.xcframework` archive that you can use as a dependency in Xcode.
-
-CryptoSwift.xcframework is a Release (Optimized) binary that offers the best available Swift code performance.
-
-<img width="320" alt="Screen Shot 2020-10-27 at 00 06 32" src="https://user-images.githubusercontent.com/758033/97240586-f0878280-17ee-11eb-9119-e5a960417d04.png">
-
-#### Embedded Framework
-
-Embedded frameworks require a minimum deployment target of iOS 11.0 or macOS Sierra (10.13). Drag the `CryptoSwift.xcodeproj` file into your Xcode project, and add appropriate framework as a dependency to your target. Now select your App and choose the General tab for the app target. Find *Embedded Binaries* and press "+", then select `CryptoSwift.framework` (iOS, macOS, watchOS or tvOS)
+Embedded frameworks require a minimum deployment target of iOS 11.0 or macOS 10.13. Drag `CryptoSwift.xcodeproj` into your Xcode project, add the appropriate framework as a dependency, then embed `CryptoSwift.framework` in your app target.
 
 ![](https://cloud.githubusercontent.com/assets/758033/10834511/25a26852-7e9a-11e5-8c01-6cc8f1838459.png)
 
-Sometimes "embedded framework" option is not available. In that case, you have to add new build phase for the target.
+Sometimes the embedded framework option is not available automatically. In that case, add a new build phase for the target.
 
 ![](https://cloud.githubusercontent.com/assets/758033/18415615/d5edabb0-77f8-11e6-8c94-f41d9fc2b8cb.png)
 
-##### iOS, macOS, watchOS, tvOS
+#### iOS, macOS, watchOS, tvOS
 
 In the project, you'll find [single scheme](https://mxcl.dev/PromiseKit/news/2016/08/Multiplatform-Single-Scheme-Xcode-Projects/) for all platforms:
 - CryptoSwift
 
-#### Swift versions support
+### Swift Version Support
+
+- Current release line: Swift 5.6 and newer toolchains
+
+Legacy compiler branches:
 
 - Swift 1.2: branch [swift12](https://github.com/krzyzanowskim/CryptoSwift/tree/swift12) version <= 0.0.13
 - Swift 2.1: branch [swift21](https://github.com/krzyzanowskim/CryptoSwift/tree/swift21) version <= 0.2.3
@@ -197,7 +236,7 @@ In the project, you'll find [single scheme](https://mxcl.dev/PromiseKit/news/201
 - Swift 5.0, branch [swift5](https://github.com/krzyzanowskim/CryptoSwift/tree/swift5) version <= 1.2.0
 - Swift 5.1, branch [swift51](https://github.com/krzyzanowskim/CryptoSwift/tree/swift51) version <= 1.3.3
 - Swift 5.3, branch [swift53](https://github.com/krzyzanowskim/CryptoSwift/tree/swift53) version <= 1.8.5
-- Swift 6.2 and newer, branch [main](https://github.com/krzyzanowskim/CryptoSwift/tree/main)
+- Swift 5.6 and newer, branch [main](https://github.com/krzyzanowskim/CryptoSwift/tree/main)
 
 ## How-to
 
@@ -207,12 +246,16 @@ In the project, you'll find [single scheme](https://mxcl.dev/PromiseKit/news/201
 * [Password-Based Key Derivation Function (PBKDF2, ...)](#password-based-key-derivation-functions)
 * [HMAC-based Key Derivation Function (HKDF)](#hmac-based-key-derivation-function)
 * [Data Padding](#data-padding)
+* [AEAD (ChaCha20-Poly1305)](#aead)
+* [AES-GCM](#aes-gcm)
+* [AES-CCM](#aes-ccm)
+* [AES - Advanced Encryption Standard](#aes)
 * [ChaCha20](#chacha20)
 * [Rabbit](#rabbit)
 * [Blowfish](#blowfish)
-* [AES - Advanced Encryption Standard](#aes)
-* [AES-GCM](#aes-gcm)
-* [Authenticated Encryption with Associated Data (AEAD)](#aead)
+* [RSA](#rsa)
+
+For new designs, start with an AEAD construction such as AES-GCM, AES-CCM, or ChaCha20-Poly1305. Use raw block modes only when you need compatibility with an existing protocol.
 
 ##### Basics
 
@@ -259,31 +302,35 @@ bytes.toBase64()
 
 ##### Calculate Digest
 
-Hashing a data or array of bytes (aka `Array<UInt8>`)
+Hashing an array of bytes (`Array<UInt8>`)
 ```swift
-/* Hash struct usage */
-let bytes: Array<UInt8> = [0x01, 0x02, 0x03]
-let digest = input.md5()
-let digest = Digest.md5(bytes)
+let input: Array<UInt8> = [0x01, 0x02, 0x03]
+
+let md5Digest = input.md5()
+let md5Digest2 = Digest.md5(input)
 ```
+
+Hashing `Data`
 
 ```swift
 let data = Data([0x01, 0x02, 0x03])
 
-let hash = data.md5()
-let hash = data.sha1()
-let hash = data.sha224()
-let hash = data.sha256()
-let hash = data.sha384()
-let hash = data.sha512()
+let md5Digest = data.md5()
+let sha1Digest = data.sha1()
+let sha224Digest = data.sha224()
+let sha256Digest = data.sha256()
+let sha384Digest = data.sha384()
+let sha512Digest = data.sha512()
 ```
 ```swift
 do {
     var digest = MD5()
-    let partial1 = try digest.update(withBytes: [0x31, 0x32])
-    let partial2 = try digest.update(withBytes: [0x33])
+    _ = try digest.update(withBytes: [0x31, 0x32])
+    _ = try digest.update(withBytes: [0x33])
     let result = try digest.finish()
-} catch { }
+} catch {
+    print(error)
+}
 ```
 
 Hashing a String and printing result
@@ -295,22 +342,26 @@ let hash = "123".md5() // "123".bytes.md5()
 ##### Calculate CRC
 
 ```swift
-bytes.crc16()
-data.crc16()
+let bytes: Array<UInt8> = [0x01, 0x02, 0x03]
+let data = Data(bytes)
 
-bytes.crc32()
-data.crc32()
+let bytesCRC16 = bytes.crc16()
+let dataCRC16 = data.crc16()
+
+let bytesCRC32 = bytes.crc32()
+let dataCRC32 = data.crc32()
 ```
 
 ##### Message authenticators
 
 ```swift
 // Calculate Message Authentication Code (MAC) for message
-let key: Array<UInt8> = [1,2,3,4,5,6,7,8,9,10 /* ... */]
+let key = Array<UInt8>(repeating: 0x01, count: 32)
+let message = Array("authenticated message".utf8)
 
-try Poly1305(key: key).authenticate(bytes)
-try HMAC(key: key, variant: .sha256).authenticate(bytes)
-try CMAC(key: key).authenticate(bytes)
+let poly1305 = try Poly1305(key: key).authenticate(message)
+let hmac = try HMAC(key: key, variant: .sha2(.sha256)).authenticate(message)
+let cmac = try CMAC(key: key).authenticate(message)
 ```
 
 ##### Password-Based Key Derivation Functions
@@ -336,7 +387,7 @@ let key = try Scrypt(password: password, salt: salt, dkLen: 64, N: 16384, r: 8, 
 let password: Array<UInt8> = Array("s33krit".utf8)
 let salt: Array<UInt8> = Array("nacllcan".utf8)
 
-let key = try HKDF(password: password, salt: salt, variant: .sha256).calculate()
+let key = try HKDF(password: password, salt: salt, variant: .sha2(.sha256)).calculate()
 ```
 
 
@@ -345,10 +396,13 @@ let key = try HKDF(password: password, salt: salt, variant: .sha256).calculate()
 Some content-encryption algorithms assume the input length is a multiple of `k` octets, where `k` is greater than one. For such algorithms, the input shall be padded.
 
 ```swift
-Padding.pkcs7.add(to: bytes, blockSize: AES.blockSize)
+let input = Array("hello".utf8)
+let padded = Padding.pkcs7.add(to: input, blockSize: AES.blockSize)
 ```
 
 #### Working with Ciphers
+
+Examples below use `[UInt8]` keys, IVs or nonces, and messages of the correct length for the selected algorithm.
 ##### ChaCha20
 
 ```swift
@@ -371,7 +425,9 @@ let decrypted = try Blowfish(key: key, blockMode: CBC(iv: iv), padding: .pkcs7).
 
 ##### AES
 
-Notice regarding padding: *Manual padding of data is optional, and CryptoSwift is using PKCS7 padding by default. If you need to manually disable/enable padding, you can do this by setting parameter for __AES__ class*
+For new designs, prefer AES-GCM unless you need compatibility with an existing CBC, CFB, OFB, or CTR protocol.
+
+Notice regarding padding: *Manual padding of data is optional, and CryptoSwift uses PKCS7 padding by default. If you need to manually disable or enable padding, configure the `AES` initializer explicitly.*
 
 Variant of AES encryption (AES-128, AES-192, AES-256) depends on given key length:
 
@@ -382,7 +438,8 @@ Variant of AES encryption (AES-128, AES-192, AES-256) depends on given key lengt
 AES-256 example
 
 ```swift
-let encryptedBytes = try AES(key: [1,2,3 /* ... 32 bytes total */], blockMode: CBC(iv: [1,2,3 /* ... 16 bytes total */]), padding: .pkcs7)
+let aes = try AES(key: [1,2,3 /* ... 32 bytes total */], blockMode: CBC(iv: [1,2,3 /* ... 16 bytes total */]), padding: .pkcs7)
+let encryptedBytes = try aes.encrypt(Array("secret message".utf8))
 ```
 
 Full example:
@@ -397,7 +454,7 @@ let key = try PKCS5.PBKDF2(
     salt: salt,
     iterations: 4096,
     keyLength: 32, /* AES-256 */
-    variant: .sha256
+    variant: .sha2(.sha256)
 ).calculate()
 
 /* Generate random IV value. IV is public value. Either need to generate, or get it from elsewhere */
@@ -501,7 +558,7 @@ do {
     // In combined mode, the authentication tag is appended to the encrypted message. This is usually what you want.
     let gcm = GCM(iv: iv, mode: .combined)
     let aes = try AES(key: key, blockMode: gcm, padding: .noPadding)
-    return try aes.decrypt(encrypted)
+    let decrypted = try aes.decrypt(encrypted)
 } catch {
     // failed
 }
@@ -515,11 +572,11 @@ The result of Counter with Cipher Block Chaining-Message Authentication Code enc
 
 ```swift
 do {
-    // The authentication tag is appended to the encrypted message.
+    // `encrypted` contains ciphertext with the authentication tag appended.
 	let tagLength = 8
-	let ccm = CCM(iv: iv, tagLength: tagLength, messageLength: ciphertext.count - tagLength, additionalAuthenticatedData: data)
+	let ccm = CCM(iv: iv, tagLength: tagLength, messageLength: encrypted.count - tagLength, additionalAuthenticatedData: data)
     let aes = try AES(key: key, blockMode: ccm, padding: .noPadding)
-    return try aes.decrypt(encrypted)
+    let decrypted = try aes.decrypt(encrypted)
 } catch {
     // failed
 }
@@ -530,8 +587,14 @@ Check documentation or CCM specification for valid parameters for CCM.
 ##### AEAD
 
 ```swift
-let encrypt = try AEADChaCha20Poly1305.encrypt(plaintext, key: key, iv: nonce, authenticationHeader: header)
-let decrypt = try AEADChaCha20Poly1305.decrypt(ciphertext, key: key, iv: nonce, authenticationHeader: header, authenticationTag: tag)
+let sealed = try AEADChaCha20Poly1305.encrypt(plaintext, key: key, iv: nonce, authenticationHeader: header)
+let opened = try AEADChaCha20Poly1305.decrypt(
+  sealed.cipherText,
+  key: key,
+  iv: nonce,
+  authenticationHeader: header,
+  authenticationTag: sealed.authenticationTag
+)
 ```
 
 ##### RSA
@@ -564,7 +627,7 @@ let rsa = try RSA(keySize: 2048) // This generates a modulus, public exponent an
 RSA Encryption & Decryption Example
 ``` swift
 // Alice Generates a Private Key
-let alicesPrivateKey = try RSA(keySize: 1024)
+let alicesPrivateKey = try RSA(keySize: 2048)
     
 // Alice shares her **public** key with Bob
 let alicesPublicKeyData = try alicesPrivateKey.publicKeyExternalRepresentation()
@@ -591,7 +654,7 @@ print(String(data: Data(originalDecryptedMessage), encoding: .utf8))
 RSA Signature & Verification Example
 ``` swift
 // Alice Generates a Private Key
-let alicesPrivateKey = try RSA(keySize: 1024)
+let alicesPrivateKey = try RSA(keySize: 2048)
     
 // Alice wants to sign a message that she agrees with
 let messageAliceSupports = "Hi my name is Alice!"
@@ -615,16 +678,18 @@ if verifiedSignature == true {
 }
 ```
 
+These `SecKey` interoperability examples are available on Apple platforms only.
+
 CryptoSwift RSA Key -> Apple's Security Framework SecKey Example
 ``` swift
 /// Starting with a CryptoSwift RSA Key
-let rsaKey = try RSA(keySize: 1024)
+let rsaKey = try RSA(keySize: 2048)
 
 /// Define your Keys attributes
 let attributes: [String:Any] = [
   kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
   kSecAttrKeyClass as String: kSecAttrKeyClassPrivate, // or kSecAttrKeyClassPublic
-  kSecAttrKeySizeInBits as String: 1024, // The appropriate bits
+  kSecAttrKeySizeInBits as String: 2048, // The appropriate bits
   kSecAttrIsPermanent as String: false
 ]
 var error:Unmanaged<CFError>? = nil

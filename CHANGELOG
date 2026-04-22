@@ -1,3 +1,11 @@
+1.10.0
+- Add a ChaCha20 initializer with explicit 4-byte counter support and QUIC test vectors
+- Fix XChaCha20-Poly1305 nonce length metadata to require 24-byte nonces
+- Make the privacy manifest Apple-only via a dedicated resources target and add visionOS/macCatalyst support
+- Prefer FoundationEssentials when available, with Foundation fallback for compatibility
+- Fix Scrypt and SecureBytes memory handling to avoid unsafe baseAddress crashes and release allocated memory correctly
+- Refresh release metadata and installation docs for 1.10.0
+
 1.9.0
 - Renamed bytes to byteArray in Data extension to avoid conflict with Swift 6.2 by @mluisbrown in #1076 and #1077
 

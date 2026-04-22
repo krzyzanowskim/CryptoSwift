@@ -26,4 +26,4 @@ jobs:
       run: swift build -v
 
     - name: Run tests
-      run: swift test -c release -Xswiftc -enable-testing -Xswiftc -DCI -Xswiftc -Xfrontend -Xswiftc -solver-memory-threshold -Xswiftc -Xfrontend -Xswiftc 999999999
+      run: swift test -c release -Xswiftc -enable-testing -Xswiftc -DCI

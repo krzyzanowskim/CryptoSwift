@@ -110,6 +110,11 @@ final class ChaCha20Tests: XCTestCase {
       XCTFail()
     }
   }
+
+  func testChaCha20RandomIV() {
+    let iv = ChaCha20.randomIV()
+    XCTAssertEqual(iv.count, ChaCha20.blockSize)
+  }
 }
 
 extension ChaCha20Tests {
@@ -118,7 +123,8 @@ extension ChaCha20Tests {
       ("testChaCha20", testChaCha20),
       ("testCore", testCore),
       ("testVector1Py", testVector1Py),
-      ("testChaCha20EncryptPartial", testChaCha20EncryptPartial)
+      ("testChaCha20EncryptPartial", testChaCha20EncryptPartial),
+      ("testChaCha20RandomIV", testChaCha20RandomIV)
     ]
 
     return tests

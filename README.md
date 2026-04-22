@@ -21,9 +21,7 @@ The financial sustainability of the project is possible thanks to the ongoing co
 
 ### Premium Sponsors
 
-  [Emerge Tools](https://www.emergetools.com/) is a suite of revolutionary products designed to supercharge mobile apps and the teams that build them.
-
-  [<img alt="www.emergetools.com/" width="200" src="https://github-production-user-asset-6210df.s3.amazonaws.com/758033/256565082-a21f5ac1-ef39-4b56-a8d2-575adeb7fe55.png" />](https://www.emergetools.com)
+None
 
 ## Requirements
 

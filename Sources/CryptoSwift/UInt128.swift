@@ -81,7 +81,6 @@ struct UInt128: Equatable, ExpressibleByIntegerLiteral {
     guard by < 64 else { return UInt128(a: 0, b: value.i.a >> (by - 64)) }
     let a = value.i.a >> by
     let b = (value.i.b >> by) | (value.i.a << (64 - by))
-    let a = value.i.a >> by
     return UInt128(a: a, b: b)
   }
 

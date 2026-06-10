@@ -76,13 +76,15 @@ struct UInt128: Equatable, ExpressibleByIntegerLiteral {
   }
 
   static func >> (value: UInt128, by: Int) -> UInt128 {
-    var result = value
-    for _ in 0..<by {
-      let a = result.i.a >> 1
-      let b = result.i.b >> 1 + ((result.i.a & 1) << 63)
-      result = UInt128((a, b))
+    guard by > 0 else { return value }
+    if by >= 128 { return UInt128(a: 0, b: 0) }
+    if by >= 64 {
+      return UInt128(a: 0, b: value.i.a >> (by - 64))
     }
-    return result
+    let a = value.i.a >> by
+    let b = (value.i.b >> by) | (value.i.a << (64 - by))
+    let a = value.i.a >> by
+    return UInt128(a: a, b: b)
   }
 
   // Equatable.

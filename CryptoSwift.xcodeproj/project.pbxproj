@@ -56,7 +56,6 @@
 		754310442050111A003FB1DF /* CompactMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754310432050111A003FB1DF /* CompactMap.swift */; };
 		75482EA41CB310B7001F66A5 /* PBKDF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75482EA31CB310B7001F66A5 /* PBKDF.swift */; };
 		754BE46819693E190098E6F3 /* DigestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754BE46719693E190098E6F3 /* DigestTests.swift */; };
-		755BA296235387700039CAB5 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7576F64C20725BD5006688F8 /* Default-568h@2x.png */; };
 		755FB1DA199E347D00475437 /* ExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755FB1D9199E347D00475437 /* ExtensionsTest.swift */; };
 		7564F0522072EAEB00CA5A96 /* PBKDFPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F6207290F8006688F8 /* PBKDFPerf.swift */; platformFilter = ios; };
 		7564F0532072EAEB00CA5A96 /* ChaCha20TestsPerf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576F6F020728EAB006688F8 /* ChaCha20TestsPerf.swift */; platformFilter = ios; };
@@ -274,17 +273,13 @@
 		75211F92207249D8004E41F8 /* CryptoSwift-TestHostApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CryptoSwift-TestHostApp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		75211F94207249D8004E41F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75211FA0207249D8004E41F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		75211FA520724A0F004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-TestHostApp-Test.xcconfig"; sourceTree = "<group>"; };
-		75211FA820724A0F004E41F8 /* CryptoSwift-Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-Shared.xcconfig"; sourceTree = "<group>"; };
-		75211FA920724A0F004E41F8 /* CryptoSwift-TestHostApp-Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-TestHostApp-Shared.xcconfig"; sourceTree = "<group>"; };
-		75211FAA20724A0F004E41F8 /* Project-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
-		75211FAC20724A0F004E41F8 /* CryptoSwift-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-Release.xcconfig"; sourceTree = "<group>"; };
-		75211FAE20724A10004E41F8 /* Tests-Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Tests-Shared.xcconfig"; sourceTree = "<group>"; };
-		75211FAF20724A10004E41F8 /* CryptoSwift-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-Debug.xcconfig"; sourceTree = "<group>"; };
-		75211FB020724A10004E41F8 /* Project-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Debug.xcconfig"; sourceTree = "<group>"; };
-		75211FB120724A10004E41F8 /* Tests-Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Tests-Test.xcconfig"; sourceTree = "<group>"; };
-		75211FB220724A10004E41F8 /* Project-Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "Project-Shared.xcconfig"; sourceTree = "<group>"; };
-		75211FB420724A10004E41F8 /* CryptoSwift-Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "CryptoSwift-Test.xcconfig"; sourceTree = "<group>"; };
+		75211FA820724A0F004E41F8 /* CryptoSwift.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = CryptoSwift.xcconfig; sourceTree = "<group>"; };
+		75211FA920724A0F004E41F8 /* TestHostApp.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = TestHostApp.xcconfig; sourceTree = "<group>"; };
+		75211FAA20724A0F004E41F8 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		FA57000000000000000000B0 /* Test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Test.xcconfig; sourceTree = "<group>"; };
+		75211FAE20724A10004E41F8 /* Tests.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Tests.xcconfig; sourceTree = "<group>"; };
+		75211FB020724A10004E41F8 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		75211FB220724A10004E41F8 /* Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
 		7523742C2083C61C0016D662 /* GCM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCM.swift; sourceTree = "<group>"; };
 		7529366920683DFC00195874 /* AEADChaCha20Poly1305.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEADChaCha20Poly1305.swift; sourceTree = "<group>"; };
 		753674062175D012003E32A6 /* StreamDecryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamDecryptor.swift; sourceTree = "<group>"; };
@@ -300,7 +295,6 @@
 		756A64C52111083B00BE8805 /* StreamEncryptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamEncryptor.swift; sourceTree = "<group>"; };
 		756BFDCA1A82B87300B9D9A4 /* Bridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridging.h; sourceTree = "<group>"; };
 		7571938D2816BFE3001C3AC0 /* CS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CS.swift; sourceTree = "<group>"; };
-		7576F64C20725BD5006688F8 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		7576F6EB20726319006688F8 /* DigestTestsPerf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigestTestsPerf.swift; sourceTree = "<group>"; };
 		7576F6EE20726422006688F8 /* AESTestsPerf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AESTestsPerf.swift; sourceTree = "<group>"; };
 		7576F6F020728EAB006688F8 /* ChaCha20TestsPerf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChaCha20TestsPerf.swift; sourceTree = "<group>"; };
@@ -509,7 +503,6 @@
 		75211F93207249D8004E41F8 /* CryptoSwift-TestHostApp */ = {
 			isa = PBXGroup;
 			children = (
-				7576F64C20725BD5006688F8 /* Default-568h@2x.png */,
 				75211F94207249D8004E41F8 /* AppDelegate.swift */,
 				75211FA0207249D8004E41F8 /* Info.plist */,
 			);
@@ -601,17 +594,13 @@
 		75843E9A2072457A0050583A /* config */ = {
 			isa = PBXGroup;
 			children = (
-				75211FAF20724A10004E41F8 /* CryptoSwift-Debug.xcconfig */,
-				75211FAC20724A0F004E41F8 /* CryptoSwift-Release.xcconfig */,
-				75211FA820724A0F004E41F8 /* CryptoSwift-Shared.xcconfig */,
-				75211FB420724A10004E41F8 /* CryptoSwift-Test.xcconfig */,
-				75211FA520724A0F004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig */,
-				75211FA920724A0F004E41F8 /* CryptoSwift-TestHostApp-Shared.xcconfig */,
-				75211FB020724A10004E41F8 /* Project-Debug.xcconfig */,
-				75211FAA20724A0F004E41F8 /* Project-Release.xcconfig */,
-				75211FB220724A10004E41F8 /* Project-Shared.xcconfig */,
-				75211FAE20724A10004E41F8 /* Tests-Shared.xcconfig */,
-				75211FB120724A10004E41F8 /* Tests-Test.xcconfig */,
+				75211FB220724A10004E41F8 /* Shared.xcconfig */,
+				75211FB020724A10004E41F8 /* Debug.xcconfig */,
+				75211FAA20724A0F004E41F8 /* Release.xcconfig */,
+				FA57000000000000000000B0 /* Test.xcconfig */,
+				75211FA820724A0F004E41F8 /* CryptoSwift.xcconfig */,
+				75211FAE20724A10004E41F8 /* Tests.xcconfig */,
+				75211FA920724A0F004E41F8 /* TestHostApp.xcconfig */,
 			);
 			path = config;
 			sourceTree = "<group>";
@@ -861,27 +850,27 @@
 					75211F91207249D8004E41F8 = {
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					754BE45419693E190098E6F3 = {
 						CreatedOnToolsVersion = 6.0;
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					754BE45F19693E190098E6F3 = {
 						CreatedOnToolsVersion = 6.0;
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					7564F04E2072EAEB00CA5A96 = {
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 75211F91207249D8004E41F8;
 					};
 					7595C1492072E48C00EA1A5F = {
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -914,7 +903,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				755BA296235387700039CAB5 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1169,65 +1157,91 @@
 /* Begin XCBuildConfiguration section */
 		75211FA1207249D8004E41F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75211FA920724A0F004E41F8 /* TestHostApp.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		75211FA2207249D8004E41F8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75211FA920724A0F004E41F8 /* TestHostApp.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
-		75211FA3207249D8004E41F8 /* Test */ = {
+		FA57000000000000000000A5 /* Test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FA520724A0F004E41F8 /* CryptoSwift-TestHostApp-Test.xcconfig */;
+			baseConfigurationReference = 75211FA920724A0F004E41F8 /* TestHostApp.xcconfig */;
 			buildSettings = {
 			};
 			name = Test;
 		};
 		754BE46919693E190098E6F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FB020724A10004E41F8 /* Project-Debug.xcconfig */;
+			baseConfigurationReference = 75211FB020724A10004E41F8 /* Debug.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		754BE46A19693E190098E6F3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FAA20724A0F004E41F8 /* Project-Release.xcconfig */;
+			baseConfigurationReference = 75211FAA20724A0F004E41F8 /* Release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
+		FA57000000000000000000A0 /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA57000000000000000000B0 /* Test.xcconfig */;
+			buildSettings = {
+			};
+			name = Test;
+		};
 		754BE46C19693E190098E6F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FAF20724A10004E41F8 /* CryptoSwift-Debug.xcconfig */;
+			baseConfigurationReference = 75211FA820724A0F004E41F8 /* CryptoSwift.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		754BE46D19693E190098E6F3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FAC20724A0F004E41F8 /* CryptoSwift-Release.xcconfig */;
+			baseConfigurationReference = 75211FA820724A0F004E41F8 /* CryptoSwift.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
+		FA57000000000000000000A1 /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75211FA820724A0F004E41F8 /* CryptoSwift.xcconfig */;
+			buildSettings = {
+			};
+			name = Test;
+		};
 		754BE46F19693E190098E6F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75211FAE20724A10004E41F8 /* Tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		754BE47019693E190098E6F3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75211FAE20724A10004E41F8 /* Tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
+		FA57000000000000000000A2 /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75211FAE20724A10004E41F8 /* Tests.xcconfig */;
+			buildSettings = {
+			};
+			name = Test;
+		};
 		7564F05D2072EAEB00CA5A96 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75211FAE20724A10004E41F8 /* Tests.xcconfig */;
 			buildSettings = {
 				SDKROOT = iphoneos;
 			};
@@ -1235,55 +1249,37 @@
 		};
 		7564F05E2072EAEB00CA5A96 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75211FAE20724A10004E41F8 /* Tests.xcconfig */;
 			buildSettings = {
 				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
-		7564F05F2072EAEB00CA5A96 /* Test */ = {
+		FA57000000000000000000A3 /* Test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FB120724A10004E41F8 /* Tests-Test.xcconfig */;
+			baseConfigurationReference = 75211FAE20724A10004E41F8 /* Tests.xcconfig */;
 			buildSettings = {
 				SDKROOT = iphoneos;
 			};
 			name = Test;
 		};
-		756B66AA1F6AAFDB00DEC41C /* Test */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FB220724A10004E41F8 /* Project-Shared.xcconfig */;
-			buildSettings = {
-			};
-			name = Test;
-		};
-		756B66AB1F6AAFDB00DEC41C /* Test */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FB420724A10004E41F8 /* CryptoSwift-Test.xcconfig */;
-			buildSettings = {
-			};
-			name = Test;
-		};
-		756B66AC1F6AAFDB00DEC41C /* Test */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FB120724A10004E41F8 /* Tests-Test.xcconfig */;
-			buildSettings = {
-			};
-			name = Test;
-		};
 		7595C14F2072E48C00EA1A5F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75211FAE20724A10004E41F8 /* Tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		7595C1502072E48C00EA1A5F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75211FAE20724A10004E41F8 /* Tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
 		};
-		7595C1512072E48C00EA1A5F /* Test */ = {
+		FA57000000000000000000A4 /* Test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 75211FB120724A10004E41F8 /* Tests-Test.xcconfig */;
+			baseConfigurationReference = 75211FAE20724A10004E41F8 /* Tests.xcconfig */;
 			buildSettings = {
 			};
 			name = Test;
@@ -1296,7 +1292,7 @@
 			buildConfigurations = (
 				75211FA1207249D8004E41F8 /* Debug */,
 				75211FA2207249D8004E41F8 /* Release */,
-				75211FA3207249D8004E41F8 /* Test */,
+				FA57000000000000000000A5 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1306,7 +1302,7 @@
 			buildConfigurations = (
 				754BE46919693E190098E6F3 /* Debug */,
 				754BE46A19693E190098E6F3 /* Release */,
-				756B66AA1F6AAFDB00DEC41C /* Test */,
+				FA57000000000000000000A0 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1316,7 +1312,7 @@
 			buildConfigurations = (
 				754BE46C19693E190098E6F3 /* Debug */,
 				754BE46D19693E190098E6F3 /* Release */,
-				756B66AB1F6AAFDB00DEC41C /* Test */,
+				FA57000000000000000000A1 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1326,7 +1322,7 @@
 			buildConfigurations = (
 				754BE46F19693E190098E6F3 /* Debug */,
 				754BE47019693E190098E6F3 /* Release */,
-				756B66AC1F6AAFDB00DEC41C /* Test */,
+				FA57000000000000000000A2 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1336,7 +1332,7 @@
 			buildConfigurations = (
 				7564F05D2072EAEB00CA5A96 /* Debug */,
 				7564F05E2072EAEB00CA5A96 /* Release */,
-				7564F05F2072EAEB00CA5A96 /* Test */,
+				FA57000000000000000000A3 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1346,7 +1342,7 @@
 			buildConfigurations = (
 				7595C14F2072E48C00EA1A5F /* Debug */,
 				7595C1502072E48C00EA1A5F /* Release */,
-				7595C1512072E48C00EA1A5F /* Test */,
+				FA57000000000000000000A4 /* Test */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

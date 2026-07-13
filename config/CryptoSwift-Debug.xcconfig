@@ -1,6 +1,0 @@
-#include "CryptoSwift-Shared.xcconfig"
-
-OTHER_SWIFT_FLAGS = $(inherited) -Xfrontend -debug-time-function-bodies
-SWIFT_COMPILATION_MODE = incremental
-SWIFT_OPTIMIZATION_LEVEL = -Onone
-SWIFT_ENFORCE_EXCLUSIVE_ACCESS = none

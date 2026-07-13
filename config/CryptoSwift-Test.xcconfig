@@ -1,8 +1,0 @@
-#include "CryptoSwift-Shared.xcconfig"
-
-ENABLE_TESTABILITY = YES
-STRIP_INSTALLED_PRODUCT = NO
-
-// Disable for tests. https://twitter.com/krzyzanowskim/status/1191515868401983489
-BUILD_LIBRARY_FOR_DISTRIBUTION = NO
-COPY_PHASE_STRIP = NO

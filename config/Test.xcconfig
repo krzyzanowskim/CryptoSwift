@@ -1,0 +1,21 @@
+#include "Shared.xcconfig"
+
+// Performance-test configuration: Release-grade optimization, but built for
+// testing (@testable) and NOT for distribution. The TestsPerformance schemes
+// use this so benchmarks measure optimized, testable CryptoSwift.
+//
+// Testability is scoped to this configuration on purpose — Release must stay
+// non-testable because build-framework.sh ships the Release build.
+
+SWIFT_COMPILATION_MODE = wholemodule
+SWIFT_OPTIMIZATION_LEVEL = -O
+SWIFT_ENFORCE_EXCLUSIVE_ACCESS = compile-time
+GCC_OPTIMIZATION_LEVEL = fast
+SWIFT_DISABLE_SAFETY_CHECKS = YES
+
+ENABLE_TESTABILITY = YES
+BUILD_LIBRARY_FOR_DISTRIBUTION = NO
+ENABLE_NS_ASSERTIONS = NO
+
+// Local test runs only ever target the active arch.
+ONLY_ACTIVE_ARCH = YES

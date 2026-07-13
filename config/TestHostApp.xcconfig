@@ -1,0 +1,13 @@
+// CryptoSwift-TestHostApp — iOS host app used to run the test bundle on device/simulator.
+
+CODE_SIGN_STYLE = Automatic
+DEVELOPMENT_TEAM = HA4H7JURM8
+ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
+
+INFOPLIST_FILE = CryptoSwift-TestHostApp/Info.plist
+PRODUCT_BUNDLE_IDENTIFIER = test.CryptoSwiftTestHostApp
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks
+
+SDKROOT = iphoneos
+SUPPORTED_PLATFORMS = iphonesimulator iphoneos
+ONLY_ACTIVE_ARCH = YES

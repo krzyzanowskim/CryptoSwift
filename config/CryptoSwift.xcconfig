@@ -1,16 +1,15 @@
-CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES
+// CryptoSwift.framework — dynamic framework packaging.
+// Configuration-independent; per-config compiler flags come from Debug/Release.xcconfig.
+
 APPLICATION_EXTENSION_API_ONLY = YES
+
 DYLIB_COMPATIBILITY_VERSION = 1
 DYLIB_CURRENT_VERSION = 1
 DYLIB_INSTALL_NAME_BASE = @rpath
-
-ENABLE_BITCODE = NO
-ENABLE_BITCODE[sdk=macosx*] = NO
-
 INSTALL_PATH = $(LOCAL_LIBRARY_DIR)/Frameworks
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks @loader_path/Frameworks
-INFOPLIST_FILE = Info.plist
-PRODUCT_BUNDLE_IDENTIFIER = com.krzyzanowskim.${PRODUCT_NAME:rfc1034identifier}
-PRODUCT_NAME = $(TARGET_NAME)
 SKIP_INSTALL = YES
 DEAD_CODE_STRIPPING = YES
+
+INFOPLIST_FILE = Info.plist
+PRODUCT_BUNDLE_IDENTIFIER = com.krzyzanowskim.${PRODUCT_NAME:rfc1034identifier}

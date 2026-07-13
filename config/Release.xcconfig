@@ -1,0 +1,18 @@
+#include "Shared.xcconfig"
+
+// Release: optimized builds. These settings ship in the released XCFramework.
+
+SWIFT_COMPILATION_MODE = wholemodule
+SWIFT_OPTIMIZATION_LEVEL = -O
+SWIFT_ENFORCE_EXCLUSIVE_ACCESS = compile-time
+GCC_OPTIMIZATION_LEVEL = fast
+
+// Drops Swift runtime safety checks (bounds/overflow) from the shipped binary.
+// Intentional performance trade-off — see https://twitter.com/krzyzanowskim/status/1191515868401983489
+SWIFT_DISABLE_SAFETY_CHECKS = YES
+
+ENABLE_NS_ASSERTIONS = NO
+COPY_PHASE_STRIP = YES
+VALIDATE_PRODUCT = YES
+
+CODE_SIGN_IDENTITY[sdk=macosx*] = Developer ID Application

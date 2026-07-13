@@ -1,0 +1,13 @@
+#include "Shared.xcconfig"
+
+// Debug: fast, unoptimized builds with assertions and testability.
+
+SWIFT_COMPILATION_MODE = incremental
+SWIFT_OPTIMIZATION_LEVEL = -Onone
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) DEBUG=1
+
+ONLY_ACTIVE_ARCH = YES
+ENABLE_TESTABILITY = YES
+COPY_PHASE_STRIP = NO
+GCC_DYNAMIC_NO_PIC = NO

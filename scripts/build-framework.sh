@@ -1,119 +1,61 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-BASE_PWD="$PWD"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-OUTPUT_DIR=$( mktemp -d )
-COMMON_SETUP="-project ${SCRIPT_DIR}/../CryptoSwift.xcodeproj -scheme CryptoSwift -configuration Release -quiet SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES"
+PROJECT="${SCRIPT_DIR}/../CryptoSwift.xcodeproj"
+XCFRAMEWORK="${SCRIPT_DIR}/../CryptoSwift.xcframework"
+OUTPUT_DIR="$( mktemp -d )"
+DERIVED_DATA_PATH=""
 
-# macOS
-DERIVED_DATA_PATH=$( mktemp -d )
-xcrun xcodebuild build \
-	$COMMON_SETUP \
-	-derivedDataPath "${DERIVED_DATA_PATH}" \
-	-destination 'generic/platform=macOS'
+# Clean up temporary build output on any exit (success or failure).
+trap 'rm -rf "${OUTPUT_DIR}" "${DERIVED_DATA_PATH}"' EXIT
 
-mkdir -p "${OUTPUT_DIR}/macos"
-ditto "${DERIVED_DATA_PATH}/Build/Products/Release/CryptoSwift.framework" "${OUTPUT_DIR}/macos/CryptoSwift.framework"
-rm -rf "${DERIVED_DATA_PATH}"
+COMMON_SETUP=(
+	-project "${PROJECT}"
+	-scheme CryptoSwift
+	-configuration Release
+	-quiet
+	SKIP_INSTALL=NO
+	BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+)
 
-# macOS Catalyst
-DERIVED_DATA_PATH=$( mktemp -d )
-xcrun xcodebuild build \
-	$COMMON_SETUP \
-	-derivedDataPath "${DERIVED_DATA_PATH}" \
-	-destination 'generic/platform=macOS,variant=Mac Catalyst'
+# destination | Build/Products subdirectory | output slice directory
+PLATFORMS=(
+	"generic/platform=macOS|Release|macos"
+	"generic/platform=macOS,variant=Mac Catalyst|Release-maccatalyst|maccatalyst"
+	"generic/platform=iOS|Release-iphoneos|iphoneos"
+	"generic/platform=iOS Simulator|Release-iphonesimulator|iphonesimulator"
+	"generic/platform=tvOS|Release-appletvos|appletvos"
+	"generic/platform=tvOS Simulator|Release-appletvsimulator|appletvsimulator"
+	"generic/platform=watchOS|Release-watchos|watchos"
+	"generic/platform=watchOS Simulator|Release-watchsimulator|watchsimulator"
+)
 
-mkdir -p "${OUTPUT_DIR}/maccatalyst"
-ditto "${DERIVED_DATA_PATH}/Build/Products/Release-maccatalyst/CryptoSwift.framework" "${OUTPUT_DIR}/maccatalyst/CryptoSwift.framework"
-rm -rf "${DERIVED_DATA_PATH}"
+frameworks=()
+for entry in "${PLATFORMS[@]}"; do
+	IFS='|' read -r destination products_subdir slice <<< "${entry}"
 
-# iOS
-DERIVED_DATA_PATH=$( mktemp -d )
-xcrun xcodebuild build \
-	$COMMON_SETUP \
-	-derivedDataPath "${DERIVED_DATA_PATH}" \
-	-destination 'generic/platform=iOS'
+	DERIVED_DATA_PATH="$( mktemp -d )"
+	xcrun xcodebuild build \
+		"${COMMON_SETUP[@]}" \
+		-derivedDataPath "${DERIVED_DATA_PATH}" \
+		-destination "${destination}"
 
-mkdir -p "${OUTPUT_DIR}/iphoneos"
-ditto "${DERIVED_DATA_PATH}/Build/Products/Release-iphoneos/CryptoSwift.framework" "${OUTPUT_DIR}/iphoneos/CryptoSwift.framework"
-rm -rf "${DERIVED_DATA_PATH}"
+	mkdir -p "${OUTPUT_DIR}/${slice}"
+	ditto \
+		"${DERIVED_DATA_PATH}/Build/Products/${products_subdir}/CryptoSwift.framework" \
+		"${OUTPUT_DIR}/${slice}/CryptoSwift.framework"
+	rm -rf "${DERIVED_DATA_PATH}"
+	DERIVED_DATA_PATH=""
 
-# iOS Simulator
-DERIVED_DATA_PATH=$( mktemp -d )
-xcrun xcodebuild build \
-	$COMMON_SETUP \
-	-derivedDataPath "${DERIVED_DATA_PATH}" \
-	-destination 'generic/platform=iOS Simulator'
-
-mkdir -p "${OUTPUT_DIR}/iphonesimulator"
-ditto "${DERIVED_DATA_PATH}/Build/Products/Release-iphonesimulator/CryptoSwift.framework" "${OUTPUT_DIR}/iphonesimulator/CryptoSwift.framework"
-rm -rf "${DERIVED_DATA_PATH}"
-
-# tvOS
-DERIVED_DATA_PATH=$( mktemp -d )
-xcrun xcodebuild build \
-	$COMMON_SETUP \
-	-derivedDataPath "${DERIVED_DATA_PATH}" \
-	-destination 'generic/platform=tvOS'
-
-mkdir -p "${OUTPUT_DIR}/appletvos"
-ditto "${DERIVED_DATA_PATH}/Build/Products/Release-appletvos/CryptoSwift.framework" "${OUTPUT_DIR}/appletvos/CryptoSwift.framework"
-rm -rf "${DERIVED_DATA_PATH}"
-
-# tvOS Simulator
-DERIVED_DATA_PATH=$( mktemp -d )
-xcrun xcodebuild build \
-	$COMMON_SETUP \
-	-derivedDataPath "${DERIVED_DATA_PATH}" \
-	-destination 'generic/platform=tvOS Simulator'
-
-mkdir -p "${OUTPUT_DIR}/appletvsimulator"
-ditto "${DERIVED_DATA_PATH}/Build/Products/Release-appletvsimulator/CryptoSwift.framework" "${OUTPUT_DIR}/appletvsimulator/CryptoSwift.framework"
-rm -rf "${DERIVED_DATA_PATH}"
-
-# watchOS
-DERIVED_DATA_PATH=$( mktemp -d )
-xcrun xcodebuild build \
-	$COMMON_SETUP \
-	-derivedDataPath "${DERIVED_DATA_PATH}" \
-	-destination 'generic/platform=watchOS'
-
-mkdir -p "${OUTPUT_DIR}/watchos"
-ditto "${DERIVED_DATA_PATH}/Build/Products/Release-watchos/CryptoSwift.framework" "${OUTPUT_DIR}/watchos/CryptoSwift.framework"
-rm -rf "${DERIVED_DATA_PATH}"
-
-# watchOS Simulator
-DERIVED_DATA_PATH=$( mktemp -d )
-xcrun xcodebuild build \
-	$COMMON_SETUP \
-	-derivedDataPath "${DERIVED_DATA_PATH}" \
-	-destination 'generic/platform=watchOS Simulator'
-
-mkdir -p "${OUTPUT_DIR}/watchsimulator"
-ditto "${DERIVED_DATA_PATH}/Build/Products/Release-watchsimulator/CryptoSwift.framework" "${OUTPUT_DIR}/watchsimulator/CryptoSwift.framework"
-rm -rf "${DERIVED_DATA_PATH}"
+	frameworks+=(-framework "${OUTPUT_DIR}/${slice}/CryptoSwift.framework")
+done
 
 # XCFRAMEWORK
-rm -rf ${SCRIPT_DIR}/../CryptoSwift.xcframework
+rm -rf "${XCFRAMEWORK}"
 xcrun xcodebuild -quiet -create-xcframework \
-	-framework "${OUTPUT_DIR}/iphoneos/CryptoSwift.framework" \
-	-framework "${OUTPUT_DIR}/iphonesimulator/CryptoSwift.framework" \
-	-framework "${OUTPUT_DIR}/appletvos/CryptoSwift.framework" \
-	-framework "${OUTPUT_DIR}/appletvsimulator/CryptoSwift.framework" \
-	-framework "${OUTPUT_DIR}/watchos/CryptoSwift.framework" \
-	-framework "${OUTPUT_DIR}/watchsimulator/CryptoSwift.framework" \
-	-framework "${OUTPUT_DIR}/macos/CryptoSwift.framework" \
-	-framework "${OUTPUT_DIR}/maccatalyst/CryptoSwift.framework" \
-	-output ${SCRIPT_DIR}/../CryptoSwift.xcframework
+	"${frameworks[@]}" \
+	-output "${XCFRAMEWORK}"
 
-# pushd ${OUTPUT_DIR}
-# xcrun zip --symlinks -r -o ${BASE_PWD}/CryptoSwift.xcframework.zip CryptoSwift.xcframework
-# popd
-
-echo "✔️ CryptoSwift.xcframework"
-echo ${OUTPUT_DIR}
-
-rm -rf ${OUTPUT_DIR}
-cd ${BASE_PWD}
+echo "✔️ ${XCFRAMEWORK}"

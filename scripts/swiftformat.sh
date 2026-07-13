@@ -1,3 +1,6 @@
 #!/bin/bash
+set -euo pipefail
 
-swiftformat  --hexliteralcase lowercase --hexgrouping none --ranges nospace --wrapelements beforefirst --self remove $1
+# Formatting rules live in .swiftformat (read automatically by swiftformat).
+# Format the given path, or the whole repository if none is provided.
+swiftformat "${1:-.}"

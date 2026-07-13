@@ -14,9 +14,9 @@
 //
 
 #if canImport(FoundationEssentials)
-import FoundationEssentials
+  import FoundationEssentials
 #else
-import Foundation
+  import Foundation
 #endif
 
 struct UInt128: Equatable, ExpressibleByIntegerLiteral {
@@ -31,9 +31,9 @@ struct UInt128: Equatable, ExpressibleByIntegerLiteral {
   init(_ raw: Array<UInt8>) {
     precondition(raw.count >= 16, "UInt128 requires at least 16 bytes")
     let a = UInt64(raw[0]) << 56 | UInt64(raw[1]) << 48 | UInt64(raw[2]) << 40 | UInt64(raw[3]) << 32 |
-            UInt64(raw[4]) << 24 | UInt64(raw[5]) << 16 | UInt64(raw[6]) << 8  | UInt64(raw[7])
+      UInt64(raw[4]) << 24 | UInt64(raw[5]) << 16 | UInt64(raw[6]) << 8 | UInt64(raw[7])
     let b = UInt64(raw[8]) << 56 | UInt64(raw[9]) << 48 | UInt64(raw[10]) << 40 | UInt64(raw[11]) << 32 |
-            UInt64(raw[12]) << 24 | UInt64(raw[13]) << 16 | UInt64(raw[14]) << 8  | UInt64(raw[15])
+      UInt64(raw[12]) << 24 | UInt64(raw[13]) << 16 | UInt64(raw[14]) << 8 | UInt64(raw[15])
     self.init((a, b))
   }
 
@@ -76,13 +76,12 @@ struct UInt128: Equatable, ExpressibleByIntegerLiteral {
   }
 
   static func >> (value: UInt128, by: Int) -> UInt128 {
-    var result = value
-    for _ in 0..<by {
-      let a = result.i.a >> 1
-      let b = result.i.b >> 1 + ((result.i.a & 1) << 63)
-      result = UInt128((a, b))
-    }
-    return result
+    guard by > 0 else { return value }
+    guard by < 128 else { return UInt128(a: 0, b: 0) }
+    guard by < 64 else { return UInt128(a: 0, b: value.i.a >> (by - 64)) }
+    let a = value.i.a >> by
+    let b = (value.i.b >> by) | (value.i.a << (64 - by))
+    return UInt128(a: a, b: b)
   }
 
   // Equatable.

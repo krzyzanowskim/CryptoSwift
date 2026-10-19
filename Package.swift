@@ -1,4 +1,4 @@
-// swift-tools-version:5.6
+// swift-tools-version:5.7
 
 import PackageDescription
 
@@ -14,7 +14,7 @@ let applePlatforms: [Platform] = [
 let package = Package(
   name: "CryptoSwift",
   platforms: [
-    .macOS(.v10_13), .macCatalyst(.v13), .iOS(.v11), .tvOS(.v11), .watchOS(.v4), .custom("visionos", versionString: "1.0")
+    .macOS(.v10_13), .macCatalyst(.v13), .iOS(.v15), .tvOS(.v11), .watchOS(.v9), .custom("visionos", versionString: "1.0")
   ],
   products: [
     .library(
